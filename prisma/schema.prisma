@@ -1,0 +1,335 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  GERANT
+  BUREAU
+  DEA
+  AA
+  TAXI
+  REGULATEUR
+}
+
+enum VehicleType {
+  AMBULANCE
+  VSL
+  TAXI
+}
+
+enum VehicleStatus {
+  ACTIVE
+  MAINTENANCE
+  OUT_OF_SERVICE
+}
+
+enum RuleMode {
+  OFF
+  ALERT
+  BLOCK
+  BOTH
+}
+
+// ✅ 4.1 — Extension Automatisation Planning (Jour/Semaine)
+enum PlanningTemplateCategory {
+  VSL
+  AMBULANCE
+  TAXI
+  GARDE
+}
+
+enum AutoScheduleScope {
+  DAY
+  WEEK
+}
+
+enum AutoScheduleStatus {
+  DRAFT
+  PUBLISHED
+  CANCELLED
+}
+
+model Company {
+  id        String    @id @default(uuid()) @db.Uuid
+  name      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  users     User[]
+  vehicles  Vehicle[]
+
+  // ✅ Phase 1 — Règles entreprise (data)
+  rules CompanyRule[]
+
+  // ✅ Phase 1 — Templates shifts (data)
+  shiftTemplates ShiftTemplate[]
+
+  // ✅ Phase 1 — Types maintenance (data)
+  maintenanceTypes MaintenanceType[]
+
+  // ✅ 4.1 — Runs d'automatisation planning (data)
+  autoScheduleRuns AutoScheduleRun[]
+  draftShifts      DraftShift[]
+
+  // ✅ 4.2 — Planning final
+  shifts Shift[]
+}
+
+model User {
+  id        String   @id @default(uuid()) @db.Uuid
+  email     String   @unique
+  password  String
+  name      String
+  role      Role // (on garde 1 rôle POUR L’INSTANT, multi-rôles ensuite)
+  companyId String   @db.Uuid
+  company   Company  @relation(fields: [companyId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // ✅ Phase 1 — Permissions (data)
+  userPermissions UserPermission[]
+
+  // ✅ 4.1 — Draft shifts proposés (employé 1)
+  draftShifts DraftShift[]
+
+  // ✅ 4.1 — Draft shifts proposés (employé 2)
+  draftShifts2 DraftShift[] @relation("DraftShiftUser2")
+
+  // ✅ 4.1 — Runs créés
+  createdAutoScheduleRuns AutoScheduleRun[] @relation("AutoScheduleRunCreatedBy")
+
+  // ✅ 4.2 — Shifts publiés (planning final) (employé 1)
+  shifts Shift[]
+
+  // ✅ 4.2 — Shifts publiés (planning final) (employé 2)
+  shifts2 Shift[] @relation("ShiftUser2")
+
+  @@index([companyId])
+}
+
+model Permission {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  label       String
+  description String?
+  createdAt   DateTime @default(now())
+
+  users UserPermission[]
+}
+
+model UserPermission {
+  id           String @id @default(cuid())
+  userId       String @db.Uuid
+  permissionId String
+
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, permissionId])
+}
+
+model CompanyRule {
+  id        String   @id @default(cuid())
+  companyId String   @db.Uuid
+  key       String
+  value     String
+  mode      RuleMode
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@unique([companyId, key])
+  @@index([companyId])
+}
+
+model ShiftTemplate {
+  id        String @id @default(cuid())
+  companyId String @db.Uuid
+
+  name String
+
+  // ✅ 4.1 — pour automatisation
+  category     PlanningTemplateCategory @default(AMBULANCE)
+  requiredRole Role?
+  isActive     Boolean                  @default(true)
+
+  startTime       String // "08:00"
+  endTime         String // "16:00"
+  crossesMidnight Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  // ✅ 4.1 — draft shifts issus de ce template (optionnel)
+  draftShifts DraftShift[]
+
+  // ✅ 4.2 — shifts publiés issus de ce template (optionnel)
+  shifts Shift[]
+
+  @@unique([companyId, name])
+  @@index([companyId])
+  @@index([companyId, category])
+}
+
+model MaintenanceType {
+  id        String @id @default(cuid())
+  companyId String @db.Uuid
+
+  name        String
+  description String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@unique([companyId, name])
+  @@index([companyId])
+}
+
+model Vehicle {
+  id              String        @id @default(uuid()) @db.Uuid
+  immatriculation String
+  type            VehicleType
+  status          VehicleStatus @default(ACTIVE)
+
+  companyId String  @db.Uuid
+  company   Company @relation(fields: [companyId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // ✅ 4.1 — draft shifts proposés avec ce véhicule
+  draftShifts DraftShift[]
+
+  // ✅ 4.2 — shifts publiés (planning final)
+  shifts Shift[]
+
+  @@unique([companyId, immatriculation])
+  @@index([companyId])
+}
+
+// ✅ 4.1 — Run d'automatisation (une génération)
+model AutoScheduleRun {
+  id        String  @id @default(cuid())
+  companyId String  @db.Uuid
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  scope  AutoScheduleScope
+  status AutoScheduleStatus @default(DRAFT)
+
+  // Période ciblée
+  day       DateTime? // si scope=DAY
+  weekStart DateTime? // si scope=WEEK (lundi 00:00)
+
+  // Qui a lancé la génération
+  createdById String? @db.Uuid
+  createdBy   User?   @relation("AutoScheduleRunCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+
+  draftShifts DraftShift[]
+
+  // ✅ 4.2 — shifts publiés issus de ce run (optionnel)
+  shifts Shift[]
+
+  @@index([companyId, status])
+  @@index([companyId, day])
+  @@index([companyId, weekStart])
+}
+
+// ✅ 4.1 — Shifts brouillons produits par une génération
+model DraftShift {
+  id String @id @default(cuid())
+
+  companyId String  @db.Uuid
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  runId String
+  run   AutoScheduleRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  // trace template (optionnel)
+  templateId String?
+  template   ShiftTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
+
+  // jour + horaires proposés
+  date    DateTime
+  startAt DateTime
+  endAt   DateTime
+
+  // Affectations proposées (optionnelles)
+  userId String? @db.Uuid
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  // ✅ NOUVEAU : employé 2 (optionnel)
+  user2Id String? @db.Uuid
+  user2   User?   @relation("DraftShiftUser2", fields: [user2Id], references: [id], onDelete: SetNull)
+
+  vehicleId String?  @db.Uuid
+  vehicle   Vehicle? @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
+
+  notes String?
+
+  createdAt DateTime @default(now())
+
+  @@index([companyId, date])
+  @@index([runId])
+  @@index([companyId, userId, startAt])
+  @@index([companyId, user2Id, startAt])
+  @@index([companyId, vehicleId, startAt])
+}
+
+// ✅ 4.2 — Planning final (shifts publiés)
+model Shift {
+  id String @id @default(cuid())
+
+  companyId String  @db.Uuid
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  // Période
+  date    DateTime
+  startAt DateTime
+  endAt   DateTime
+
+  // Affectations (optionnelles au début)
+  userId String? @db.Uuid
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  // ✅ NOUVEAU : employé 2 (optionnel)
+  user2Id String? @db.Uuid
+  user2   User?   @relation("ShiftUser2", fields: [user2Id], references: [id], onDelete: SetNull)
+
+  vehicleId String?  @db.Uuid
+  vehicle   Vehicle? @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
+
+  // Trace d'où ça vient (optionnel mais utile)
+  runId String?
+  run   AutoScheduleRun? @relation(fields: [runId], references: [id], onDelete: SetNull)
+
+  templateId String?
+  template   ShiftTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
+
+  notes String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([companyId, date])
+  @@index([companyId, startAt])
+  @@index([runId])
+
+  // ✅ Phase 2 (DATA) — Index métier pour futures règles (conflits / dispo)
+  @@index([companyId, userId, startAt])
+  @@index([companyId, user2Id, startAt])
+  @@index([companyId, vehicleId, startAt])
+}
