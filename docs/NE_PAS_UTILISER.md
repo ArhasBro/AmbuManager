@@ -138,3 +138,13 @@ Pour chaque nouvelle session :
 4️⃣ travailler
 5️⃣ coller bloc fin session
 6️⃣ mettre à jour la documentation
+
+
+MAJ sur GitHub :
+CMD : 
+
+git add .
+git commit -m "update"
+git push
+
+git status
