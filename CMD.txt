@@ -1,0 +1,1 @@
+tree ./dossier /F /A > Nom du fichier voulu
