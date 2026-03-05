@@ -8,7 +8,7 @@
 
 - Patch principal (artefact rejouable) :
   - Chemin : `docs/patches/4.6/SESSION-20260305-01__4.6__planning-quality-score-v3.diff`
-  - Statut : PRÊT 
+  - Statut : PUSH
 
 ## Vérifications techniques
 
