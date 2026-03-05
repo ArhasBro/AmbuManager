@@ -1,0 +1,271 @@
+diff --git a/app/api/planning/autoschedule/runs/[id]/match/apply/route.ts b/app/api/planning/autoschedule/runs/[id]/match/apply/route.ts
+index 7a241fd..a3c2665 100644
+--- a/app/api/planning/autoschedule/runs/[id]/match/apply/route.ts
++++ b/app/api/planning/autoschedule/runs/[id]/match/apply/route.ts
+@@ -36,9 +36,9 @@ function hasAutoschedulePermission(session: unknown): boolean {
+ 
+ export async function POST(
+   req: NextRequest,
+-  { params }: { params: { id: string } }
++  { params }: { params: Promise<{ id: string }> }
+ ) {
+-  const { id } = params;
++  const { id } = await params;
+ 
+   const session = await getServerSession(authOptions);
+ 
+diff --git a/app/api/planning/autoschedule/runs/[id]/match/preview/route.ts b/app/api/planning/autoschedule/runs/[id]/match/preview/route.ts
+index 3a33788..27c2bc4 100644
+--- a/app/api/planning/autoschedule/runs/[id]/match/preview/route.ts
++++ b/app/api/planning/autoschedule/runs/[id]/match/preview/route.ts
+@@ -37,9 +37,9 @@ function hasAutoschedulePermission(session: unknown): boolean {
+ 
+ export async function POST(
+   req: NextRequest,
+-  { params }: { params: { id: string } }
++  { params }: { params: Promise<{ id: string }> }
+ ) {
+-  const { id } = params;
++  const { id } = await params;
+ 
+   const session = await getServerSession(authOptions);
+ 
+@@ -86,12 +86,12 @@ export async function POST(
+     // body vide accepté => includeAlreadyAssigned = false
+   }
+ 
+-  const plan = await computeDraftShiftMatchingByRole(prisma, {
++    const plan = await computeDraftShiftMatchingByRole(prisma, {
+     companyId,
+     runId,
+     includeAlreadyAssigned,
+   });
+ 
+   const quality = computePlanningQuality(plan);
+-return ok({ plan, quality }, 200);
++  return ok({ plan, quality }, 200);
+ }
+\ No newline at end of file
+diff --git a/app/planning/planning-client.tsx b/app/planning/planning-client.tsx
+index d397370..05c95c8 100644
+--- a/app/planning/planning-client.tsx
++++ b/app/planning/planning-client.tsx
+@@ -54,6 +54,10 @@ function isRecord(v: unknown): v is JsonRecord {
+   return typeof v === "object" && v !== null && !Array.isArray(v);
+ }
+ 
++function isNumber(v: unknown): v is number {
++  return typeof v === "number" && Number.isFinite(v);
++}
++
+ // 4.6 matching types (UI) — alignés service/API
+ type MatchingReason =
+   | "MATCHED"
+@@ -77,40 +81,6 @@ type MatchingPlanItem = {
+ 
+ type MatchingApplyItem = MatchingPlanItem & { applied: boolean };
+ 
+-function isMatchingPlanItem(v: unknown): v is MatchingPlanItem {
+-  if (!isRecord(v)) return false;
+-
+-  const shiftIdOk = typeof v.shiftId === "string";
+-  const startAtOk = typeof v.startAt === "string";
+-  const endAtOk = typeof v.endAt === "string";
+-
+-  const requiredRoleOk = v.requiredRole === null || typeof v.requiredRole === "string";
+-  const currentUserIdOk = v.currentUserId === null || typeof v.currentUserId === "string";
+-  const proposedUserIdOk = v.proposedUserId === null || typeof v.proposedUserId === "string";
+-
+-  const reasonOk =
+-    v.reason === "MATCHED" ||
+-    v.reason === "ALREADY_ASSIGNED" ||
+-    v.reason === "NO_REQUIRED_ROLE" ||
+-    v.reason === "NO_USER_WITH_REQUIRED_ROLE" ||
+-    v.reason === "USER_CONFLICT";
+-
+-  return (
+-    shiftIdOk &&
+-    startAtOk &&
+-    endAtOk &&
+-    requiredRoleOk &&
+-    currentUserIdOk &&
+-    proposedUserIdOk &&
+-    reasonOk
+-  );
+-}
+-
+-function isMatchingApplyItem(v: unknown): v is MatchingApplyItem {
+-  if (!isRecord(v)) return false;
+-  return typeof v.applied === "boolean";
+-
+-
+ type PlanningQuality = {
+   overall: number;
+   coverage: { score: number; covered: number; total: number; pct: number };
+@@ -129,10 +99,6 @@ type PlanningQuality = {
+   explanations: string[];
+ };
+ 
+-function isNumber(v: unknown): v is number {
+-  return typeof v === "number" && Number.isFinite(v);
+-}
+-
+ function isCountsByReason(v: unknown): v is Record<MatchingReason, number> {
+   if (!isRecord(v)) return false;
+   const keys: MatchingReason[] = [
+@@ -147,14 +113,53 @@ function isCountsByReason(v: unknown): v is Record<MatchingReason, number> {
+ 
+ function isPlanningQuality(v: unknown): v is PlanningQuality {
+   if (!isRecord(v)) return false;
++
+   if (!isNumber(v.overall)) return false;
+   if (!isRecord(v.coverage) || !isNumber(v.coverage.score)) return false;
+   if (!isRecord(v.stability) || !isNumber(v.stability.score)) return false;
+   if (!isRecord(v.equity) || !isNumber(v.equity.score)) return false;
++
+   if (!isCountsByReason(v.countsByReason)) return false;
+   if (!Array.isArray(v.explanations) || !v.explanations.every((x) => typeof x === "string")) return false;
++
+   return true;
+ }
++
++function isMatchingPlanItem(v: unknown): v is MatchingPlanItem {
++  if (!isRecord(v)) return false;
++
++  const shiftIdOk = typeof v.shiftId === "string";
++  const startAtOk = typeof v.startAt === "string";
++  const endAtOk = typeof v.endAt === "string";
++
++  const requiredRoleOk = v.requiredRole === null || typeof v.requiredRole === "string";
++  const currentUserIdOk = v.currentUserId === null || typeof v.currentUserId === "string";
++  const proposedUserIdOk = v.proposedUserId === null || typeof v.proposedUserId === "string";
++
++  const reasonOk =
++    v.reason === "MATCHED" ||
++    v.reason === "ALREADY_ASSIGNED" ||
++    v.reason === "NO_REQUIRED_ROLE" ||
++    v.reason === "NO_USER_WITH_REQUIRED_ROLE" ||
++    v.reason === "USER_CONFLICT";
++
++  return (
++    shiftIdOk &&
++    startAtOk &&
++    endAtOk &&
++    requiredRoleOk &&
++    currentUserIdOk &&
++    proposedUserIdOk &&
++    reasonOk
++  );
++}
++
++function isMatchingApplyItem(v: unknown): v is MatchingApplyItem {
++  if (!isRecord(v)) return false;
++  if (!isMatchingPlanItem(v)) return false;
++
++  // v est déjà un objet : on vérifie applied sans le typer en MatchingPlanItem
++  return "applied" in v && typeof (v as Record<string, unknown>).applied === "boolean";
+ }
+ 
+ function formatDate(d: Date) {
+@@ -736,15 +741,12 @@ export default function PlanningClient() {
+       }
+ 
+       // ✅ appel direct API (standard { ok, data })
+-      const { res, json, text } = await fetchJson(
+-        `/api/planning/autoschedule/runs/${lastRunId}/match/preview`,
+-        {
+-          method: "POST",
+-          headers: { "Content-Type": "application/json" },
+-          // on veut voir aussi ALREADY_ASSIGNED dans le tableau/compteurs
+-          body: JSON.stringify({ includeAlreadyAssigned: true }),
+-        }
+-      );
++      const { res, json, text } = await fetchJson(`/api/planning/autoschedule/runs/${lastRunId}/match/preview`, {
++        method: "POST",
++        headers: { "Content-Type": "application/json" },
++        // on veut voir aussi ALREADY_ASSIGNED dans le tableau/compteurs
++        body: JSON.stringify({ includeAlreadyAssigned: true }),
++      });
+ 
+       if (!res.ok || !jsonOkPayload(json)) {
+         const err = jsonErrPayload(json) ? getString(json.error) : `HTTP_${res.status}`;
+@@ -820,14 +822,11 @@ export default function PlanningClient() {
+ 
+     try {
+       // ✅ apply exige { confirm:true }
+-      const { res, json, text } = await fetchJson(
+-        `/api/planning/autoschedule/runs/${lastRunId}/match/apply`,
+-        {
+-          method: "POST",
+-          headers: { "Content-Type": "application/json" },
+-          body: JSON.stringify({ confirm: true }),
+-        }
+-      );
++      const { res, json, text } = await fetchJson(`/api/planning/autoschedule/runs/${lastRunId}/match/apply`, {
++        method: "POST",
++        headers: { "Content-Type": "application/json" },
++        body: JSON.stringify({ confirm: true }),
++      });
+ 
+       if (!res.ok || !jsonOkPayload(json)) {
+         const err = jsonErrPayload(json) ? getString(json.error) : `HTTP_${res.status}`;
+@@ -1240,18 +1239,13 @@ export default function PlanningClient() {
+       {genMsg && <div style={{ opacity: 0.9 }}>{genMsg}</div>}
+       {dayGenMsg && <div style={{ opacity: 0.9 }}>{dayGenMsg}</div>}
+       {matchMsg && <div style={{ opacity: 0.9 }}>{matchMsg}</div>}
++
+       {matchQuality && (
+-        <div
+-          style={{
+-            border: "1px solid rgba(255,255,255,0.18)",
+-            borderRadius: 10,
+-            padding: 10,
+-            marginTop: 8,
+-          }}
+-        >
++        <div style={{ border: "1px solid rgba(255,255,255,0.18)", borderRadius: 10, padding: 10, marginTop: 8 }}>
+           <div style={{ fontWeight: 900 }}>Score qualité planning : {matchQuality.overall}/100</div>
+           <div style={{ fontSize: 12, opacity: 0.9, marginTop: 6 }}>
+-            Couverture {matchQuality.coverage.score}/100 — Stabilité {matchQuality.stability.score}/100 — Équité {matchQuality.equity.score}/100
++            Couverture {matchQuality.coverage.score}/100 — Stabilité {matchQuality.stability.score}/100 — Équité{" "}
++            {matchQuality.equity.score}/100
+           </div>
+           <ul style={{ marginTop: 8, paddingLeft: 18, opacity: 0.95 }}>
+             {matchQuality.explanations.map((t, i) => (
+@@ -1260,6 +1254,7 @@ export default function PlanningClient() {
+           </ul>
+         </div>
+       )}
++
+       {pubMsg && <div style={{ opacity: 0.9 }}>{pubMsg}</div>}
+       {cancelMsg && <div style={{ opacity: 0.9 }}>{cancelMsg}</div>}
+ 
+@@ -1272,6 +1267,7 @@ export default function PlanningClient() {
+                 setMatchMsg(null);
+                 setMatchPreview(null);
+                 setMatchApplied(null);
++                setMatchQuality(null);
+                 setMatchPreviewRunId(null);
+               }}
+               style={{
+@@ -1289,7 +1285,8 @@ export default function PlanningClient() {
+           {previewSummary && (
+             <div style={{ marginTop: 6, fontSize: 12, opacity: 0.9 }}>
+               Simulation — MATCHED:{previewSummary.MATCHED}, ALREADY_ASSIGNED:{previewSummary.ALREADY_ASSIGNED}, NO_REQUIRED_ROLE:
+-              {previewSummary.NO_REQUIRED_ROLE}, NO_USER_WITH_REQUIRED_ROLE:{previewSummary.NO_USER_WITH_REQUIRED_ROLE}, USER_CONFLICT:{previewSummary.USER_CONFLICT}
++              {previewSummary.NO_REQUIRED_ROLE}, NO_USER_WITH_REQUIRED_ROLE:{previewSummary.NO_USER_WITH_REQUIRED_ROLE}, USER_CONFLICT:
++              {previewSummary.USER_CONFLICT}
+             </div>
+           )}
+ 
+@@ -1321,7 +1318,9 @@ export default function PlanningClient() {
+                     <td style={{ padding: "6px 6px", opacity: 0.9 }}>{it.requiredRole ?? "—"}</td>
+                     <td style={{ padding: "6px 6px", opacity: 0.9 }}>{it.proposedUserId ?? "—"}</td>
+                     <td style={{ padding: "6px 6px", opacity: 0.9 }}>{it.reason}</td>
+-                    <td style={{ padding: "6px 6px", opacity: 0.9 }}>{isMatchingApplyItem(it) ? (it.applied ? "✅" : "—") : "—"}</td>
++                    <td style={{ padding: "6px 6px", opacity: 0.9 }}>
++                      {isMatchingApplyItem(it) ? (it.applied ? "✅" : "—") : "—"}
++                    </td>
+                   </tr>
+                 ))}
+               </tbody>
