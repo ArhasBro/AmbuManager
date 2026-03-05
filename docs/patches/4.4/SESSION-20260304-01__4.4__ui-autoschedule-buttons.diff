@@ -1,0 +1,142 @@
+--- a/app/planning/planning-client.tsx
++++ b/app/planning/planning-client.tsx
+@@ -1095,20 +1095,6 @@
+               </button>
+ 
+               <button
+-                onClick={generateWeek}
+-                disabled={genLoading}
+-                style={{
+-                  border: "1px solid rgba(255,255,255,0.25)",
+-                  padding: "6px 10px",
+-                  borderRadius: 8,
+-                  opacity: genLoading ? 0.7 : 1,
+-                }}
+-                title="Génère un brouillon (DraftShifts) pour la semaine affichée"
+-              >
+-                {genLoading ? "Génération…" : "Générer cette semaine"}
+-              </button>
+-
+-              <button
+                 onClick={previewMatch}
+                 disabled={matchDisabled}
+                 style={{
+@@ -1136,37 +1122,51 @@
+                 {matchApplyLoading ? "Application…" : "Appliquer auto-assign"}
+               </button>
+ 
+-              <button
+-                onClick={publishLastRun}
+-                disabled={publishDisabled}
+-                style={{
+-                  border: "1px solid rgba(255,255,255,0.25)",
+-                  padding: "6px 10px",
+-                  borderRadius: 8,
+-                  opacity: publishDisabled ? 0.6 : 1,
+-                }}
+-                title="Publie le dernier run DRAFT"
+-              >
+-                {pubLoading ? "Publication…" : "Publier le brouillon"}
+-              </button>
+-
+-              <button
+-                onClick={cancelLastRun}
+-                disabled={cancelLoading || !lastRunId || (lastRunStatus !== null && lastRunStatus !== "DRAFT")}
+-                style={{
+-                  border: "1px solid rgba(255,255,255,0.25)",
+-                  padding: "6px 10px",
+-                  borderRadius: 8,
+-                  opacity: cancelLoading ? 0.7 : 1,
+-                }}
+-                title="Annule le dernier run DRAFT"
+-              >
+-                {cancelLoading ? "Annulation…" : "Annuler le brouillon"}
+-              </button>
+-
+               {listsError && <span style={{ fontSize: 12, opacity: 0.8 }}>Listes: erreur ({listsError})</span>}
+             </>
+           )}
++
++          <button
++            onClick={generateWeek}
++            disabled={genLoading}
++            style={{
++              border: "1px solid rgba(255,255,255,0.25)",
++              padding: "6px 10px",
++              borderRadius: 8,
++              opacity: genLoading ? 0.7 : 1,
++            }}
++            title="Génère un brouillon (DraftShifts) pour la semaine affichée"
++          >
++            {genLoading ? "Génération…" : "Générer cette semaine"}
++          </button>
++
++          <button
++            onClick={publishLastRun}
++            disabled={publishDisabled}
++            style={{
++              border: "1px solid rgba(255,255,255,0.25)",
++              padding: "6px 10px",
++              borderRadius: 8,
++              opacity: publishDisabled ? 0.6 : 1,
++            }}
++            title="Publie le dernier run DRAFT"
++          >
++            {pubLoading ? "Publication…" : "Publier le brouillon"}
++          </button>
++
++          <button
++            onClick={cancelLastRun}
++            disabled={cancelLoading || !lastRunId || (lastRunStatus !== null && lastRunStatus !== "DRAFT")}
++            style={{
++              border: "1px solid rgba(255,255,255,0.25)",
++              padding: "6px 10px",
++              borderRadius: 8,
++              opacity: cancelLoading ? 0.7 : 1,
++            }}
++            title="Annule le dernier run DRAFT"
++          >
++            {cancelLoading ? "Annulation…" : "Annuler le brouillon"}
++          </button>
+         </div>
+       </div>
+ 
+@@ -1289,23 +1289,21 @@
+                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
+                   <div style={{ fontWeight: 800, textTransform: "capitalize" }}>{dayLabelFR(d)}</div>
+ 
+-                  {canAdminSave(role) && (
+-                    <button
+-                      onClick={() => generateDay(key)}
+-                      disabled={isDayGenerating || genLoading || pubLoading || cancelLoading}
+-                      style={{
+-                        border: "1px solid rgba(255,255,255,0.25)",
+-                        padding: "4px 8px",
+-                        borderRadius: 8,
+-                        opacity: isDayGenerating ? 0.7 : 1,
+-                        fontSize: 12,
+-                        whiteSpace: "nowrap",
+-                      }}
+-                      title="Génère un brouillon (DraftShifts) pour ce jour"
+-                    >
+-                      {isDayGenerating ? "Génération…" : "Générer ce jour"}
+-                    </button>
+-                  )}
++                  <button
++                    onClick={() => generateDay(key)}
++                    disabled={isDayGenerating || genLoading || pubLoading || cancelLoading}
++                    style={{
++                      border: "1px solid rgba(255,255,255,0.25)",
++                      padding: "4px 8px",
++                      borderRadius: 8,
++                      opacity: isDayGenerating ? 0.7 : 1,
++                      fontSize: 12,
++                      whiteSpace: "nowrap",
++                    }}
++                    title="Génère un brouillon (DraftShifts) pour ce jour"
++                  >
++                    {isDayGenerating ? "Génération…" : "Générer ce jour"}
++                  </button>
+                 </div>
+ 
+                 <div style={{ opacity: 0.75, marginBottom: 8 }}>{key}</div>
