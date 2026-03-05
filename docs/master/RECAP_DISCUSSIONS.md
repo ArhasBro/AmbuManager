@@ -187,3 +187,19 @@ Chaque section indique un **Statut de source** :
 ### Extraits (limités)
 - Mention service matching + intégration UI `/planning`.
 - Points en attente : score qualité + explications (à livrer).
+
+## 18. SESSION-20260304-01 — DoD 4.4 VALIDÉ — 04/03/2026
+### Métadonnées (source)
+- Date : 04/03/2026
+- Statut de source : **EXTRAIT CONFIRMÉ**
+
+### Extraits / synthèse dérivée
+- Validation : **VALIDÉ : DoD 4.4**
+- Preuves d’exécution consignées : `docs/sessions/SESSION-20260304-01/EVIDENCES.md`
+- Scénarios validés (extraits) :
+  - WEEK (generate → publish → shifts visibles) + runId `cmmdblltx0000b47kad73zl8v`
+  - CANCEL (status=CANCELLED) + runId `cmmdbqyow0018b47kzdyl38tn`
+  - DRAFT_ALREADY_EXISTS + runId `cmmdbsq3n0022b47kxia55tpl`
+  - RBAC : publish interdit (planner) + autoschedule interdit (viewer)
+  - Sécurité : 401 sans session + cross-tenant NOT_FOUND
+- Prochaine étape : 4.6 — score qualité planning + explications.

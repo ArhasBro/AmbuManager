@@ -22,5 +22,3 @@ STRUCTURE_PROJET.md
 ## Validation
 
 VALIDÉ  
-ou  
-NON VALIDÉ
