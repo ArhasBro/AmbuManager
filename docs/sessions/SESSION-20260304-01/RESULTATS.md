@@ -30,4 +30,4 @@
 
 ## Prochaine étape logique unique
 
-- Passer au bloc **4.6 — score qualité planning + explications** (selon `ETAT_GLOBAL_PROJET.md` / `PLAN_DE_DEVELOPPEMENT.md`).
+- Passer au bloc **4.6 — score qualité planning + explications** (référence : `ETAT_GLOBAL_PROJET.md` / `PLAN_DE_DEVELOPPEMENT.md`).
