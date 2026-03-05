@@ -86,12 +86,12 @@ export async function POST(
     // body vide accepté => includeAlreadyAssigned = false
   }
 
-  const plan = await computeDraftShiftMatchingByRole(prisma, {
+    const plan = await computeDraftShiftMatchingByRole(prisma, {
     companyId,
     runId,
     includeAlreadyAssigned,
   });
 
   const quality = computePlanningQuality(plan);
-return ok({ plan, quality }, 200);
+  return ok({ plan, quality }, 200);
 }
