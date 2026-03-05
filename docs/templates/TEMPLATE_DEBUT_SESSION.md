@@ -56,7 +56,7 @@ Validé uniquement si :
 -Codage "validé"
 -Test "validé"
 
-Si "Non validé" réalisé les codes (via VS Code) et éffectuer les test.
+Si "Non validé" réalisé les codes (via VS Code) avec des patch que l'on met dans "./docs/patches/(numéro de bloc) et éffectuer les tests pour validé le bloc.
 
 INTERDICTION  
 - Aucune dérive hors du bloc actif.  

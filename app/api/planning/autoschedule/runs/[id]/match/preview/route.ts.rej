@@ -1,0 +1,18 @@
+diff a/app/api/planning/autoschedule/runs/[id]/match/preview/route.ts b/app/api/planning/autoschedule/runs/[id]/match/preview/route.ts	(rejected hunks)
+@@ -6,6 +6,7 @@
+ import { prisma } from "@/lib/prisma";
+ import { ok, json } from "@/lib/api/response";
+ import { computeDraftShiftMatchingByRole } from "@/lib/services/planning/matching.service";
++import { computePlanningQuality } from "@/lib/services/planning/matching-quality";
+ 
+ const BodySchema = z
+   .object({
+@@ -91,5 +92,7 @@
+     includeAlreadyAssigned,
+   });
+ 
+-  return ok(plan, 200);
++  const quality = computePlanningQuality(plan);
++
++  return ok({ plan, quality }, 200);
+ }

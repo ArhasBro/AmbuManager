@@ -6,6 +6,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { ok, json } from "@/lib/api/response";
 import { computeDraftShiftMatchingByRole } from "@/lib/services/planning/matching.service";
+import { computePlanningQuality } from "@/lib/services/planning/matching-quality";
 
 const BodySchema = z
   .object({
@@ -91,5 +92,6 @@ export async function POST(
     includeAlreadyAssigned,
   });
 
-  return ok(plan, 200);
+  const quality = computePlanningQuality(plan);
+return ok({ plan, quality }, 200);
 }
