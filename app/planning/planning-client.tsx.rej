@@ -1,58 +1,5 @@
 diff a/app/planning/planning-client.tsx b/app/planning/planning-client.tsx	(rejected hunks)
-@@ -109,6 +109,52 @@
- function isMatchingApplyItem(v: unknown): v is MatchingApplyItem {
-   if (!isRecord(v)) return false;
-   return typeof v.applied === "boolean";
-+
-+
-+type PlanningQuality = {
-+  overall: number;
-+  coverage: { score: number; covered: number; total: number; pct: number };
-+  stability: { score: number; conflicts: number; total: number; pct: number };
-+  equity: {
-+    score: number;
-+    users: number;
-+    totalAssigned: number;
-+    mean: number;
-+    stdev: number;
-+    cv: number;
-+    min: number;
-+    max: number;
-+  };
-+  countsByReason: Record<MatchingReason, number>;
-+  explanations: string[];
-+};
-+
-+function isNumber(v: unknown): v is number {
-+  return typeof v === "number" && Number.isFinite(v);
-+}
-+
-+function isCountsByReason(v: unknown): v is Record<MatchingReason, number> {
-+  if (!isRecord(v)) return false;
-+  const keys: MatchingReason[] = [
-+    "MATCHED",
-+    "ALREADY_ASSIGNED",
-+    "NO_REQUIRED_ROLE",
-+    "NO_USER_WITH_REQUIRED_ROLE",
-+    "USER_CONFLICT",
-+  ];
-+  return keys.every((k) => isNumber(v[k]));
-+}
-+
-+function isPlanningQuality(v: unknown): v is PlanningQuality {
-+  if (!isRecord(v)) return false;
-+  if (!isNumber(v.overall)) return false;
-+  if (!isRecord(v.coverage) || !isNumber(v.coverage.score)) return false;
-+  if (!isRecord(v.stability) || !isNumber(v.stability.score)) return false;
-+  if (!isRecord(v.equity) || !isNumber(v.equity.score)) return false;
-+  if (!isCountsByReason(v.countsByReason)) return false;
-+  if (!Array.isArray(v.explanations) || !v.explanations.every((x) => typeof x === "string")) return false;
-+  return true;
-+}
- }
- 
- function formatDate(d: Date) {
-@@ -260,6 +306,7 @@
+@@ -260,6 +309,7 @@ export default function PlanningClient() {
    const [matchMsg, setMatchMsg] = useState<string | null>(null);
    const [matchPreview, setMatchPreview] = useState<MatchingPlanItem[] | null>(null);
    const [matchApplied, setMatchApplied] = useState<MatchingApplyItem[] | null>(null);
@@ -60,7 +7,7 @@ diff a/app/planning/planning-client.tsx b/app/planning/planning-client.tsx	(reje
  
    // ✅ verrou : le preview est lié à un runId précis
    const [matchPreviewRunId, setMatchPreviewRunId] = useState<string | null>(null);
-@@ -529,6 +576,7 @@
+@@ -529,6 +579,7 @@ export default function PlanningClient() {
      setMatchMsg(null);
      setMatchPreview(null);
      setMatchApplied(null);
@@ -68,7 +15,7 @@ diff a/app/planning/planning-client.tsx b/app/planning/planning-client.tsx	(reje
      setMatchPreviewRunId(null);
    }, []);
  
-@@ -665,6 +713,7 @@
+@@ -665,6 +716,7 @@ export default function PlanningClient() {
      setMatchApplyLoading(false);
      setMatchMsg(null);
      setMatchApplied(null);
@@ -76,23 +23,7 @@ diff a/app/planning/planning-client.tsx b/app/planning/planning-client.tsx	(reje
      setPubMsg(null);
  
      try {
-@@ -674,6 +723,7 @@
-         setMatchMsg(`Impossible : run.status=${lastRunStatus}`);
-         setMatchPreviewRunId(null);
-         setMatchPreview(null);
-+        setMatchQuality(null);
-         return;
-       }
- 
-@@ -681,6 +731,7 @@
-         setMatchMsg("Impossible : aucun DraftShift (NO_DRAFTS).");
-         setMatchPreviewRunId(null);
-         setMatchPreview(null);
-+        setMatchQuality(null);
-         return;
-       }
- 
-@@ -701,20 +752,35 @@
+@@ -701,20 +753,35 @@ export default function PlanningClient() {
        }
  
        const data = isRecord(json) ? json.data : null;
@@ -102,20 +33,20 @@ diff a/app/planning/planning-client.tsx b/app/planning/planning-client.tsx	(reje
 +      let qualityRaw: unknown = null;
 +
 +      if (isRecord(data) && "plan" in data) {
-+        planRaw = (data as Record<string, unknown>).plan;
-+        qualityRaw = (data as Record<string, unknown>).quality;
++        planRaw = data.plan;
++        qualityRaw = data.quality;
 +      }
 +
 +      const arr = Array.isArray(planRaw) ? planRaw : [];
        const parsed: MatchingPlanItem[] = arr.filter(isMatchingPlanItem);
  
-       setMatchPreview(parsed);
-       setMatchPreviewRunId(lastRunId);
-+      setMatchQuality(isPlanningQuality(qualityRaw) ? qualityRaw : null);
- 
-       const c = countByReason(parsed);
 +      const q = isPlanningQuality(qualityRaw) ? qualityRaw : null;
 +
+       setMatchPreview(parsed);
+       setMatchPreviewRunId(lastRunId);
++      setMatchQuality(q);
+ 
+       const c = countByReason(parsed);
        setMatchMsg(
 -        `Simulation OK ✅ — MATCHED:${c.MATCHED}, ALREADY_ASSIGNED:${c.ALREADY_ASSIGNED}, NO_REQUIRED_ROLE:${c.NO_REQUIRED_ROLE}, NO_USER_WITH_REQUIRED_ROLE:${c.NO_USER_WITH_REQUIRED_ROLE}, USER_CONFLICT:${c.USER_CONFLICT}`
 +        q
@@ -130,7 +61,7 @@ diff a/app/planning/planning-client.tsx b/app/planning/planning-client.tsx	(reje
        setMatchPreviewRunId(null);
      } finally {
        setMatchPreviewLoading(false);
-@@ -1174,6 +1240,26 @@
+@@ -1174,6 +1241,27 @@ export default function PlanningClient() {
        {genMsg && <div style={{ opacity: 0.9 }}>{genMsg}</div>}
        {dayGenMsg && <div style={{ opacity: 0.9 }}>{dayGenMsg}</div>}
        {matchMsg && <div style={{ opacity: 0.9 }}>{matchMsg}</div>}
@@ -145,7 +76,8 @@ diff a/app/planning/planning-client.tsx b/app/planning/planning-client.tsx	(reje
 +        >
 +          <div style={{ fontWeight: 900 }}>Score qualité planning : {matchQuality.overall}/100</div>
 +          <div style={{ fontSize: 12, opacity: 0.9, marginTop: 6 }}>
-+            Couverture {matchQuality.coverage.score}/100 — Stabilité {matchQuality.stability.score}/100 — Équité {matchQuality.equity.score}/100
++            Couverture {matchQuality.coverage.score}/100 — Stabilité {matchQuality.stability.score}/100 — Équité{" "}
++            {matchQuality.equity.score}/100
 +          </div>
 +          <ul style={{ marginTop: 8, paddingLeft: 18, opacity: 0.95 }}>
 +            {matchQuality.explanations.map((t, i) => (

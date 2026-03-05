@@ -1,0 +1,344 @@
+diff --git a/app/api/planning/autoschedule/runs/[id]/match/preview/route.ts b/app/api/planning/autoschedule/runs/[id]/match/preview/route.ts
+index 5472dc7..b8173df 100644
+--- a/app/api/planning/autoschedule/runs/[id]/match/preview/route.ts
++++ b/app/api/planning/autoschedule/runs/[id]/match/preview/route.ts
+@@ -6,6 +6,7 @@ import { authOptions } from "@/lib/auth";
+ import { prisma } from "@/lib/prisma";
+ import { ok, json } from "@/lib/api/response";
+ import { computeDraftShiftMatchingByRole } from "@/lib/services/planning/matching.service";
++import { computePlanningQuality } from "@/lib/services/planning/matching-quality";
+ 
+ const BodySchema = z
+   .object({
+@@ -91,5 +92,7 @@ export async function POST(
+     includeAlreadyAssigned,
+   });
+ 
+-  return ok(plan, 200);
++  const quality = computePlanningQuality(plan);
++
++  return ok({ plan, quality }, 200);
+ }
+\ No newline at end of file
+diff --git a/app/planning/planning-client.tsx b/app/planning/planning-client.tsx
+index 9de69ee..a00bfcb 100644
+--- a/app/planning/planning-client.tsx
++++ b/app/planning/planning-client.tsx
+@@ -54,6 +54,10 @@ function isRecord(v: unknown): v is JsonRecord {
+   return typeof v === "object" && v !== null && !Array.isArray(v);
+ }
+ 
++function isNumber(v: unknown): v is number {
++  return typeof v === "number" && Number.isFinite(v);
++}
++
+ // 4.6 matching types (UI) — alignés service/API
+ type MatchingReason =
+   | "MATCHED"
+@@ -77,6 +81,51 @@ type MatchingPlanItem = {
+ 
+ type MatchingApplyItem = MatchingPlanItem & { applied: boolean };
+ 
++type PlanningQuality = {
++  overall: number;
++  coverage: { score: number; covered: number; total: number; pct: number };
++  stability: { score: number; conflicts: number; total: number; pct: number };
++  equity: {
++    score: number;
++    users: number;
++    totalAssigned: number;
++    mean: number;
++    stdev: number;
++    cv: number;
++    min: number;
++    max: number;
++  };
++  countsByReason: Record<MatchingReason, number>;
++  explanations: string[];
++};
++
++function isCountsByReason(v: unknown): v is Record<MatchingReason, number> {
++  if (!isRecord(v)) return false;
++  const keys: MatchingReason[] = [
++    "MATCHED",
++    "ALREADY_ASSIGNED",
++    "NO_REQUIRED_ROLE",
++    "NO_USER_WITH_REQUIRED_ROLE",
++    "USER_CONFLICT",
++  ];
++  return keys.every((k) => isNumber(v[k]));
++}
++
++function isPlanningQuality(v: unknown): v is PlanningQuality {
++  if (!isRecord(v)) return false;
++
++  if (!isNumber(v.overall)) return false;
++  if (!isRecord(v.coverage) || !isNumber(v.coverage.score)) return false;
++  if (!isRecord(v.stability) || !isNumber(v.stability.score)) return false;
++  if (!isRecord(v.equity) || !isNumber(v.equity.score)) return false;
++
++  if (!isCountsByReason(v.countsByReason)) return false;
++  if (!Array.isArray(v.explanations) || !v.explanations.every((x) => typeof x === "string")) return false;
++
++  return true;
++}
++
++
+ function isMatchingPlanItem(v: unknown): v is MatchingPlanItem {
+   if (!isRecord(v)) return false;
+ 
+@@ -260,6 +309,7 @@ export default function PlanningClient() {
+   const [matchMsg, setMatchMsg] = useState<string | null>(null);
+   const [matchPreview, setMatchPreview] = useState<MatchingPlanItem[] | null>(null);
+   const [matchApplied, setMatchApplied] = useState<MatchingApplyItem[] | null>(null);
++  const [matchQuality, setMatchQuality] = useState<PlanningQuality | null>(null);
+ 
+   // ✅ verrou : le preview est lié à un runId précis
+   const [matchPreviewRunId, setMatchPreviewRunId] = useState<string | null>(null);
+@@ -529,6 +579,7 @@ export default function PlanningClient() {
+     setMatchMsg(null);
+     setMatchPreview(null);
+     setMatchApplied(null);
++    setMatchQuality(null);
+     setMatchPreviewRunId(null);
+   }, []);
+ 
+@@ -665,6 +716,7 @@ export default function PlanningClient() {
+     setMatchApplyLoading(false);
+     setMatchMsg(null);
+     setMatchApplied(null);
++    setMatchQuality(null);
+     setPubMsg(null);
+ 
+     try {
+@@ -701,20 +753,35 @@ export default function PlanningClient() {
+       }
+ 
+       const data = isRecord(json) ? json.data : null;
+-      const arr = Array.isArray(data) ? data : [];
++
++      let planRaw: unknown = data;
++      let qualityRaw: unknown = null;
++
++      if (isRecord(data) && "plan" in data) {
++        planRaw = data.plan;
++        qualityRaw = data.quality;
++      }
++
++      const arr = Array.isArray(planRaw) ? planRaw : [];
+       const parsed: MatchingPlanItem[] = arr.filter(isMatchingPlanItem);
+ 
++      const q = isPlanningQuality(qualityRaw) ? qualityRaw : null;
++
+       setMatchPreview(parsed);
+       setMatchPreviewRunId(lastRunId);
++      setMatchQuality(q);
+ 
+       const c = countByReason(parsed);
+       setMatchMsg(
+-        `Simulation OK ✅ — MATCHED:${c.MATCHED}, ALREADY_ASSIGNED:${c.ALREADY_ASSIGNED}, NO_REQUIRED_ROLE:${c.NO_REQUIRED_ROLE}, NO_USER_WITH_REQUIRED_ROLE:${c.NO_USER_WITH_REQUIRED_ROLE}, USER_CONFLICT:${c.USER_CONFLICT}`
++        q
++          ? `Simulation OK ✅ — Score:${q.overall}/100 (Couv:${q.coverage.score}, Stab:${q.stability.score}, Eq:${q.equity.score}) — MATCHED:${c.MATCHED}, ALREADY_ASSIGNED:${c.ALREADY_ASSIGNED}, NO_REQUIRED_ROLE:${c.NO_REQUIRED_ROLE}, NO_USER_WITH_REQUIRED_ROLE:${c.NO_USER_WITH_REQUIRED_ROLE}, USER_CONFLICT:${c.USER_CONFLICT}`
++          : `Simulation OK ✅ — MATCHED:${c.MATCHED}, ALREADY_ASSIGNED:${c.ALREADY_ASSIGNED}, NO_REQUIRED_ROLE:${c.NO_REQUIRED_ROLE}, NO_USER_WITH_REQUIRED_ROLE:${c.NO_USER_WITH_REQUIRED_ROLE}, USER_CONFLICT:${c.USER_CONFLICT}`
+       );
+     } catch (e: unknown) {
+       const msg = e instanceof Error ? e.message : "Unknown error";
+       setMatchMsg(`Erreur simulation: ${msg}`);
+       setMatchPreview(null);
++      setMatchQuality(null);
+       setMatchPreviewRunId(null);
+     } finally {
+       setMatchPreviewLoading(false);
+@@ -1174,6 +1241,27 @@ export default function PlanningClient() {
+       {genMsg && <div style={{ opacity: 0.9 }}>{genMsg}</div>}
+       {dayGenMsg && <div style={{ opacity: 0.9 }}>{dayGenMsg}</div>}
+       {matchMsg && <div style={{ opacity: 0.9 }}>{matchMsg}</div>}
++      {matchQuality && (
++        <div
++          style={{
++            border: "1px solid rgba(255,255,255,0.18)",
++            borderRadius: 10,
++            padding: 10,
++            marginTop: 8,
++          }}
++        >
++          <div style={{ fontWeight: 900 }}>Score qualité planning : {matchQuality.overall}/100</div>
++          <div style={{ fontSize: 12, opacity: 0.9, marginTop: 6 }}>
++            Couverture {matchQuality.coverage.score}/100 — Stabilité {matchQuality.stability.score}/100 — Équité{" "}
++            {matchQuality.equity.score}/100
++          </div>
++          <ul style={{ marginTop: 8, paddingLeft: 18, opacity: 0.95 }}>
++            {matchQuality.explanations.map((t, i) => (
++              <li key={i}>{t}</li>
++            ))}
++          </ul>
++        </div>
++      )}
+       {pubMsg && <div style={{ opacity: 0.9 }}>{pubMsg}</div>}
+       {cancelMsg && <div style={{ opacity: 0.9 }}>{cancelMsg}</div>}
+ 
+diff --git a/lib/services/planning/matching-quality.ts b/lib/services/planning/matching-quality.ts
+new file mode 100644
+index 0000000..50869ea
+--- /dev/null
++++ b/lib/services/planning/matching-quality.ts
+@@ -0,0 +1,159 @@
++import type { MatchingPlanItem, MatchingReason } from "./matching.service";
++
++export type PlanningQualityWeights = {
++  coverage: number;
++  stability: number;
++  equity: number;
++};
++
++export type PlanningQuality = {
++  overall: number;
++  weights: PlanningQualityWeights;
++
++  coverage: { score: number; covered: number; total: number; pct: number };
++  stability: { score: number; conflicts: number; total: number; pct: number };
++  equity: {
++    score: number;
++    users: number;
++    totalAssigned: number;
++    mean: number;
++    stdev: number;
++    cv: number;
++    min: number;
++    max: number;
++  };
++
++  countsByReason: Record<MatchingReason, number>;
++  explanations: string[];
++};
++
++export const PLANNING_QUALITY_DEFAULT_WEIGHTS: PlanningQualityWeights = {
++  coverage: 0.5,
++  stability: 0.3,
++  equity: 0.2,
++};
++
++const EMPTY_COUNTS: Record<MatchingReason, number> = {
++  MATCHED: 0,
++  ALREADY_ASSIGNED: 0,
++  NO_REQUIRED_ROLE: 0,
++  NO_USER_WITH_REQUIRED_ROLE: 0,
++  USER_CONFLICT: 0,
++};
++
++function clampScore(n: number): number {
++  if (!Number.isFinite(n)) return 0;
++  if (n < 0) return 0;
++  if (n > 100) return 100;
++  return Math.round(n);
++}
++
++function pct(part: number, total: number): number {
++  if (total <= 0) return 100;
++  return Math.round((part / total) * 100);
++}
++
++/**
++ * Score qualité planning (v1)
++ * - Couverture : % des DraftShifts avec requiredRole assignés (MATCHED ou ALREADY_ASSIGNED)
++ * - Stabilité  : pénalité sur USER_CONFLICT (sur DraftShifts avec requiredRole)
++ * - Équité     : 1/(1+CV) sur la distribution des assignations par user (MATCHED/ALREADY_ASSIGNED)
++ */
++export function computePlanningQuality(
++  plan: MatchingPlanItem[],
++  weights: PlanningQualityWeights = PLANNING_QUALITY_DEFAULT_WEIGHTS
++): PlanningQuality {
++  const counts: Record<MatchingReason, number> = { ...EMPTY_COUNTS };
++
++  for (const item of plan) {
++    const r = item.reason;
++    if (r in counts) counts[r as MatchingReason] = (counts[r as MatchingReason] ?? 0) + 1;
++  }
++
++  const withRole = plan.filter((i) => i.requiredRole !== null);
++  const totalWithRole = withRole.length;
++
++  const covered = withRole.filter((i) => i.reason === "MATCHED" || i.reason === "ALREADY_ASSIGNED").length;
++  const coverageScore = totalWithRole === 0 ? 100 : pct(covered, totalWithRole);
++
++  const conflicts = withRole.filter((i) => i.reason === "USER_CONFLICT").length;
++  const stabilityScore = totalWithRole === 0 ? 100 : clampScore(100 - (conflicts / totalWithRole) * 100);
++  const conflictPct = totalWithRole === 0 ? 0 : pct(conflicts, totalWithRole);
++
++  // Équité (distribution des assignations par user)
++  const byUser = new Map<string, number>();
++  for (const i of plan) {
++    const assignedUserId =
++      i.reason === "MATCHED" || i.reason === "ALREADY_ASSIGNED"
++        ? (i.proposedUserId ?? i.currentUserId)
++        : null;
++
++    if (typeof assignedUserId === "string" && assignedUserId.length > 0) {
++      byUser.set(assignedUserId, (byUser.get(assignedUserId) ?? 0) + 1);
++    }
++  }
++
++  const userCounts = Array.from(byUser.values());
++  const users = userCounts.length;
++  const totalAssigned = userCounts.reduce((a, b) => a + b, 0);
++  const meanRaw = users > 0 ? totalAssigned / users : 0;
++
++  let stdevRaw = 0;
++  if (users > 0 && meanRaw > 0) {
++    const variance = userCounts.reduce((acc, c) => acc + (c - meanRaw) ** 2, 0) / users;
++    stdevRaw = Math.sqrt(variance);
++  }
++
++  const cvRaw = meanRaw > 0 ? stdevRaw / meanRaw : 0;
++
++  const min = users > 0 ? Math.min(...userCounts) : 0;
++  const max = users > 0 ? Math.max(...userCounts) : 0;
++
++  const equityScore = users <= 1 ? 100 : clampScore(100 * (1 / (1 + cvRaw)));
++
++  const sumWeights = weights.coverage + weights.stability + weights.equity;
++  const norm = sumWeights > 0 ? sumWeights : 1;
++
++  const overallRaw =
++    coverageScore * (weights.coverage / norm) +
++    stabilityScore * (weights.stability / norm) +
++    equityScore * (weights.equity / norm);
++
++  const overall = clampScore(overallRaw);
++
++  const mean = Number(meanRaw.toFixed(2));
++  const stdev = Number(stdevRaw.toFixed(2));
++  const cv = Number(cvRaw.toFixed(2));
++
++  const explanations: string[] = [
++    `Couverture: ${covered}/${totalWithRole} shifts avec rôle assignés (MATCHED ou déjà assignés) → ${coverageScore}/100.`,
++    `Stabilité: ${conflicts} conflit(s) utilisateur sur ${totalWithRole} shifts avec rôle (${conflictPct}%) → ${stabilityScore}/100.`,
++    `Équité: ${users} utilisateur(s) assignés, min=${min}, max=${max}, moyenne=${mean}, CV=${cv} → ${equityScore}/100.`,
++  ];
++
++  const noRole = counts.NO_REQUIRED_ROLE ?? 0;
++  const noUser = counts.NO_USER_WITH_REQUIRED_ROLE ?? 0;
++
++  if (noRole > 0) explanations.push(`Données: ${noRole} shift(s) sans requiredRole → NO_REQUIRED_ROLE.`);
++  if (noUser > 0)
++    explanations.push(
++      `Ressources: ${noUser} shift(s) sans utilisateur avec le rôle requis → NO_USER_WITH_REQUIRED_ROLE.`
++    );
++  if ((counts.USER_CONFLICT ?? 0) > 0)
++    explanations.push(`Conflits: ${counts.USER_CONFLICT} shift(s) non assignés pour conflit utilisateur → USER_CONFLICT.`);
++
++  return {
++    overall,
++    weights,
++    coverage: {
++      score: coverageScore,
++      covered,
++      total: totalWithRole,
++      pct: totalWithRole === 0 ? 100 : pct(covered, totalWithRole),
++    },
++    stability: { score: stabilityScore, conflicts, total: totalWithRole, pct: conflictPct },
++    equity: { score: equityScore, users, totalAssigned, mean, stdev, cv, min, max },
++    countsByReason: counts,
++    explanations,
++  };
++}
