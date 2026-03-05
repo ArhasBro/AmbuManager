@@ -14,7 +14,6 @@ Ce dossier contient les patchs (`.diff`) produits et appliqués pendant le proje
 docs/patches/  
 README.md  
 <phase>/  
-README.md  
 SESSION-YYYYMMDD-XX__<phase>__<short-title>.diff  
 
 Exemple :
