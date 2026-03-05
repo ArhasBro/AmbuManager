@@ -29,8 +29,8 @@ Les statuts ci-dessous sont fixés par décision de pilotage au **04/03/2026** s
 - **1 — Permissions & Paramétrage entreprise** : **VALIDÉ**
 
 ### 3.2 Roadmap 4.4 → 5.0
-- **4.4 — Stabilisation Planning** : **EN COURS**  
-  Motif : DoD 4.4 non cochée (scénarios/edge cases/tenant-safety + **RBAC/permissions**) → VALIDATION NÉCESSAIRE.  
+- **4.4 — Stabilisation Planning** : **VALIDÉ**  
+  Motif : DoD 4.4 cochée + preuves d’exécution consignées (session `docs/sessions/SESSION-20260304-01/EVIDENCES.md`).  
   Note : performance minimale est NON BLOQUANTE pour clôture 4.4 (priorité 4.7).
 
 - **4.5 — Logique Métier** : **VALIDÉ**
@@ -39,11 +39,13 @@ Les statuts ci-dessous sont fixés par décision de pilotage au **04/03/2026** s
 - **5.0 — SaaS production** : **À FAIRE**
 
 ## 4. 4.4 — Gap de clôture (EN COURS → VALIDÉ)
-Pour clôturer 4.4 en **VALIDÉ**, il manque explicitement :
-- DoD 4.4 cochée (scénarios fonctionnels, edge cases, sécurité tenant-safety + RBAC/permissions).
-- Documentation des scénarios reproductibles.
-- Verdicts edge cases (timezone/ISO, `[id]`, templates invalides).
-- Tests cross-tenant (A/B) + RBAC/permissions.
+4.4 est considéré **VALIDÉ** après exécution des scénarios de la DoD 4.4 et consignation des preuves dans :
+- `docs/sessions/SESSION-20260304-01/EVIDENCES.md`
+
+Éléments validés :
+- Scénarios : WEEK (generate → publish → shifts visibles), CANCEL, DRAFT_ALREADY_EXISTS.
+- Sécurité : 401 sans session, 403 autoschedule (viewer), 403 publish (planner), cross-tenant (A ne voit pas un run B).
+- Pré-requis de test : seed multi-tenant A/B + ShiftTemplates actifs.
 
 Performance : **NON BLOQUANT** en 4.4 (suivi indicatif seulement).
 
@@ -56,7 +58,7 @@ Performance : **NON BLOQUANT** en 4.4 (suivi indicatif seulement).
 - Incident Prisma Studio (ShiftTemplate.id vide) : **À CONFIRMER**
 
 ## 7. Prochaine étape logique unique
-Cocher DoD 4.4 (PLAN) → passer 4.4 en VALIDÉ → compléter 4.6 (score + explications).
+4.4 validé → compléter 4.6 (score + explications).
 
 ## Vérifications par le code (ZIP)
 ### ✅ Confirmé par le code

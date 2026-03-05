@@ -31,16 +31,17 @@ Format unique attendu :
   - `PLANNING_AUTOSCHEDULE`
   - `PLANNING_AUTOSCHEDULE_PUBLISH`
 - RBAC Planning (4.4) : l’endpoint publish exige la permission `PLANNING_AUTOSCHEDULE_PUBLISH` pour les rôles hors ADMIN/GERANT (référence: SESSION-20260304-01).
+- UI Planning (4.4) : boutons autoschedule/publish/cancel affichés pour rôles non-admin afin de permettre les tests DoD ; l’autorité reste l’API (RBAC/401/403).
 - Autres permissions historiquement citées (ex : `PLANNING_EDIT`, `RULES_EDIT`, `FLEET_EDIT`, `USERS_MANAGE`) : **À CONFIRMER / non présentes dans le seed actuel**.
 
 ## 4. Décisions en attente
-- Clôture 4.4 : cocher DoD checklist.
+- Clôture 4.4 : VALIDÉ (preuves en session SESSION-20260304-01).
 - Audit/logging : niveau minimal + implémentation.
 - Score qualité planning : métriques + implémentation.
 - Flotte & conformité : périmètre data + priorisation.
 
 ## 5. Alignement statuts (référence ETAT_GLOBAL_PROJET)
-- 4.4 : EN COURS (DoD non cochée, perf non bloquante).
+- 4.4 : VALIDÉ (DoD cochée, preuves `docs/sessions/SESSION-20260304-01/EVIDENCES.md`).
 - 4.5 : VALIDÉ.
 - 4.6 : EN COURS.
 - 4.7 / 5.0 : À FAIRE.
