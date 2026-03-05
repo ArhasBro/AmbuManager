@@ -11,3 +11,6 @@ git commit -m "update"
 git push
 
 git status
+
+
+npm run build

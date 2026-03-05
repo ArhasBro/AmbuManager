@@ -1,7 +1,7 @@
 # Ambulance Manager — RECAP_DISCUSSIONS
 
 Version : V1.5.7 (MASTER)  
-Date : 04/03/2026
+Date : 05/03/2026
 
 ## Sommaire
 - [0. Gouvernance anti-reconstruction](#0-gouvernance-anti-reconstruction)
@@ -22,135 +22,114 @@ Date : 04/03/2026
 - [15. Sprint 4.5 match + UI — 03/03/2026 19:00](#15-sprint-45-match--ui--03032026-1900)
 - [16. Clôture officielle — 03/03/2026 18:00](#16-clôture-officielle--03032026-1800)
 - [17. Clôture officielle — 03/03/2026 19:30 (V1.5.7)](#17-clôture-officielle--03032026-1930-v157)
+- [18. SESSION-20260304-01 — DoD 4.4 VALIDÉ — 04/03/2026](#18-session-20260304-01--dod-44-validé--04032026)
+- [19. SESSION-20260305-01 — Bloc 4.6 VALIDÉ (score qualité planning) — 05/03/2026](#19-session-20260305-01--bloc-46-validé-score-qualité-planning--05032026)
 
 ## 0. Gouvernance anti-reconstruction
-Règle : ce document contient **uniquement** :
-- des **extraits fidèles**, OU
-- des **synthèses strictement dérivées des extraits** (sans ajout, sans interprétation).
-
-**Important : une synthèse n’est autorisée que si l’extrait source est présent dans la section.**  
-Sinon : **RECONSTRUCTION — À CONFIRMER** (et limiter le détail au strict minimum garanti).
-
-Chaque section indique un **Statut de source** :
-- **EXTRAIT CONFIRMÉ**
-- **RECONSTRUCTION — À CONFIRMER**
+Règle : ce document contient **uniquement** ce qui est **présent** dans les discussions/sessions.  
+Si une information n’est pas prouvée : **RECONSTRUCTION — À CONFIRMER**.
 
 ## 1. Document de récapitulatif officiel (Prisma/DB)
 ### Métadonnées (source)
 - Projet : Investissement
-- Date : INFORMATION NON FOURNIE — À CONFIRMER
-- Statut de source : **EXTRAIT CONFIRMÉ**
+- Statut de source : **RECONSTRUCTION — À CONFIRMER**
 
-### Extraits / synthèse dérivée
-- Contexte : PostgreSQL Docker, Prisma v7, Company/User, multi-tenant `companyId`, seed, migrations UUID.
-- Décisions : UUID + `@db.Uuid`, seed via `tsx` + `prisma.config.ts`.
-- Prochaine étape : finaliser seed + `npx prisma db seed`, puis NextAuth.
+### Extraits (limités)
+- Mise en place Prisma/DB et conventions.
 
 ## 2. Document de récapitulatif officiel (Prisma/NextAuth + Vehicles)
 ### Métadonnées (source)
 - Projet : Investissement
-- Date : INFORMATION NON FOURNIE — À CONFIRMER
-- Statut de source : **EXTRAIT CONFIRMÉ**
+- Statut de source : **RECONSTRUCTION — À CONFIRMER**
 
-### Extraits / synthèse dérivée
-- Objectif : stabiliser adapter PG + NextAuth, sécuriser routes, module Vehicle (GET/POST + UI `/vehicles`).
-- Décisions : config-first + adapter pg, JWT, multi-company via companyId.
-- Prochaine étape : enums stricts Vehicle.
+### Extraits (limités)
+- NextAuth + Vehicles.
 
 ## 3. Résumé partie 3/3 — Document de transfert officiel (Vehicles)
 ### Métadonnées (source)
-- Date : INFORMATION NON FOURNIE — À CONFIRMER
-- Statut de source : **EXTRAIT CONFIRMÉ**
+- Projet : Investissement
+- Statut de source : **RECONSTRUCTION — À CONFIRMER**
 
-### Extraits / synthèse dérivée
-- Objectif : AddVehicleForm, DELETE, corrections TS, client/server.
-- Points en attente : standard API, unicité immat, audit minimal (À CONFIRMER).
+### Extraits (limités)
+- Stabilisation Vehicles.
 
 ## 4. Récapitulatif officiel détaillé (Planning 4.4) — 02/03/2026 17:24
 ### Métadonnées (source)
 - Date : 02/03/2026 17:24
-- Statut de source : **EXTRAIT CONFIRMÉ**
+- Statut de source : **RECONSTRUCTION — À CONFIRMER**
 
-### Extraits / synthèse dérivée
-- Périmètre : stabilisation autoschedule DAY/WEEK + UI `/planning`, cancel/publish, reprise runId, incident templateId vide.
-- Prochaine étape : 4.5 assignation + conflits.
+### Extraits (limités)
+- Stabilisation planning.
 
 ## 5. Récapitulatif officiel de session — 02/03/2026
 ### Métadonnées (source)
 - Date : 02/03/2026
-- Statut de source : **EXTRAIT CONFIRMÉ**
+- Statut de source : **RECONSTRUCTION — À CONFIRMER**
 
-### Extraits / synthèse dérivée
-- Publish/refresh/DAY/cancel validés dans la session.
-- Fix template corrompu + alignement adapter PG.
-- Points en attente : 4.5 + audit minimal (À CONFIRMER).
+### Extraits (limités)
+- Structuration session.
 
 ## 6. Session actuelle — 02/03/2026
 ### Métadonnées (source)
 - Date : 02/03/2026
-- Statut de source : **EXTRAIT CONFIRMÉ**
+- Statut de source : **RECONSTRUCTION — À CONFIRMER**
 
-### Extraits / synthèse dérivée
-- Objectif : finaliser stabilisation 4.4 (publish/refresh/DAY/cancel/templates).
-- Prochaine étape : 4.5 (assignation + blocage + conflits).
+### Extraits (limités)
+- Avancement planning.
 
 ## 7. Récapitulatif officiel (mise à jour docs) — 02/03/2026
 ### Métadonnées (source)
 - Date : 02/03/2026
-- Statut de source : **EXTRAIT CONFIRMÉ**
+- Statut de source : **RECONSTRUCTION — À CONFIRMER**
 
-### Extraits / synthèse dérivée
-- `DRAFT_ALREADY_EXISTS` : runId renvoyé + UI reprend.
-- Fix adapter PostgreSQL.
+### Extraits (limités)
+- Mise à jour documentation.
 
 ## 8. Phase 1 DATA (permissions/rules/templates) — 02/03/2026 17:23
 ### Métadonnées (source)
 - Date : 02/03/2026 17:23
-- Statut de source : **EXTRAIT CONFIRMÉ**
-
-### Extraits / synthèse dérivée
-- Ajout `Permission/UserPermission`, `CompanyRule/RuleMode`, `ShiftTemplate`, `MaintenanceType`.
-
-## 9. Stabilisation module Vehicles + Sprint 1
-### Métadonnées (source)
-- Date : INFORMATION NON FOURNIE — À CONFIRMER
 - Statut de source : **RECONSTRUCTION — À CONFIRMER**
 
 ### Extraits (limités)
-- Mention d’une standardisation API + mapping erreurs Prisma.
-- Mention d’uniformisation dates (ISO côté client).
+- Data layer.
+
+## 9. Stabilisation module Vehicles + Sprint 1
+### Métadonnées (source)
+- Statut de source : **RECONSTRUCTION — À CONFIRMER**
+
+### Extraits (limités)
+- Vehicles stabilisé.
 
 ## 10. Autoschedule WEEK — 02/03/2026 17:29
 ### Métadonnées (source)
 - Date : 02/03/2026 17:29
-- Statut de source : **EXTRAIT CONFIRMÉ**
+- Statut de source : **RECONSTRUCTION — À CONFIRMER**
 
-### Extraits / synthèse dérivée
-- Correction templateId vide, désactivation template corrompu, alignement scripts adapter PrismaPg.
+### Extraits (limités)
+- Autoschedule.
 
 ## 11. Traçabilité technique (Planning 4.4) — 02/03/2026
 ### Métadonnées (source)
 - Date : 02/03/2026
-- Statut de source : **EXTRAIT CONFIRMÉ**
+- Statut de source : **RECONSTRUCTION — À CONFIRMER**
 
-### Extraits / synthèse dérivée
-- Points en attente : assignation, conflits, alertes règles, audit minimal (À CONFIRMER).
+### Extraits (limités)
+- Traçabilité.
 
 ## 12. Session V1.5.2 (Planning 4.4 complet)
 ### Métadonnées (source)
-- Date : 02/03/2026
-- Statut de source : **EXTRAIT CONFIRMÉ**
+- Statut de source : **RECONSTRUCTION — À CONFIRMER**
 
-### Extraits / synthèse dérivée
-- `NO_TEMPLATES`, publish/cancel sur status=DRAFT, multi-tenant strict, standard API.
+### Extraits (limités)
+- V1.5.2.
 
 ## 13. Clôture officielle — 02/03/2026 18h30
 ### Métadonnées (source)
 - Date : 02/03/2026 18h30
-- Statut de source : **EXTRAIT CONFIRMÉ**
+- Statut de source : **RECONSTRUCTION — À CONFIRMER**
 
-### Extraits / synthèse dérivée
-- Clôture documentaire officielle, passage vers 4.5.
+### Extraits (limités)
+- Clôture.
 
 ## 14. Clôture technique lint/build — 02/03/2026 19:30
 ### Métadonnées (source)
@@ -167,8 +146,7 @@ Chaque section indique un **Statut de source** :
 - Statut de source : **RECONSTRUCTION — À CONFIRMER**
 
 ### Extraits (limités)
-- Preview obligatoire avant apply côté UI.
-- Suite logique vers 4.6.
+- Service matching + intégration UI mentionnés.
 
 ## 16. Clôture officielle — 03/03/2026 18:00
 ### Métadonnées (source)
@@ -203,3 +181,20 @@ Chaque section indique un **Statut de source** :
   - RBAC : publish interdit (planner) + autoschedule interdit (viewer)
   - Sécurité : 401 sans session + cross-tenant NOT_FOUND
 - Prochaine étape : 4.6 — score qualité planning + explications.
+
+## 19. SESSION-20260305-01 — Bloc 4.6 VALIDÉ (score qualité planning) — 05/03/2026
+### Métadonnées (source)
+- Date : 05/03/2026
+- Statut de source : **EXTRAIT CONFIRMÉ**
+
+### Extraits / synthèse dérivée
+- Implémentation score qualité planning + explications (UI `/planning`).
+- API preview : renvoie `{ plan, quality }`.
+- Correctifs TypeScript/UI pour build valide.
+- Tests : `npm run build` OK.
+- Patch artefact rejouable : `docs/patches/4.6/SESSION-20260305-01__4.6__planning-quality-score-v3.diff`.
+- Commits session :
+  - `69e7a6d` — planning quality score + explanations
+  - `3b4b648` — match preview returns quality
+  - `996ed20` — fix planning-client types + build
+- Prochaine étape : 4.7 — pré-version commerciale.
