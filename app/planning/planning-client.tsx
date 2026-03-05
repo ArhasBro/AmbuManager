@@ -125,7 +125,6 @@ function isPlanningQuality(v: unknown): v is PlanningQuality {
   return true;
 }
 
-
 function isMatchingPlanItem(v: unknown): v is MatchingPlanItem {
   if (!isRecord(v)) return false;
 
@@ -157,53 +156,10 @@ function isMatchingPlanItem(v: unknown): v is MatchingPlanItem {
 
 function isMatchingApplyItem(v: unknown): v is MatchingApplyItem {
   if (!isRecord(v)) return false;
-  return typeof v.applied === "boolean";
+  if (!isMatchingPlanItem(v)) return false;
 
-
-type PlanningQuality = {
-  overall: number;
-  coverage: { score: number; covered: number; total: number; pct: number };
-  stability: { score: number; conflicts: number; total: number; pct: number };
-  equity: {
-    score: number;
-    users: number;
-    totalAssigned: number;
-    mean: number;
-    stdev: number;
-    cv: number;
-    min: number;
-    max: number;
-  };
-  countsByReason: Record<MatchingReason, number>;
-  explanations: string[];
-};
-
-function isNumber(v: unknown): v is number {
-  return typeof v === "number" && Number.isFinite(v);
-}
-
-function isCountsByReason(v: unknown): v is Record<MatchingReason, number> {
-  if (!isRecord(v)) return false;
-  const keys: MatchingReason[] = [
-    "MATCHED",
-    "ALREADY_ASSIGNED",
-    "NO_REQUIRED_ROLE",
-    "NO_USER_WITH_REQUIRED_ROLE",
-    "USER_CONFLICT",
-  ];
-  return keys.every((k) => isNumber(v[k]));
-}
-
-function isPlanningQuality(v: unknown): v is PlanningQuality {
-  if (!isRecord(v)) return false;
-  if (!isNumber(v.overall)) return false;
-  if (!isRecord(v.coverage) || !isNumber(v.coverage.score)) return false;
-  if (!isRecord(v.stability) || !isNumber(v.stability.score)) return false;
-  if (!isRecord(v.equity) || !isNumber(v.equity.score)) return false;
-  if (!isCountsByReason(v.countsByReason)) return false;
-  if (!Array.isArray(v.explanations) || !v.explanations.every((x) => typeof x === "string")) return false;
-  return true;
-}
+  // v est déjà un objet : on vérifie applied sans le typer en MatchingPlanItem
+  return "applied" in v && typeof (v as Record<string, unknown>).applied === "boolean";
 }
 
 function formatDate(d: Date) {
@@ -785,15 +741,12 @@ export default function PlanningClient() {
       }
 
       // ✅ appel direct API (standard { ok, data })
-      const { res, json, text } = await fetchJson(
-        `/api/planning/autoschedule/runs/${lastRunId}/match/preview`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          // on veut voir aussi ALREADY_ASSIGNED dans le tableau/compteurs
-          body: JSON.stringify({ includeAlreadyAssigned: true }),
-        }
-      );
+      const { res, json, text } = await fetchJson(`/api/planning/autoschedule/runs/${lastRunId}/match/preview`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        // on veut voir aussi ALREADY_ASSIGNED dans le tableau/compteurs
+        body: JSON.stringify({ includeAlreadyAssigned: true }),
+      });
 
       if (!res.ok || !jsonOkPayload(json)) {
         const err = jsonErrPayload(json) ? getString(json.error) : `HTTP_${res.status}`;
@@ -869,14 +822,11 @@ export default function PlanningClient() {
 
     try {
       // ✅ apply exige { confirm:true }
-      const { res, json, text } = await fetchJson(
-        `/api/planning/autoschedule/runs/${lastRunId}/match/apply`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ confirm: true }),
-        }
-      );
+      const { res, json, text } = await fetchJson(`/api/planning/autoschedule/runs/${lastRunId}/match/apply`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ confirm: true }),
+      });
 
       if (!res.ok || !jsonOkPayload(json)) {
         const err = jsonErrPayload(json) ? getString(json.error) : `HTTP_${res.status}`;
@@ -1289,18 +1239,13 @@ export default function PlanningClient() {
       {genMsg && <div style={{ opacity: 0.9 }}>{genMsg}</div>}
       {dayGenMsg && <div style={{ opacity: 0.9 }}>{dayGenMsg}</div>}
       {matchMsg && <div style={{ opacity: 0.9 }}>{matchMsg}</div>}
+
       {matchQuality && (
-        <div
-          style={{
-            border: "1px solid rgba(255,255,255,0.18)",
-            borderRadius: 10,
-            padding: 10,
-            marginTop: 8,
-          }}
-        >
+        <div style={{ border: "1px solid rgba(255,255,255,0.18)", borderRadius: 10, padding: 10, marginTop: 8 }}>
           <div style={{ fontWeight: 900 }}>Score qualité planning : {matchQuality.overall}/100</div>
           <div style={{ fontSize: 12, opacity: 0.9, marginTop: 6 }}>
-            Couverture {matchQuality.coverage.score}/100 — Stabilité {matchQuality.stability.score}/100 — Équité {matchQuality.equity.score}/100
+            Couverture {matchQuality.coverage.score}/100 — Stabilité {matchQuality.stability.score}/100 — Équité{" "}
+            {matchQuality.equity.score}/100
           </div>
           <ul style={{ marginTop: 8, paddingLeft: 18, opacity: 0.95 }}>
             {matchQuality.explanations.map((t, i) => (
@@ -1309,6 +1254,7 @@ export default function PlanningClient() {
           </ul>
         </div>
       )}
+
       {pubMsg && <div style={{ opacity: 0.9 }}>{pubMsg}</div>}
       {cancelMsg && <div style={{ opacity: 0.9 }}>{cancelMsg}</div>}
 
@@ -1321,6 +1267,7 @@ export default function PlanningClient() {
                 setMatchMsg(null);
                 setMatchPreview(null);
                 setMatchApplied(null);
+                setMatchQuality(null);
                 setMatchPreviewRunId(null);
               }}
               style={{
@@ -1338,7 +1285,8 @@ export default function PlanningClient() {
           {previewSummary && (
             <div style={{ marginTop: 6, fontSize: 12, opacity: 0.9 }}>
               Simulation — MATCHED:{previewSummary.MATCHED}, ALREADY_ASSIGNED:{previewSummary.ALREADY_ASSIGNED}, NO_REQUIRED_ROLE:
-              {previewSummary.NO_REQUIRED_ROLE}, NO_USER_WITH_REQUIRED_ROLE:{previewSummary.NO_USER_WITH_REQUIRED_ROLE}, USER_CONFLICT:{previewSummary.USER_CONFLICT}
+              {previewSummary.NO_REQUIRED_ROLE}, NO_USER_WITH_REQUIRED_ROLE:{previewSummary.NO_USER_WITH_REQUIRED_ROLE}, USER_CONFLICT:
+              {previewSummary.USER_CONFLICT}
             </div>
           )}
 
@@ -1370,7 +1318,9 @@ export default function PlanningClient() {
                     <td style={{ padding: "6px 6px", opacity: 0.9 }}>{it.requiredRole ?? "—"}</td>
                     <td style={{ padding: "6px 6px", opacity: 0.9 }}>{it.proposedUserId ?? "—"}</td>
                     <td style={{ padding: "6px 6px", opacity: 0.9 }}>{it.reason}</td>
-                    <td style={{ padding: "6px 6px", opacity: 0.9 }}>{isMatchingApplyItem(it) ? (it.applied ? "✅" : "—") : "—"}</td>
+                    <td style={{ padding: "6px 6px", opacity: 0.9 }}>
+                      {isMatchingApplyItem(it) ? (it.applied ? "✅" : "—") : "—"}
+                    </td>
                   </tr>
                 ))}
               </tbody>
