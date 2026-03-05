@@ -1,5 +1,7 @@
 # PROTOCOLE_SESSION
 
+Version : V1.5.7 
+Date : 04/03/2026
 Ce document décrit le protocole standard pour les sessions de travail du projet.
 
 ## Structure d'une session

@@ -1,5 +1,8 @@
-﻿Structure du dossier pour le volume Windows
-Le numÚro de sÚrie du volume est 123E-4DB7
+﻿# Structure du dossier pour le volume Windows
+
+Version : V1.5.7 
+Date : 04/03/2026
+
 C:.
 |   .env
 |   .gitignore
