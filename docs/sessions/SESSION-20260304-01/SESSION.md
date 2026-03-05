@@ -30,3 +30,7 @@ Sources autorisées utilisées :
 
 Clôturer la stabilisation Planning 4.4 en complétant et validant la DoD 4.4
 (tests/scénarios + preuves + mise à jour documentaire du statut).
+
+## Statut de clôture
+
+VALIDÉ : DoD 4.4
