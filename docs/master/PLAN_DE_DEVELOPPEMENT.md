@@ -75,7 +75,11 @@ Implémentations attendues (périmètre 4.4) :
 > Tant qu’au moins un item n’est pas coché, statut = EN COURS.
 
 ### 5.1 Pré-requis (environnement)
-- [ ] Procédure standardisée (max 5 lignes) pour : reset DB / migrate / seed — **VALIDATION NÉCESSAIRE**
+- [ ] Procédure standardisée (max 5 lignes) pour : reset DB / migrate / seed
+  1) Vérifier `.env` : `DATABASE_URL` (PostgreSQL) + `NEXTAUTH_SECRET`
+  2) `npm install`
+  3) `npm run db:reset`
+  4) `npm run dev`
 - [ ] Compte ADMIN tenant A opérationnel
 - [ ] Compte ADMIN tenant B opérationnel (tests cross-tenant) — **VALIDATION NÉCESSAIRE**
 

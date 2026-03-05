@@ -30,6 +30,7 @@ Format unique attendu :
 - Permissions confirmées seed :
   - `PLANNING_AUTOSCHEDULE`
   - `PLANNING_AUTOSCHEDULE_PUBLISH`
+- RBAC Planning (4.4) : l’endpoint publish exige la permission `PLANNING_AUTOSCHEDULE_PUBLISH` pour les rôles hors ADMIN/GERANT (référence: SESSION-20260304-01).
 - Autres permissions historiquement citées (ex : `PLANNING_EDIT`, `RULES_EDIT`, `FLEET_EDIT`, `USERS_MANAGE`) : **À CONFIRMER / non présentes dans le seed actuel**.
 
 ## 4. Décisions en attente

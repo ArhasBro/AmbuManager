@@ -1,0 +1,498 @@
+diff -ruN AmbuManager-main_before44/app/api/planning/autoschedule/runs/[id]/publish/route.ts AmbuManager-main/app/api/planning/autoschedule/runs/[id]/publish/route.ts
+--- AmbuManager-main_before44/app/api/planning/autoschedule/runs/[id]/publish/route.ts	2026-03-05 09:36:35.317779267 +0000
++++ AmbuManager-main/app/api/planning/autoschedule/runs/[id]/publish/route.ts	2026-03-05 09:43:48.331972774 +0000
+@@ -28,12 +28,16 @@
+   return id;
+ }
+ 
+-async function canAutoSchedule(userId: string): Promise<boolean> {
++async function hasPermission(userId: string, code: string): Promise<boolean> {
+   const perms = await prisma.userPermission.findMany({
+     where: { userId },
+     include: { permission: true },
+   });
+-  return perms.some((p) => p.permission.code === "PLANNING_AUTOSCHEDULE");
++  return perms.some((p) => p.permission.code === code);
++}
++
++async function canPublishAutoSchedule(userId: string): Promise<boolean> {
++  return hasPermission(userId, "PLANNING_AUTOSCHEDULE_PUBLISH");
+ }
+ 
+ function prismaToApiError(
+@@ -312,10 +316,14 @@
+   }
+ 
+   const roleAllowed = role === "ADMIN" || role === "GERANT";
+-  const permAllowed = roleAllowed ? true : await canAutoSchedule(userId);
++  // ✅ RBAC : ADMIN/GERANT ok, sinon permission dédiée publish
++  const permAllowed = roleAllowed ? true : await canPublishAutoSchedule(userId);
+ 
+   if (!permAllowed) {
+-    return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });
++    return NextResponse.json(
++      { ok: false, error: "FORBIDDEN", details: "PLANNING_AUTOSCHEDULE_PUBLISH requis" },
++      { status: 403 }
++    );
+   }
+ 
+   // ✅ id depuis params (Promise), sinon fallback via l’URL
+diff -ruN AmbuManager-main_before44/docs/master/PLAN_DE_DEVELOPPEMENT.md AmbuManager-main/docs/master/PLAN_DE_DEVELOPPEMENT.md
+--- AmbuManager-main_before44/docs/master/PLAN_DE_DEVELOPPEMENT.md	2026-03-05 09:36:35.327885702 +0000
++++ AmbuManager-main/docs/master/PLAN_DE_DEVELOPPEMENT.md	2026-03-05 09:40:42.974319478 +0000
+@@ -75,7 +75,11 @@
+ > Tant qu’au moins un item n’est pas coché, statut = EN COURS.
+ 
+ ### 5.1 Pré-requis (environnement)
+-- [ ] Procédure standardisée (max 5 lignes) pour : reset DB / migrate / seed — **VALIDATION NÉCESSAIRE**
++- [ ] Procédure standardisée (max 5 lignes) pour : reset DB / migrate / seed
++  1) Vérifier `.env` : `DATABASE_URL` (PostgreSQL) + `NEXTAUTH_SECRET`
++  2) `npm install`
++  3) `npm run db:reset`
++  4) `npm run dev`
+ - [ ] Compte ADMIN tenant A opérationnel
+ - [ ] Compte ADMIN tenant B opérationnel (tests cross-tenant) — **VALIDATION NÉCESSAIRE**
+ 
+diff -ruN AmbuManager-main_before44/docs/master/REGISTRE_DECISIONS.md AmbuManager-main/docs/master/REGISTRE_DECISIONS.md
+--- AmbuManager-main_before44/docs/master/REGISTRE_DECISIONS.md	2026-03-05 09:36:35.328349848 +0000
++++ AmbuManager-main/docs/master/REGISTRE_DECISIONS.md	2026-03-05 09:42:48.853843612 +0000
+@@ -30,6 +30,7 @@
+ - Permissions confirmées seed :
+   - `PLANNING_AUTOSCHEDULE`
+   - `PLANNING_AUTOSCHEDULE_PUBLISH`
++- RBAC Planning (4.4) : l’endpoint publish exige la permission `PLANNING_AUTOSCHEDULE_PUBLISH` pour les rôles hors ADMIN/GERANT (référence: SESSION-20260304-01).
+ - Autres permissions historiquement citées (ex : `PLANNING_EDIT`, `RULES_EDIT`, `FLEET_EDIT`, `USERS_MANAGE`) : **À CONFIRMER / non présentes dans le seed actuel**.
+ 
+ ## 4. Décisions en attente
+diff -ruN AmbuManager-main_before44/package.json AmbuManager-main/package.json
+--- AmbuManager-main_before44/package.json	2026-03-05 09:36:35.353055354 +0000
++++ AmbuManager-main/package.json	2026-03-05 09:40:42.974013158 +0000
+@@ -9,7 +9,8 @@
+     "lint": "eslint",
+     "db:seed": "prisma db seed",
+     "db:migrate": "prisma migrate dev",
+-    "db:studio": "prisma studio"
++    "db:studio": "prisma studio",
++    "db:reset": "prisma migrate reset --force"
+   },
+   "prisma": {
+     "seed": "tsx prisma/seed.ts"
+diff -ruN AmbuManager-main_before44/prisma/seed.ts AmbuManager-main/prisma/seed.ts
+--- AmbuManager-main_before44/prisma/seed.ts	2026-03-05 09:36:35.361314916 +0000
++++ AmbuManager-main/prisma/seed.ts	2026-03-05 09:40:42.973596658 +0000
+@@ -1,5 +1,5 @@
+ import "dotenv/config";
+-import { PrismaClient, Role } from "@prisma/client";
++import { PrismaClient, Role, PlanningTemplateCategory, VehicleType, VehicleStatus } from "@prisma/client";
+ import { PrismaPg } from "@prisma/adapter-pg";
+ import { Pool } from "pg";
+ import bcrypt from "bcrypt";
+@@ -11,103 +11,66 @@
+ const adapter = new PrismaPg(pool);
+ const prisma = new PrismaClient({ adapter });
+ 
+-async function main() {
+-  const COMPANY_NAME = "Ambulance Manager";
+-  const ADMIN_EMAIL = "admin@ambulance.local";
+-  const ADMIN_PASSWORD = process.env.SEED_ADMIN_PASSWORD ?? "admin123";
+-  const VEHICLE_PLATE = "AA-123-AA";
++type SeedCompany = {
++  name: string;
++  admin: { email: string; password: string; name: string };
++  users: Array<{ email: string; password: string; name: string; role: Role; permissions: string[] }>;
++  vehicles: Array<{ plate: string; type: VehicleType; status: VehicleStatus }>;
++  templates: Array<{
++    name: string;
++    category: PlanningTemplateCategory;
++    startTime: string;
++    endTime: string;
++    crossesMidnight?: boolean;
++    requiredRole?: Role | null;
++    isActive?: boolean;
++  }>;
++};
+ 
++async function upsertCompany(name: string) {
+   const now = new Date();
+ 
+-  // =========================
+-  // 1) COMPANY (find -> update/create)
+-  // =========================
+-  let company = await prisma.company.findUnique({
+-    where: { name: COMPANY_NAME },
+-  });
+-
+-  if (!company) {
+-    company = await prisma.company.create({
+-      data: {
+-        name: COMPANY_NAME,
+-        createdAt: now,
+-        updatedAt: now,
+-      },
++  const existing = await prisma.company.findUnique({ where: { name } });
++  if (!existing) {
++    const created = await prisma.company.create({
++      data: { name, createdAt: now, updatedAt: now },
+     });
+-    console.log("✅ Company created:", company.id);
+-  } else {
+-    company = await prisma.company.update({
+-      where: { id: company.id },
+-      data: { updatedAt: now },
+-    });
+-    console.log("✅ Company found:", company.id);
++    console.log("✅ Company created:", name, created.id);
++    return created;
+   }
+ 
+-  // =========================
+-  // 2) ADMIN USER (upsert email)
+-  // =========================
+-  const hashedPassword = await bcrypt.hash(ADMIN_PASSWORD, 10);
++  const updated = await prisma.company.update({
++    where: { id: existing.id },
++    data: { updatedAt: now },
++  });
++  console.log("✅ Company found:", name, updated.id);
++  return updated;
++}
+ 
+-  const admin = await prisma.user.upsert({
+-    where: { email: ADMIN_EMAIL },
++async function upsertUser(params: { email: string; password: string; name: string; role: Role; companyId: string }) {
++  const hashedPassword = await bcrypt.hash(params.password, 10);
++
++  const user = await prisma.user.upsert({
++    where: { email: params.email },
+     update: {
+-      name: "Nathan",
+-      role: Role.ADMIN,
+-      companyId: company.id,
++      name: params.name,
++      role: params.role,
++      companyId: params.companyId,
+       password: hashedPassword,
+     },
+     create: {
+-      email: ADMIN_EMAIL,
++      email: params.email,
+       password: hashedPassword,
+-      name: "Nathan",
+-      role: Role.ADMIN,
+-      companyId: company.id,
+-    },
+-  });
+-
+-  console.log("✅ Admin upserted:", admin.id);
+-
+-  // =========================
+-  // 3) VEHICLE (unique composé: companyId + immatriculation)
+-  // =========================
+-  const existingVehicle = await prisma.vehicle.findUnique({
+-    where: {
+-      companyId_immatriculation: {
+-        companyId: company.id,
+-        immatriculation: VEHICLE_PLATE,
+-      },
++      name: params.name,
++      role: params.role,
++      companyId: params.companyId,
+     },
+   });
+ 
+-  if (!existingVehicle) {
+-    await prisma.vehicle.create({
+-      data: {
+-        immatriculation: VEHICLE_PLATE,
+-        type: "AMBULANCE",
+-        status: "ACTIVE",
+-        companyId: company.id,
+-      },
+-    });
+-    console.log("✅ Vehicle created");
+-  } else {
+-    await prisma.vehicle.update({
+-      where: {
+-        companyId_immatriculation: {
+-          companyId: company.id,
+-          immatriculation: VEHICLE_PLATE,
+-        },
+-      },
+-      data: {
+-        type: "AMBULANCE",
+-        status: "ACTIVE",
+-      },
+-    });
+-    console.log("✅ Vehicle updated");
+-  }
++  return user;
++}
+ 
+-  // =========================
+-  // 4) PERMISSIONS (4.1.3)
+-  // =========================
++async function ensurePermissions() {
+   const permissions = [
+     {
+       code: "PLANNING_AUTOSCHEDULE",
+@@ -121,46 +84,230 @@
+     },
+   ] as const;
+ 
+-  const createdPermissions = [];
++  const created = [];
+   for (const p of permissions) {
+     const perm = await prisma.permission.upsert({
+       where: { code: p.code },
+-      update: {
+-        label: p.label,
+-        description: p.description,
+-      },
+-      create: {
+-        code: p.code,
+-        label: p.label,
+-        description: p.description,
+-      },
++      update: { label: p.label, description: p.description },
++      create: { code: p.code, label: p.label, description: p.description },
+     });
+-    createdPermissions.push(perm);
++    created.push(perm);
+   }
+ 
+-  // Assignation à l’admin (idempotent)
+-  for (const perm of createdPermissions) {
++  console.log("✅ Permissions ensured:", created.map((p) => p.code).join(", "));
++  return created;
++}
++
++async function setUserPermissions(userId: string, permissionCodes: string[]) {
++  if (permissionCodes.length === 0) return;
++
++  const perms = await prisma.permission.findMany({
++    where: { code: { in: permissionCodes } },
++    select: { id: true, code: true },
++  });
++
++  for (const perm of perms) {
+     await prisma.userPermission.upsert({
+       where: {
+         userId_permissionId: {
+-          userId: admin.id,
++          userId,
+           permissionId: perm.id,
+         },
+       },
+       update: {},
+-      create: {
+-        userId: admin.id,
+-        permissionId: perm.id,
+-      },
++      create: { userId, permissionId: perm.id },
+     });
+   }
++}
++
++async function upsertTemplate(params: {
++  companyId: string;
++  name: string;
++  category: PlanningTemplateCategory;
++  startTime: string;
++  endTime: string;
++  crossesMidnight: boolean;
++  requiredRole: Role | null;
++  isActive: boolean;
++}) {
++  await prisma.shiftTemplate.upsert({
++    where: { companyId_name: { companyId: params.companyId, name: params.name } },
++    update: {
++      category: params.category,
++      startTime: params.startTime,
++      endTime: params.endTime,
++      crossesMidnight: params.crossesMidnight,
++      requiredRole: params.requiredRole,
++      isActive: params.isActive,
++    },
++    create: {
++      companyId: params.companyId,
++      name: params.name,
++      category: params.category,
++      startTime: params.startTime,
++      endTime: params.endTime,
++      crossesMidnight: params.crossesMidnight,
++      requiredRole: params.requiredRole,
++      isActive: params.isActive,
++    },
++  });
++}
++
++async function main() {
++  // =========================
++  // Global defaults
++  // =========================
++  const adminPasswordA = process.env.SEED_ADMIN_PASSWORD ?? "admin123";
++  const adminPasswordB = process.env.SEED_ADMIN_B_PASSWORD ?? adminPasswordA;
++
++  const userPassword = process.env.SEED_USER_PASSWORD ?? "user123";
++  const now = new Date();
+ 
+-  console.log(
+-    "✅ Permissions ensured:",
+-    createdPermissions.map((p) => p.code).join(", ")
+-  );
++  // =========================
++  // 1) Permissions (global)
++  // =========================
++  await ensurePermissions();
+ 
+-  console.log("✅ Seed OK");
++  // =========================
++  // 2) Tenants A/B + users + vehicles + templates
++  // =========================
++  const companies: SeedCompany[] = [
++    {
++      name: "Ambulance Manager",
++      admin: { email: "admin@ambulance.local", password: adminPasswordA, name: "Nathan" },
++      users: [
++        {
++          email: "planner@ambulance.local",
++          password: userPassword,
++          name: "Planner",
++          role: Role.BUREAU,
++          permissions: ["PLANNING_AUTOSCHEDULE"], // ✅ autoschedule OK, publish KO (test 403 publish)
++        },
++        {
++          email: "viewer@ambulance.local",
++          password: userPassword,
++          name: "Viewer",
++          role: Role.BUREAU,
++          permissions: [], // ✅ aucun droit (test 403 autoschedule)
++        },
++      ],
++      vehicles: [{ plate: "AA-123-AA", type: VehicleType.AMBULANCE, status: VehicleStatus.ACTIVE }],
++      templates: [
++        {
++          name: "AMB Jour 08:00-16:00",
++          category: PlanningTemplateCategory.AMBULANCE,
++          startTime: "08:00",
++          endTime: "16:00",
++          crossesMidnight: false,
++          requiredRole: null,
++          isActive: true,
++        },
++        {
++          name: "AMB Nuit 16:00-00:00",
++          category: PlanningTemplateCategory.AMBULANCE,
++          startTime: "16:00",
++          endTime: "00:00",
++          crossesMidnight: true,
++          requiredRole: null,
++          isActive: true,
++        },
++      ],
++    },
++    {
++      name: "Ambulance Manager - B",
++      admin: { email: "admin-b@ambulance.local", password: adminPasswordB, name: "Admin B" },
++      users: [
++        {
++          email: "planner-b@ambulance.local",
++          password: userPassword,
++          name: "Planner B",
++          role: Role.BUREAU,
++          permissions: ["PLANNING_AUTOSCHEDULE"],
++        },
++      ],
++      vehicles: [{ plate: "BB-234-BB", type: VehicleType.AMBULANCE, status: VehicleStatus.ACTIVE }],
++      templates: [
++        {
++          name: "AMB Jour 08:00-16:00",
++          category: PlanningTemplateCategory.AMBULANCE,
++          startTime: "08:00",
++          endTime: "16:00",
++          crossesMidnight: false,
++          requiredRole: null,
++          isActive: true,
++        },
++      ],
++    },
++  ];
++
++  for (const cfg of companies) {
++    const company = await upsertCompany(cfg.name);
++
++    // ADMIN
++    const admin = await upsertUser({
++      email: cfg.admin.email,
++      password: cfg.admin.password,
++      name: cfg.admin.name,
++      role: Role.ADMIN,
++      companyId: company.id,
++    });
++    console.log("✅ Admin upserted:", cfg.name, admin.email, admin.id);
++
++    await setUserPermissions(admin.id, ["PLANNING_AUTOSCHEDULE", "PLANNING_AUTOSCHEDULE_PUBLISH"]);
++
++    // Other users
++    for (const u of cfg.users) {
++      const user = await upsertUser({
++        email: u.email,
++        password: u.password,
++        name: u.name,
++        role: u.role,
++        companyId: company.id,
++      });
++      console.log("✅ User upserted:", cfg.name, user.email, user.id);
++
++      await setUserPermissions(user.id, u.permissions);
++    }
++
++    // Vehicles
++    for (const v of cfg.vehicles) {
++      const existing = await prisma.vehicle.findUnique({
++        where: { companyId_immatriculation: { companyId: company.id, immatriculation: v.plate } },
++      });
++
++      if (!existing) {
++        await prisma.vehicle.create({
++          data: { companyId: company.id, immatriculation: v.plate, type: v.type, status: v.status },
++        });
++        console.log("✅ Vehicle created:", cfg.name, v.plate);
++      } else {
++        await prisma.vehicle.update({
++          where: { companyId_immatriculation: { companyId: company.id, immatriculation: v.plate } },
++          data: { type: v.type, status: v.status },
++        });
++        console.log("✅ Vehicle updated:", cfg.name, v.plate);
++      }
++    }
++
++    // Templates
++    for (const t of cfg.templates) {
++      await upsertTemplate({
++        companyId: company.id,
++        name: t.name,
++        category: t.category,
++        startTime: t.startTime,
++        endTime: t.endTime,
++        crossesMidnight: t.crossesMidnight ?? false,
++        requiredRole: (t.requiredRole ?? null) as Role | null,
++        isActive: t.isActive ?? true,
++      });
++    }
++    console.log("✅ ShiftTemplates ensured:", cfg.name, cfg.templates.length);
++
++    await prisma.company.update({ where: { id: company.id }, data: { updatedAt: now } });
++  }
++
++  console.log("✅ Seed OK (A/B ready for DoD 4.4 tests)");
+ }
+ 
+ main()
+@@ -171,4 +318,4 @@
+   .finally(async () => {
+     await prisma.$disconnect();
+     await pool.end();
+-  });
+\ No newline at end of file
++  });

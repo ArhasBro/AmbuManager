@@ -28,12 +28,16 @@ function extractRunIdFromPath(pathname: string): string | null {
   return id;
 }
 
-async function canAutoSchedule(userId: string): Promise<boolean> {
+async function hasPermission(userId: string, code: string): Promise<boolean> {
   const perms = await prisma.userPermission.findMany({
     where: { userId },
     include: { permission: true },
   });
-  return perms.some((p) => p.permission.code === "PLANNING_AUTOSCHEDULE");
+  return perms.some((p) => p.permission.code === code);
+}
+
+async function canPublishAutoSchedule(userId: string): Promise<boolean> {
+  return hasPermission(userId, "PLANNING_AUTOSCHEDULE_PUBLISH");
 }
 
 function prismaToApiError(
@@ -312,10 +316,14 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
   }
 
   const roleAllowed = role === "ADMIN" || role === "GERANT";
-  const permAllowed = roleAllowed ? true : await canAutoSchedule(userId);
+  // ✅ RBAC : ADMIN/GERANT ok, sinon permission dédiée publish
+  const permAllowed = roleAllowed ? true : await canPublishAutoSchedule(userId);
 
   if (!permAllowed) {
-    return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });
+    return NextResponse.json(
+      { ok: false, error: "FORBIDDEN", details: "PLANNING_AUTOSCHEDULE_PUBLISH requis" },
+      { status: 403 }
+    );
   }
 
   // ✅ id depuis params (Promise), sinon fallback via l’URL
