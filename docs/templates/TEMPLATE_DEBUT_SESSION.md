@@ -49,6 +49,15 @@ OBJECTIF UNIQUE DE LA SESSION
 ━━━━━━━━━━━━━━━━━━━━  
 Définir un seul objectif, mesurable, lié au bloc actif.
 
+━━━━━━━━━━━━━━━━━━━━  
+VALIDATION DE LA SESSION
+━━━━━━━━━━━━━━━━━━━━  
+Validé uniquement si :
+-Codage "validé"
+-Test "validé"
+
+Si "Non validé" réalisé les codes et éffectuer les test via chatGPT 
+
 INTERDICTION  
 - Aucune dérive hors du bloc actif.  
 - Toute décision impactante doit être enregistrée en clôture (REGISTRE_DECISIONS).  
