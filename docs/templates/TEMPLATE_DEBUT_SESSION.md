@@ -56,7 +56,7 @@ Validé uniquement si :
 -Codage "validé"
 -Test "validé"
 
-Si "Non validé" réalisé les codes et éffectuer les test via chatGPT 
+Si "Non validé" réalisé les codes (via VS Code) et éffectuer les test.
 
 INTERDICTION  
 - Aucune dérive hors du bloc actif.  
