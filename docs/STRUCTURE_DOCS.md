@@ -77,12 +77,14 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |       
 |   +---SESSION-20260306-01
 |   |       EVIDENCES.md
+|   |       FIN_SESSION.md
 |   |       NOTES.md
 |   |       RESULTATS.md
 |   |       SESSION.md
 |   |       
 |   \---SESSION-YYYYMMDD-XX
 |           EVIDENCES.md
+|           FIN_SESSION.md
 |           NOTES.md
 |           RESULTATS.md
 |           SESSION.md
