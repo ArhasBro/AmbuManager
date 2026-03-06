@@ -47,12 +47,12 @@ git apply -p1 docs/patches/general/NOM_DU_PATCH.diff
 - Objectif : corriger la publication autoschedule sans dépendre du README général.
 - Fichier principal : `app/api/planning/autoschedule/runs/[id]/publish/route.ts`.
 - Résultat : prise en compte de `user2Id`, contrôles de conflits sur les deux slots employés, contrôles de repos minimum sur les deux slots, publication finale avec conservation de `user2Id`.
-- Statut : À APPLIQUER / À CONFIRMER
+- Statut : APPLIQUÉ
 
 ### PATCH_5B_README_COMPAT.diff
 - Objectif : documenter proprement les patchs généraux déjà réalisés dans un README compatible avec le dépôt actuel.
 - Fichier principal : `docs/patches/general/README.md`.
 - Résultat : historique lisible des patchs 1, 2, 3B, 4 et 5.
-- Statut : EN COURS
+- Statut : APPLIQUÉ
 
 ## Remarque
