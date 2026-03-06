@@ -5,18 +5,18 @@ import type { Role } from "@prisma/client";
 declare module "next-auth" {
   interface Session {
     user: {
-      id: string;
+      id?: string;
       email?: string | null;
       name?: string | null;
-      role: Role;
-      companyId: string;
+      role?: Role;
+      companyId?: string;
     };
   }
 
   interface User {
     id: string;
-    role: Role;
-    companyId: string;
+    role?: Role;
+    companyId?: string;
   }
 }
 

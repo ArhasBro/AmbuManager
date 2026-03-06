@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth/next";
 import { z } from "zod";
 
 import { authOptions } from "@/lib/auth";
+import { canAutoSchedule } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 import { ok, json } from "@/lib/api/response";
 import { computeDraftShiftMatchingByRole } from "@/lib/services/planning/matching.service";
@@ -14,26 +15,6 @@ const BodySchema = z
   })
   .strict();
 
-function hasAutoschedulePermission(session: unknown): boolean {
-  if (!session || typeof session !== "object") return false;
-
-  const s = session as {
-    user?: {
-      role?: unknown;
-      permissions?: unknown;
-    };
-  };
-
-  const role = s.user?.role;
-  if (role === "ADMIN" || role === "GERANT") return true;
-
-  const permissions = s.user?.permissions;
-  if (Array.isArray(permissions)) {
-    return (permissions as unknown[]).includes("PLANNING_AUTOSCHEDULE");
-  }
-
-  return false;
-}
 
 export async function POST(
   req: NextRequest,
@@ -43,19 +24,16 @@ export async function POST(
 
   const session = await getServerSession(authOptions);
 
-  const companyId =
-    session?.user && typeof session.user === "object"
-      ? (session.user as { companyId?: unknown }).companyId
-      : undefined;
+  const companyId = session?.user?.companyId;
 
-  if (typeof companyId !== "string" || companyId.length === 0) {
+  if (!session?.user?.id || typeof companyId !== "string" || companyId.length === 0) {
     return json(
       { ok: false, error: "UNAUTHORIZED", details: "Session invalide (companyId manquant)" },
       401
     );
   }
 
-  if (!hasAutoschedulePermission(session)) {
+  if (!(await canAutoSchedule(session.user.id, session.user.role))) {
     return json(
       { ok: false, error: "FORBIDDEN", details: "Accès refusé (PLANNING_AUTOSCHEDULE requis)" },
       403

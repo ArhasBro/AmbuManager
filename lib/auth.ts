@@ -108,13 +108,9 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         const t = token as typeof token & TokenExtras;
 
-        session.user.id = typeof token.sub === "string" ? token.sub : "";
-
-        // role : si absent, fallback ADMIN (conservé)
-        session.user.role = isRole(t.role) ? t.role : Role.ADMIN;
-
-        // companyId : on évite de forcer "" (ça casse tes guards)
-        session.user.companyId = isNonEmptyString(t.companyId) ? t.companyId : "";
+        session.user.id = typeof token.sub === "string" ? token.sub : undefined;
+        session.user.role = isRole(t.role) ? t.role : undefined;
+        session.user.companyId = isNonEmptyString(t.companyId) ? t.companyId : undefined;
       }
 
       return session;

@@ -33,5 +33,6 @@ export function conflict(error = "Conflict", details?: unknown) {
 }
 
 export function serverError(details?: unknown) {
-  return json({ ok: false, error: "Server error", details }, 500);
+  const safeDetails = process.env.NODE_ENV === "production" ? undefined : details;
+  return json({ ok: false, error: "Server error", details: safeDetails }, 500);
 }

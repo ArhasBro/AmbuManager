@@ -1,0 +1,274 @@
+diff --git a/app/api/planning/autoschedule/runs/[id]/match/apply/route.ts b/app/api/planning/autoschedule/runs/[id]/match/apply/route.ts
+index a3c2665..943b672 100644
+--- a/app/api/planning/autoschedule/runs/[id]/match/apply/route.ts
++++ b/app/api/planning/autoschedule/runs/[id]/match/apply/route.ts
+@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth/next";
+ import { z } from "zod";
+ 
+ import { authOptions } from "@/lib/auth";
++import { canAutoSchedule } from "@/lib/permissions";
+ import { prisma } from "@/lib/prisma";
+ import { ok, json } from "@/lib/api/response";
+ import { autoMatchRunDraftShifts } from "@/lib/services/planning/matching.service";
+@@ -13,26 +14,6 @@ const BodySchema = z
+   })
+   .strict();
+ 
+-function hasAutoschedulePermission(session: unknown): boolean {
+-  if (!session || typeof session !== "object") return false;
+-
+-  const s = session as {
+-    user?: {
+-      role?: unknown;
+-      permissions?: unknown;
+-    };
+-  };
+-
+-  const role = s.user?.role;
+-  if (role === "ADMIN" || role === "GERANT") return true;
+-
+-  const permissions = s.user?.permissions;
+-  if (Array.isArray(permissions)) {
+-    return (permissions as unknown[]).includes("PLANNING_AUTOSCHEDULE");
+-  }
+-
+-  return false;
+-}
+ 
+ export async function POST(
+   req: NextRequest,
+@@ -42,19 +23,16 @@ export async function POST(
+ 
+   const session = await getServerSession(authOptions);
+ 
+-  const companyId =
+-    session?.user && typeof session.user === "object"
+-      ? (session.user as { companyId?: unknown }).companyId
+-      : undefined;
++  const companyId = session?.user?.companyId;
+ 
+-  if (typeof companyId !== "string" || companyId.length === 0) {
++  if (!session?.user?.id || typeof companyId !== "string" || companyId.length === 0) {
+     return json(
+       { ok: false, error: "UNAUTHORIZED", details: "Session invalide (companyId manquant)" },
+       401
+     );
+   }
+ 
+-  if (!hasAutoschedulePermission(session)) {
++  if (!(await canAutoSchedule(session.user.id, session.user.role))) {
+     return json(
+       { ok: false, error: "FORBIDDEN", details: "Accès refusé (PLANNING_AUTOSCHEDULE requis)" },
+       403
+diff --git a/app/api/planning/autoschedule/runs/[id]/match/preview/route.ts b/app/api/planning/autoschedule/runs/[id]/match/preview/route.ts
+index 27c2bc4..27234c4 100644
+--- a/app/api/planning/autoschedule/runs/[id]/match/preview/route.ts
++++ b/app/api/planning/autoschedule/runs/[id]/match/preview/route.ts
+@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth/next";
+ import { z } from "zod";
+ 
+ import { authOptions } from "@/lib/auth";
++import { canAutoSchedule } from "@/lib/permissions";
+ import { prisma } from "@/lib/prisma";
+ import { ok, json } from "@/lib/api/response";
+ import { computeDraftShiftMatchingByRole } from "@/lib/services/planning/matching.service";
+@@ -14,26 +15,6 @@ const BodySchema = z
+   })
+   .strict();
+ 
+-function hasAutoschedulePermission(session: unknown): boolean {
+-  if (!session || typeof session !== "object") return false;
+-
+-  const s = session as {
+-    user?: {
+-      role?: unknown;
+-      permissions?: unknown;
+-    };
+-  };
+-
+-  const role = s.user?.role;
+-  if (role === "ADMIN" || role === "GERANT") return true;
+-
+-  const permissions = s.user?.permissions;
+-  if (Array.isArray(permissions)) {
+-    return (permissions as unknown[]).includes("PLANNING_AUTOSCHEDULE");
+-  }
+-
+-  return false;
+-}
+ 
+ export async function POST(
+   req: NextRequest,
+@@ -43,19 +24,16 @@ export async function POST(
+ 
+   const session = await getServerSession(authOptions);
+ 
+-  const companyId =
+-    session?.user && typeof session.user === "object"
+-      ? (session.user as { companyId?: unknown }).companyId
+-      : undefined;
++  const companyId = session?.user?.companyId;
+ 
+-  if (typeof companyId !== "string" || companyId.length === 0) {
++  if (!session?.user?.id || typeof companyId !== "string" || companyId.length === 0) {
+     return json(
+       { ok: false, error: "UNAUTHORIZED", details: "Session invalide (companyId manquant)" },
+       401
+     );
+   }
+ 
+-  if (!hasAutoschedulePermission(session)) {
++  if (!(await canAutoSchedule(session.user.id, session.user.role))) {
+     return json(
+       { ok: false, error: "FORBIDDEN", details: "Accès refusé (PLANNING_AUTOSCHEDULE requis)" },
+       403
+diff --git a/app/api/planning/autoschedule/runs/[id]/match/route.ts b/app/api/planning/autoschedule/runs/[id]/match/route.ts
+index 33ac741..c0a95bf 100644
+--- a/app/api/planning/autoschedule/runs/[id]/match/route.ts
++++ b/app/api/planning/autoschedule/runs/[id]/match/route.ts
+@@ -1,54 +1,31 @@
+-import { NextResponse } from "next/server";
++
+ import { getServerSession } from "next-auth/next";
+ 
+ import { authOptions } from "@/lib/auth";
++import { canAutoSchedule } from "@/lib/permissions";
+ 
+-function hasAutoschedulePermission(session: unknown): boolean {
+-  if (!session || typeof session !== "object") return false;
+-
+-  const s = session as {
+-    user?: {
+-      role?: unknown;
+-      permissions?: unknown;
+-    };
+-  };
+-
+-  const role = s.user?.role;
+-  if (role === "ADMIN" || role === "GERANT") return true;
+-
+-  const permissions = s.user?.permissions;
+-  if (Array.isArray(permissions)) {
+-    // type-safe: p est unknown, mais comparaison string OK
+-    return permissions.some((p) => p === "PLANNING_AUTOSCHEDULE");
+-  }
+-
+-  return false;
+-}
+ 
+ export async function GET() {
+   const session = await getServerSession(authOptions);
+ 
+-  const companyId =
+-    session?.user && typeof session.user === "object"
+-      ? (session.user as { companyId?: unknown }).companyId
+-      : undefined;
++  const companyId = session?.user?.companyId;
+ 
+-  if (typeof companyId !== "string" || companyId.length === 0) {
+-    return NextResponse.json(
++  if (!session?.user?.id || typeof companyId !== "string" || companyId.length === 0) {
++    return Response.json(
+       { ok: false, error: "UNAUTHORIZED", message: "Session invalide (companyId manquant)" },
+       { status: 401 }
+     );
+   }
+ 
+-  if (!hasAutoschedulePermission(session)) {
+-    return NextResponse.json(
++  if (!(await canAutoSchedule(session.user.id, session.user.role))) {
++    return Response.json(
+       { ok: false, error: "FORBIDDEN", message: "Accès refusé (PLANNING_AUTOSCHEDULE requis)" },
+       { status: 403 }
+     );
+   }
+ 
+   // Route dépréciée : séparation stricte preview/apply
+-  return NextResponse.json(
++  return Response.json(
+     {
+       ok: false,
+       error: "GONE",
+diff --git a/app/api/planning/autoschedule/runs/route.ts b/app/api/planning/autoschedule/runs/route.ts
+index b23737f..7308599 100644
+--- a/app/api/planning/autoschedule/runs/route.ts
++++ b/app/api/planning/autoschedule/runs/route.ts
+@@ -1,9 +1,10 @@
+ import { NextRequest, NextResponse } from "next/server";
+-import { getServerSession } from "next-auth";
++import { getServerSession } from "next-auth/next";
+ import { authOptions } from "@/lib/auth";
+ import { prisma } from "@/lib/prisma";
+ import { z } from "zod";
+ import { AutoScheduleScope, AutoScheduleStatus } from "@prisma/client";
++import { canAutoSchedule } from "@/lib/permissions";
+ 
+ const QuerySchema = z.object({
+   scope: z.nativeEnum(AutoScheduleScope).optional(),
+@@ -12,13 +13,6 @@ const QuerySchema = z.object({
+   cursor: z.string().optional(), // autoScheduleRun.id
+ });
+ 
+-async function canAutoSchedule(userId: string): Promise<boolean> {
+-  const perms = await prisma.userPermission.findMany({
+-    where: { userId },
+-    include: { permission: true },
+-  });
+-  return perms.some((p) => p.permission.code === "PLANNING_AUTOSCHEDULE");
+-}
+ 
+ type PrismaKnownCode = "P2002" | "P2025";
+ 
+@@ -37,8 +31,7 @@ function prismaToApiError(e: unknown): { status: number; body: { ok: false; erro
+   if (code === "P2002") return { status: 409, body: { ok: false, error: "CONFLICT" } };
+   if (code === "P2025") return { status: 404, body: { ok: false, error: "NOT_FOUND" } };
+ 
+-  const message = e instanceof Error ? e.message : "Unknown error";
+-  return { status: 500, body: { ok: false, error: "SERVER_ERROR", message } };
++  return { status: 500, body: { ok: false, error: "SERVER_ERROR" } };
+ }
+ 
+ export async function GET(req: NextRequest) {
+@@ -52,8 +45,7 @@ export async function GET(req: NextRequest) {
+     return NextResponse.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
+   }
+ 
+-  const roleAllowed = role === "ADMIN" || role === "GERANT";
+-  const permAllowed = roleAllowed ? true : await canAutoSchedule(userId);
++  const permAllowed = await canAutoSchedule(userId, role);
+ 
+   if (!permAllowed) {
+     return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });
+diff --git a/lib/permissions.ts b/lib/permissions.ts
+new file mode 100644
+index 0000000..c7b4e9a
+--- /dev/null
++++ b/lib/permissions.ts
+@@ -0,0 +1,23 @@
++import { prisma } from "@/lib/prisma";
++
++export async function hasPermission(userId: string, code: string): Promise<boolean> {
++  const permission = await prisma.userPermission.findFirst({
++    where: {
++      userId,
++      permission: { code },
++    },
++    select: { id: true },
++  });
++
++  return Boolean(permission);
++}
++
++export async function canAutoSchedule(userId: string, role?: string): Promise<boolean> {
++  if (role === "ADMIN" || role === "GERANT") return true;
++  return hasPermission(userId, "PLANNING_AUTOSCHEDULE");
++}
++
++export async function canPublishAutoSchedule(userId: string, role?: string): Promise<boolean> {
++  if (role === "ADMIN" || role === "GERANT") return true;
++  return hasPermission(userId, "PLANNING_PUBLISH");
++}
+diff --git a/proxy.ts b/middleware.ts
+similarity index 100%
+rename from proxy.ts
+rename to middleware.ts

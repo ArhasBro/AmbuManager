@@ -11,6 +11,14 @@ type Vehicle = {
   createdAt: string;
 };
 
+type ApiSuccess<T> = { ok: true; data: T };
+type ApiFailure = { ok: false; error: string };
+type ApiResponse<T> = ApiSuccess<T> | ApiFailure;
+
+function getApiError<T>(payload: ApiResponse<T> | null, fallback: string) {
+  return payload && !payload.ok ? payload.error : fallback;
+}
+
 export default function VehiclesClient({
   initialVehicles,
 }: {
@@ -35,14 +43,13 @@ export default function VehiclesClient({
         body: JSON.stringify(payload),
       });
 
-      const data = await res.json().catch(() => null);
+      const data = (await res.json().catch(() => null)) as ApiResponse<Vehicle> | null;
 
-      if (!res.ok) {
-        throw new Error(data?.error ?? "Erreur lors de la création du véhicule");
+      if (!res.ok || !data?.ok) {
+        throw new Error(getApiError(data, "Erreur lors de la création du véhicule"));
       }
 
-      const created = data as Vehicle;
-      setVehicles((prev) => [created, ...prev]);
+      setVehicles((prev) => [data.data, ...prev]);
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Erreur inconnue");
     } finally {
@@ -62,10 +69,10 @@ export default function VehiclesClient({
         method: "DELETE",
       });
 
-      const data = await res.json().catch(() => null);
+      const data = (await res.json().catch(() => null)) as ApiResponse<{ id: string }> | null;
 
-      if (!res.ok) {
-        throw new Error(data?.error ?? "Erreur lors de la suppression");
+      if (!res.ok || !data?.ok) {
+        throw new Error(getApiError(data, "Erreur lors de la suppression"));
       }
 
       setVehicles((prev) => prev.filter((v) => v.id !== id));

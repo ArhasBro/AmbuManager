@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
+import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import { AutoScheduleScope, AutoScheduleStatus } from "@prisma/client";
+import { canAutoSchedule } from "@/lib/permissions";
 
 const QuerySchema = z.object({
   scope: z.nativeEnum(AutoScheduleScope).optional(),
@@ -12,13 +13,6 @@ const QuerySchema = z.object({
   cursor: z.string().optional(), // autoScheduleRun.id
 });
 
-async function canAutoSchedule(userId: string): Promise<boolean> {
-  const perms = await prisma.userPermission.findMany({
-    where: { userId },
-    include: { permission: true },
-  });
-  return perms.some((p) => p.permission.code === "PLANNING_AUTOSCHEDULE");
-}
 
 type PrismaKnownCode = "P2002" | "P2025";
 
@@ -37,8 +31,7 @@ function prismaToApiError(e: unknown): { status: number; body: { ok: false; erro
   if (code === "P2002") return { status: 409, body: { ok: false, error: "CONFLICT" } };
   if (code === "P2025") return { status: 404, body: { ok: false, error: "NOT_FOUND" } };
 
-  const message = e instanceof Error ? e.message : "Unknown error";
-  return { status: 500, body: { ok: false, error: "SERVER_ERROR", message } };
+  return { status: 500, body: { ok: false, error: "SERVER_ERROR" } };
 }
 
 export async function GET(req: NextRequest) {
@@ -52,8 +45,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
   }
 
-  const roleAllowed = role === "ADMIN" || role === "GERANT";
-  const permAllowed = roleAllowed ? true : await canAutoSchedule(userId);
+  const permAllowed = await canAutoSchedule(userId, role);
 
   if (!permAllowed) {
     return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });

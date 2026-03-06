@@ -1,0 +1,268 @@
+diff --git a/app/api/health/prisma/route.ts b/app/api/health/prisma/route.ts
+index 8cb3cd1..189a29d 100644
+--- a/app/api/health/prisma/route.ts
++++ b/app/api/health/prisma/route.ts
+@@ -1,7 +1,21 @@
++import { getServerSession } from "next-auth/next";
++import { Role } from "@prisma/client";
++
+ import { prisma } from "@/lib/prisma";
+-import { ok, serverError } from "@/lib/api/response";
++import { authOptions } from "@/lib/auth";
++import { forbidden, ok, serverError, unauthorized } from "@/lib/api/response";
+ 
+ export async function GET() {
++  const session = await getServerSession(authOptions);
++
++  if (!session?.user?.id || !session.user.companyId) {
++    return unauthorized();
++  }
++
++  if (session.user.role !== Role.ADMIN) {
++    return forbidden();
++  }
++
+   try {
+     const companies = await prisma.company.count();
+     const users = await prisma.user.count();
+@@ -12,4 +26,4 @@ export async function GET() {
+   } catch (e) {
+     return serverError(e);
+   }
+-}
+\ No newline at end of file
++}
+diff --git a/app/dashboard/page.tsx b/app/dashboard/page.tsx
+index 462e26f..e0db531 100644
+--- a/app/dashboard/page.tsx
++++ b/app/dashboard/page.tsx
+@@ -1,18 +1,12 @@
+-import { getServerSession } from "next-auth";
++import { getServerSession } from "next-auth/next";
++import { redirect } from "next/navigation";
+ import { authOptions } from "@/lib/auth";
+ import LogoutButton from "./logout-button";
+ 
+ export default async function DashboardPage() {
+   const session = await getServerSession(authOptions);
+ 
+-  if (!session) {
+-    return (
+-      <div style={{ padding: 16 }}>
+-        <h1>Non autorisé</h1>
+-        <p>Va sur /login</p>
+-      </div>
+-    );
+-  }
++  if (!session) redirect("/login");
+ 
+   return (
+     <div style={{ padding: 16, display: "grid", gap: 12 }}>
+@@ -21,12 +15,14 @@ export default async function DashboardPage() {
+         <LogoutButton />
+       </div>
+ 
+-      <div style={{ padding: 12, border: "1px solid #333", borderRadius: 8 }}>
+-        <h2 style={{ marginTop: 0 }}>Session</h2>
+-        <pre style={{ margin: 0, whiteSpace: "pre-wrap" }}>
+-          {JSON.stringify(session, null, 2)}
+-        </pre>
+-      </div>
++      {process.env.NODE_ENV !== "production" ? (
++        <div style={{ padding: 12, border: "1px solid #333", borderRadius: 8 }}>
++          <h2 style={{ marginTop: 0 }}>Session (debug)</h2>
++          <pre style={{ margin: 0, whiteSpace: "pre-wrap" }}>
++            {JSON.stringify(session, null, 2)}
++          </pre>
++        </div>
++      ) : null}
+     </div>
+   );
+ }
+\ No newline at end of file
+diff --git a/app/login/page.tsx b/app/login/page.tsx
+index 71ba4d5..64c7948 100644
+--- a/app/login/page.tsx
++++ b/app/login/page.tsx
+@@ -8,8 +8,8 @@ export default function LoginPage() {
+   const router = useRouter();
+   const { status } = useSession();
+ 
+-  const [email, setEmail] = useState("admin@ambulance.local");
+-  const [password, setPassword] = useState("admin123");
++  const [email, setEmail] = useState("");
++  const [password, setPassword] = useState("");
+   const [error, setError] = useState<string | null>(null);
+   const [loading, setLoading] = useState(false);
+ 
+diff --git a/app/vehicles/page.tsx b/app/vehicles/page.tsx
+index ea7497b..24bc7ab 100644
+--- a/app/vehicles/page.tsx
++++ b/app/vehicles/page.tsx
+@@ -1,23 +1,19 @@
+-import { getServerSession } from "next-auth";
++import { getServerSession } from "next-auth/next";
+ import { authOptions } from "@/lib/auth";
+ import { redirect } from "next/navigation";
+ import { prisma } from "@/lib/prisma";
++import { Role } from "@prisma/client";
+ 
+ import VehiclesClient from "./vehicles-client";
+ 
+-type AppSessionUser = {
+-  role?: string;
+-  companyId?: string;
+-};
+-
+ export default async function VehiclesPage() {
+   const session = await getServerSession(authOptions);
+ 
+   if (!session) redirect("/login");
+ 
+-  const user = session.user as AppSessionUser;
++  const user = session.user;
+ 
+-  if (user.role !== "ADMIN") redirect("/login");
++  if (user.role !== Role.ADMIN && user.role !== Role.GERANT) redirect("/login");
+   if (!user.companyId) redirect("/login");
+ 
+   const companyId = user.companyId;
+diff --git a/app/vehicles/vehicles-client.tsx b/app/vehicles/vehicles-client.tsx
+index 7a077ea..e5b34ff 100644
+--- a/app/vehicles/vehicles-client.tsx
++++ b/app/vehicles/vehicles-client.tsx
+@@ -11,6 +11,14 @@ type Vehicle = {
+   createdAt: string;
+ };
+ 
++type ApiSuccess<T> = { ok: true; data: T };
++type ApiFailure = { ok: false; error: string };
++type ApiResponse<T> = ApiSuccess<T> | ApiFailure;
++
++function getApiError<T>(payload: ApiResponse<T> | null, fallback: string) {
++  return payload && !payload.ok ? payload.error : fallback;
++}
++
+ export default function VehiclesClient({
+   initialVehicles,
+ }: {
+@@ -35,14 +43,13 @@ export default function VehiclesClient({
+         body: JSON.stringify(payload),
+       });
+ 
+-      const data = await res.json().catch(() => null);
++      const data = (await res.json().catch(() => null)) as ApiResponse<Vehicle> | null;
+ 
+-      if (!res.ok) {
+-        throw new Error(data?.error ?? "Erreur lors de la création du véhicule");
++      if (!res.ok || !data?.ok) {
++        throw new Error(getApiError(data, "Erreur lors de la création du véhicule"));
+       }
+ 
+-      const created = data as Vehicle;
+-      setVehicles((prev) => [created, ...prev]);
++      setVehicles((prev) => [data.data, ...prev]);
+     } catch (e: unknown) {
+       setError(e instanceof Error ? e.message : "Erreur inconnue");
+     } finally {
+@@ -62,10 +69,10 @@ export default function VehiclesClient({
+         method: "DELETE",
+       });
+ 
+-      const data = await res.json().catch(() => null);
++      const data = (await res.json().catch(() => null)) as ApiResponse<{ id: string }> | null;
+ 
+-      if (!res.ok) {
+-        throw new Error(data?.error ?? "Erreur lors de la suppression");
++      if (!res.ok || !data?.ok) {
++        throw new Error(getApiError(data, "Erreur lors de la suppression"));
+       }
+ 
+       setVehicles((prev) => prev.filter((v) => v.id !== id));
+diff --git a/lib/api/response.ts b/lib/api/response.ts
+index bd6907a..74361c6 100644
+--- a/lib/api/response.ts
++++ b/lib/api/response.ts
+@@ -33,5 +33,6 @@ export function conflict(error = "Conflict", details?: unknown) {
+ }
+ 
+ export function serverError(details?: unknown) {
+-  return json({ ok: false, error: "Server error", details }, 500);
++  const safeDetails = process.env.NODE_ENV === "production" ? undefined : details;
++  return json({ ok: false, error: "Server error", details: safeDetails }, 500);
+ }
+\ No newline at end of file
+diff --git a/lib/auth.ts b/lib/auth.ts
+index f91607b..835afde 100644
+--- a/lib/auth.ts
++++ b/lib/auth.ts
+@@ -108,13 +108,9 @@ export const authOptions: NextAuthOptions = {
+       if (session.user) {
+         const t = token as typeof token & TokenExtras;
+ 
+-        session.user.id = typeof token.sub === "string" ? token.sub : "";
+-
+-        // role : si absent, fallback ADMIN (conservé)
+-        session.user.role = isRole(t.role) ? t.role : Role.ADMIN;
+-
+-        // companyId : on évite de forcer "" (ça casse tes guards)
+-        session.user.companyId = isNonEmptyString(t.companyId) ? t.companyId : "";
++        session.user.id = typeof token.sub === "string" ? token.sub : undefined;
++        session.user.role = isRole(t.role) ? t.role : undefined;
++        session.user.companyId = isNonEmptyString(t.companyId) ? t.companyId : undefined;
+       }
+ 
+       return session;
+diff --git a/package.json b/package.json
+index 846f0d6..ce1cec3 100644
+--- a/package.json
++++ b/package.json
+@@ -6,7 +6,7 @@
+     "dev": "next dev",
+     "build": "next build",
+     "start": "next start",
+-    "lint": "eslint",
++    "lint": "eslint .",
+     "db:seed": "prisma db seed",
+     "db:migrate": "prisma migrate dev",
+     "db:studio": "prisma studio",
+diff --git a/prisma/schema.prisma b/prisma/schema.prisma
+index 6491ea2..636c604 100644
+--- a/prisma/schema.prisma
++++ b/prisma/schema.prisma
+@@ -7,6 +7,7 @@ generator client {
+ 
+ datasource db {
+   provider = "postgresql"
++  url      = env("DATABASE_URL")
+ }
+ 
+ enum Role {
+diff --git a/types/next-auth.d.ts b/types/next-auth.d.ts
+index 54db52d..4b14546 100644
+--- a/types/next-auth.d.ts
++++ b/types/next-auth.d.ts
+@@ -5,18 +5,18 @@ import type { Role } from "@prisma/client";
+ declare module "next-auth" {
+   interface Session {
+     user: {
+-      id: string;
++      id?: string;
+       email?: string | null;
+       name?: string | null;
+-      role: Role;
+-      companyId: string;
++      role?: Role;
++      companyId?: string;
+     };
+   }
+ 
+   interface User {
+     id: string;
+-    role: Role;
+-    companyId: string;
++    role?: Role;
++    companyId?: string;
+   }
+ }
+ 

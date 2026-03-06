@@ -14,3 +14,26 @@ git status
 
 
 npm run build
+
+# Git
+git fetch --all --prune
+git log --oneline -n 20
+git apply -p1 --check docs/patches/general/PATCH_GLOBAL.diff
+git apply -p1 docs/patches/general/PATCH_GLOBAL.diff
+git apply -p1 --reject docs/patches/general/PATCH_GLOBAL.diff
+
+# Node / Next
+npm install
+npm run dev
+npm run lint
+npm run build
+
+# Prisma
+npx prisma generate
+npm run db:migrate
+npm run db:seed
+npm run db:reset
+npm run db:studio
+
+# Arborescence
+tree . /F /A > STRUCTURE_TREE.txt

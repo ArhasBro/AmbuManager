@@ -1,0 +1,202 @@
+diff --git a/docs/STRUCTURE_DOCS.md b/docs/STRUCTURE_DOCS.md
+new file mode 100644
+index 0000000..493da80
+--- /dev/null
++++ b/docs/STRUCTURE_DOCS.md
+@@ -0,0 +1,43 @@
++# STRUCTURE_DOCS
++
++## Objectif
++
++Ce fichier décrit la structure documentaire attendue du dossier `docs/`.
++
++## Arborescence cible
++
++```text
++docs/
++├── README.md
++├── SOURCES_AUTORISEES.md
++├── PROTOCOLE_SESSION.md
++├── NE_PAS_UTILISER.md
++├── STRUCTURE_DOCS.md
++├── REFONTE/
++│   └── REFONTE.md
++├── master/
++│   ├── DOCUMENT_MAITRE.md
++│   ├── ETAT_GLOBAL_PROJET.md
++│   ├── PLAN_DE_DEVELOPPEMENT.md
++│   ├── RECAP_DISCUSSIONS.md
++│   └── REGISTRE_DECISIONS.md
++├── patches/
++│   ├── README.md
++│   ├── 4.4/
++│   │   └── README.md
++│   ├── 4.6/
++│   │   └── README.md
++│   ├── 4.7/
++│   │   └── README.md
++│   └── general/
++│       └── README.md
++├── sessions/
++│   ├── SESSION-YYYYMMDD-XX/
++│   │   ├── SESSION.md
++│   │   ├── NOTES.md
++│   │   ├── EVIDENCES.md
++│   │   └── RESULTATS.md
++│   └── SESSION-<date>/
++└── templates/
++    ├── TEMPLATE_DEBUT_SESSION.md
++    ├── TEMPLATE_DOD_4_4.md
++    ├── TEMPLATE_FIN_SESSION.md
++    └── TEMPLATE_RECAP_SESSION.md
++```
++
++## Règles
++
++- Les fichiers Markdown sont à conserver en UTF-8.
++- Les patchs officiels sont stockés dans `docs/patches/`.
++- Les comptes rendus de session sont stockés dans `docs/sessions/`.
++- Les documents maîtres vivent dans `docs/master/`.
+diff --git a/docs/patches/4.4/README.md b/docs/patches/4.4/README.md
+new file mode 100644
+index 0000000..62084f9
+--- /dev/null
++++ b/docs/patches/4.4/README.md
+@@ -0,0 +1,11 @@
++# Patches 4.4
++
++Ce dossier contient les patchs liés au bloc 4.4.
++
++## Fichiers présents
++
++- `SESSION-20260304-01_4.4_rbac-seed-dbreset.diff`
++- `SESSION-20260304-01__4.4__cloture-docs.diff`
++- `SESSION-20260304-01__4.4__ui-autoschedule-buttons.diff`
++
++Appliquer les patchs depuis la racine du projet avec `git apply -p1`.
+diff --git a/docs/patches/4.7/README.md b/docs/patches/4.7/README.md
+new file mode 100644
+index 0000000..cf57680
+--- /dev/null
++++ b/docs/patches/4.7/README.md
+@@ -0,0 +1,5 @@
++# Patches 4.7
++
++Ce dossier est réservé aux patchs du bloc 4.7.
++
++Aucun patch officiel n'est actuellement présent dans ce dossier.
+diff --git a/docs/patches/README.md b/docs/patches/README.md
+new file mode 100644
+index 0000000..c5d0c91
+--- /dev/null
++++ b/docs/patches/README.md
+@@ -0,0 +1,47 @@
++# Patches — Ambulance Manager
++
++Ce dossier contient les patchs (`.diff`) produits et appliqués pendant le projet.
++
++## Règles
++
++- Un patch est rattaché à une session (`SESSION-YYYYMMDD-XX`) et à un bloc/phase (ex: `4.4`).
++- Chaque patch doit être traçable : session, objectif, fichiers impactés, statut d’application.
++- Les patchs doivent être appliqués depuis la racine du projet.
++- Les patchs servent à rejouer une modification, auditer, ou partager un changement.
++
++## Structure
++
++```text
++docs/patches/
++├── README.md
++├── <phase>/
++│   └── SESSION-YYYYMMDD-XX__<phase>__<short-title>.diff
++└── general/
++    └── PATCH_<nom>.diff
++```
++
++## Convention de nommage
++
++Format standard :
++
++`SESSION-YYYYMMDD-XX__PHASE__short-title.diff`
++
++## Application d’un patch
++
++Depuis la racine :
++
++```bash
++git apply -p1 --check <chemin_du_patch>
++git apply -p1 <chemin_du_patch>
++
++# si conflit
++git apply -p1 --reject <chemin_du_patch>
++```
++
++## Exception — Audit global / maintenance
++
++Des patchs non rattachés à une session unique peuvent être stockés dans `docs/patches/general/`.
++
++Exemples :
++
++- `PATCH_1_CORE_SECURITE.diff`
++- `PATCH_2_PERMISSIONS_MIDDLEWARE.diff`
++- `PATCH_3B_DOCS_COMPAT.diff`
++
++Ces patchs restent applicables depuis la racine avec `git apply -p1`.
+diff --git a/docs/patches/general/README.md b/docs/patches/general/README.md
+new file mode 100644
+index 0000000..7e61ff0
+--- /dev/null
++++ b/docs/patches/general/README.md
+@@ -0,0 +1,13 @@
++# Patches généraux
++
++Ce dossier regroupe les patchs transverses, non limités à une session unique.
++
++## Utilisation
++
++- Placer les patchs `.diff` dans ce dossier.
++- Appliquer les patchs depuis la racine du projet.
++- Vérifier d’abord avec `git apply -p1 --check`.
++
++## Exemples présents
++
++- `PATCH_1_CORE_SECURITE.diff`
++- `PATCH_2_PERMISSIONS_MIDDLEWARE.diff`
+diff --git a/docs/sessions/SESSION-20260305-02/SESSION.md b/docs/sessions/SESSION-20260305-02/SESSION.md
+new file mode 100644
+index 0000000..f6a9473
+--- /dev/null
++++ b/docs/sessions/SESSION-20260305-02/SESSION.md
+@@ -0,0 +1,13 @@
++# SESSION
++
++## ID SESSION
++
++SESSION-20260305-02
++
++## Date
++
++INFORMATION NON FOURNIE — À CONFIRMER
++
++## Contexte
++
++INFORMATION NON FOURNIE — À CONFIRMER
+diff --git a/docs/sessions/SESSION-YYYYMMDD-XX/SESSION.md b/docs/sessions/SESSION-YYYYMMDD-XX/SESSION.md
+new file mode 100644
+index 0000000..96a5908
+--- /dev/null
++++ b/docs/sessions/SESSION-YYYYMMDD-XX/SESSION.md
+@@ -0,0 +1,13 @@
++# SESSION
++
++## ID SESSION
++
++SESSION-YYYYMMDD-XX
++
++## Date
++
++INFORMATION NON FOURNIE — À CONFIRMER
++
++## Contexte
++
++INFORMATION NON FOURNIE — À CONFIRMER

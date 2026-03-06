@@ -1,23 +1,19 @@
-import { getServerSession } from "next-auth";
+import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { Role } from "@prisma/client";
 
 import VehiclesClient from "./vehicles-client";
-
-type AppSessionUser = {
-  role?: string;
-  companyId?: string;
-};
 
 export default async function VehiclesPage() {
   const session = await getServerSession(authOptions);
 
   if (!session) redirect("/login");
 
-  const user = session.user as AppSessionUser;
+  const user = session.user;
 
-  if (user.role !== "ADMIN") redirect("/login");
+  if (user.role !== Role.ADMIN && user.role !== Role.GERANT) redirect("/login");
   if (!user.companyId) redirect("/login");
 
   const companyId = user.companyId;
