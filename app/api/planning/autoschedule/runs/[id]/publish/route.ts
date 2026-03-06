@@ -50,6 +50,7 @@ type DraftForPublish = {
   startAt: Date;
   endAt: Date;
   userId: string | null;
+  user2Id: string | null;
   vehicleId: string | null;
   notes: string | null;
 };
@@ -88,7 +89,9 @@ async function checkConflicts(
 > {
   if (drafts.length === 0) return { kind: "OK" };
 
-  const userIds = Array.from(new Set(drafts.map((d) => d.userId).filter(Boolean))) as string[];
+  const userIds = Array.from(
+    new Set(drafts.flatMap((d) => [d.userId, d.user2Id]).filter(Boolean))
+  ) as string[];
   const vehicleIds = Array.from(new Set(drafts.map((d) => d.vehicleId).filter(Boolean))) as string[];
 
   const minStart = drafts.reduce((min, d) => (d.startAt < min ? d.startAt : min), drafts[0]!.startAt);
@@ -99,29 +102,35 @@ async function checkConflicts(
     const existingUserShifts = await tx.shift.findMany({
       where: {
         companyId,
-        userId: { in: userIds },
+        OR: [{ userId: { in: userIds } }, { user2Id: { in: userIds } }],
         startAt: { lt: maxEnd },
         endAt: { gt: minStart },
       },
-      select: { id: true, userId: true, startAt: true, endAt: true },
+      select: { id: true, userId: true, user2Id: true, startAt: true, endAt: true },
       orderBy: { startAt: "asc" },
     });
 
     for (const d of drafts) {
-      if (!d.userId) continue;
-      const c = existingUserShifts.find(
-        (s) => s.userId === d.userId && overlaps(s.startAt, s.endAt, d.startAt, d.endAt)
-      );
-      if (c) {
-        return {
-          kind: "CONFLICT_USER",
-          conflict: {
-            userId: d.userId,
-            draft: { startAt: d.startAt.toISOString(), endAt: d.endAt.toISOString() },
-            existingShiftId: c.id,
-            existing: { startAt: c.startAt.toISOString(), endAt: c.endAt.toISOString() },
-          },
-        };
+      const assignedUsers = Array.from(new Set([d.userId, d.user2Id].filter(Boolean))) as string[];
+      if (assignedUsers.length === 0) continue;
+
+      for (const assignedUserId of assignedUsers) {
+        const c = existingUserShifts.find(
+          (s) =>
+            (s.userId === assignedUserId || s.user2Id === assignedUserId) &&
+            overlaps(s.startAt, s.endAt, d.startAt, d.endAt)
+        );
+        if (c) {
+          return {
+            kind: "CONFLICT_USER",
+            conflict: {
+              userId: assignedUserId,
+              draft: { startAt: d.startAt.toISOString(), endAt: d.endAt.toISOString() },
+              existingShiftId: c.id,
+              existing: { startAt: c.startAt.toISOString(), endAt: c.endAt.toISOString() },
+            },
+          };
+        }
       }
     }
   }
@@ -218,7 +227,9 @@ async function computeMinRestWarnings(
   drafts: DraftForPublish[],
   requiredHours: number
 ): Promise<RestWarning[]> {
-  const userIds = Array.from(new Set(drafts.map((d) => d.userId).filter(Boolean))) as string[];
+  const userIds = Array.from(
+    new Set(drafts.flatMap((d) => [d.userId, d.user2Id]).filter(Boolean))
+  ) as string[];
   if (userIds.length === 0) return [];
   if (drafts.length === 0) return [];
 
@@ -232,11 +243,11 @@ async function computeMinRestWarnings(
   const existing = await tx.shift.findMany({
     where: {
       companyId,
-      userId: { in: userIds },
+      OR: [{ userId: { in: userIds } }, { user2Id: { in: userIds } }],
       startAt: { lt: windowEnd },
       endAt: { gt: windowStart },
     },
-    select: { id: true, userId: true, startAt: true, endAt: true },
+    select: { id: true, userId: true, user2Id: true, startAt: true, endAt: true },
     orderBy: { startAt: "asc" },
   });
 
@@ -246,12 +257,12 @@ async function computeMinRestWarnings(
     const items: TimelineItem[] = [];
 
     for (const s of existing) {
-      if (s.userId !== uid) continue;
+      if (s.userId !== uid && s.user2Id !== uid) continue;
       items.push({ kind: "EXISTING", id: s.id, userId: uid, startAt: s.startAt, endAt: s.endAt });
     }
 
     for (const d of drafts) {
-      if (d.userId !== uid) continue;
+      if (d.userId !== uid && d.user2Id !== uid) continue;
       items.push({ kind: "DRAFT", id: null, userId: uid, startAt: d.startAt, endAt: d.endAt });
     }
 
@@ -366,6 +377,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
           startAt: true,
           endAt: true,
           userId: true,
+          user2Id: true,
           vehicleId: true,
           notes: true,
         },
@@ -412,6 +424,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
           startAt: d.startAt,
           endAt: d.endAt,
           userId: d.userId,
+          user2Id: d.user2Id,
           vehicleId: d.vehicleId,
           runId: d.runId,
           templateId: d.templateId,
