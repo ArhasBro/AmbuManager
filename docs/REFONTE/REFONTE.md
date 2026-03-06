@@ -42,3 +42,19 @@
 - Vérifier `npx prisma generate`
 - Vérifier `npm run lint`
 - Vérifier `npm run build`
+
+Dernière validation obtenue :  
+- PATCH_1_CORE_SECURITE appliqué  
+- PATCH_2_PERMISSIONS_MIDDLEWARE appliqué  
+- PATCH_3B_DOCS_COMPAT appliqué  
+- PATCH_4_TECHNIQUE_FINAL appliqué  
+- PATCH_5A_ROUTE_ONLY appliqué  
+- PATCH_5B_README_COMPAT appliqué  
+- `npm run lint` : VALIDÉ  
+- `npm run build` : VALIDÉ  
+- `npx prisma validate` : VALIDÉ  
+- `prisma/test-login.ts` : VALIDÉ  
+  - `DB email: admin@ambulance.local`  
+  - `Password is hashed: true`  
+  - `bcrypt.compare: true`
+  
