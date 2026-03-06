@@ -9,8 +9,12 @@ async function main() {
   const adapter = new PrismaPg(pool);
   const prisma = new PrismaClient({ adapter });
 
-  const email = "admin@ambulance.local";
-  const password = "admin123";
+  const email = process.env.TEST_EMAIL;
+  const password = process.env.TEST_PASSWORD;
+
+  if (!email || !password) {
+    throw new Error("Missing TEST_EMAIL or TEST_PASSWORD in environment.");
+  }
 
   const user = await prisma.user.findUnique({ where: { email } });
 

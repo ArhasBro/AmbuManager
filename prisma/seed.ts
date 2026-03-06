@@ -11,6 +11,21 @@ const pool = new Pool({
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
+
+function readSeedPassword(envName: string, fallback: string): string {
+  const value = process.env[envName];
+  if (typeof value === "string" && value.length > 0) return value;
+
+  if (process.env.ALLOW_INSECURE_SEED_DEFAULTS === "true") {
+    console.warn(`⚠️  ${envName} absent: fallback de développement utilisé.`);
+    return fallback;
+  }
+
+  throw new Error(
+    `Missing ${envName}. Define it in the environment or set ALLOW_INSECURE_SEED_DEFAULTS=true for local demo data.`
+  );
+}
+
 type SeedCompany = {
   name: string;
   admin: { email: string; password: string; name: string };
@@ -157,10 +172,10 @@ async function main() {
   // =========================
   // Global defaults
   // =========================
-  const adminPasswordA = process.env.SEED_ADMIN_PASSWORD ?? "admin123";
+  const adminPasswordA = readSeedPassword("SEED_ADMIN_PASSWORD", "admin123");
   const adminPasswordB = process.env.SEED_ADMIN_B_PASSWORD ?? adminPasswordA;
 
-  const userPassword = process.env.SEED_USER_PASSWORD ?? "user123";
+  const userPassword = readSeedPassword("SEED_USER_PASSWORD", "user123");
   const now = new Date();
 
   // =========================

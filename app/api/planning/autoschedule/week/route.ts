@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
+import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { canAutoSchedule } from "@/lib/permissions";
 
 const BodySchema = z.object({
   // "YYYY-MM-DD" (idéalement lundi; on accepte autre et on ramène au lundi)
@@ -53,14 +54,6 @@ function toMondayLocal(dayStr: string): Date {
   return addDays(base, -diffToMonday);
 }
 
-async function canAutoSchedule(userId: string): Promise<boolean> {
-  const perms = await prisma.userPermission.findMany({
-    where: { userId },
-    include: { permission: true },
-  });
-  return perms.some((p) => p.permission.code === "PLANNING_AUTOSCHEDULE");
-}
-
 type PrismaKnownCode = "P2002" | "P2025";
 
 function getPrismaCode(e: unknown): PrismaKnownCode | null {
@@ -73,15 +66,14 @@ function getPrismaCode(e: unknown): PrismaKnownCode | null {
   return null;
 }
 
-function prismaToApiError(e: unknown): { status: number; body: { ok: false; error: string; message?: string } } {
+function prismaToApiError(e: unknown): { status: number; body: { ok: false; error: string } } {
   // mapping minimal et safe
   const code = getPrismaCode(e);
 
   if (code === "P2002") return { status: 409, body: { ok: false, error: "CONFLICT" } };
   if (code === "P2025") return { status: 404, body: { ok: false, error: "NOT_FOUND" } };
 
-  const message = e instanceof Error ? e.message : "Unknown error";
-  return { status: 500, body: { ok: false, error: "SERVER_ERROR", message } };
+  return { status: 500, body: { ok: false, error: "SERVER_ERROR" } };
 }
 
 function isAutoscheduleSentinel(v: unknown): v is AutoscheduleSentinel {
@@ -108,8 +100,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
   }
 
-  const roleAllowed = role === "ADMIN" || role === "GERANT";
-  const permAllowed = roleAllowed ? true : await canAutoSchedule(userId);
+  const permAllowed = await canAutoSchedule(userId, role);
 
   if (!permAllowed) {
     return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });

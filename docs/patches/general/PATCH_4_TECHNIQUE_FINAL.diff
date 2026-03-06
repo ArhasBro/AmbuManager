@@ -1,0 +1,525 @@
+diff --git a/app/api/company/rules/route.ts b/app/api/company/rules/route.ts
+index 314cbac..63d984f 100644
+--- a/app/api/company/rules/route.ts
++++ b/app/api/company/rules/route.ts
+@@ -1,5 +1,5 @@
+ import { NextRequest, NextResponse } from "next/server";
+-import { getServerSession } from "next-auth";
++import { getServerSession } from "next-auth/next";
+ import { authOptions } from "@/lib/auth";
+ import { prisma } from "@/lib/prisma";
+ import { z } from "zod";
+@@ -72,9 +72,8 @@ export async function GET(req: NextRequest) {
+         updatedAt: r.updatedAt.toISOString(),
+       })),
+     });
+-  } catch (e: unknown) {
+-    const message = e instanceof Error ? e.message : "Unknown error";
+-    return NextResponse.json({ ok: false, error: "SERVER_ERROR", message }, { status: 500 });
++  } catch {
++    return NextResponse.json({ ok: false, error: "SERVER_ERROR" }, { status: 500 });
+   }
+ }
+ 
+@@ -130,8 +129,7 @@ export async function PATCH(req: NextRequest) {
+         updatedAt: rule.updatedAt.toISOString(),
+       },
+     });
+-  } catch (e: unknown) {
+-    const message = e instanceof Error ? e.message : "Unknown error";
+-    return NextResponse.json({ ok: false, error: "SERVER_ERROR", message }, { status: 500 });
++  } catch {
++    return NextResponse.json({ ok: false, error: "SERVER_ERROR" }, { status: 500 });
+   }
+ }
+\ No newline at end of file
+diff --git a/app/api/planning/autoschedule/day/route.ts b/app/api/planning/autoschedule/day/route.ts
+index 5b0efaa..7f10c10 100644
+--- a/app/api/planning/autoschedule/day/route.ts
++++ b/app/api/planning/autoschedule/day/route.ts
+@@ -1,8 +1,9 @@
+ import { NextRequest, NextResponse } from "next/server";
+-import { getServerSession } from "next-auth";
++import { getServerSession } from "next-auth/next";
+ import { authOptions } from "@/lib/auth";
+ import { prisma } from "@/lib/prisma";
+ import { z } from "zod";
++import { canAutoSchedule } from "@/lib/permissions";
+ 
+ const BodySchema = z.object({
+   day: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "day must be YYYY-MM-DD"),
+@@ -32,14 +33,6 @@ function buildDateTimeLocal(dayStr: string, timeStr: string): Date {
+   return new Date(Y, M - 1, D, h, m, 0, 0);
+ }
+ 
+-async function canAutoSchedule(userId: string): Promise<boolean> {
+-  const perms = await prisma.userPermission.findMany({
+-    where: { userId },
+-    include: { permission: true },
+-  });
+-  return perms.some((p) => p.permission.code === "PLANNING_AUTOSCHEDULE");
+-}
+-
+ type PrismaKnownCode = "P2002" | "P2025";
+ 
+ function getPrismaCode(e: unknown): PrismaKnownCode | null {
+@@ -50,13 +43,12 @@ function getPrismaCode(e: unknown): PrismaKnownCode | null {
+   return null;
+ }
+ 
+-function prismaToApiError(e: unknown): { status: number; body: { ok: false; error: string; message?: string } } {
++function prismaToApiError(e: unknown): { status: number; body: { ok: false; error: string } } {
+   const code = getPrismaCode(e);
+   if (code === "P2002") return { status: 409, body: { ok: false, error: "CONFLICT" } };
+   if (code === "P2025") return { status: 404, body: { ok: false, error: "NOT_FOUND" } };
+ 
+-  const message = e instanceof Error ? e.message : "Unknown error";
+-  return { status: 500, body: { ok: false, error: "SERVER_ERROR", message } };
++  return { status: 500, body: { ok: false, error: "SERVER_ERROR" } };
+ }
+ 
+ function isAutoscheduleSentinel(v: unknown): v is AutoscheduleSentinel {
+@@ -84,8 +76,7 @@ export async function POST(req: NextRequest) {
+   }
+ 
+   // ✅ RBAC (ADMIN/GERANT) ou permission dédiée
+-  const roleAllowed = role === "ADMIN" || role === "GERANT";
+-  const permAllowed = roleAllowed ? true : await canAutoSchedule(userId);
++  const permAllowed = await canAutoSchedule(userId, role);
+ 
+   if (!permAllowed) {
+     return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });
+diff --git a/app/api/planning/autoschedule/runs/[id]/cancel/route.ts b/app/api/planning/autoschedule/runs/[id]/cancel/route.ts
+index 19f2738..d45575e 100644
+--- a/app/api/planning/autoschedule/runs/[id]/cancel/route.ts
++++ b/app/api/planning/autoschedule/runs/[id]/cancel/route.ts
+@@ -1,10 +1,11 @@
+ import { NextRequest, NextResponse } from "next/server";
+-import { getServerSession } from "next-auth";
++import { getServerSession } from "next-auth/next";
+ import { z } from "zod";
+ 
+ import { authOptions } from "@/lib/auth";
+ import { prisma } from "@/lib/prisma";
+ import { AutoScheduleStatus } from "@prisma/client";
++import { canAutoSchedule } from "@/lib/permissions";
+ 
+ const ParamsSchema = z.object({
+   id: z.string().min(1),
+@@ -26,15 +27,7 @@ function extractRunIdFromPath(pathname: string): string | null {
+   return id;
+ }
+ 
+-async function canAutoSchedule(userId: string): Promise<boolean> {
+-  const perms = await prisma.userPermission.findMany({
+-    where: { userId },
+-    include: { permission: true },
+-  });
+-  return perms.some((p) => p.permission.code === "PLANNING_AUTOSCHEDULE");
+-}
+-
+-function prismaToApiError(e: unknown): { status: number; body: { ok: false; error: string; message?: string } } {
++function prismaToApiError(e: unknown): { status: number; body: { ok: false; error: string } } {
+   if (typeof e === "object" && e && "code" in e) {
+     const maybe = e as { code?: unknown };
+     const code = typeof maybe.code === "string" ? maybe.code : null;
+@@ -43,8 +36,7 @@ function prismaToApiError(e: unknown): { status: number; body: { ok: false; erro
+     if (code === "P2025") return { status: 404, body: { ok: false, error: "NOT_FOUND" } };
+   }
+ 
+-  const message = e instanceof Error ? e.message : "Unknown error";
+-  return { status: 500, body: { ok: false, error: "SERVER_ERROR", message } };
++  return { status: 500, body: { ok: false, error: "SERVER_ERROR" } };
+ }
+ 
+ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
+@@ -59,8 +51,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
+   }
+ 
+   // ✅ RBAC (ADMIN/GERANT) ou permission dédiée
+-  const roleAllowed = role === "ADMIN" || role === "GERANT";
+-  const permAllowed = roleAllowed ? true : await canAutoSchedule(userId);
++  const permAllowed = await canAutoSchedule(userId, role);
+ 
+   if (!permAllowed) {
+     return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });
+diff --git a/app/api/planning/autoschedule/runs/[id]/match/apply/route.ts b/app/api/planning/autoschedule/runs/[id]/match/apply/route.ts
+index 943b672..7607a63 100644
+--- a/app/api/planning/autoschedule/runs/[id]/match/apply/route.ts
++++ b/app/api/planning/autoschedule/runs/[id]/match/apply/route.ts
+@@ -80,6 +80,6 @@ export async function POST(
+       return json({ ok: false, error: "MATCH_STALE_STATE" }, 409);
+     }
+ 
+-    return json({ ok: false, error: "MATCH_FAILED", details: message }, 500);
++    return json({ ok: false, error: "MATCH_FAILED" }, 500);
+   }
+ }
+\ No newline at end of file
+diff --git a/app/api/planning/autoschedule/runs/[id]/publish/route.ts b/app/api/planning/autoschedule/runs/[id]/publish/route.ts
+index 842a790..67292e2 100644
+--- a/app/api/planning/autoschedule/runs/[id]/publish/route.ts
++++ b/app/api/planning/autoschedule/runs/[id]/publish/route.ts
+@@ -1,10 +1,11 @@
+ import { NextRequest, NextResponse } from "next/server";
+-import { getServerSession } from "next-auth";
++import { getServerSession } from "next-auth/next";
+ import { z } from "zod";
+ import { AutoScheduleStatus, Prisma, RuleMode } from "@prisma/client";
+ 
+ import { authOptions } from "@/lib/auth";
+ import { prisma } from "@/lib/prisma";
++import { canPublishAutoSchedule } from "@/lib/permissions";
+ 
+ const ParamsSchema = z.object({
+   id: z.string().min(1),
+@@ -28,21 +29,9 @@ function extractRunIdFromPath(pathname: string): string | null {
+   return id;
+ }
+ 
+-async function hasPermission(userId: string, code: string): Promise<boolean> {
+-  const perms = await prisma.userPermission.findMany({
+-    where: { userId },
+-    include: { permission: true },
+-  });
+-  return perms.some((p) => p.permission.code === code);
+-}
+-
+-async function canPublishAutoSchedule(userId: string): Promise<boolean> {
+-  return hasPermission(userId, "PLANNING_AUTOSCHEDULE_PUBLISH");
+-}
+-
+ function prismaToApiError(
+   e: unknown
+-): { status: number; body: { ok: false; error: string; message?: string } } {
++): { status: number; body: { ok: false; error: string } } {
+   if (typeof e === "object" && e && "code" in e) {
+     const maybe = e as { code?: unknown };
+     const code = typeof maybe.code === "string" ? maybe.code : null;
+@@ -50,8 +39,7 @@ function prismaToApiError(
+     if (code === "P2002") return { status: 409, body: { ok: false, error: "CONFLICT" } };
+     if (code === "P2025") return { status: 404, body: { ok: false, error: "NOT_FOUND" } };
+   }
+-  const message = e instanceof Error ? e.message : "Unknown error";
+-  return { status: 500, body: { ok: false, error: "SERVER_ERROR", message } };
++  return { status: 500, body: { ok: false, error: "SERVER_ERROR" } };
+ }
+ 
+ type DraftForPublish = {
+@@ -315,13 +303,11 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
+     return NextResponse.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
+   }
+ 
+-  const roleAllowed = role === "ADMIN" || role === "GERANT";
+-  // ✅ RBAC : ADMIN/GERANT ok, sinon permission dédiée publish
+-  const permAllowed = roleAllowed ? true : await canPublishAutoSchedule(userId);
++  const permAllowed = await canPublishAutoSchedule(userId, role);
+ 
+   if (!permAllowed) {
+     return NextResponse.json(
+-      { ok: false, error: "FORBIDDEN", details: "PLANNING_AUTOSCHEDULE_PUBLISH requis" },
++      { ok: false, error: "FORBIDDEN" },
+       { status: 403 }
+     );
+   }
+diff --git a/app/api/planning/autoschedule/runs/[id]/route.ts b/app/api/planning/autoschedule/runs/[id]/route.ts
+index ad34e0e..6dac84c 100644
+--- a/app/api/planning/autoschedule/runs/[id]/route.ts
++++ b/app/api/planning/autoschedule/runs/[id]/route.ts
+@@ -1,5 +1,5 @@
+ import { NextRequest, NextResponse } from "next/server";
+-import { getServerSession } from "next-auth";
++import { getServerSession } from "next-auth/next";
+ import { authOptions } from "@/lib/auth";
+ import { prisma } from "@/lib/prisma";
+ import { z } from "zod";
+@@ -37,12 +37,11 @@ function getPrismaCode(e: unknown): PrismaKnownCode | null {
+   return null;
+ }
+ 
+-function prismaToApiError(e: unknown): { status: number; body: { ok: false; error: string; message?: string } } {
++function prismaToApiError(e: unknown): { status: number; body: { ok: false; error: string } } {
+   const code = getPrismaCode(e);
+   if (code === "P2025") return { status: 404, body: { ok: false, error: "NOT_FOUND" } };
+ 
+-  const message = e instanceof Error ? e.message : "Unknown error";
+-  return { status: 500, body: { ok: false, error: "SERVER_ERROR", message } };
++  return { status: 500, body: { ok: false, error: "SERVER_ERROR" } };
+ }
+ 
+ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
+diff --git a/app/api/planning/autoschedule/runs/route.ts b/app/api/planning/autoschedule/runs/route.ts
+index 7308599..b1e157f 100644
+--- a/app/api/planning/autoschedule/runs/route.ts
++++ b/app/api/planning/autoschedule/runs/route.ts
+@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth/next";
+ import { authOptions } from "@/lib/auth";
+ import { prisma } from "@/lib/prisma";
+ import { z } from "zod";
+-import { AutoScheduleScope, AutoScheduleStatus } from "@prisma/client";
++import { AutoScheduleScope, AutoScheduleStatus, type Prisma } from "@prisma/client";
+ import { canAutoSchedule } from "@/lib/permissions";
+ 
+ const QuerySchema = z.object({
+@@ -26,7 +26,26 @@ function getPrismaCode(e: unknown): PrismaKnownCode | null {
+   return null;
+ }
+ 
+-function prismaToApiError(e: unknown): { status: number; body: { ok: false; error: string; message?: string } } {
++
++function encodeCursor(createdAt: Date, id: string): string {
++  return `${createdAt.toISOString()}__${id}`;
++}
++
++function decodeCursor(cursor: string): { createdAt: Date; id: string } | null {
++  const sep = cursor.lastIndexOf("__");
++  if (sep <= 0) return null;
++
++  const createdAtRaw = cursor.slice(0, sep);
++  const id = cursor.slice(sep + 2);
++  if (!id) return null;
++
++  const createdAt = new Date(createdAtRaw);
++  if (Number.isNaN(createdAt.getTime())) return null;
++
++  return { createdAt, id };
++}
++
++function prismaToApiError(e: unknown): { status: number; body: { ok: false; error: string } } {
+   const code = getPrismaCode(e);
+   if (code === "P2002") return { status: 409, body: { ok: false, error: "CONFLICT" } };
+   if (code === "P2025") return { status: 404, body: { ok: false, error: "NOT_FOUND" } };
+@@ -69,16 +88,35 @@ export async function GET(req: NextRequest) {
+ 
+   const { scope, status, limit, cursor } = parsed.data;
+ 
++  const cursorData = cursor ? decodeCursor(cursor) : null;
++  if (cursor && !cursorData) {
++    return NextResponse.json({ ok: false, error: "INVALID_CURSOR" }, { status: 400 });
++  }
++
++  const where: Prisma.AutoScheduleRunWhereInput = {
++    companyId,
++    ...(scope ? { scope } : {}),
++    ...(status ? { status } : {}),
++    ...(cursorData
++      ? {
++          OR: [
++            { createdAt: { lt: cursorData.createdAt } },
++            {
++              AND: [
++                { createdAt: { equals: cursorData.createdAt } },
++                { id: { lt: cursorData.id } },
++              ],
++            },
++          ],
++        }
++      : {}),
++  };
++
+   try {
+     const runs = await prisma.autoScheduleRun.findMany({
+-      where: {
+-        companyId,
+-        ...(scope ? { scope } : {}),
+-        ...(status ? { status } : {}),
+-      },
+-      orderBy: { createdAt: "desc" },
++      where,
++      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+       take: limit + 1,
+-      ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
+       select: {
+         id: true,
+         companyId: true,
+@@ -94,7 +132,7 @@ export async function GET(req: NextRequest) {
+ 
+     const hasMore = runs.length > limit;
+     const items = hasMore ? runs.slice(0, limit) : runs;
+-    const nextCursor = hasMore ? items[items.length - 1]!.id : null;
++    const nextCursor = hasMore ? encodeCursor(items[items.length - 1]!.createdAt, items[items.length - 1]!.id) : null;
+ 
+     return NextResponse.json({
+       ok: true,
+diff --git a/app/api/planning/autoschedule/week/route.ts b/app/api/planning/autoschedule/week/route.ts
+index 2b83367..80b2fbe 100644
+--- a/app/api/planning/autoschedule/week/route.ts
++++ b/app/api/planning/autoschedule/week/route.ts
+@@ -1,8 +1,9 @@
+ import { NextRequest, NextResponse } from "next/server";
+-import { getServerSession } from "next-auth";
++import { getServerSession } from "next-auth/next";
+ import { authOptions } from "@/lib/auth";
+ import { prisma } from "@/lib/prisma";
+ import { z } from "zod";
++import { canAutoSchedule } from "@/lib/permissions";
+ 
+ const BodySchema = z.object({
+   // "YYYY-MM-DD" (idéalement lundi; on accepte autre et on ramène au lundi)
+@@ -53,14 +54,6 @@ function toMondayLocal(dayStr: string): Date {
+   return addDays(base, -diffToMonday);
+ }
+ 
+-async function canAutoSchedule(userId: string): Promise<boolean> {
+-  const perms = await prisma.userPermission.findMany({
+-    where: { userId },
+-    include: { permission: true },
+-  });
+-  return perms.some((p) => p.permission.code === "PLANNING_AUTOSCHEDULE");
+-}
+-
+ type PrismaKnownCode = "P2002" | "P2025";
+ 
+ function getPrismaCode(e: unknown): PrismaKnownCode | null {
+@@ -73,15 +66,14 @@ function getPrismaCode(e: unknown): PrismaKnownCode | null {
+   return null;
+ }
+ 
+-function prismaToApiError(e: unknown): { status: number; body: { ok: false; error: string; message?: string } } {
++function prismaToApiError(e: unknown): { status: number; body: { ok: false; error: string } } {
+   // mapping minimal et safe
+   const code = getPrismaCode(e);
+ 
+   if (code === "P2002") return { status: 409, body: { ok: false, error: "CONFLICT" } };
+   if (code === "P2025") return { status: 404, body: { ok: false, error: "NOT_FOUND" } };
+ 
+-  const message = e instanceof Error ? e.message : "Unknown error";
+-  return { status: 500, body: { ok: false, error: "SERVER_ERROR", message } };
++  return { status: 500, body: { ok: false, error: "SERVER_ERROR" } };
+ }
+ 
+ function isAutoscheduleSentinel(v: unknown): v is AutoscheduleSentinel {
+@@ -108,8 +100,7 @@ export async function POST(req: NextRequest) {
+     return NextResponse.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
+   }
+ 
+-  const roleAllowed = role === "ADMIN" || role === "GERANT";
+-  const permAllowed = roleAllowed ? true : await canAutoSchedule(userId);
++  const permAllowed = await canAutoSchedule(userId, role);
+ 
+   if (!permAllowed) {
+     return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });
+diff --git a/app/api/planning/shifts/[id]/assign/route.ts b/app/api/planning/shifts/[id]/assign/route.ts
+index c6960e4..9013408 100644
+--- a/app/api/planning/shifts/[id]/assign/route.ts
++++ b/app/api/planning/shifts/[id]/assign/route.ts
+@@ -1,6 +1,6 @@
+ import { NextRequest, NextResponse } from "next/server";
+ import { z } from "zod";
+-import { getServerSession } from "next-auth";
++import { getServerSession } from "next-auth/next";
+ 
+ import { authOptions } from "@/lib/auth";
+ import { prisma } from "@/lib/prisma";
+diff --git a/app/api/planning/shifts/route.ts b/app/api/planning/shifts/route.ts
+index f7e9a38..e7e9a0a 100644
+--- a/app/api/planning/shifts/route.ts
++++ b/app/api/planning/shifts/route.ts
+@@ -1,5 +1,5 @@
+ import { NextRequest, NextResponse } from "next/server";
+-import { getServerSession } from "next-auth";
++import { getServerSession } from "next-auth/next";
+ import { authOptions } from "@/lib/auth";
+ import { prisma } from "@/lib/prisma";
+ import { z } from "zod";
+@@ -115,8 +115,7 @@ export async function GET(req: NextRequest) {
+           : null,
+       })),
+     });
+-  } catch (e: unknown) {
+-    const message = e instanceof Error ? e.message : "Unknown error";
+-    return NextResponse.json({ ok: false, error: "SERVER_ERROR", message }, { status: 500 });
++  } catch {
++    return NextResponse.json({ ok: false, error: "SERVER_ERROR" }, { status: 500 });
+   }
+ }
+\ No newline at end of file
+diff --git a/app/api/users/route.ts b/app/api/users/route.ts
+index 08c5cf1..4b0e94d 100644
+--- a/app/api/users/route.ts
++++ b/app/api/users/route.ts
+@@ -1,4 +1,4 @@
+-import { getServerSession } from "next-auth";
++import { getServerSession } from "next-auth/next";
+ import { authOptions } from "@/lib/auth";
+ import { prisma } from "@/lib/prisma";
+ 
+diff --git a/app/api/vehicles/route.ts b/app/api/vehicles/route.ts
+index 7e8602d..fb3faac 100644
+--- a/app/api/vehicles/route.ts
++++ b/app/api/vehicles/route.ts
+@@ -1,4 +1,4 @@
+-import { getServerSession } from "next-auth";
++import { getServerSession } from "next-auth/next";
+ import { authOptions } from "@/lib/auth";
+ import { prisma } from "@/lib/prisma";
+ 
+diff --git a/lib/permissions.ts b/lib/permissions.ts
+index c7b4e9a..06d5d31 100644
+--- a/lib/permissions.ts
++++ b/lib/permissions.ts
+@@ -19,5 +19,5 @@ export async function canAutoSchedule(userId: string, role?: string): Promise<bo
+ 
+ export async function canPublishAutoSchedule(userId: string, role?: string): Promise<boolean> {
+   if (role === "ADMIN" || role === "GERANT") return true;
+-  return hasPermission(userId, "PLANNING_PUBLISH");
++  return hasPermission(userId, "PLANNING_AUTOSCHEDULE_PUBLISH");
+ }
+diff --git a/prisma/seed.ts b/prisma/seed.ts
+index 993f68a..3cf9f8a 100644
+--- a/prisma/seed.ts
++++ b/prisma/seed.ts
+@@ -11,6 +11,21 @@ const pool = new Pool({
+ const adapter = new PrismaPg(pool);
+ const prisma = new PrismaClient({ adapter });
+ 
++
++function readSeedPassword(envName: string, fallback: string): string {
++  const value = process.env[envName];
++  if (typeof value === "string" && value.length > 0) return value;
++
++  if (process.env.ALLOW_INSECURE_SEED_DEFAULTS === "true") {
++    console.warn(`⚠️  ${envName} absent: fallback de développement utilisé.`);
++    return fallback;
++  }
++
++  throw new Error(
++    `Missing ${envName}. Define it in the environment or set ALLOW_INSECURE_SEED_DEFAULTS=true for local demo data.`
++  );
++}
++
+ type SeedCompany = {
+   name: string;
+   admin: { email: string; password: string; name: string };
+@@ -157,10 +172,10 @@ async function main() {
+   // =========================
+   // Global defaults
+   // =========================
+-  const adminPasswordA = process.env.SEED_ADMIN_PASSWORD ?? "admin123";
++  const adminPasswordA = readSeedPassword("SEED_ADMIN_PASSWORD", "admin123");
+   const adminPasswordB = process.env.SEED_ADMIN_B_PASSWORD ?? adminPasswordA;
+ 
+-  const userPassword = process.env.SEED_USER_PASSWORD ?? "user123";
++  const userPassword = readSeedPassword("SEED_USER_PASSWORD", "user123");
+   const now = new Date();
+ 
+   // =========================
+diff --git a/prisma/test-login.ts b/prisma/test-login.ts
+index 067b397..e1a5a39 100644
+--- a/prisma/test-login.ts
++++ b/prisma/test-login.ts
+@@ -9,8 +9,12 @@ async function main() {
+   const adapter = new PrismaPg(pool);
+   const prisma = new PrismaClient({ adapter });
+ 
+-  const email = "admin@ambulance.local";
+-  const password = "admin123";
++  const email = process.env.TEST_EMAIL;
++  const password = process.env.TEST_PASSWORD;
++
++  if (!email || !password) {
++    throw new Error("Missing TEST_EMAIL or TEST_PASSWORD in environment.");
++  }
+ 
+   const user = await prisma.user.findUnique({ where: { email } });
+ 

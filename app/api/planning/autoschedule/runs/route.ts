@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
-import { AutoScheduleScope, AutoScheduleStatus } from "@prisma/client";
+import { AutoScheduleScope, AutoScheduleStatus, type Prisma } from "@prisma/client";
 import { canAutoSchedule } from "@/lib/permissions";
 
 const QuerySchema = z.object({
@@ -26,7 +26,26 @@ function getPrismaCode(e: unknown): PrismaKnownCode | null {
   return null;
 }
 
-function prismaToApiError(e: unknown): { status: number; body: { ok: false; error: string; message?: string } } {
+
+function encodeCursor(createdAt: Date, id: string): string {
+  return `${createdAt.toISOString()}__${id}`;
+}
+
+function decodeCursor(cursor: string): { createdAt: Date; id: string } | null {
+  const sep = cursor.lastIndexOf("__");
+  if (sep <= 0) return null;
+
+  const createdAtRaw = cursor.slice(0, sep);
+  const id = cursor.slice(sep + 2);
+  if (!id) return null;
+
+  const createdAt = new Date(createdAtRaw);
+  if (Number.isNaN(createdAt.getTime())) return null;
+
+  return { createdAt, id };
+}
+
+function prismaToApiError(e: unknown): { status: number; body: { ok: false; error: string } } {
   const code = getPrismaCode(e);
   if (code === "P2002") return { status: 409, body: { ok: false, error: "CONFLICT" } };
   if (code === "P2025") return { status: 404, body: { ok: false, error: "NOT_FOUND" } };
@@ -69,16 +88,35 @@ export async function GET(req: NextRequest) {
 
   const { scope, status, limit, cursor } = parsed.data;
 
+  const cursorData = cursor ? decodeCursor(cursor) : null;
+  if (cursor && !cursorData) {
+    return NextResponse.json({ ok: false, error: "INVALID_CURSOR" }, { status: 400 });
+  }
+
+  const where: Prisma.AutoScheduleRunWhereInput = {
+    companyId,
+    ...(scope ? { scope } : {}),
+    ...(status ? { status } : {}),
+    ...(cursorData
+      ? {
+          OR: [
+            { createdAt: { lt: cursorData.createdAt } },
+            {
+              AND: [
+                { createdAt: { equals: cursorData.createdAt } },
+                { id: { lt: cursorData.id } },
+              ],
+            },
+          ],
+        }
+      : {}),
+  };
+
   try {
     const runs = await prisma.autoScheduleRun.findMany({
-      where: {
-        companyId,
-        ...(scope ? { scope } : {}),
-        ...(status ? { status } : {}),
-      },
-      orderBy: { createdAt: "desc" },
+      where,
+      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
       take: limit + 1,
-      ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
       select: {
         id: true,
         companyId: true,
@@ -94,7 +132,7 @@ export async function GET(req: NextRequest) {
 
     const hasMore = runs.length > limit;
     const items = hasMore ? runs.slice(0, limit) : runs;
-    const nextCursor = hasMore ? items[items.length - 1]!.id : null;
+    const nextCursor = hasMore ? encodeCursor(items[items.length - 1]!.createdAt, items[items.length - 1]!.id) : null;
 
     return NextResponse.json({
       ok: true,

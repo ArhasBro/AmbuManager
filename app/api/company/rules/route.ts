@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
+import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
@@ -72,9 +72,8 @@ export async function GET(req: NextRequest) {
         updatedAt: r.updatedAt.toISOString(),
       })),
     });
-  } catch (e: unknown) {
-    const message = e instanceof Error ? e.message : "Unknown error";
-    return NextResponse.json({ ok: false, error: "SERVER_ERROR", message }, { status: 500 });
+  } catch {
+    return NextResponse.json({ ok: false, error: "SERVER_ERROR" }, { status: 500 });
   }
 }
 
@@ -130,8 +129,7 @@ export async function PATCH(req: NextRequest) {
         updatedAt: rule.updatedAt.toISOString(),
       },
     });
-  } catch (e: unknown) {
-    const message = e instanceof Error ? e.message : "Unknown error";
-    return NextResponse.json({ ok: false, error: "SERVER_ERROR", message }, { status: 500 });
+  } catch {
+    return NextResponse.json({ ok: false, error: "SERVER_ERROR" }, { status: 500 });
   }
 }

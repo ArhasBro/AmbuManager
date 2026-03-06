@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
+import { getServerSession } from "next-auth/next";
 import { z } from "zod";
 
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { AutoScheduleStatus } from "@prisma/client";
+import { canAutoSchedule } from "@/lib/permissions";
 
 const ParamsSchema = z.object({
   id: z.string().min(1),
@@ -26,15 +27,7 @@ function extractRunIdFromPath(pathname: string): string | null {
   return id;
 }
 
-async function canAutoSchedule(userId: string): Promise<boolean> {
-  const perms = await prisma.userPermission.findMany({
-    where: { userId },
-    include: { permission: true },
-  });
-  return perms.some((p) => p.permission.code === "PLANNING_AUTOSCHEDULE");
-}
-
-function prismaToApiError(e: unknown): { status: number; body: { ok: false; error: string; message?: string } } {
+function prismaToApiError(e: unknown): { status: number; body: { ok: false; error: string } } {
   if (typeof e === "object" && e && "code" in e) {
     const maybe = e as { code?: unknown };
     const code = typeof maybe.code === "string" ? maybe.code : null;
@@ -43,8 +36,7 @@ function prismaToApiError(e: unknown): { status: number; body: { ok: false; erro
     if (code === "P2025") return { status: 404, body: { ok: false, error: "NOT_FOUND" } };
   }
 
-  const message = e instanceof Error ? e.message : "Unknown error";
-  return { status: 500, body: { ok: false, error: "SERVER_ERROR", message } };
+  return { status: 500, body: { ok: false, error: "SERVER_ERROR" } };
 }
 
 export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
@@ -59,8 +51,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
   }
 
   // ✅ RBAC (ADMIN/GERANT) ou permission dédiée
-  const roleAllowed = role === "ADMIN" || role === "GERANT";
-  const permAllowed = roleAllowed ? true : await canAutoSchedule(userId);
+  const permAllowed = await canAutoSchedule(userId, role);
 
   if (!permAllowed) {
     return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });

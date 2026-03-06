@@ -80,6 +80,6 @@ export async function POST(
       return json({ ok: false, error: "MATCH_STALE_STATE" }, 409);
     }
 
-    return json({ ok: false, error: "MATCH_FAILED", details: message }, 500);
+    return json({ ok: false, error: "MATCH_FAILED" }, 500);
   }
 }

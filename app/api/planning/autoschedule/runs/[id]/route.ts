@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
+import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
@@ -37,12 +37,11 @@ function getPrismaCode(e: unknown): PrismaKnownCode | null {
   return null;
 }
 
-function prismaToApiError(e: unknown): { status: number; body: { ok: false; error: string; message?: string } } {
+function prismaToApiError(e: unknown): { status: number; body: { ok: false; error: string } } {
   const code = getPrismaCode(e);
   if (code === "P2025") return { status: 404, body: { ok: false, error: "NOT_FOUND" } };
 
-  const message = e instanceof Error ? e.message : "Unknown error";
-  return { status: 500, body: { ok: false, error: "SERVER_ERROR", message } };
+  return { status: 500, body: { ok: false, error: "SERVER_ERROR" } };
 }
 
 export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {

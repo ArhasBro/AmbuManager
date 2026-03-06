@@ -19,5 +19,5 @@ export async function canAutoSchedule(userId: string, role?: string): Promise<bo
 
 export async function canPublishAutoSchedule(userId: string, role?: string): Promise<boolean> {
   if (role === "ADMIN" || role === "GERANT") return true;
-  return hasPermission(userId, "PLANNING_PUBLISH");
+  return hasPermission(userId, "PLANNING_AUTOSCHEDULE_PUBLISH");
 }

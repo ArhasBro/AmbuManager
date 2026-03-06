@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
+import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { canAutoSchedule } from "@/lib/permissions";
 
 const BodySchema = z.object({
   day: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "day must be YYYY-MM-DD"),
@@ -32,14 +33,6 @@ function buildDateTimeLocal(dayStr: string, timeStr: string): Date {
   return new Date(Y, M - 1, D, h, m, 0, 0);
 }
 
-async function canAutoSchedule(userId: string): Promise<boolean> {
-  const perms = await prisma.userPermission.findMany({
-    where: { userId },
-    include: { permission: true },
-  });
-  return perms.some((p) => p.permission.code === "PLANNING_AUTOSCHEDULE");
-}
-
 type PrismaKnownCode = "P2002" | "P2025";
 
 function getPrismaCode(e: unknown): PrismaKnownCode | null {
@@ -50,13 +43,12 @@ function getPrismaCode(e: unknown): PrismaKnownCode | null {
   return null;
 }
 
-function prismaToApiError(e: unknown): { status: number; body: { ok: false; error: string; message?: string } } {
+function prismaToApiError(e: unknown): { status: number; body: { ok: false; error: string } } {
   const code = getPrismaCode(e);
   if (code === "P2002") return { status: 409, body: { ok: false, error: "CONFLICT" } };
   if (code === "P2025") return { status: 404, body: { ok: false, error: "NOT_FOUND" } };
 
-  const message = e instanceof Error ? e.message : "Unknown error";
-  return { status: 500, body: { ok: false, error: "SERVER_ERROR", message } };
+  return { status: 500, body: { ok: false, error: "SERVER_ERROR" } };
 }
 
 function isAutoscheduleSentinel(v: unknown): v is AutoscheduleSentinel {
@@ -84,8 +76,7 @@ export async function POST(req: NextRequest) {
   }
 
   // ✅ RBAC (ADMIN/GERANT) ou permission dédiée
-  const roleAllowed = role === "ADMIN" || role === "GERANT";
-  const permAllowed = roleAllowed ? true : await canAutoSchedule(userId);
+  const permAllowed = await canAutoSchedule(userId, role);
 
   if (!permAllowed) {
     return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });

@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
+import { getServerSession } from "next-auth/next";
 import { z } from "zod";
 import { AutoScheduleStatus, Prisma, RuleMode } from "@prisma/client";
 
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { canPublishAutoSchedule } from "@/lib/permissions";
 
 const ParamsSchema = z.object({
   id: z.string().min(1),
@@ -28,21 +29,9 @@ function extractRunIdFromPath(pathname: string): string | null {
   return id;
 }
 
-async function hasPermission(userId: string, code: string): Promise<boolean> {
-  const perms = await prisma.userPermission.findMany({
-    where: { userId },
-    include: { permission: true },
-  });
-  return perms.some((p) => p.permission.code === code);
-}
-
-async function canPublishAutoSchedule(userId: string): Promise<boolean> {
-  return hasPermission(userId, "PLANNING_AUTOSCHEDULE_PUBLISH");
-}
-
 function prismaToApiError(
   e: unknown
-): { status: number; body: { ok: false; error: string; message?: string } } {
+): { status: number; body: { ok: false; error: string } } {
   if (typeof e === "object" && e && "code" in e) {
     const maybe = e as { code?: unknown };
     const code = typeof maybe.code === "string" ? maybe.code : null;
@@ -50,8 +39,7 @@ function prismaToApiError(
     if (code === "P2002") return { status: 409, body: { ok: false, error: "CONFLICT" } };
     if (code === "P2025") return { status: 404, body: { ok: false, error: "NOT_FOUND" } };
   }
-  const message = e instanceof Error ? e.message : "Unknown error";
-  return { status: 500, body: { ok: false, error: "SERVER_ERROR", message } };
+  return { status: 500, body: { ok: false, error: "SERVER_ERROR" } };
 }
 
 type DraftForPublish = {
@@ -315,13 +303,11 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
     return NextResponse.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
   }
 
-  const roleAllowed = role === "ADMIN" || role === "GERANT";
-  // ✅ RBAC : ADMIN/GERANT ok, sinon permission dédiée publish
-  const permAllowed = roleAllowed ? true : await canPublishAutoSchedule(userId);
+  const permAllowed = await canPublishAutoSchedule(userId, role);
 
   if (!permAllowed) {
     return NextResponse.json(
-      { ok: false, error: "FORBIDDEN", details: "PLANNING_AUTOSCHEDULE_PUBLISH requis" },
+      { ok: false, error: "FORBIDDEN" },
       { status: 403 }
     );
   }
