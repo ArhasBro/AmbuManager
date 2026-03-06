@@ -57,6 +57,34 @@ enum AutoScheduleStatus {
   CANCELLED
 }
 
+// ✅ 4.7 — Audit minimal du planning / autoschedule
+model PlanningAuditLog {
+  id String @id @default(cuid())
+
+  companyId String  @db.Uuid
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  actorUserId String? @db.Uuid
+  actorUser   User?   @relation("PlanningAuditLogActor", fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  runId String?
+  run   AutoScheduleRun? @relation(fields: [runId], references: [id], onDelete: SetNull)
+
+  action     String
+  entityType String
+  entityId   String
+  summary    String
+  payload    Json?
+
+  createdAt DateTime @default(now())
+
+  @@index([companyId, createdAt])
+  @@index([companyId, action, createdAt])
+  @@index([companyId, entityType, entityId])
+  @@index([runId])
+  @@index([actorUserId])
+}
+
 model Company {
   id        String    @id @default(uuid()) @db.Uuid
   name      String    @unique
@@ -80,6 +108,9 @@ model Company {
 
   // ✅ 4.2 — Planning final
   shifts Shift[]
+
+  // ✅ 4.7 — Audit planning minimal
+  planningAuditLogs PlanningAuditLog[]
 }
 
 model User {
@@ -110,6 +141,9 @@ model User {
 
   // ✅ 4.2 — Shifts publiés (planning final) (employé 2)
   shifts2 Shift[] @relation("ShiftUser2")
+
+  // ✅ 4.7 — Audit planning minimal
+  planningAuditLogs PlanningAuditLog[] @relation("PlanningAuditLogActor")
 
   @@index([companyId])
 }
@@ -242,6 +276,9 @@ model AutoScheduleRun {
 
   // ✅ 4.2 — shifts publiés issus de ce run (optionnel)
   shifts Shift[]
+
+  // ✅ 4.7 — logs d'audit rattachés au run (optionnel)
+  planningAuditLogs PlanningAuditLog[]
 
   @@index([companyId, status])
   @@index([companyId, day])

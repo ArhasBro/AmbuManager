@@ -1,7 +1,7 @@
 tree ./dossier /F /A > Nom du fichier voulu
 
 git ls-files > STRUCTURE_PROJET.md 
-
+tree .\docs /F /A | Out-File -FilePath .\docs\STRUCTURE_DOCS.md -Encoding utf8
 
 MAJ sur GitHub :
 CMD : 
@@ -37,3 +37,5 @@ npm run db:studio
 
 # Arborescence
 tree . /F /A > STRUCTURE_TREE.txt
+
+sortie propre + retour du terminal + aucune erreur = validé

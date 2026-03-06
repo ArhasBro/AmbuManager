@@ -1,12 +1,13 @@
 // lib/services/planning/assign-shift.ts
 import { prisma } from "@/lib/prisma";
+import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
 import type { PlanningIssue, PlanningIssueCode } from "@/lib/types/planning";
 import { RuleMode } from "@prisma/client";
 
 export type AssignShiftInput = {
   companyId: string;
   shiftId: string;
-  actorUserId: string; // réservé audit futur (pas utilisé tant que champ non confirmé)
+  actorUserId: string;
 
   userId: string | null;
   user2Id: string | null;
@@ -68,6 +69,10 @@ export async function assignShift(input: AssignShiftInput): Promise<AssignShiftR
       companyId: true,
       startAt: true,
       endAt: true,
+      userId: true,
+      user2Id: true,
+      vehicleId: true,
+      runId: true,
       template: { select: { category: true } },
     },
   });
@@ -215,10 +220,43 @@ export async function assignShift(input: AssignShiftInput): Promise<AssignShiftR
   const blockingConflict = issues.find((i) => i.code === "USER_OVERLAP_CONFLICT" || i.code === "VEHICLE_OVERLAP_CONFLICT");
   if (blockingConflict) return { ok: false, error: blockingConflict };
 
-  // 7) Update Shift
-  await prisma.shift.update({
-    where: { id: shiftId },
-    data: { userId, user2Id, vehicleId },
+  // 7) Update Shift + audit minimal si changement réel
+  const changedFields = [
+    shift.userId !== userId ? "userId" : null,
+    shift.user2Id !== user2Id ? "user2Id" : null,
+    shift.vehicleId !== vehicleId ? "vehicleId" : null,
+  ].filter((field): field is string => field !== null);
+
+  await prisma.$transaction(async (tx) => {
+    await tx.shift.update({
+      where: { id: shiftId },
+      data: { userId, user2Id, vehicleId },
+    });
+
+    if (changedFields.length > 0) {
+      await writePlanningAudit(tx, {
+        companyId,
+        actorUserId: input.actorUserId,
+        runId: shift.runId,
+        action: "SHIFT_ASSIGNED_MANUALLY",
+        entityType: "Shift",
+        entityId: shiftId,
+        summary: `Shift manually assigned (${changedFields.join(", ")})`,
+        payload: {
+          changedFields,
+          previous: {
+            userId: shift.userId,
+            user2Id: shift.user2Id,
+            vehicleId: shift.vehicleId,
+          },
+          next: {
+            userId,
+            user2Id,
+            vehicleId,
+          },
+        },
+      });
+    }
   });
 
   return { ok: true, data: { shiftId, issues } };

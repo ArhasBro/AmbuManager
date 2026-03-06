@@ -198,3 +198,23 @@ Si une information n’est pas prouvée : **RECONSTRUCTION — À CONFIRMER**.
   - `3b4b648` — match preview returns quality
   - `996ed20` — fix planning-client types + build
 - Prochaine étape : 4.7 — pré-version commerciale.
+
+## 20. SESSION-20260306-01 — Bloc 4.7.1 VALIDÉ (traçabilité planning minimale) — 06/03/2026
+### Métadonnées (source)
+- Date : 06/03/2026
+- Statut de source : **EXTRAIT CONFIRMÉ**
+
+### Extraits / synthèse dérivée
+- Bloc 4.7.1 cadré puis livré en 5 patchs validés.
+- Ajout d’un modèle Prisma `PlanningAuditLog` + migration + helper `lib/services/planning/planning-audit.ts`.
+- Journalisation validée pour : création run DAY/WEEK, publication, annulation, matching appliqué, affectations manuelles `DraftShift` / `Shift`.
+- Tests techniques : `npx prisma validate`, `npx prisma generate`, `npm run lint`, `npm run build` OK.
+- Tests manuels validés : WEEK, DAY, publish, cancel, match apply, assignation manuelle Shift, assignation manuelle DraftShift, absence de faux log.
+- Particularité UI : les `DraftShift` ne sont pas éditables directement depuis `/planning` ; le test manuel a été réalisé via l’API d’assignation depuis la console navigateur.
+- Patches artefacts :
+  - `docs/patches/4.7/4.7.1/SESSION-20260306-01__4.7.1-01__audit-infra.diff`
+  - `docs/patches/4.7/4.7.1/SESSION-20260306-01__4.7.1-02__audit-run-create.diff`
+  - `docs/patches/4.7/4.7.1/SESSION-20260306-01__4.7.1-03__audit-run-status.diff`
+  - `docs/patches/4.7/4.7.1/SESSION-20260306-01__4.7.1-04__audit-match-apply.diff`
+  - `docs/patches/4.7/4.7.1/SESSION-20260306-01__4.7.1-05__audit-manual-assignments.diff`
+- Prochaine étape : suite 4.7 hors 4.7.1 — périmètre exact **INFORMATION NON FOURNIE — À CONFIRMER**.

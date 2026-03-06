@@ -1,0 +1,149 @@
+diff --git a/prisma/schema.prisma b/prisma/schema.prisma
+index 6491ea2..081f320 100644
+--- a/prisma/schema.prisma
++++ b/prisma/schema.prisma
+@@ -57,6 +57,34 @@ enum AutoScheduleStatus {
+   CANCELLED
+ }
+ 
++// ✅ 4.7 — Audit minimal du planning / autoschedule
++model PlanningAuditLog {
++  id String @id @default(cuid())
++
++  companyId String  @db.Uuid
++  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
++
++  actorUserId String? @db.Uuid
++  actorUser   User?   @relation("PlanningAuditLogActor", fields: [actorUserId], references: [id], onDelete: SetNull)
++
++  runId String?
++  run   AutoScheduleRun? @relation(fields: [runId], references: [id], onDelete: SetNull)
++
++  action     String
++  entityType String
++  entityId   String
++  summary    String
++  payload    Json?
++
++  createdAt DateTime @default(now())
++
++  @@index([companyId, createdAt])
++  @@index([companyId, action, createdAt])
++  @@index([companyId, entityType, entityId])
++  @@index([runId])
++  @@index([actorUserId])
++}
++
+ model Company {
+   id        String    @id @default(uuid()) @db.Uuid
+   name      String    @unique
+@@ -80,6 +108,9 @@ model Company {
+ 
+   // ✅ 4.2 — Planning final
+   shifts Shift[]
++
++  // ✅ 4.7 — Audit planning minimal
++  planningAuditLogs PlanningAuditLog[]
+ }
+ 
+ model User {
+@@ -111,6 +142,9 @@ model User {
+   // ✅ 4.2 — Shifts publiés (planning final) (employé 2)
+   shifts2 Shift[] @relation("ShiftUser2")
+ 
++  // ✅ 4.7 — Audit planning minimal
++  planningAuditLogs PlanningAuditLog[] @relation("PlanningAuditLogActor")
++
+   @@index([companyId])
+ }
+ 
+@@ -243,6 +277,9 @@ model AutoScheduleRun {
+   // ✅ 4.2 — shifts publiés issus de ce run (optionnel)
+   shifts Shift[]
+ 
++  // ✅ 4.7 — logs d'audit rattachés au run (optionnel)
++  planningAuditLogs PlanningAuditLog[]
++
+   @@index([companyId, status])
+   @@index([companyId, day])
+   @@index([companyId, weekStart])
+diff --git a/lib/services/planning/planning-audit.ts b/lib/services/planning/planning-audit.ts
+new file mode 100644
+index 0000000..e14ead4
+--- /dev/null
++++ b/lib/services/planning/planning-audit.ts
+@@ -0,0 +1,29 @@
++import { Prisma, PrismaClient } from "@prisma/client";
++
++type PlanningAuditDb = Prisma.TransactionClient | PrismaClient;
++
++export type PlanningAuditInput = {
++  companyId: string;
++  actorUserId?: string | null;
++  runId?: string | null;
++  action: string;
++  entityType: string;
++  entityId: string;
++  summary: string;
++  payload?: Prisma.InputJsonValue;
++};
++
++export async function writePlanningAudit(db: PlanningAuditDb, input: PlanningAuditInput) {
++  return db.planningAuditLog.create({
++    data: {
++      companyId: input.companyId,
++      actorUserId: input.actorUserId ?? null,
++      runId: input.runId ?? null,
++      action: input.action,
++      entityType: input.entityType,
++      entityId: input.entityId,
++      summary: input.summary,
++      payload: input.payload,
++    },
++  });
++}
+diff --git a/prisma/migrations/20260306221500_add_planning_audit_log/migration.sql b/prisma/migrations/20260306221500_add_planning_audit_log/migration.sql
+new file mode 100644
+index 0000000..ad12eed
+--- /dev/null
++++ b/prisma/migrations/20260306221500_add_planning_audit_log/migration.sql
+@@ -0,0 +1,39 @@
++-- CreateTable
++CREATE TABLE "PlanningAuditLog" (
++    "id" TEXT NOT NULL,
++    "companyId" UUID NOT NULL,
++    "actorUserId" UUID,
++    "runId" TEXT,
++    "action" TEXT NOT NULL,
++    "entityType" TEXT NOT NULL,
++    "entityId" TEXT NOT NULL,
++    "summary" TEXT NOT NULL,
++    "payload" JSONB,
++    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
++
++    CONSTRAINT "PlanningAuditLog_pkey" PRIMARY KEY ("id")
++);
++
++-- CreateIndex
++CREATE INDEX "PlanningAuditLog_companyId_createdAt_idx" ON "PlanningAuditLog"("companyId", "createdAt");
++
++-- CreateIndex
++CREATE INDEX "PlanningAuditLog_companyId_action_createdAt_idx" ON "PlanningAuditLog"("companyId", "action", "createdAt");
++
++-- CreateIndex
++CREATE INDEX "PlanningAuditLog_companyId_entityType_entityId_idx" ON "PlanningAuditLog"("companyId", "entityType", "entityId");
++
++-- CreateIndex
++CREATE INDEX "PlanningAuditLog_runId_idx" ON "PlanningAuditLog"("runId");
++
++-- CreateIndex
++CREATE INDEX "PlanningAuditLog_actorUserId_idx" ON "PlanningAuditLog"("actorUserId");
++
++-- AddForeignKey
++ALTER TABLE "PlanningAuditLog" ADD CONSTRAINT "PlanningAuditLog_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("id") ON DELETE CASCADE ON UPDATE CASCADE;
++
++-- AddForeignKey
++ALTER TABLE "PlanningAuditLog" ADD CONSTRAINT "PlanningAuditLog_actorUserId_fkey" FOREIGN KEY ("actorUserId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
++
++-- AddForeignKey
++ALTER TABLE "PlanningAuditLog" ADD CONSTRAINT "PlanningAuditLog_runId_fkey" FOREIGN KEY ("runId") REFERENCES "AutoScheduleRun"("id") ON DELETE SET NULL ON UPDATE CASCADE;

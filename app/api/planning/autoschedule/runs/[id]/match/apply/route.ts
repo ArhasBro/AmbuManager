@@ -7,6 +7,7 @@ import { canAutoSchedule } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 import { ok, json } from "@/lib/api/response";
 import { autoMatchRunDraftShifts } from "@/lib/services/planning/matching.service";
+import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
 
 const BodySchema = z
   .object({
@@ -14,6 +15,35 @@ const BodySchema = z
   })
   .strict();
 
+
+type MatchingApplyAuditItem = {
+  applied?: boolean;
+  reason?: string;
+};
+
+function toMatchingAuditMetrics(result: unknown): {
+  planCount: number;
+  appliedCount: number;
+  conflictCount: number;
+} {
+  if (!Array.isArray(result)) {
+    return { planCount: 0, appliedCount: 0, conflictCount: 0 };
+  }
+
+  let appliedCount = 0;
+  let conflictCount = 0;
+
+  for (const item of result as MatchingApplyAuditItem[]) {
+    if (item.applied === true) appliedCount += 1;
+    if (item.reason === "USER_CONFLICT") conflictCount += 1;
+  }
+
+  return {
+    planCount: result.length,
+    appliedCount,
+    conflictCount,
+  };
+}
 
 export async function POST(
   req: NextRequest,
@@ -62,6 +92,23 @@ export async function POST(
       companyId,
       runId,
       dryRun: false,
+    });
+
+    const metrics = toMatchingAuditMetrics(result);
+
+    await writePlanningAudit(prisma, {
+      companyId,
+      actorUserId: session.user.id,
+      runId,
+      action: "AUTOSCHEDULE_MATCH_APPLIED",
+      entityType: "AutoScheduleRun",
+      entityId: runId,
+      summary: `Autoschedule matching applied (${metrics.appliedCount}/${metrics.planCount})`,
+      payload: {
+        planCount: metrics.planCount,
+        appliedCount: metrics.appliedCount,
+        conflictCount: metrics.conflictCount,
+      },
     });
 
     return ok(result, 200);

@@ -1,7 +1,7 @@
 # Ambulance Manager — DOCUMENT_MAITRE
 
 Version : V1.5.7 (MASTER)  
-Date : 04/03/2026
+Date : 06/03/2026
 
 ## Sommaire
 - [1. Vision du projet](#1-vision-du-projet)
@@ -56,6 +56,7 @@ Ambulance Manager est une plateforme SaaS destinée à la gestion opérationnell
 - `AutoScheduleRun`
 - `DraftShift`
 - `Shift`
+- `PlanningAuditLog`
 - `MaintenanceType`
 
 ### 5.2 Notes de stabilité (data)
@@ -94,20 +95,22 @@ Le reste (PUT/PATCH, détails avancés, conformité flotte) : **À CONFIRMER / n
 - Génération **DAY/WEEK** → `AutoScheduleRun` + `DraftShift`
 - Runs : list/read/cancel/publish
 - `DRAFT_ALREADY_EXISTS` : retour `runId` pour reprise UI
+- Traçabilité minimale validée (4.7.1) : création run, publish, cancel, matching appliqué
 
 ### 7.5 Planning — Assignation (Logique métier)
 - Assignation sur `DraftShift` et/ou `Shift`
 - Validations : conflits user/véhicule + repos minimum via règle entreprise
+- Traçabilité minimale validée (4.7.1) sur assignations manuelles `DraftShift` / `Shift`
 
 ### 7.6 Planning — Pré-IA (matching)
 - Matching preview/apply par rôle requis (confirmé)
-- Score qualité planning : **À CONFIRMER** (objectif explicite ; non identifié comme calcul complet)
+- Score qualité planning : validé (session `SESSION-20260305-01`)
 
 ## 8. Roadmap technique 4.4 → 5.0 (statuts alignés)
-> **Source de vérité statuts : `ETAT_GLOBAL_PROJET.md`** (décision de pilotage 04/03/2026).
+> **Source de vérité statuts : `ETAT_GLOBAL_PROJET.md`** (décision de pilotage 06/03/2026).
 
 ### 8.1 4.4 — Stabilisation Planning
-**Statut : EN COURS**
+**Statut : VALIDÉ**
 
 Items visés :
 - Publish intégré dans `/planning`
@@ -122,10 +125,12 @@ Gap de clôture : voir **PLAN_DE_DEVELOPPEMENT → DoD 4.4 (Checklist officielle
 **Statut : VALIDÉ**
 
 ### 8.3 4.6 — Pré-IA (matching)
-**Statut : EN COURS**
+**Statut : VALIDÉ**
 
 ### 8.4 4.7 — Pré-version commerciale
-**Statut : À FAIRE**
+**Statut : EN COURS**
+
+Sous-bloc validé : **4.7.1 — Traçabilité planning minimale**
 
 ### 8.5 5.0 — SaaS production
 **Statut : À FAIRE**
@@ -145,6 +150,7 @@ Gap de clôture : voir **PLAN_DE_DEVELOPPEMENT → DoD 4.4 (Checklist officielle
 - Format API `{ ok:true, data } / { ok:false, error, details? }`.
 - Dates : sérialisation ISO côté client.
 - `DRAFT_ALREADY_EXISTS` renvoie `runId`.
+- Traçabilité planning minimale persistante validée via `PlanningAuditLog` + helper `lib/services/planning/planning-audit.ts`.
 
 Permissions confirmées par le seed actuel :
 - `PLANNING_AUTOSCHEDULE`
@@ -153,16 +159,14 @@ Permissions confirmées par le seed actuel :
 Autres permissions historiquement citées (ex : `PLANNING_EDIT`, `RULES_EDIT`, `FLEET_EDIT`, `USERS_MANAGE`) : **À CONFIRMER / non présentes dans le seed actuel**.
 
 ## 11. Points en attente
-- Clôture officielle 4.4 via DoD + scénarios (checklist à cocher).
+- Suite 4.7 hors 4.7.1 : périmètre exact à cadrer.
 - Règles avancées planning : à planifier.
-- Score qualité planning (4.6) : à implémenter.
 - Flotte & conformité : à modéliser/implémenter.
-- Audit/logging : définir niveau minimal et implémenter (actuellement “audit futur” commenté).
+- Historique/versioning planning complet et consultation UI/API de l’audit : à définir.
 
 ## 12. Prochaine étape logique unique
-Clôturer 4.4 via **PLAN_DE_DEVELOPPEMENT → DoD 4.4 (Checklist officielle)**.  
-**La session suivante est dédiée à la validation DoD 4.4 (exécution + documentation des scénarios), pas à du dev feature.**  
-Ensuite seulement : compléter 4.6 (score qualité + explications UI).
+4.7.1 validé → cadrer le bloc suivant de 4.7 sans dérive d’architecture.  
+Le périmètre exact du prochain sous-bloc est **INFORMATION NON FOURNIE — À CONFIRMER**.
 
 ## 13. Incidents & corrections connus
 - Routes dynamiques `[id]` : fallback extraction id via `req.nextUrl.pathname` (présent sur routes runs).
@@ -196,13 +200,23 @@ Ensuite seulement : compléter 4.6 (score qualité + explications UI).
   - `app/api/planning/autoschedule/runs/[id]/match/apply/route.ts`
   - `app/planning/planning-client.tsx`
   - `lib/services/planning/matching.service.ts`
+- Audit planning minimal (4.7.1) :
+  - `prisma/schema.prisma`
+  - `prisma/migrations/20260306221500_add_planning_audit_log/migration.sql`
+  - `lib/services/planning/planning-audit.ts`
+  - `app/api/planning/autoschedule/day/route.ts`
+  - `app/api/planning/autoschedule/week/route.ts`
+  - `app/api/planning/autoschedule/runs/[id]/publish/route.ts`
+  - `app/api/planning/autoschedule/runs/[id]/cancel/route.ts`
+  - `app/api/planning/autoschedule/runs/[id]/match/apply/route.ts`
+  - `lib/services/planning/assign-draftshift.ts`
+  - `lib/services/planning/assign-shift.ts`
 
 ### ⚠️ Documenté mais non vérifié dans le code
 - Incident Prisma Studio “ShiftTemplate.id vide” : documenté, pas de guard explicite repéré.
-- Score qualité planning : objectif explicite, non identifié comme complet.
+- Score qualité planning : implémentation validée (session `SESSION-20260305-01`).
 
 ### ❌ Non retrouvé / à confirmer
-- Audit effectif (écritures DB/logs structurés) : non retrouvé ; “audit futur” commenté dans services d’assignation.
 - Modules flotte & conformité : non présents en modèles dédiés.
 - Exports PDF/CSV, historique/versioning planning (4.7) : non retrouvés comme modules complets.
 - Billing/observabilité/onboarding (5.0) : non retrouvés.

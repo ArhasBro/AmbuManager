@@ -1,0 +1,159 @@
+diff --git a/lib/services/planning/assign-draftshift.ts b/lib/services/planning/assign-draftshift.ts
+index e444189..6fba043 100644
+--- a/lib/services/planning/assign-draftshift.ts
++++ b/lib/services/planning/assign-draftshift.ts
+@@ -1,12 +1,13 @@
+ // lib/services/planning/assign-draftshift.ts
+ import { prisma } from "@/lib/prisma";
++import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
+ import type { PlanningIssue, PlanningIssueCode } from "@/lib/types/planning";
+ import { RuleMode } from "@prisma/client";
+ 
+ export type AssignDraftShiftInput = {
+   companyId: string;
+   draftShiftId: string;
+-  actorUserId: string; // réservé audit futur (pas utilisé tant que champ non confirmé)
++  actorUserId: string;
+ 
+   userId: string | null;
+   user2Id: string | null;
+@@ -71,6 +72,7 @@ export async function assignDraftShift(input: AssignDraftShiftInput): Promise<As
+       userId: true,
+       user2Id: true,
+       vehicleId: true,
++      runId: true,
+       run: { select: { status: true } },
+       template: { select: { category: true } },
+     },
+@@ -236,11 +238,44 @@ export async function assignDraftShift(input: AssignDraftShiftInput): Promise<As
+   const blockingConflict = issues.find((i) => i.code === "USER_OVERLAP_CONFLICT" || i.code === "VEHICLE_OVERLAP_CONFLICT");
+   if (blockingConflict) return { ok: false, error: blockingConflict };
+ 
+-  // 7) Update DraftShift
+-  await prisma.draftShift.update({
+-    where: { id: draftShiftId },
+-    data: { userId, user2Id, vehicleId },
++  // 7) Update DraftShift + audit minimal si changement réel
++  const changedFields = [
++    draft.userId !== userId ? "userId" : null,
++    draft.user2Id !== user2Id ? "user2Id" : null,
++    draft.vehicleId !== vehicleId ? "vehicleId" : null,
++  ].filter((field): field is string => field !== null);
++
++  await prisma.$transaction(async (tx) => {
++    await tx.draftShift.update({
++      where: { id: draftShiftId },
++      data: { userId, user2Id, vehicleId },
++    });
++
++    if (changedFields.length > 0) {
++      await writePlanningAudit(tx, {
++        companyId,
++        actorUserId: input.actorUserId,
++        runId: draft.runId,
++        action: "DRAFT_SHIFT_ASSIGNED_MANUALLY",
++        entityType: "DraftShift",
++        entityId: draftShiftId,
++        summary: `DraftShift manually assigned (${changedFields.join(", ")})`,
++        payload: {
++          changedFields,
++          previous: {
++            userId: draft.userId,
++            user2Id: draft.user2Id,
++            vehicleId: draft.vehicleId,
++          },
++          next: {
++            userId,
++            user2Id,
++            vehicleId,
++          },
++        },
++      });
++    }
+   });
+ 
+   return { ok: true, data: { draftShiftId, issues } };
+-}
+\ No newline at end of file
++}
+diff --git a/lib/services/planning/assign-shift.ts b/lib/services/planning/assign-shift.ts
+index 2421780..f9921e4 100644
+--- a/lib/services/planning/assign-shift.ts
++++ b/lib/services/planning/assign-shift.ts
+@@ -1,12 +1,13 @@
+ // lib/services/planning/assign-shift.ts
+ import { prisma } from "@/lib/prisma";
++import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
+ import type { PlanningIssue, PlanningIssueCode } from "@/lib/types/planning";
+ import { RuleMode } from "@prisma/client";
+ 
+ export type AssignShiftInput = {
+   companyId: string;
+   shiftId: string;
+-  actorUserId: string; // réservé audit futur (pas utilisé tant que champ non confirmé)
++  actorUserId: string;
+ 
+   userId: string | null;
+   user2Id: string | null;
+@@ -68,6 +69,10 @@ export async function assignShift(input: AssignShiftInput): Promise<AssignShiftR
+       companyId: true,
+       startAt: true,
+       endAt: true,
++      userId: true,
++      user2Id: true,
++      vehicleId: true,
++      runId: true,
+       template: { select: { category: true } },
+     },
+   });
+@@ -215,11 +220,44 @@ export async function assignShift(input: AssignShiftInput): Promise<AssignShiftR
+   const blockingConflict = issues.find((i) => i.code === "USER_OVERLAP_CONFLICT" || i.code === "VEHICLE_OVERLAP_CONFLICT");
+   if (blockingConflict) return { ok: false, error: blockingConflict };
+ 
+-  // 7) Update Shift
+-  await prisma.shift.update({
+-    where: { id: shiftId },
+-    data: { userId, user2Id, vehicleId },
++  // 7) Update Shift + audit minimal si changement réel
++  const changedFields = [
++    shift.userId !== userId ? "userId" : null,
++    shift.user2Id !== user2Id ? "user2Id" : null,
++    shift.vehicleId !== vehicleId ? "vehicleId" : null,
++  ].filter((field): field is string => field !== null);
++
++  await prisma.$transaction(async (tx) => {
++    await tx.shift.update({
++      where: { id: shiftId },
++      data: { userId, user2Id, vehicleId },
++    });
++
++    if (changedFields.length > 0) {
++      await writePlanningAudit(tx, {
++        companyId,
++        actorUserId: input.actorUserId,
++        runId: shift.runId,
++        action: "SHIFT_ASSIGNED_MANUALLY",
++        entityType: "Shift",
++        entityId: shiftId,
++        summary: `Shift manually assigned (${changedFields.join(", ")})`,
++        payload: {
++          changedFields,
++          previous: {
++            userId: shift.userId,
++            user2Id: shift.user2Id,
++            vehicleId: shift.vehicleId,
++          },
++          next: {
++            userId,
++            user2Id,
++            vehicleId,
++          },
++        },
++      });
++    }
+   });
+ 
+   return { ok: true, data: { shiftId, issues } };
+-}
+\ No newline at end of file
++}

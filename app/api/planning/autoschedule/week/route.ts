@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import { canAutoSchedule } from "@/lib/permissions";
+import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
 
 const BodySchema = z.object({
   // "YYYY-MM-DD" (idéalement lundi; on accepte autre et on ramène au lundi)
@@ -125,6 +126,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const monday = toMondayLocal(weekStart);
+    const normalizedWeekStart = formatDay(monday);
 
     const result = await prisma.$transaction(async (tx) => {
       // ✅ empêche double génération DRAFT sur la même semaine
@@ -207,6 +209,22 @@ export async function POST(req: NextRequest) {
       if (draftsData.length > 0) {
         await tx.draftShift.createMany({ data: draftsData });
       }
+
+      await writePlanningAudit(tx, {
+        companyId,
+        actorUserId: userId,
+        runId: run.id,
+        action: "AUTOSCHEDULE_RUN_CREATED",
+        entityType: "AutoScheduleRun",
+        entityId: run.id,
+        summary: `Autoschedule WEEK created for ${normalizedWeekStart}${category ? ` (${category})` : ""}`,
+        payload: {
+          scope: "WEEK",
+          weekStart: normalizedWeekStart,
+          draftCount: draftsData.length,
+          category: category ?? null,
+        },
+      });
 
       // IMPORTANT: sécurité multi-tenant sur le read final
       const full = await tx.autoScheduleRun.findFirst({

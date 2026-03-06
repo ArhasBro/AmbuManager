@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import { canAutoSchedule } from "@/lib/permissions";
+import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
 
 const BodySchema = z.object({
   day: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "day must be YYYY-MM-DD"),
@@ -166,6 +167,22 @@ export async function POST(req: NextRequest) {
       if (draftsData.length > 0) {
         await tx.draftShift.createMany({ data: draftsData });
       }
+
+      await writePlanningAudit(tx, {
+        companyId,
+        actorUserId: userId,
+        runId: run.id,
+        action: "AUTOSCHEDULE_RUN_CREATED",
+        entityType: "AutoScheduleRun",
+        entityId: run.id,
+        summary: `Autoschedule DAY created for ${day}${category ? ` (${category})` : ""}`,
+        payload: {
+          scope: "DAY",
+          day,
+          draftCount: draftsData.length,
+          category: category ?? null,
+        },
+      });
 
       // IMPORTANT: sécurité multi-tenant sur le read final
       const full = await tx.autoScheduleRun.findFirst({

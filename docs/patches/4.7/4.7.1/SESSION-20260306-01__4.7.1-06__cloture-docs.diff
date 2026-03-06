@@ -1,0 +1,612 @@
+diff --git a/docs/master/DOCUMENT_MAITRE.md b/docs/master/DOCUMENT_MAITRE.md
+index c116aaa..1bed69d 100644
+--- a/docs/master/DOCUMENT_MAITRE.md
++++ b/docs/master/DOCUMENT_MAITRE.md
+@@ -1,7 +1,7 @@
+ # Ambulance Manager — DOCUMENT_MAITRE
+ 
+ Version : V1.5.7 (MASTER)  
+-Date : 04/03/2026
++Date : 06/03/2026
+ 
+ ## Sommaire
+ - [1. Vision du projet](#1-vision-du-projet)
+@@ -56,6 +56,7 @@ Ambulance Manager est une plateforme SaaS destinée à la gestion opérationnell
+ - `AutoScheduleRun`
+ - `DraftShift`
+ - `Shift`
++- `PlanningAuditLog`
+ - `MaintenanceType`
+ 
+ ### 5.2 Notes de stabilité (data)
+@@ -94,20 +95,22 @@ Le reste (PUT/PATCH, détails avancés, conformité flotte) : **À CONFIRMER / n
+ - Génération **DAY/WEEK** → `AutoScheduleRun` + `DraftShift`
+ - Runs : list/read/cancel/publish
+ - `DRAFT_ALREADY_EXISTS` : retour `runId` pour reprise UI
++- Traçabilité minimale validée (4.7.1) : création run, publish, cancel, matching appliqué
+ 
+ ### 7.5 Planning — Assignation (Logique métier)
+ - Assignation sur `DraftShift` et/ou `Shift`
+ - Validations : conflits user/véhicule + repos minimum via règle entreprise
++- Traçabilité minimale validée (4.7.1) sur assignations manuelles `DraftShift` / `Shift`
+ 
+ ### 7.6 Planning — Pré-IA (matching)
+ - Matching preview/apply par rôle requis (confirmé)
+-- Score qualité planning : **À CONFIRMER** (objectif explicite ; non identifié comme calcul complet)
++- Score qualité planning : validé (session `SESSION-20260305-01`)
+ 
+ ## 8. Roadmap technique 4.4 → 5.0 (statuts alignés)
+-> **Source de vérité statuts : `ETAT_GLOBAL_PROJET.md`** (décision de pilotage 04/03/2026).
++> **Source de vérité statuts : `ETAT_GLOBAL_PROJET.md`** (décision de pilotage 06/03/2026).
+ 
+ ### 8.1 4.4 — Stabilisation Planning
+-**Statut : EN COURS**
++**Statut : VALIDÉ**
+ 
+ Items visés :
+ - Publish intégré dans `/planning`
+@@ -122,10 +125,12 @@ Gap de clôture : voir **PLAN_DE_DEVELOPPEMENT → DoD 4.4 (Checklist officielle
+ **Statut : VALIDÉ**
+ 
+ ### 8.3 4.6 — Pré-IA (matching)
+-**Statut : EN COURS**
++**Statut : VALIDÉ**
+ 
+ ### 8.4 4.7 — Pré-version commerciale
+-**Statut : À FAIRE**
++**Statut : EN COURS**
++
++Sous-bloc validé : **4.7.1 — Traçabilité planning minimale**
+ 
+ ### 8.5 5.0 — SaaS production
+ **Statut : À FAIRE**
+@@ -145,6 +150,7 @@ Gap de clôture : voir **PLAN_DE_DEVELOPPEMENT → DoD 4.4 (Checklist officielle
+ - Format API `{ ok:true, data } / { ok:false, error, details? }`.
+ - Dates : sérialisation ISO côté client.
+ - `DRAFT_ALREADY_EXISTS` renvoie `runId`.
++- Traçabilité planning minimale persistante validée via `PlanningAuditLog` + helper `lib/services/planning/planning-audit.ts`.
+ 
+ Permissions confirmées par le seed actuel :
+ - `PLANNING_AUTOSCHEDULE`
+@@ -153,16 +159,14 @@ Permissions confirmées par le seed actuel :
+ Autres permissions historiquement citées (ex : `PLANNING_EDIT`, `RULES_EDIT`, `FLEET_EDIT`, `USERS_MANAGE`) : **À CONFIRMER / non présentes dans le seed actuel**.
+ 
+ ## 11. Points en attente
+-- Clôture officielle 4.4 via DoD + scénarios (checklist à cocher).
++- Suite 4.7 hors 4.7.1 : périmètre exact à cadrer.
+ - Règles avancées planning : à planifier.
+-- Score qualité planning (4.6) : à implémenter.
+ - Flotte & conformité : à modéliser/implémenter.
+-- Audit/logging : définir niveau minimal et implémenter (actuellement “audit futur” commenté).
++- Historique/versioning planning complet et consultation UI/API de l’audit : à définir.
+ 
+ ## 12. Prochaine étape logique unique
+-Clôturer 4.4 via **PLAN_DE_DEVELOPPEMENT → DoD 4.4 (Checklist officielle)**.  
+-**La session suivante est dédiée à la validation DoD 4.4 (exécution + documentation des scénarios), pas à du dev feature.**  
+-Ensuite seulement : compléter 4.6 (score qualité + explications UI).
++4.7.1 validé → cadrer le bloc suivant de 4.7 sans dérive d’architecture.  
++Le périmètre exact du prochain sous-bloc est **INFORMATION NON FOURNIE — À CONFIRMER**.
+ 
+ ## 13. Incidents & corrections connus
+ - Routes dynamiques `[id]` : fallback extraction id via `req.nextUrl.pathname` (présent sur routes runs).
+@@ -196,13 +200,23 @@ Ensuite seulement : compléter 4.6 (score qualité + explications UI).
+   - `app/api/planning/autoschedule/runs/[id]/match/apply/route.ts`
+   - `app/planning/planning-client.tsx`
+   - `lib/services/planning/matching.service.ts`
++- Audit planning minimal (4.7.1) :
++  - `prisma/schema.prisma`
++  - `prisma/migrations/20260306221500_add_planning_audit_log/migration.sql`
++  - `lib/services/planning/planning-audit.ts`
++  - `app/api/planning/autoschedule/day/route.ts`
++  - `app/api/planning/autoschedule/week/route.ts`
++  - `app/api/planning/autoschedule/runs/[id]/publish/route.ts`
++  - `app/api/planning/autoschedule/runs/[id]/cancel/route.ts`
++  - `app/api/planning/autoschedule/runs/[id]/match/apply/route.ts`
++  - `lib/services/planning/assign-draftshift.ts`
++  - `lib/services/planning/assign-shift.ts`
+ 
+ ### ⚠️ Documenté mais non vérifié dans le code
+ - Incident Prisma Studio “ShiftTemplate.id vide” : documenté, pas de guard explicite repéré.
+-- Score qualité planning : objectif explicite, non identifié comme complet.
++- Score qualité planning : implémentation validée (session `SESSION-20260305-01`).
+ 
+ ### ❌ Non retrouvé / à confirmer
+-- Audit effectif (écritures DB/logs structurés) : non retrouvé ; “audit futur” commenté dans services d’assignation.
+ - Modules flotte & conformité : non présents en modèles dédiés.
+ - Exports PDF/CSV, historique/versioning planning (4.7) : non retrouvés comme modules complets.
+-- Billing/observabilité/onboarding (5.0) : non retrouvés.
+\ No newline at end of file
++- Billing/observabilité/onboarding (5.0) : non retrouvés.
+diff --git a/docs/master/ETAT_GLOBAL_PROJET.md b/docs/master/ETAT_GLOBAL_PROJET.md
+index bc5877a..f008a97 100644
+--- a/docs/master/ETAT_GLOBAL_PROJET.md
++++ b/docs/master/ETAT_GLOBAL_PROJET.md
+@@ -1,11 +1,11 @@
+ # Ambulance Manager — ETAT_GLOBAL_PROJET
+ 
+ Version : V1.5.7 (MASTER)  
+-Date : 05/03/2026
++Date : 06/03/2026
+ 
+ ## Sommaire
+ - [1. Rôle](#1-rôle)
+-- [2. Décision de pilotage au 05/03/2026](#2-décision-de-pilotage-au-05032026)
++- [2. Décision de pilotage au 06/03/2026](#2-décision-de-pilotage-au-06032026)
+ - [3. Statut officiel par phase](#3-statut-officiel-par-phase)
+ - [4. 4.4 — Gap de clôture (EN COURS → VALIDÉ)](#4-44--gap-de-clôture-en-cours--validé)
+ - [5. Convention de rattachement (V1.5.7)](#5-convention-de-rattachement-v157)
+@@ -17,8 +17,8 @@ Date : 05/03/2026
+ Document **autonome** de **statut officiel** (source de vérité).  
+ Les autres documents (Document maître, Plan, Registre) **s’alignent** sur ces statuts.
+ 
+-## 2. Décision de pilotage au 05/03/2026
+-Les statuts ci-dessous sont fixés par décision de pilotage au **05/03/2026** selon :
++## 2. Décision de pilotage au 06/03/2026
++Les statuts ci-dessous sont fixés par décision de pilotage au **06/03/2026** selon :
+ - état de livraison observable (code + flux existants),
+ - présence/absence de DoD formalisée,
+ - validations manuelles non formalisées (→ VALIDATION NÉCESSAIRE).
+@@ -39,7 +39,9 @@ Les statuts ci-dessous sont fixés par décision de pilotage au **05/03/2026** s
+ - **4.6 — Pré-IA (matching)** : **VALIDÉ**  
+   Motif : score qualité planning + explications livrés (UI) + preview renvoie `{ plan, quality }` + apply conservé, build validé.  
+   Preuves : session `docs/sessions/SESSION-20260305-01/EVIDENCES.md`.
+-- **4.7 — Pré-version commerciale** : **À FAIRE**
++- **4.7 — Pré-version commerciale** : **EN COURS**  
++  Motif : 4.7.1 — traçabilité planning minimale validé (audit persistant sur runs, matching appliqué et assignations manuelles).  
++  Preuves : session `docs/sessions/SESSION-20260306-01/EVIDENCES.md`.
+ - **5.0 — SaaS production** : **À FAIRE**
+ 
+ ## 4. 4.4 — Gap de clôture (EN COURS → VALIDÉ)
+@@ -57,11 +59,12 @@ Performance : **NON BLOQUANT** en 4.4 (suivi indicatif seulement).
+ - Si des documents historiques mentionnent “4.3” : **convention V1.5.7** = rattacher “Publish UI / Refresh / Génération DAY / Cancel / reprise runId” à **4.4 (Stabilisation)**.
+ 
+ ## 6. Points à confirmer
+-- Audit/journalisation minimale : **À CONFIRMER**
++- Suite 4.7 hors 4.7.1 : **INFORMATION NON FOURNIE — À CONFIRMER**
+ - Incident Prisma Studio (ShiftTemplate.id vide) : **À CONFIRMER**
+ 
+ ## 7. Prochaine étape logique unique
+-4.6 validé → commencer 4.7 (pré-version commerciale).
++4.7.1 validé → cadrer le bloc suivant de 4.7 (pré-version commerciale).
++Périmètre exact : **INFORMATION NON FOURNIE — À CONFIRMER**.
+ 
+ ## Vérifications par le code (ZIP)
+ ### ✅ Confirmé par le code
+@@ -70,4 +73,15 @@ Performance : **NON BLOQUANT** en 4.4 (suivi indicatif seulement).
+   - `app/api/planning/autoschedule/runs/[id]/match/apply/route.ts`
+   - `app/planning/planning-client.tsx`
+   - `lib/services/planning/matching.service.ts`
+-  - `lib/services/planning/matching-quality.ts`
+\ No newline at end of file
++  - `lib/services/planning/matching-quality.ts`
++- Audit planning minimal (4.7.1) :
++  - `prisma/schema.prisma`
++  - `prisma/migrations/20260306221500_add_planning_audit_log/migration.sql`
++  - `lib/services/planning/planning-audit.ts`
++  - `app/api/planning/autoschedule/day/route.ts`
++  - `app/api/planning/autoschedule/week/route.ts`
++  - `app/api/planning/autoschedule/runs/[id]/publish/route.ts`
++  - `app/api/planning/autoschedule/runs/[id]/cancel/route.ts`
++  - `app/api/planning/autoschedule/runs/[id]/match/apply/route.ts`
++  - `lib/services/planning/assign-draftshift.ts`
++  - `lib/services/planning/assign-shift.ts`
+diff --git a/docs/master/PLAN_DE_DEVELOPPEMENT.md b/docs/master/PLAN_DE_DEVELOPPEMENT.md
+index d81a015..d64943d 100644
+--- a/docs/master/PLAN_DE_DEVELOPPEMENT.md
++++ b/docs/master/PLAN_DE_DEVELOPPEMENT.md
+@@ -1,7 +1,7 @@
+ # Ambulance Manager — PLAN_DE_DEVELOPPEMENT
+ 
+ Version : V1.5.7 (MASTER)  
+-Date : 04/03/2026
++Date : 06/03/2026
+ 
+ ## Sommaire
+ - [1. Règles d’exécution](#1-règles-dexécution)
+@@ -23,14 +23,14 @@ Date : 04/03/2026
+ 
+ ## 2. Source de vérité statuts
+ - **Statuts officiels** : `ETAT_GLOBAL_PROJET.md`
+-- Tous les statuts mentionnés ici s’alignent dessus (décision de pilotage 04/03/2026).
++- Tous les statuts mentionnés ici s’alignent dessus (décision de pilotage 06/03/2026).
+ 
+ ## 3. Roadmap exécutable (4.4 → 5.0)
+ ### 3.1 Convention V1.5.7 (rattachement)
+ - Si des documents historiques mentionnent “4.3” : **convention V1.5.7** = rattacher “Publish UI / Refresh / DAY / Cancel / reprise runId” à **4.4 (Stabilisation)**.
+ 
+ ### 3.2 4.4 — Stabilisation Planning
+-**Statut officiel : EN COURS**
++**Statut officiel : VALIDÉ**
+ 
+ Objectif : fiabiliser le cycle complet “autoschedule → draft → publish → refresh UI”.
+ 
+@@ -41,64 +41,74 @@ Implémentations attendues (périmètre 4.4) :
+ - Cancel run (DRAFT → CANCELLED)
+ - `DRAFT_ALREADY_EXISTS` : retour `runId` + reprise UI
+ 
+-**Gap de clôture** : tant que la **Checklist DoD 4.4** (section 5) n’est pas cochée, 4.4 reste EN COURS.
++**Clôture** : VALIDÉ (preuves consignées en session `SESSION-20260304-01`).
+ 
+ ### 3.3 4.5 — Logique Métier
+ **Statut officiel : VALIDÉ**
+ 
+ ### 3.4 4.6 — Pré-IA (matching)
+-**Statut officiel : EN COURS**
++**Statut officiel : VALIDÉ**
+ 
+ ### 3.5 4.7 — Pré-version commerciale
+-**Statut officiel : À FAIRE**
++**Statut officiel : EN COURS**
++
++Sous-bloc validé : **4.7.1 — Traçabilité planning minimale**
++- `PlanningAuditLog` + migration + helper centralisé
++- Audit validé sur create DAY/WEEK, publish, cancel, match/apply
++- Audit validé sur assignations manuelles `DraftShift` / `Shift`
+ 
+ ### 3.6 5.0 — SaaS production
+ **Statut officiel : À FAIRE**
+ 
+ ## 4. DoD minimal par phase
+-### 4.4 (EN COURS)
+-- Voir section 5 (DoD checklist officielle).
++### 4.4 (VALIDÉ)
++- DoD 4.4 exécutée et prouvée en session `SESSION-20260304-01`.
+ 
+ ### 4.5 (VALIDÉ)
+ - Assignation observable + validations actives.
+ - Lint OK + Build OK.
+ - Zéro accès cross-tenant sur endpoints assignation.
+ 
+-### 4.6 (EN COURS)
++### 4.6 (VALIDÉ)
+ - Preview renvoie un plan exploitable.
+ - Apply applique uniquement après preview.
+ - UI déclenche preview/apply et affiche résultat.
+-- Score qualité : à livrer avant clôture 4.6.
++- Score qualité + explications : validés en session `SESSION-20260305-01`.
++
++### 4.7 (EN COURS)
++- Traçabilité planning minimale persistante validée en 4.7.1.
++- Écritures d’audit structurées en base : create/publish/cancel/match/apply/assignations manuelles.
++- Suite 4.7 hors 4.7.1 : **INFORMATION NON FOURNIE — À CONFIRMER**.
+ 
+ ## 5. DoD 4.4 — Checklist officielle à cocher
+ > Objectif : clôturer 4.4 sans ambiguïté.  
+-> Tant qu’au moins un item n’est pas coché, statut = EN COURS.
++> Archive : 4.4 est désormais VALIDÉ ; la checklist ci-dessous est conservée comme trace documentaire.
+ 
+ ### 5.1 Pré-requis (environnement)
+-- [ ] Procédure standardisée (max 5 lignes) pour : reset DB / migrate / seed
++- [x] Procédure standardisée (max 5 lignes) pour : reset DB / migrate / seed
+   1) Vérifier `.env` : `DATABASE_URL` (PostgreSQL) + `NEXTAUTH_SECRET`
+   2) `npm install`
+   3) `npm run db:reset`
+   4) `npm run dev`
+-- [ ] Compte ADMIN tenant A opérationnel
+-- [ ] Compte ADMIN tenant B opérationnel (tests cross-tenant) — **VALIDATION NÉCESSAIRE**
++- [x] Compte ADMIN tenant A opérationnel
++- [x] Compte ADMIN tenant B opérationnel (tests cross-tenant)
+ 
+ ### 5.2 Scénarios manuels (fonctionnels) — à documenter et exécuter
+-- [ ] DAY : autoschedule DAY → run DRAFT → UI `/planning` → publish → refresh UI
+-- [ ] WEEK : autoschedule WEEK → run DRAFT → UI `/planning` → publish → refresh UI
+-- [ ] Cancel : cancel run DRAFT → status = CANCELLED → UI reflète l’état
+-- [ ] DRAFT_ALREADY_EXISTS : relancer autoschedule → API renvoie `runId` → UI reprend le run
++- [x] DAY : autoschedule DAY → run DRAFT → UI `/planning` → publish → refresh UI
++- [x] WEEK : autoschedule WEEK → run DRAFT → UI `/planning` → publish → refresh UI
++- [x] Cancel : cancel run DRAFT → status = CANCELLED → UI reflète l’état
++- [x] DRAFT_ALREADY_EXISTS : relancer autoschedule → API renvoie `runId` → UI reprend le run
+ 
+ ### 5.3 Edge cases (robustesse)
+-- [ ] Routes dynamiques `[id]` robustes (id extrait, pas de crash)
+-- [ ] Timezone/ISO : affichage cohérent vs stockage
+-- [ ] Templates invalides/corrompus : erreur claire, pas de corruption
++- [x] Routes dynamiques `[id]` robustes (id extrait, pas de crash)
++- [x] Timezone/ISO : affichage cohérent vs stockage
++- [x] Templates invalides/corrompus : erreur claire, pas de corruption
+ 
+ ### 5.4 Sécurité (tenant-safety + RBAC/permissions)
+-- [ ] Tenant A ne peut pas lire un run Tenant B
+-- [ ] Tenant A ne peut pas publish/cancel un run Tenant B
+-- [ ] Accès sans session : 401
+-- [ ] Accès sans permission : 403 (autoschedule/publish selon permission)
++- [x] Tenant A ne peut pas lire un run Tenant B
++- [x] Tenant A ne peut pas publish/cancel un run Tenant B
++- [x] Accès sans session : 401
++- [x] Accès sans permission : 403 (autoschedule/publish selon permission)
+ 
+ ### 5.5 Performance minimale
+ Statut pour clôture 4.4 : **NON BLOQUANT** (optimisations perf prioritaires en 4.7).  
+@@ -106,8 +116,8 @@ Statut pour clôture 4.4 : **NON BLOQUANT** (optimisations perf prioritaires en
+ - [ ] Mesure indicative liste runs / refresh UI — **VALIDATION NÉCESSAIRE**
+ 
+ ### 5.6 Clôture documentaire
+-- [ ] ETAT_GLOBAL_PROJET : 4.4 → VALIDÉ
+-- [ ] DOCUMENT_MAITRE/PLAN/REGISTRE alignés
++- [x] ETAT_GLOBAL_PROJET : 4.4 → VALIDÉ
++- [x] DOCUMENT_MAITRE/PLAN/REGISTRE alignés
+ 
+ ## 6. Risques & mitigations
+ - **Fuite multi-tenant (leak `companyId`)**
+@@ -122,7 +132,8 @@ Statut pour clôture 4.4 : **NON BLOQUANT** (optimisations perf prioritaires en
+   - Mitigation : conventions ISO ; tests semaine ; affichage contrôlé UI.
+ 
+ ## 7. Prochaine étape logique unique
+-Valider/Documenter/Cocher DoD 4.4 → passer 4.4 en VALIDÉ → compléter 4.6.
++4.7.1 validé → cadrer le bloc suivant de 4.7 sans dérive d’architecture.
++Périmètre exact du prochain sous-bloc : **INFORMATION NON FOURNIE — À CONFIRMER**.
+ 
+ ## Vérifications par le code (ZIP)
+ ### ✅ Confirmé par le code
+@@ -131,4 +142,15 @@ Valider/Documenter/Cocher DoD 4.4 → passer 4.4 en VALIDÉ → compléter 4.6.
+ - Matching preview/apply + UI :
+   - `app/api/planning/autoschedule/runs/[id]/match/preview/route.ts`
+   - `app/api/planning/autoschedule/runs/[id]/match/apply/route.ts`
+-  - `app/planning/planning-client.tsx`
+\ No newline at end of file
++  - `app/planning/planning-client.tsx`
++- Audit planning minimal (4.7.1) :
++  - `prisma/schema.prisma`
++  - `prisma/migrations/20260306221500_add_planning_audit_log/migration.sql`
++  - `lib/services/planning/planning-audit.ts`
++  - `app/api/planning/autoschedule/day/route.ts`
++  - `app/api/planning/autoschedule/week/route.ts`
++  - `app/api/planning/autoschedule/runs/[id]/publish/route.ts`
++  - `app/api/planning/autoschedule/runs/[id]/cancel/route.ts`
++  - `app/api/planning/autoschedule/runs/[id]/match/apply/route.ts`
++  - `lib/services/planning/assign-draftshift.ts`
++  - `lib/services/planning/assign-shift.ts`
+diff --git a/docs/master/RECAP_DISCUSSIONS.md b/docs/master/RECAP_DISCUSSIONS.md
+index 9df708d..684eb1d 100644
+--- a/docs/master/RECAP_DISCUSSIONS.md
++++ b/docs/master/RECAP_DISCUSSIONS.md
+@@ -197,4 +197,24 @@ Si une information n’est pas prouvée : **RECONSTRUCTION — À CONFIRMER**.
+   - `69e7a6d` — planning quality score + explanations
+   - `3b4b648` — match preview returns quality
+   - `996ed20` — fix planning-client types + build
+-- Prochaine étape : 4.7 — pré-version commerciale.
+\ No newline at end of file
++- Prochaine étape : 4.7 — pré-version commerciale.
++
++## 20. SESSION-20260306-01 — Bloc 4.7.1 VALIDÉ (traçabilité planning minimale) — 06/03/2026
++### Métadonnées (source)
++- Date : 06/03/2026
++- Statut de source : **EXTRAIT CONFIRMÉ**
++
++### Extraits / synthèse dérivée
++- Bloc 4.7.1 cadré puis livré en 5 patchs validés.
++- Ajout d’un modèle Prisma `PlanningAuditLog` + migration + helper `lib/services/planning/planning-audit.ts`.
++- Journalisation validée pour : création run DAY/WEEK, publication, annulation, matching appliqué, affectations manuelles `DraftShift` / `Shift`.
++- Tests techniques : `npx prisma validate`, `npx prisma generate`, `npm run lint`, `npm run build` OK.
++- Tests manuels validés : WEEK, DAY, publish, cancel, match apply, assignation manuelle Shift, assignation manuelle DraftShift, absence de faux log.
++- Particularité UI : les `DraftShift` ne sont pas éditables directement depuis `/planning` ; le test manuel a été réalisé via l’API d’assignation depuis la console navigateur.
++- Patches artefacts :
++  - `docs/patches/4.7/4.7.1/SESSION-20260306-01__4.7.1-01__audit-infra.diff`
++  - `docs/patches/4.7/4.7.1/SESSION-20260306-01__4.7.1-02__audit-run-create.diff`
++  - `docs/patches/4.7/4.7.1/SESSION-20260306-01__4.7.1-03__audit-run-status.diff`
++  - `docs/patches/4.7/4.7.1/SESSION-20260306-01__4.7.1-04__audit-match-apply.diff`
++  - `docs/patches/4.7/4.7.1/SESSION-20260306-01__4.7.1-05__audit-manual-assignments.diff`
++- Prochaine étape : suite 4.7 hors 4.7.1 — périmètre exact **INFORMATION NON FOURNIE — À CONFIRMER**.
+diff --git a/docs/master/REGISTRE_DECISIONS.md b/docs/master/REGISTRE_DECISIONS.md
+index 67b31f9..b779951 100644
+--- a/docs/master/REGISTRE_DECISIONS.md
++++ b/docs/master/REGISTRE_DECISIONS.md
+@@ -1,7 +1,7 @@
+ # Ambulance Manager — REGISTRE_DECISIONS
+ 
+ Version : V1.5.7 (MASTER)  
+-Date : 05/03/2026
++Date : 06/03/2026
+ 
+ ## Sommaire
+ - [1. Rôle](#1-rôle)
+@@ -41,16 +41,24 @@ Format unique attendu :
+   - Équité : score = `100 * (1 / (1 + CV))` sur la distribution des assignations par user.
+   - API preview : renvoie `{ plan, quality }`.
+   - UI `/planning` : affiche score + sous-scores + explications.
++- DEC-20260306-01 — 4.7.1 : traçabilité planning minimale persistante VALIDÉE.
++  - Modèle dédié : `PlanningAuditLog`.
++  - Helper centralisé : `lib/services/planning/planning-audit.ts`.
++  - Actions tracées : `AUTOSCHEDULE_RUN_CREATED`, `AUTOSCHEDULE_RUN_PUBLISHED`, `AUTOSCHEDULE_RUN_CANCELLED`, `AUTOSCHEDULE_MATCH_APPLIED`, `DRAFT_SHIFT_ASSIGNED_MANUALLY`, `SHIFT_ASSIGNED_MANUALLY`.
++  - Données minimales : `companyId`, `actorUserId`, `runId`, `action`, `entityType`, `entityId`, `summary`, `payload`, `createdAt`.
++  - Écriture d’audit dans la même transaction que la mutation pour les actions concernées par transaction (`publish`, `cancel`, assignations manuelles).
+ 
+ ## 4. Décisions en attente
+-- Audit/logging : niveau minimal + implémentation.
++- PEND-20260306-01 — Suite 4.7 hors 4.7.1 : périmètre exact à confirmer.
++- Consultation UI/API de l’historique planning : niveau minimal à définir.
+ - Flotte & conformité : périmètre data + priorisation.
+ 
+ ## 5. Alignement statuts (référence ETAT_GLOBAL_PROJET)
+ - 4.4 : VALIDÉ (DoD cochée, preuves `docs/sessions/SESSION-20260304-01/EVIDENCES.md`).
+ - 4.5 : VALIDÉ.
+ - 4.6 : VALIDÉ (session `docs/sessions/SESSION-20260305-01/EVIDENCES.md`).
+-- 4.7 / 5.0 : À FAIRE.
++- 4.7 : EN COURS (4.7.1 validé, session `docs/sessions/SESSION-20260306-01/EVIDENCES.md`).
++- 5.0 : À FAIRE.
+ 
+ ## 6. Gouvernance de mise à jour
+ - Mettre à jour `ETAT_GLOBAL_PROJET.md` puis aligner les autres.
+@@ -61,4 +69,14 @@ Format unique attendu :
+   - `app/api/planning/autoschedule/runs/[id]/match/preview/route.ts`
+   - `app/api/planning/autoschedule/runs/[id]/match/apply/route.ts`
+   - `app/planning/planning-client.tsx`
+-  - `lib/services/planning/matching-quality.ts`
+\ No newline at end of file
++  - `lib/services/planning/matching-quality.ts`
++- Audit planning minimal présent (4.7.1) :
++  - `prisma/schema.prisma`
++  - `lib/services/planning/planning-audit.ts`
++  - `app/api/planning/autoschedule/day/route.ts`
++  - `app/api/planning/autoschedule/week/route.ts`
++  - `app/api/planning/autoschedule/runs/[id]/publish/route.ts`
++  - `app/api/planning/autoschedule/runs/[id]/cancel/route.ts`
++  - `app/api/planning/autoschedule/runs/[id]/match/apply/route.ts`
++  - `lib/services/planning/assign-draftshift.ts`
++  - `lib/services/planning/assign-shift.ts`
+diff --git a/docs/patches/4.7/README.md b/docs/patches/4.7/README.md
+index ff02cc3..4f9cfde 100644
+--- a/docs/patches/4.7/README.md
++++ b/docs/patches/4.7/README.md
+@@ -1,5 +1,19 @@
+-# Patches 4.7
++# Patches — Phase 4.7
+ 
+-Ce dossier est réservé aux patchs du bloc 4.7.
++Ce dossier contient les patchs (`.diff`) rattachés au bloc **4.7 — Pré-version commerciale**.
+ 
+-Aucun patch officiel n'est actuellement présent dans ce dossier.
++## Sous-dossiers présents
++
++- `4.7.1/`
++  - Statut : **VALIDÉ**
++  - Objet : traçabilité planning minimale
++
++## Résultat documentaire
++
++- 4.7 est désormais **EN COURS**.
++- 4.7.1 est **VALIDÉ** (voir `docs/sessions/SESSION-20260306-01/EVIDENCES.md`).
++
++## Application
++
++Les patchs 4.7.1 s’appliquent depuis la racine du projet via `git apply -p1 ...`.
++Voir le détail dans `docs/patches/4.7/4.7.1/README.md`.
+diff --git a/docs/sessions/SESSION-20260306-01/EVIDENCES.md b/docs/sessions/SESSION-20260306-01/EVIDENCES.md
+index 0bf94f7..b0b7479 100644
+--- a/docs/sessions/SESSION-20260306-01/EVIDENCES.md
++++ b/docs/sessions/SESSION-20260306-01/EVIDENCES.md
+@@ -4,4 +4,41 @@
+ 
+ ---
+ 
+-INFORMATION NON FOURNIE — À CONFIRMER
+\ No newline at end of file
++## Patches
++
++- `docs/patches/4.7/4.7.1/SESSION-20260306-01__4.7.1-01__audit-infra.diff`
++- `docs/patches/4.7/4.7.1/SESSION-20260306-01__4.7.1-02__audit-run-create.diff`
++- `docs/patches/4.7/4.7.1/SESSION-20260306-01__4.7.1-03__audit-run-status.diff`
++- `docs/patches/4.7/4.7.1/SESSION-20260306-01__4.7.1-04__audit-match-apply.diff`
++- `docs/patches/4.7/4.7.1/SESSION-20260306-01__4.7.1-05__audit-manual-assignments.diff`
++
++## Vérifications techniques
++
++- `npx prisma validate` : OK
++- `npx prisma generate` : OK
++- `npm run lint` : OK
++- `npm run build` : OK
++
++## Vérifications manuelles
++
++- Création run WEEK : OK
++- Création run DAY : OK
++- Publish run : OK
++- Cancel run : OK
++- Match apply : OK
++- Affectation manuelle `Shift` : OK
++- Affectation manuelle `DraftShift` : OK
++- Absence de faux log sur non-changement : OK
++
++## Fichiers code impactés par la session
++
++- `prisma/schema.prisma`
++- `prisma/migrations/20260306221500_add_planning_audit_log/migration.sql`
++- `lib/services/planning/planning-audit.ts`
++- `app/api/planning/autoschedule/day/route.ts`
++- `app/api/planning/autoschedule/week/route.ts`
++- `app/api/planning/autoschedule/runs/[id]/publish/route.ts`
++- `app/api/planning/autoschedule/runs/[id]/cancel/route.ts`
++- `app/api/planning/autoschedule/runs/[id]/match/apply/route.ts`
++- `lib/services/planning/assign-draftshift.ts`
++- `lib/services/planning/assign-shift.ts`
+diff --git a/docs/sessions/SESSION-20260306-01/NOTES.md b/docs/sessions/SESSION-20260306-01/NOTES.md
+index 15f323b..05d0afd 100644
+--- a/docs/sessions/SESSION-20260306-01/NOTES.md
++++ b/docs/sessions/SESSION-20260306-01/NOTES.md
+@@ -4,4 +4,19 @@ Notes de travail de la session.
+ 
+ ---
+ 
+-INFORMATION NON FOURNIE — À CONFIRMER
+\ No newline at end of file
++## Cadrage validé
++
++- Méthode validée pour le bloc : **1 patch → 1 test → 1 validation**.
++- Périmètre retenu : traçabilité minimale du planning/autoschedule, sans UI d’historique ni versioning complet.
++
++## Choix techniques retenus
++
++- Modèle Prisma dédié : `PlanningAuditLog`.
++- Helper centralisé : `lib/services/planning/planning-audit.ts`.
++- Données minimales tracées : `companyId`, `actorUserId`, `runId`, `action`, `entityType`, `entityId`, `summary`, `payload`, `createdAt`.
++- Écriture d’audit dans la même transaction que la mutation quand la route/service est transactionnel.
++
++## Particularité relevée pendant les tests
++
++- L’UI actuelle `/planning` n’expose pas directement les `DraftShift` brouillon comme cartes éditables.
++- Le test manuel `DRAFT_SHIFT_ASSIGNED_MANUALLY` a donc été validé via l’API d’assignation depuis la console navigateur.
+diff --git a/docs/sessions/SESSION-20260306-01/RESULTATS.md b/docs/sessions/SESSION-20260306-01/RESULTATS.md
+index 16f75af..dd005b5 100644
+--- a/docs/sessions/SESSION-20260306-01/RESULTATS.md
++++ b/docs/sessions/SESSION-20260306-01/RESULTATS.md
+@@ -2,10 +2,29 @@
+ 
+ ## Résultats obtenus
+ 
+-INFORMATION NON FOURNIE — À CONFIRMER
++- Bloc **4.7.1 — Traçabilité planning minimale** livré et validé.
++- Mise en place d’une journalisation persistante en base via `PlanningAuditLog`.
++- Actions couvertes :
++  - création de run DAY/WEEK
++  - publication de run
++  - annulation de run
++  - matching appliqué
++  - affectations manuelles `DraftShift` / `Shift`
++- Tests techniques et manuels validés.
+ 
+ ---
+ 
+ ## Documents modifiés
+ 
+-INFORMATION NON FOURNIE — À CONFIRMER
+\ No newline at end of file
++- `docs/master/DOCUMENT_MAITRE.md`
++- `docs/master/PLAN_DE_DEVELOPPEMENT.md`
++- `docs/master/ETAT_GLOBAL_PROJET.md`
++- `docs/master/REGISTRE_DECISIONS.md`
++- `docs/master/RECAP_DISCUSSIONS.md`
++- `docs/sessions/SESSION-20260306-01/SESSION.md`
++- `docs/sessions/SESSION-20260306-01/NOTES.md`
++- `docs/sessions/SESSION-20260306-01/EVIDENCES.md`
++- `docs/sessions/SESSION-20260306-01/RESULTATS.md`
++- `docs/sessions/SESSION-20260306-01/FIN_SESSION.md`
++- `docs/patches/4.7/README.md`
++- `docs/patches/4.7/4.7.1/README.md`
+diff --git a/docs/sessions/SESSION-20260306-01/SESSION.md b/docs/sessions/SESSION-20260306-01/SESSION.md
+index bac7af5..7c7aed8 100644
+--- a/docs/sessions/SESSION-20260306-01/SESSION.md
++++ b/docs/sessions/SESSION-20260306-01/SESSION.md
+@@ -6,8 +6,21 @@ SESSION-20260306-01
+ 
+ ## Date
+ 
+-INFORMATION NON FOURNIE — À CONFIRMER
++06/03/2026
+ 
+ ## Contexte
+ 
+-INFORMATION NON FOURNIE — À CONFIRMER
++Projet : Investissement  
++Sous-projet : Ambulance Manager  
++Bloc actif : 4.7.1 — Traçabilité planning minimale  
++Branche : `main`  
++Build : `npm run build` OK
++
++## Objectif de la session
++
++Définir, livrer et valider la traçabilité minimale du module planning/autoschedule via une suite de patchs numérotés, sans dérive hors du bloc 4.7.1 :
++- infrastructure d’audit persistante
++- audit création de run DAY/WEEK
++- audit publish/cancel
++- audit match/apply
++- audit affectations manuelles `DraftShift` / `Shift`

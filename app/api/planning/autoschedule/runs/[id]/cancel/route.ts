@@ -6,6 +6,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { AutoScheduleStatus } from "@prisma/client";
 import { canAutoSchedule } from "@/lib/permissions";
+import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
 
 const ParamsSchema = z.object({
   id: z.string().min(1),
@@ -111,6 +112,19 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
         where: { id: runId },
         data: { status: AutoScheduleStatus.CANCELLED },
         select: { id: true, status: true },
+      });
+
+      await writePlanningAudit(tx, {
+        companyId,
+        actorUserId: userId,
+        runId: run.id,
+        action: "AUTOSCHEDULE_RUN_CANCELLED",
+        entityType: "AutoScheduleRun",
+        entityId: run.id,
+        summary: "Autoschedule run cancelled",
+        payload: {
+          previousStatus: run.status,
+        },
       });
 
       return { ok: true as const, data: updated };

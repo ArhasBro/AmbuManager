@@ -1,12 +1,13 @@
 // lib/services/planning/assign-draftshift.ts
 import { prisma } from "@/lib/prisma";
+import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
 import type { PlanningIssue, PlanningIssueCode } from "@/lib/types/planning";
 import { RuleMode } from "@prisma/client";
 
 export type AssignDraftShiftInput = {
   companyId: string;
   draftShiftId: string;
-  actorUserId: string; // réservé audit futur (pas utilisé tant que champ non confirmé)
+  actorUserId: string;
 
   userId: string | null;
   user2Id: string | null;
@@ -71,6 +72,7 @@ export async function assignDraftShift(input: AssignDraftShiftInput): Promise<As
       userId: true,
       user2Id: true,
       vehicleId: true,
+      runId: true,
       run: { select: { status: true } },
       template: { select: { category: true } },
     },
@@ -236,10 +238,43 @@ export async function assignDraftShift(input: AssignDraftShiftInput): Promise<As
   const blockingConflict = issues.find((i) => i.code === "USER_OVERLAP_CONFLICT" || i.code === "VEHICLE_OVERLAP_CONFLICT");
   if (blockingConflict) return { ok: false, error: blockingConflict };
 
-  // 7) Update DraftShift
-  await prisma.draftShift.update({
-    where: { id: draftShiftId },
-    data: { userId, user2Id, vehicleId },
+  // 7) Update DraftShift + audit minimal si changement réel
+  const changedFields = [
+    draft.userId !== userId ? "userId" : null,
+    draft.user2Id !== user2Id ? "user2Id" : null,
+    draft.vehicleId !== vehicleId ? "vehicleId" : null,
+  ].filter((field): field is string => field !== null);
+
+  await prisma.$transaction(async (tx) => {
+    await tx.draftShift.update({
+      where: { id: draftShiftId },
+      data: { userId, user2Id, vehicleId },
+    });
+
+    if (changedFields.length > 0) {
+      await writePlanningAudit(tx, {
+        companyId,
+        actorUserId: input.actorUserId,
+        runId: draft.runId,
+        action: "DRAFT_SHIFT_ASSIGNED_MANUALLY",
+        entityType: "DraftShift",
+        entityId: draftShiftId,
+        summary: `DraftShift manually assigned (${changedFields.join(", ")})`,
+        payload: {
+          changedFields,
+          previous: {
+            userId: draft.userId,
+            user2Id: draft.user2Id,
+            vehicleId: draft.vehicleId,
+          },
+          next: {
+            userId,
+            user2Id,
+            vehicleId,
+          },
+        },
+      });
+    }
   });
 
   return { ok: true, data: { draftShiftId, issues } };

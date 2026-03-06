@@ -1,0 +1,60 @@
+--- a/app/api/planning/autoschedule/runs/[id]/publish/route.ts	2026-03-06 21:38:15.434763254 +0000
++++ b/app/api/planning/autoschedule/runs/[id]/publish/route.ts	2026-03-06 21:59:55.064855631 +0000
+@@ -6,6 +6,7 @@
+ import { authOptions } from "@/lib/auth";
+ import { prisma } from "@/lib/prisma";
+ import { canPublishAutoSchedule } from "@/lib/permissions";
++import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
+ 
+ const ParamsSchema = z.object({
+   id: z.string().min(1),
+@@ -437,6 +438,19 @@
+         data: { status: AutoScheduleStatus.PUBLISHED },
+       });
+ 
++      await writePlanningAudit(tx, {
++        companyId,
++        actorUserId: userId,
++        runId: run.id,
++        action: "AUTOSCHEDULE_RUN_PUBLISHED",
++        entityType: "AutoScheduleRun",
++        entityId: run.id,
++        summary: "Autoschedule run published",
++        payload: {
++          publishedCount: drafts.length,
++        },
++      });
++
+       return { kind: "OK" as const, publishedCount: drafts.length, warnings };
+     });
+ 
+--- a/app/api/planning/autoschedule/runs/[id]/cancel/route.ts	2026-03-06 21:38:15.433201804 +0000
++++ b/app/api/planning/autoschedule/runs/[id]/cancel/route.ts	2026-03-06 21:59:55.065459985 +0000
+@@ -6,6 +6,7 @@
+ import { prisma } from "@/lib/prisma";
+ import { AutoScheduleStatus } from "@prisma/client";
+ import { canAutoSchedule } from "@/lib/permissions";
++import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
+ 
+ const ParamsSchema = z.object({
+   id: z.string().min(1),
+@@ -113,6 +114,19 @@
+         select: { id: true, status: true },
+       });
+ 
++      await writePlanningAudit(tx, {
++        companyId,
++        actorUserId: userId,
++        runId: run.id,
++        action: "AUTOSCHEDULE_RUN_CANCELLED",
++        entityType: "AutoScheduleRun",
++        entityId: run.id,
++        summary: "Autoschedule run cancelled",
++        payload: {
++          previousStatus: run.status,
++        },
++      });
++
+       return { ok: true as const, data: updated };
+     });
+ 

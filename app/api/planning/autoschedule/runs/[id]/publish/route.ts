@@ -6,6 +6,7 @@ import { AutoScheduleStatus, Prisma, RuleMode } from "@prisma/client";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { canPublishAutoSchedule } from "@/lib/permissions";
+import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
 
 const ParamsSchema = z.object({
   id: z.string().min(1),
@@ -435,6 +436,19 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
       await tx.autoScheduleRun.updateMany({
         where: { id: run.id, companyId },
         data: { status: AutoScheduleStatus.PUBLISHED },
+      });
+
+      await writePlanningAudit(tx, {
+        companyId,
+        actorUserId: userId,
+        runId: run.id,
+        action: "AUTOSCHEDULE_RUN_PUBLISHED",
+        entityType: "AutoScheduleRun",
+        entityId: run.id,
+        summary: "Autoschedule run published",
+        payload: {
+          publishedCount: drafts.length,
+        },
       });
 
       return { kind: "OK" as const, publishedCount: drafts.length, warnings };
