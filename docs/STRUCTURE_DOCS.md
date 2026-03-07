@@ -1,4 +1,6 @@
-﻿Structure du dossier pour le volume Windows
+﻿MAJ Le 07/03/2026 à 21:41
+
+Structure du dossier pour le volume Windows
 Le numÚro de sÚrie du volume est 123E-4DB7
 C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   NE_PAS_UTILISER.md
@@ -33,14 +35,20 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   +---4.7
 |   |   |   README.md
 |   |   |   
-|   |   \---4.7.1
+|   |   +---4.7.1
+|   |   |       README.md
+|   |   |       SESSION-20260306-01__4.7.1-01__audit-infra.diff
+|   |   |       SESSION-20260306-01__4.7.1-02__audit-run-create.diff
+|   |   |       SESSION-20260306-01__4.7.1-03__audit-run-status.diff
+|   |   |       SESSION-20260306-01__4.7.1-04__audit-match-apply.diff
+|   |   |       SESSION-20260306-01__4.7.1-05__audit-manual-assignments.diff
+|   |   |       SESSION-20260306-01__4.7.1-06__cloture-docs.diff
+|   |   |       
+|   |   \---4.7.2
 |   |           README.md
-|   |           SESSION-20260306-01__4.7.1-01__audit-infra.diff
-|   |           SESSION-20260306-01__4.7.1-02__audit-run-create.diff
-|   |           SESSION-20260306-01__4.7.1-03__audit-run-status.diff
-|   |           SESSION-20260306-01__4.7.1-04__audit-match-apply.diff
-|   |           SESSION-20260306-01__4.7.1-05__audit-manual-assignments.diff
-|   |           SESSION-20260306-01__4.7.1-06__cloture-docs.diff
+|   |           SESSION-20260307-01__4.7.2-01__run-audit-read-api.diff
+|   |           SESSION-20260307-01__4.7.2-02__run-audit-read-ui.diff
+|   |           SESSION-20260307-01__4.7.2-03__cloture-docs.diff
 |   |           
 |   \---general
 |           PATCH_1_CORE_SECURITE.diff
@@ -76,6 +84,13 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |       SESSION.md
 |   |       
 |   +---SESSION-20260306-01
+|   |       EVIDENCES.md
+|   |       FIN_SESSION.md
+|   |       NOTES.md
+|   |       RESULTATS.md
+|   |       SESSION.md
+|   |       
+|   +---SESSION-20260307-01
 |   |       EVIDENCES.md
 |   |       FIN_SESSION.md
 |   |       NOTES.md
