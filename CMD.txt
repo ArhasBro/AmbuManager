@@ -12,6 +12,7 @@ git push
 
 git status
 
+.\create_session.ps1
 
 npm run build
 
