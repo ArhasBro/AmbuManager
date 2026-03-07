@@ -218,3 +218,27 @@ Si une information n’est pas prouvée : **RECONSTRUCTION — À CONFIRMER**.
   - `docs/patches/4.7/4.7.1/SESSION-20260306-01__4.7.1-04__audit-match-apply.diff`
   - `docs/patches/4.7/4.7.1/SESSION-20260306-01__4.7.1-05__audit-manual-assignments.diff`
 - Prochaine étape : suite 4.7 hors 4.7.1 — périmètre exact **INFORMATION NON FOURNIE — À CONFIRMER**.
+
+
+## 21. SESSION-20260307-01 — Bloc 4.7.2 VALIDÉ (consultation minimale de l’audit planning) — 07/03/2026
+### Métadonnées (source)
+- Date : 07/03/2026
+- Statut de source : **EXTRAIT CONFIRMÉ**
+
+### Extraits / synthèse dérivée
+- Bloc 4.7.2 cadré puis livré en 3 patchs, dont 2 patchs code validés avant clôture documentaire.
+- Choix d’architecture validé : enrichir `GET /api/planning/autoschedule/runs/[id]` plutôt que créer une route dédiée au premier bloc 4.7.2.
+- API run enrichie avec `data.auditLogs` :
+  - tri décroissant
+  - limite courte
+  - `createdAt`, `action`, `summary`, `actorUser`, `payload`
+- UI `/planning` enrichie avec un panneau read-only **Historique du run courant**.
+- Tests techniques validés : `npm run lint`, `npm run build` OK.
+- Test manuel validé :
+  - lecture API `auditLogs` sur le run courant
+  - affichage UI read-only de l’historique du run courant
+- Patches artefacts :
+  - `docs/patches/4.7/4.7.2/SESSION-20260307-01__4.7.2-01__run-audit-read-api.diff`
+  - `docs/patches/4.7/4.7.2/SESSION-20260307-01__4.7.2-02__run-audit-read-ui.diff`
+- Bloc 4.7.2 déclaré VALIDÉ avant clôture documentaire.
+- Prochaine étape : suite 4.7 hors 4.7.2 — périmètre exact **INFORMATION NON FOURNIE — À CONFIRMER**.

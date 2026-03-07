@@ -1,7 +1,7 @@
 # Ambulance Manager — ETAT_GLOBAL_PROJET
 
 Version : V1.5.7 (MASTER)  
-Date : 06/03/2026
+Date : 07/03/2026
 
 ## Sommaire
 - [1. Rôle](#1-rôle)
@@ -40,8 +40,8 @@ Les statuts ci-dessous sont fixés par décision de pilotage au **06/03/2026** s
   Motif : score qualité planning + explications livrés (UI) + preview renvoie `{ plan, quality }` + apply conservé, build validé.  
   Preuves : session `docs/sessions/SESSION-20260305-01/EVIDENCES.md`.
 - **4.7 — Pré-version commerciale** : **EN COURS**  
-  Motif : 4.7.1 — traçabilité planning minimale validé (audit persistant sur runs, matching appliqué et assignations manuelles).  
-  Preuves : session `docs/sessions/SESSION-20260306-01/EVIDENCES.md`.
+  Motif : 4.7.1 — traçabilité planning minimale validée + 4.7.2 — consultation minimale de l’audit planning validée (lecture API du run courant + affichage UI read-only dans `/planning`).  
+  Preuves : sessions `docs/sessions/SESSION-20260306-01/EVIDENCES.md` et `docs/sessions/SESSION-20260307-01/EVIDENCES.md`.
 - **5.0 — SaaS production** : **À FAIRE**
 
 ## 4. 4.4 — Gap de clôture (EN COURS → VALIDÉ)
@@ -59,11 +59,11 @@ Performance : **NON BLOQUANT** en 4.4 (suivi indicatif seulement).
 - Si des documents historiques mentionnent “4.3” : **convention V1.5.7** = rattacher “Publish UI / Refresh / Génération DAY / Cancel / reprise runId” à **4.4 (Stabilisation)**.
 
 ## 6. Points à confirmer
-- Suite 4.7 hors 4.7.1 : **INFORMATION NON FOURNIE — À CONFIRMER**
+- Suite 4.7 hors 4.7.2 : **INFORMATION NON FOURNIE — À CONFIRMER**
 - Incident Prisma Studio (ShiftTemplate.id vide) : **À CONFIRMER**
 
 ## 7. Prochaine étape logique unique
-4.7.1 validé → cadrer le bloc suivant de 4.7 (pré-version commerciale).
+4.7.2 validé → cadrer le bloc suivant de 4.7 (pré-version commerciale).
 Périmètre exact : **INFORMATION NON FOURNIE — À CONFIRMER**.
 
 ## Vérifications par le code (ZIP)
@@ -85,3 +85,6 @@ Périmètre exact : **INFORMATION NON FOURNIE — À CONFIRMER**.
   - `app/api/planning/autoschedule/runs/[id]/match/apply/route.ts`
   - `lib/services/planning/assign-draftshift.ts`
   - `lib/services/planning/assign-shift.ts`
+- Consultation minimale audit run (4.7.2) :
+  - `app/api/planning/autoschedule/runs/[id]/route.ts`
+  - `app/planning/planning-client.tsx`

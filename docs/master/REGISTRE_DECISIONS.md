@@ -1,7 +1,7 @@
 # Ambulance Manager — REGISTRE_DECISIONS
 
 Version : V1.5.7 (MASTER)  
-Date : 06/03/2026
+Date : 07/03/2026
 
 ## Sommaire
 - [1. Rôle](#1-rôle)
@@ -47,17 +47,23 @@ Format unique attendu :
   - Actions tracées : `AUTOSCHEDULE_RUN_CREATED`, `AUTOSCHEDULE_RUN_PUBLISHED`, `AUTOSCHEDULE_RUN_CANCELLED`, `AUTOSCHEDULE_MATCH_APPLIED`, `DRAFT_SHIFT_ASSIGNED_MANUALLY`, `SHIFT_ASSIGNED_MANUALLY`.
   - Données minimales : `companyId`, `actorUserId`, `runId`, `action`, `entityType`, `entityId`, `summary`, `payload`, `createdAt`.
   - Écriture d’audit dans la même transaction que la mutation pour les actions concernées par transaction (`publish`, `cancel`, assignations manuelles).
+- DEC-20260307-01 — 4.7.2 : consultation minimale de l’audit planning VALIDÉE.
+  - Lecture read-only des logs récents du run courant via enrichissement de `GET /api/planning/autoschedule/runs/[id]`.
+  - Pas de route dédiée supplémentaire au premier bloc 4.7.2.
+  - Pas de page historique globale au premier bloc 4.7.2.
+  - Affichage UI minimal read-only de l’historique du run courant dans `/planning`.
+  - Informations exposées : `createdAt`, `action`, `summary`, `actorUser`, `payload`, tri décroissant, limite courte.
 
 ## 4. Décisions en attente
-- PEND-20260306-01 — Suite 4.7 hors 4.7.1 : périmètre exact à confirmer.
-- Consultation UI/API de l’historique planning : niveau minimal à définir.
+- PEND-20260306-01 — Suite 4.7 hors 4.7.2 : périmètre exact à confirmer.
+- Historique/versioning planning global au-delà du run courant : niveau minimal à définir.
 - Flotte & conformité : périmètre data + priorisation.
 
 ## 5. Alignement statuts (référence ETAT_GLOBAL_PROJET)
 - 4.4 : VALIDÉ (DoD cochée, preuves `docs/sessions/SESSION-20260304-01/EVIDENCES.md`).
 - 4.5 : VALIDÉ.
 - 4.6 : VALIDÉ (session `docs/sessions/SESSION-20260305-01/EVIDENCES.md`).
-- 4.7 : EN COURS (4.7.1 validé, session `docs/sessions/SESSION-20260306-01/EVIDENCES.md`).
+- 4.7 : EN COURS (4.7.1 et 4.7.2 validés, sessions `docs/sessions/SESSION-20260306-01/EVIDENCES.md` et `docs/sessions/SESSION-20260307-01/EVIDENCES.md`).
 - 5.0 : À FAIRE.
 
 ## 6. Gouvernance de mise à jour
@@ -80,3 +86,6 @@ Format unique attendu :
   - `app/api/planning/autoschedule/runs/[id]/match/apply/route.ts`
   - `lib/services/planning/assign-draftshift.ts`
   - `lib/services/planning/assign-shift.ts`
+- Consultation minimale audit run présente (4.7.2) :
+  - `app/api/planning/autoschedule/runs/[id]/route.ts`
+  - `app/planning/planning-client.tsx`

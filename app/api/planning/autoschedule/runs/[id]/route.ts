@@ -109,6 +109,20 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
           orderBy: { startAt: "asc" },
           include: { template: true, user: true, vehicle: true },
         },
+        planningAuditLogs: {
+          orderBy: { createdAt: "desc" },
+          take: 20,
+          select: {
+            id: true,
+            createdAt: true,
+            action: true,
+            entityType: true,
+            entityId: true,
+            summary: true,
+            payload: true,
+            actorUser: { select: { id: true, name: true, email: true } },
+          },
+        },
       },
     });
 
@@ -116,10 +130,12 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
       return NextResponse.json({ ok: false, error: "NOT_FOUND" }, { status: 404 });
     }
 
+    const { planningAuditLogs, ...runData } = run;
+
     return NextResponse.json({
       ok: true,
       data: {
-        ...run,
+        ...runData,
         day: run.day ? run.day.toISOString() : null,
         weekStart: run.weekStart ? run.weekStart.toISOString() : null,
         createdAt: run.createdAt.toISOString(),
@@ -129,6 +145,10 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
           startAt: s.startAt.toISOString(),
           endAt: s.endAt.toISOString(),
           createdAt: s.createdAt.toISOString(),
+        })),
+        auditLogs: planningAuditLogs.map((log) => ({
+          ...log,
+          createdAt: log.createdAt.toISOString(),
         })),
       },
     });

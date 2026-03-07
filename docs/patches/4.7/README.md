@@ -25,6 +25,17 @@ Statut :
 - **TERMINÉ**
 - **VALIDÉ**
 
+### Bloc 4.7.2 — Consultation minimale de l’audit planning
+Session principale :
+- `SESSION-20260307-01`
+
+Objectif :
+- rendre exploitable en lecture l’audit persistant introduit en 4.7.1, via une solution API + UI read-only minimale sur le run courant
+
+Statut :
+- **TERMINÉ**
+- **VALIDÉ**
+
 ---
 
 ## Méthode de travail utilisée
@@ -50,6 +61,15 @@ Contenu principal :
 - `SESSION-20260306-01__4.7.1-04__audit-match-apply.diff`
 - `SESSION-20260306-01__4.7.1-05__audit-manual-assignments.diff`
 - `SESSION-20260306-01__4.7.1-06__cloture-docs.diff`
+
+### Dossier bloc 4.7.2
+- `docs/patches/4.7/4.7.2/`
+
+Contenu principal :
+- `README.md`
+- `SESSION-20260307-01__4.7.2-01__run-audit-read-api.diff`
+- `SESSION-20260307-01__4.7.2-02__run-audit-read-ui.diff`
+- `SESSION-20260307-01__4.7.2-03__cloture-docs.diff`
 
 ---
 
@@ -105,12 +125,18 @@ Le bloc 4.7.1 a livré une traçabilité minimale du planning/autoschedule via u
 - `docs/sessions/SESSION-20260306-01/EVIDENCES.md`
 - `docs/sessions/SESSION-20260306-01/RESULTATS.md`
 - `docs/sessions/SESSION-20260306-01/FIN_SESSION.md`
+- `docs/sessions/SESSION-20260307-01/SESSION.md`
+- `docs/sessions/SESSION-20260307-01/NOTES.md`
+- `docs/sessions/SESSION-20260307-01/EVIDENCES.md`
+- `docs/sessions/SESSION-20260307-01/RESULTATS.md`
+- `docs/sessions/SESSION-20260307-01/FIN_SESSION.md`
 
 ---
 
 ## État actuel de la phase 4.7
 
 - Bloc 4.7.1 : **VALIDÉ**
+- Bloc 4.7.2 : **VALIDÉ**
 - Bloc suivant : **INFORMATION NON FOURNIE — À CONFIRMER**
 
 ---
@@ -118,7 +144,28 @@ Le bloc 4.7.1 a livré une traçabilité minimale du planning/autoschedule via u
 ## Point de reprise
 
 Dernier point validé :
-- **Bloc 4.7.1 — Traçabilité planning minimale**
+- **Bloc 4.7.2 — Consultation minimale de l’audit planning**
 
 Point de reprise suivant :
 - **INFORMATION NON FOURNIE — À CONFIRMER**
+
+---
+
+## Résumé du bloc 4.7.2
+
+Le bloc 4.7.2 a livré une consultation minimale read-only de l’audit planning sur le run courant.
+
+### Couverture obtenue
+- lecture API des logs récents du run courant via `GET /api/planning/autoschedule/runs/[id]`
+- affichage UI read-only de l’historique du run courant dans `/planning`
+
+### Choix d’architecture validés
+- pas de route dédiée supplémentaire au premier bloc 4.7.2
+- pas de page historique globale au premier bloc 4.7.2
+- réutilisation du point d’entrée existant `GET /api/planning/autoschedule/runs/[id]`
+
+### Vérifications validées sur 4.7.2
+- `npm run lint` : OK
+- `npm run build` : OK
+- test manuel auditLogs API ok
+- test manuel UI audit run ok

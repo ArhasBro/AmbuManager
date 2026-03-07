@@ -1,7 +1,7 @@
 # Ambulance Manager — DOCUMENT_MAITRE
 
 Version : V1.5.7 (MASTER)  
-Date : 06/03/2026
+Date : 07/03/2026
 
 ## Sommaire
 - [1. Vision du projet](#1-vision-du-projet)
@@ -96,6 +96,9 @@ Le reste (PUT/PATCH, détails avancés, conformité flotte) : **À CONFIRMER / n
 - Runs : list/read/cancel/publish
 - `DRAFT_ALREADY_EXISTS` : retour `runId` pour reprise UI
 - Traçabilité minimale validée (4.7.1) : création run, publish, cancel, matching appliqué
+- Consultation minimale de l’audit validée (4.7.2) :
+  - lecture API des logs récents du run courant via `GET /api/planning/autoschedule/runs/[id]`
+  - affichage UI read-only de l’historique du run courant dans `/planning`
 
 ### 7.5 Planning — Assignation (Logique métier)
 - Assignation sur `DraftShift` et/ou `Shift`
@@ -130,7 +133,9 @@ Gap de clôture : voir **PLAN_DE_DEVELOPPEMENT → DoD 4.4 (Checklist officielle
 ### 8.4 4.7 — Pré-version commerciale
 **Statut : EN COURS**
 
-Sous-bloc validé : **4.7.1 — Traçabilité planning minimale**
+Sous-blocs validés :
+- **4.7.1 — Traçabilité planning minimale**
+- **4.7.2 — Consultation minimale de l’audit planning**
 
 ### 8.5 5.0 — SaaS production
 **Statut : À FAIRE**
@@ -151,6 +156,7 @@ Sous-bloc validé : **4.7.1 — Traçabilité planning minimale**
 - Dates : sérialisation ISO côté client.
 - `DRAFT_ALREADY_EXISTS` renvoie `runId`.
 - Traçabilité planning minimale persistante validée via `PlanningAuditLog` + helper `lib/services/planning/planning-audit.ts`.
+- Consultation minimale de l’audit planning validée via enrichissement de `GET /api/planning/autoschedule/runs/[id]` + affichage read-only dans `/planning`.
 
 Permissions confirmées par le seed actuel :
 - `PLANNING_AUTOSCHEDULE`
@@ -159,13 +165,13 @@ Permissions confirmées par le seed actuel :
 Autres permissions historiquement citées (ex : `PLANNING_EDIT`, `RULES_EDIT`, `FLEET_EDIT`, `USERS_MANAGE`) : **À CONFIRMER / non présentes dans le seed actuel**.
 
 ## 11. Points en attente
-- Suite 4.7 hors 4.7.1 : périmètre exact à cadrer.
+- Suite 4.7 hors 4.7.2 : périmètre exact à cadrer.
 - Règles avancées planning : à planifier.
 - Flotte & conformité : à modéliser/implémenter.
-- Historique/versioning planning complet et consultation UI/API de l’audit : à définir.
+- Historique/versioning planning complet au-delà de la consultation minimale du run courant : à définir.
 
 ## 12. Prochaine étape logique unique
-4.7.1 validé → cadrer le bloc suivant de 4.7 sans dérive d’architecture.  
+4.7.2 validé → cadrer le bloc suivant de 4.7 sans dérive d’architecture.  
 Le périmètre exact du prochain sous-bloc est **INFORMATION NON FOURNIE — À CONFIRMER**.
 
 ## 13. Incidents & corrections connus
@@ -211,6 +217,9 @@ Le périmètre exact du prochain sous-bloc est **INFORMATION NON FOURNIE — À 
   - `app/api/planning/autoschedule/runs/[id]/match/apply/route.ts`
   - `lib/services/planning/assign-draftshift.ts`
   - `lib/services/planning/assign-shift.ts`
+- Consultation minimale audit run (4.7.2) :
+  - `app/api/planning/autoschedule/runs/[id]/route.ts`
+  - `app/planning/planning-client.tsx`
 
 ### ⚠️ Documenté mais non vérifié dans le code
 - Incident Prisma Studio “ShiftTemplate.id vide” : documenté, pas de guard explicite repéré.

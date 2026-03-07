@@ -1,7 +1,7 @@
 # Ambulance Manager — PLAN_DE_DEVELOPPEMENT
 
 Version : V1.5.7 (MASTER)  
-Date : 06/03/2026
+Date : 07/03/2026
 
 ## Sommaire
 - [1. Règles d’exécution](#1-règles-dexécution)
@@ -52,10 +52,14 @@ Implémentations attendues (périmètre 4.4) :
 ### 3.5 4.7 — Pré-version commerciale
 **Statut officiel : EN COURS**
 
-Sous-bloc validé : **4.7.1 — Traçabilité planning minimale**
-- `PlanningAuditLog` + migration + helper centralisé
-- Audit validé sur create DAY/WEEK, publish, cancel, match/apply
-- Audit validé sur assignations manuelles `DraftShift` / `Shift`
+Sous-blocs validés :
+- **4.7.1 — Traçabilité planning minimale**
+  - `PlanningAuditLog` + migration + helper centralisé
+  - Audit validé sur create DAY/WEEK, publish, cancel, match/apply
+  - Audit validé sur assignations manuelles `DraftShift` / `Shift`
+- **4.7.2 — Consultation minimale de l’audit planning**
+  - lecture API des logs récents du run courant via `GET /api/planning/autoschedule/runs/[id]`
+  - affichage UI read-only de l’historique du run courant dans `/planning`
 
 ### 3.6 5.0 — SaaS production
 **Statut officiel : À FAIRE**
@@ -78,7 +82,8 @@ Sous-bloc validé : **4.7.1 — Traçabilité planning minimale**
 ### 4.7 (EN COURS)
 - Traçabilité planning minimale persistante validée en 4.7.1.
 - Écritures d’audit structurées en base : create/publish/cancel/match/apply/assignations manuelles.
-- Suite 4.7 hors 4.7.1 : **INFORMATION NON FOURNIE — À CONFIRMER**.
+- Consultation minimale read-only de l’audit run validée en 4.7.2.
+- Suite 4.7 hors 4.7.2 : **INFORMATION NON FOURNIE — À CONFIRMER**.
 
 ## 5. DoD 4.4 — Checklist officielle à cocher
 > Objectif : clôturer 4.4 sans ambiguïté.  
@@ -132,7 +137,7 @@ Statut pour clôture 4.4 : **NON BLOQUANT** (optimisations perf prioritaires en 
   - Mitigation : conventions ISO ; tests semaine ; affichage contrôlé UI.
 
 ## 7. Prochaine étape logique unique
-4.7.1 validé → cadrer le bloc suivant de 4.7 sans dérive d’architecture.
+4.7.2 validé → cadrer le bloc suivant de 4.7 sans dérive d’architecture.
 Périmètre exact du prochain sous-bloc : **INFORMATION NON FOURNIE — À CONFIRMER**.
 
 ## Vérifications par le code (ZIP)
@@ -154,3 +159,6 @@ Périmètre exact du prochain sous-bloc : **INFORMATION NON FOURNIE — À CONFI
   - `app/api/planning/autoschedule/runs/[id]/match/apply/route.ts`
   - `lib/services/planning/assign-draftshift.ts`
   - `lib/services/planning/assign-shift.ts`
+- Consultation minimale audit run (4.7.2) :
+  - `app/api/planning/autoschedule/runs/[id]/route.ts`
+  - `app/planning/planning-client.tsx`
