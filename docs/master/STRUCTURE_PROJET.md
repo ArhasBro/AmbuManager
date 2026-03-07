@@ -1,6 +1,4 @@
-﻿MAJ Le 07/03/2026 à 21:41
-
-Structure du dossier pour le volume Windows
+﻿Structure du dossier pour le volume Windows
 Le numÚro de sÚrie du volume est 123E-4DB7
 C:.
 |   .env
@@ -1893,6 +1891,13 @@ C:.
 |   |   |       SESSION.md
 |   |   |       
 |   |   +---SESSION-20260307-01
+|   |   |       EVIDENCES.md
+|   |   |       FIN_SESSION.md
+|   |   |       NOTES.md
+|   |   |       RESULTATS.md
+|   |   |       SESSION.md
+|   |   |       
+|   |   +---SESSION-20260307-02
 |   |   |       EVIDENCES.md
 |   |   |       FIN_SESSION.md
 |   |   |       NOTES.md
