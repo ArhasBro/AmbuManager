@@ -1,4 +1,7 @@
-# Document de cadrage fonctionnel complet — version finale mise à jour
+# Document de cadrage fonctionnel complet
+
+Version : V1.5.7 (MASTER)  
+Date : 09/03/2026
 
 **Projet :** Investissement  
 **Sous-projet :** Ambulance Manager  
