@@ -2,18 +2,27 @@
 
 Ce document définit les sources documentaires autorisées pour l’analyse du projet.
 
-## Sources principales
+## Base officielle produit
 
-Les documents suivants constituent la documentation officielle du projet :
+docs/master/DOCUMENT_CADRAGE_FONCTIONNEL.md
 
-docs/README.md
+Ce document constitue la base officielle produit.  
+Il est figé et ne doit pas être modifié sans autorisation et validation explicite.
+
+## Documents maîtres de pilotage
+
+Les documents suivants constituent le socle de pilotage du projet :
 
 docs/master/DOCUMENT_MAITRE.md  
 docs/master/PLAN_DE_DEVELOPPEMENT.md  
 docs/master/ETAT_GLOBAL_PROJET.md  
 docs/master/REGISTRE_DECISIONS.md  
 docs/master/RECAP_DISCUSSIONS.md  
-docs/master/STRUCTURE_PROJET.md  
+docs/master/STRUCTURE_PROJET.md
+
+## Index documentaire
+
+docs/README.md
 
 ## Sessions de travail
 

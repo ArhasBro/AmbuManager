@@ -1,7 +1,7 @@
 # Ambulance Manager — RECAP_DISCUSSIONS
 
 Version : V1.5.7 (MASTER)  
-Date : 05/03/2026
+Date : 09/03/2026
 
 ## Sommaire
 - [0. Gouvernance anti-reconstruction](#0-gouvernance-anti-reconstruction)
@@ -24,6 +24,8 @@ Date : 05/03/2026
 - [17. Clôture officielle — 03/03/2026 19:30 (V1.5.7)](#17-clôture-officielle--03032026-1930-v157)
 - [18. SESSION-20260304-01 — DoD 4.4 VALIDÉ — 04/03/2026](#18-session-20260304-01--dod-44-validé--04032026)
 - [19. SESSION-20260305-01 — Bloc 4.6 VALIDÉ (score qualité planning) — 05/03/2026](#19-session-20260305-01--bloc-46-validé-score-qualité-planning--05032026)
+- [20. SESSION-20260306-01 — Bloc 4.7.1 VALIDÉ (traçabilité planning minimale) — 06/03/2026](#20-session-20260306-01--bloc-471-validé-traçabilité-planning-minimale--06032026)
+- [21. Validation du cadrage fonctionnel — 09/03/2026](#21-validation-du-cadrage-fonctionnel--09032026)
 
 ## 0. Gouvernance anti-reconstruction
 Règle : ce document contient **uniquement** ce qui est **présent** dans les discussions/sessions.  
@@ -219,26 +221,19 @@ Si une information n’est pas prouvée : **RECONSTRUCTION — À CONFIRMER**.
   - `docs/patches/4.7/4.7.1/SESSION-20260306-01__4.7.1-05__audit-manual-assignments.diff`
 - Prochaine étape : suite 4.7 hors 4.7.1 — périmètre exact **INFORMATION NON FOURNIE — À CONFIRMER**.
 
-
-## 21. SESSION-20260307-01 — Bloc 4.7.2 VALIDÉ (consultation minimale de l’audit planning) — 07/03/2026
+## 21. Validation du cadrage fonctionnel — 09/03/2026
 ### Métadonnées (source)
-- Date : 07/03/2026
+- Date : 09/03/2026
 - Statut de source : **EXTRAIT CONFIRMÉ**
 
 ### Extraits / synthèse dérivée
-- Bloc 4.7.2 cadré puis livré en 3 patchs, dont 2 patchs code validés avant clôture documentaire.
-- Choix d’architecture validé : enrichir `GET /api/planning/autoschedule/runs/[id]` plutôt que créer une route dédiée au premier bloc 4.7.2.
-- API run enrichie avec `data.auditLogs` :
-  - tri décroissant
-  - limite courte
-  - `createdAt`, `action`, `summary`, `actorUser`, `payload`
-- UI `/planning` enrichie avec un panneau read-only **Historique du run courant**.
-- Tests techniques validés : `npm run lint`, `npm run build` OK.
-- Test manuel validé :
-  - lecture API `auditLogs` sur le run courant
-  - affichage UI read-only de l’historique du run courant
-- Patches artefacts :
-  - `docs/patches/4.7/4.7.2/SESSION-20260307-01__4.7.2-01__run-audit-read-api.diff`
-  - `docs/patches/4.7/4.7.2/SESSION-20260307-01__4.7.2-02__run-audit-read-ui.diff`
-- Bloc 4.7.2 déclaré VALIDÉ avant clôture documentaire.
-- Prochaine étape : suite 4.7 hors 4.7.2 — périmètre exact **INFORMATION NON FOURNIE — À CONFIRMER**.
+- `docs/master/DOCUMENT_CADRAGE_FONCTIONNEL.md` est validé comme base officielle produit.
+- Ce document est figé et ne doit pas être modifié sans validation explicite.
+- Pour la suite, ne pas revenir en arrière sur ce cadrage sans demande explicite.
+- La prochaine étape attendue est la refonte du plan de développement.
+- Cette refonte devra respecter strictement :
+  - 1 session = 1 point clair
+  - 1 fonctionnalité
+  - 1 patch
+  - 1 DoD
+  - 1 validation

@@ -2,74 +2,77 @@
 ⚠️ CLÔTURE OFFICIELLE DE SESSION — IA
 
 RÈGLES DE SOURCE (NON NÉGOCIABLES)  
-- Sources autorisées : 7 documents + CODE si fourni (définition §3.2)  
+- Sources autorisées : documentation officielle du projet + CODE si fourni  
 - Les documents fournis priment sur toute mémoire interne de l’IA  
 - Si une info manque : "INFORMATION NON FOURNIE — À CONFIRMER"  
-- En cas de contradiction : CODE > DOCUMENTATION (ordre d’autorité du protocole)  
+- En cas de contradiction : CODE > DOCUMENTATION  
 - Validation utilisateur uniquement via : "VALIDÉ :" ou "AUTORISÉ :"
+
+RAPPEL DOCUMENTAIRE  
+- `docs/master/DOCUMENT_CADRAGE_FONCTIONNEL.md` constitue la base officielle produit.
+- Ce document est figé et ne doit pas être modifié sans validation explicite.
+- Toute session clôturée doit rester cohérente avec ce cadrage, sauf demande explicite de réouverture du périmètre.
 
 ━━━━━━━━━━━━━━━━━━━━  
 ID SESSION + RÉFÉRENCE  
 ━━━━━━━━━━━━━━━━━━━━  
-ID SESSION : SESSION-YYYYMMDD-XX  
-Version actuelle (référence) :  
-Phase active :  
-Maturité :  
+ID SESSION : à renseigner  
+Version actuelle (référence) : à renseigner  
+Phase active : à renseigner  
+Maturité : à renseigner  
 Freeze actif : Oui / Non
 
-CODE (SI FOURNI — §3.2)  
+CODE (SI FOURNI)  
 - Extraits collés : Oui / Non  
 - Repo accessible + commit/tag : Oui / Non  
-- Branche :  
-- Commit final :
+- Branche : à renseigner  
+- Commit final : à renseigner
 
 ━━━━━━━━━━━━━━━━━━━━  
-1️⃣ VALIDATION MATRICE (OBLIGATOIRE)  
+1️⃣ VALIDATION MATRICE  
 ━━━━━━━━━━━━━━━━━━━━  
-☐ Décision validée → vérifier non-duplication puis ajouter DEC-XXXX dans REGISTRE_DECISIONS.md  
-☐ Nouveau point bloquant / attente → vérifier non-duplication puis ajouter PEND-XXXX dans REGISTRE_DECISIONS.md  
-☐ Statut phase/bloc modifié → MAJ ETAT_GLOBAL_PROJET.md + PLAN_DE_DEVELOPPEMENT.md  
-☐ Modification structurelle → valider d’abord dans DOCUMENT_MAITRE.md puis incrément MAJOR/MINOR selon règles  
-☐ Incohérence détectée (DOC vs CODE) → consigner dans REGISTRE_DECISIONS.md + ajuster stabilité YELLOW/RED
+- Objectif prévu : à renseigner  
+- Objectif atteint : Oui / Non  
+- Fonctionnalité unique traitée : à renseigner  
+- Périmètre respecté : Oui / Non  
+- Débordement de scope : Oui / Non
 
 ━━━━━━━━━━━━━━━━━━━━  
-2️⃣ SORTIES MINIMALES (OBLIGATOIRES)  
+2️⃣ VALIDATION TECHNIQUE  
 ━━━━━━━━━━━━━━━━━━━━  
-☐ RECAP_DISCUSSIONS.md mis à jour  
-☐ Liste Documents modifiés / Documents non modifiés  
-☐ Point exact de reprise complet (version/phase/module/bloc/condition)
+- Patch produit : Oui / Non  
+- lint : OK / NOK / NON LANCÉ  
+- build : OK / NOK / NON LANCÉ  
+- tests : OK / NOK / NON LANCÉ  
+- manual test : OK / NOK / NON LANCÉ
 
 ━━━━━━━━━━━━━━━━━━━━  
-3️⃣ SYNTHÈSE DOCUMENTAIRE  
+3️⃣ DOD  
 ━━━━━━━━━━━━━━━━━━━━  
-Documents modifiés + incrément :
-- STRUCTURE_PROJET.md : MINOR/PATCH (si modifié)
-- PLAN_DE_DEVELOPPEMENT.md : MINOR/PATCH  
-- ETAT_GLOBAL_PROJET.md : PATCH  
-- REGISTRE_DECISIONS.md : PATCH  
-- RECAP_DISCUSSIONS.md : PATCH  
-- (si applicable) DOCUMENT_MAITRE.md : MAJOR/MINOR  
-- (si applicable) PROTOCOLE_SESSION.md : MAJOR/MINOR  
-
-Nouvelle version officielle (par fichier) :
-- ...
+- DoD prévue : à renseigner  
+- DoD atteinte : Oui / Non  
+- Validation utilisateur : Oui / Non
 
 ━━━━━━━━━━━━━━━━━━━━  
-4️⃣ POINT EXACT DE REPRISE (OBLIGATOIRE)  
+4️⃣ IMPACT DOCUMENTAIRE  
 ━━━━━━━━━━━━━━━━━━━━  
-Version :  
-Phase :  
-Module :  
-Bloc précis :  
-Condition de validation :
+- Documents mis à jour : à renseigner  
+- Cohérence avec `DOCUMENT_CADRAGE_FONCTIONNEL.md` : Oui / Non  
+- Retour en arrière sur le cadrage produit : Oui / Non  
+- Si oui : validation explicite présente ? Oui / Non
 
 ━━━━━━━━━━━━━━━━━━━━  
-5️⃣ STATUT GLOBAL  
+5️⃣ STATUT FINAL  
 ━━━━━━━━━━━━━━━━━━━━  
-Stabilité : GREEN / YELLOW / RED  
-Impact maturité : (si évolution)  
-Freeze : Activé / Levé / Inchangé (+ raison si Activé)
+- Session clôturable : Oui / Non  
+- Prochaine étape logique : à renseigner  
+- Point restant ouvert : à renseigner
 
-━━━━━━━━━━━━━━━━━━━━  
-# SESSION-XXXX CLÔTURÉE OFFICIELLEMENT  
-━━━━━━━━━━━━━━━━━━━━
+RÈGLE FINALE  
+- Une session clôturée ne modifie pas le cadrage produit validé sans validation explicite.
+- Le futur plan de développement devra respecter :
+  - 1 session = 1 point clair
+  - 1 fonctionnalité
+  - 1 patch
+  - 1 DoD
+  - 1 validation

@@ -1,10 +1,11 @@
 # TEMPLATE_DEBUT_SESSION.md
-⚠️ OUVERTURE OFFICIELLE DE SESSION — IA  
+⚠️ OUVERTURE OFFICIELLE DE SESSION — IA
+
 Projet : Investissement  
 Sous-projet : Ambulance Manager
 
 RÈGLES DE SOURCE (NON NÉGOCIABLES)  
-- Sources autorisées : 7 documents + CODE si fourni (définition §3.2)  
+- Sources autorisées : documentation officielle du projet + CODE si fourni  
 - Les documents fournis priment sur toute mémoire interne de l’IA  
 - Si une info manque : "INFORMATION NON FOURNIE — À CONFIRMER"  
 - En cas de contradiction : CODE > DOCUMENTATION (ordre d’autorité du protocole)  
@@ -12,52 +13,37 @@ RÈGLES DE SOURCE (NON NÉGOCIABLES)
 - Validation utilisateur uniquement via : "VALIDÉ :" ou "AUTORISÉ :"
 
 PACK DOCUMENTAIRE FOURNI (OBLIGATOIRE À RENSEIGNER)  
-- DOCUMENT_MAITRE.md : vX.Y.Z (si fourni)  
-- PLAN_DE_DEVELOPPEMENT.md : vX.Y.Z  
-- ETAT_GLOBAL_PROJET.md : vX.Y.Z  
-- REGISTRE_DECISIONS.md : vX.Y.Z  
-- RECAP_DISCUSSIONS.md : vX.Y.Z (min 1 entrée, reco 3)  
-- PROTOCOLE_SESSION.md : vX.Y.Z  
-- STRUCTURE_PROJET.md : vX.Y.Z  
+- DOCUMENT_MAITRE.md : version à renseigner
+- DOCUMENT_CADRAGE_FONCTIONNEL.md : base officielle produit
+- PLAN_DE_DEVELOPPEMENT.md : version à renseigner
+- ETAT_GLOBAL_PROJET.md : version à renseigner
+- REGISTRE_DECISIONS.md : version à renseigner
+- RECAP_DISCUSSIONS.md : version à renseigner
+- STRUCTURE_PROJET.md : version à renseigner
+- SOURCES_AUTORISEES.md : version à renseigner
+- STRUCTURE_DOCS.md : version à renseigner
+- PROTOCOLE_SESSION.md : version à renseigner
 
-CODE (SI FOURNI — §3.2)  
-- Extraits collés : Oui / Non  
-- Repo accessible + commit/tag : Oui / Non  
-- Branche :  
-- Commit/Tag :
+RAPPEL PRIORITAIRE  
+- `docs/master/DOCUMENT_CADRAGE_FONCTIONNEL.md` constitue la base officielle produit.
+- Ne pas revenir sur ce cadrage sans demande explicite.
+- Le plan de développement ne doit pas être considéré comme source autonome de périmètre produit s’il contredit le cadrage validé.
 
-━━━━━━━━━━━━━━━━━━━━  
-ID SESSION  
-━━━━━━━━━━━━━━━━━━━━  
-ID SESSION : SESSION-YYYYMMDD-XX  
-Version actuelle (référence) :  
-Phase active :  
-Maturité : ALPHA / BETA / STABLE / PRODUCTION_READY  
-Stabilité : GREEN / YELLOW / RED  
-Freeze actif : Oui / Non (+ raison si Oui)
+CONTEXTE DE SESSION  
+- ID SESSION : à renseigner
+- Version cible : à renseigner
+- Phase / bloc : à renseigner
+- Objectif unique de la session : à renseigner
 
-━━━━━━━━━━━━━━━━━━━━  
-POINT EXACT DE REPRISE  
-━━━━━━━━━━━━━━━━━━━━  
-Module :  
-Bloc précis :  
-Dernière validation obtenue :  
-Condition de validation du bloc en cours :
+RÈGLE DE TRAVAIL  
+- 1 session = 1 point clair
+- 1 fonctionnalité
+- 1 patch
+- 1 DoD
+- 1 validation
 
-━━━━━━━━━━━━━━━━━━━━  
-OBJECTIF UNIQUE DE LA SESSION  
-━━━━━━━━━━━━━━━━━━━━  
-Définir un seul objectif, mesurable, lié au bloc actif.
-
-━━━━━━━━━━━━━━━━━━━━  
-VALIDATION DE LA SESSION
-━━━━━━━━━━━━━━━━━━━━  
-Validé uniquement si :
--Codage "validé"
--Test "validé"
-
-Si "Non validé" réalisé les codes (via VS Code) avec des patch que l'on met dans "./docs/patches/(numéro de bloc) et éffectuer les tests pour validé le bloc.
-
-INTERDICTION  
-- Aucune dérive hors du bloc actif.  
-- Toute décision impactante doit être enregistrée en clôture (REGISTRE_DECISIONS).  
+CONTRAINTE  
+- Ne traiter que le périmètre validé
+- Ne pas élargir le scope
+- Ne pas produire de code non demandé
+- Si un doute existe : "INFORMATION NON FOURNIE — À CONFIRMER"

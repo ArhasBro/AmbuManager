@@ -1,7 +1,7 @@
 # Ambulance Manager — REGISTRE_DECISIONS
 
 Version : V1.5.7 (MASTER)  
-Date : 07/03/2026
+Date : 09/03/2026
 
 ## Sommaire
 - [1. Rôle](#1-rôle)
@@ -53,22 +53,38 @@ Format unique attendu :
   - Pas de page historique globale au premier bloc 4.7.2.
   - Affichage UI minimal read-only de l’historique du run courant dans `/planning`.
   - Informations exposées : `createdAt`, `action`, `summary`, `actorUser`, `payload`, tri décroissant, limite courte.
+- DEC-20260309-01 — Cadrage fonctionnel VALIDÉ comme base officielle produit.
+  - Le document `docs/master/DOCUMENT_CADRAGE_FONCTIONNEL.md` devient la base officielle produit.
+  - Ce document est figé et ne doit pas être modifié sans validation explicite.
+  - Pour la suite, ne pas revenir sur ce cadrage sans demande explicite.
+  - La prochaine étape attendue est la refonte du plan de développement.
+  - Cette refonte devra respecter strictement :
+    - 1 session = 1 point clair
+    - 1 fonctionnalité
+    - 1 patch
+    - 1 DoD
+    - 1 validation
 
 ## 4. Décisions en attente
 - PEND-20260306-01 — Suite 4.7 hors 4.7.2 : périmètre exact à confirmer.
 - Historique/versioning planning global au-delà du run courant : niveau minimal à définir.
 - Flotte & conformité : périmètre data + priorisation.
+- Refonte complète de `docs/master/PLAN_DE_DEVELOPPEMENT.md` : à faire plus tard, sur la base du cadrage validé.
+- Les points restant réellement ouverts du cadrage fonctionnel demeurent portés par `docs/master/DOCUMENT_CADRAGE_FONCTIONNEL.md`.
 
 ## 5. Alignement statuts (référence ETAT_GLOBAL_PROJET)
 - 4.4 : VALIDÉ (DoD cochée, preuves `docs/sessions/SESSION-20260304-01/EVIDENCES.md`).
 - 4.5 : VALIDÉ.
 - 4.6 : VALIDÉ (session `docs/sessions/SESSION-20260305-01/EVIDENCES.md`).
 - 4.7 : EN COURS (4.7.1 et 4.7.2 validés, sessions `docs/sessions/SESSION-20260306-01/EVIDENCES.md` et `docs/sessions/SESSION-20260307-01/EVIDENCES.md`).
+- Le cadrage fonctionnel est VALIDÉ comme base officielle produit.
+- La prochaine étape attendue est la refonte du plan de développement.
 - 5.0 : À FAIRE.
 
 ## 6. Gouvernance de mise à jour
 - Mettre à jour `ETAT_GLOBAL_PROJET.md` puis aligner les autres.
 - Toute info non prouvée : **À CONFIRMER**.
+- `docs/master/DOCUMENT_CADRAGE_FONCTIONNEL.md` est figé et ne doit pas être modifié sans validation explicite.
 
 ## Vérifications par le code (ZIP)
 - Matching preview/apply + UI présents (4.6) :
