@@ -62,7 +62,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |       REFONTE.md
 |       
 +---sessions
-|   +---ALPHA
+|   +---1-ALPHA
 |   |   +---BLOC_A1
 |   |   |   \---SESSION-20260310-01_A1_AUTH-01
 |   |   |           EVIDENCES.md
@@ -83,6 +83,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   +---BLOC_A7
 |   |   +---BLOC_A8
 |   |   \---BLOC_A9
+|   +---2-BETA
 |   +---ANCIEN_FORMAT_SESSION
 |   |   +---SESSION-20260304-01
 |   |   |       EVIDENCES.md
@@ -125,7 +126,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |           RESULTATS.md
 |   |           SESSION.md
 |   |           
-|   +---BETA
 |   \---SESSION-YYYYMMDD-XX
 |           EVIDENCES.md
 |           FIN_SESSION.md
