@@ -16,7 +16,7 @@ RAPPEL DOCUMENTAIRE
 ━━━━━━━━━━━━━━━━━━━━  
 ID SESSION + RÉFÉRENCE  
 ━━━━━━━━━━━━━━━━━━━━  
-ID SESSION : SESSION-20260310-01_BLOC-01A1_AUTH-01  
+ID SESSION : SESSION-20260310-01_A1_AUTH-01  
 Version actuelle (référence) : V1.5.7 (MASTER)  
 Phase active : BLOC A1 — Accès, Auth, Multi-tenant, Permissions, API  
 Maturité : ALPHA  
@@ -74,7 +74,10 @@ CODE (SI FOURNI)
 - Point restant ouvert : mot de passe initial côté produit et réinitialisation de mot de passe non prouvés dans l’existant inspecté
 
 VERDICT FINAL  
-- **incomplet**
+VALIDÉ :
+Session AUTH-01 validée
+Verdict : incomplet
+Date validation : 10/03/2026
 
 RÈGLE FINALE  
 - Une session clôturée ne modifie pas le cadrage produit validé sans validation explicite.

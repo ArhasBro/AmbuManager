@@ -1864,6 +1864,27 @@ C:.
 |   |       REFONTE.md
 |   |       
 |   +---sessions
+|   |   +---ALPHA
+|   |   |   +---BLOC_A1
+|   |   |   |   \---SESSION-20260310-01_A1_AUTH-01
+|   |   |   |           EVIDENCES.md
+|   |   |   |           FIN_SESSION.md
+|   |   |   |           NOTES.md
+|   |   |   |           RESULTATS.md
+|   |   |   |           SESSION.md
+|   |   |   |           
+|   |   |   +---BLOC_A10
+|   |   |   +---BLOC_A11
+|   |   |   +---BLOC_A12
+|   |   |   +---BLOC_A13
+|   |   |   +---BLOC_A2
+|   |   |   +---BLOC_A3
+|   |   |   +---BLOC_A4
+|   |   |   +---BLOC_A5
+|   |   |   +---BLOC_A6
+|   |   |   +---BLOC_A7
+|   |   |   +---BLOC_A8
+|   |   |   \---BLOC_A9
 |   |   +---ANCIEN_FORMAT_SESSION
 |   |   |   +---SESSION-20260304-01
 |   |   |   |       EVIDENCES.md
@@ -1906,13 +1927,7 @@ C:.
 |   |   |           RESULTATS.md
 |   |   |           SESSION.md
 |   |   |           
-|   |   +---SESSION-20260310-01_BLOC-01A1_AUTH-01
-|   |   |       EVIDENCES.md
-|   |   |       FIN_SESSION.md
-|   |   |       NOTES.md
-|   |   |       RESULTATS.md
-|   |   |       SESSION.md
-|   |   |       
+|   |   +---BETA
 |   |   \---SESSION-YYYYMMDD-XX
 |   |           EVIDENCES.md
 |   |           FIN_SESSION.md
