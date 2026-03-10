@@ -62,41 +62,49 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |       REFONTE.md
 |       
 +---sessions
-|   +---SESSION-20260304-01
-|   |       EVIDENCES.md
-|   |       FIN_SESSION.md
-|   |       NOTES.md
-|   |       RESULTATS.md
-|   |       SESSION.md
-|   |       
-|   +---SESSION-20260305-01
-|   |       EVIDENCES.md
-|   |       FIN_SESSION.md
-|   |       NOTES.md
-|   |       RESULTATS.md
-|   |       SESSION.md
-|   |       
-|   +---SESSION-20260305-02 (REFONTE)
-|   |       EVIDENCES.md
-|   |       NOTES.md
-|   |       RESULTATS.md
-|   |       SESSION.md
-|   |       
-|   +---SESSION-20260306-01
-|   |       EVIDENCES.md
-|   |       FIN_SESSION.md
-|   |       NOTES.md
-|   |       RESULTATS.md
-|   |       SESSION.md
-|   |       
-|   +---SESSION-20260307-01
-|   |       EVIDENCES.md
-|   |       FIN_SESSION.md
-|   |       NOTES.md
-|   |       RESULTATS.md
-|   |       SESSION.md
-|   |       
-|   +---SESSION-20260307-02
+|   +---ANCIEN_FORMAT_SESSION
+|   |   +---SESSION-20260304-01
+|   |   |       EVIDENCES.md
+|   |   |       FIN_SESSION.md
+|   |   |       NOTES.md
+|   |   |       RESULTATS.md
+|   |   |       SESSION.md
+|   |   |       
+|   |   +---SESSION-20260305-01
+|   |   |       EVIDENCES.md
+|   |   |       FIN_SESSION.md
+|   |   |       NOTES.md
+|   |   |       RESULTATS.md
+|   |   |       SESSION.md
+|   |   |       
+|   |   +---SESSION-20260305-02 (REFONTE)
+|   |   |       EVIDENCES.md
+|   |   |       NOTES.md
+|   |   |       RESULTATS.md
+|   |   |       SESSION.md
+|   |   |       
+|   |   +---SESSION-20260306-01
+|   |   |       EVIDENCES.md
+|   |   |       FIN_SESSION.md
+|   |   |       NOTES.md
+|   |   |       RESULTATS.md
+|   |   |       SESSION.md
+|   |   |       
+|   |   +---SESSION-20260307-01
+|   |   |       EVIDENCES.md
+|   |   |       FIN_SESSION.md
+|   |   |       NOTES.md
+|   |   |       RESULTATS.md
+|   |   |       SESSION.md
+|   |   |       
+|   |   \---SESSION-20260307-02
+|   |           EVIDENCES.md
+|   |           FIN_SESSION.md
+|   |           NOTES.md
+|   |           RESULTATS.md
+|   |           SESSION.md
+|   |           
+|   +---SESSION-20260310-01_BLOC-01A1_AUTH-01
 |   |       EVIDENCES.md
 |   |       FIN_SESSION.md
 |   |       NOTES.md
