@@ -19,45 +19,61 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 +---patches
 |   |   README.md
 |   |   
-|   +---4.4
-|   |       README.md
-|   |       SESSION-20260304-01_4.4_rbac-seed-dbreset.diff
-|   |       SESSION-20260304-01__4.4__cloture-docs.diff
-|   |       SESSION-20260304-01__4.4__ui-autoschedule-buttons.diff
-|   |       
-|   +---4.6
-|   |       README.md
-|   |       SESSION-20260305-01__4.6__planning-quality-score-v2.diff
-|   |       SESSION-20260305-01__4.6__planning-quality-score-v3.diff
-|   |       SESSION-20260305-01__4.6__planning-quality-score_v1.diff
-|   |       
-|   +---4.7
-|   |   |   README.md
-|   |   |   
-|   |   +---4.7.1
-|   |   |       README.md
-|   |   |       SESSION-20260306-01__4.7.1-01__audit-infra.diff
-|   |   |       SESSION-20260306-01__4.7.1-02__audit-run-create.diff
-|   |   |       SESSION-20260306-01__4.7.1-03__audit-run-status.diff
-|   |   |       SESSION-20260306-01__4.7.1-04__audit-match-apply.diff
-|   |   |       SESSION-20260306-01__4.7.1-05__audit-manual-assignments.diff
-|   |   |       SESSION-20260306-01__4.7.1-06__cloture-docs.diff
-|   |   |       
-|   |   \---4.7.2
-|   |           README.md
-|   |           SESSION-20260307-01__4.7.2-01__run-audit-read-api.diff
-|   |           SESSION-20260307-01__4.7.2-02__run-audit-read-ui.diff
-|   |           SESSION-20260307-01__4.7.2-03__cloture-docs.diff
-|   |           
-|   \---general
-|           PATCH_1_CORE_SECURITE.diff
-|           PATCH_2_PERMISSIONS_MIDDLEWARE.diff
-|           PATCH_3B_DOCS_COMPAT.diff
-|           PATCH_4_TECHNIQUE_FINAL.diff
-|           PATCH_5A_ROUTE_ONLY.diff
-|           PATCH_5B_README_COMPAT.diff
-|           README.md
-|           
+|   +---1-ALPHA
+|   |   +---BLOC_A1
+|   |   +---BLOC_A10
+|   |   +---BLOC_A11
+|   |   +---BLOC_A12
+|   |   +---BLOC_A13
+|   |   +---BLOC_A2
+|   |   +---BLOC_A3
+|   |   +---BLOC_A4
+|   |   +---BLOC_A5
+|   |   +---BLOC_A6
+|   |   +---BLOC_A7
+|   |   +---BLOC_A8
+|   |   \---BLOC_A9
+|   +---2-BETA
+|   \---ANCIENS_PATCHS
+|       +---4.4
+|       |       README.md
+|       |       SESSION-20260304-01_4.4_rbac-seed-dbreset.diff
+|       |       SESSION-20260304-01__4.4__cloture-docs.diff
+|       |       SESSION-20260304-01__4.4__ui-autoschedule-buttons.diff
+|       |       
+|       +---4.6
+|       |       README.md
+|       |       SESSION-20260305-01__4.6__planning-quality-score-v2.diff
+|       |       SESSION-20260305-01__4.6__planning-quality-score-v3.diff
+|       |       SESSION-20260305-01__4.6__planning-quality-score_v1.diff
+|       |       
+|       +---4.7
+|       |   |   README.md
+|       |   |   
+|       |   +---4.7.1
+|       |   |       README.md
+|       |   |       SESSION-20260306-01__4.7.1-01__audit-infra.diff
+|       |   |       SESSION-20260306-01__4.7.1-02__audit-run-create.diff
+|       |   |       SESSION-20260306-01__4.7.1-03__audit-run-status.diff
+|       |   |       SESSION-20260306-01__4.7.1-04__audit-match-apply.diff
+|       |   |       SESSION-20260306-01__4.7.1-05__audit-manual-assignments.diff
+|       |   |       SESSION-20260306-01__4.7.1-06__cloture-docs.diff
+|       |   |       
+|       |   \---4.7.2
+|       |           README.md
+|       |           SESSION-20260307-01__4.7.2-01__run-audit-read-api.diff
+|       |           SESSION-20260307-01__4.7.2-02__run-audit-read-ui.diff
+|       |           SESSION-20260307-01__4.7.2-03__cloture-docs.diff
+|       |           
+|       \---general
+|               PATCH_1_CORE_SECURITE.diff
+|               PATCH_2_PERMISSIONS_MIDDLEWARE.diff
+|               PATCH_3B_DOCS_COMPAT.diff
+|               PATCH_4_TECHNIQUE_FINAL.diff
+|               PATCH_5A_ROUTE_ONLY.diff
+|               PATCH_5B_README_COMPAT.diff
+|               README.md
+|               
 +---REFONTE
 |       REFONTE.md
 |       
