@@ -50,6 +50,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |       |       README_PATCH.md
 |   |       |       
 |   |       \---SESSION-20260312-08_A1_TENANT-03
+|   |               PATCH__SESSION-20260312-08_A1_TENANT-03.diff
 |   |               README_PATCH.md
 |   |               
 |   \---ANCIENS_PATCHS
