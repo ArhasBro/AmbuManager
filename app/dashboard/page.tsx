@@ -1,4 +1,5 @@
 import { getServerSession } from "next-auth/next";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
 import LogoutButton from "./logout-button";
@@ -14,6 +15,12 @@ export default async function DashboardPage() {
         <h1 style={{ margin: 0 }}>Dashboard</h1>
         <LogoutButton />
       </div>
+
+      {(session.user.role === "ADMIN" || session.user.role === "GERANT") ? (
+        <div style={{ display: "flex", gap: 12 }}>
+          <Link href="/users">Réinitialisation mot de passe</Link>
+        </div>
+      ) : null}
 
       {process.env.NODE_ENV !== "production" ? (
         <div style={{ padding: 12, border: "1px solid #333", borderRadius: 8 }}>

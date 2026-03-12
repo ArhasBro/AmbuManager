@@ -1354,11 +1354,23 @@ C:.
 |   |   |   |   |   |   route.js.nft.json
 |   |   |   |   |   |   route_client-reference-manifest.js
 |   |   |   |   |   |   
-|   |   |   |   |   \---route
-|   |   |   |   |           app-paths-manifest.json
-|   |   |   |   |           build-manifest.json
-|   |   |   |   |           server-reference-manifest.json
-|   |   |   |   |           
+|   |   |   |   |   +---route
+|   |   |   |   |   |       app-paths-manifest.json
+|   |   |   |   |   |       build-manifest.json
+|   |   |   |   |   |       server-reference-manifest.json
+|   |   |   |   |   |       
+|   |   |   |   |   \---[id]
+|   |   |   |   |       \---reset-password
+|   |   |   |   |           |   route.js
+|   |   |   |   |           |   route.js.map
+|   |   |   |   |           |   route.js.nft.json
+|   |   |   |   |           |   route_client-reference-manifest.js
+|   |   |   |   |           |   
+|   |   |   |   |           \---route
+|   |   |   |   |                   app-paths-manifest.json
+|   |   |   |   |                   build-manifest.json
+|   |   |   |   |                   server-reference-manifest.json
+|   |   |   |   |                   
 |   |   |   |   \---vehicles
 |   |   |   |       |   route.js
 |   |   |   |       |   route.js.map
@@ -1451,6 +1463,19 @@ C:.
 |   |   |   |   |   
 |   |   |   |   \---planning
 |   |   |   |           __PAGE__.segment.rsc
+|   |   |   |           
+|   |   |   +---users
+|   |   |   |   |   page.js
+|   |   |   |   |   page.js.map
+|   |   |   |   |   page.js.nft.json
+|   |   |   |   |   page_client-reference-manifest.js
+|   |   |   |   |   
+|   |   |   |   \---page
+|   |   |   |           app-paths-manifest.json
+|   |   |   |           build-manifest.json
+|   |   |   |           next-font-manifest.json
+|   |   |   |           react-loadable-manifest.json
+|   |   |   |           server-reference-manifest.json
 |   |   |   |           
 |   |   |   +---vehicles
 |   |   |   |   |   page.js
@@ -1563,6 +1588,8 @@ C:.
 |   |   |   |   [root-of-the-server]__f10b53bb._.js.map
 |   |   |   |   [root-of-the-server]__f42cba32._.js
 |   |   |   |   [root-of-the-server]__f42cba32._.js.map
+|   |   |   |   [root-of-the-server]__fd390e3d._.js
+|   |   |   |   [root-of-the-server]__fd390e3d._.js.map
 |   |   |   |   [root-of-the-server]__ffe224e8._.js
 |   |   |   |   [root-of-the-server]__ffe224e8._.js.map
 |   |   |   |   [turbopack]_runtime.js
@@ -1597,6 +1624,8 @@ C:.
 |   |   |   |   _next-internal_server_app_api_planning_shifts_[id]_assign_route_actions_75edfcab.js.map
 |   |   |   |   _next-internal_server_app_api_users_route_actions_4b9121e3.js
 |   |   |   |   _next-internal_server_app_api_users_route_actions_4b9121e3.js.map
+|   |   |   |   _next-internal_server_app_api_users_[id]_reset-password_route_actions_d12d905c.js
+|   |   |   |   _next-internal_server_app_api_users_[id]_reset-password_route_actions_d12d905c.js.map
 |   |   |   |   _next-internal_server_app_api_vehicles_route_actions_7bc5da8c.js
 |   |   |   |   _next-internal_server_app_api_vehicles_route_actions_7bc5da8c.js.map
 |   |   |   |   _next-internal_server_app_favicon_ico_route_actions_353150a5.js
@@ -1607,18 +1636,18 @@ C:.
 |   |   |           app_b9b1292a._.js.map
 |   |   |           app_cd194de2._.js
 |   |   |           app_cd194de2._.js.map
-|   |   |           app_dashboard_logout-button_tsx_efb5e489._.js
-|   |   |           app_dashboard_logout-button_tsx_efb5e489._.js.map
 |   |   |           app_planning_planning-client_tsx_ec2e83fd._.js
 |   |   |           app_planning_planning-client_tsx_ec2e83fd._.js.map
 |   |   |           app_vehicles_vehicles-client_tsx_94295d31._.js
 |   |   |           app_vehicles_vehicles-client_tsx_94295d31._.js.map
 |   |   |           node_modules_eee573be._.js
 |   |   |           node_modules_eee573be._.js.map
-|   |   |           node_modules_next_dist_4c9b09d4._.js
-|   |   |           node_modules_next_dist_4c9b09d4._.js.map
+|   |   |           node_modules_next_dist_27457240._.js
+|   |   |           node_modules_next_dist_27457240._.js.map
 |   |   |           node_modules_next_dist_6607e1c8._.js
 |   |   |           node_modules_next_dist_6607e1c8._.js.map
+|   |   |           node_modules_next_dist_852965c2._.js
+|   |   |           node_modules_next_dist_852965c2._.js.map
 |   |   |           node_modules_next_dist_9764e5f5._.js
 |   |   |           node_modules_next_dist_9764e5f5._.js.map
 |   |   |           node_modules_next_dist_client_components_9774470f._.js
@@ -1635,38 +1664,42 @@ C:.
 |   |   |           node_modules_next_dist_esm_build_templates_app-page_b8e1111a.js.map
 |   |   |           node_modules_next_dist_f21d913a._.js
 |   |   |           node_modules_next_dist_f21d913a._.js.map
-|   |   |           [root-of-the-server]__01e8c8d3._.js
-|   |   |           [root-of-the-server]__01e8c8d3._.js.map
+|   |   |           [root-of-the-server]__0d5ae7ad._.js
+|   |   |           [root-of-the-server]__0d5ae7ad._.js.map
+|   |   |           [root-of-the-server]__1470ccec._.js
+|   |   |           [root-of-the-server]__1470ccec._.js.map
 |   |   |           [root-of-the-server]__1beaccf2._.js
 |   |   |           [root-of-the-server]__1beaccf2._.js.map
-|   |   |           [root-of-the-server]__248c6ef7._.js
-|   |   |           [root-of-the-server]__248c6ef7._.js.map
 |   |   |           [root-of-the-server]__296a25b5._.js
 |   |   |           [root-of-the-server]__296a25b5._.js.map
-|   |   |           [root-of-the-server]__3a58e0e5._.js
-|   |   |           [root-of-the-server]__3a58e0e5._.js.map
-|   |   |           [root-of-the-server]__5dc99069._.js
-|   |   |           [root-of-the-server]__5dc99069._.js.map
+|   |   |           [root-of-the-server]__36ebbb9f._.js
+|   |   |           [root-of-the-server]__36ebbb9f._.js.map
+|   |   |           [root-of-the-server]__5130829c._.js
+|   |   |           [root-of-the-server]__5130829c._.js.map
 |   |   |           [root-of-the-server]__76e5f64f._.js
 |   |   |           [root-of-the-server]__76e5f64f._.js.map
-|   |   |           [root-of-the-server]__7882e3d9._.js
-|   |   |           [root-of-the-server]__7882e3d9._.js.map
 |   |   |           [root-of-the-server]__7f1adca8._.js
 |   |   |           [root-of-the-server]__7f1adca8._.js.map
 |   |   |           [root-of-the-server]__87883845._.js
 |   |   |           [root-of-the-server]__87883845._.js.map
+|   |   |           [root-of-the-server]__9ae77970._.js
+|   |   |           [root-of-the-server]__9ae77970._.js.map
+|   |   |           [root-of-the-server]__9d5e3ced._.js
+|   |   |           [root-of-the-server]__9d5e3ced._.js.map
 |   |   |           [root-of-the-server]__a457c799._.js
 |   |   |           [root-of-the-server]__a457c799._.js.map
 |   |   |           [root-of-the-server]__b9356576._.js
 |   |   |           [root-of-the-server]__b9356576._.js.map
-|   |   |           [root-of-the-server]__c220fe54._.js
-|   |   |           [root-of-the-server]__c220fe54._.js.map
-|   |   |           [root-of-the-server]__cc0705de._.js
-|   |   |           [root-of-the-server]__cc0705de._.js.map
+|   |   |           [root-of-the-server]__e0a07927._.js
+|   |   |           [root-of-the-server]__e0a07927._.js.map
 |   |   |           [root-of-the-server]__e1b2e646._.js
 |   |   |           [root-of-the-server]__e1b2e646._.js.map
+|   |   |           [root-of-the-server]__e5c1a29b._.js
+|   |   |           [root-of-the-server]__e5c1a29b._.js.map
 |   |   |           [turbopack]_runtime.js
 |   |   |           [turbopack]_runtime.js.map
+|   |   |           _05e07409._.js
+|   |   |           _05e07409._.js.map
 |   |   |           _27f38564._.js
 |   |   |           _27f38564._.js.map
 |   |   |           _2c715f22._.js
@@ -1679,10 +1712,14 @@ C:.
 |   |   |           _5f02a5a9._.js.map
 |   |   |           _6139f1ce._.js
 |   |   |           _6139f1ce._.js.map
+|   |   |           _a70391a9._.js
+|   |   |           _a70391a9._.js.map
 |   |   |           _b2ebc7ca._.js
 |   |   |           _b2ebc7ca._.js.map
-|   |   |           _c4e666cd._.js
-|   |   |           _c4e666cd._.js.map
+|   |   |           _c23fb881._.js
+|   |   |           _c23fb881._.js.map
+|   |   |           _ffa8fc97._.js
+|   |   |           _ffa8fc97._.js.map
 |   |   |           _next-internal_server_app_dashboard_page_actions_7f01ccec.js
 |   |   |           _next-internal_server_app_dashboard_page_actions_7f01ccec.js.map
 |   |   |           _next-internal_server_app_login_page_actions_0e9aafc0.js
@@ -1691,6 +1728,8 @@ C:.
 |   |   |           _next-internal_server_app_page_actions_39d4fc33.js.map
 |   |   |           _next-internal_server_app_planning_page_actions_09255cef.js
 |   |   |           _next-internal_server_app_planning_page_actions_09255cef.js.map
+|   |   |           _next-internal_server_app_users_page_actions_0d09aa8d.js
+|   |   |           _next-internal_server_app_users_page_actions_0d09aa8d.js.map
 |   |   |           _next-internal_server_app_vehicles_page_actions_11f14ce8.js
 |   |   |           _next-internal_server_app_vehicles_page_actions_11f14ce8.js.map
 |   |   |           _next-internal_server_app__global-error_page_actions_75761787.js
@@ -1706,26 +1745,28 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
-|   |   +---bsDOyDGhfcKOPGuT4uv6x
+|   |   +---bqGYi6ezKSHHmHW4okdHi
 |   |   |       _buildManifest.js
 |   |   |       _clientMiddlewareManifest.json
 |   |   |       _ssgManifest.js
 |   |   |       
 |   |   +---chunks
-|   |   |       0d1ccd4d8aeb0aa9.js
-|   |   |       1627bf2f54f2038d.js
-|   |   |       3c27ebee76d65f87.js
+|   |   |       1687260e4d8b05d6.js
 |   |   |       419287bb501c2fe7.js
 |   |   |       4524ccf59c8b171b.js
+|   |   |       642a00754c8aebb8.js
 |   |   |       672c0168d7981883.js
 |   |   |       7570e90fe76a1747.css
+|   |   |       82abf2d65f5428ae.js
 |   |   |       899b7782e7cb92a1.js
-|   |   |       97cf3e8820d09e0a.js
-|   |   |       a3887068798e60b4.js
+|   |   |       96a8fcc9ec5b00e6.js
 |   |   |       a6dad97d9634a72d.js
 |   |   |       a6dad97d9634a72d.js.map
+|   |   |       ae064a76748670f1.js
+|   |   |       af7027598a07baa5.js
 |   |   |       cdb83a758231f045.js
-|   |   |       turbopack-41f3830d49930b81.js
+|   |   |       ff1a16fafef87110.js
+|   |   |       turbopack-c4abe13a78f6dadb.js
 |   |   |       
 |   |   \---media
 |   |           favicon.0b3bf435.ico
@@ -1791,8 +1832,12 @@ C:.
 |   |   |                   route.ts
 |   |   |                   
 |   |   +---users
-|   |   |       route.ts
-|   |   |       
+|   |   |   |   route.ts
+|   |   |   |   
+|   |   |   \---[id]
+|   |   |       \---reset-password
+|   |   |               route.ts
+|   |   |               
 |   |   \---vehicles
 |   |           route.ts
 |   |           
@@ -1806,6 +1851,10 @@ C:.
 |   +---planning
 |   |       page.tsx
 |   |       planning-client.tsx
+|   |       
+|   +---users
+|   |       page.tsx
+|   |       reset-password-client.tsx
 |   |       
 |   \---vehicles
 |           add-vehicle-form.tsx
@@ -1848,6 +1897,7 @@ C:.
 |   |   |       |       NO_PATCH.md
 |   |   |       |       
 |   |   |       \---SESSION-20260312-04_A1_AUTH-05
+|   |   |               PATCH__SESSION-20260312-04_A1_AUTH-05.diff
 |   |   |               README_PATCH.md
 |   |   |               
 |   |   \---ANCIENS_PATCHS

@@ -36,6 +36,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |       |       NO_PATCH.md
 |   |       |       
 |   |       \---SESSION-20260312-04_A1_AUTH-05
+|   |               PATCH__SESSION-20260312-04_A1_AUTH-05.diff
 |   |               README_PATCH.md
 |   |               
 |   \---ANCIENS_PATCHS
