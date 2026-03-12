@@ -351,6 +351,16 @@ C:.
 |   |   |               00000279.meta
 |   |   |               00000280.meta
 |   |   |               00000281.meta
+|   |   |               00000282.sst
+|   |   |               00000283.sst
+|   |   |               00000284.sst
+|   |   |               00000285.sst
+|   |   |               00000286.sst
+|   |   |               00000287.meta
+|   |   |               00000288.meta
+|   |   |               00000289.meta
+|   |   |               00000290.meta
+|   |   |               00000291.meta
 |   |   |               CURRENT
 |   |   |               LOG
 |   |   |               
@@ -1696,7 +1706,7 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
-|   |   +---0O6w2b_KVfKxH3yYr6qEM
+|   |   +---bsDOyDGhfcKOPGuT4uv6x
 |   |   |       _buildManifest.js
 |   |   |       _clientMiddlewareManifest.json
 |   |   |       _ssgManifest.js
@@ -1708,13 +1718,13 @@ C:.
 |   |   |       419287bb501c2fe7.js
 |   |   |       4524ccf59c8b171b.js
 |   |   |       672c0168d7981883.js
-|   |   |       81ba125f9abc1724.css
+|   |   |       7570e90fe76a1747.css
 |   |   |       899b7782e7cb92a1.js
 |   |   |       97cf3e8820d09e0a.js
 |   |   |       a3887068798e60b4.js
 |   |   |       a6dad97d9634a72d.js
 |   |   |       a6dad97d9634a72d.js.map
-|   |   |       ca2b0abc1f2c3999.js
+|   |   |       cdb83a758231f045.js
 |   |   |       turbopack-41f3830d49930b81.js
 |   |   |       
 |   |   \---media
@@ -1823,7 +1833,15 @@ C:.
 |   |   |   
 |   |   +---1-ALPHA
 |   |   |   \---BLOC_A1
-|   |   |       \---SESSION-20260310-01_A1_AUTH-01
+|   |   |       +---SESSION-20260310-01_A1_AUTH-01
+|   |   |       |       NO_PATCH.md
+|   |   |       |       
+|   |   |       +---SESSION-20260312-01_A1_AUTH-02
+|   |   |       |       PATCH__SESSION-20260312-01_A1_AUTH-02.diff
+|   |   |       |       PATCH__SESSION-20260312-01_A1_AUTH-02_BUILD-FIX.diff
+|   |   |       |       README_PATCH.md
+|   |   |       |       
+|   |   |       \---SESSION-20260312-02_A1_AUTH-03
 |   |   |               NO_PATCH.md
 |   |   |               
 |   |   \---ANCIENS_PATCHS
@@ -1874,7 +1892,21 @@ C:.
 |   |   |   
 |   |   +---1-ALPHA
 |   |   |   \---BLOC_A1
-|   |   |       \---SESSION-20260310-01_A1_AUTH-01
+|   |   |       +---SESSION-20260310-01_A1_AUTH-01
+|   |   |       |       EVIDENCES.md
+|   |   |       |       FIN_SESSION.md
+|   |   |       |       NOTES.md
+|   |   |       |       RESULTATS.md
+|   |   |       |       SESSION.md
+|   |   |       |       
+|   |   |       +---SESSION-20260312-01_A1_AUTH-02
+|   |   |       |       EVIDENCES.md
+|   |   |       |       FIN_SESSION.md
+|   |   |       |       NOTES.md
+|   |   |       |       RESULTATS.md
+|   |   |       |       SESSION.md
+|   |   |       |       
+|   |   |       \---SESSION-20260312-02_A1_AUTH-03
 |   |   |               EVIDENCES.md
 |   |   |               FIN_SESSION.md
 |   |   |               NOTES.md

@@ -21,7 +21,15 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   
 |   +---1-ALPHA
 |   |   \---BLOC_A1
-|   |       \---SESSION-20260310-01_A1_AUTH-01
+|   |       +---SESSION-20260310-01_A1_AUTH-01
+|   |       |       NO_PATCH.md
+|   |       |       
+|   |       +---SESSION-20260312-01_A1_AUTH-02
+|   |       |       PATCH__SESSION-20260312-01_A1_AUTH-02.diff
+|   |       |       PATCH__SESSION-20260312-01_A1_AUTH-02_BUILD-FIX.diff
+|   |       |       README_PATCH.md
+|   |       |       
+|   |       \---SESSION-20260312-02_A1_AUTH-03
 |   |               NO_PATCH.md
 |   |               
 |   \---ANCIENS_PATCHS
@@ -72,7 +80,21 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   
 |   +---1-ALPHA
 |   |   \---BLOC_A1
-|   |       \---SESSION-20260310-01_A1_AUTH-01
+|   |       +---SESSION-20260310-01_A1_AUTH-01
+|   |       |       EVIDENCES.md
+|   |       |       FIN_SESSION.md
+|   |       |       NOTES.md
+|   |       |       RESULTATS.md
+|   |       |       SESSION.md
+|   |       |       
+|   |       +---SESSION-20260312-01_A1_AUTH-02
+|   |       |       EVIDENCES.md
+|   |       |       FIN_SESSION.md
+|   |       |       NOTES.md
+|   |       |       RESULTATS.md
+|   |       |       SESSION.md
+|   |       |       
+|   |       \---SESSION-20260312-02_A1_AUTH-03
 |   |               EVIDENCES.md
 |   |               FIN_SESSION.md
 |   |               NOTES.md
