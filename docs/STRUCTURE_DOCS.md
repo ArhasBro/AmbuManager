@@ -29,8 +29,11 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |       |       PATCH__SESSION-20260312-01_A1_AUTH-02_BUILD-FIX.diff
 |   |       |       README_PATCH.md
 |   |       |       
-|   |       \---SESSION-20260312-02_A1_AUTH-03
-|   |               NO_PATCH.md
+|   |       +---SESSION-20260312-02_A1_AUTH-03
+|   |       |       NO_PATCH.md
+|   |       |       
+|   |       \---SESSION-20260312-03_A1_AUTH-04
+|   |               README_PATCH.md
 |   |               
 |   \---ANCIENS_PATCHS
 |       +---4.4
@@ -94,7 +97,14 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |       |       RESULTATS.md
 |   |       |       SESSION.md
 |   |       |       
-|   |       \---SESSION-20260312-02_A1_AUTH-03
+|   |       +---SESSION-20260312-02_A1_AUTH-03
+|   |       |       EVIDENCES.md
+|   |       |       FIN_SESSION.md
+|   |       |       NOTES.md
+|   |       |       RESULTATS.md
+|   |       |       SESSION.md
+|   |       |       
+|   |       \---SESSION-20260312-03_A1_AUTH-04
 |   |               EVIDENCES.md
 |   |               FIN_SESSION.md
 |   |               NOTES.md

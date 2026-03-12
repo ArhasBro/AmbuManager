@@ -16,7 +16,7 @@ git status
 
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 Unblock-File -Path .\create_session.ps1
-.\create_session.ps1 -Stage "1-ALPHA" -Block "A1" -SessionCode "AUTH-03" -Type "VALIDATION" -Title "Vérification et validation de la session enrichie (`role`, `companyId`)"
+.\create_session.ps1 -Stage "1-ALPHA" -Block "A1" -SessionCode "AUTH-04" -Type "COMPLETION" -Title "Création/validation du mot de passe initial côté produit"
 -Satge = 1-ALPHA / 2-BETA
 -Block = A...
 -SessionCode = AUTH / TENANT / RBAC / API....

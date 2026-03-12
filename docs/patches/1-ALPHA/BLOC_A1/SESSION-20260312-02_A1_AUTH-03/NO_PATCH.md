@@ -6,5 +6,6 @@ Type : VALIDATION
 
 Raison :
 - Session documentaire de type VALIDATION.
-- Aucun patch officiel a produire pour cette session.
-- Le dossier patch reste present pour conserver le miroir avec docs/sessions.
+- Aucune correction code autorisée dans AUTH-03.
+- Aucune non-conformité n’est prouvée sur le périmètre `session enrichie / role / companyId`.
+- Aucun patch officiel à produire pour cette session.
