@@ -11,3 +11,15 @@ INFORMATION NON FOURNIE — À CONFIRMER
 ## Contexte
 
 INFORMATION NON FOURNIE — À CONFIRMER
+
+## Objectif de la session
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## Périmètre exact traité
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## Résultat synthétique de session
+
+INFORMATION NON FOURNIE — À CONFIRMER

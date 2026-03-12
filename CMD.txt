@@ -14,6 +14,12 @@ git push
 git status
 
 .\create_session.ps1
+.\create_session.ps1 -Stage "1-ALPHA" -Block "A1" -SessionCode "AUTH-02" -Type "AUDIT" -Title "Audit de la cohérence de la session auth"
+-Satge = 1-ALPHA / 2-BETA
+-Block = A...
+-SessionCode = AUTH / TENANT / RBAC / API....
+-Type = AUDIT / CORRECTION / VALIDATION / COMPLÉTION
+-Title = .........
 
 npm run build
 
