@@ -1,0 +1,33 @@
+diff --git a/app/login/page.tsx b/app/login/page.tsx
+--- a/app/login/page.tsx
++++ b/app/login/page.tsx
+@@ -1,7 +1,7 @@
+ "use client";
+ 
+ import { signIn, useSession } from "next-auth/react";
+-import { useEffect, useState } from "react";
++import { Suspense, useEffect, useState } from "react";
+ import { useRouter, useSearchParams } from "next/navigation";
+ 
+ const DEFAULT_LOGIN_REDIRECT = "/dashboard";
+@@ -35,7 +35,7 @@
+   return fallback;
+ }
+ 
+-export default function LoginPage() {
++function LoginPageContent() {
+   const router = useRouter();
+   const searchParams = useSearchParams();
+   const { status } = useSession();
+@@ -112,3 +112,11 @@
+     </div>
+   );
+ }
++
++export default function LoginPage() {
++  return (
++    <Suspense fallback={<div style={{ padding: 16 }}>Chargement...</div>}>
++      <LoginPageContent />
++    </Suspense>
++  );
++}
