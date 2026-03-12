@@ -1896,8 +1896,11 @@ C:.
 |   |   |       +---SESSION-20260312-03_A1_AUTH-04
 |   |   |       |       NO_PATCH.md
 |   |   |       |       
-|   |   |       \---SESSION-20260312-04_A1_AUTH-05
-|   |   |               PATCH__SESSION-20260312-04_A1_AUTH-05.diff
+|   |   |       +---SESSION-20260312-04_A1_AUTH-05
+|   |   |       |       PATCH__SESSION-20260312-04_A1_AUTH-05.diff
+|   |   |       |       README_PATCH.md
+|   |   |       |       
+|   |   |       \---SESSION-20260312-05_A1_AUTH-06
 |   |   |               README_PATCH.md
 |   |   |               
 |   |   \---ANCIENS_PATCHS
@@ -1976,7 +1979,14 @@ C:.
 |   |   |       |       RESULTATS.md
 |   |   |       |       SESSION.md
 |   |   |       |       
-|   |   |       \---SESSION-20260312-04_A1_AUTH-05
+|   |   |       +---SESSION-20260312-04_A1_AUTH-05
+|   |   |       |       EVIDENCES.md
+|   |   |       |       FIN_SESSION.md
+|   |   |       |       NOTES.md
+|   |   |       |       RESULTATS.md
+|   |   |       |       SESSION.md
+|   |   |       |       
+|   |   |       \---SESSION-20260312-05_A1_AUTH-06
 |   |   |               EVIDENCES.md
 |   |   |               FIN_SESSION.md
 |   |   |               NOTES.md
