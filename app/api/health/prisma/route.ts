@@ -17,8 +17,12 @@ export async function GET() {
   }
 
   try {
-    const companies = await prisma.company.count();
-    const users = await prisma.user.count();
+    const companyId = session.user.companyId;
+
+    const [companies, users] = await Promise.all([
+      prisma.company.count({ where: { id: companyId } }),
+      prisma.user.count({ where: { companyId } }),
+    ]);
 
     return ok({
       counts: { companies, users },

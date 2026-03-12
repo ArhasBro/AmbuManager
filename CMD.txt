@@ -16,7 +16,7 @@ git status
 
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 Unblock-File -Path .\create_session.ps1
-.\create_session.ps1 -Stage "1-ALPHA" -Block "A1" -SessionCode "TENANT-02" -Type "CORRECTION" -Title "Correction des routes/API non correctement cloisonnées"
+.\create_session.ps1 -Stage "1-ALPHA" -Block "A1" -SessionCode "TENANT-03" -Type "CORRECTION" -Title "Vérification et remise à niveau du cloisonnement UI si nécessaire"
 -Satge = 1-ALPHA / 2-BETA
 -Block = A...
 -SessionCode = AUTH / TENANT / RBAC / API....

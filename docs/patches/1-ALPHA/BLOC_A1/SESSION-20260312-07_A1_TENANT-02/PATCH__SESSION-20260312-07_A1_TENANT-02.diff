@@ -1,0 +1,708 @@
+--- a/app/api/health/prisma/route.ts
++++ b/app/api/health/prisma/route.ts
+@@ -17,8 +17,12 @@
+   }
+ 
+   try {
+-    const companies = await prisma.company.count();
+-    const users = await prisma.user.count();
++    const companyId = session.user.companyId;
++
++    const [companies, users] = await Promise.all([
++      prisma.company.count({ where: { id: companyId } }),
++      prisma.user.count({ where: { companyId } }),
++    ]);
+ 
+     return ok({
+       counts: { companies, users },
+--- a/app/api/vehicles/route.ts
++++ b/app/api/vehicles/route.ts
+@@ -115,14 +115,12 @@
+   const { id } = parsed.data;
+ 
+   try {
+-    const vehicle = await prisma.vehicle.findFirst({
++    const deleted = await prisma.vehicle.deleteMany({
+       where: { id, companyId },
+-      select: { id: true },
+     });
+ 
+-    if (!vehicle) return notFound();
++    if (deleted.count === 0) return notFound();
+ 
+-    await prisma.vehicle.delete({ where: { id } });
+     return ok({ deleted: true });
+   } catch (e: unknown) {
+     const mapped = prismaToHttp(e);
+--- a/app/api/users/[id]/reset-password/route.ts
++++ b/app/api/users/[id]/reset-password/route.ts
+@@ -76,14 +76,27 @@
+ 
+     const hashedPassword = await bcrypt.hash(parsed.data.newPassword, 10);
+ 
+-    const updatedUser = await prisma.user.update({
+-      where: { id: targetUser.id },
+-      data: { password: hashedPassword },
+-      select: {
+-        id: true,
+-        updatedAt: true,
+-      },
+-    });
++    const [, updatedUser] = await prisma.$transaction([
++      prisma.user.updateMany({
++        where: {
++          id: targetUser.id,
++          companyId,
++        },
++        data: { password: hashedPassword },
++      }),
++      prisma.user.findFirst({
++        where: {
++          id: targetUser.id,
++          companyId,
++        },
++        select: {
++          id: true,
++          updatedAt: true,
++        },
++      }),
++    ]);
++
++    if (!updatedUser) return notFound();
+ 
+     return ok(
+       serializeDates({
+--- a/app/api/planning/autoschedule/runs/[id]/cancel/route.ts
++++ b/app/api/planning/autoschedule/runs/[id]/cancel/route.ts
+@@ -108,12 +108,15 @@
+         return { ok: false as const, error: "RUN_ALREADY_PUBLISHED" as const };
+       }
+ 
+-      const updated = await tx.autoScheduleRun.update({
+-        where: { id: runId },
++      const updated = await tx.autoScheduleRun.updateMany({
++        where: { id: runId, companyId },
+         data: { status: AutoScheduleStatus.CANCELLED },
+-        select: { id: true, status: true },
+       });
+ 
++      if (updated.count === 0) {
++        return { ok: false as const, error: "NOT_FOUND" as const };
++      }
++
+       await writePlanningAudit(tx, {
+         companyId,
+         actorUserId: userId,
+@@ -127,7 +130,7 @@
+         },
+       });
+ 
+-      return { ok: true as const, data: updated };
++      return { ok: true as const, data: { id: run.id, status: AutoScheduleStatus.CANCELLED } };
+     });
+ 
+     if (!result.ok) {
+--- a/docs/sessions/1-ALPHA/BLOC_A1/SESSION-20260312-07_A1_TENANT-02/SESSION.md
++++ b/docs/sessions/1-ALPHA/BLOC_A1/SESSION-20260312-07_A1_TENANT-02/SESSION.md
+@@ -1,4 +1,4 @@
+-﻿# SESSION
++# SESSION
+ 
+ ## ID SESSION
+ 
+@@ -12,24 +12,121 @@
+ 
+ Projet : Investissement  
+ Sous-projet : Ambulance Manager  
+-Maturite : 1-ALPHA  
++Maturité : 1-ALPHA  
+ Bloc : A1  
+ Type : CORRECTION  
+-Intitule : Correction des routes/API non correctement cloisonnées
++Intitulé : Correction des routes/API non correctement cloisonnées
+ 
+-## Objectif de la session
+-
+-INFORMATION NON FOURNIE - A CONFIRMER
+-
+-## Perimetre exact traite
++Références officielles utilisées :
++- `docs/master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
++- `docs/master/PLAN_DE_DEVELOPPEMENT.md`
++- `docs/master/ETAT_GLOBAL_PROJET.md`
++- `docs/master/REGISTRE_DECISIONS.md`
++- `docs/master/DOCUMENT_MAITRE.md`
++- `docs/master/RECAP_DISCUSSIONS.md`
++- `docs/SOURCES_AUTORISEES.md`
++- `docs/STRUCTURE_DOCS.md`
++- `docs/sessions/1-ALPHA/BLOC_A1/SESSION-20260312-06_A1_TENANT-01/SESSION.md`
++- `docs/sessions/1-ALPHA/BLOC_A1/SESSION-20260312-06_A1_TENANT-01/EVIDENCES.md`
++- `docs/sessions/1-ALPHA/BLOC_A1/SESSION-20260312-06_A1_TENANT-01/RESULTATS.md`
++- code réel du dépôt
++
++Contexte utile rappelé :
++- `AUTH-01` a conclu à un socle auth existant mais incomplet ;
++- `AUTH-02` a corrigé le flux de connexion ;
++- `AUTH-03` a validé la session enrichie `role` + `companyId` ;
++- `AUTH-05` a validé le reset password par admin/gérant ;
++- `AUTH-06` a conclu à l’absence prouvée d’un reset autonome par support propriétaire ;
++- `TENANT-01` a retenu un verdict `partiellement conforme` et a identifié comme défauts utiles à corriger :
++  - une fuite d’agrégats globaux dans `app/api/health/prisma/route.ts` ;
++  - des mutations finales bornées surtout par pré-vérification sur `app/api/vehicles/route.ts`, `app/api/users/[id]/reset-password/route.ts` et `app/api/planning/autoschedule/runs/[id]/cancel/route.ts`.
+ 
+-INFORMATION NON FOURNIE - A CONFIRMER
+-
+-## Resultat synthetique de session
++## Objectif de la session
+ 
+-INFORMATION NON FOURNIE - A CONFIRMER
++Corriger strictement, sans refonte, uniquement les routes/API réellement insuffisamment cloisonnées côté multi-tenant sur le périmètre prouvé par `TENANT-01`, afin de :
++1. supprimer la lecture inter-tenant non justifiée dans la route health Prisma ;
++2. renforcer les mutations finales ciblées pour qu’elles portent elles aussi la contrainte `companyId` ;
++3. conserver un patch minimal, lisible et défendable ;
++4. documenter précisément ce qui a été corrigé, ce qui est resté inchangé et ce qui n’a pas pu être prouvé par build dans l’environnement fourni.
++
++## Périmètre exact traité
++
++### Documentation
++- `docs/master/DOCUMENT_MAITRE.md`
++- `docs/master/REGISTRE_DECISIONS.md`
++- `docs/master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
++- `docs/master/PLAN_DE_DEVELOPPEMENT.md`
++- `docs/master/ETAT_GLOBAL_PROJET.md`
++- session précédente utile `TENANT-01`
++
++### Code inspecté
++- `app/api/health/prisma/route.ts`
++- `app/api/vehicles/route.ts`
++- `app/api/users/[id]/reset-password/route.ts`
++- `app/api/planning/autoschedule/runs/[id]/cancel/route.ts`
++- `prisma/schema.prisma` pour vérifier les possibilités réelles de bornage des mutations
++
++### Code modifié
++- `app/api/health/prisma/route.ts`
++- `app/api/vehicles/route.ts`
++- `app/api/users/[id]/reset-password/route.ts`
++- `app/api/planning/autoschedule/runs/[id]/cancel/route.ts`
++
++### Hors périmètre explicitement respecté
++- RBAC global complet hors lien strict avec l’isolation tenant
++- auth au sens large hors ce qui porte ou contrôle `companyId`
++- création utilisateur
++- reset password hors dimension cloisonnement tenant
++- planning métier hors route `cancel` strictement ciblée
++- services planning non requis pour appliquer le correctif minimal des routes ciblées
++- refonte architecture
++- optimisation technique
++- migration Prisma
++- autres sessions
++
++## Résultat synthétique de session
++
++Constat principal :
++- la route `app/api/health/prisma/route.ts` ne renvoie plus de compteurs globaux système ; les deux compteurs sont désormais bornés à la société courante ;
++- la suppression véhicule ne repose plus sur une lecture bornée suivie d’un `delete` par `id` seul ; la mutation finale est portée par `deleteMany({ where: { id, companyId } })` ;
++- le reset password admin/gérant ne repose plus sur une écriture finale par `id` seul ; la mutation finale est portée par `updateMany({ where: { id, companyId } })` puis relecture bornée ;
++- l’annulation d’un run autoschedule ne repose plus sur un `update` final par `id` seul ; la mutation finale est portée par `updateMany({ where: { id, companyId } })` ;
++- le patch reste minimal et ne modifie pas les zones déjà correctement cloisonnées en lecture ou création.
++
++## Décision de session
++
++Décision retenue :
++- **PATCH APPLIQUÉ**
++
++Justification méthodologique spécifique au type `CORRECTION` :
++- les défauts traités sont directement issus de `TENANT-01` et confirmés par le code réel ;
++- aucune refonte ni abstraction supplémentaire n’a été introduite ;
++- seules les routes/API strictement utiles ont été modifiées ;
++- un fichier `.diff` est produit pour rejouer le correctif.
++
++## Verdict retenu
++
++**partiellement conforme**
++
++## Justification du verdict
++
++La correction est cohérente et bien bornée sur le périmètre `TENANT-02` :
++- le défaut inter-tenant non ambigu de la route health Prisma est corrigé ;
++- les trois mutations finales ciblées portent désormais elles aussi la contrainte tenant.
++
++Le verdict n’est pas `conforme` car la preuve technique finale complète n’a pas pu être entièrement établie dans l’environnement fourni :
++- `npm run lint` est `OK` ;
++- `npm run build` échoue sur un problème Prisma déjà présent dans le dépôt / environnement (`RuleMode` non exporté par `@prisma/client`) ;
++- une tentative de `npx prisma generate` échoue ici faute d’accès réseau aux binaires Prisma.
++
++## Limites de preuve
++
++- correction prouvée par inspection du code réel modifié ;
++- `git apply --check` a été exécuté avec succès sur le patch produit ;
++- `npm run build` n’est pas validé dans ce conteneur pour une cause non démontrée comme étant liée au patch `TENANT-02` ;
++- toute protection base de données externe reste : **INFORMATION NON FOURNIE — À CONFIRMER**.
+ 
+-## Dossiers lies
++## Dossiers liés
+ 
+-- Session : docs/sessions/1-ALPHA/BLOC_A1/SESSION-20260312-07_A1_TENANT-02
+-- Patchs  : docs/patches/1-ALPHA/BLOC_A1/SESSION-20260312-07_A1_TENANT-02
++- Session : `./docs/sessions/1-ALPHA/BLOC_A1/SESSION-20260312-07_A1_TENANT-02`
++- Patch : `./docs/patches/1-ALPHA/BLOC_A1/SESSION-20260312-07_A1_TENANT-02`
+--- a/docs/sessions/1-ALPHA/BLOC_A1/SESSION-20260312-07_A1_TENANT-02/NOTES.md
++++ b/docs/sessions/1-ALPHA/BLOC_A1/SESSION-20260312-07_A1_TENANT-02/NOTES.md
+@@ -1,10 +1,69 @@
+-﻿# NOTES
++# NOTES
+ 
+ Notes de travail de la session.
+ 
+ ---
+ 
+-## MÃ©thode / observations
++## Méthode / observations
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++### 1. Reprise stricte du constat `TENANT-01`
++La session est repartie uniquement des défauts réellement documentés comme utiles à corriger :
++- fuite d’agrégats globaux dans `app/api/health/prisma/route.ts` ;
++- mutations finales encore portées par `id` seul après pré-vérification bornée sur :
++  - `app/api/vehicles/route.ts`
++  - `app/api/users/[id]/reset-password/route.ts`
++  - `app/api/planning/autoschedule/runs/[id]/cancel/route.ts`
+ 
++### 2. Vérification des possibilités réelles côté Prisma
++Observation importante :
++- `User`, `Vehicle` et `AutoScheduleRun` n’exposent pas de clé composite unique `id + companyId` dans `prisma/schema.prisma` ;
++- une mutation `update({ where: { id, companyId } })` ou `delete({ where: { id, companyId } })` n’était donc pas disponible telle quelle sans ouvrir une migration / refonte ;
++- le correctif minimal défendable consistait à porter la contrainte tenant dans `updateMany` / `deleteMany` avec un `where` explicite.
++
++### 3. Choix de correction retenu
++Choix appliqué :
++- ne pas toucher aux lectures déjà correctement cloisonnées ;
++- ne pas introduire de helper partagé ni d’abstraction ;
++- remplacer uniquement les mutations finales insuffisamment bornées par des mutations `*Many` filtrées sur `companyId` ;
++- conserver les formats de réponse existants autant que possible.
++
++### 4. Détail des corrections retenues
++#### 4.1 `app/api/health/prisma/route.ts`
++- avant : `company.count()` et `user.count()` globaux ;
++- après :
++  - `company.count({ where: { id: companyId } })`
++  - `user.count({ where: { companyId } })`
++- objectif : supprimer la lecture inter-tenant agrégée tout en conservant le même shape de réponse.
++
++#### 4.2 `app/api/vehicles/route.ts`
++- avant : prélecture bornée puis `delete({ where: { id } })` ;
++- après : `deleteMany({ where: { id, companyId } })`.
++
++#### 4.3 `app/api/users/[id]/reset-password/route.ts`
++- avant : prélecture bornée puis `update({ where: { id } })` ;
++- après : transaction avec :
++  - `updateMany({ where: { id, companyId } })`
++  - relecture bornée `findFirst({ where: { id, companyId } })`
++- objectif : conserver la réponse avec `updatedAt` sans ouvrir de migration Prisma.
++
++#### 4.4 `app/api/planning/autoschedule/runs/[id]/cancel/route.ts`
++- avant : prélecture bornée puis `update({ where: { id: runId } })` ;
++- après : `updateMany({ where: { id: runId, companyId } })`.
++
++### 5. Zones inspectées mais non modifiées
++- contrôles d’accès session / rôle des routes ciblées ;
++- lectures déjà bornées par `companyId` dans les mêmes routes ;
++- structure des réponses API hors strict nécessaire ;
++- schéma Prisma : inspecté pour comprendre les contraintes, non modifié.
++
++### 6. Vérifications techniques
++Exécuté :
++- `npm ci` : OK
++- `npm run lint` : OK
++- `npm run build` : échec
++- `npx prisma generate` : échec
++
++Observation utile sur l’échec build :
++- l’erreur rencontrée pendant `next build` pointe `app/api/company/rules/route.ts` sur `RuleMode` non exporté par `@prisma/client` ;
++- ce fichier est hors périmètre de `TENANT-02` et n’a pas été modifié dans cette session ;
++- la tentative de régénération Prisma échoue dans le conteneur faute d’accès réseau aux binaires Prisma.
+--- a/docs/sessions/1-ALPHA/BLOC_A1/SESSION-20260312-07_A1_TENANT-02/EVIDENCES.md
++++ b/docs/sessions/1-ALPHA/BLOC_A1/SESSION-20260312-07_A1_TENANT-02/EVIDENCES.md
+@@ -1,10 +1,159 @@
+-﻿# EVIDENCES
++# EVIDENCES
+ 
+-Ã‰lÃ©ments factuels utilisÃ©s pendant la session.
++Éléments factuels utilisés pendant la session.
+ 
+ ---
+ 
+-## Sources utilisÃ©es
++## Sources utilisées
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++### Documentation officielle
++- `docs/master/DOCUMENT_MAITRE.md`
++- `docs/master/REGISTRE_DECISIONS.md`
++- `docs/master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
++- `docs/master/PLAN_DE_DEVELOPPEMENT.md`
++- `docs/master/ETAT_GLOBAL_PROJET.md`
++- session précédente utile `TENANT-01`
+ 
++### Code réel inspecté
++- `app/api/health/prisma/route.ts`
++- `app/api/vehicles/route.ts`
++- `app/api/users/[id]/reset-password/route.ts`
++- `app/api/planning/autoschedule/runs/[id]/cancel/route.ts`
++- `prisma/schema.prisma`
++
++---
++
++## 1. Constat source repris de `TENANT-01`
++
++### 1.1 Route health Prisma
++Source utile : `docs/sessions/1-ALPHA/BLOC_A1/SESSION-20260312-06_A1_TENANT-01/EVIDENCES.md`
++
++Constat repris :
++- `app/api/health/prisma/route.ts` exposait des compteurs globaux sans filtre `companyId`.
++
++### 1.2 Mutations finales seulement implicitement tenantisées
++Source utile : `docs/sessions/1-ALPHA/BLOC_A1/SESSION-20260312-06_A1_TENANT-01/EVIDENCES.md`
++
++Constat repris :
++- `app/api/vehicles/route.ts` : suppression finale par `id` seul ;
++- `app/api/users/[id]/reset-password/route.ts` : mise à jour finale par `id` seul ;
++- `app/api/planning/autoschedule/runs/[id]/cancel/route.ts` : mutation finale par `id` seul.
++
++---
++
++## 2. Preuves code avant / après correction
++
++### 2.1 `app/api/health/prisma/route.ts`
++Source : code réel modifié
++
++Preuves :
++- ligne 20 : récupération explicite de `const companyId = session.user.companyId;`
++- lignes 22 à 25 :
++  - `prisma.company.count({ where: { id: companyId } })`
++  - `prisma.user.count({ where: { companyId } })`
++
++Constat :
++- les deux agrégats sont désormais bornés au tenant courant ;
++- la fuite de métadonnées agrégées globales n’est plus présente dans cette route.
++
++### 2.2 `app/api/vehicles/route.ts`
++Source : code réel modifié
++
++Preuves :
++- lignes 117 à 120 : `prisma.vehicle.deleteMany({ where: { id, companyId } })`
++- ligne 122 : `if (deleted.count === 0) return notFound();`
++
++Constat :
++- la suppression finale porte désormais elle-même la contrainte tenant ;
++- la session n’a pas modifié le GET ni le POST déjà correctement bornés.
++
++### 2.3 `app/api/users/[id]/reset-password/route.ts`
++Source : code réel modifié
++
++Preuves :
++- lignes 79 à 97 : transaction Prisma portant :
++  - `updateMany({ where: { id: targetUser.id, companyId } ... })`
++  - `findFirst({ where: { id: targetUser.id, companyId } ... })`
++- ligne 99 : `if (!updatedUser) return notFound();`
++
++Constat :
++- l’écriture finale de mot de passe est maintenant bornée par `companyId` dans la requête d’écriture elle-même ;
++- la réponse conserve `id` et `updatedAt` via relecture bornée.
++
++### 2.4 `app/api/planning/autoschedule/runs/[id]/cancel/route.ts`
++Source : code réel modifié
++
++Preuves :
++- lignes 111 à 114 : `tx.autoScheduleRun.updateMany({ where: { id: runId, companyId }, data: { status: AutoScheduleStatus.CANCELLED } })`
++- lignes 116 à 118 : contrôle de `updated.count`
++- ligne 133 : retour de la donnée finale `{ id: run.id, status: AutoScheduleStatus.CANCELLED }`
++
++Constat :
++- l’annulation finale du run porte désormais explicitement la contrainte tenant ;
++- la logique métier existante (idempotence, blocage des runs publiés, audit) est conservée.
++
++---
++
++## 3. Preuve d’absence de refonte
++
++### 3.1 Schéma Prisma non modifié
++Source : inspection session
++
++Constat :
++- aucune migration ni modification de `prisma/schema.prisma` n’a été introduite ;
++- le correctif s’appuie sur les possibilités immédiatement disponibles (`updateMany` / `deleteMany`) ;
++- la session reste bornée au patch minimal attendu.
++
++### 3.2 Zones déjà conformes non modifiées
++Source : code réel modifié
++
++Constat :
++- GET `vehicles` reste sur `findMany({ where: { companyId } })` ;
++- POST `vehicles` reste sur `create({ data: { companyId, ... } })` ;
++- la prélecture bornée des routes reset-password et cancel est conservée.
++
++---
++
++## 4. Vérifications techniques réellement exécutées
++
++### 4.1 Installation dépendances
++Preuve : exécution `npm ci`
++
++Résultat :
++- OK
++
++### 4.2 Vérification patch
++Preuve : exécution `git apply --check` sur une copie fraîche du dépôt
++
++Résultat :
++- OK
++
++### 4.3 Lint
++Preuve : exécution `npm run lint`
++
++Résultat :
++- OK
++
++### 4.4 Build
++Preuve : exécution `npm run build`
++
++Résultat :
++- échec
++
++Erreur observée :
++- `./app/api/company/rules/route.ts: Module "@prisma/client" has no exported member 'RuleMode'`
++
++Constat :
++- l’échec build constaté ne pointe pas un des fichiers modifiés dans `TENANT-02`.
++
++### 4.5 Régénération Prisma
++Preuve : exécution `npx prisma generate`
++
++Résultat :
++- échec
++
++Erreur observée :
++- échec réseau lors du téléchargement du binaire Prisma (`binaries.prisma.sh`)
++
++Constat :
++- la preuve build complète ne peut pas être finalisée dans ce conteneur pour cette cause.
+--- a/docs/sessions/1-ALPHA/BLOC_A1/SESSION-20260312-07_A1_TENANT-02/RESULTATS.md
++++ b/docs/sessions/1-ALPHA/BLOC_A1/SESSION-20260312-07_A1_TENANT-02/RESULTATS.md
+@@ -1,12 +1,84 @@
+-﻿# RESULTATS
++# RESULTATS
+ 
+-## RÃ©sultats obtenus
++## Résultats obtenus
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++### 1. Correction effectivement appliquée
++Validation :
++- oui
++
++Constat :
++- `app/api/health/prisma/route.ts` ne renvoie plus de compteurs globaux système ;
++- `app/api/vehicles/route.ts` supprime désormais via `deleteMany({ where: { id, companyId } })` ;
++- `app/api/users/[id]/reset-password/route.ts` met désormais à jour via `updateMany({ where: { id, companyId } })` puis relit dans le même tenant ;
++- `app/api/planning/autoschedule/runs/[id]/cancel/route.ts` annule désormais via `updateMany({ where: { id: runId, companyId } })`.
++
++### 2. Zones inspectées mais non modifiées
++Validation :
++- oui
++
++Constat :
++- lectures déjà bornées des routes ciblées ;
++- créations déjà tenantisées ;
++- schéma Prisma inspecté sans modification ;
++- aucune autre route ou service hors stricte nécessité n’a été touché.
++
++### 3. Bornage du patch
++Validation :
++- oui
++
++Constat :
++- aucun débordement vers RBAC global ;
++- aucune refonte ;
++- aucune migration ;
++- aucune correction hors multi-tenant strict sur les routes ciblées.
++
++### 4. Validation technique
++Validation :
++- partielle
++
++Constat :
++- `npm ci` : OK
++- `npm run lint` : OK
++- `npm run build` : échec sur un problème Prisma hors périmètre modifié
++- `npx prisma generate` : non faisable dans ce conteneur faute d’accès réseau aux binaires Prisma
++
++### 5. Impact méthodologique
++Validation :
++- recevable
++
++Constat :
++- la correction répond bien aux constats de `TENANT-01` ;
++- le patch reste minimal et rejouable ;
++- la preuve de build complet reste incomplète dans l’environnement fourni.
+ 
+ ---
+ 
+-## Documents modifiÃ©s
++## Documents modifiés
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++Fichiers code modifiés :
++- `app/api/health/prisma/route.ts`
++- `app/api/vehicles/route.ts`
++- `app/api/users/[id]/reset-password/route.ts`
++- `app/api/planning/autoschedule/runs/[id]/cancel/route.ts`
++
++Fichiers session mis à jour :
++- `docs/sessions/1-ALPHA/BLOC_A1/SESSION-20260312-07_A1_TENANT-02/SESSION.md`
++- `docs/sessions/1-ALPHA/BLOC_A1/SESSION-20260312-07_A1_TENANT-02/NOTES.md`
++- `docs/sessions/1-ALPHA/BLOC_A1/SESSION-20260312-07_A1_TENANT-02/EVIDENCES.md`
++- `docs/sessions/1-ALPHA/BLOC_A1/SESSION-20260312-07_A1_TENANT-02/RESULTATS.md`
++- `docs/sessions/1-ALPHA/BLOC_A1/SESSION-20260312-07_A1_TENANT-02/FIN_SESSION.md`
++
++Fichiers patch mis à jour :
++- `docs/patches/1-ALPHA/BLOC_A1/SESSION-20260312-07_A1_TENANT-02/README_PATCH.md`
++- `docs/patches/1-ALPHA/BLOC_A1/SESSION-20260312-07_A1_TENANT-02/PATCH__SESSION-20260312-07_A1_TENANT-02.diff`
+ 
++---
++
++## Verdict final
++
++**partiellement conforme**
++
++### Justification du verdict
++Les corrections ciblées ont bien été appliquées sur le périmètre `TENANT-02` et répondent aux défauts réellement identifiés par `TENANT-01`.
++
++Le verdict n’est pas `conforme` car la preuve technique finale complète reste partielle dans cet environnement : le lint est validé, mais le build ne l’est pas à cause d’un problème Prisma hors des fichiers modifiés et non régénérable ici sans accès réseau.
+--- a/docs/sessions/1-ALPHA/BLOC_A1/SESSION-20260312-07_A1_TENANT-02/FIN_SESSION.md
++++ b/docs/sessions/1-ALPHA/BLOC_A1/SESSION-20260312-07_A1_TENANT-02/FIN_SESSION.md
+@@ -1,14 +1,58 @@
+-﻿# FIN_SESSION
++# FIN_SESSION
+ 
+-## ClÃ´ture
++## Clôture finale TENANT-02
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++Session :
++`SESSION-20260312-07_A1_TENANT-02`
+ 
+-## Validation
+-
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++Objet :
++- correction des routes/API non correctement cloisonnées
++
++## Conclusion
++
++La session a corrigé les défauts multi-tenant effectivement utiles et prouvés sur le périmètre ciblé :
++- la route health Prisma n’expose plus d’agrégats globaux système ;
++- la suppression véhicule porte désormais explicitement `companyId` dans la mutation finale ;
++- le reset password admin/gérant porte désormais explicitement `companyId` dans la mutation finale ;
++- l’annulation d’un run autoschedule porte désormais explicitement `companyId` dans la mutation finale.
++
++Le patch reste minimal :
++- aucun schéma Prisma modifié ;
++- aucune refonte ;
++- aucune extension du périmètre vers d’autres modules.
++
++## Validation de périmètre
++
++- périmètre `TENANT-02` respecté : Oui
++- mélange avec RBAC global complet : Non
++- mélange avec auth large hors tenant : Non
++- mélange avec création utilisateur / reset hors cloisonnement tenant : Non
++- débordement vers refonte architecture : Non
++- débordement vers migrations Prisma : Non
++- correction hors routes/API strictement utiles : Non
++
++## Validation méthodologique
++
++- constats repris depuis `TENANT-01` : Oui
++- défaut réellement visé rappelé : Oui
++- comportement réel vérifié dans le code : Oui
++- patch minimal et justifié : Oui
++- distinction claire entre corrigé / inchangé / non prouvé : Oui
++- vérifications techniques réellement exécutées : Oui
++
++## Résultats techniques réellement exécutés
++
++- `npm ci` : OK
++- `npm run lint` : OK
++- `npm run build` : échec
++- `npx prisma generate` : échec (réseau / binaires Prisma indisponibles dans le conteneur)
++- `git apply --check` : OK
+ 
+ ## Verdict final
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++**partiellement conforme**
++
++### Motivation du verdict
++Le cœur du correctif multi-tenant demandé par `TENANT-02` est bien appliqué et documenté.
+ 
++Le verdict reste `partiellement conforme` car la validation technique finale complète n’est pas totalement démontrée dans l’environnement fourni : le build n’a pas pu être validé, pour une erreur Prisma observée hors du périmètre des fichiers modifiés.
+--- a/docs/patches/1-ALPHA/BLOC_A1/SESSION-20260312-07_A1_TENANT-02/README_PATCH.md
++++ b/docs/patches/1-ALPHA/BLOC_A1/SESSION-20260312-07_A1_TENANT-02/README_PATCH.md
+@@ -1,24 +1,47 @@
+-﻿# README_PATCH
++# README_PATCH
+ 
+-## Session liee
++## Session liée
+ SESSION-20260312-07_A1_TENANT-02
+ 
+ ## Type
+ CORRECTION
+ 
+ ## Dossier patch
+-docs/patches/1-ALPHA/BLOC_A1/SESSION-20260312-07_A1_TENANT-02
++`docs/patches/1-ALPHA/BLOC_A1/SESSION-20260312-07_A1_TENANT-02`
+ 
+-## Patch officiel attendu
+-PATCH__SESSION-20260312-07_A1_TENANT-02.diff
++## Patch officiel
++`PATCH__SESSION-20260312-07_A1_TENANT-02.diff`
++
++## Objet du patch
++Correction minimale des routes/API insuffisamment cloisonnées côté multi-tenant sur le périmètre prouvé par `TENANT-01` :
++- suppression des agrégats globaux dans `app/api/health/prisma/route.ts` ;
++- bornage tenant explicite des mutations finales dans :
++  - `app/api/vehicles/route.ts`
++  - `app/api/users/[id]/reset-password/route.ts`
++  - `app/api/planning/autoschedule/runs/[id]/cancel/route.ts`
++
++## Fichiers code inclus
++- `app/api/health/prisma/route.ts`
++- `app/api/vehicles/route.ts`
++- `app/api/users/[id]/reset-password/route.ts`
++- `app/api/planning/autoschedule/runs/[id]/cancel/route.ts`
+ 
+ ## Commandes d'application
+ 
+-`ash
++```bash
+ git apply --check "docs/patches/1-ALPHA/BLOC_A1/SESSION-20260312-07_A1_TENANT-02/PATCH__SESSION-20260312-07_A1_TENANT-02.diff"
+ git apply         "docs/patches/1-ALPHA/BLOC_A1/SESSION-20260312-07_A1_TENANT-02/PATCH__SESSION-20260312-07_A1_TENANT-02.diff"
+-`
++```
++
++## Vérifications réellement exécutées
++- `git apply --check` : OK
++- `npm ci` : OK
++- `npm run lint` : OK
++- `npm run build` : échec hors périmètre patch (`@prisma/client` / `RuleMode`)
++- `npx prisma generate` : échec dans le conteneur faute d’accès réseau aux binaires Prisma
+ 
+ ## Statut
+-- Dossier patch initialise.
+-- Patch officiel a produire dans cette session si du code est modifie.
++- patch produit
++- patch minimal
++- patch borné au périmètre `TENANT-02`
++- build complet non prouvé dans cet environnement

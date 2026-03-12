@@ -108,11 +108,14 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
         return { ok: false as const, error: "RUN_ALREADY_PUBLISHED" as const };
       }
 
-      const updated = await tx.autoScheduleRun.update({
-        where: { id: runId },
+      const updated = await tx.autoScheduleRun.updateMany({
+        where: { id: runId, companyId },
         data: { status: AutoScheduleStatus.CANCELLED },
-        select: { id: true, status: true },
       });
+
+      if (updated.count === 0) {
+        return { ok: false as const, error: "NOT_FOUND" as const };
+      }
 
       await writePlanningAudit(tx, {
         companyId,
@@ -127,7 +130,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
         },
       });
 
-      return { ok: true as const, data: updated };
+      return { ok: true as const, data: { id: run.id, status: AutoScheduleStatus.CANCELLED } };
     });
 
     if (!result.ok) {

@@ -1,14 +1,40 @@
-﻿# FIN_SESSION
+﻿# FIN DE SESSION
 
-## ClÃ´ture
+## Session clôturée
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+ID session : `SESSION-20260312-07_A1_TENANT-02`  
+Type : `CORRECTION`  
+Intitulé : `TENANT-02 — CORRECTION — Correction des routes/API non correctement cloisonnées`
 
-## Validation
+## Synthèse finale
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+La session a été menée strictement dans le périmètre prévu.
+
+Le correctif appliqué :
+- supprime la lecture inter-tenant non justifiée relevée sur `health/prisma` ;
+- renforce les mutations finales des routes réellement concernées pour qu’elles portent aussi la contrainte tenant ;
+- reste minimal ;
+- n’ouvre pas de refonte ;
+- ne modifie pas de zones non prouvées comme défaillantes.
+
+## État final prouvé sur le dépôt cible
+
+- patch code appliqué : OK
+- `npm run lint` : OK
+- `npm run build` : OK
+
+## État documentaire
+
+La documentation finale est recalée sur l’état réellement validé sur le dépôt cible.
+
+## Conclusion
+
+La correction `TENANT-02` est recevable techniquement et méthodologiquement.
 
 ## Verdict final
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+conforme
 
+## Validation
+
+Validation officielle possible.

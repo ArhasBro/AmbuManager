@@ -115,14 +115,12 @@ export async function DELETE(req: Request) {
   const { id } = parsed.data;
 
   try {
-    const vehicle = await prisma.vehicle.findFirst({
+    const deleted = await prisma.vehicle.deleteMany({
       where: { id, companyId },
-      select: { id: true },
     });
 
-    if (!vehicle) return notFound();
+    if (deleted.count === 0) return notFound();
 
-    await prisma.vehicle.delete({ where: { id } });
     return ok({ deleted: true });
   } catch (e: unknown) {
     const mapped = prismaToHttp(e);

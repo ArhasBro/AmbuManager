@@ -1,4 +1,4 @@
-﻿# SESSION
+# SESSION
 
 ## ID SESSION
 
@@ -12,24 +12,78 @@ SESSION-20260312-07_A1_TENANT-02
 
 Projet : Investissement  
 Sous-projet : Ambulance Manager  
-Maturite : 1-ALPHA  
+Maturité : 1-ALPHA  
 Bloc : A1  
-Type : CORRECTION  
-Intitule : Correction des routes/API non correctement cloisonnées
+Type : CORRECTION
 
-## Objectif de la session
+## Intitulé
 
-INFORMATION NON FOURNIE - A CONFIRMER
+TENANT-02 — CORRECTION — Correction des routes/API non correctement cloisonnées
 
-## Perimetre exact traite
+## Objectif
 
-INFORMATION NON FOURNIE - A CONFIRMER
+Corriger uniquement les routes/API réellement insuffisamment cloisonnées côté multi-tenant, à partir des constats prouvés par `TENANT-01` et du code réel, sans ouvrir de refonte ni déborder du périmètre.
 
-## Resultat synthetique de session
+## Périmètre strict
 
-INFORMATION NON FOURNIE - A CONFIRMER
+Inclus :
+- correction des lectures inter-tenant non justifiées si elles existent réellement ;
+- correction des mutations finales insuffisamment bornées par tenant si le code réel le prouve ;
+- production d’un patch minimal, lisible et défendable ;
+- mise à jour de la documentation de session.
 
-## Dossiers lies
+Exclus :
+- refonte architecture ;
+- RBAC global hors lien strict avec l’isolation tenant ;
+- auth hors ce qui sert à porter ou contrôler le tenant ;
+- création utilisateur ;
+- reset password hors dimension cloisonnement tenant ;
+- migrations non strictement nécessaires ;
+- optimisation technique ;
+- autres sessions.
 
-- Session : docs/sessions/1-ALPHA/BLOC_A1/SESSION-20260312-07_A1_TENANT-02
-- Patchs  : docs/patches/1-ALPHA/BLOC_A1/SESSION-20260312-07_A1_TENANT-02
+## Constats de départ réellement visés
+
+À partir de `TENANT-01`, les défauts réellement ciblés étaient :
+
+1. `app/api/health/prisma/route.ts`
+   - exposition de compteurs globaux non bornés par tenant ;
+
+2. mutations finales avec borne tenant surtout implicite via pré-vérification applicative, puis écriture finale par `id` seul :
+   - `app/api/vehicles/route.ts`
+   - `app/api/users/[id]/reset-password/route.ts`
+   - `app/api/planning/autoschedule/runs/[id]/cancel/route.ts`
+
+## Fichiers code modifiés
+
+- `app/api/health/prisma/route.ts`
+- `app/api/vehicles/route.ts`
+- `app/api/users/[id]/reset-password/route.ts`
+- `app/api/planning/autoschedule/runs/[id]/cancel/route.ts`
+
+## Résumé des corrections appliquées
+
+- `health/prisma` :
+  - remplacement des compteurs globaux par des compteurs bornés à `session.user.companyId` ;
+
+- `vehicles DELETE` :
+  - suppression finale bornée par `id + companyId` ;
+
+- `users/[id]/reset-password` :
+  - mise à jour finale bornée par `id + companyId` ;
+  - relecture finale bornée au même tenant ;
+
+- `planning/autoschedule/runs/[id]/cancel` :
+  - annulation finale bornée par `id + companyId`.
+
+## Résultat final prouvé
+
+Sur le dépôt cible après application contrôlée du patch code via le `.diff`, avec exclusion volontaire des fichiers de documentation :
+
+- application du patch code via le `.diff` avec exclusion des fichiers de documentation : OK
+- `npm run lint` : OK
+- `npm run build` : OK
+
+## Verdict session
+
+conforme

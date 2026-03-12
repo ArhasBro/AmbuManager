@@ -76,14 +76,27 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
 
     const hashedPassword = await bcrypt.hash(parsed.data.newPassword, 10);
 
-    const updatedUser = await prisma.user.update({
-      where: { id: targetUser.id },
-      data: { password: hashedPassword },
-      select: {
-        id: true,
-        updatedAt: true,
-      },
-    });
+    const [, updatedUser] = await prisma.$transaction([
+      prisma.user.updateMany({
+        where: {
+          id: targetUser.id,
+          companyId,
+        },
+        data: { password: hashedPassword },
+      }),
+      prisma.user.findFirst({
+        where: {
+          id: targetUser.id,
+          companyId,
+        },
+        select: {
+          id: true,
+          updatedAt: true,
+        },
+      }),
+    ]);
+
+    if (!updatedUser) return notFound();
 
     return ok(
       serializeDates({
