@@ -13,7 +13,10 @@ git push
 
 git status
 
-.\create_session.ps1 -Stage "1-ALPHA" -Block "A1" -SessionCode "AUTH-02" -Type "CORRECTION" -Title "Correction/remise à niveau du flux de connexion si nécessaire"
+
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+Unblock-File -Path .\create_session.ps1
+.\create_session.ps1 -Stage "1-ALPHA" -Block "A1" -SessionCode "AUTH-03" -Type "VALIDATION" -Title "Vérification et validation de la session enrichie (`role`, `companyId`)"
 -Satge = 1-ALPHA / 2-BETA
 -Block = A...
 -SessionCode = AUTH / TENANT / RBAC / API....
