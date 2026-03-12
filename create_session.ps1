@@ -38,105 +38,6 @@ function Ensure-Directory {
     }
 }
 
-function Remove-GitKeepIfNeeded {
-    param([string]$DirectoryPath)
-
-    $gitkeepPath = Join-Path $DirectoryPath ".gitkeep"
-    if (Test-Path $gitkeepPath) {
-        Remove-Item $gitkeepPath -Force
-    }
-}
-
-
-function Get-BlockTitle {
-    param(
-        [string]$StageValue,
-        [string]$BlockValue
-    )
-
-    $map = @{
-        "1-ALPHA|A1"  = "Acces, Auth, Multi-tenant, Permissions, API"
-        "1-ALPHA|A2"  = "Structure societe, profil societe, bases / depots, role support"
-        "1-ALPHA|A3"  = "Utilisateurs"
-        "1-ALPHA|A4"  = "Vehicules et conformite documentaire minimale"
-        "1-ALPHA|A5"  = "Regles metier et parametres societe"
-        "1-ALPHA|A6"  = "Shift templates"
-        "1-ALPHA|A7"  = "Dashboard"
-        "1-ALPHA|A8"  = "Planning manuel"
-        "1-ALPHA|A9"  = "Autoschedule"
-        "1-ALPHA|A10" = "Matching"
-        "1-ALPHA|A11" = "Audit / tracabilite"
-        "1-ALPHA|A12" = "Exports, onboarding et imports"
-        "1-ALPHA|A13" = "Qualite, documentation, gel ALPHA"
-        "2-BETA|B1"   = "Alertes applicatives"
-        "2-BETA|B2"   = "Autoschedule mensuel et regles avancees"
-        "2-BETA|B3"   = "RBAC enrichi et multi-role"
-        "2-BETA|B4"   = "Historique enrichi"
-    }
-
-    $key = "{0}|{1}" -f $StageValue, $BlockValue
-    if ($map.ContainsKey($key)) {
-        return $map[$key]
-    }
-
-    return "INFORMATION NON FOURNIE — A CONFIRMER"
-}
-
-function Ensure-BlockReadme {
-    param(
-        [string]$DirectoryPath,
-        [string]$StageValue,
-        [string]$BlockValue,
-        [string]$Kind
-    )
-
-    Ensure-Directory $DirectoryPath
-    Remove-GitKeepIfNeeded -DirectoryPath $DirectoryPath
-
-    $title = Get-BlockTitle -StageValue $StageValue -BlockValue $BlockValue
-    $readmePath = Join-Path $DirectoryPath "README.md"
-
-    if ($Kind -eq "sessions") {
-        $content = @"
-# BLOC_$BlockValue
-
-Maturite : $StageValue  
-Bloc : $BlockValue  
-Intitule officiel : $title
-
-Reference : `docs/master/PLAN_DE_DEVELOPPEMENT.md`
-
-Ce dossier contient les **sessions documentaires** du bloc $BlockValue.
-
-Regle :
-- 1 session = 1 point clair
-- 1 session = 1 fonctionnalite
-- 1 session = 1 DoD
-- 1 session = 1 validation
-"@
-    }
-    else {
-        $content = @"
-# BLOC_$BlockValue
-
-Maturite : $StageValue  
-Bloc : $BlockValue  
-Intitule officiel : $title
-
-Reference : `docs/master/PLAN_DE_DEVELOPPEMENT.md`
-
-Ce dossier contient les **artefacts de patch** rattaches aux sessions du bloc $BlockValue.
-
-Regle :
-- 1 session = 1 patch officiel maximum
-- AUDIT / VALIDATION = `NO_PATCH.md`
-- CORRECTION / COMPLETION = `README_PATCH.md` puis patch officiel unique si necessaire
-"@
-    }
-
-    Set-Content -Path $readmePath -Value $content -Encoding utf8
-}
-
 function Get-SafeString {
     param([string]$Value)
 
@@ -163,37 +64,42 @@ function Get-CanonicalStage {
     }
 }
 
-function Get-CanonicalBlock {
+function Test-BlockAllowedForStage {
     param(
-        [string]$Value,
-        [string]$StageValue
+        [string]$StageValue,
+        [string]$BlockValue
     )
+
+    switch ($StageValue) {
+        "1-ALPHA" {
+            if ($BlockValue -notmatch '^A([1-9]|1[0-3])$') {
+                throw "Bloc invalide pour 1-ALPHA. Valeurs autorisees : A1 a A13."
+            }
+        }
+        "2-BETA" {
+            if ($BlockValue -notmatch '^B([1-4])$') {
+                throw "Bloc invalide pour 2-BETA. Valeurs autorisees : B1 a B4."
+            }
+        }
+        default {
+            throw "Stage non gere : $StageValue"
+        }
+    }
+}
+
+function Get-CanonicalBlock {
+    param([string]$Value)
 
     $clean = (Get-SafeString -Value $Value).ToUpperInvariant()
 
-    if ($StageValue -eq "1-ALPHA") {
-        if ($clean -match '^BLOC_(A([1-9]|1[0-3]))$') {
-            return $Matches[1]
-        }
-        if ($clean -match '^(A([1-9]|1[0-3]))$') {
-            return $Matches[1]
-        }
-
-        throw "Bloc invalide pour 1-ALPHA. Valeurs autorisees : A1 a A13 (ou BLOC_A1 a BLOC_A13)."
+    if ($clean -match '^BLOC_((A([1-9]|1[0-3]))|(B([1-4])))$') {
+        return $Matches[1]
+    }
+    if ($clean -match '^((A([1-9]|1[0-3]))|(B([1-4])))$') {
+        return $Matches[1]
     }
 
-    if ($StageValue -eq "2-BETA") {
-        if ($clean -match '^BLOC_(B([1-4]))$') {
-            return $Matches[1]
-        }
-        if ($clean -match '^(B([1-4]))$') {
-            return $Matches[1]
-        }
-
-        throw "Bloc invalide pour 2-BETA. Valeurs autorisees : B1 a B4 (ou BLOC_B1 a BLOC_B4)."
-    }
-
-    throw "Stage non supporte pour la resolution du bloc : $StageValue"
+    throw "Bloc invalide. Valeurs autorisees : A1 a A13, B1 a B4 (ou BLOC_A1 a BLOC_A13, BLOC_B1 a BLOC_B4)."
 }
 
 function Get-CanonicalType {
@@ -204,10 +110,10 @@ function Get-CanonicalType {
     switch ($clean) {
         "AUDIT"       { return "AUDIT" }
         "CORRECTION"  { return "CORRECTION" }
-        "COMPLETION"  { return "COMPLÉTION" }
-        "COMPLÉTION"  { return "COMPLÉTION" }
+        "COMPLETION"  { return "COMPLETION" }
+        "COMPLÉTION"  { return "COMPLETION" }
         "VALIDATION"  { return "VALIDATION" }
-        default        { throw "Type invalide. Valeurs autorisees : AUDIT, CORRECTION, COMPLÉTION, VALIDATION." }
+        default        { throw "Type invalide. Valeurs autorisees : AUDIT, CORRECTION, COMPLETION, VALIDATION." }
     }
 }
 
@@ -287,7 +193,7 @@ function Initialize-SessionFiles {
     Set-SessionIdInFile -FilePath $resultatsMdPath -SessionId $SessionId
     Set-SessionIdInFile -FilePath $finSessionPath  -SessionId $SessionId
 
-    $sessionContent = @"
+$sessionContent = @"
 # SESSION
 
 ## ID SESSION
@@ -309,15 +215,15 @@ Intitule : $TitleValue
 
 ## Objectif de la session
 
-INFORMATION NON FOURNIE — A CONFIRMER
+INFORMATION NON FOURNIE - A CONFIRMER
 
 ## Perimetre exact traite
 
-INFORMATION NON FOURNIE — A CONFIRMER
+INFORMATION NON FOURNIE - A CONFIRMER
 
 ## Resultat synthetique de session
 
-INFORMATION NON FOURNIE — A CONFIRMER
+INFORMATION NON FOURNIE - A CONFIRMER
 
 ## Dossiers lies
 
@@ -327,16 +233,16 @@ INFORMATION NON FOURNIE — A CONFIRMER
     Set-Content -Path $sessionMdPath -Value $sessionContent -Encoding utf8
 
     if (-not (Test-Path $notesMdPath)) {
-        Set-Content -Path $notesMdPath -Value "# NOTES`n`nINFORMATION NON FOURNIE — A CONFIRMER" -Encoding utf8
+        Set-Content -Path $notesMdPath -Value "# NOTES`n`nINFORMATION NON FOURNIE - A CONFIRMER" -Encoding utf8
     }
     if (-not (Test-Path $evidencesMdPath)) {
-        Set-Content -Path $evidencesMdPath -Value "# EVIDENCES`n`nINFORMATION NON FOURNIE — A CONFIRMER" -Encoding utf8
+        Set-Content -Path $evidencesMdPath -Value "# EVIDENCES`n`nINFORMATION NON FOURNIE - A CONFIRMER" -Encoding utf8
     }
     if (-not (Test-Path $resultatsMdPath)) {
-        Set-Content -Path $resultatsMdPath -Value "# RESULTATS`n`nINFORMATION NON FOURNIE — A CONFIRMER" -Encoding utf8
+        Set-Content -Path $resultatsMdPath -Value "# RESULTATS`n`nINFORMATION NON FOURNIE - A CONFIRMER" -Encoding utf8
     }
     if (-not (Test-Path $finSessionPath)) {
-        Set-Content -Path $finSessionPath -Value "# FIN_SESSION`n`nINFORMATION NON FOURNIE — A CONFIRMER" -Encoding utf8
+        Set-Content -Path $finSessionPath -Value "# FIN_SESSION`n`nINFORMATION NON FOURNIE - A CONFIRMER" -Encoding utf8
     }
 }
 
@@ -349,14 +255,13 @@ function Initialize-PatchFolder {
     )
 
     Ensure-Directory $PatchDir
-    Remove-GitKeepIfNeeded -DirectoryPath $PatchDir
 
     $patchFileName = "PATCH__{0}.diff" -f $SessionId
     $readmePatchPath = Join-Path $PatchDir "README_PATCH.md"
     $noPatchPath = Join-Path $PatchDir "NO_PATCH.md"
 
     if ($TypeValue -in @("AUDIT", "VALIDATION")) {
-        $noPatchContent = @"
+$noPatchContent = @"
 # NO_PATCH
 
 Session : $SessionId
@@ -374,7 +279,7 @@ Raison :
         }
     }
     else {
-        $readmePatchContent = @"
+$readmePatchContent = @"
 # README_PATCH
 
 ## Session liee
@@ -409,13 +314,14 @@ git apply         "$PatchRelativePath/$patchFileName"
 
 # --- Interactive fallback ---
 $Stage = Prompt-IfMissing -CurrentValue $Stage -PromptText "Stage (1-ALPHA / 2-BETA)"
-$Block = Prompt-IfMissing -CurrentValue $Block -PromptText "Bloc (A1 a A13 pour ALPHA / B1 a B4 pour BETA)"
+$Block = Prompt-IfMissing -CurrentValue $Block -PromptText "Bloc (A1 a A13 / B1 a B4)"
 $SessionCode = Prompt-IfMissing -CurrentValue $SessionCode -PromptText "Code session (ex: AUTH-01)"
 $Type = Prompt-IfMissing -CurrentValue $Type -PromptText "Type (AUDIT / CORRECTION / COMPLETION / VALIDATION)"
 $Title = Prompt-IfMissing -CurrentValue $Title -PromptText "Intitule de la session"
 
 $Stage = Get-CanonicalStage -Value $Stage
-$Block = Get-CanonicalBlock -Value $Block -StageValue $Stage
+$Block = Get-CanonicalBlock -Value $Block
+Test-BlockAllowedForStage -StageValue $Stage -BlockValue $Block
 $SessionCode = (Get-SafeString -Value $SessionCode).ToUpperInvariant()
 $Type = Get-CanonicalType -Value $Type
 $Title = Get-SafeString -Value $Title
@@ -443,8 +349,8 @@ $blockPatchesRoot  = Join-Path $stagePatchesRoot  $blockDirName
 
 Ensure-Directory $stageSessionsRoot
 Ensure-Directory $stagePatchesRoot
-Ensure-BlockReadme -DirectoryPath $blockSessionsRoot -StageValue $Stage -BlockValue $Block -Kind "sessions"
-Ensure-BlockReadme -DirectoryPath $blockPatchesRoot -StageValue $Stage -BlockValue $Block -Kind "patches"
+Ensure-Directory $blockSessionsRoot
+Ensure-Directory $blockPatchesRoot
 
 $dateToken   = Get-Date -Format "yyyyMMdd"
 $dateDisplay = Get-Date -Format "dd/MM/yyyy"
