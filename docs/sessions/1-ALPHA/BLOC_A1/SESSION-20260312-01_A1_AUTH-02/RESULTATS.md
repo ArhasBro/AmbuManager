@@ -1,79 +1,96 @@
 ﻿# RESULTATS
 
-## Résultats de la correction complémentaire AUTH-02
+## Résultats finaux de la session AUTH-02
 
 Le diagnostic AUTH-02 est conservé :
 - défaut réel localisé sur la redirection post-connexion
 - correction limitée à `app/login/page.tsx`
 
-La présente correction complémentaire traite uniquement la régression build introduite par le précédent patch AUTH-02.
+La documentation est mise à jour pour refléter l’état réel désormais prouvé du dépôt.
 
 ---
 
-## 1. Cause retenue
+## 1. Défaut AUTH-02 traité
 
-Cause retenue :
-- `useSearchParams()` a été introduit directement dans `app/login/page.tsx`
-- sur le dépôt utilisateur, cela provoque un échec de build sur `/login`
+Défaut traité :
+- redirection post-connexion figée vers `/dashboard`
 
-Preuve prise en compte :
-- `npm run build` : ÉCHEC
-- erreur :
-  - `useSearchParams() should be wrapped in a suspense boundary at page "/login"`
-  - `Error occurred prerendering page "/login"`
+Portée de correction retenue :
+- un seul fichier code concerné : `app/login/page.tsx`
 
----
-
-## 2. Correction retenue
-
-Correction minimale appliquée au patch :
-- ajout de `Suspense` dans `app/login/page.tsx`
-- création d’un sous-composant `LoginPageContent`
-- déplacement de `useSearchParams()` dans ce sous-composant
-- conservation intégrale de la logique de redirection sécurisée
+Justification :
+- le défaut était localisé dans la page de login
+- aucune preuve ne justifiait une modification de :
+  - `lib/auth.ts`
+  - `app/api/auth/[...nextauth]/route.ts`
+  - `proxy.ts`
+  - `app/providers.tsx`
 
 ---
 
-## 3. Périmètre
+## 2. Correctifs appliqués
+
+### Patch AUTH-02
+Correctif appliqué :
+- sécurisation de `callbackUrl`
+- fallback `/dashboard`
+- normalisation de la destination de retour
+- redirection post-login corrigée
+
+### Patch BUILD-FIX
+Correctif appliqué :
+- usage de `useSearchParams()` déplacé dans un sous-composant enfant
+- sous-composant enveloppé dans `Suspense`
+- logique de redirection sécurisée conservée
+
+---
+
+## 3. État réel du dépôt
+
+État désormais prouvé :
+- patch AUTH-02 appliqué dans le dépôt
+- patch BUILD-FIX appliqué dans le dépôt
+- `git apply --check` : OK
+- `npm run lint` : OK
+- `npm run build` : OK
+
+Conséquence :
+- le défaut AUTH-02 est corrigé
+- la régression build liée à `useSearchParams()` est corrigée
+- aucune non-conformité technique restante n’est prouvée sur le périmètre traité
+
+---
+
+## 4. Périmètre final
 
 Périmètre respecté :
+- flux de connexion uniquement
 - un seul fichier code modifié : `app/login/page.tsx`
 
-Aucun autre fichier code modifié :
-- `lib/auth.ts`
-- `app/api/auth/[...nextauth]/route.ts`
-- `proxy.ts`
-- `app/providers.tsx`
+Hors périmètre maintenu :
+- RBAC détaillé
+- multi-tenant global
+- reset password
+- mot de passe initial
+- API globale
+- autres sessions AUTH
 
-Pourquoi :
-- la régression build est localisée dans la page de login
-- aucune preuve ne justifie d’élargir le patch
-
----
-
-## 4. Ce qui reste inchangé
-
-Le correctif complémentaire ne remet pas en cause :
-- le diagnostic AUTH-02
-- la sécurisation de `callbackUrl`
-- le fallback `/dashboard`
-- le rejet des destinations non internes sûres
-- la normalisation de `res.url`
+Conséquence :
+- la session reste strictement conforme au rôle attendu de `AUTH-02`
 
 ---
 
-## 5. Vérification disponible
+## 5. Réserve restante
 
-Vérification locale réalisée sur le patch complémentaire :
-- `git apply --check` : OK
+Réserve restante explicite :
+- test manuel fonctionnel de redirection post-login à confirmer sur :
+  - `/dashboard`
+  - `/vehicles`
+  - `/planning`
 
-Ce que cela prouve :
-- le `.diff` complémentaire est applicable sur l’état attendu
-
-Ce que cela ne prouve pas encore :
-- application réelle dans le dépôt utilisateur
-- résultat réel de `npm run lint`
-- résultat réel de `npm run build`
+Justification :
+- la validation statique est désormais obtenue
+- la seule réserve finale restante est une validation fonctionnelle en exécution manuelle
 
 ---
 
@@ -81,15 +98,12 @@ Ce que cela ne prouve pas encore :
 
 **VALIDABLE SOUS RÉSERVE**
 
-Réserve :
-- appliquer le patch dans le dépôt réel
-- relancer :
-  - `npm run lint`
-  - `npm run build`
+### Justification du verdict
 
-Justification :
-- la cause est identifiée précisément
-- la correction est minimale
-- le périmètre AUTH-02 est respecté
-- la sécurisation de la redirection est conservée
-- la validation finale dépend du nouveau build sur le dépôt utilisateur
+Le verdict `VALIDABLE SOUS RÉSERVE` est retenu car :
+- le défaut AUTH-02 a été corrigé
+- le BUILD-FIX a été appliqué
+- `git apply --check` est validé
+- `npm run lint` est validé
+- `npm run build` est validé
+- la seule réserve restante est le test manuel fonctionnel de redirection post-login

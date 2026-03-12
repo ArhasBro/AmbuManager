@@ -6,11 +6,14 @@
 
 ## Objet
 
-Correctif complémentaire du patch AUTH-02 pour supprimer la régression build liée à `useSearchParams()` sur `/login`, tout en conservant la redirection sécurisée.
+Documentation finale des correctifs appliqués pour la session AUTH-02 :
+- correctif AUTH-02 sur la redirection post-connexion
+- correctif BUILD-FIX sur l’usage de `useSearchParams()` à la page `/login`
 
-## Fichier patch
+## Fichiers patchs
 
-`PATCH__SESSION-20260312-01_A1_AUTH-02_BUILD-FIX.diff`
+- `PATCH__SESSION-20260312-01_A1_AUTH-02.diff`
+- `PATCH__SESSION-20260312-01_A1_AUTH-02_BUILD-FIX.diff`
 
 ## Fichier code touché
 
@@ -18,20 +21,21 @@ Correctif complémentaire du patch AUTH-02 pour supprimer la régression build l
 
 ## Portée exacte
 
-Le patch :
-- conserve la sécurisation de `callbackUrl`
-- conserve le fallback `/dashboard`
-- corrige uniquement l’usage de `useSearchParams()`
-- ajoute un wrapper `Suspense`
-- déplace le hook dans un composant enfant local au même fichier
+Les correctifs appliqués :
+- conservent la sécurisation de `callbackUrl`
+- conservent le fallback `/dashboard`
+- normalisent la destination de retour après connexion
+- corrigent l’usage de `useSearchParams()` via un sous-composant enfant
+- ajoutent un wrapper `Suspense`
+- restent limités à `app/login/page.tsx`
 
-Le patch ne touche pas :
+Les correctifs ne touchent pas :
 - `lib/auth.ts`
 - `app/api/auth/[...nextauth]/route.ts`
 - `proxy.ts`
 - `app/providers.tsx`
 
-## Pourquoi ce patch reste dans AUTH-02
+## Pourquoi cela reste dans AUTH-02
 
 La correction :
 - ne traite que le flux de connexion
@@ -40,12 +44,22 @@ La correction :
 - ne modifie pas le middleware
 - ne sort pas du périmètre autorisé de la session
 
-## Vérification locale
+## État réel désormais validé
 
+- patch AUTH-02 appliqué : Oui
+- patch BUILD-FIX appliqué : Oui
 - `git apply --check` : OK
+- `npm run lint` : OK
+- `npm run build` : OK
 
-## Commandes d’application
+## Réserve restante
 
-```bash
-git apply --check "docs/patches/1-ALPHA/BLOC_A1/SESSION-20260312-01_A1_AUTH-02/PATCH__SESSION-20260312-01_A1_AUTH-02_BUILD-FIX.diff"
-git apply "docs/patches/1-ALPHA/BLOC_A1/SESSION-20260312-01_A1_AUTH-02/PATCH__SESSION-20260312-01_A1_AUTH-02_BUILD-FIX.diff"
+Seule réserve restante :
+- test manuel fonctionnel de redirection post-login à confirmer sur :
+  - `/dashboard`
+  - `/vehicles`
+  - `/planning`
+
+## Verdict documentaire
+
+**VALIDABLE SOUS RÉSERVE**

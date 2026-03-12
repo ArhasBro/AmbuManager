@@ -1,50 +1,65 @@
 ﻿# FIN_SESSION
 
-## Clôture complémentaire AUTH-02
+## Clôture finale AUTH-02
 
-Correction complémentaire réalisée sur :
+Session :
 `SESSION-20260312-01_A1_AUTH-02`
 
 Objet :
-- corriger uniquement la régression build introduite par l’usage de `useSearchParams()` dans `app/login/page.tsx`
+- correction / remise à niveau du flux de connexion si nécessaire
+- mise à jour documentaire finale après application des correctifs et validation technique
 
 ## Conclusion
 
 Le diagnostic AUTH-02 est conservé.  
-La correction complémentaire est limitée à la page de login et conserve la redirection sécurisée.
+Le défaut réel du flux de connexion a été corrigé.  
+Le BUILD-FIX a également été appliqué pour supprimer la régression build liée à `useSearchParams()`.
 
-Correction retenue :
-- `useSearchParams()` déplacé dans un sous-composant enfant
-- sous-composant enveloppé dans `Suspense`
-- aucun élargissement hors flux de connexion
+L’état réel du dépôt est désormais le suivant :
+- patch AUTH-02 appliqué
+- patch BUILD-FIX appliqué
+- `git apply --check` : OK
+- `npm run lint` : OK
+- `npm run build` : OK
 
 ## Validation de périmètre
 
 - périmètre AUTH-02 respecté : Oui
+- correction limitée au flux de connexion : Oui
 - nombre de fichiers code modifiés : 1
 - fichier modifié : `app/login/page.tsx`
 - débordement de scope : Non
 
 ## Validation technique
 
-- patch complémentaire produit : Oui
+- patch AUTH-02 appliqué : Oui
+- patch BUILD-FIX appliqué : Oui
 - `git apply --check` : OK
-- `npm run lint` après correctif : NON RELANCÉ
-- `npm run build` après correctif : NON RELANCÉ
-- test manuel après correctif : NON RELANCÉ
+- `npm run lint` : OK
+- `npm run build` : OK
+
+## Réserve restante
+
+Réserve explicite restante :
+- test manuel fonctionnel de redirection post-login à confirmer sur :
+  - `/dashboard`
+  - `/vehicles`
+  - `/planning`
 
 ## Verdict final
 
 **VALIDABLE SOUS RÉSERVE**
 
-Réserve obligatoire :
-- appliquer le patch dans le dépôt réel
-- relancer `npm run lint`
-- relancer `npm run build`
+Justification :
+- le défaut AUTH-02 a été corrigé
+- la régression build a été corrigée
+- la validation statique est complète
+- la seule réserve restante est la validation manuelle du comportement de redirection
 
-## Pourquoi cela reste dans AUTH-02
+## Règle finale
 
-La correction :
-- reste limitée au flux de connexion
-- ne touche ni RBAC, ni multi-tenant global, ni reset password, ni mot de passe initial, ni API globale
-- ne modifie que la page de login
+Cette session :
+- ne rouvre pas l’audit AUTH-01
+- ne traite pas les sujets AUTH-03 à AUTH-06
+- ne modifie ni RBAC, ni multi-tenant global, ni reset password, ni mot de passe initial, ni API globale
+- reste strictement limitée au flux de connexion
