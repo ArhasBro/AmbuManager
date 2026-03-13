@@ -35,4 +35,17 @@ npm run db:seed
 npm run db:reset
 npm run db:studio
 
+
+
+GPT :
+
+Session validée, nous passons à la suivante.
+
+Avant de préparer les prompts, relis bien les fichiers `.md` présents dans `./docs`, et surtout dans `./docs/master`, car ce sont les documents de référence qui t’aident à faire le travail correctement.
+
+Prépare les prompts pour :
+
+- XXXX
+- XXXX
+
 sortie propre + retour du terminal + aucune erreur = validé

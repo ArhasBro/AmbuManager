@@ -30,7 +30,7 @@ type RunAuditLog = {
 };
 
 type ViewMode = "SIMPLE" | "AMBULANCE";
-type Role = "ADMIN" | "GERANT" | "BUREAU" | "DEA" | "AA" | "TAXI" | "REGULATEUR" | string;
+type Role = "ADMIN" | "GERANT" | "BUREAU" | "ADE" | "AA" | "TAXI" | "REGULATEUR" | string;
 
 type RestWarning = {
   code: "MIN_REST_VIOLATION";

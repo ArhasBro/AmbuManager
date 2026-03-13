@@ -16,8 +16,8 @@ $ErrorActionPreference = "Stop"
 
 # --- CONFIG ---
 $DocsRoot            = ".\docs"
-$DocsSessionsRoot    = Join-Path $DocsRoot "sessions"
-$DocsPatchesRoot     = Join-Path $DocsRoot "patches"
+$DocsSessionsRoot    = Join-Path $DocsRoot "2-sessions"
+$DocsPatchesRoot     = Join-Path $DocsRoot "3-patches"
 $SessionTemplateDir  = Join-Path $DocsSessionsRoot "SESSION-YYYYMMDD-XX"
 $DefaultOpenInVSCode = $true
 
@@ -60,7 +60,7 @@ function Get-CanonicalStage {
         "2-BETA"  { return "2-BETA" }
         "BETA"    { return "2-BETA" }
         "B"       { return "2-BETA" }
-        default    { throw "Stage invalide. Valeurs autorisees : 1-ALPHA, 2-BETA, ALPHA, BETA." }
+        default   { throw "Stage invalide. Valeurs autorisees : 1-ALPHA, 2-BETA, ALPHA, BETA." }
     }
 }
 
@@ -113,7 +113,7 @@ function Get-CanonicalType {
         "COMPLETION"  { return "COMPLETION" }
         "COMPLÉTION"  { return "COMPLETION" }
         "VALIDATION"  { return "VALIDATION" }
-        default        { throw "Type invalide. Valeurs autorisees : AUDIT, CORRECTION, COMPLETION, VALIDATION." }
+        default       { throw "Type invalide. Valeurs autorisees : AUDIT, CORRECTION, COMPLETION, VALIDATION." }
     }
 }
 
@@ -271,7 +271,7 @@ Type : $TypeValue
 Raison :
 - Session documentaire de type $TypeValue.
 - Aucun patch officiel a produire pour cette session.
-- Le dossier patch reste present pour conserver le miroir avec docs/sessions.
+- Le dossier patch reste present pour conserver le miroir avec docs/2-sessions.
 "@
         Set-Content -Path $noPatchPath -Value $noPatchContent -Encoding utf8
         if (Test-Path $readmePatchPath) {
@@ -369,8 +369,8 @@ if (Test-Path $newPatchDir) {
 
 Copy-Item -Recurse -Force $SessionTemplateDir $newSessionDir
 
-$sessionRelativePath = (Join-Path "docs/sessions/$Stage/$blockDirName" $sessionId) -replace '\\','/'
-$patchRelativePath   = (Join-Path "docs/patches/$Stage/$blockDirName"  $sessionId) -replace '\\','/'
+$sessionRelativePath = (Join-Path "docs/2-sessions/$Stage/$blockDirName" $sessionId) -replace '\\','/'
+$patchRelativePath   = (Join-Path "docs/3-patches/$Stage/$blockDirName"  $sessionId) -replace '\\','/'
 
 Initialize-SessionFiles `
     -SessionDir $newSessionDir `

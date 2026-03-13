@@ -2,7 +2,7 @@
 
 ## ID SESSION
 
-SESSION-20260313-03_A1_RBAC-02
+SESSION-20260313-04_A1_RBAC-03
 
 ## Date
 
@@ -14,8 +14,8 @@ Projet : Investissement
 Sous-projet : Ambulance Manager  
 Maturite : 1-ALPHA  
 Bloc : A1  
-Type : CORRECTION  
-Intitule : Remplacement méthodique de DEA par ADE
+Type : AUDIT  
+Intitule : Audit des permissions existantes par rapport au cadrage validé
 
 ## Objectif de la session
 
@@ -31,5 +31,5 @@ INFORMATION NON FOURNIE - A CONFIRMER
 
 ## Dossiers lies
 
-- Session : docs/sessions/1-ALPHA/BLOC_A1/SESSION-20260313-03_A1_RBAC-02
-- Patchs  : docs/patches/1-ALPHA/BLOC_A1/SESSION-20260313-03_A1_RBAC-02
+- Session : docs/sessions/1-ALPHA/BLOC_A1/SESSION-20260313-04_A1_RBAC-03
+- Patchs  : docs/patches/1-ALPHA/BLOC_A1/SESSION-20260313-04_A1_RBAC-03

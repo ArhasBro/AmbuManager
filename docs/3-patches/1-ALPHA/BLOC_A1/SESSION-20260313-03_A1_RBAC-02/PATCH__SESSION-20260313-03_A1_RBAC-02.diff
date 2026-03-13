@@ -1,0 +1,33 @@
+diff --git a/prisma/schema.prisma b/prisma/schema.prisma
+index 081f320..6b30469 100644
+--- a/prisma/schema.prisma
++++ b/prisma/schema.prisma
+@@ -13,7 +13,7 @@ enum Role {
+   ADMIN
+   GERANT
+   BUREAU
+-  DEA
++  ADE
+   AA
+   TAXI
+   REGULATEUR
+diff --git a/app/planning/planning-client.tsx b/app/planning/planning-client.tsx
+index f82ae0d..188734a 100644
+--- a/app/planning/planning-client.tsx
++++ b/app/planning/planning-client.tsx
+@@ -30,7 +30,7 @@ type RunAuditLog = {
+ };
+ 
+ type ViewMode = "SIMPLE" | "AMBULANCE";
+-type Role = "ADMIN" | "GERANT" | "BUREAU" | "DEA" | "AA" | "TAXI" | "REGULATEUR" | string;
++type Role = "ADMIN" | "GERANT" | "BUREAU" | "ADE" | "AA" | "TAXI" | "REGULATEUR" | string;
+ 
+ type RestWarning = {
+   code: "MIN_REST_VIOLATION";
+diff --git a/prisma/migrations/20260313120000_rename_role_dea_to_ade/migration.sql b/prisma/migrations/20260313120000_rename_role_dea_to_ade/migration.sql
+new file mode 100644
+index 0000000..76bdfcf
+--- /dev/null
++++ b/prisma/migrations/20260313120000_rename_role_dea_to_ade/migration.sql
+@@ -0,0 +1 @@
++ALTER TYPE "Role" RENAME VALUE 'DEA' TO 'ADE';
