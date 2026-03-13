@@ -1,10 +1,13 @@
-﻿# NO_PATCH
+# NO_PATCH
 
-Session : SESSION-20260313-16_A1_API-06
+Session : `SESSION-20260313-16_A1_API-06`
 
-Type : VALIDATION
+Type : `VALIDATION`
 
-Raison :
-- Session documentaire de type VALIDATION.
-- Aucun patch officiel a produire pour cette session.
-- Le dossier patch reste present pour conserver le miroir avec docs/2-sessions.
+Mode retenu : `NO_PATCH`
+
+## Raison
+- session documentaire de type `VALIDATION` ;
+- aucun correctif code réalisé ;
+- aucun `.diff` fonctionnel à produire ;
+- verdict établi à partir du code réel et des sessions déjà validées.
