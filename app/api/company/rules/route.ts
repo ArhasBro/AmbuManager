@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import { RuleMode } from "@prisma/client";
+
+import { authOptions } from "@/lib/auth";
+import { canManageCompanyRules } from "@/lib/permissions";
+import { prisma } from "@/lib/prisma";
 
 // GET: /api/company/rules?keys=PLANNING_VIEW_MODE,OTHER_KEY
 // - Tous les rôles connectés peuvent lire (multi-tenant via companyId)
@@ -16,11 +18,6 @@ const PatchBodySchema = z.object({
   key: z.string().min(1),
   value: z.string().min(1),
 });
-
-// Simple helper : seuls ADMIN/GERANT peuvent modifier un réglage entreprise
-function canWriteRules(role?: string) {
-  return role === "ADMIN" || role === "GERANT";
-}
 
 export async function GET(req: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -87,7 +84,7 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
   }
 
-  if (!canWriteRules(role)) {
+  if (!(await canManageCompanyRules(userId, role))) {
     return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });
   }
 

@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 
 import { authOptions } from "@/lib/auth";
-import { requireRole } from "@/lib/rbac";
+import { canManageUsers } from "@/lib/permissions";
 
 import ResetPasswordClient from "./reset-password-client";
 
@@ -12,7 +12,7 @@ export default async function UsersPage() {
   const user = session?.user;
 
   if (!user?.id || !user.companyId) redirect("/login");
-  if (!requireRole(user.role, ["ADMIN", "GERANT"])) redirect("/login");
+  if (!(await canManageUsers(user.id, user.role))) redirect("/login");
 
   return (
     <div style={{ padding: 16, display: "grid", gap: 16 }}>
@@ -20,7 +20,7 @@ export default async function UsersPage() {
         <div>
           <h1 style={{ margin: 0 }}>Utilisateurs — réinitialisation mot de passe</h1>
           <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
-            Action réservée à l&apos;admin / gérant pour réinitialiser le mot de passe d&apos;un autre utilisateur de la même société.
+            Action réservée à l&apos;admin / gérant ou à un profil disposant de la permission fine de gestion utilisateurs.
           </p>
         </div>
 

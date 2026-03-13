@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { Role } from "@prisma/client";
+import { canManageVehicles } from "@/lib/permissions";
 
 import VehiclesClient from "./vehicles-client";
 
@@ -13,7 +13,7 @@ export default async function VehiclesPage() {
 
   const user = session.user;
 
-  if (user.role !== Role.ADMIN && user.role !== Role.GERANT) redirect("/login");
+  if (!user.id || !(await canManageVehicles(user.id, user.role))) redirect("/login");
   if (!user.companyId) redirect("/login");
 
   const companyId = user.companyId;

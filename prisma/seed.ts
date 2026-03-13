@@ -3,6 +3,7 @@ import { PrismaClient, Role, PlanningTemplateCategory, VehicleType, VehicleStatu
 import { PrismaPg } from "@prisma/adapter-pg";
 import { Pool } from "pg";
 import bcrypt from "bcrypt";
+import { ALPHA_PERMISSION_CATALOG } from "../lib/permission-catalog";
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -86,21 +87,8 @@ async function upsertUser(params: { email: string; password: string; name: strin
 }
 
 async function ensurePermissions() {
-  const permissions = [
-    {
-      code: "PLANNING_AUTOSCHEDULE",
-      label: "Automatisation planning",
-      description: "Permet de générer un planning en brouillon (Jour/Semaine).",
-    },
-    {
-      code: "PLANNING_AUTOSCHEDULE_PUBLISH",
-      label: "Publication planning auto",
-      description: "Permet de publier un planning généré (passage DRAFT -> PUBLISHED).",
-    },
-  ] as const;
-
   const created = [];
-  for (const p of permissions) {
+  for (const p of ALPHA_PERMISSION_CATALOG) {
     const perm = await prisma.permission.upsert({
       where: { code: p.code },
       update: { label: p.label, description: p.description },

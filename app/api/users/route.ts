@@ -3,7 +3,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 import { ok, badRequest, unauthorized, forbidden, serverError } from "@/lib/api/response";
-import { requireRole } from "@/lib/rbac";
+import { canManageUsers } from "@/lib/permissions";
 import { serializeDates } from "@/lib/serializers";
 import { z } from "zod";
 
@@ -23,12 +23,14 @@ function getErrorMessage(e: unknown): string {
 
 export async function GET(req: Request) {
   const session = await getServerSession(authOptions);
-  if (!session?.user?.companyId) return unauthorized();
+  const companyId = session?.user?.companyId;
+  const userId = session?.user?.id;
 
-  // ✅ RBAC (Phase actuelle) : ADMIN + GERANT uniquement
-  if (!requireRole(session.user.role, ["ADMIN", "GERANT"])) return forbidden();
+  if (!companyId || !userId) return unauthorized();
 
-  const companyId = session.user.companyId;
+  const allowed = await canManageUsers(userId, session.user.role);
+  if (!allowed) return forbidden();
+
 
   const url = new URL(req.url);
   const parsed = listQuerySchema.safeParse({

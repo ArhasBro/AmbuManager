@@ -5,7 +5,7 @@ import { z } from "zod";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { AutoScheduleStatus } from "@prisma/client";
-import { canAutoSchedule } from "@/lib/permissions";
+import { canCancelAutoSchedule } from "@/lib/permissions";
 import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
 
 const ParamsSchema = z.object({
@@ -52,7 +52,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
   }
 
   // ✅ RBAC (ADMIN/GERANT) ou permission dédiée
-  const permAllowed = await canAutoSchedule(userId, role);
+  const permAllowed = await canCancelAutoSchedule(userId, role);
 
   if (!permAllowed) {
     return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });

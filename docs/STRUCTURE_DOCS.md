@@ -219,6 +219,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |       |       NO_PATCH.md
 |   |       |       
 |   |       \---SESSION-20260313-05_A1_RBAC-04
+|   |               PATCH__SESSION-20260313-05_A1_RBAC-04.diff
 |   |               README_PATCH.md
 |   |               
 |   \---ANCIENS_PATCHS

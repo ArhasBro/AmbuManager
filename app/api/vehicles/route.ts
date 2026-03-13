@@ -6,7 +6,7 @@ import { ok, badRequest, unauthorized, forbidden, notFound, conflict, serverErro
 import { prismaToHttp } from "@/lib/api/prisma-error";
 import { createVehicleBodySchema, deleteVehicleQuerySchema } from "@/lib/validators/vehicle";
 import { serializeDates } from "@/lib/serializers";
-import { requireRole } from "@/lib/rbac";
+import { canManageVehicles } from "@/lib/permissions";
 import { z } from "zod";
 
 const listQuerySchema = z.object({
@@ -25,12 +25,14 @@ function getErrorMessage(e: unknown): string {
 
 export async function GET(req: Request) {
   const session = await getServerSession(authOptions);
-  if (!session?.user?.companyId) return unauthorized();
+  const companyId = session?.user?.companyId;
+  const userId = session?.user?.id;
 
-  // ✅ RBAC (Phase actuelle) : ADMIN + GERANT uniquement
-  if (!requireRole(session.user.role, ["ADMIN", "GERANT"])) return forbidden();
+  if (!companyId || !userId) return unauthorized();
 
-  const companyId = session.user.companyId;
+  const allowed = await canManageVehicles(userId, session.user.role);
+  if (!allowed) return forbidden();
+
 
   // ✅ Support ?limit=...
   const url = new URL(req.url);
@@ -61,10 +63,10 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
-  if (!session?.user?.companyId) return unauthorized();
-  if (session.user.role !== "ADMIN") return forbidden();
+  const companyId = session?.user?.companyId;
 
-  const companyId = session.user.companyId;
+  if (!companyId) return unauthorized();
+  if (session.user.role !== "ADMIN") return forbidden();
 
   const jsonBody: unknown = await req.json().catch(() => null);
   const parsed = createVehicleBodySchema.safeParse(jsonBody);
@@ -101,10 +103,10 @@ export async function POST(req: Request) {
 
 export async function DELETE(req: Request) {
   const session = await getServerSession(authOptions);
-  if (!session?.user?.companyId) return unauthorized();
-  if (session.user.role !== "ADMIN") return forbidden();
+  const companyId = session?.user?.companyId;
 
-  const companyId = session.user.companyId;
+  if (!companyId) return unauthorized();
+  if (session.user.role !== "ADMIN") return forbidden();
 
   const url = new URL(req.url);
   const parsed = deleteVehicleQuerySchema.safeParse({

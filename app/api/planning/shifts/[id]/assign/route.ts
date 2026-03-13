@@ -4,7 +4,7 @@ import { getServerSession } from "next-auth/next";
 
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { requireRole } from "@/lib/rbac";
+import { canEditPlanning } from "@/lib/permissions";
 import { assignDraftShift } from "@/lib/services/planning/assign-draftshift";
 import { assignShift } from "@/lib/services/planning/assign-shift";
 
@@ -40,7 +40,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
   }
 
   // 2) RBAC
-  if (!requireRole(userRole, ["ADMIN", "GERANT"])) {
+  if (!(await canEditPlanning(actorUserId, userRole))) {
     return json(403, { ok: false, error: "FORBIDDEN" });
   }
 

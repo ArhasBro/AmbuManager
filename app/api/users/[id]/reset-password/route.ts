@@ -5,7 +5,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { badRequest, forbidden, notFound, ok, serverError, unauthorized } from "@/lib/api/response";
-import { requireRole } from "@/lib/rbac";
+import { canManageUsers } from "@/lib/permissions";
 import { serializeDates } from "@/lib/serializers";
 
 const resetPasswordBodySchema = z
@@ -40,7 +40,7 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
   const role = session?.user?.role;
 
   if (!actorUserId || !companyId) return unauthorized();
-  if (!requireRole(role, ["ADMIN", "GERANT"])) return forbidden();
+  if (!(await canManageUsers(actorUserId, role))) return forbidden();
 
   let body: unknown;
   try {

@@ -1548,6 +1548,10 @@ C:.
 |   |   |   |   [root-of-the-server]__0dee59aa._.js.map
 |   |   |   |   [root-of-the-server]__0e43a126._.js
 |   |   |   |   [root-of-the-server]__0e43a126._.js.map
+|   |   |   |   [root-of-the-server]__2a005fc9._.js
+|   |   |   |   [root-of-the-server]__2a005fc9._.js.map
+|   |   |   |   [root-of-the-server]__3a228d2f._.js
+|   |   |   |   [root-of-the-server]__3a228d2f._.js.map
 |   |   |   |   [root-of-the-server]__3d510304._.js
 |   |   |   |   [root-of-the-server]__3d510304._.js.map
 |   |   |   |   [root-of-the-server]__466e0aef._.js
@@ -1556,16 +1560,14 @@ C:.
 |   |   |   |   [root-of-the-server]__51fd3f4a._.js.map
 |   |   |   |   [root-of-the-server]__5e792a0f._.js
 |   |   |   |   [root-of-the-server]__5e792a0f._.js.map
-|   |   |   |   [root-of-the-server]__719bde5d._.js
-|   |   |   |   [root-of-the-server]__719bde5d._.js.map
-|   |   |   |   [root-of-the-server]__7ca89c19._.js
-|   |   |   |   [root-of-the-server]__7ca89c19._.js.map
+|   |   |   |   [root-of-the-server]__6e7a5963._.js
+|   |   |   |   [root-of-the-server]__6e7a5963._.js.map
+|   |   |   |   [root-of-the-server]__80597b5e._.js
+|   |   |   |   [root-of-the-server]__80597b5e._.js.map
 |   |   |   |   [root-of-the-server]__88924fbd._.js
 |   |   |   |   [root-of-the-server]__88924fbd._.js.map
 |   |   |   |   [root-of-the-server]__b46cb4bd._.js
 |   |   |   |   [root-of-the-server]__b46cb4bd._.js.map
-|   |   |   |   [root-of-the-server]__db87c0db._.js
-|   |   |   |   [root-of-the-server]__db87c0db._.js.map
 |   |   |   |   [root-of-the-server]__e6c5e537._.js
 |   |   |   |   [root-of-the-server]__e6c5e537._.js.map
 |   |   |   |   [root-of-the-server]__ecb56e79._.js
@@ -1576,10 +1578,8 @@ C:.
 |   |   |   |   [root-of-the-server]__f10b53bb._.js.map
 |   |   |   |   [root-of-the-server]__f42cba32._.js
 |   |   |   |   [root-of-the-server]__f42cba32._.js.map
-|   |   |   |   [root-of-the-server]__fd390e3d._.js
-|   |   |   |   [root-of-the-server]__fd390e3d._.js.map
-|   |   |   |   [root-of-the-server]__ffe224e8._.js
-|   |   |   |   [root-of-the-server]__ffe224e8._.js.map
+|   |   |   |   [root-of-the-server]__f6b8a4de._.js
+|   |   |   |   [root-of-the-server]__f6b8a4de._.js.map
 |   |   |   |   [turbopack]_runtime.js
 |   |   |   |   [turbopack]_runtime.js.map
 |   |   |   |   _47b770e9._.js
@@ -1662,28 +1662,28 @@ C:.
 |   |   |           [root-of-the-server]__36ebbb9f._.js.map
 |   |   |           [root-of-the-server]__3e4277b6._.js
 |   |   |           [root-of-the-server]__3e4277b6._.js.map
-|   |   |           [root-of-the-server]__76e5f64f._.js
-|   |   |           [root-of-the-server]__76e5f64f._.js.map
+|   |   |           [root-of-the-server]__5218791f._.js
+|   |   |           [root-of-the-server]__5218791f._.js.map
 |   |   |           [root-of-the-server]__84823185._.js
 |   |   |           [root-of-the-server]__84823185._.js.map
 |   |   |           [root-of-the-server]__87883845._.js
 |   |   |           [root-of-the-server]__87883845._.js.map
-|   |   |           [root-of-the-server]__9ae77970._.js
-|   |   |           [root-of-the-server]__9ae77970._.js.map
 |   |   |           [root-of-the-server]__9d5e3ced._.js
 |   |   |           [root-of-the-server]__9d5e3ced._.js.map
 |   |   |           [root-of-the-server]__a457c799._.js
 |   |   |           [root-of-the-server]__a457c799._.js.map
 |   |   |           [root-of-the-server]__b9356576._.js
 |   |   |           [root-of-the-server]__b9356576._.js.map
+|   |   |           [root-of-the-server]__c4d88a62._.js
+|   |   |           [root-of-the-server]__c4d88a62._.js.map
 |   |   |           [root-of-the-server]__d7d7eec3._.js
 |   |   |           [root-of-the-server]__d7d7eec3._.js.map
+|   |   |           [root-of-the-server]__d9175139._.js
+|   |   |           [root-of-the-server]__d9175139._.js.map
 |   |   |           [root-of-the-server]__e0a07927._.js
 |   |   |           [root-of-the-server]__e0a07927._.js.map
 |   |   |           [root-of-the-server]__e1b2e646._.js
 |   |   |           [root-of-the-server]__e1b2e646._.js.map
-|   |   |           [root-of-the-server]__e5c1a29b._.js
-|   |   |           [root-of-the-server]__e5c1a29b._.js.map
 |   |   |           [turbopack]_runtime.js
 |   |   |           [turbopack]_runtime.js.map
 |   |   |           _05e07409._.js
@@ -1751,13 +1751,13 @@ C:.
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
 |   |   |       
-|   |   +---kgdo0N9QbonbcrbsQtdRa
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
+|   |   +---media
+|   |   |       favicon.0b3bf435.ico
 |   |   |       
-|   |   \---media
-|   |           favicon.0b3bf435.ico
+|   |   \---umbikNaQwFYVmoaEst_zU
+|   |           _buildManifest.js
+|   |           _clientMiddlewareManifest.json
+|   |           _ssgManifest.js
 |   |           
 |   \---types
 |           routes.d.ts
@@ -2068,6 +2068,7 @@ C:.
 |   |   |       |       NO_PATCH.md
 |   |   |       |       
 |   |   |       \---SESSION-20260313-05_A1_RBAC-04
+|   |   |               PATCH__SESSION-20260313-05_A1_RBAC-04.diff
 |   |   |               README_PATCH.md
 |   |   |               
 |   |   \---ANCIENS_PATCHS
@@ -2121,6 +2122,7 @@ C:.
 |           
 +---lib
 |   |   auth.ts
+|   |   permission-catalog.ts
 |   |   permissions.ts
 |   |   prisma.ts
 |   |   rbac.ts

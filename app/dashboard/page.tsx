@@ -2,12 +2,28 @@ import { getServerSession } from "next-auth/next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
+import {
+  canAccessAdminDashboard,
+  canManageUsers,
+  canManageVehicles,
+} from "@/lib/permissions";
 import LogoutButton from "./logout-button";
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
 
   if (!session) redirect("/login");
+
+  const user = session.user;
+  const userId = user.id;
+
+  const [adminDashboardAllowed, usersAllowed, vehiclesAllowed] = userId
+    ? await Promise.all([
+        canAccessAdminDashboard(userId, user.role),
+        canManageUsers(userId, user.role),
+        canManageVehicles(userId, user.role),
+      ])
+    : [false, false, false];
 
   return (
     <div style={{ padding: 16, display: "grid", gap: 12 }}>
@@ -16,9 +32,17 @@ export default async function DashboardPage() {
         <LogoutButton />
       </div>
 
-      {(session.user.role === "ADMIN" || session.user.role === "GERANT") ? (
-        <div style={{ display: "flex", gap: 12 }}>
-          <Link href="/users">Réinitialisation mot de passe</Link>
+      <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+        <Link href="/planning">Planning</Link>
+      </div>
+
+      {adminDashboardAllowed ? (
+        <div style={{ display: "grid", gap: 8, padding: 12, border: "1px solid #333", borderRadius: 8 }}>
+          <h2 style={{ margin: 0 }}>Dashboard admin</h2>
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+            {usersAllowed ? <Link href="/users">Réinitialisation mot de passe</Link> : null}
+            {vehiclesAllowed ? <Link href="/vehicles">Véhicules</Link> : null}
+          </div>
         </div>
       ) : null}
 
