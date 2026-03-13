@@ -1,10 +1,10 @@
 ﻿# NO_PATCH
 
-Session : SESSION-20260313-10_A1_RBAC-09
+Session : SESSION-20260313-11_A1_API-01
 
-Type : VALIDATION
+Type : AUDIT
 
 Raison :
-- Session documentaire de type VALIDATION.
+- Session documentaire de type AUDIT.
 - Aucun patch officiel a produire pour cette session.
 - Le dossier patch reste present pour conserver le miroir avec docs/2-sessions.

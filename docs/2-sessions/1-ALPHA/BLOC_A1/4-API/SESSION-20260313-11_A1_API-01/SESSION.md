@@ -2,7 +2,7 @@
 
 ## ID SESSION
 
-SESSION-20260313-10_A1_RBAC-09
+SESSION-20260313-11_A1_API-01
 
 ## Date
 
@@ -14,8 +14,8 @@ Projet : Investissement
 Sous-projet : Ambulance Manager  
 Maturite : 1-ALPHA  
 Bloc : A1  
-Type : VALIDATION  
-Intitule : Validation du bloc rôles/permissions ALPHA
+Type : AUDIT  
+Intitule : Audit du format API existant
 
 ## Objectif de la session
 
@@ -31,5 +31,5 @@ INFORMATION NON FOURNIE - A CONFIRMER
 
 ## Dossiers lies
 
-- Session : docs/2-sessions/1-ALPHA/BLOC_A1/SESSION-20260313-10_A1_RBAC-09
-- Patchs  : docs/3-patches/1-ALPHA/BLOC_A1/SESSION-20260313-10_A1_RBAC-09
+- Session : docs/2-sessions/1-ALPHA/BLOC_A1/SESSION-20260313-11_A1_API-01
+- Patchs  : docs/3-patches/1-ALPHA/BLOC_A1/SESSION-20260313-11_A1_API-01
