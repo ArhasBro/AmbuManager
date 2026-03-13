@@ -1733,18 +1733,13 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
-|   |   +---bYzDcHZzRb06BHqRs8Xmf
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
-|   |   |       
 |   |   +---chunks
 |   |   |       000ea66499535a39.js
 |   |   |       1687260e4d8b05d6.js
 |   |   |       4524ccf59c8b171b.js
+|   |   |       54db6fcd2003973a.css
 |   |   |       642a00754c8aebb8.js
 |   |   |       672c0168d7981883.js
-|   |   |       7570e90fe76a1747.css
 |   |   |       82abf2d65f5428ae.js
 |   |   |       899b7782e7cb92a1.js
 |   |   |       96a8fcc9ec5b00e6.js
@@ -1756,8 +1751,13 @@ C:.
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
 |   |   |       
-|   |   \---media
-|   |           favicon.0b3bf435.ico
+|   |   +---media
+|   |   |       favicon.0b3bf435.ico
+|   |   |       
+|   |   \---p4q61wedkl4ORQSGFGiOJ
+|   |           _buildManifest.js
+|   |           _clientMiddlewareManifest.json
+|   |           _ssgManifest.js
 |   |           
 |   \---types
 |           routes.d.ts
@@ -1989,7 +1989,14 @@ C:.
 |   |   |       |       RESULTATS.md
 |   |   |       |       SESSION.md
 |   |   |       |       
-|   |   |       \---SESSION-20260313-09_A1_RBAC-08
+|   |   |       +---SESSION-20260313-09_A1_RBAC-08
+|   |   |       |       EVIDENCES.md
+|   |   |       |       FIN_SESSION.md
+|   |   |       |       NOTES.md
+|   |   |       |       RESULTATS.md
+|   |   |       |       SESSION.md
+|   |   |       |       
+|   |   |       \---SESSION-20260313-10_A1_RBAC-09
 |   |   |               EVIDENCES.md
 |   |   |               FIN_SESSION.md
 |   |   |               NOTES.md
@@ -2110,8 +2117,12 @@ C:.
 |   |   |       +---SESSION-20260313-08_A1_RBAC-07
 |   |   |       |       NO_PATCH.md
 |   |   |       |       
-|   |   |       \---SESSION-20260313-09_A1_RBAC-08
-|   |   |               README_PATCH.md
+|   |   |       +---SESSION-20260313-09_A1_RBAC-08
+|   |   |       |       PATCH__SESSION-20260313-09_A1_RBAC-08.diff
+|   |   |       |       README_PATCH.md
+|   |   |       |       
+|   |   |       \---SESSION-20260313-10_A1_RBAC-09
+|   |   |               NO_PATCH.md
 |   |   |               
 |   |   \---ANCIENS_PATCHS
 |   |       +---4.4

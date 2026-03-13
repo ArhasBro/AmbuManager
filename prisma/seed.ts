@@ -102,25 +102,37 @@ async function ensurePermissions() {
 }
 
 async function setUserPermissions(userId: string, permissionCodes: string[]) {
-  if (permissionCodes.length === 0) return;
+  const uniqueCodes = [...new Set(permissionCodes)];
 
-  const perms = await prisma.permission.findMany({
-    where: { code: { in: permissionCodes } },
-    select: { id: true, code: true },
+  const perms =
+    uniqueCodes.length > 0
+      ? await prisma.permission.findMany({
+          where: { code: { in: uniqueCodes } },
+          select: { id: true, code: true },
+        })
+      : [];
+
+  if (perms.length !== uniqueCodes.length) {
+    const foundCodes = new Set(perms.map((perm) => perm.code));
+    const missingCodes = uniqueCodes.filter((code) => !foundCodes.has(code));
+    throw new Error(`Missing permissions in catalog: ${missingCodes.join(", ")}`);
+  }
+
+  const permissionIds = perms.map((perm) => perm.id);
+
+  await prisma.userPermission.deleteMany({
+    where:
+      permissionIds.length > 0
+        ? { userId, permissionId: { notIn: permissionIds } }
+        : { userId },
   });
 
-  for (const perm of perms) {
-    await prisma.userPermission.upsert({
-      where: {
-        userId_permissionId: {
-          userId,
-          permissionId: perm.id,
-        },
-      },
-      update: {},
-      create: { userId, permissionId: perm.id },
-    });
-  }
+  if (permissionIds.length === 0) return;
+
+  await prisma.userPermission.createMany({
+    data: permissionIds.map((permissionId) => ({ userId, permissionId })),
+    skipDuplicates: true,
+  });
 }
 
 async function upsertTemplate(params: {
