@@ -1,10 +1,20 @@
-﻿# NO_PATCH
+# NO_PATCH
 
-Session : SESSION-20260313-08_A1_RBAC-07
+Session : `SESSION-20260313-08_A1_RBAC-07`
 
-Type : VALIDATION
+Type : `VALIDATION`
 
-Raison :
-- Session documentaire de type VALIDATION.
-- Aucun patch officiel a produire pour cette session.
-- Le dossier patch reste present pour conserver le miroir avec docs/2-sessions.
+Décision :
+- aucun correctif code supplémentaire n’est retenu.
+
+Raisons :
+- `RBAC-07` vérifie le rôle principal obligatoire sur le modèle réellement présent ;
+- le dépôt porte déjà un unique champ `User.role` obligatoire ;
+- aucune structure multi-rôle active n’a été trouvée ;
+- aucune non-conformité prouvée n’impose un patch dans cette session.
+
+Conséquences :
+- aucun fichier `.diff` ;
+- aucun `README_PATCH.md` ;
+- `git apply --check` non applicable ;
+- le dossier patch reste présent pour traçabilité documentaire.

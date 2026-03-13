@@ -133,7 +133,14 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |       |       RESULTATS.md
 |   |       |       SESSION.md
 |   |       |       
-|   |       \---SESSION-20260313-08_A1_RBAC-07
+|   |       +---SESSION-20260313-08_A1_RBAC-07
+|   |       |       EVIDENCES.md
+|   |       |       FIN_SESSION.md
+|   |       |       NOTES.md
+|   |       |       RESULTATS.md
+|   |       |       SESSION.md
+|   |       |       
+|   |       \---SESSION-20260313-09_A1_RBAC-08
 |   |               EVIDENCES.md
 |   |               FIN_SESSION.md
 |   |               NOTES.md
@@ -251,8 +258,11 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |       |       PATCH__SESSION-20260313-07_A1_RBAC-06.diff
 |   |       |       README_PATCH.md
 |   |       |       
-|   |       \---SESSION-20260313-08_A1_RBAC-07
-|   |               NO_PATCH.md
+|   |       +---SESSION-20260313-08_A1_RBAC-07
+|   |       |       NO_PATCH.md
+|   |       |       
+|   |       \---SESSION-20260313-09_A1_RBAC-08
+|   |               README_PATCH.md
 |   |               
 |   \---ANCIENS_PATCHS
 |       +---4.4

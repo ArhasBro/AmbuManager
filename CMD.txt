@@ -55,13 +55,13 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 2. **Prompt de contrôle**
    - À rédiger pour la discussion de contrôle qualité.
    - Il doit servir à analyser et évaluer la réponse issue de la discussion de production.
-   - Ce prompt ne doit pas être utilisé tout de suite.
+   - Ce prompt ne doit pas être utilisé tout de suite il faut attendre que j'envoie la réponse au premier prompt.
    - Il devra être utilisé uniquement après que je t’aurai transmis la réponse de la discussion de production.
    - Faire un prompt de réponse adapté pour la discussion production.
 
 Références de la session :
 
-- SESSION-20260313-08_A1_RBAC-07
-- **RBAC-07 — VALIDATION** — Vérification du rôle principal obligatoire
+- SESSION-20260313-09_A1_RBAC-08
+- **RBAC-08 — CORRECTION** — Stabilisation de l’affectation rôle principal + permissions si nécessaire
 
 sortie propre + retour du terminal + aucune erreur = validé
