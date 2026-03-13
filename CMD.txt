@@ -58,7 +58,7 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260313-10_A1_RBAC-09
-- **RBAC-09 — VALIDATION** — Validation du bloc rôles/permissions ALPHA
+- SESSION-20260313-12_A1_API-02
+- **API-02 — CORRECTION** — Correction des routes non conformes au format API cible
 
 sortie propre + retour du terminal + aucune erreur = validé

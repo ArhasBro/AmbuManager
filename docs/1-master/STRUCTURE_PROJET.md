@@ -2007,7 +2007,14 @@ C:.
 |   |   |       |           SESSION.md
 |   |   |       |           
 |   |   |       \---4-API
-|   |   |           \---SESSION-20260313-11_A1_API-01
+|   |   |           +---SESSION-20260313-11_A1_API-01
+|   |   |           |       EVIDENCES.md
+|   |   |           |       FIN_SESSION.md
+|   |   |           |       NOTES.md
+|   |   |           |       RESULTATS.md
+|   |   |           |       SESSION.md
+|   |   |           |       
+|   |   |           \---SESSION-20260313-12_A1_API-02
 |   |   |                   EVIDENCES.md
 |   |   |                   FIN_SESSION.md
 |   |   |                   NOTES.md
@@ -2139,8 +2146,11 @@ C:.
 |   |   |       |           NO_PATCH.md
 |   |   |       |           
 |   |   |       \---4-API
-|   |   |           \---SESSION-20260313-11_A1_API-01
-|   |   |                   NO_PATCH.md
+|   |   |           +---SESSION-20260313-11_A1_API-01
+|   |   |           |       NO_PATCH.md
+|   |   |           |       
+|   |   |           \---SESSION-20260313-12_A1_API-02
+|   |   |                   README_PATCH.md
 |   |   |                   
 |   |   \---ANCIENS_PATCHS
 |   |       +---4.4
