@@ -58,7 +58,7 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260313-15_A1_API-05
-- **API-05 — VALIDATION** — Vérification de cohérence API/UI sur les modules déjà présents
+- SESSION-20260313-16_A1_API-06
+- **API-06 — VALIDATION** — Validation du socle API ALPHA
 
 sortie propre + retour du terminal + aucune erreur = validé
