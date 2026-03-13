@@ -2,7 +2,7 @@ tree ./dossier /F /A > Nom du fichier voulu
 
 git ls-files > STRUCTURE_PROJET.md 
 tree .\docs /F /A | Out-File -FilePath .\docs\STRUCTURE_DOCS.md -Encoding utf8
-tree /F /A | Out-File -FilePath .\docs\master\STRUCTURE_PROJET.md -Encoding utf8
+tree /F /A | Out-File -FilePath .\docs\1-master\STRUCTURE_PROJET.md -Encoding utf8
 git add .
 git commit -m "update"
 git push
