@@ -40,7 +40,7 @@ GPT :
 
 Session validée, nous passons à la suivante.
 
-Avant de préparer quoi que ce soit, relis attentivement tous les fichiers `.md` présents dans `./docs`, avec une attention particulière pour ceux de `./docs/master`. Ces documents sont les références à suivre pour garantir un travail correct, cohérent et méthodologiquement conforme.
+Avant de préparer quoi que ce soit, relis attentivement tous les fichiers `.md` présents dans `./docs/master`. Ces documents sont les références à suivre pour garantir un travail correct, cohérent et méthodologiquement conforme.
 
 Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
@@ -48,17 +48,19 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
    - À rédiger en t’appuyant sur le `TEMPLATE_DEBUT_SESSION.md` ainsi que sur les règles définies dans les fichiers de `./docs`.
    - Il s’agit du prompt principal.
    - Il doit permettre d’exécuter la session dans la discussion de production.
+   - Uniquement les information concernant la session concerné.
+   - Si besoin de ressources suplémentaire il s'aide du ZIP joint
 
 2. **Prompt de contrôle**
    - À rédiger pour la discussion de contrôle qualité.
-   - Il doit servir à analyser et évaluer la réponse issue de la discussion de production.
-   - Ce prompt ne doit pas être utilisé tout de suite il faut attendre que j'envoie la réponse au premier prompt.
-   - Il devra être utilisé uniquement après que je t’aurai transmis la réponse de la discussion de production.
+   - Il doit servir à analyser et évaluer la réponse issue de la discussion de production UNIQUEMENT.
+   - Il devra être utilisé seulement et uniquement après que j'aurai transmis la réponse de la discussion de production.
    - Faire un prompt de réponse adapté pour la discussion production.
+   - Le prompt doit être cours et concis.
 
 Références de la session :
 
-- SESSION-20260313-16_A1_API-06
-- **API-06 — VALIDATION** — Validation du socle API ALPHA
+- SESSION-20260313-17_A2_ORG-01
+- ORG-01 — AUDIT** — Audit du modèle société existant
 
 sortie propre + retour du terminal + aucune erreur = validé
