@@ -14,6 +14,7 @@ C:.
 |   prisma.config.ts
 |   proxy.ts
 |   README.md
+|   STRUCTURE_PROJET.md
 |   tsconfig.json
 |   
 +---.next

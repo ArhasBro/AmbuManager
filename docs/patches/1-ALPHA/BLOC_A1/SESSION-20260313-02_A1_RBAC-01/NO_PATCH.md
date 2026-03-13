@@ -1,10 +1,11 @@
-﻿# NO_PATCH
+# NO_PATCH
 
-Session : SESSION-20260313-02_A1_RBAC-01
+Session : `SESSION-20260313-02_A1_RBAC-01`
 
-Type : AUDIT
+Type : `AUDIT`
 
 Raison :
-- Session documentaire de type AUDIT.
-- Aucun patch officiel a produire pour cette session.
-- Le dossier patch reste present pour conserver le miroir avec docs/sessions.
+- session documentaire de type audit ;
+- aucun patch code à produire ;
+- objectif limité au constat factuel des rôles et de leur usage réel ;
+- aucun fichier `.diff` applicable.
