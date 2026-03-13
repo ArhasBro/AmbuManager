@@ -1954,7 +1954,14 @@ C:.
 |   |   |       |       RESULTATS.md
 |   |   |       |       SESSION.md
 |   |   |       |       
-|   |   |       \---SESSION-20260313-04_A1_RBAC-03
+|   |   |       +---SESSION-20260313-04_A1_RBAC-03
+|   |   |       |       EVIDENCES.md
+|   |   |       |       FIN_SESSION.md
+|   |   |       |       NOTES.md
+|   |   |       |       RESULTATS.md
+|   |   |       |       SESSION.md
+|   |   |       |       
+|   |   |       \---SESSION-20260313-05_A1_RBAC-04
 |   |   |               EVIDENCES.md
 |   |   |               FIN_SESSION.md
 |   |   |               NOTES.md
@@ -2057,8 +2064,11 @@ C:.
 |   |   |       |       PATCH__SESSION-20260313-03_A1_RBAC-02.diff
 |   |   |       |       README_PATCH.md
 |   |   |       |       
-|   |   |       \---SESSION-20260313-04_A1_RBAC-03
-|   |   |               NO_PATCH.md
+|   |   |       +---SESSION-20260313-04_A1_RBAC-03
+|   |   |       |       NO_PATCH.md
+|   |   |       |       
+|   |   |       \---SESSION-20260313-05_A1_RBAC-04
+|   |   |               README_PATCH.md
 |   |   |               
 |   |   \---ANCIENS_PATCHS
 |   |       +---4.4
