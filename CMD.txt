@@ -58,7 +58,7 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260313-13_A1_API-03
-- **API-03 — AUDIT** — Audit de cohérence des erreurs API
+- SESSION-20260313-14_A1_API-04
+- **API-04 — CORRECTION** — Harmonisation minimale des erreurs critiques
 
 sortie propre + retour du terminal + aucune erreur = validé
