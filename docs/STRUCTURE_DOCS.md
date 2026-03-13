@@ -157,28 +157,28 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |       |           RESULTATS.md
 |   |       |           SESSION.md
 |   |       |           
-|   |       +---4-API
-|   |       |   +---SESSION-20260313-11_A1_API-01
-|   |       |   |       EVIDENCES.md
-|   |       |   |       FIN_SESSION.md
-|   |       |   |       NOTES.md
-|   |       |   |       RESULTATS.md
-|   |       |   |       SESSION.md
-|   |       |   |       
-|   |       |   \---SESSION-20260313-12_A1_API-02
-|   |       |           EVIDENCES.md
-|   |       |           FIN_SESSION.md
-|   |       |           NOTES.md
-|   |       |           RESULTATS.md
-|   |       |           SESSION.md
-|   |       |           
-|   |       \---SESSION-20260313-13_A1_API-03
-|   |               EVIDENCES.md
-|   |               FIN_SESSION.md
-|   |               NOTES.md
-|   |               RESULTATS.md
-|   |               SESSION.md
-|   |               
+|   |       \---4-API
+|   |           +---SESSION-20260313-11_A1_API-01
+|   |           |       EVIDENCES.md
+|   |           |       FIN_SESSION.md
+|   |           |       NOTES.md
+|   |           |       RESULTATS.md
+|   |           |       SESSION.md
+|   |           |       
+|   |           +---SESSION-20260313-12_A1_API-02
+|   |           |       EVIDENCES.md
+|   |           |       FIN_SESSION.md
+|   |           |       NOTES.md
+|   |           |       RESULTATS.md
+|   |           |       SESSION.md
+|   |           |       
+|   |           \---SESSION-20260313-13_A1_API-03
+|   |                   EVIDENCES.md
+|   |                   FIN_SESSION.md
+|   |                   NOTES.md
+|   |                   RESULTATS.md
+|   |                   SESSION.md
+|   |                   
 |   +---ANCIEN_FORMAT_SESSION
 |   |   +---SESSION-20260304-01
 |   |   |       EVIDENCES.md
@@ -303,17 +303,17 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |       |   \---SESSION-20260313-10_A1_RBAC-09
 |   |       |           NO_PATCH.md
 |   |       |           
-|   |       +---4-API
-|   |       |   +---SESSION-20260313-11_A1_API-01
-|   |       |   |       NO_PATCH.md
-|   |       |   |       
-|   |       |   \---SESSION-20260313-12_A1_API-02
-|   |       |           PATCH__SESSION-20260313-12_A1_API-02.diff
-|   |       |           README_PATCH.md
-|   |       |           
-|   |       \---SESSION-20260313-13_A1_API-03
-|   |               NO_PATCH.md
-|   |               
+|   |       \---4-API
+|   |           +---SESSION-20260313-11_A1_API-01
+|   |           |       NO_PATCH.md
+|   |           |       
+|   |           +---SESSION-20260313-12_A1_API-02
+|   |           |       PATCH__SESSION-20260313-12_A1_API-02.diff
+|   |           |       README_PATCH.md
+|   |           |       
+|   |           \---SESSION-20260313-13_A1_API-03
+|   |                   NO_PATCH.md
+|   |                   
 |   \---ANCIENS_PATCHS
 |       +---4.4
 |       |       README.md
