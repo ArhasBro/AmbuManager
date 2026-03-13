@@ -1,0 +1,164 @@
+--- a/app/api/planning/autoschedule/runs/[id]/route.ts
++++ b/app/api/planning/autoschedule/runs/[id]/route.ts
+@@ -1,7 +1,7 @@
+ import { NextRequest, NextResponse } from "next/server";
+ import { getServerSession } from "next-auth/next";
+ import { authOptions } from "@/lib/auth";
+-import { canViewAudit } from "@/lib/permissions";
++import { canAutoSchedule, canViewAudit } from "@/lib/permissions";
+ import { prisma } from "@/lib/prisma";
+ import { z } from "zod";
+ 
+@@ -56,8 +56,11 @@
+     return NextResponse.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
+   }
+ 
+-  // ✅ RBAC : accès natif ADMIN/GERANT ou permission dédiée consulter audit
+-  if (!(await canViewAudit(userId, role))) {
++  const canViewRun = await canAutoSchedule(userId, role);
++  const canReadAudit = await canViewAudit(userId, role);
++
++  // ✅ RBAC-06 : distinguer l’accès run et l’accès audit sur le support mixte existant
++  if (!canViewRun && !canReadAudit) {
+     return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });
+   }
+ 
+@@ -130,28 +133,38 @@
+       return NextResponse.json({ ok: false, error: "NOT_FOUND" }, { status: 404 });
+     }
+ 
+-    const { planningAuditLogs, ...runData } = run;
++    const { planningAuditLogs, draftShifts, _count, ...runData } = run;
+ 
+-    return NextResponse.json({
+-      ok: true,
+-      data: {
+-        ...runData,
+-        day: run.day ? run.day.toISOString() : null,
+-        weekStart: run.weekStart ? run.weekStart.toISOString() : null,
+-        createdAt: run.createdAt.toISOString(),
+-        draftShifts: run.draftShifts.map((s) => ({
+-          ...s,
+-          date: s.date.toISOString(),
+-          startAt: s.startAt.toISOString(),
+-          endAt: s.endAt.toISOString(),
+-          createdAt: s.createdAt.toISOString(),
+-        })),
+-        auditLogs: planningAuditLogs.map((log) => ({
+-          ...log,
+-          createdAt: log.createdAt.toISOString(),
+-        })),
++    const data: Record<string, unknown> = {
++      ...runData,
++      day: run.day ? run.day.toISOString() : null,
++      weekStart: run.weekStart ? run.weekStart.toISOString() : null,
++      createdAt: run.createdAt.toISOString(),
++      access: {
++        canViewRun,
++        canViewAudit: canReadAudit,
+       },
+-    });
++    };
++
++    if (canViewRun) {
++      data._count = _count;
++      data.draftShifts = draftShifts.map((s) => ({
++        ...s,
++        date: s.date.toISOString(),
++        startAt: s.startAt.toISOString(),
++        endAt: s.endAt.toISOString(),
++        createdAt: s.createdAt.toISOString(),
++      }));
++    }
++
++    if (canReadAudit) {
++      data.auditLogs = planningAuditLogs.map((log) => ({
++        ...log,
++        createdAt: log.createdAt.toISOString(),
++      }));
++    }
++
++    return NextResponse.json({ ok: true, data });
+   } catch (e) {
+     const mapped = prismaToApiError(e);
+     return NextResponse.json(mapped.body, { status: mapped.status });
+--- a/app/planning/planning-client.tsx
++++ b/app/planning/planning-client.tsx
+@@ -313,6 +313,8 @@
+   const [lastRunStatus, setLastRunStatus] = useState<string | null>(null);
+   const [lastRunDraftCount, setLastRunDraftCount] = useState<number | null>(null);
+   const [runAuditLogs, setRunAuditLogs] = useState<RunAuditLog[]>([]);
++  const [runCanViewAudit, setRunCanViewAudit] = useState<boolean | null>(null);
++  const [runCanViewRun, setRunCanViewRun] = useState<boolean | null>(null);
+   const [runInfoLoading, setRunInfoLoading] = useState(false);
+ 
+   const [dayGenLoadingKey, setDayGenLoadingKey] = useState<string | null>(null);
+@@ -418,6 +420,11 @@
+ 
+       const status = run && "status" in run ? run.status : null;
+ 
++      const accessRaw = run && "access" in run ? run.access : null;
++      const access = isRecord(accessRaw) ? accessRaw : null;
++      const canViewRun = access && typeof access.canViewRun === "boolean" ? access.canViewRun : null;
++      const canViewAudit = access && typeof access.canViewAudit === "boolean" ? access.canViewAudit : null;
++
+       const draftShifts = run && "draftShifts" in run ? run.draftShifts : null;
+       const countFromArray = Array.isArray(draftShifts) ? draftShifts.length : null;
+ 
+@@ -425,7 +432,7 @@
+       const countObj = isRecord(_count) ? _count : null;
+       const draftCount = countObj && typeof countObj.draftShifts === "number" ? countObj.draftShifts : null;
+ 
+-      const count = draftCount ?? countFromArray ?? 0;
++      const count = canViewRun === false ? null : draftCount ?? countFromArray ?? 0;
+ 
+       const auditLogsRaw = run && "auditLogs" in run ? run.auditLogs : null;
+       const auditLogs = safeArray<unknown>(auditLogsRaw)
+@@ -465,10 +472,14 @@
+       setLastRunStatus(typeof status === "string" ? status : null);
+       setLastRunDraftCount(count);
+       setRunAuditLogs(auditLogs);
++      setRunCanViewRun(canViewRun);
++      setRunCanViewAudit(canViewAudit);
+     } catch {
+       setLastRunStatus(null);
+       setLastRunDraftCount(null);
+       setRunAuditLogs([]);
++      setRunCanViewRun(null);
++      setRunCanViewAudit(null);
+     } finally {
+       setRunInfoLoading(false);
+     }
+@@ -1305,12 +1316,18 @@
+           <div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: "baseline" }}>
+             <div style={{ fontWeight: 900 }}>Historique du run courant</div>
+             <div style={{ fontSize: 12, opacity: 0.75 }}>
+-              {runInfoLoading ? "Chargement…" : `${runAuditLogs.length} entrée(s)`}
++              {runInfoLoading
++                ? "Chargement…"
++                : runCanViewAudit === false
++                  ? "Audit non autorisé"
++                  : `${runAuditLogs.length} entrée(s)`}
+             </div>
+           </div>
+ 
+           {runInfoLoading ? (
+             <div style={{ marginTop: 8, opacity: 0.75 }}>Chargement de l’audit…</div>
++          ) : runCanViewAudit === false ? (
++            <div style={{ marginTop: 8, opacity: 0.75 }}>Accès audit non autorisé sur ce run.</div>
+           ) : runAuditLogs.length === 0 ? (
+             <div style={{ marginTop: 8, opacity: 0.75 }}>Aucun log d’audit sur ce run.</div>
+           ) : (
+@@ -1332,7 +1349,11 @@
+             </div>
+           )}
+ 
+-          <div style={{ marginTop: 6, fontSize: 12, opacity: 0.75 }}>(Affichage limité à 20 lignes)</div>
++          <div style={{ marginTop: 6, fontSize: 12, opacity: 0.75 }}>
++            {runCanViewRun === false
++              ? "Mode audit seul : détail complet du run masqué."
++              : "Affichage limité à 20 lignes."}
++          </div>
+         </div>
+       )}
+ 

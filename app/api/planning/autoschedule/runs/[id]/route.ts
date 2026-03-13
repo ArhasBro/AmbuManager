@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
-import { canViewAudit } from "@/lib/permissions";
+import { canAutoSchedule, canViewAudit } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 
@@ -56,8 +56,11 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     return NextResponse.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
   }
 
-  // ✅ RBAC : accès natif ADMIN/GERANT ou permission dédiée consulter audit
-  if (!(await canViewAudit(userId, role))) {
+  const canViewRun = await canAutoSchedule(userId, role);
+  const canReadAudit = await canViewAudit(userId, role);
+
+  // ✅ RBAC-06 : distinguer l’accès run et l’accès audit sur le support mixte existant
+  if (!canViewRun && !canReadAudit) {
     return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });
   }
 
@@ -130,28 +133,38 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
       return NextResponse.json({ ok: false, error: "NOT_FOUND" }, { status: 404 });
     }
 
-    const { planningAuditLogs, ...runData } = run;
+    const { planningAuditLogs, draftShifts, _count, ...runData } = run;
 
-    return NextResponse.json({
-      ok: true,
-      data: {
-        ...runData,
-        day: run.day ? run.day.toISOString() : null,
-        weekStart: run.weekStart ? run.weekStart.toISOString() : null,
-        createdAt: run.createdAt.toISOString(),
-        draftShifts: run.draftShifts.map((s) => ({
-          ...s,
-          date: s.date.toISOString(),
-          startAt: s.startAt.toISOString(),
-          endAt: s.endAt.toISOString(),
-          createdAt: s.createdAt.toISOString(),
-        })),
-        auditLogs: planningAuditLogs.map((log) => ({
-          ...log,
-          createdAt: log.createdAt.toISOString(),
-        })),
+    const data: Record<string, unknown> = {
+      ...runData,
+      day: run.day ? run.day.toISOString() : null,
+      weekStart: run.weekStart ? run.weekStart.toISOString() : null,
+      createdAt: run.createdAt.toISOString(),
+      access: {
+        canViewRun,
+        canViewAudit: canReadAudit,
       },
-    });
+    };
+
+    if (canViewRun) {
+      data._count = _count;
+      data.draftShifts = draftShifts.map((s) => ({
+        ...s,
+        date: s.date.toISOString(),
+        startAt: s.startAt.toISOString(),
+        endAt: s.endAt.toISOString(),
+        createdAt: s.createdAt.toISOString(),
+      }));
+    }
+
+    if (canReadAudit) {
+      data.auditLogs = planningAuditLogs.map((log) => ({
+        ...log,
+        createdAt: log.createdAt.toISOString(),
+      }));
+    }
+
+    return NextResponse.json({ ok: true, data });
   } catch (e) {
     const mapped = prismaToApiError(e);
     return NextResponse.json(mapped.body, { status: mapped.status });

@@ -313,6 +313,8 @@ export default function PlanningClient() {
   const [lastRunStatus, setLastRunStatus] = useState<string | null>(null);
   const [lastRunDraftCount, setLastRunDraftCount] = useState<number | null>(null);
   const [runAuditLogs, setRunAuditLogs] = useState<RunAuditLog[]>([]);
+  const [runCanViewAudit, setRunCanViewAudit] = useState<boolean | null>(null);
+  const [runCanViewRun, setRunCanViewRun] = useState<boolean | null>(null);
   const [runInfoLoading, setRunInfoLoading] = useState(false);
 
   const [dayGenLoadingKey, setDayGenLoadingKey] = useState<string | null>(null);
@@ -418,6 +420,11 @@ export default function PlanningClient() {
 
       const status = run && "status" in run ? run.status : null;
 
+      const accessRaw = run && "access" in run ? run.access : null;
+      const access = isRecord(accessRaw) ? accessRaw : null;
+      const canViewRun = access && typeof access.canViewRun === "boolean" ? access.canViewRun : null;
+      const canViewAudit = access && typeof access.canViewAudit === "boolean" ? access.canViewAudit : null;
+
       const draftShifts = run && "draftShifts" in run ? run.draftShifts : null;
       const countFromArray = Array.isArray(draftShifts) ? draftShifts.length : null;
 
@@ -425,7 +432,7 @@ export default function PlanningClient() {
       const countObj = isRecord(_count) ? _count : null;
       const draftCount = countObj && typeof countObj.draftShifts === "number" ? countObj.draftShifts : null;
 
-      const count = draftCount ?? countFromArray ?? 0;
+      const count = canViewRun === false ? null : draftCount ?? countFromArray ?? 0;
 
       const auditLogsRaw = run && "auditLogs" in run ? run.auditLogs : null;
       const auditLogs = safeArray<unknown>(auditLogsRaw)
@@ -465,10 +472,14 @@ export default function PlanningClient() {
       setLastRunStatus(typeof status === "string" ? status : null);
       setLastRunDraftCount(count);
       setRunAuditLogs(auditLogs);
+      setRunCanViewRun(canViewRun);
+      setRunCanViewAudit(canViewAudit);
     } catch {
       setLastRunStatus(null);
       setLastRunDraftCount(null);
       setRunAuditLogs([]);
+      setRunCanViewRun(null);
+      setRunCanViewAudit(null);
     } finally {
       setRunInfoLoading(false);
     }
@@ -1305,12 +1316,18 @@ export default function PlanningClient() {
           <div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: "baseline" }}>
             <div style={{ fontWeight: 900 }}>Historique du run courant</div>
             <div style={{ fontSize: 12, opacity: 0.75 }}>
-              {runInfoLoading ? "Chargement…" : `${runAuditLogs.length} entrée(s)`}
+              {runInfoLoading
+                ? "Chargement…"
+                : runCanViewAudit === false
+                  ? "Audit non autorisé"
+                  : `${runAuditLogs.length} entrée(s)`}
             </div>
           </div>
 
           {runInfoLoading ? (
             <div style={{ marginTop: 8, opacity: 0.75 }}>Chargement de l’audit…</div>
+          ) : runCanViewAudit === false ? (
+            <div style={{ marginTop: 8, opacity: 0.75 }}>Accès audit non autorisé sur ce run.</div>
           ) : runAuditLogs.length === 0 ? (
             <div style={{ marginTop: 8, opacity: 0.75 }}>Aucun log d’audit sur ce run.</div>
           ) : (
@@ -1332,7 +1349,11 @@ export default function PlanningClient() {
             </div>
           )}
 
-          <div style={{ marginTop: 6, fontSize: 12, opacity: 0.75 }}>(Affichage limité à 20 lignes)</div>
+          <div style={{ marginTop: 6, fontSize: 12, opacity: 0.75 }}>
+            {runCanViewRun === false
+              ? "Mode audit seul : détail complet du run masqué."
+              : "Affichage limité à 20 lignes."}
+          </div>
         </div>
       )}
 

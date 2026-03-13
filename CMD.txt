@@ -18,8 +18,8 @@ Unblock-File -Path .\create_session.ps1
 # Git
 git fetch --all --prune
 git log --oneline -n 20
-git apply --check ".\docs\3-patches\1-ALPHA\BLOC_A1\SESSION-\PATCH"
-git apply ".\docs\3-patches\1-ALPHA\BLOC_A1\SESSION\PATCH"
+git apply --check ".\docs\3-patches\1-ALPHA\BLOC_A1\SESSION-20260313-07_A1_RBAC-06\PATCH__SESSION-20260313-07_A1_RBAC-06.diff"
+git apply ".\docs\3-patches\1-ALPHA\BLOC_A1\SESSION-20260313-07_A1_RBAC-06\PATCH__SESSION-20260313-07_A1_RBAC-06.diff"
 git apply -p1 --check docs/patches/general/PATCH_GLOBAL.diff
 git apply -p1 docs/patches/general/PATCH_GLOBAL.diff
 git apply -p1 --reject docs/patches/general/PATCH_GLOBAL.diff
@@ -37,7 +37,7 @@ npm run db:seed
 npm run db:reset
 npm run db:studio
 
-.\docs\3-patches\1-ALPHA\BLOC_A1\SESSION-20260313-06_A1_RBAC-05\PATCH__SESSION-20260313-06_A1_RBAC-05.diff
+.\docs\3-patches\1-ALPHA\BLOC_A1\SESSION-20260313-07_A1_RBAC-06\PATCH__SESSION-20260313-07_A1_RBAC-06.diff
 
 GPT :
 
@@ -61,7 +61,7 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- XXXX
-- XXXX
+- SESSION-20260313-08_A1_RBAC-07
+- **RBAC-07 — VALIDATION** — Vérification du rôle principal obligatoire
 
 sortie propre + retour du terminal + aucune erreur = validé

@@ -1733,9 +1733,14 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
+|   |   +---bYzDcHZzRb06BHqRs8Xmf
+|   |   |       _buildManifest.js
+|   |   |       _clientMiddlewareManifest.json
+|   |   |       _ssgManifest.js
+|   |   |       
 |   |   +---chunks
+|   |   |       000ea66499535a39.js
 |   |   |       1687260e4d8b05d6.js
-|   |   |       419287bb501c2fe7.js
 |   |   |       4524ccf59c8b171b.js
 |   |   |       642a00754c8aebb8.js
 |   |   |       672c0168d7981883.js
@@ -1750,11 +1755,6 @@ C:.
 |   |   |       cdb83a758231f045.js
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
-|   |   |       
-|   |   +---lGA26FzpfAsxBPfgThqUi
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
 |   |   |       
 |   |   \---media
 |   |           favicon.0b3bf435.ico
@@ -1975,7 +1975,14 @@ C:.
 |   |   |       |       RESULTATS.md
 |   |   |       |       SESSION.md
 |   |   |       |       
-|   |   |       \---SESSION-20260313-07_A1_RBAC-06
+|   |   |       +---SESSION-20260313-07_A1_RBAC-06
+|   |   |       |       EVIDENCES.md
+|   |   |       |       FIN_SESSION.md
+|   |   |       |       NOTES.md
+|   |   |       |       RESULTATS.md
+|   |   |       |       SESSION.md
+|   |   |       |       
+|   |   |       \---SESSION-20260313-08_A1_RBAC-07
 |   |   |               EVIDENCES.md
 |   |   |               FIN_SESSION.md
 |   |   |               NOTES.md
@@ -2089,8 +2096,12 @@ C:.
 |   |   |       |       PATCH__SESSION-20260313-06_A1_RBAC-05.diff
 |   |   |       |       README_PATCH.md
 |   |   |       |       
-|   |   |       \---SESSION-20260313-07_A1_RBAC-06
-|   |   |               README_PATCH.md
+|   |   |       +---SESSION-20260313-07_A1_RBAC-06
+|   |   |       |       PATCH__SESSION-20260313-07_A1_RBAC-06.diff
+|   |   |       |       README_PATCH.md
+|   |   |       |       
+|   |   |       \---SESSION-20260313-08_A1_RBAC-07
+|   |   |               NO_PATCH.md
 |   |   |               
 |   |   \---ANCIENS_PATCHS
 |   |       +---4.4
