@@ -12,7 +12,7 @@ git status
 
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 Unblock-File -Path .\create_session.ps1
-.\create_session.ps1 -Stage "1-ALPHA" -Block "A1" -SessionCode "TENANT-04" -Type "VALIDATION" -Title "Validation multi-tenant sur périmètre ALPHA"
+.\create_session.ps1 -Stage "1-ALPHA" -Block "A1" -SessionCode "RBAC-02" -Type "CORRECTION" -Title "Remplacement méthodique de DEA par ADE"
 
 
 # Git
