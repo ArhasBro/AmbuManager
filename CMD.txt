@@ -3,10 +3,6 @@ tree ./dossier /F /A > Nom du fichier voulu
 git ls-files > STRUCTURE_PROJET.md 
 tree .\docs /F /A | Out-File -FilePath .\docs\STRUCTURE_DOCS.md -Encoding utf8
 tree /F /A | Out-File -FilePath .\docs\master\STRUCTURE_PROJET.md -Encoding utf8
-
-MAJ sur GitHub :
-CMD : 
-
 git add .
 git commit -m "update"
 git push
@@ -17,13 +13,7 @@ git status
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 Unblock-File -Path .\create_session.ps1
 .\create_session.ps1 -Stage "1-ALPHA" -Block "A1" -SessionCode "TENANT-04" -Type "VALIDATION" -Title "Validation multi-tenant sur périmètre ALPHA"
--Satge = 1-ALPHA / 2-BETA
--Block = A...
--SessionCode = AUTH / TENANT / RBAC / API....
--Type = AUDIT / CORRECTION / VALIDATION / COMPLÉTION
--Title = .........
 
-npm run build
 
 # Git
 git fetch --all --prune
@@ -44,8 +34,5 @@ npm run db:migrate
 npm run db:seed
 npm run db:reset
 npm run db:studio
-
-# Arborescence
-tree . /F /A > STRUCTURE_TREE.txt
 
 sortie propre + retour du terminal + aucune erreur = validé
