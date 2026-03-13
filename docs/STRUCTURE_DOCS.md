@@ -179,7 +179,14 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |           |       RESULTATS.md
 |   |           |       SESSION.md
 |   |           |       
-|   |           \---SESSION-20260313-14_A1_API-04
+|   |           +---SESSION-20260313-14_A1_API-04
+|   |           |       EVIDENCES.md
+|   |           |       FIN_SESSION.md
+|   |           |       NOTES.md
+|   |           |       RESULTATS.md
+|   |           |       SESSION.md
+|   |           |       
+|   |           \---SESSION-20260313-15_A1_API-05
 |   |                   EVIDENCES.md
 |   |                   FIN_SESSION.md
 |   |                   NOTES.md
@@ -321,8 +328,12 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |           +---SESSION-20260313-13_A1_API-03
 |   |           |       NO_PATCH.md
 |   |           |       
-|   |           \---SESSION-20260313-14_A1_API-04
-|   |                   README_PATCH.md
+|   |           +---SESSION-20260313-14_A1_API-04
+|   |           |       PATCH__SESSION-20260313-14_A1_API-04.diff
+|   |           |       README_PATCH.md
+|   |           |       
+|   |           \---SESSION-20260313-15_A1_API-05
+|   |                   NO_PATCH.md
 |   |                   
 |   \---ANCIENS_PATCHS
 |       +---4.4

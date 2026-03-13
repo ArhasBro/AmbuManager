@@ -1,0 +1,163 @@
+diff --git a/app/api/users/[id]/reset-password/route.ts b/app/api/users/[id]/reset-password/route.ts
+index 27e4876..b0bc0bb 100644
+--- a/app/api/users/[id]/reset-password/route.ts
++++ b/app/api/users/[id]/reset-password/route.ts
+@@ -46,16 +46,16 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }>
+   try {
+     body = await req.json();
+   } catch {
+-    return badRequest("Invalid JSON");
++    return badRequest("INVALID_JSON");
+   }
+ 
+   const parsed = resetPasswordBodySchema.safeParse(body);
+-  if (!parsed.success) return badRequest("Invalid body", parsed.error.flatten());
++  if (!parsed.success) return badRequest("VALIDATION_ERROR", parsed.error.flatten());
+ 
+   const { id: targetUserId } = await ctx.params;
+-  if (!targetUserId) return badRequest("Missing user id");
++  if (!targetUserId) return badRequest("BAD_REQUEST", { message: "Missing user id" });
+   if (targetUserId === actorUserId) {
+-    return badRequest("Self password change is out of scope for this route");
++    return badRequest("BAD_REQUEST", { message: "Self password change is out of scope for this route" });
+   }
+ 
+   try {
+diff --git a/app/api/users/route.ts b/app/api/users/route.ts
+index dfda914..4d274d7 100644
+--- a/app/api/users/route.ts
++++ b/app/api/users/route.ts
+@@ -36,7 +36,7 @@ export async function GET(req: Request) {
+   const parsed = listQuerySchema.safeParse({
+     limit: url.searchParams.get("limit") ?? undefined,
+   });
+-  if (!parsed.success) return badRequest("Invalid query", parsed.error.flatten());
++  if (!parsed.success) return badRequest("VALIDATION_ERROR", parsed.error.flatten());
+ 
+   const { limit } = parsed.data;
+ 
+@@ -60,4 +60,4 @@ export async function GET(req: Request) {
+   } catch (e: unknown) {
+     return serverError(getErrorMessage(e));
+   }
+-}
+\ No newline at end of file
++}
+diff --git a/app/api/vehicles/route.ts b/app/api/vehicles/route.ts
+index 347ac5e..f349e7b 100644
+--- a/app/api/vehicles/route.ts
++++ b/app/api/vehicles/route.ts
+@@ -39,7 +39,7 @@ export async function GET(req: Request) {
+   const parsed = listQuerySchema.safeParse({
+     limit: url.searchParams.get("limit") ?? undefined,
+   });
+-  if (!parsed.success) return badRequest("Invalid query", parsed.error.flatten());
++  if (!parsed.success) return badRequest("VALIDATION_ERROR", parsed.error.flatten());
+ 
+   const { limit } = parsed.data;
+ 
+@@ -70,7 +70,7 @@ export async function POST(req: Request) {
+ 
+   const jsonBody: unknown = await req.json().catch(() => null);
+   const parsed = createVehicleBodySchema.safeParse(jsonBody);
+-  if (!parsed.success) return badRequest("Invalid body", parsed.error.flatten());
++  if (!parsed.success) return badRequest("VALIDATION_ERROR", parsed.error.flatten());
+ 
+   const { immatriculation, type } = parsed.data;
+ 
+@@ -96,7 +96,9 @@ export async function POST(req: Request) {
+     return ok(serializeDates(vehicle), 201);
+   } catch (e: unknown) {
+     const mapped = prismaToHttp(e);
+-    if (mapped?.status === 409) return conflict("Véhicule déjà existant");
++    if (mapped?.status === 409) {
++      return conflict(mapped.error, { message: "Véhicule déjà existant" });
++    }
+     return serverError(mapped ?? getErrorMessage(e));
+   }
+ }
+@@ -112,7 +114,7 @@ export async function DELETE(req: Request) {
+   const parsed = deleteVehicleQuerySchema.safeParse({
+     id: url.searchParams.get("id"),
+   });
+-  if (!parsed.success) return badRequest("Invalid query", parsed.error.flatten());
++  if (!parsed.success) return badRequest("VALIDATION_ERROR", parsed.error.flatten());
+ 
+   const { id } = parsed.data;
+ 
+@@ -129,4 +131,4 @@ export async function DELETE(req: Request) {
+     if (mapped?.status === 404) return notFound();
+     return serverError(mapped ?? getErrorMessage(e));
+   }
+-}
+\ No newline at end of file
++}
+diff --git a/lib/api/prisma-error.ts b/lib/api/prisma-error.ts
+index 59ec72c..f2f9453 100644
+--- a/lib/api/prisma-error.ts
++++ b/lib/api/prisma-error.ts
+@@ -1,6 +1,6 @@
+ // (aucun import nécessaire)
+ 
+-type HttpMapped = { status: number; message: string };
++type HttpMapped = { status: number; error: string };
+ 
+ type PrismaKnownCode = "P2002" | "P2025";
+ 
+@@ -27,11 +27,11 @@ function getMessage(e: unknown): string {
+ export function prismaToHttp(e: unknown): HttpMapped | null {
+   const code = getKnownPrismaCode(e);
+ 
+-  if (code === "P2002") return { status: 409, message: "Duplicate" };
+-  if (code === "P2025") return { status: 404, message: "Not found" };
++  if (code === "P2002") return { status: 409, error: "CONFLICT" };
++  if (code === "P2025") return { status: 404, error: "NOT_FOUND" };
+ 
+   const msg = getMessage(e);
+-  if (msg.includes("duplicate key")) return { status: 409, message: "Duplicate" };
++  if (msg.includes("duplicate key")) return { status: 409, error: "CONFLICT" };
+ 
+   return null;
+-}
+\ No newline at end of file
++}
+diff --git a/lib/api/response.ts b/lib/api/response.ts
+index 74361c6..1044f12 100644
+--- a/lib/api/response.ts
++++ b/lib/api/response.ts
+@@ -12,27 +12,27 @@ export function ok<T>(data: T, status = 200) {
+   return json({ ok: true, data }, status);
+ }
+ 
+-export function badRequest(error: string, details?: unknown) {
++export function badRequest(error = "BAD_REQUEST", details?: unknown) {
+   return json({ ok: false, error, details }, 400);
+ }
+ 
+ export function unauthorized() {
+-  return json({ ok: false, error: "Unauthorized" }, 401);
++  return json({ ok: false, error: "UNAUTHORIZED" }, 401);
+ }
+ 
+ export function forbidden() {
+-  return json({ ok: false, error: "Forbidden" }, 403);
++  return json({ ok: false, error: "FORBIDDEN" }, 403);
+ }
+ 
+ export function notFound() {
+-  return json({ ok: false, error: "Not found" }, 404);
++  return json({ ok: false, error: "NOT_FOUND" }, 404);
+ }
+ 
+-export function conflict(error = "Conflict", details?: unknown) {
++export function conflict(error = "CONFLICT", details?: unknown) {
+   return json({ ok: false, error, details }, 409);
+ }
+ 
+ export function serverError(details?: unknown) {
+   const safeDetails = process.env.NODE_ENV === "production" ? undefined : details;
+-  return json({ ok: false, error: "Server error", details: safeDetails }, 500);
+-}
+\ No newline at end of file
++  return json({ ok: false, error: "SERVER_ERROR", details: safeDetails }, 500);
++}

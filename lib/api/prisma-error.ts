@@ -1,6 +1,6 @@
 // (aucun import nécessaire)
 
-type HttpMapped = { status: number; message: string };
+type HttpMapped = { status: number; error: string };
 
 type PrismaKnownCode = "P2002" | "P2025";
 
@@ -27,11 +27,11 @@ function getMessage(e: unknown): string {
 export function prismaToHttp(e: unknown): HttpMapped | null {
   const code = getKnownPrismaCode(e);
 
-  if (code === "P2002") return { status: 409, message: "Duplicate" };
-  if (code === "P2025") return { status: 404, message: "Not found" };
+  if (code === "P2002") return { status: 409, error: "CONFLICT" };
+  if (code === "P2025") return { status: 404, error: "NOT_FOUND" };
 
   const msg = getMessage(e);
-  if (msg.includes("duplicate key")) return { status: 409, message: "Duplicate" };
+  if (msg.includes("duplicate key")) return { status: 409, error: "CONFLICT" };
 
   return null;
 }

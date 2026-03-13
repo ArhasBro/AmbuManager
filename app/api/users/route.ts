@@ -36,7 +36,7 @@ export async function GET(req: Request) {
   const parsed = listQuerySchema.safeParse({
     limit: url.searchParams.get("limit") ?? undefined,
   });
-  if (!parsed.success) return badRequest("Invalid query", parsed.error.flatten());
+  if (!parsed.success) return badRequest("VALIDATION_ERROR", parsed.error.flatten());
 
   const { limit } = parsed.data;
 

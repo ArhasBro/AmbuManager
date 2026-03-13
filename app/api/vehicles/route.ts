@@ -39,7 +39,7 @@ export async function GET(req: Request) {
   const parsed = listQuerySchema.safeParse({
     limit: url.searchParams.get("limit") ?? undefined,
   });
-  if (!parsed.success) return badRequest("Invalid query", parsed.error.flatten());
+  if (!parsed.success) return badRequest("VALIDATION_ERROR", parsed.error.flatten());
 
   const { limit } = parsed.data;
 
@@ -70,7 +70,7 @@ export async function POST(req: Request) {
 
   const jsonBody: unknown = await req.json().catch(() => null);
   const parsed = createVehicleBodySchema.safeParse(jsonBody);
-  if (!parsed.success) return badRequest("Invalid body", parsed.error.flatten());
+  if (!parsed.success) return badRequest("VALIDATION_ERROR", parsed.error.flatten());
 
   const { immatriculation, type } = parsed.data;
 
@@ -96,7 +96,9 @@ export async function POST(req: Request) {
     return ok(serializeDates(vehicle), 201);
   } catch (e: unknown) {
     const mapped = prismaToHttp(e);
-    if (mapped?.status === 409) return conflict("Véhicule déjà existant");
+    if (mapped?.status === 409) {
+      return conflict(mapped.error, { message: "Véhicule déjà existant" });
+    }
     return serverError(mapped ?? getErrorMessage(e));
   }
 }
@@ -112,7 +114,7 @@ export async function DELETE(req: Request) {
   const parsed = deleteVehicleQuerySchema.safeParse({
     id: url.searchParams.get("id"),
   });
-  if (!parsed.success) return badRequest("Invalid query", parsed.error.flatten());
+  if (!parsed.success) return badRequest("VALIDATION_ERROR", parsed.error.flatten());
 
   const { id } = parsed.data;
 

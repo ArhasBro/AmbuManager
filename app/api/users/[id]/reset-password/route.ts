@@ -46,16 +46,16 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
   try {
     body = await req.json();
   } catch {
-    return badRequest("Invalid JSON");
+    return badRequest("INVALID_JSON");
   }
 
   const parsed = resetPasswordBodySchema.safeParse(body);
-  if (!parsed.success) return badRequest("Invalid body", parsed.error.flatten());
+  if (!parsed.success) return badRequest("VALIDATION_ERROR", parsed.error.flatten());
 
   const { id: targetUserId } = await ctx.params;
-  if (!targetUserId) return badRequest("Missing user id");
+  if (!targetUserId) return badRequest("BAD_REQUEST", { message: "Missing user id" });
   if (targetUserId === actorUserId) {
-    return badRequest("Self password change is out of scope for this route");
+    return badRequest("BAD_REQUEST", { message: "Self password change is out of scope for this route" });
   }
 
   try {
