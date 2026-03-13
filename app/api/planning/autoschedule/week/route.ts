@@ -15,7 +15,7 @@ const BodySchema = z.object({
 type Category = z.infer<typeof BodySchema>["category"];
 
 type AutoscheduleSentinel =
-  | { ok: false; error: "DRAFT_ALREADY_EXISTS"; runId: string }
+  | { ok: false; error: "DRAFT_ALREADY_EXISTS"; details: { runId: string } }
   | { ok: false; error: "NO_TEMPLATES" };
 
 function parseTimeToHoursMinutes(time: string): { h: number; m: number } {
@@ -81,11 +81,19 @@ function isAutoscheduleSentinel(v: unknown): v is AutoscheduleSentinel {
   if (typeof v !== "object" || v === null) return false;
   if (!("ok" in v) || !("error" in v)) return false;
 
-  const obj = v as { ok?: unknown; error?: unknown; runId?: unknown };
+  const obj = v as { ok?: unknown; error?: unknown; details?: unknown };
   if (obj.ok !== false) return false;
 
   if (obj.error === "NO_TEMPLATES") return true;
-  if (obj.error === "DRAFT_ALREADY_EXISTS" && typeof obj.runId === "string") return true;
+  if (
+    obj.error === "DRAFT_ALREADY_EXISTS" &&
+    typeof obj.details === "object" &&
+    obj.details !== null &&
+    "runId" in obj.details &&
+    typeof (obj.details as { runId?: unknown }).runId === "string"
+  ) {
+    return true;
+  }
 
   return false;
 }
@@ -141,7 +149,7 @@ export async function POST(req: NextRequest) {
       });
 
       if (existingDraft) {
-        return { ok: false, error: "DRAFT_ALREADY_EXISTS", runId: existingDraft.id } satisfies AutoscheduleSentinel;
+        return { ok: false, error: "DRAFT_ALREADY_EXISTS", details: { runId: existingDraft.id } } satisfies AutoscheduleSentinel;
       }
 
       const templateWhere: { companyId: string; isActive: boolean; category?: Category } = {
@@ -247,7 +255,7 @@ export async function POST(req: NextRequest) {
       }
 
       if (result.error === "DRAFT_ALREADY_EXISTS") {
-        return NextResponse.json({ ok: false, error: "DRAFT_ALREADY_EXISTS", runId: result.runId }, { status: 409 });
+        return NextResponse.json({ ok: false, error: "DRAFT_ALREADY_EXISTS", details: result.details }, { status: 409 });
       }
     }
 

@@ -1733,11 +1733,16 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
+|   |   +---7tG09Bi_3OMKKB937WOZG
+|   |   |       _buildManifest.js
+|   |   |       _clientMiddlewareManifest.json
+|   |   |       _ssgManifest.js
+|   |   |       
 |   |   +---chunks
 |   |   |       000ea66499535a39.js
 |   |   |       1687260e4d8b05d6.js
+|   |   |       34f7551faf121447.css
 |   |   |       4524ccf59c8b171b.js
-|   |   |       54db6fcd2003973a.css
 |   |   |       642a00754c8aebb8.js
 |   |   |       672c0168d7981883.js
 |   |   |       82abf2d65f5428ae.js
@@ -1751,13 +1756,8 @@ C:.
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
 |   |   |       
-|   |   +---media
-|   |   |       favicon.0b3bf435.ico
-|   |   |       
-|   |   \---p4q61wedkl4ORQSGFGiOJ
-|   |           _buildManifest.js
-|   |           _clientMiddlewareManifest.json
-|   |           _ssgManifest.js
+|   |   \---media
+|   |           favicon.0b3bf435.ico
 |   |           
 |   \---types
 |           routes.d.ts
@@ -2006,21 +2006,28 @@ C:.
 |   |   |       |           RESULTATS.md
 |   |   |       |           SESSION.md
 |   |   |       |           
-|   |   |       \---4-API
-|   |   |           +---SESSION-20260313-11_A1_API-01
-|   |   |           |       EVIDENCES.md
-|   |   |           |       FIN_SESSION.md
-|   |   |           |       NOTES.md
-|   |   |           |       RESULTATS.md
-|   |   |           |       SESSION.md
-|   |   |           |       
-|   |   |           \---SESSION-20260313-12_A1_API-02
-|   |   |                   EVIDENCES.md
-|   |   |                   FIN_SESSION.md
-|   |   |                   NOTES.md
-|   |   |                   RESULTATS.md
-|   |   |                   SESSION.md
-|   |   |                   
+|   |   |       +---4-API
+|   |   |       |   +---SESSION-20260313-11_A1_API-01
+|   |   |       |   |       EVIDENCES.md
+|   |   |       |   |       FIN_SESSION.md
+|   |   |       |   |       NOTES.md
+|   |   |       |   |       RESULTATS.md
+|   |   |       |   |       SESSION.md
+|   |   |       |   |       
+|   |   |       |   \---SESSION-20260313-12_A1_API-02
+|   |   |       |           EVIDENCES.md
+|   |   |       |           FIN_SESSION.md
+|   |   |       |           NOTES.md
+|   |   |       |           RESULTATS.md
+|   |   |       |           SESSION.md
+|   |   |       |           
+|   |   |       \---SESSION-20260313-13_A1_API-03
+|   |   |               EVIDENCES.md
+|   |   |               FIN_SESSION.md
+|   |   |               NOTES.md
+|   |   |               RESULTATS.md
+|   |   |               SESSION.md
+|   |   |               
 |   |   +---ANCIEN_FORMAT_SESSION
 |   |   |   +---SESSION-20260304-01
 |   |   |   |       EVIDENCES.md
@@ -2145,13 +2152,17 @@ C:.
 |   |   |       |   \---SESSION-20260313-10_A1_RBAC-09
 |   |   |       |           NO_PATCH.md
 |   |   |       |           
-|   |   |       \---4-API
-|   |   |           +---SESSION-20260313-11_A1_API-01
-|   |   |           |       NO_PATCH.md
-|   |   |           |       
-|   |   |           \---SESSION-20260313-12_A1_API-02
-|   |   |                   README_PATCH.md
-|   |   |                   
+|   |   |       +---4-API
+|   |   |       |   +---SESSION-20260313-11_A1_API-01
+|   |   |       |   |       NO_PATCH.md
+|   |   |       |   |       
+|   |   |       |   \---SESSION-20260313-12_A1_API-02
+|   |   |       |           PATCH__SESSION-20260313-12_A1_API-02.diff
+|   |   |       |           README_PATCH.md
+|   |   |       |           
+|   |   |       \---SESSION-20260313-13_A1_API-03
+|   |   |               NO_PATCH.md
+|   |   |               
 |   |   \---ANCIENS_PATCHS
 |   |       +---4.4
 |   |       |       README.md

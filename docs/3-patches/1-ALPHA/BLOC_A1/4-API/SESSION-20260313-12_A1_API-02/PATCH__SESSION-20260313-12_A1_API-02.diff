@@ -1,0 +1,214 @@
+diff --git a/app/api/planning/autoschedule/day/route.ts b/app/api/planning/autoschedule/day/route.ts
+index 4cb732a..4d8c546 100644
+--- a/app/api/planning/autoschedule/day/route.ts
++++ b/app/api/planning/autoschedule/day/route.ts
+@@ -14,7 +14,7 @@ const BodySchema = z.object({
+ type Category = z.infer<typeof BodySchema>["category"];
+ 
+ type AutoscheduleSentinel =
+-  | { ok: false; error: "DRAFT_ALREADY_EXISTS"; runId: string }
++  | { ok: false; error: "DRAFT_ALREADY_EXISTS"; details: { runId: string } }
+   | { ok: false; error: "NO_TEMPLATES" };
+ 
+ function parseTimeToHoursMinutes(time: string): { h: number; m: number } {
+@@ -56,11 +56,19 @@ function isAutoscheduleSentinel(v: unknown): v is AutoscheduleSentinel {
+   if (typeof v !== "object" || v === null) return false;
+   if (!("ok" in v) || !("error" in v)) return false;
+ 
+-  const obj = v as { ok?: unknown; error?: unknown; runId?: unknown };
++  const obj = v as { ok?: unknown; error?: unknown; details?: unknown };
+   if (obj.ok !== false) return false;
+ 
+   if (obj.error === "NO_TEMPLATES") return true;
+-  if (obj.error === "DRAFT_ALREADY_EXISTS" && typeof obj.runId === "string") return true;
++  if (
++    obj.error === "DRAFT_ALREADY_EXISTS" &&
++    typeof obj.details === "object" &&
++    obj.details !== null &&
++    "runId" in obj.details &&
++    typeof (obj.details as { runId?: unknown }).runId === "string"
++  ) {
++    return true;
++  }
+ 
+   return false;
+ }
+@@ -116,7 +124,7 @@ export async function POST(req: NextRequest) {
+       });
+ 
+       if (existingDraft) {
+-        return { ok: false, error: "DRAFT_ALREADY_EXISTS", runId: existingDraft.id } satisfies AutoscheduleSentinel;
++        return { ok: false, error: "DRAFT_ALREADY_EXISTS", details: { runId: existingDraft.id } } satisfies AutoscheduleSentinel;
+       }
+ 
+       const templateWhere: { companyId: string; isActive: boolean; category?: Category } = {
+@@ -205,7 +213,7 @@ export async function POST(req: NextRequest) {
+       }
+ 
+       if (result.error === "DRAFT_ALREADY_EXISTS") {
+-        return NextResponse.json({ ok: false, error: "DRAFT_ALREADY_EXISTS", runId: result.runId }, { status: 409 });
++        return NextResponse.json({ ok: false, error: "DRAFT_ALREADY_EXISTS", details: result.details }, { status: 409 });
+       }
+     }
+ 
+diff --git a/app/api/planning/autoschedule/runs/[id]/cancel/route.ts b/app/api/planning/autoschedule/runs/[id]/cancel/route.ts
+index e8ac47a..932fbbd 100644
+--- a/app/api/planning/autoschedule/runs/[id]/cancel/route.ts
++++ b/app/api/planning/autoschedule/runs/[id]/cancel/route.ts
+@@ -76,11 +76,13 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
+       {
+         ok: false,
+         error: "VALIDATION_ERROR",
+-        details: parsedParams.error.flatten(),
+-        debug: {
+-          pathname: req.nextUrl.pathname,
+-          paramsId: idFromParams ?? null,
+-          pathId: idFromPath ?? null,
++        details: {
++          ...parsedParams.error.flatten(),
++          debug: {
++            pathname: req.nextUrl.pathname,
++            paramsId: idFromParams ?? null,
++            pathId: idFromPath ?? null,
++          },
+         },
+       },
+       { status: 400 }
+diff --git a/app/api/planning/autoschedule/runs/[id]/match/route.ts b/app/api/planning/autoschedule/runs/[id]/match/route.ts
+index c0a95bf..3a40e19 100644
+--- a/app/api/planning/autoschedule/runs/[id]/match/route.ts
++++ b/app/api/planning/autoschedule/runs/[id]/match/route.ts
+@@ -12,14 +12,14 @@ export async function GET() {
+ 
+   if (!session?.user?.id || typeof companyId !== "string" || companyId.length === 0) {
+     return Response.json(
+-      { ok: false, error: "UNAUTHORIZED", message: "Session invalide (companyId manquant)" },
++      { ok: false, error: "UNAUTHORIZED", details: "Session invalide (companyId manquant)" },
+       { status: 401 }
+     );
+   }
+ 
+   if (!(await canAutoSchedule(session.user.id, session.user.role))) {
+     return Response.json(
+-      { ok: false, error: "FORBIDDEN", message: "Accès refusé (PLANNING_AUTOSCHEDULE requis)" },
++      { ok: false, error: "FORBIDDEN", details: "Accès refusé (PLANNING_AUTOSCHEDULE requis)" },
+       { status: 403 }
+     );
+   }
+@@ -29,7 +29,7 @@ export async function GET() {
+     {
+       ok: false,
+       error: "GONE",
+-      message:
++      details:
+         "Cette route est dépréciée. Utilise /match/preview (simulation) et /match/apply (application).",
+     },
+     { status: 410 }
+diff --git a/app/api/planning/autoschedule/runs/[id]/publish/route.ts b/app/api/planning/autoschedule/runs/[id]/publish/route.ts
+index aab4989..1b9842f 100644
+--- a/app/api/planning/autoschedule/runs/[id]/publish/route.ts
++++ b/app/api/planning/autoschedule/runs/[id]/publish/route.ts
+@@ -342,11 +342,13 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
+       {
+         ok: false,
+         error: "VALIDATION_ERROR",
+-        details: parsedParams.error.flatten(),
+-        debug: {
+-          pathname: req.nextUrl.pathname,
+-          paramsId: idFromParams ?? null,
+-          pathId: idFromPath ?? null,
++        details: {
++          ...parsedParams.error.flatten(),
++          debug: {
++            pathname: req.nextUrl.pathname,
++            paramsId: idFromParams ?? null,
++            pathId: idFromPath ?? null,
++          },
+         },
+       },
+       { status: 400 }
+@@ -477,7 +479,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
+     }
+     if (result.kind === "RULE_CONFIG_ERROR") {
+       return NextResponse.json(
+-        { ok: false, error: "RULE_CONFIG_ERROR", message: result.message },
++        { ok: false, error: "RULE_CONFIG_ERROR", details: { message: result.message } },
+         { status: 400 }
+       );
+     }
+diff --git a/app/api/planning/autoschedule/runs/[id]/route.ts b/app/api/planning/autoschedule/runs/[id]/route.ts
+index 1f33a0d..6c9ee1b 100644
+--- a/app/api/planning/autoschedule/runs/[id]/route.ts
++++ b/app/api/planning/autoschedule/runs/[id]/route.ts
+@@ -82,11 +82,13 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string
+       {
+         ok: false,
+         error: "VALIDATION_ERROR",
+-        details: parsedParams.error.flatten(),
+-        debug: {
+-          pathname: req.nextUrl.pathname,
+-          paramsId: idFromParams ?? null,
+-          pathId: idFromPath ?? null,
++        details: {
++          ...parsedParams.error.flatten(),
++          debug: {
++            pathname: req.nextUrl.pathname,
++            paramsId: idFromParams ?? null,
++            pathId: idFromPath ?? null,
++          },
+         },
+       },
+       { status: 400 }
+diff --git a/app/api/planning/autoschedule/week/route.ts b/app/api/planning/autoschedule/week/route.ts
+index 9c81a91..6f236e9 100644
+--- a/app/api/planning/autoschedule/week/route.ts
++++ b/app/api/planning/autoschedule/week/route.ts
+@@ -15,7 +15,7 @@ const BodySchema = z.object({
+ type Category = z.infer<typeof BodySchema>["category"];
+ 
+ type AutoscheduleSentinel =
+-  | { ok: false; error: "DRAFT_ALREADY_EXISTS"; runId: string }
++  | { ok: false; error: "DRAFT_ALREADY_EXISTS"; details: { runId: string } }
+   | { ok: false; error: "NO_TEMPLATES" };
+ 
+ function parseTimeToHoursMinutes(time: string): { h: number; m: number } {
+@@ -81,11 +81,19 @@ function isAutoscheduleSentinel(v: unknown): v is AutoscheduleSentinel {
+   if (typeof v !== "object" || v === null) return false;
+   if (!("ok" in v) || !("error" in v)) return false;
+ 
+-  const obj = v as { ok?: unknown; error?: unknown; runId?: unknown };
++  const obj = v as { ok?: unknown; error?: unknown; details?: unknown };
+   if (obj.ok !== false) return false;
+ 
+   if (obj.error === "NO_TEMPLATES") return true;
+-  if (obj.error === "DRAFT_ALREADY_EXISTS" && typeof obj.runId === "string") return true;
++  if (
++    obj.error === "DRAFT_ALREADY_EXISTS" &&
++    typeof obj.details === "object" &&
++    obj.details !== null &&
++    "runId" in obj.details &&
++    typeof (obj.details as { runId?: unknown }).runId === "string"
++  ) {
++    return true;
++  }
+ 
+   return false;
+ }
+@@ -141,7 +149,7 @@ export async function POST(req: NextRequest) {
+       });
+ 
+       if (existingDraft) {
+-        return { ok: false, error: "DRAFT_ALREADY_EXISTS", runId: existingDraft.id } satisfies AutoscheduleSentinel;
++        return { ok: false, error: "DRAFT_ALREADY_EXISTS", details: { runId: existingDraft.id } } satisfies AutoscheduleSentinel;
+       }
+ 
+       const templateWhere: { companyId: string; isActive: boolean; category?: Category } = {
+@@ -247,7 +255,7 @@ export async function POST(req: NextRequest) {
+       }
+ 
+       if (result.error === "DRAFT_ALREADY_EXISTS") {
+-        return NextResponse.json({ ok: false, error: "DRAFT_ALREADY_EXISTS", runId: result.runId }, { status: 409 });
++        return NextResponse.json({ ok: false, error: "DRAFT_ALREADY_EXISTS", details: result.details }, { status: 409 });
+       }
+     }
+ 

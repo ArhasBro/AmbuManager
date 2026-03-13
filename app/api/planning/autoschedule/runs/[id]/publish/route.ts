@@ -342,11 +342,13 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
       {
         ok: false,
         error: "VALIDATION_ERROR",
-        details: parsedParams.error.flatten(),
-        debug: {
-          pathname: req.nextUrl.pathname,
-          paramsId: idFromParams ?? null,
-          pathId: idFromPath ?? null,
+        details: {
+          ...parsedParams.error.flatten(),
+          debug: {
+            pathname: req.nextUrl.pathname,
+            paramsId: idFromParams ?? null,
+            pathId: idFromPath ?? null,
+          },
         },
       },
       { status: 400 }
@@ -477,7 +479,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
     }
     if (result.kind === "RULE_CONFIG_ERROR") {
       return NextResponse.json(
-        { ok: false, error: "RULE_CONFIG_ERROR", message: result.message },
+        { ok: false, error: "RULE_CONFIG_ERROR", details: { message: result.message } },
         { status: 400 }
       );
     }

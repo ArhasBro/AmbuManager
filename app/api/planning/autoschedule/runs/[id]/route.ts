@@ -82,11 +82,13 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
       {
         ok: false,
         error: "VALIDATION_ERROR",
-        details: parsedParams.error.flatten(),
-        debug: {
-          pathname: req.nextUrl.pathname,
-          paramsId: idFromParams ?? null,
-          pathId: idFromPath ?? null,
+        details: {
+          ...parsedParams.error.flatten(),
+          debug: {
+            pathname: req.nextUrl.pathname,
+            paramsId: idFromParams ?? null,
+            pathId: idFromPath ?? null,
+          },
         },
       },
       { status: 400 }

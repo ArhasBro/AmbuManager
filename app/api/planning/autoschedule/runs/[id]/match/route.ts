@@ -12,14 +12,14 @@ export async function GET() {
 
   if (!session?.user?.id || typeof companyId !== "string" || companyId.length === 0) {
     return Response.json(
-      { ok: false, error: "UNAUTHORIZED", message: "Session invalide (companyId manquant)" },
+      { ok: false, error: "UNAUTHORIZED", details: "Session invalide (companyId manquant)" },
       { status: 401 }
     );
   }
 
   if (!(await canAutoSchedule(session.user.id, session.user.role))) {
     return Response.json(
-      { ok: false, error: "FORBIDDEN", message: "Accès refusé (PLANNING_AUTOSCHEDULE requis)" },
+      { ok: false, error: "FORBIDDEN", details: "Accès refusé (PLANNING_AUTOSCHEDULE requis)" },
       { status: 403 }
     );
   }
@@ -29,7 +29,7 @@ export async function GET() {
     {
       ok: false,
       error: "GONE",
-      message:
+      details:
         "Cette route est dépréciée. Utilise /match/preview (simulation) et /match/apply (application).",
     },
     { status: 410 }
