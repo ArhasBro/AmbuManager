@@ -53,7 +53,10 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |       |       PATCH__SESSION-20260312-08_A1_TENANT-03.diff
 |   |       |       README_PATCH.md
 |   |       |       
-|   |       \---SESSION-20260313-01_A1_TENANT-04
+|   |       +---SESSION-20260313-01_A1_TENANT-04
+|   |       |       NO_PATCH.md
+|   |       |       
+|   |       \---SESSION-20260313-02_A1_RBAC-01
 |   |               NO_PATCH.md
 |   |               
 |   \---ANCIENS_PATCHS
@@ -167,7 +170,14 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |       |       RESULTATS.md
 |   |       |       SESSION.md
 |   |       |       
-|   |       \---SESSION-20260313-01_A1_TENANT-04
+|   |       +---SESSION-20260313-01_A1_TENANT-04
+|   |       |       EVIDENCES.md
+|   |       |       FIN_SESSION.md
+|   |       |       NOTES.md
+|   |       |       RESULTATS.md
+|   |       |       SESSION.md
+|   |       |       
+|   |       \---SESSION-20260313-02_A1_RBAC-01
 |   |               EVIDENCES.md
 |   |               FIN_SESSION.md
 |   |               NOTES.md
