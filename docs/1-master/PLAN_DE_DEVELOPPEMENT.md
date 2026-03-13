@@ -122,7 +122,7 @@ Pour un même sous-sujet, l’enchaînement naturel devient :
 Chaque session doit produire **un seul livrable principal**.
 
 Ce livrable principal peut être :
-- un patch code
+- un patch code + cmd 
 - un patch documentaire
 - un verdict formel sans correction nécessaire
 

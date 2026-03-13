@@ -234,6 +234,6 @@ Si une information n’est pas prouvée : **RECONSTRUCTION — À CONFIRMER**.
 - Cette refonte devra respecter strictement :
   - 1 session = 1 point clair
   - 1 fonctionnalité
-  - 1 patch
+  - 1 patch + cmd git apply
   - 1 DoD
   - 1 validation
