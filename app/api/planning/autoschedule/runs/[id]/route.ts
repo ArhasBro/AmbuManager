@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
+import { canViewAudit } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 
@@ -55,9 +56,8 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     return NextResponse.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
   }
 
-  // ✅ Décision validée : ADMIN + GERANT uniquement
-  const roleAllowed = role === "ADMIN" || role === "GERANT";
-  if (!roleAllowed) {
+  // ✅ RBAC : accès natif ADMIN/GERANT ou permission dédiée consulter audit
+  if (!(await canViewAudit(userId, role))) {
     return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });
   }
 

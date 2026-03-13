@@ -1558,6 +1558,8 @@ C:.
 |   |   |   |   [root-of-the-server]__466e0aef._.js.map
 |   |   |   |   [root-of-the-server]__51fd3f4a._.js
 |   |   |   |   [root-of-the-server]__51fd3f4a._.js.map
+|   |   |   |   [root-of-the-server]__58fa01f8._.js
+|   |   |   |   [root-of-the-server]__58fa01f8._.js.map
 |   |   |   |   [root-of-the-server]__5e792a0f._.js
 |   |   |   |   [root-of-the-server]__5e792a0f._.js.map
 |   |   |   |   [root-of-the-server]__6e7a5963._.js
@@ -1566,8 +1568,6 @@ C:.
 |   |   |   |   [root-of-the-server]__80597b5e._.js.map
 |   |   |   |   [root-of-the-server]__88924fbd._.js
 |   |   |   |   [root-of-the-server]__88924fbd._.js.map
-|   |   |   |   [root-of-the-server]__b46cb4bd._.js
-|   |   |   |   [root-of-the-server]__b46cb4bd._.js.map
 |   |   |   |   [root-of-the-server]__e6c5e537._.js
 |   |   |   |   [root-of-the-server]__e6c5e537._.js.map
 |   |   |   |   [root-of-the-server]__ecb56e79._.js
@@ -1751,13 +1751,13 @@ C:.
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
 |   |   |       
-|   |   +---media
-|   |   |       favicon.0b3bf435.ico
+|   |   +---lGA26FzpfAsxBPfgThqUi
+|   |   |       _buildManifest.js
+|   |   |       _clientMiddlewareManifest.json
+|   |   |       _ssgManifest.js
 |   |   |       
-|   |   \---umbikNaQwFYVmoaEst_zU
-|   |           _buildManifest.js
-|   |           _clientMiddlewareManifest.json
-|   |           _ssgManifest.js
+|   |   \---media
+|   |           favicon.0b3bf435.ico
 |   |           
 |   \---types
 |           routes.d.ts
@@ -1968,7 +1968,14 @@ C:.
 |   |   |       |       RESULTATS.md
 |   |   |       |       SESSION.md
 |   |   |       |       
-|   |   |       \---SESSION-20260313-06_A1_RBAC-05
+|   |   |       +---SESSION-20260313-06_A1_RBAC-05
+|   |   |       |       EVIDENCES.md
+|   |   |       |       FIN_SESSION.md
+|   |   |       |       NOTES.md
+|   |   |       |       RESULTATS.md
+|   |   |       |       SESSION.md
+|   |   |       |       
+|   |   |       \---SESSION-20260313-07_A1_RBAC-06
 |   |   |               EVIDENCES.md
 |   |   |               FIN_SESSION.md
 |   |   |               NOTES.md
@@ -2078,7 +2085,11 @@ C:.
 |   |   |       |       PATCH__SESSION-20260313-05_A1_RBAC-04.diff
 |   |   |       |       README_PATCH.md
 |   |   |       |       
-|   |   |       \---SESSION-20260313-06_A1_RBAC-05
+|   |   |       +---SESSION-20260313-06_A1_RBAC-05
+|   |   |       |       PATCH__SESSION-20260313-06_A1_RBAC-05.diff
+|   |   |       |       README_PATCH.md
+|   |   |       |       
+|   |   |       \---SESSION-20260313-07_A1_RBAC-06
 |   |   |               README_PATCH.md
 |   |   |               
 |   |   \---ANCIENS_PATCHS

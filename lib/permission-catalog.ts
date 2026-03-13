@@ -70,6 +70,11 @@ export const ALPHA_PERMISSION_CATALOG = [
     description: "Permet de modifier les règles métier de la société.",
   },
   {
+    code: "AUDIT_VIEW",
+    label: "Consulter audit",
+    description: "Permet de consulter les entrées d'audit déjà exposées par le produit.",
+  },
+  {
     code: "PLANNING_EXPORT",
     label: "Exporter planning",
     description: "Permet d'exporter le planning lorsqu'une action dédiée existe.",

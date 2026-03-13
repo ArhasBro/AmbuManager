@@ -68,6 +68,10 @@ export async function canManageCompanyRules(userId: string, role?: string): Prom
   return hasPermissionAccess({ userId, role, codes: ["COMPANY_RULES_MANAGE"] });
 }
 
+export async function canViewAudit(userId: string, role?: string): Promise<boolean> {
+  return hasPermissionAccess({ userId, role, codes: ["AUDIT_VIEW"] });
+}
+
 export async function canEditPlanning(userId: string, role?: string): Promise<boolean> {
   return hasPermissionAccess({ userId, role, codes: ["PLANNING_EDIT"] });
 }

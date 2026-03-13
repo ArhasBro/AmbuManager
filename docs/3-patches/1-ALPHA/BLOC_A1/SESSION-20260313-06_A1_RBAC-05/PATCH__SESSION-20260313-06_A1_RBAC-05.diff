@@ -1,0 +1,51 @@
+--- a/lib/permission-catalog.ts
++++ b/lib/permission-catalog.ts
+@@ -70,6 +70,11 @@
+     description: "Permet de modifier les règles métier de la société.",
+   },
+   {
++    code: "AUDIT_VIEW",
++    label: "Consulter audit",
++    description: "Permet de consulter les entrées d'audit déjà exposées par le produit.",
++  },
++  {
+     code: "PLANNING_EXPORT",
+     label: "Exporter planning",
+     description: "Permet d'exporter le planning lorsqu'une action dédiée existe.",
+
+--- a/lib/permissions.ts
++++ b/lib/permissions.ts
+@@ -68,6 +68,10 @@
+   return hasPermissionAccess({ userId, role, codes: ["COMPANY_RULES_MANAGE"] });
+ }
+ 
++export async function canViewAudit(userId: string, role?: string): Promise<boolean> {
++  return hasPermissionAccess({ userId, role, codes: ["AUDIT_VIEW"] });
++}
++
+ export async function canEditPlanning(userId: string, role?: string): Promise<boolean> {
+   return hasPermissionAccess({ userId, role, codes: ["PLANNING_EDIT"] });
+ }
+
+--- a/app/api/planning/autoschedule/runs/[id]/route.ts
++++ b/app/api/planning/autoschedule/runs/[id]/route.ts
+@@ -1,6 +1,7 @@
+ import { NextRequest, NextResponse } from "next/server";
+ import { getServerSession } from "next-auth/next";
+ import { authOptions } from "@/lib/auth";
++import { canViewAudit } from "@/lib/permissions";
+ import { prisma } from "@/lib/prisma";
+ import { z } from "zod";
+ 
+@@ -55,9 +56,8 @@
+     return NextResponse.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
+   }
+ 
+-  // ✅ Décision validée : ADMIN + GERANT uniquement
+-  const roleAllowed = role === "ADMIN" || role === "GERANT";
+-  if (!roleAllowed) {
++  // ✅ RBAC : accès natif ADMIN/GERANT ou permission dédiée consulter audit
++  if (!(await canViewAudit(userId, role))) {
+     return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });
+   }
+ 

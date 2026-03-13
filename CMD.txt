@@ -37,15 +37,29 @@ npm run db:seed
 npm run db:reset
 npm run db:studio
 
-
+.\docs\3-patches\1-ALPHA\BLOC_A1\SESSION-20260313-06_A1_RBAC-05\PATCH__SESSION-20260313-06_A1_RBAC-05.diff
 
 GPT :
 
 Session validée, nous passons à la suivante.
 
-Avant de préparer les prompts, relis bien les fichiers `.md` présents dans `./docs`, et surtout dans `./docs/master`, car ce sont les documents de référence qui t’aident à faire le travail correctement.
+Avant de préparer quoi que ce soit, relis attentivement tous les fichiers `.md` présents dans `./docs`, avec une attention particulière pour ceux de `./docs/master`. Ces documents sont les références à suivre pour garantir un travail correct, cohérent et méthodologiquement conforme.
 
-Prépare les prompts pour :
+Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
+
+1. **Prompt de production**
+   - À rédiger en t’appuyant sur le `TEMPLATE_DEBUT_SESSION.md` ainsi que sur les règles définies dans les fichiers de `./docs`.
+   - Il s’agit du prompt principal.
+   - Il doit permettre d’exécuter la session dans la discussion de production.
+
+2. **Prompt de contrôle**
+   - À rédiger pour la discussion de contrôle qualité.
+   - Il doit servir à analyser et évaluer la réponse issue de la discussion de production.
+   - Ce prompt ne doit pas être utilisé tout de suite.
+   - Il devra être utilisé uniquement après que je t’aurai transmis la réponse de la discussion de production.
+   - Faire un prompt de réponse adapté pour la discussion production.
+
+Références de la session :
 
 - XXXX
 - XXXX
