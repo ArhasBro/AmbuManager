@@ -209,7 +209,14 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |       |   |       RESULTATS.md
 |   |       |   |       SESSION.md
 |   |       |   |       
-|   |       |   \---SESSION-20260314-01_A2_ORG-02
+|   |       |   +---SESSION-20260314-01_A2_ORG-02
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   \---SESSION-20260314-02_A2_ORG-03
 |   |       |           EVIDENCES.md
 |   |       |           FIN_SESSION.md
 |   |       |           NOTES.md
@@ -217,14 +224,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |       |           SESSION.md
 |   |       |           
 |   |       +---2-BASE
-|   |       +---3-SUP
-|   |       \---SESSION-20260314-02_A2_ORG-03
-|   |               EVIDENCES.md
-|   |               FIN_SESSION.md
-|   |               NOTES.md
-|   |               RESULTATS.md
-|   |               SESSION.md
-|   |               
+|   |       \---3-SUP
 |   \---SESSION-YYYYMMDD-XX
 |           EVIDENCES.md
 |           FIN_SESSION.md
@@ -333,15 +333,15 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |           |   +---SESSION-20260313-17_A2_ORG-01
 |           |   |       NO_PATCH.md
 |           |   |       
-|           |   \---SESSION-20260314-01_A2_ORG-02
-|           |           ORG-02.diff
+|           |   +---SESSION-20260314-01_A2_ORG-02
+|           |   |       ORG-02.diff
+|           |   |       README_PATCH.md
+|           |   |       
+|           |   \---SESSION-20260314-02_A2_ORG-03
 |           |           README_PATCH.md
 |           |           
 |           +---2-BASE
-|           +---3-SUP
-|           \---SESSION-20260314-02_A2_ORG-03
-|                   README_PATCH.md
-|                   
+|           \---3-SUP
 +---4-templates
 |       TEMPLATE_DEBUT_SESSION.md
 |       TEMPLATE_DOD_4_4.md
