@@ -60,7 +60,7 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260313-17_A2_ORG-01
-- ORG-01 — AUDIT** — Audit du modèle société existant
+- SESSION-20260314-01_A2_ORG-02
+- ORG-02 — COMPLÉTION** — Ajout/correction des champs minimaux du profil société
 
 sortie propre + retour du terminal + aucune erreur = validé
