@@ -2,7 +2,7 @@
 
 ## ID SESSION
 
-SESSION-20260314-01_A2_ORG-02
+SESSION-20260314-02_A2_ORG-03
 
 ## Date
 
@@ -15,7 +15,7 @@ Sous-projet : Ambulance Manager
 Maturite : 1-ALPHA  
 Bloc : A2  
 Type : COMPLETION  
-Intitule : Ajout/correction des champs minimaux du profil société
+Intitule : Édition UI du profil société
 
 ## Objectif de la session
 
@@ -31,5 +31,5 @@ INFORMATION NON FOURNIE - A CONFIRMER
 
 ## Dossiers lies
 
-- Session : docs/2-sessions/1-ALPHA/BLOC_A2/SESSION-20260314-01_A2_ORG-02
-- Patchs  : docs/3-patches/1-ALPHA/BLOC_A2/SESSION-20260314-01_A2_ORG-02
+- Session : docs/2-sessions/1-ALPHA/BLOC_A2/SESSION-20260314-02_A2_ORG-03
+- Patchs  : docs/3-patches/1-ALPHA/BLOC_A2/SESSION-20260314-02_A2_ORG-03

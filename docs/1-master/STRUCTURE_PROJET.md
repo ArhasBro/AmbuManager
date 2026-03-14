@@ -1759,13 +1759,13 @@ C:.
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
 |   |   |       
-|   |   +---iPhBNXETN62svABL_9tq5
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
+|   |   +---media
+|   |   |       favicon.0b3bf435.ico
 |   |   |       
-|   |   \---media
-|   |           favicon.0b3bf435.ico
+|   |   \---WZ-PF7dtvOwTED42_FzQf
+|   |           _buildManifest.js
+|   |           _clientMiddlewareManifest.json
+|   |           _ssgManifest.js
 |   |           
 |   \---types
 |           routes.d.ts
@@ -2059,7 +2059,14 @@ C:.
 |   |   |   |               
 |   |   |   \---BLOC_A2
 |   |   |       +---1-ORG
-|   |   |       |   \---SESSION-20260313-17_A2_ORG-01
+|   |   |       |   +---SESSION-20260313-17_A2_ORG-01
+|   |   |       |   |       EVIDENCES.md
+|   |   |       |   |       FIN_SESSION.md
+|   |   |       |   |       NOTES.md
+|   |   |       |   |       RESULTATS.md
+|   |   |       |   |       SESSION.md
+|   |   |       |   |       
+|   |   |       |   \---SESSION-20260314-01_A2_ORG-02
 |   |   |       |           EVIDENCES.md
 |   |   |       |           FIN_SESSION.md
 |   |   |       |           NOTES.md
@@ -2068,7 +2075,7 @@ C:.
 |   |   |       |           
 |   |   |       +---2-BASE
 |   |   |       +---3-SUP
-|   |   |       \---SESSION-20260314-01_A2_ORG-02
+|   |   |       \---SESSION-20260314-02_A2_ORG-03
 |   |   |               EVIDENCES.md
 |   |   |               FIN_SESSION.md
 |   |   |               NOTES.md
@@ -2180,12 +2187,16 @@ C:.
 |   |       |               
 |   |       \---BLOC_A2
 |   |           +---1-ORG
-|   |           |   \---SESSION-20260313-17_A2_ORG-01
-|   |           |           NO_PATCH.md
+|   |           |   +---SESSION-20260313-17_A2_ORG-01
+|   |           |   |       NO_PATCH.md
+|   |           |   |       
+|   |           |   \---SESSION-20260314-01_A2_ORG-02
+|   |           |           ORG-02.diff
+|   |           |           README_PATCH.md
 |   |           |           
 |   |           +---2-BASE
 |   |           +---3-SUP
-|   |           \---SESSION-20260314-01_A2_ORG-02
+|   |           \---SESSION-20260314-02_A2_ORG-03
 |   |                   README_PATCH.md
 |   |                   
 |   +---4-templates
@@ -38460,7 +38471,10 @@ C:.
 |       +---20260306221500_add_planning_audit_log
 |       |       migration.sql
 |       |       
-|       \---20260313120000_rename_role_dea_to_ade
+|       +---20260313120000_rename_role_dea_to_ade
+|       |       migration.sql
+|       |       
+|       \---20260314143000_org02_company_profile
 |               migration.sql
 |               
 +---public

@@ -15,8 +15,8 @@ Unblock-File -Path .\create_session.ps1
 # Git
 git fetch --all --prune
 git log --oneline -n 20
-git apply --check ".\docs\3-patches\1-ALPHA\BLOC_A1\4-API\SESSION-20260313-14_A1_API-04\PATCH__SESSION-20260313-14_A1_API-04.diff"
-git apply ".\docs\3-patches\1-ALPHA\BLOC_A1\4-API\SESSION-20260313-14_A1_API-04\PATCH__SESSION-20260313-14_A1_API-04.diff"
+git apply --check ".\docs\3-patches\1-ALPHA\BLOC_A2\1-ORG\SESSION-20260314-01_A2_ORG-02\ORG-02.diff"
+git apply ".\docs\3-patches\1-ALPHA\BLOC_A2\1-ORG\SESSION-20260314-01_A2_ORG-02\ORG-02.diff"
 git apply -p1 --check docs/patches/general/PATCH_GLOBAL.diff
 git apply -p1 docs/patches/general/PATCH_GLOBAL.diff
 git apply -p1 --reject docs/patches/general/PATCH_GLOBAL.diff
@@ -60,7 +60,7 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260314-01_A2_ORG-02
-- ORG-02 — COMPLÉTION** — Ajout/correction des champs minimaux du profil société
+- SESSION-20260314-02_A2_ORG-03
+- ORG-03 — COMPLÉTION** — Édition UI du profil société
 
 sortie propre + retour du terminal + aucune erreur = validé

@@ -29,6 +29,10 @@ function readSeedPassword(envName: string, fallback: string): string {
 
 type SeedCompany = {
   name: string;
+  managerNames: string;
+  address: string;
+  phone: string;
+  siret: string;
   admin: { email: string; password: string; name: string };
   users: Array<{ email: string; password: string; name: string; role: Role; permissions: string[] }>;
   vehicles: Array<{ plate: string; type: VehicleType; status: VehicleStatus }>;
@@ -43,23 +47,36 @@ type SeedCompany = {
   }>;
 };
 
-async function upsertCompany(name: string) {
+async function upsertCompany(params: {
+  name: string;
+  managerNames: string;
+  address: string;
+  phone: string;
+  siret: string;
+}) {
   const now = new Date();
+  const companyData = {
+    name: params.name,
+    managerNames: params.managerNames,
+    address: params.address,
+    phone: params.phone,
+    siret: params.siret,
+  };
 
-  const existing = await prisma.company.findUnique({ where: { name } });
+  const existing = await prisma.company.findUnique({ where: { name: params.name } });
   if (!existing) {
     const created = await prisma.company.create({
-      data: { name, createdAt: now, updatedAt: now },
+      data: { ...companyData, createdAt: now, updatedAt: now },
     });
-    console.log("✅ Company created:", name, created.id);
+    console.log("✅ Company created:", params.name, created.id);
     return created;
   }
 
   const updated = await prisma.company.update({
     where: { id: existing.id },
-    data: { updatedAt: now },
+    data: { ...companyData, updatedAt: now },
   });
-  console.log("✅ Company found:", name, updated.id);
+  console.log("✅ Company found:", params.name, updated.id);
   return updated;
 }
 
@@ -189,6 +206,10 @@ async function main() {
   const companies: SeedCompany[] = [
     {
       name: "Ambulance Manager",
+      managerNames: "Nathan Archenoul",
+      address: "1 rue de l'Exemple, 22400 Lamballe-Armor",
+      phone: "0296000001",
+      siret: "73282932000074",
       admin: { email: "admin@ambulance.local", password: adminPasswordA, name: "Nathan" },
       users: [
         {
@@ -230,6 +251,10 @@ async function main() {
     },
     {
       name: "Ambulance Manager - B",
+      managerNames: "Admin B",
+      address: "2 avenue des Tests, 35000 Rennes",
+      phone: "0297000002",
+      siret: "55210055400013",
       admin: { email: "admin-b@ambulance.local", password: adminPasswordB, name: "Admin B" },
       users: [
         {
@@ -256,7 +281,13 @@ async function main() {
   ];
 
   for (const cfg of companies) {
-    const company = await upsertCompany(cfg.name);
+    const company = await upsertCompany({
+      name: cfg.name,
+      managerNames: cfg.managerNames,
+      address: cfg.address,
+      phone: cfg.phone,
+      siret: cfg.siret,
+    });
 
     // ADMIN
     const admin = await upsertUser({
