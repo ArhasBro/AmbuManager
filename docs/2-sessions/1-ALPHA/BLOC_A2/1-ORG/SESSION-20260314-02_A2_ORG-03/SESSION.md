@@ -6,119 +6,81 @@
 
 ## Date
 
-`2026-03-14`
+`2026-03-15`
 
 ## Contexte
 
-Projet : `Investissement`  
-Sous-projet : `Ambulance Manager`  
-Maturité : `1-ALPHA`  
-Bloc : `A2`  
-Type : `COMPLÉTION`  
+Projet : `Investissement`
+Sous-projet : `Ambulance Manager`
+Maturité : `1-ALPHA`
+Bloc : `A2`
+Type : `COMPLETION`
 Intitulé : `Édition UI du profil société`
 
-Cette session est une **complétion strictement bornée à `ORG-03`**.
-Elle reprend comme acquis validés `ORG-01` et `ORG-02` :
-- absence initiale d’UI profil société prouvée par audit ;
-- présence désormais effective des champs minimaux `name`, `managerNames`, `address`, `phone`, `siret` sur `Company`.
+## État réel constaté dans le ZIP actuel
 
-## Références de travail retenues
+Le ZIP réellement fourni ne contient pas le code `ORG-03` que le message annonçait comme déjà présent.
+Constat factuel à l'inspection du dépôt actuel :
+- `app/api/company/profile/route.ts` : absent dans le ZIP reçu ;
+- `app/company/company-profile-form.tsx` : absent dans le ZIP reçu ;
+- `app/company/page.tsx` : absent dans le ZIP reçu ;
+- `lib/validators/company-profile.ts` : absent dans le ZIP reçu.
 
-### Références documentaires prioritaires
-- `docs/1-master/DOCUMENT_MAITRE.md`
-- `docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
-- `docs/1-master/PLAN_DE_DEVELOPPEMENT.md`
-- `docs/1-master/ETAT_GLOBAL_PROJET.md`
-- `docs/1-master/REGISTRE_DECISIONS.md`
-- `docs/1-master/RECAP_DISCUSSIONS.md`
-- `docs/1-master/STRUCTURE_PROJET.md`
-- `docs/SOURCES_AUTORISEES.md`
-- `docs/STRUCTURE_DOCS.md`
-- `docs/PROTOCOLE_SESSION.md`
-- `docs/4-templates/TEMPLATE_DEBUT_SESSION.md`
+En conséquence, le travail a été réalisé **à partir du ZIP réellement fourni**, qui ne portait pas encore le code `ORG-03` côté application.
 
-### Historique repris sans réouverture
-- `A1` est clôturé globalement et n’est pas rouvert ;
-- `ORG-01` et `ORG-02` sont pris comme acquis validés ;
-- auth/session enrichie, multi-tenant ALPHA, RBAC et contrat API officiel sont repris sans réouverture.
+## Objectif de session retenu
 
-### Code réellement concerné
-- `app/dashboard/page.tsx`
-- `app/company/page.tsx`
-- `app/company/company-profile-form.tsx`
-- `app/api/company/profile/route.ts`
-- `lib/validators/company-profile.ts`
+Livrer la UI minimale `ORG-03` du profil société ALPHA sur les champs :
+- `name`
+- `managerNames`
+- `address`
+- `phone`
+- `siret`
 
-## Objectif exact
-
-Ajouter une **UI minimale réellement utilisable** permettant à la société connectée :
-- d’afficher son profil société ALPHA ;
-- de modifier les 5 champs attendus ;
-- de rester strictement bornée à la société courante via `companyId` ;
-- de rester accessible uniquement aux profils légitimes du périmètre société ALPHA.
+Avec les bornes suivantes :
+- lecture et écriture minimales seulement ;
+- bornage à la société courante via `companyId` ;
+- accès limité à `ADMIN` / `GERANT` ;
+- aucun onboarding ;
+- aucun nouveau champ ;
+- aucune migration ;
+- aucun élargissement hors `ORG-03`.
 
 ## Périmètre exact traité
 
-### Travail effectivement réalisé
-- ajout d’une page dédiée `Profil société` ;
-- ajout d’un formulaire client minimal de consultation / édition ;
-- ajout d’une route API minimale de mise à jour ;
-- ajout de la validation d’entrée strictement nécessaire ;
-- ajout du point d’entrée depuis le dashboard admin existant.
-
-### Fichiers code réellement modifiés
+### Code modifié
 - `app/dashboard/page.tsx`
 - `app/company/page.tsx`
 - `app/company/company-profile-form.tsx`
 - `app/api/company/profile/route.ts`
 - `lib/validators/company-profile.ts`
 
-### Hors périmètre explicite
-- aucune gestion multi-sociétés ;
-- aucun onboarding société ;
-- aucun nouveau champ hors `name`, `managerNames`, `address`, `phone`, `siret` ;
-- aucune modification du schéma Prisma ou des migrations ;
-- aucune ouverture de `ORG-04`, `BASE-*`, `SUP-*` ;
-- aucune modification des documents master.
+### Documentation modifiée
+- `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/SESSION.md`
+- `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/NOTES.md`
+- `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/EVIDENCES.md`
+- `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/RESULTATS.md`
+- `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/FIN_SESSION.md`
+- `docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/README_PATCH.md`
 
-## Stratégie de mise en œuvre retenue
+## Résultat synthétique
 
-La stratégie retenue est la plus simple compatible avec le dépôt existant :
-- page serveur dédiée pour lire la société courante par `companyId` ;
-- formulaire client minimal pour modifier les 5 champs ;
-- route `PATCH` dédiée, bornée à `session.user.companyId` ;
-- contrôle d’accès explicite limité à `ADMIN` et `GERANT` ;
-- conservation du contrat API `{ ok:true, data } / { ok:false, error, details? }`.
-
-Aucune logique annexe n’a été ouverte.
-Aucun module société élargi n’a été introduit.
-
-## Résultat synthétique de session
-
-Le dépôt expose désormais une **UI minimale de profil société** cohérente avec `03.2 Profil société` sur le périmètre strict de `ORG-03` :
-- lien d’accès depuis le dashboard admin ;
-- écran dédié ;
-- affichage des 5 champs ;
-- édition des 5 champs ;
-- mise à jour bornée à la société courante par `companyId` ;
-- accès réservé à `ADMIN` / `GERANT`.
+La UI minimale du profil société ALPHA est désormais présente dans le dépôt réellement fourni :
+- point d'entrée depuis le dashboard admin ;
+- page dédiée ;
+- formulaire d'édition des 5 champs ;
+- route API minimale `PATCH /api/company/profile` ;
+- lecture et écriture bornées à `companyId` ;
+- accès limité à `ADMIN` / `GERANT`.
 
 ## Vérifications techniques réellement exécutées
 
-- `npm run lint` ;
-- `npm run build`.
-
-## État des vérifications techniques
-
 - `npm run lint` : **OK**
-- `npm run build` : **échec**
-  - erreur relevée dans l’environnement extrait :
-    - `Module '"@prisma/client"' has no exported member 'RuleMode'`
-    - premier point de blocage remonté : `app/api/company/rules/route.ts`
+- `npm run build` : **ECHEC**
+  - premier blocage observé après ajout de `ORG-03` : `app/api/company/rules/route.ts`
+  - message : `Module '"@prisma/client"' has no exported member 'RuleMode'`
 
-## Livrable principal
+## Patch produit
 
-- complétion code strictement bornée à `ORG-03` ;
-- patch git `ORG-03.diff` ;
-- clôture documentaire complète de session ;
-- maintien du périmètre limité à l’UI minimale du profil société.
+Patch incrémental par rapport au ZIP réellement reçu :
+- `ORG-03-rectif-02.diff`

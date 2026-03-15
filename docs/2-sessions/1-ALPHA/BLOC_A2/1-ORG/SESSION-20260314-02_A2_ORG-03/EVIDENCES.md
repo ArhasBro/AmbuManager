@@ -14,122 +14,55 @@
 - `docs/STRUCTURE_DOCS.md`
 - `docs/PROTOCOLE_SESSION.md`
 - `docs/4-templates/TEMPLATE_DEBUT_SESSION.md`
-- sessions antérieures acquises : `ORG-01`, `ORG-02`
 
-### Code réel modifié
+### Code réel inspecté
 - `app/dashboard/page.tsx`
-- `app/company/page.tsx`
-- `app/company/company-profile-form.tsx`
-- `app/api/company/profile/route.ts`
-- `lib/validators/company-profile.ts`
+- `prisma/schema.prisma`
+- `app/api/company/rules/route.ts`
 
-## Références documentaires déterminantes
+## État réel du ZIP reçu avant modification
 
-### Cadrage officiel du profil société
-- `docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
-  - module `03 — Multi-tenant / sociétés / profil société`
-  - `03.2 Profil société`
-  - besoin minimal explicite :
-    - `nom société`
-    - `nom des gérants`
-    - `adresse`
-    - `téléphone`
-    - `SIRET`
+Constat factuel :
+- `app/api/company/profile/route.ts` absent ;
+- `app/company/page.tsx` absent ;
+- `app/company/company-profile-form.tsx` absent ;
+- `lib/validators/company-profile.ts` absent.
 
-### Ordonnancement officiel du bloc A2
-- `docs/1-master/PLAN_DE_DEVELOPPEMENT.md`
-  - `ORG-02 — COMPLÉTION`
-  - `ORG-03 — COMPLÉTION`
-  - `ORG-04 — VALIDATION`
+Conclusion : le ZIP reçu ne contenait pas encore le code applicatif `ORG-03` annoncé dans le message.
 
-## Rappel acquis repris comme base
+## Preuves de la complétion apportée
 
-### `ORG-01`
-- aucune UI profil société visible dans le dépôt inspecté ;
-- aucune API dédiée au profil société visible.
+### 1. Point d'entrée dashboard
+`app/dashboard/page.tsx` expose désormais le lien `Profil société` pour `ADMIN` / `GERANT`.
 
-### `ORG-02`
-- `Company` porte désormais `name`, `managerNames`, `address`, `phone`, `siret`.
+### 2. Page dédiée
+`app/company/page.tsx` lit la société courante via `session.user.companyId` et affiche les 5 champs requis.
 
-## Preuves de complétion apportée
-
-### 1. Point d’entrée UI ajouté au dashboard admin
-`app/dashboard/page.tsx` expose désormais un lien `Profil société` dans le dashboard admin lorsque le rôle est `ADMIN` ou `GERANT`.
-
-Conclusion probante :
-- l’UI n’est plus cachée ni inexistante ;
-- le point d’entrée demandé côté admin/dashboard existe réellement.
-
-### 2. Page dédiée de profil société ajoutée
-`app/company/page.tsx` lit la société courante via `session.user.companyId` et affiche une page dédiée contenant les 5 champs requis.
-
-Conclusion probante :
-- la consultation minimale du profil société existe réellement ;
-- l’écran est borné à la société courante.
-
-### 3. Formulaire client minimal de consultation / édition ajouté
-`app/company/company-profile-form.tsx` expose l’édition des champs :
+### 3. Formulaire client
+`app/company/company-profile-form.tsx` permet la consultation et l'édition de :
 - `name`
 - `managerNames`
 - `address`
 - `phone`
 - `siret`
 
-Conclusion probante :
-- les 5 champs attendus sont bien consultables et modifiables dans l’UI.
-
-### 4. Route API minimale de mise à jour ajoutée
+### 4. Route API minimale
 `app/api/company/profile/route.ts` :
-- récupère `companyId` depuis la session ;
-- refuse l’accès sans session ;
-- refuse l’accès hors `ADMIN` / `GERANT` ;
-- met à jour uniquement la société courante ;
-- renvoie le contrat API officiel.
+- exige une session ;
+- borne l'accès à `ADMIN` / `GERANT` ;
+- borne la mise à jour à `companyId` ;
+- conserve le contrat API `{ ok:true, data } / { ok:false, error, details? }`.
 
-Conclusion probante :
-- l’écriture technique strictement nécessaire à la UI existe réellement ;
-- la mise à jour est bornée à `companyId`.
-
-### 5. Validation d’entrée minimale ajoutée
-`lib/validators/company-profile.ts` valide les 5 champs comme chaînes non vides, simples et bornées.
-
-Conclusion probante :
-- l’API de profil société ne reçoit pas de payload libre ;
-- aucun champ hors périmètre n’est accepté.
-
-## Fichiers réellement modifiés
-
-- `app/dashboard/page.tsx`
-- `app/company/page.tsx`
-- `app/company/company-profile-form.tsx`
-- `app/api/company/profile/route.ts`
-- `lib/validators/company-profile.ts`
-
-## Fichiers volontairement non ouverts
-
-- schéma Prisma et migrations
-- seed
-- rôles / permissions fines nouvelles
-- support propriétaire
-- bases / dépôts
-- documents master
-- `ORG-04`, `BASE-*`, `SUP-*`
+### 5. Validation d'entrée minimale
+`lib/validators/company-profile.ts` borne strictement les 5 champs attendus.
 
 ## Vérifications techniques réellement exécutées
 
 - `npm run lint` : **OK**
-- `npm run build` : **échec**
+- `npm run build` : **ECHEC**
 
-### Détail de l’échec build
-Premier blocage remonté en build :
+### Détail du blocage build
+Le build ne bloque pas sur `managerNames` dans le code ajouté pour `ORG-03`.
+Premier blocage observé ensuite :
 - `./app/api/company/rules/route.ts:4:10`
 - `Module '"@prisma/client"' has no exported member 'RuleMode'`
-
-## Conclusion de preuve
-
-La matière probante suffit à conclure que `ORG-03` a bien livré, et seulement livré, les éléments suivants :
-- point d’entrée dashboard ;
-- page dédiée profil société ;
-- formulaire minimal d’édition ;
-- route API minimale de mise à jour ;
-- bornage `companyId` + accès `ADMIN` / `GERANT`.

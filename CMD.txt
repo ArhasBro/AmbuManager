@@ -15,8 +15,8 @@ Unblock-File -Path .\create_session.ps1
 # Git
 git fetch --all --prune
 git log --oneline -n 20
-git apply --check ".\docs\3-patches\1-ALPHA\BLOC_A2\1-ORG\SESSION-20260314-02_A2_ORG-03\ORG-03-rectif-01.diff"
-git apply ".\docs\3-patches\1-ALPHA\BLOC_A2\1-ORG\SESSION-20260314-02_A2_ORG-03\ORG-03-rectif-01.diff"
+git apply --check ".\"
+git apply ".\"
 git apply -p1 --check docs/patches/general/PATCH_GLOBAL.diff
 git apply -p1 docs/patches/general/PATCH_GLOBAL.diff
 git apply -p1 --reject docs/patches/general/PATCH_GLOBAL.diff

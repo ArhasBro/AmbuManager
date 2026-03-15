@@ -1,0 +1,382 @@
+diff --git a/app/dashboard/page.tsx b/app/dashboard/page.tsx
+index bb053e1..5629ea5 100644
+--- a/app/dashboard/page.tsx
++++ b/app/dashboard/page.tsx
+@@ -40,6 +40,7 @@ export default async function DashboardPage() {
+         <div style={{ display: "grid", gap: 8, padding: 12, border: "1px solid #333", borderRadius: 8 }}>
+           <h2 style={{ margin: 0 }}>Dashboard admin</h2>
+           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
++            {companyProfileAllowed ? <Link href="/company">Profil société</Link> : null}
+             {usersAllowed ? <Link href="/users">Réinitialisation mot de passe</Link> : null}
+             {vehiclesAllowed ? <Link href="/vehicles">Véhicules</Link> : null}
+           </div>
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/EVIDENCES.md b/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/EVIDENCES.md
+index ed53cf4..a50a7b5 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/EVIDENCES.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/EVIDENCES.md
+@@ -1,10 +1,68 @@
+-﻿# EVIDENCES
++# EVIDENCES
+ 
+-Ã‰lÃ©ments factuels utilisÃ©s pendant la session.
++## Sources utilisées
+ 
+----
++### Documentation
++- `docs/1-master/DOCUMENT_MAITRE.md`
++- `docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
++- `docs/1-master/PLAN_DE_DEVELOPPEMENT.md`
++- `docs/1-master/ETAT_GLOBAL_PROJET.md`
++- `docs/1-master/REGISTRE_DECISIONS.md`
++- `docs/1-master/RECAP_DISCUSSIONS.md`
++- `docs/1-master/STRUCTURE_PROJET.md`
++- `docs/SOURCES_AUTORISEES.md`
++- `docs/STRUCTURE_DOCS.md`
++- `docs/PROTOCOLE_SESSION.md`
++- `docs/4-templates/TEMPLATE_DEBUT_SESSION.md`
+ 
+-## Sources utilisÃ©es
++### Code réel inspecté
++- `app/dashboard/page.tsx`
++- `prisma/schema.prisma`
++- `app/api/company/rules/route.ts`
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++## État réel du ZIP reçu avant modification
+ 
++Constat factuel :
++- `app/api/company/profile/route.ts` absent ;
++- `app/company/page.tsx` absent ;
++- `app/company/company-profile-form.tsx` absent ;
++- `lib/validators/company-profile.ts` absent.
++
++Conclusion : le ZIP reçu ne contenait pas encore le code applicatif `ORG-03` annoncé dans le message.
++
++## Preuves de la complétion apportée
++
++### 1. Point d'entrée dashboard
++`app/dashboard/page.tsx` expose désormais le lien `Profil société` pour `ADMIN` / `GERANT`.
++
++### 2. Page dédiée
++`app/company/page.tsx` lit la société courante via `session.user.companyId` et affiche les 5 champs requis.
++
++### 3. Formulaire client
++`app/company/company-profile-form.tsx` permet la consultation et l'édition de :
++- `name`
++- `managerNames`
++- `address`
++- `phone`
++- `siret`
++
++### 4. Route API minimale
++`app/api/company/profile/route.ts` :
++- exige une session ;
++- borne l'accès à `ADMIN` / `GERANT` ;
++- borne la mise à jour à `companyId` ;
++- conserve le contrat API `{ ok:true, data } / { ok:false, error, details? }`.
++
++### 5. Validation d'entrée minimale
++`lib/validators/company-profile.ts` borne strictement les 5 champs attendus.
++
++## Vérifications techniques réellement exécutées
++
++- `npm run lint` : **OK**
++- `npm run build` : **ECHEC**
++
++### Détail du blocage build
++Le build ne bloque pas sur `managerNames` dans le code ajouté pour `ORG-03`.
++Premier blocage observé ensuite :
++- `./app/api/company/rules/route.ts:4:10`
++- `Module '"@prisma/client"' has no exported member 'RuleMode'`
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/FIN_SESSION.md b/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/FIN_SESSION.md
+index fb41981..c608801 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/FIN_SESSION.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/FIN_SESSION.md
+@@ -1,14 +1,22 @@
+-﻿# FIN_SESSION
++# FIN_SESSION
+ 
+-## ClÃ´ture
++## Clôture
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++Session : `SESSION-20260314-02_A2_ORG-03`
+ 
+-## Validation
++## Résumé réel
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++La session livre la UI minimale du profil société ALPHA sur le dépôt réellement fourni, malgré l'écart entre le ZIP reçu et l'état attendu décrit dans le message.
+ 
+-## Verdict final
++## Validation technique
++
++- `npm run lint` : **OK**
++- `npm run build` : **ECHEC**
++  - premier blocage observé : `app/api/company/rules/route.ts`
++  - message : `Module '"@prisma/client"' has no exported member 'RuleMode'`
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++## Verdict final
+ 
++Résultat session : **partiellement conforme**
++- conforme sur le périmètre fonctionnel `ORG-03` ;
++- non clôturable en build global à cause d'un blocage hors `ORG-03`.
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/NOTES.md b/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/NOTES.md
+index cf1efd7..c37b1a6 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/NOTES.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/NOTES.md
+@@ -1,10 +1,26 @@
+-﻿# NOTES
++# NOTES
+ 
+-Notes de travail de la session.
++## Observation de départ
+ 
+----
++Le message de cadrage indiquait que plusieurs fichiers `ORG-03` existaient déjà dans le working tree.
++L'inspection du ZIP réellement reçu montre l'inverse : ces fichiers n'étaient pas présents côté application.
+ 
+-## MÃ©thode / observations
++## Conséquence méthodologique
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++Le ZIP reçu a été pris comme source de vérité.
++Le correctif livré n'est donc pas une micro-rectification sur des fichiers déjà présents, mais la mise en place minimale de `ORG-03` sur l'état réel du dépôt fourni.
+ 
++## Choix techniques retenus
++
++Pour éviter de retomber sur le blocage `managerNames` signalé dans l'historique précédent, la lecture et la mise à jour du profil société utilisent des requêtes SQL via `prisma.$queryRaw` plutôt qu'un `select` Prisma typé sur `managerNames`.
++
++## Périmètre volontairement non ouvert
++
++Aucun élargissement n'a été fait vers :
++- `ORG-04`
++- `BASE-*`
++- `SUP-*`
++- onboarding société
++- multi-sociétés
++- nouveaux champs
++- migrations Prisma
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/RESULTATS.md b/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/RESULTATS.md
+index bbf7c32..fe47b9c 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/RESULTATS.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/RESULTATS.md
+@@ -1,12 +1,55 @@
+-﻿# RESULTATS
++# RESULTATS
+ 
+-## RÃ©sultats obtenus
++## Résultats obtenus
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++Le dépôt réellement fourni contient désormais une UI minimale de profil société ALPHA sur le périmètre `ORG-03`.
+ 
+----
++### UI ajoutée
++- lien `Profil société` dans le dashboard admin ;
++- page `/company` ;
++- formulaire d'édition minimal.
+ 
+-## Documents modifiÃ©s
++### API / validation ajoutées
++- `PATCH /api/company/profile`
++- validation `lib/validators/company-profile.ts`
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++### Champs couverts
++- `name`
++- `managerNames`
++- `address`
++- `phone`
++- `siret`
+ 
++### Bornes conservées
++- société courante uniquement via `companyId` ;
++- accès `ADMIN` / `GERANT` uniquement ;
++- aucun nouveau champ ;
++- aucune migration.
++
++## Fichiers code modifiés
++
++- `app/dashboard/page.tsx`
++- `app/company/page.tsx`
++- `app/company/company-profile-form.tsx`
++- `app/api/company/profile/route.ts`
++- `lib/validators/company-profile.ts`
++
++## Fichiers documentation modifiés
++
++- `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/SESSION.md`
++- `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/NOTES.md`
++- `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/EVIDENCES.md`
++- `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/RESULTATS.md`
++- `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/FIN_SESSION.md`
++- `docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/README_PATCH.md`
++
++## Vérifications réelles
++
++- `npm run lint` : **OK**
++- `npm run build` : **ECHEC**
++  - premier blocage : `app/api/company/rules/route.ts`
++  - message : `Module '"@prisma/client"' has no exported member 'RuleMode'`
++
++## Patch
++
++- `ORG-03-rectif-02.diff`
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/SESSION.md b/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/SESSION.md
+index 2157ba5..46fca0b 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/SESSION.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/SESSION.md
+@@ -1,35 +1,86 @@
+-﻿# SESSION
++# SESSION
+ 
+ ## ID SESSION
+ 
+-SESSION-20260314-02_A2_ORG-03
++`SESSION-20260314-02_A2_ORG-03`
+ 
+ ## Date
+ 
+-14/03/2026
++`2026-03-15`
+ 
+ ## Contexte
+ 
+-Projet : Investissement  
+-Sous-projet : Ambulance Manager  
+-Maturite : 1-ALPHA  
+-Bloc : A2  
+-Type : COMPLETION  
+-Intitule : Édition UI du profil société
++Projet : `Investissement`
++Sous-projet : `Ambulance Manager`
++Maturité : `1-ALPHA`
++Bloc : `A2`
++Type : `COMPLETION`
++Intitulé : `Édition UI du profil société`
+ 
+-## Objectif de la session
++## État réel constaté dans le ZIP actuel
+ 
+-INFORMATION NON FOURNIE - A CONFIRMER
++Le ZIP réellement fourni ne contient pas le code `ORG-03` que le message annonçait comme déjà présent.
++Constat factuel à l'inspection du dépôt actuel :
++- `app/api/company/profile/route.ts` : absent dans le ZIP reçu ;
++- `app/company/company-profile-form.tsx` : absent dans le ZIP reçu ;
++- `app/company/page.tsx` : absent dans le ZIP reçu ;
++- `lib/validators/company-profile.ts` : absent dans le ZIP reçu.
+ 
+-## Perimetre exact traite
++En conséquence, le travail a été réalisé **à partir du ZIP réellement fourni**, qui ne portait pas encore le code `ORG-03` côté application.
+ 
+-INFORMATION NON FOURNIE - A CONFIRMER
++## Objectif de session retenu
+ 
+-## Resultat synthetique de session
++Livrer la UI minimale `ORG-03` du profil société ALPHA sur les champs :
++- `name`
++- `managerNames`
++- `address`
++- `phone`
++- `siret`
+ 
+-INFORMATION NON FOURNIE - A CONFIRMER
++Avec les bornes suivantes :
++- lecture et écriture minimales seulement ;
++- bornage à la société courante via `companyId` ;
++- accès limité à `ADMIN` / `GERANT` ;
++- aucun onboarding ;
++- aucun nouveau champ ;
++- aucune migration ;
++- aucun élargissement hors `ORG-03`.
+ 
+-## Dossiers lies
++## Périmètre exact traité
+ 
+-- Session : docs/2-sessions/1-ALPHA/BLOC_A2/SESSION-20260314-02_A2_ORG-03
+-- Patchs  : docs/3-patches/1-ALPHA/BLOC_A2/SESSION-20260314-02_A2_ORG-03
++### Code modifié
++- `app/dashboard/page.tsx`
++- `app/company/page.tsx`
++- `app/company/company-profile-form.tsx`
++- `app/api/company/profile/route.ts`
++- `lib/validators/company-profile.ts`
++
++### Documentation modifiée
++- `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/SESSION.md`
++- `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/NOTES.md`
++- `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/EVIDENCES.md`
++- `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/RESULTATS.md`
++- `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/FIN_SESSION.md`
++- `docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/README_PATCH.md`
++
++## Résultat synthétique
++
++La UI minimale du profil société ALPHA est désormais présente dans le dépôt réellement fourni :
++- point d'entrée depuis le dashboard admin ;
++- page dédiée ;
++- formulaire d'édition des 5 champs ;
++- route API minimale `PATCH /api/company/profile` ;
++- lecture et écriture bornées à `companyId` ;
++- accès limité à `ADMIN` / `GERANT`.
++
++## Vérifications techniques réellement exécutées
++
++- `npm run lint` : **OK**
++- `npm run build` : **ECHEC**
++  - premier blocage observé après ajout de `ORG-03` : `app/api/company/rules/route.ts`
++  - message : `Module '"@prisma/client"' has no exported member 'RuleMode'`
++
++## Patch produit
++
++Patch incrémental par rapport au ZIP réellement reçu :
++- `ORG-03-rectif-02.diff`
+diff --git a/docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/README_PATCH.md b/docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/README_PATCH.md
+index c47e535..16a4eac 100644
+--- a/docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/README_PATCH.md
++++ b/docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/README_PATCH.md
+@@ -1,24 +1,25 @@
+-﻿# README_PATCH
++# README_PATCH
+ 
+-## Session liee
+-SESSION-20260314-02_A2_ORG-03
++## Patch
+ 
+-## Type
+-COMPLETION
++Patch officiel : `ORG-03-rectif-02.diff`
+ 
+-## Dossier patch
+-docs/3-patches/1-ALPHA/BLOC_A2/SESSION-20260314-02_A2_ORG-03
++## Objet
+ 
+-## Patch officiel attendu
+-PATCH__SESSION-20260314-02_A2_ORG-03.diff
++Ce patch s'applique sur le ZIP réellement reçu pour ajouter la UI minimale `ORG-03` et la documentation de session correspondante.
+ 
+-## Commandes d'application
++## Application
+ 
+-`ash
+-git apply --check "docs/3-patches/1-ALPHA/BLOC_A2/SESSION-20260314-02_A2_ORG-03/PATCH__SESSION-20260314-02_A2_ORG-03.diff"
+-git apply         "docs/3-patches/1-ALPHA/BLOC_A2/SESSION-20260314-02_A2_ORG-03/PATCH__SESSION-20260314-02_A2_ORG-03.diff"
+-`
++```bash
++git apply --check docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/ORG-03-rectif-02.diff
++git apply docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/ORG-03-rectif-02.diff
++```
+ 
+-## Statut
+-- Dossier patch initialise.
+-- Patch officiel a produire dans cette session si du code est modifie.
++## Vérifications observées
++
++- `git apply --check` : OK
++- `git apply` : OK
++- `npm run lint` : OK
++- `npm run build` : ECHEC
++  - premier blocage : `./app/api/company/rules/route.ts:4:10`
++  - message : `Module '"@prisma/client"' has no exported member 'RuleMode'`
