@@ -17,21 +17,11 @@ C:.
 |   tsconfig.json
 |   
 +---.next
-|   |   app-path-routes-manifest.json
 |   |   build-manifest.json
-|   |   BUILD_ID
-|   |   export-marker.json
 |   |   fallback-build-manifest.json
-|   |   images-manifest.json
 |   |   next-minimal-server.js.nft.json
 |   |   next-server.js.nft.json
 |   |   package.json
-|   |   prerender-manifest.json
-|   |   required-server-files.js
-|   |   required-server-files.json
-|   |   routes-manifest.json
-|   |   trace
-|   |   trace-build
 |   |   turbopack
 |   |   
 |   +---build
@@ -264,7 +254,6 @@ C:.
 |   |   |               00000345.sst
 |   |   |               00000346.meta
 |   |   |               00000347.meta
-|   |   |               00000348.del
 |   |   |               00000349.sst
 |   |   |               00000350.sst
 |   |   |               00000351.sst
@@ -281,6 +270,34 @@ C:.
 |   |   |               00000362.meta
 |   |   |               00000363.meta
 |   |   |               00000364.meta
+|   |   |               00000365.sst
+|   |   |               00000366.sst
+|   |   |               00000367.sst
+|   |   |               00000368.sst
+|   |   |               00000369.sst
+|   |   |               00000370.meta
+|   |   |               00000371.meta
+|   |   |               00000372.meta
+|   |   |               00000373.meta
+|   |   |               00000374.meta
+|   |   |               00000375.sst
+|   |   |               00000376.sst
+|   |   |               00000377.sst
+|   |   |               00000378.meta
+|   |   |               00000379.meta
+|   |   |               00000380.meta
+|   |   |               00000381.sst
+|   |   |               00000382.sst
+|   |   |               00000383.sst
+|   |   |               00000384.meta
+|   |   |               00000385.meta
+|   |   |               00000386.meta
+|   |   |               00000387.sst
+|   |   |               00000388.sst
+|   |   |               00000389.sst
+|   |   |               00000390.meta
+|   |   |               00000391.meta
+|   |   |               00000392.meta
 |   |   |               CURRENT
 |   |   |               LOG
 |   |   |               
@@ -1159,7 +1176,6 @@ C:.
 |   |                   
 |   +---server
 |   |   |   app-paths-manifest.json
-|   |   |   functions-config-manifest.json
 |   |   |   interception-route-rewrite-manifest.js
 |   |   |   middleware-build-manifest.js
 |   |   |   middleware-manifest.json
@@ -1173,24 +1189,10 @@ C:.
 |   |   |   server-reference-manifest.json
 |   |   |   
 |   |   +---app
-|   |   |   |   favicon.ico.body
-|   |   |   |   favicon.ico.meta
-|   |   |   |   index.html
-|   |   |   |   index.meta
-|   |   |   |   index.rsc
-|   |   |   |   login.html
-|   |   |   |   login.meta
-|   |   |   |   login.rsc
 |   |   |   |   page.js
 |   |   |   |   page.js.map
 |   |   |   |   page.js.nft.json
 |   |   |   |   page_client-reference-manifest.js
-|   |   |   |   _global-error.html
-|   |   |   |   _global-error.meta
-|   |   |   |   _global-error.rsc
-|   |   |   |   _not-found.html
-|   |   |   |   _not-found.meta
-|   |   |   |   _not-found.rsc
 |   |   |   |   
 |   |   |   +---api
 |   |   |   |   +---auth
@@ -1206,6 +1208,17 @@ C:.
 |   |   |   |   |               server-reference-manifest.json
 |   |   |   |   |               
 |   |   |   |   +---company
+|   |   |   |   |   +---profile
+|   |   |   |   |   |   |   route.js
+|   |   |   |   |   |   |   route.js.map
+|   |   |   |   |   |   |   route.js.nft.json
+|   |   |   |   |   |   |   route_client-reference-manifest.js
+|   |   |   |   |   |   |   
+|   |   |   |   |   |   \---route
+|   |   |   |   |   |           app-paths-manifest.json
+|   |   |   |   |   |           build-manifest.json
+|   |   |   |   |   |           server-reference-manifest.json
+|   |   |   |   |   |           
 |   |   |   |   |   \---rules
 |   |   |   |   |       |   route.js
 |   |   |   |   |       |   route.js.map
@@ -1387,6 +1400,19 @@ C:.
 |   |   |   |               build-manifest.json
 |   |   |   |               server-reference-manifest.json
 |   |   |   |               
+|   |   |   +---company
+|   |   |   |   |   page.js
+|   |   |   |   |   page.js.map
+|   |   |   |   |   page.js.nft.json
+|   |   |   |   |   page_client-reference-manifest.js
+|   |   |   |   |   
+|   |   |   |   \---page
+|   |   |   |           app-paths-manifest.json
+|   |   |   |           build-manifest.json
+|   |   |   |           next-font-manifest.json
+|   |   |   |           react-loadable-manifest.json
+|   |   |   |           server-reference-manifest.json
+|   |   |   |           
 |   |   |   +---dashboard
 |   |   |   |   |   page.js
 |   |   |   |   |   page.js.map
@@ -1409,13 +1435,6 @@ C:.
 |   |   |   |           app-paths-manifest.json
 |   |   |   |           build-manifest.json
 |   |   |   |           
-|   |   |   +---index.segments
-|   |   |   |       _full.segment.rsc
-|   |   |   |       _head.segment.rsc
-|   |   |   |       _index.segment.rsc
-|   |   |   |       _tree.segment.rsc
-|   |   |   |       __PAGE__.segment.rsc
-|   |   |   |       
 |   |   |   +---login
 |   |   |   |   |   page.js
 |   |   |   |   |   page.js.map
@@ -1428,16 +1447,6 @@ C:.
 |   |   |   |           next-font-manifest.json
 |   |   |   |           react-loadable-manifest.json
 |   |   |   |           server-reference-manifest.json
-|   |   |   |           
-|   |   |   +---login.segments
-|   |   |   |   |   login.segment.rsc
-|   |   |   |   |   _full.segment.rsc
-|   |   |   |   |   _head.segment.rsc
-|   |   |   |   |   _index.segment.rsc
-|   |   |   |   |   _tree.segment.rsc
-|   |   |   |   |   
-|   |   |   |   \---login
-|   |   |   |           __PAGE__.segment.rsc
 |   |   |   |           
 |   |   |   +---page
 |   |   |   |       app-paths-manifest.json
@@ -1498,35 +1507,18 @@ C:.
 |   |   |   |           react-loadable-manifest.json
 |   |   |   |           server-reference-manifest.json
 |   |   |   |           
-|   |   |   +---_global-error.segments
-|   |   |   |       _full.segment.rsc
-|   |   |   |       _head.segment.rsc
-|   |   |   |       _index.segment.rsc
-|   |   |   |       _tree.segment.rsc
-|   |   |   |       __PAGE__.segment.rsc
-|   |   |   |       
-|   |   |   +---_not-found
-|   |   |   |   |   page.js
-|   |   |   |   |   page.js.map
-|   |   |   |   |   page.js.nft.json
-|   |   |   |   |   page_client-reference-manifest.js
-|   |   |   |   |   
-|   |   |   |   \---page
-|   |   |   |           app-paths-manifest.json
-|   |   |   |           build-manifest.json
-|   |   |   |           next-font-manifest.json
-|   |   |   |           react-loadable-manifest.json
-|   |   |   |           server-reference-manifest.json
-|   |   |   |           
-|   |   |   \---_not-found.segments
-|   |   |       |   _full.segment.rsc
-|   |   |       |   _head.segment.rsc
-|   |   |       |   _index.segment.rsc
-|   |   |       |   _not-found.segment.rsc
-|   |   |       |   _tree.segment.rsc
+|   |   |   \---_not-found
+|   |   |       |   page.js
+|   |   |       |   page.js.map
+|   |   |       |   page.js.nft.json
+|   |   |       |   page_client-reference-manifest.js
 |   |   |       |   
-|   |   |       \---_not-found
-|   |   |               __PAGE__.segment.rsc
+|   |   |       \---page
+|   |   |               app-paths-manifest.json
+|   |   |               build-manifest.json
+|   |   |               next-font-manifest.json
+|   |   |               react-loadable-manifest.json
+|   |   |               server-reference-manifest.json
 |   |   |               
 |   |   +---chunks
 |   |   |   |   bec2d_app_api_planning_autoschedule_runs_[id]_match_apply_route_actions_4ed003d4.js
@@ -1575,6 +1567,8 @@ C:.
 |   |   |   |   [root-of-the-server]__80597b5e._.js.map
 |   |   |   |   [root-of-the-server]__88924fbd._.js
 |   |   |   |   [root-of-the-server]__88924fbd._.js.map
+|   |   |   |   [root-of-the-server]__c3997a41._.js
+|   |   |   |   [root-of-the-server]__c3997a41._.js.map
 |   |   |   |   [root-of-the-server]__e6c5e537._.js
 |   |   |   |   [root-of-the-server]__e6c5e537._.js.map
 |   |   |   |   [root-of-the-server]__ecb56e79._.js
@@ -1603,6 +1597,8 @@ C:.
 |   |   |   |   _bec5ea43._.js.map
 |   |   |   |   _next-internal_server_app_api_auth_[___nextauth]_route_actions_1c865db8.js
 |   |   |   |   _next-internal_server_app_api_auth_[___nextauth]_route_actions_1c865db8.js.map
+|   |   |   |   _next-internal_server_app_api_company_profile_route_actions_9bff62e4.js
+|   |   |   |   _next-internal_server_app_api_company_profile_route_actions_9bff62e4.js.map
 |   |   |   |   _next-internal_server_app_api_company_rules_route_actions_774d72f1.js
 |   |   |   |   _next-internal_server_app_api_company_rules_route_actions_774d72f1.js.map
 |   |   |   |   _next-internal_server_app_api_health_prisma_route_actions_c9f47495.js
@@ -1673,6 +1669,8 @@ C:.
 |   |   |           [root-of-the-server]__5218791f._.js.map
 |   |   |           [root-of-the-server]__84823185._.js
 |   |   |           [root-of-the-server]__84823185._.js.map
+|   |   |           [root-of-the-server]__8731afda._.js
+|   |   |           [root-of-the-server]__8731afda._.js.map
 |   |   |           [root-of-the-server]__87883845._.js
 |   |   |           [root-of-the-server]__87883845._.js.map
 |   |   |           [root-of-the-server]__9d5e3ced._.js
@@ -1701,6 +1699,8 @@ C:.
 |   |   |           _2c715f22._.js.map
 |   |   |           _30e06fe7._.js
 |   |   |           _30e06fe7._.js.map
+|   |   |           _5516c59e._.js
+|   |   |           _5516c59e._.js.map
 |   |   |           _5c5d5a9d._.js
 |   |   |           _5c5d5a9d._.js.map
 |   |   |           _5f02a5a9._.js
@@ -1713,8 +1713,12 @@ C:.
 |   |   |           _b2ebc7ca._.js.map
 |   |   |           _c23fb881._.js
 |   |   |           _c23fb881._.js.map
+|   |   |           _f92ad8b9._.js
+|   |   |           _f92ad8b9._.js.map
 |   |   |           _ffa8fc97._.js
 |   |   |           _ffa8fc97._.js.map
+|   |   |           _next-internal_server_app_company_page_actions_ca33e7ac.js
+|   |   |           _next-internal_server_app_company_page_actions_ca33e7ac.js.map
 |   |   |           _next-internal_server_app_dashboard_page_actions_7f01ccec.js
 |   |   |           _next-internal_server_app_dashboard_page_actions_7f01ccec.js.map
 |   |   |           _next-internal_server_app_login_page_actions_0e9aafc0.js
@@ -1732,12 +1736,8 @@ C:.
 |   |   |           _next-internal_server_app__not-found_page_actions_554ec2bf.js
 |   |   |           _next-internal_server_app__not-found_page_actions_554ec2bf.js.map
 |   |   |           
-|   |   +---middleware
-|   |   |       middleware-manifest.json
-|   |   |       
-|   |   \---pages
-|   |           404.html
-|   |           500.html
+|   |   \---middleware
+|   |           middleware-manifest.json
 |   |           
 |   +---static
 |   |   +---chunks
@@ -1754,6 +1754,7 @@ C:.
 |   |   |       a6dad97d9634a72d.js.map
 |   |   |       ae064a76748670f1.js
 |   |   |       af7027598a07baa5.js
+|   |   |       b870288de7d3931e.js
 |   |   |       cdb83a758231f045.js
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
@@ -1761,7 +1762,7 @@ C:.
 |   |   +---media
 |   |   |       favicon.0b3bf435.ico
 |   |   |       
-|   |   \---WZ-PF7dtvOwTED42_FzQf
+|   |   \---nL-aBCGB50M-eLVNT6GFV
 |   |           _buildManifest.js
 |   |           _clientMiddlewareManifest.json
 |   |           _ssgManifest.js
@@ -1783,6 +1784,9 @@ C:.
 |   |   |           route.ts
 |   |   |           
 |   |   +---company
+|   |   |   +---profile
+|   |   |   |       route.ts
+|   |   |   |       
 |   |   |   \---rules
 |   |   |           route.ts
 |   |   |           
@@ -1836,6 +1840,10 @@ C:.
 |   |   \---vehicles
 |   |           route.ts
 |   |           
+|   +---company
+|   |       company-profile-form.tsx
+|   |       page.tsx
+|   |       
 |   +---dashboard
 |   |       logout-button.tsx
 |   |       page.tsx
@@ -2194,6 +2202,8 @@ C:.
 |   |           |   |       README_PATCH.md
 |   |           |   |       
 |   |           |   \---SESSION-20260314-02_A2_ORG-03
+|   |           |           ORG-03-rectif-01.diff
+|   |           |           ORG-03.diff
 |   |           |           README_PATCH.md
 |   |           |           
 |   |           +---2-BASE
@@ -2232,6 +2242,7 @@ C:.
 |   |       planning.ts
 |   |       
 |   \---validators
+|           company-profile.ts
 |           planning-assign.ts
 |           vehicle.ts
 |           

@@ -1,0 +1,828 @@
+diff --git a/app/api/company/profile/route.ts b/app/api/company/profile/route.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..6e33d7281d7a5b65509418bfadb78c52e9bf56fd
+--- /dev/null
++++ b/app/api/company/profile/route.ts
+@@ -0,0 +1,82 @@
++import { getServerSession } from "next-auth/next";
++
++import { authOptions } from "@/lib/auth";
++import { prisma } from "@/lib/prisma";
++import { badRequest, forbidden, notFound, ok, serverError, unauthorized } from "@/lib/api/response";
++import { updateCompanyProfileBodySchema } from "@/lib/validators/company-profile";
++
++type CompanyProfileRow = {
++  id: string;
++  name: string | null;
++  managerNames: string | null;
++  address: string | null;
++  phone: string | null;
++  siret: string | null;
++  updatedAt: Date;
++};
++
++function canManageCompanyProfile(role?: string) {
++  return role === "ADMIN" || role === "GERANT";
++}
++
++function getErrorMessage(e: unknown): string {
++  if (e instanceof Error) return e.message;
++  if (typeof e === "string") return e;
++  try {
++    return JSON.stringify(e);
++  } catch {
++    return "Unknown error";
++  }
++}
++
++export async function PATCH(req: Request) {
++  const session = await getServerSession(authOptions);
++  const userId = session?.user?.id;
++  const companyId = session?.user?.companyId;
++  const role = session?.user?.role;
++
++  if (!userId || !companyId) return unauthorized();
++  if (!canManageCompanyProfile(role)) return forbidden();
++
++  const jsonBody: unknown = await req.json().catch(() => null);
++  const parsed = updateCompanyProfileBodySchema.safeParse(jsonBody);
++  if (!parsed.success) return badRequest("VALIDATION_ERROR", parsed.error.flatten());
++
++  try {
++    const rows = await prisma.$queryRaw<CompanyProfileRow[]>`
++      UPDATE "Company"
++      SET
++        "name" = ${parsed.data.name},
++        "managerNames" = ${parsed.data.managerNames},
++        "address" = ${parsed.data.address},
++        "phone" = ${parsed.data.phone},
++        "siret" = ${parsed.data.siret},
++        "updatedAt" = NOW()
++      WHERE "id" = ${companyId}
++      RETURNING
++        "id",
++        "name",
++        "managerNames",
++        "address",
++        "phone",
++        "siret",
++        "updatedAt"
++    `;
++
++    const company = rows[0];
++
++    if (!company) return notFound();
++
++    return ok({
++      ...company,
++      name: company.name ?? "",
++      managerNames: company.managerNames ?? "",
++      address: company.address ?? "",
++      phone: company.phone ?? "",
++      siret: company.siret ?? "",
++      updatedAt: company.updatedAt.toISOString(),
++    });
++  } catch (e: unknown) {
++    return serverError(getErrorMessage(e));
++  }
++}
+diff --git a/app/company/company-profile-form.tsx b/app/company/company-profile-form.tsx
+new file mode 100644
+index 0000000000000000000000000000000000000000..f8f6f2d98099ce1fd69bece6fb8e92119d36a510
+--- /dev/null
++++ b/app/company/company-profile-form.tsx
+@@ -0,0 +1,155 @@
++"use client";
++
++import { useState } from "react";
++
++type CompanyProfile = {
++  name: string;
++  managerNames: string;
++  address: string;
++  phone: string;
++  siret: string;
++};
++
++type ApiSuccess<T> = { ok: true; data: T };
++type ApiFailure = { ok: false; error: string; details?: unknown };
++type ApiResponse<T> = ApiSuccess<T> | ApiFailure;
++
++type CompanyProfileResponse = CompanyProfile & {
++  id: string;
++  updatedAt: string;
++};
++
++function getApiError<T>(payload: ApiResponse<T> | null, fallback: string) {
++  return payload && !payload.ok ? payload.error : fallback;
++}
++
++export default function CompanyProfileForm({
++  initialProfile,
++}: {
++  initialProfile: CompanyProfile;
++}) {
++  const [form, setForm] = useState<CompanyProfile>(initialProfile);
++  const [isSubmitting, setIsSubmitting] = useState(false);
++  const [error, setError] = useState<string | null>(null);
++  const [success, setSuccess] = useState<string | null>(null);
++
++  function updateField<K extends keyof CompanyProfile>(key: K, value: CompanyProfile[K]) {
++    setForm((prev) => ({ ...prev, [key]: value }));
++  }
++
++  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
++    event.preventDefault();
++    setIsSubmitting(true);
++    setError(null);
++    setSuccess(null);
++
++    try {
++      const res = await fetch("/api/company/profile", {
++        method: "PATCH",
++        headers: { "Content-Type": "application/json" },
++        body: JSON.stringify(form),
++      });
++
++      const data = (await res.json().catch(() => null)) as ApiResponse<CompanyProfileResponse> | null;
++
++      if (!res.ok || !data?.ok) {
++        throw new Error(getApiError(data, "Erreur lors de la mise à jour du profil société"));
++      }
++
++      setForm({
++        name: data.data.name,
++        managerNames: data.data.managerNames,
++        address: data.data.address,
++        phone: data.data.phone,
++        siret: data.data.siret,
++      });
++      setSuccess("Profil société mis à jour.");
++    } catch (e: unknown) {
++      setError(e instanceof Error ? e.message : "Erreur inconnue");
++    } finally {
++      setIsSubmitting(false);
++    }
++  }
++
++  return (
++    <form
++      onSubmit={handleSubmit}
++      style={{
++        display: "grid",
++        gap: 16,
++        padding: 16,
++        border: "1px solid #ddd",
++        borderRadius: 10,
++        maxWidth: 720,
++      }}
++    >
++      <div style={{ display: "grid", gap: 8 }}>
++        <label htmlFor="company-name">Nom société</label>
++        <input
++          id="company-name"
++          value={form.name}
++          onChange={(e) => updateField("name", e.target.value)}
++          required
++          disabled={isSubmitting}
++          style={{ padding: 10 }}
++        />
++      </div>
++
++      <div style={{ display: "grid", gap: 8 }}>
++        <label htmlFor="company-managers">Nom des gérants</label>
++        <input
++          id="company-managers"
++          value={form.managerNames}
++          onChange={(e) => updateField("managerNames", e.target.value)}
++          required
++          disabled={isSubmitting}
++          style={{ padding: 10 }}
++        />
++      </div>
++
++      <div style={{ display: "grid", gap: 8 }}>
++        <label htmlFor="company-address">Adresse</label>
++        <input
++          id="company-address"
++          value={form.address}
++          onChange={(e) => updateField("address", e.target.value)}
++          required
++          disabled={isSubmitting}
++          style={{ padding: 10 }}
++        />
++      </div>
++
++      <div style={{ display: "grid", gap: 8 }}>
++        <label htmlFor="company-phone">Téléphone</label>
++        <input
++          id="company-phone"
++          value={form.phone}
++          onChange={(e) => updateField("phone", e.target.value)}
++          required
++          disabled={isSubmitting}
++          style={{ padding: 10 }}
++        />
++      </div>
++
++      <div style={{ display: "grid", gap: 8 }}>
++        <label htmlFor="company-siret">SIRET</label>
++        <input
++          id="company-siret"
++          value={form.siret}
++          onChange={(e) => updateField("siret", e.target.value)}
++          required
++          disabled={isSubmitting}
++          style={{ padding: 10 }}
++        />
++      </div>
++
++      <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
++        <button disabled={isSubmitting} style={{ padding: "10px 14px" }}>
++          {isSubmitting ? "Enregistrement..." : "Enregistrer"}
++        </button>
++        {success ? <span style={{ color: "green" }}>{success}</span> : null}
++        {error ? <span style={{ color: "crimson" }}>{error}</span> : null}
++      </div>
++    </form>
++  );
++}
+diff --git a/app/company/page.tsx b/app/company/page.tsx
+new file mode 100644
+index 0000000000000000000000000000000000000000..5207c1018b499bf4480ff4fe0dddc38694cd7688
+--- /dev/null
++++ b/app/company/page.tsx
+@@ -0,0 +1,73 @@
++import Link from "next/link";
++import { getServerSession } from "next-auth/next";
++import { redirect } from "next/navigation";
++
++import { authOptions } from "@/lib/auth";
++import { prisma } from "@/lib/prisma";
++
++import CompanyProfileForm from "./company-profile-form";
++
++type CompanyProfileRow = {
++  name: string | null;
++  managerNames: string | null;
++  address: string | null;
++  phone: string | null;
++  siret: string | null;
++};
++
++function canManageCompanyProfile(role?: string) {
++  return role === "ADMIN" || role === "GERANT";
++}
++
++async function getCompanyProfile(companyId: string) {
++  const rows = await prisma.$queryRaw<CompanyProfileRow[]>`
++    SELECT
++      "name",
++      "managerNames",
++      "address",
++      "phone",
++      "siret"
++    FROM "Company"
++    WHERE "id" = ${companyId}
++    LIMIT 1
++  `;
++
++  return rows[0] ?? null;
++}
++
++export default async function CompanyPage() {
++  const session = await getServerSession(authOptions);
++  const user = session?.user;
++
++  if (!user?.id || !user.companyId) redirect("/login");
++  if (!canManageCompanyProfile(user.role)) redirect("/login");
++
++  const company = await getCompanyProfile(user.companyId);
++
++  if (!company) redirect("/login");
++
++  return (
++    <div style={{ padding: 16, display: "grid", gap: 16 }}>
++      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
++        <div>
++          <h1 style={{ margin: 0 }}>Profil société</h1>
++          <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
++            Consultation et édition minimales de la société courante sur le périmètre ALPHA.
++          </p>
++        </div>
++
++        <Link href="/dashboard">Retour dashboard</Link>
++      </div>
++
++      <CompanyProfileForm
++        initialProfile={{
++          name: company.name ?? "",
++          managerNames: company.managerNames ?? "",
++          address: company.address ?? "",
++          phone: company.phone ?? "",
++          siret: company.siret ?? "",
++        }}
++      />
++    </div>
++  );
++}
+diff --git a/app/dashboard/page.tsx b/app/dashboard/page.tsx
+index bb053e15fff092ef1f818738b335c8b05baf50ae..d482d17b4e613f27fff8d125ab33779084105f97 100644
+--- a/app/dashboard/page.tsx
++++ b/app/dashboard/page.tsx
+@@ -25,6 +25,8 @@ export default async function DashboardPage() {
+       ])
+     : [false, false, false];
+ 
++  const companyProfileAllowed = user.role === "ADMIN" || user.role === "GERANT";
++
+   return (
+     <div style={{ padding: 16, display: "grid", gap: 12 }}>
+       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+@@ -40,6 +42,7 @@ export default async function DashboardPage() {
+         <div style={{ display: "grid", gap: 8, padding: 12, border: "1px solid #333", borderRadius: 8 }}>
+           <h2 style={{ margin: 0 }}>Dashboard admin</h2>
+           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
++            {companyProfileAllowed ? <Link href="/company">Profil société</Link> : null}
+             {usersAllowed ? <Link href="/users">Réinitialisation mot de passe</Link> : null}
+             {vehiclesAllowed ? <Link href="/vehicles">Véhicules</Link> : null}
+           </div>
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/EVIDENCES.md b/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/EVIDENCES.md
+index ed53cf43e296b6fb7ad4efa218d264ec17a960d3..7aad86821a51001521f21b3f1c9bc3052b48d116 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/EVIDENCES.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/EVIDENCES.md
+@@ -1,10 +1,77 @@
+-﻿# EVIDENCES
++# EVIDENCES
+ 
+-Ã‰lÃ©ments factuels utilisÃ©s pendant la session.
++## Sources utilisées
+ 
+----
++### Documentation
++- `docs/1-master/DOCUMENT_MAITRE.md`
++- `docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
++- `docs/1-master/PLAN_DE_DEVELOPPEMENT.md`
++- `docs/1-master/ETAT_GLOBAL_PROJET.md`
++- `docs/1-master/REGISTRE_DECISIONS.md`
++- `docs/1-master/RECAP_DISCUSSIONS.md`
++- `docs/1-master/STRUCTURE_PROJET.md`
++- `docs/SOURCES_AUTORISEES.md`
++- `docs/STRUCTURE_DOCS.md`
++- `docs/PROTOCOLE_SESSION.md`
++- `docs/4-templates/TEMPLATE_DEBUT_SESSION.md`
+ 
+-## Sources utilisÃ©es
++### Code réel vérifié / modifié
++- `prisma/schema.prisma`
++- `app/dashboard/page.tsx`
++- `app/company/page.tsx`
++- `app/company/company-profile-form.tsx`
++- `app/api/company/profile/route.ts`
++- `lib/validators/company-profile.ts`
++- `app/api/company/rules/route.ts`
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++## Preuves déterminantes
+ 
++### 1. Le modèle source contient bien `managerNames`
++`prisma/schema.prisma` expose bien sur `Company` :
++- `name`
++- `managerNames`
++- `address`
++- `phone`
++- `siret`
++
++Conclusion : l'erreur initiale de build ne prouve pas une absence du champ dans le schéma source.
++
++### 2. L'échec initial venait du code `ORG-03`
++Le blocage build initial était :
++- `app/api/company/profile/route.ts`
++- `managerNames does not exist in type 'CompanySelect<DefaultArgs>'`
++
++Conclusion : le point à corriger était l'usage Prisma typé dans `ORG-03`.
++
++### 3. Le correctif retire ce point de casse sans élargissement
++- `app/company/page.tsx` lit le profil société par `prisma.$queryRaw`
++- `app/api/company/profile/route.ts` met à jour le profil société par `UPDATE ... RETURNING`
++
++Conclusion :
++- les 5 champs restent couverts ;
++- `companyId` reste le bornage réel ;
++- aucun faux support Prisma n'est inventé.
++
++### 4. Le contrôle d'accès reste minimal et inchangé
++Le point d'entrée UI et la route sont limités à :
++- session obligatoire ;
++- `companyId` obligatoire ;
++- rôle `ADMIN` ou `GERANT`.
++
++Conclusion : la rectification ne rouvre pas RBAC ni le périmètre société.
++
++### 5. Le build après correction ne bloque plus sur `managerNames`
++Résultat réel après application du nouveau patch :
++- `npm run build` échoue encore,
++- mais le premier blocage observé est :
++  - `./app/api/company/rules/route.ts:4:10`
++  - `Module '"@prisma/client"' has no exported member 'RuleMode'`
++
++Conclusion : le blocage `managerNames` propre à `ORG-03` a bien été corrigé.
++
++## Vérifications techniques réellement exécutées
++
++- `git apply --check` : **OK**
++- `git apply` : **OK**
++- `npm run lint` : **OK**
++- `npm run build` : **échec**
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/FIN_SESSION.md b/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/FIN_SESSION.md
+index fb4198104865afdb5d7402e2a0ebfff294300623..22f1105e4b0403b61e1a7908eb5880589648ab2c 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/FIN_SESSION.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/FIN_SESSION.md
+@@ -1,14 +1,35 @@
+-﻿# FIN_SESSION
++# FIN_SESSION
+ 
+-## ClÃ´ture
++## Clôture de session
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++Session : `SESSION-20260314-02_A2_ORG-03`
++Type : `COMPLÉTION`
++Bloc : `A2`
++Stage : `1-ALPHA`
+ 
+-## Validation
++## Résumé de clôture
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++La session livre une UI minimale de profil société ALPHA cohérente avec `ORG-03` :
++- lien dashboard `Profil société` ;
++- page dédiée `/company` ;
++- formulaire d'édition des 5 champs ;
++- route `PATCH` bornée à `companyId` ;
++- accès limité à `ADMIN` / `GERANT`.
+ 
+-## Verdict final
++## Vérifications techniques réellement exécutées
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++- `git apply --check` : **OK**
++- `git apply` : **OK**
++- `npm run lint` : **OK**
++- `npm run build` : **échec**
+ 
++## Détail du blocage build final
++
++Premier blocage réellement observé après correction `ORG-03` :
++- `./app/api/company/rules/route.ts:4:10`
++- `Module '"@prisma/client"' has no exported member 'RuleMode'`
++
++## Verdict de clôture
++
++La session ne peut pas être déclarée `conforme` car le build global reste cassé.
++Verdict retenu : **`partiellement conforme`**.
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/NOTES.md b/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/NOTES.md
+index cf1efd735017163d3f4087fd41333a82be400572..730ab5f7a376fbcbbb3115f96c6aa2ee269e4262 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/NOTES.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/NOTES.md
+@@ -1,10 +1,52 @@
+-﻿# NOTES
++# NOTES
+ 
+-Notes de travail de la session.
++## Nature de la rectification
+ 
+----
++Rectification strictement bornée à `ORG-03`.
++Aucune réouverture de `ORG-01`, `ORG-02`, `ORG-04`, `BASE-*`, `SUP-*`.
+ 
+-## MÃ©thode / observations
++## Cause exacte de l'échec précédent
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++Le blocage build réellement vérifié avant correction était :
++- fichier : `app/api/company/profile/route.ts`
++- erreur TypeScript :
++  - `Object literal may only specify known properties, and 'managerNames' does not exist in type 'CompanySelect<DefaultArgs>'`
+ 
++Constat exact :
++- `managerNames` existe bien dans `prisma/schema.prisma` sur `Company` ;
++- le problème venait de l'usage Prisma typé dans `ORG-03` sur ce champ ;
++- il ne fallait ni inventer un faux support, ni rouvrir `ORG-02`.
++
++## Correctif retenu
++
++Correction minimale appliquée :
++- lecture serveur du profil société via `prisma.$queryRaw` dans `app/company/page.tsx` ;
++- mise à jour du profil société via `UPDATE ... RETURNING` dans `app/api/company/profile/route.ts` ;
++- ajout de la validation Zod minimale ;
++- ajout de la page et du formulaire dédiés ;
++- ajout du lien dashboard vers `/company` pour `ADMIN` / `GERANT`.
++
++## Portée fonctionnelle conservée
++
++Le correctif conserve strictement les champs :
++- `name`
++- `managerNames`
++- `address`
++- `phone`
++- `siret`
++
++Aucun champ supplémentaire.
++Aucune ouverture multi-sociétés.
++Aucune refonte large.
++
++## Vérifications réelles après rectification
++
++- `git apply --check` : **OK**
++- `git apply` : **OK**
++- `npm run lint` : **OK**
++- `npm run build` : **échec**
++
++Le build ne rebloque plus sur `managerNames` dans `app/api/company/profile/route.ts`.
++Le premier blocage réellement observé après correction est désormais :
++- `./app/api/company/rules/route.ts:4:10`
++- `Module '"@prisma/client"' has no exported member 'RuleMode'`
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/RESULTATS.md b/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/RESULTATS.md
+index bbf7c32c2d16bec952e1dd5762a9af8b914e025f..3cd9002a2993a6294e6eb166e129905d28b69744 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/RESULTATS.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/RESULTATS.md
+@@ -1,12 +1,65 @@
+-﻿# RESULTATS
++# RESULTATS
+ 
+-## RÃ©sultats obtenus
++## Résultat obtenu
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++`ORG-03` est corrigée de manière minimale sur son périmètre UI, mais la validation technique finale du dépôt reste partielle car le build global échoue encore hors `ORG-03`.
+ 
+----
++## Réponses factuelles aux attendus
+ 
+-## Documents modifiÃ©s
++### 1. Cause du build failure initial identifiée
++**Oui.**
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++Cause exacte :
++- dans `app/api/company/profile/route.ts`, `managerNames` était utilisé dans un accès Prisma typé non aligné avec `CompanySelect<DefaultArgs>`.
+ 
++### 2. Code corrigé de manière minimale
++**Oui.**
++
++Correction appliquée :
++- retrait du `select` Prisma typé bloquant ;
++- lecture / écriture réalignées via `prisma.$queryRaw` au seul service de `ORG-03`.
++
++### 3. Périmètre des champs conservé
++**Oui.**
++
++Champs conservés :
++- `name`
++- `managerNames`
++- `address`
++- `phone`
++- `siret`
++
++### 4. Blocage `managerNames` encore présent après correction
++**Non.**
++
++Après application réelle du nouveau patch, le build ne bloque plus sur `app/api/company/profile/route.ts`.
++
++### 5. État final du dépôt
++Le dépôt n'est pas build-green.
++Le premier blocage réellement observé après correction est :
++- `./app/api/company/rules/route.ts:4:10`
++- `Module '"@prisma/client"' has no exported member 'RuleMode'`
++
++## Liste exacte des fichiers code modifiés
++
++- `app/dashboard/page.tsx`
++- `app/company/page.tsx`
++- `app/company/company-profile-form.tsx`
++- `app/api/company/profile/route.ts`
++- `lib/validators/company-profile.ts`
++
++## Liste exacte des fichiers `.md` modifiés
++
++- `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/SESSION.md`
++- `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/NOTES.md`
++- `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/EVIDENCES.md`
++- `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/RESULTATS.md`
++- `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/FIN_SESSION.md`
++- `docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/README_PATCH.md`
++
++## Vérifications techniques réellement exécutées
++
++- `git apply --check` : **OK**
++- `git apply` : **OK**
++- `npm run lint` : **OK**
++- `npm run build` : **échec**
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/SESSION.md b/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/SESSION.md
+index 2157ba568b346932eca6ec6115a8eb7d20a710fc..bb5725588535571bd26375103a317fbbbbaf700a 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/SESSION.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/SESSION.md
+@@ -1,35 +1,106 @@
+-﻿# SESSION
++# SESSION
+ 
+ ## ID SESSION
+ 
+-SESSION-20260314-02_A2_ORG-03
++`SESSION-20260314-02_A2_ORG-03`
+ 
+ ## Date
+ 
+-14/03/2026
++`2026-03-14`
+ 
+ ## Contexte
+ 
+-Projet : Investissement  
+-Sous-projet : Ambulance Manager  
+-Maturite : 1-ALPHA  
+-Bloc : A2  
+-Type : COMPLETION  
+-Intitule : Édition UI du profil société
++Projet : `Investissement`
++Sous-projet : `Ambulance Manager`
++Maturité : `1-ALPHA`
++Bloc : `A2`
++Type : `COMPLÉTION`
++Intitulé : `Édition UI du profil société`
+ 
+-## Objectif de la session
++Cette session reste strictement bornée à `ORG-03`.
++Acquis repris sans réouverture :
++- `ORG-01` : absence initiale d'UI profil société ;
++- `ORG-02` : champs minimaux portés côté modèle source sur `Company` (`name`, `managerNames`, `address`, `phone`, `siret`).
+ 
+-INFORMATION NON FOURNIE - A CONFIRMER
++## Références de travail retenues
+ 
+-## Perimetre exact traite
++- `docs/1-master/DOCUMENT_MAITRE.md`
++- `docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
++- `docs/1-master/PLAN_DE_DEVELOPPEMENT.md`
++- `docs/1-master/ETAT_GLOBAL_PROJET.md`
++- `docs/1-master/REGISTRE_DECISIONS.md`
++- `docs/1-master/RECAP_DISCUSSIONS.md`
++- `docs/1-master/STRUCTURE_PROJET.md`
++- `docs/SOURCES_AUTORISEES.md`
++- `docs/STRUCTURE_DOCS.md`
++- `docs/PROTOCOLE_SESSION.md`
++- `docs/4-templates/TEMPLATE_DEBUT_SESSION.md`
+ 
+-INFORMATION NON FOURNIE - A CONFIRMER
++## Objectif exact
+ 
+-## Resultat synthetique de session
++Ajouter une UI minimale réellement utilisable permettant à la société connectée :
++- d'afficher son profil société ALPHA ;
++- de modifier `name`, `managerNames`, `address`, `phone`, `siret` ;
++- de rester bornée à la société courante via `companyId` ;
++- de rester accessible uniquement à `ADMIN` / `GERANT`.
+ 
+-INFORMATION NON FOURNIE - A CONFIRMER
++## Code réellement concerné
+ 
+-## Dossiers lies
++- `app/dashboard/page.tsx`
++- `app/company/page.tsx`
++- `app/company/company-profile-form.tsx`
++- `app/api/company/profile/route.ts`
++- `lib/validators/company-profile.ts`
+ 
+-- Session : docs/2-sessions/1-ALPHA/BLOC_A2/SESSION-20260314-02_A2_ORG-03
+-- Patchs  : docs/3-patches/1-ALPHA/BLOC_A2/SESSION-20260314-02_A2_ORG-03
++## Stratégie retenue
++
++Stratégie minimale et explicite :
++- ajout d'un point d'entrée dashboard ;
++- ajout d'une page dédiée `Profil société` ;
++- ajout d'un formulaire client simple ;
++- ajout d'une route `PATCH` bornée à `companyId` ;
++- validation d'entrée minimale ;
++- correction ciblée du blocage `managerNames` sans rouvrir `ORG-02`.
++
++La route `PATCH` et la lecture serveur n'utilisent pas de `select` Prisma typé sur `managerNames`.
++Le profil société est lu / écrit via `prisma.$queryRaw`, strictement au service de `ORG-03`.
++
++## Périmètre exact traité
++
++Traité :
++- consultation des 5 champs ;
++- édition des 5 champs ;
++- bornage à la société courante ;
++- accès limité à `ADMIN` / `GERANT`.
++
++Hors périmètre volontaire :
++- `ORG-04` ;
++- `BASE-*` ;
++- `SUP-*` ;
++- onboarding société ;
++- multi-sociétés ;
++- nouveaux champs ;
++- refonte large dashboard ;
++- modification du schéma Prisma.
++
++## Vérifications techniques réellement exécutées
++
++- `git apply --check` du patch rectificatif ;
++- `git apply` du patch rectificatif ;
++- `npm run lint` ;
++- `npm run build`.
++
++## État réel des vérifications
++
++- `git apply --check` : **OK**
++- `git apply` : **OK**
++- `npm run lint` : **OK**
++- `npm run build` : **échec**
++  - premier blocage réellement remonté après correction `ORG-03` :
++    - `./app/api/company/rules/route.ts:4:10`
++    - `Module '"@prisma/client"' has no exported member 'RuleMode'`
++
++## Livrable principal
++
++- patch rectificatif : `ORG-03-rectif-01.diff`
++- mise à jour documentaire de session alignée sur les résultats réels.
+diff --git a/docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/README_PATCH.md b/docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/README_PATCH.md
+index c47e535d33add7e7c57475ec3b5e99f53cea4729..58aca6b7b695055f2ce926c7c98763ee1039f47b 100644
+--- a/docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/README_PATCH.md
++++ b/docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/README_PATCH.md
+@@ -1,24 +1,34 @@
+-﻿# README_PATCH
++# README_PATCH
+ 
+-## Session liee
+-SESSION-20260314-02_A2_ORG-03
++## Patch
+ 
+-## Type
+-COMPLETION
++Patch rectificatif officiel : `ORG-03-rectif-01.diff`
+ 
+-## Dossier patch
+-docs/3-patches/1-ALPHA/BLOC_A2/SESSION-20260314-02_A2_ORG-03
++## Objet du patch
+ 
+-## Patch officiel attendu
+-PATCH__SESSION-20260314-02_A2_ORG-03.diff
++Ce patch livre l'état rectifié de `SESSION-20260314-02_A2_ORG-03` :
++- UI minimale profil société ;
++- formulaire d'édition ;
++- route API minimale de mise à jour ;
++- correction ciblée du blocage `managerNames` dans `app/api/company/profile/route.ts` ;
++- documentation de session réalignée sur les résultats réels.
+ 
+-## Commandes d'application
++## Application
+ 
+-`ash
+-git apply --check "docs/3-patches/1-ALPHA/BLOC_A2/SESSION-20260314-02_A2_ORG-03/PATCH__SESSION-20260314-02_A2_ORG-03.diff"
+-git apply         "docs/3-patches/1-ALPHA/BLOC_A2/SESSION-20260314-02_A2_ORG-03/PATCH__SESSION-20260314-02_A2_ORG-03.diff"
+-`
++```bash
++git apply --check docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/ORG-03-rectif-01.diff
++git apply docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/ORG-03-rectif-01.diff
++```
+ 
+-## Statut
+-- Dossier patch initialise.
+-- Patch officiel a produire dans cette session si du code est modifie.
++## Vérifications réellement observées
++
++- `git apply --check` : OK
++- `git apply` : OK
++- `npm run lint` : OK
++- `npm run build` : échec
++  - premier blocage : `./app/api/company/rules/route.ts:4:10`
++  - message : `Module '"@prisma/client"' has no exported member 'RuleMode'`
++
++## Périmètre strict
++
++Le patch reste borné à `ORG-03` et n'ouvre pas `ORG-04`, `BASE-*`, `SUP-*`.
+diff --git a/lib/validators/company-profile.ts b/lib/validators/company-profile.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..7eed142ec465b816dc8336bd1df7be33d978e4a2
+--- /dev/null
++++ b/lib/validators/company-profile.ts
+@@ -0,0 +1,16 @@
++import { z } from "zod";
++
++const profileField = (label: string, max: number) =>
++  z
++    .string()
++    .trim()
++    .min(1, `${label} required`)
++    .max(max, `${label} too long`);
++
++export const updateCompanyProfileBodySchema = z.object({
++  name: profileField("name", 160),
++  managerNames: profileField("managerNames", 255),
++  address: profileField("address", 255),
++  phone: profileField("phone", 50),
++  siret: profileField("siret", 50),
++});

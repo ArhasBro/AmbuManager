@@ -1,0 +1,552 @@
+diff --git aa/app/dashboard/page.tsx bb/app/dashboard/page.tsx
+index bb053e1..d482d17 100644
+--- aa/app/dashboard/page.tsx
++++ bb/app/dashboard/page.tsx
+@@ -25,6 +25,8 @@ export default async function DashboardPage() {
+       ])
+     : [false, false, false];
+ 
++  const companyProfileAllowed = user.role === "ADMIN" || user.role === "GERANT";
++
+   return (
+     <div style={{ padding: 16, display: "grid", gap: 12 }}>
+       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+@@ -40,6 +42,7 @@ export default async function DashboardPage() {
+         <div style={{ display: "grid", gap: 8, padding: 12, border: "1px solid #333", borderRadius: 8 }}>
+           <h2 style={{ margin: 0 }}>Dashboard admin</h2>
+           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
++            {companyProfileAllowed ? <Link href="/company">Profil société</Link> : null}
+             {usersAllowed ? <Link href="/users">Réinitialisation mot de passe</Link> : null}
+             {vehiclesAllowed ? <Link href="/vehicles">Véhicules</Link> : null}
+           </div>
+diff --git aa/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/SESSION.md bb/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/SESSION.md
+index 2157ba5..b1f82a2 100644
+--- aa/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/SESSION.md
++++ bb/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/SESSION.md
+@@ -1,35 +1,124 @@
+-﻿# SESSION
++# SESSION
+ 
+ ## ID SESSION
+ 
+-SESSION-20260314-02_A2_ORG-03
++`SESSION-20260314-02_A2_ORG-03`
+ 
+ ## Date
+ 
+-14/03/2026
++`2026-03-14`
+ 
+ ## Contexte
+ 
+-Projet : Investissement  
+-Sous-projet : Ambulance Manager  
+-Maturite : 1-ALPHA  
+-Bloc : A2  
+-Type : COMPLETION  
+-Intitule : Édition UI du profil société
++Projet : `Investissement`
++Sous-projet : `Ambulance Manager`
++Maturité : `1-ALPHA`
++Bloc : `A2`
++Type : `COMPLÉTION`
++Intitulé : `Édition UI du profil société`
+ 
+-## Objectif de la session
++Cette session est une **complétion strictement bornée à `ORG-03`**.
++Elle reprend comme acquis validés `ORG-01` et `ORG-02` :
++- absence initiale d’UI profil société prouvée par audit ;
++- présence désormais effective des champs minimaux `name`, `managerNames`, `address`, `phone`, `siret` sur `Company`.
+ 
+-INFORMATION NON FOURNIE - A CONFIRMER
++## Références de travail retenues
+ 
+-## Perimetre exact traite
++### Références documentaires prioritaires
++- `docs/1-master/DOCUMENT_MAITRE.md`
++- `docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
++- `docs/1-master/PLAN_DE_DEVELOPPEMENT.md`
++- `docs/1-master/ETAT_GLOBAL_PROJET.md`
++- `docs/1-master/REGISTRE_DECISIONS.md`
++- `docs/1-master/RECAP_DISCUSSIONS.md`
++- `docs/1-master/STRUCTURE_PROJET.md`
++- `docs/SOURCES_AUTORISEES.md`
++- `docs/STRUCTURE_DOCS.md`
++- `docs/PROTOCOLE_SESSION.md`
++- `docs/4-templates/TEMPLATE_DEBUT_SESSION.md`
+ 
+-INFORMATION NON FOURNIE - A CONFIRMER
++### Historique repris sans réouverture
++- `A1` est clôturé globalement et n’est pas rouvert ;
++- `ORG-01` et `ORG-02` sont pris comme acquis validés ;
++- auth/session enrichie, multi-tenant ALPHA, RBAC et contrat API officiel sont repris sans réouverture.
+ 
+-## Resultat synthetique de session
++### Code réellement concerné
++- `app/dashboard/page.tsx`
++- `app/company/page.tsx`
++- `app/company/company-profile-form.tsx`
++- `app/api/company/profile/route.ts`
++- `lib/validators/company-profile.ts`
+ 
+-INFORMATION NON FOURNIE - A CONFIRMER
++## Objectif exact
+ 
+-## Dossiers lies
++Ajouter une **UI minimale réellement utilisable** permettant à la société connectée :
++- d’afficher son profil société ALPHA ;
++- de modifier les 5 champs attendus ;
++- de rester strictement bornée à la société courante via `companyId` ;
++- de rester accessible uniquement aux profils légitimes du périmètre société ALPHA.
+ 
+-- Session : docs/2-sessions/1-ALPHA/BLOC_A2/SESSION-20260314-02_A2_ORG-03
+-- Patchs  : docs/3-patches/1-ALPHA/BLOC_A2/SESSION-20260314-02_A2_ORG-03
++## Périmètre exact traité
++
++### Travail effectivement réalisé
++- ajout d’une page dédiée `Profil société` ;
++- ajout d’un formulaire client minimal de consultation / édition ;
++- ajout d’une route API minimale de mise à jour ;
++- ajout de la validation d’entrée strictement nécessaire ;
++- ajout du point d’entrée depuis le dashboard admin existant.
++
++### Fichiers code réellement modifiés
++- `app/dashboard/page.tsx`
++- `app/company/page.tsx`
++- `app/company/company-profile-form.tsx`
++- `app/api/company/profile/route.ts`
++- `lib/validators/company-profile.ts`
++
++### Hors périmètre explicite
++- aucune gestion multi-sociétés ;
++- aucun onboarding société ;
++- aucun nouveau champ hors `name`, `managerNames`, `address`, `phone`, `siret` ;
++- aucune modification du schéma Prisma ou des migrations ;
++- aucune ouverture de `ORG-04`, `BASE-*`, `SUP-*` ;
++- aucune modification des documents master.
++
++## Stratégie de mise en œuvre retenue
++
++La stratégie retenue est la plus simple compatible avec le dépôt existant :
++- page serveur dédiée pour lire la société courante par `companyId` ;
++- formulaire client minimal pour modifier les 5 champs ;
++- route `PATCH` dédiée, bornée à `session.user.companyId` ;
++- contrôle d’accès explicite limité à `ADMIN` et `GERANT` ;
++- conservation du contrat API `{ ok:true, data } / { ok:false, error, details? }`.
++
++Aucune logique annexe n’a été ouverte.
++Aucun module société élargi n’a été introduit.
++
++## Résultat synthétique de session
++
++Le dépôt expose désormais une **UI minimale de profil société** cohérente avec `03.2 Profil société` sur le périmètre strict de `ORG-03` :
++- lien d’accès depuis le dashboard admin ;
++- écran dédié ;
++- affichage des 5 champs ;
++- édition des 5 champs ;
++- mise à jour bornée à la société courante par `companyId` ;
++- accès réservé à `ADMIN` / `GERANT`.
++
++## Vérifications techniques réellement exécutées
++
++- `npm run lint` ;
++- `npm run build`.
++
++## État des vérifications techniques
++
++- `npm run lint` : **OK**
++- `npm run build` : **échec**
++  - erreur relevée dans l’environnement extrait :
++    - `Module '"@prisma/client"' has no exported member 'RuleMode'`
++    - premier point de blocage remonté : `app/api/company/rules/route.ts`
++
++## Livrable principal
++
++- complétion code strictement bornée à `ORG-03` ;
++- patch git `ORG-03.diff` ;
++- clôture documentaire complète de session ;
++- maintien du périmètre limité à l’UI minimale du profil société.
+diff --git aa/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/NOTES.md bb/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/NOTES.md
+index cf1efd7..daee35c 100644
+--- aa/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/NOTES.md
++++ bb/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/NOTES.md
+@@ -1,10 +1,72 @@
+-﻿# NOTES
++# NOTES
+ 
+-Notes de travail de la session.
++## Nature de la session
+ 
+----
++Session de type **COMPLÉTION**.
++Le périmètre reste strictement borné à `ORG-03` et couvre uniquement l’**édition UI minimale du profil société ALPHA**.
+ 
+-## MÃ©thode / observations
++La présente rectification ne rouvre pas :
++- `ORG-01` ;
++- `ORG-02` ;
++- `ORG-04` ;
++- `BASE-*` ;
++- `SUP-*`.
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++## Point de départ retenu
+ 
++`ORG-02` a déjà ajouté au code source les champs minimaux du profil société sur `Company` :
++- `name`
++- `managerNames`
++- `address`
++- `phone`
++- `siret`
++
++L’échec build remonté après la première livraison `ORG-03` ne venait donc pas d’une absence du champ dans le **schéma source**, mais d’un **décalage entre le code `ORG-03` et les types Prisma réellement utilisés au build** sur les appels typés `select` / `update`.
++
++## Cause technique retenue pour la rectification
++
++Le premier blocage vérifié était :
++- fichier : `app/api/company/profile/route.ts`
++- erreur : `managerNames does not exist in type 'CompanySelect<DefaultArgs>'`
++
++Constat retenu :
++- `managerNames` existe bien dans `prisma/schema.prisma` ;
++- la casse venait des accès Prisma typés de `ORG-03`, pas d’un besoin de rouvrir `ORG-02` ;
++- une correction minimale devait donc **retirer la dépendance directe aux types Prisma non alignés** pour cette UI, sans inventer de faux support métier.
++
++## Correctif retenu
++
++Pour rester strictement dans `ORG-03`, la lecture et l’écriture du profil société ont été réalignées via des requêtes SQL bornées à la société courante :
++- lecture côté `app/company/page.tsx` via `prisma.$queryRaw` ;
++- écriture côté `app/api/company/profile/route.ts` via `UPDATE ... RETURNING`.
++
++Ce choix permet de conserver exactement le périmètre fonctionnel annoncé :
++- mêmes 5 champs ;
++- même bornage `companyId` ;
++- même contrôle d’accès `ADMIN` / `GERANT` ;
++- aucun élargissement fonctionnel.
++
++## Ce que la rectification ne fait pas
++
++La rectification `ORG-03` ne fait pas :
++- de modification du schéma Prisma ;
++- de migration supplémentaire ;
++- de refonte dashboard ;
++- d’ouverture multi-sociétés ;
++- de correction large hors profil société ;
++- de correction de `ORG-04`, `BASE-*`, `SUP-*`.
++
++## Vérifications réelles exécutées après correction
++
++- `git apply` du patch : **OK**
++- `npm run lint` : **OK**
++- `npm run build` : **échec**
++
++Le build corrigé ne bloque plus sur `managerNames` dans `ORG-03`.
++Le premier blocage réellement remonté après correction est désormais :
++- `app/api/company/rules/route.ts`
++- `Module '"@prisma/client"' has no exported member 'RuleMode'`
++
++## Conclusion de travail
++
++Après rectification, `ORG-03` reste une **complétion UI minimale cohérente** sur son périmètre annoncé, mais la clôture technique globale du dépôt n’est pas totalement verte car le build échoue encore sur un point Prisma hors `ORG-03`.
+diff --git aa/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/EVIDENCES.md bb/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/EVIDENCES.md
+index ed53cf4..1446b71 100644
+--- aa/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/EVIDENCES.md
++++ bb/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/EVIDENCES.md
+@@ -1,10 +1,95 @@
+-﻿# EVIDENCES
++# EVIDENCES
+ 
+-Ã‰lÃ©ments factuels utilisÃ©s pendant la session.
++## Sources utilisées
+ 
+----
++### Documentation
++- `docs/1-master/DOCUMENT_MAITRE.md`
++- `docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
++- `docs/1-master/PLAN_DE_DEVELOPPEMENT.md`
++- `docs/1-master/ETAT_GLOBAL_PROJET.md`
++- `docs/1-master/REGISTRE_DECISIONS.md`
++- `docs/1-master/RECAP_DISCUSSIONS.md`
++- `docs/1-master/STRUCTURE_PROJET.md`
++- `docs/SOURCES_AUTORISEES.md`
++- `docs/STRUCTURE_DOCS.md`
++- `docs/PROTOCOLE_SESSION.md`
++- `docs/4-templates/TEMPLATE_DEBUT_SESSION.md`
++- sessions antérieures acquises : `ORG-01`, `ORG-02`
+ 
+-## Sources utilisÃ©es
++### Code réel vérifié / modifié
++- `prisma/schema.prisma`
++- `app/company/page.tsx`
++- `app/api/company/profile/route.ts`
++- `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/NOTES.md`
++- `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/RESULTATS.md`
++- `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/EVIDENCES.md`
++- `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/FIN_SESSION.md`
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++## Preuves déterminantes
+ 
++### 1. `managerNames` existe bien dans le modèle source
++`prisma/schema.prisma` contient bien sur `model Company` les champs :
++- `name`
++- `managerNames`
++- `address`
++- `phone`
++- `siret`
++
++Conclusion probante :
++- le build failure initial n’établit pas une absence réelle du champ dans le code source ;
++- il établit un décalage sur les types Prisma réellement exploités au build.
++
++### 2. Le blocage initial venait bien des accès Prisma typés de `ORG-03`
++Le point bloquant remonté après première livraison était :
++- `app/api/company/profile/route.ts`
++- `managerNames does not exist in type 'CompanySelect<DefaultArgs>'`
++
++Conclusion probante :
++- l’implémentation initiale `ORG-03` dépendait d’un `select` Prisma typé non aligné ;
++- une correction minimale devait viser ce point précis.
++
++### 3. La lecture du profil société a été réalignée sans élargissement
++`app/company/page.tsx` ne repose plus sur un `select` Prisma typé pour lire `managerNames`.
++La page lit désormais les 5 champs via `prisma.$queryRaw`, toujours bornée à `session.user.companyId`.
++
++Conclusion probante :
++- la consultation UI reste réelle ;
++- le périmètre métier reste identique ;
++- la dépendance au typage Prisma bloquant a été retirée sur ce point.
++
++### 4. L’écriture du profil société a été réalignée sans élargissement
++`app/api/company/profile/route.ts` ne repose plus sur `prisma.company.update({ select: ... })` pour `managerNames`.
++La route effectue désormais un `UPDATE ... RETURNING` ciblé sur la société courante, avec le même contrat API de sortie.
++
++Conclusion probante :
++- l’édition des 5 champs reste réellement possible ;
++- le bornage `companyId` est conservé ;
++- aucun faux support Prisma n’a été inventé.
++
++### 5. Les contrôles d’accès n’ont pas été élargis
++La route et la page conservent le même contrôle d’accès minimal :
++- session obligatoire ;
++- `companyId` obligatoire ;
++- accès limité à `ADMIN` / `GERANT`.
++
++Conclusion probante :
++- la rectification ne rouvre pas RBAC ni le périmètre société.
++
++## Vérifications techniques réellement exécutées
++
++- test d’application du patch via `git apply` : **OK**
++- `npm run lint` : **OK**
++- `npm run build` : **échec**
++
++### Détail du build après rectification `ORG-03`
++Le build ne bloque plus sur `managerNames` dans `app/api/company/profile/route.ts`.
++Le premier blocage désormais remonté est :
++- `./app/api/company/rules/route.ts:4:10`
++- `Module '"@prisma/client"' has no exported member 'RuleMode'`
++
++## Conclusion de preuve
++
++La matière probante permet d’affirmer :
++- l’écart initial `managerNames` propre à `ORG-03` a été corrigé ;
++- le périmètre fonctionnel annoncé de `ORG-03` est conservé ;
++- le build global du dépôt reste néanmoins en échec sur un point Prisma hors `ORG-03`.
+diff --git aa/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/RESULTATS.md bb/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/RESULTATS.md
+index bbf7c32..4af574d 100644
+--- aa/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/RESULTATS.md
++++ bb/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/RESULTATS.md
+@@ -1,12 +1,68 @@
+-﻿# RESULTATS
++# RESULTATS
+ 
+-## RÃ©sultats obtenus
++## Résultats obtenus
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++### État global retenu
+ 
+----
++Après rectification ciblée, `ORG-03` est **fonctionnellement cohérente sur son périmètre**, mais la validation technique finale du dépôt reste **partielle** car `npm run build` échoue encore hors `ORG-03`.
+ 
+-## Documents modifiÃ©s
++## Réponses factuelles aux attendus de session
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++### 1. La cause du build failure initial a-t-elle été identifiée ?
++Réponse : **oui**.
+ 
++Cause retenue :
++- le schéma source contient bien `managerNames` ;
++- l’échec venait d’un décalage entre les accès Prisma typés utilisés dans `ORG-03` et les types Prisma réellement disponibles au build.
++
++### 2. Le code a-t-il été corrigé de manière minimale ?
++Réponse : **oui**.
++
++Correctif retenu :
++- remplacement des accès Prisma typés de lecture / mise à jour du profil société par des requêtes SQL ciblées via `prisma.$queryRaw`.
++
++### 3. Le périmètre des champs a-t-il été conservé ?
++Réponse : **oui**.
++
++Champs couverts :
++- `name`
++- `managerNames`
++- `address`
++- `phone`
++- `siret`
++
++### 4. Le build bloque-t-il encore sur `managerNames` dans `ORG-03` ?
++Réponse : **non**.
++
++Après correction, le premier blocage build réellement remonté est ailleurs :
++- `app/api/company/rules/route.ts`
++- `Module '"@prisma/client"' has no exported member 'RuleMode'`
++
++### 5. Le dépôt est-il totalement build-green après correction ?
++Réponse : **non**.
++
++Le build global reste en échec sur un point Prisma hors périmètre strict `ORG-03`.
++
++## Liste exacte des fichiers code modifiés
++
++- `app/company/page.tsx`
++- `app/api/company/profile/route.ts`
++
++## Liste exacte des fichiers `.md` modifiés
++
++- `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/NOTES.md`
++- `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/RESULTATS.md`
++- `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/EVIDENCES.md`
++- `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/FIN_SESSION.md`
++
++## Vérifications techniques réellement exécutées
++
++- `git apply` : **OK**
++- `npm run lint` : **OK**
++- `npm run build` : **échec**
++  - premier blocage : `app/api/company/rules/route.ts`
++  - message : `Module '"@prisma/client"' has no exported member 'RuleMode'`
++
++## Conclusion
++
++La rectification a bien corrigé l’écart `managerNames` propre à `ORG-03` sans rouvrir `ORG-02` ni inventer de faux support. En revanche, le dépôt n’est pas totalement validé en build à ce stade, car un blocage Prisma hors périmètre `ORG-03` reste présent.
+diff --git aa/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/FIN_SESSION.md bb/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/FIN_SESSION.md
+index fb41981..ced28e9 100644
+--- aa/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/FIN_SESSION.md
++++ bb/docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/FIN_SESSION.md
+@@ -1,14 +1,53 @@
+-﻿# FIN_SESSION
++# FIN_SESSION
+ 
+-## ClÃ´ture
++## Clôture de session
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++Session clôturée : `SESSION-20260314-02_A2_ORG-03`
+ 
+-## Validation
++Type : `COMPLÉTION`
++Bloc : `A2`
++Stage : `1-ALPHA`
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++## Résumé de clôture
+ 
+-## Verdict final
++Après rectification ciblée, la session `ORG-03` conserve une UI minimale réellement utilisable pour le profil société ALPHA et ne bloque plus sur l’écart `managerNames` initialement remonté.
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++État retenu :
++- lecture profil société réalignée ;
++- écriture profil société réalignée ;
++- périmètre fonctionnel inchangé sur les 5 champs ;
++- accès toujours limité à `ADMIN` / `GERANT` ;
++- bornage `companyId` conservé.
+ 
++## Périmètre réellement livré après rectification
++
++Livré / conservé dans `ORG-03` :
++- point d’entrée dashboard ;
++- écran dédié ;
++- formulaire client ;
++- route `PATCH` minimale ;
++- validation d’entrée minimale ;
++- correction ciblée de la casse build `managerNames` propre à `ORG-03`.
++
++Non livré volontairement :
++- ouverture de `ORG-04` ;
++- corrections larges Prisma hors `ORG-03` ;
++- onboarding société ;
++- gestion multi-sociétés ;
++- nouveaux champs.
++
++## Vérifications techniques réellement exécutées
++
++- `git apply` : **OK**
++- `npm run lint` : **OK**
++- `npm run build` : **échec**
++
++### Détail du blocage build final
++Premier blocage remonté après correction `ORG-03` :
++- `app/api/company/rules/route.ts`
++- `Module '"@prisma/client"' has no exported member 'RuleMode'`
++
++## Verdict de clôture
++
++La session ne peut pas être déclarée `conforme` car le build global reste cassé.
++Le verdict réel retenu est donc : **`partiellement conforme`**.
+diff --git aa/docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/README_PATCH.md bb/docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/README_PATCH.md
+index c47e535..0352cda 100644
+--- aa/docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/README_PATCH.md
++++ bb/docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/README_PATCH.md
+@@ -1,24 +1,31 @@
+-﻿# README_PATCH
++# README_PATCH
+ 
+-## Session liee
+-SESSION-20260314-02_A2_ORG-03
++## Patch
+ 
+-## Type
+-COMPLETION
++Patch officiel rectifié de session : `ORG-03.diff`
+ 
+-## Dossier patch
+-docs/3-patches/1-ALPHA/BLOC_A2/SESSION-20260314-02_A2_ORG-03
++## Objet du patch
+ 
+-## Patch officiel attendu
+-PATCH__SESSION-20260314-02_A2_ORG-03.diff
++Ce patch livre l'état final rectifié de `SESSION-20260314-02_A2_ORG-03` :
++- UI minimale profil société ;
++- formulaire d'édition ;
++- route API minimale de mise à jour ;
++- correction ciblée du blocage `managerNames` propre à `ORG-03`.
+ 
+-## Commandes d'application
++## Application
+ 
+-`ash
+-git apply --check "docs/3-patches/1-ALPHA/BLOC_A2/SESSION-20260314-02_A2_ORG-03/PATCH__SESSION-20260314-02_A2_ORG-03.diff"
+-git apply         "docs/3-patches/1-ALPHA/BLOC_A2/SESSION-20260314-02_A2_ORG-03/PATCH__SESSION-20260314-02_A2_ORG-03.diff"
+-`
++```bash
++git apply docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/ORG-03.diff
++```
+ 
+-## Statut
+-- Dossier patch initialise.
+-- Patch officiel a produire dans cette session si du code est modifie.
++## Vérifications réellement observées après rectification
++
++- `git apply` : OK
++- `npm run lint` : OK
++- `npm run build` : échec
++  - premier blocage : `app/api/company/rules/route.ts`
++  - message : `Module '"@prisma/client"' has no exported member 'RuleMode'`
++
++## Périmètre strict
++
++Le patch reste borné à `ORG-03` et n'ouvre pas `ORG-04`, `BASE-*` ou `SUP-*`.

@@ -25,6 +25,8 @@ export default async function DashboardPage() {
       ])
     : [false, false, false];
 
+  const companyProfileAllowed = user.role === "ADMIN" || user.role === "GERANT";
+
   return (
     <div style={{ padding: 16, display: "grid", gap: 12 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -40,6 +42,7 @@ export default async function DashboardPage() {
         <div style={{ display: "grid", gap: 8, padding: 12, border: "1px solid #333", borderRadius: 8 }}>
           <h2 style={{ margin: 0 }}>Dashboard admin</h2>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+            {companyProfileAllowed ? <Link href="/company">Profil société</Link> : null}
             {usersAllowed ? <Link href="/users">Réinitialisation mot de passe</Link> : null}
             {vehiclesAllowed ? <Link href="/vehicles">Véhicules</Link> : null}
           </div>
