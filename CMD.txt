@@ -60,7 +60,7 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260316-02_A2_ORG-04
-- ORG-04 — VALIDATION** — Validation du profil société
+- SESSION-20260316-02_A2_BASE-01
+- BASE-01 — AUDIT** — Audit de l’absence / présence partielle des bases/dépôts
 
 sortie propre + retour du terminal + aucune erreur = validé

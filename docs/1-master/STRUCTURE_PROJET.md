@@ -2211,6 +2211,13 @@ C:.
 |   |   |       |           SESSION.md
 |   |   |       |           
 |   |   |       +---2-BASE
+|   |   |       |   \---SESSION-20260316-02_A2_BASE-01
+|   |   |       |           EVIDENCES.md
+|   |   |       |           FIN_SESSION.md
+|   |   |       |           NOTES.md
+|   |   |       |           RESULTATS.md
+|   |   |       |           SESSION.md
+|   |   |       |           
 |   |   |       \---3-SUP
 |   |   \---SESSION-YYYYMMDD-XX
 |   |           EVIDENCES.md
@@ -2332,6 +2339,9 @@ C:.
 |   |           |           NO_PATCH.md
 |   |           |           
 |   |           +---2-BASE
+|   |           |   \---SESSION-20260316-02_A2_BASE-01
+|   |           |           NO_PATCH.md
+|   |           |           
 |   |           \---3-SUP
 |   +---4-templates
 |   |       TEMPLATE_DEBUT_SESSION.md
