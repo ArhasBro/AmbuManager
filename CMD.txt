@@ -69,7 +69,7 @@ Voici sa réponse ainsi que les documents généré :
 
 
 
-Je vais intégrer le .diff et je te renvoi le retour teminal de :
+Je vais intégrer le .diff et je te renvoi le retour terminal de :
 git apply --check ".\"
 git apply ".\"
 npm run lint

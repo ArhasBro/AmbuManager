@@ -10,6 +10,7 @@ Date : 09/03/2026
 - [4. Décisions en attente](#4-décisions-en-attente)
 - [5. Alignement statuts (référence ETAT_GLOBAL_PROJET)](#5-alignement-statuts-référence-etat_global_projet)
 - [6. Gouvernance de mise à jour](#6-gouvernance-de-mise-à-jour)
+- [7. Gouvernance des patchs de session](#7-Gouvernance-des-patchs-de-session)
 - [Vérifications par le code (ZIP)](#vérifications-par-le-code-zip)
 
 ## 1. Rôle
@@ -85,6 +86,55 @@ Format unique attendu :
 - Mettre à jour `ETAT_GLOBAL_PROJET.md` puis aligner les autres.
 - Toute info non prouvée : **À CONFIRMER**.
 - `docs/master/DOCUMENT_CADRAGE_FONCTIONNEL.md` est figé et ne doit pas être modifié sans validation explicite.
+
+## 7. Gouvernance des patchs de session
+
+### Statut
+Validée
+
+### Contexte
+Lors des sessions de production, le patch initial peut être appliqué puis nécessiter un ou plusieurs correctifs.
+La régénération d’un patch complet déjà appliqué crée un risque de double application, de conflits Git, de mauvaise traçabilité et de confusion entre code validé, correctifs résiduels et documentation finale.
+
+### Décision
+Les règles suivantes deviennent obligatoires pour toutes les sessions :
+
+1. **Le premier patch produit pour une session est le patch principal de référence.**
+   - Il correspond au livrable initial de code de la session.
+   - Une fois appliqué, il ne doit pas être régénéré intégralement.
+
+2. **Toute correction ultérieure doit être fournie sous forme de patch correctif minimal séparé.**
+   - Un correctif ne doit contenir que les différences restantes à apporter.
+   - Il est interdit de rejouer toute la session dans un patch complet de remplacement.
+
+3. **Les fichiers documentaires `.md` ne doivent pas être mélangés au patch principal code.**
+   - Le patch principal doit rester centré sur le code et les fichiers strictement nécessaires à l’implémentation.
+
+4. **La documentation de session doit être livrée à la fin dans un patch documentaire séparé.**
+   - Ce patch documentaire final ne doit être produit qu’après validation complète du code.
+   - Il regroupe uniquement les fichiers documentaires attendus de la session.
+
+### Conséquences
+Cette règle impose désormais une séparation stricte entre :
+- le patch principal code ;
+- les éventuels patchs correctifs minimaux ;
+- le patch documentaire final.
+
+### Convention de nommage recommandée
+- Patch principal :
+  - `BASE-04.diff`
+- Correctif :
+  - `BASE-04_FIX-01.diff`
+  - `BASE-04_FIX-02.diff`
+- Documentation finale :
+  - `BASE-04_DOCS.diff`
+
+### Objectif
+- éviter les conflits de réapplication ;
+- améliorer la traçabilité ;
+- isoler clairement les correctifs ;
+- sécuriser la validation ;
+- séparer proprement code et documentation.
 
 ## Vérifications par le code (ZIP)
 - Matching preview/apply + UI présents (4.6) :

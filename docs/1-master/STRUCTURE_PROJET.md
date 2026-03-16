@@ -1314,11 +1314,22 @@ C:.
 |   |   |   |   |   |   route.js.nft.json
 |   |   |   |   |   |   route_client-reference-manifest.js
 |   |   |   |   |   |   
-|   |   |   |   |   \---route
-|   |   |   |   |           app-paths-manifest.json
-|   |   |   |   |           build-manifest.json
-|   |   |   |   |           server-reference-manifest.json
-|   |   |   |   |           
+|   |   |   |   |   +---route
+|   |   |   |   |   |       app-paths-manifest.json
+|   |   |   |   |   |       build-manifest.json
+|   |   |   |   |   |       server-reference-manifest.json
+|   |   |   |   |   |       
+|   |   |   |   |   \---[id]
+|   |   |   |   |       |   route.js
+|   |   |   |   |       |   route.js.map
+|   |   |   |   |       |   route.js.nft.json
+|   |   |   |   |       |   route_client-reference-manifest.js
+|   |   |   |   |       |   
+|   |   |   |   |       \---route
+|   |   |   |   |               app-paths-manifest.json
+|   |   |   |   |               build-manifest.json
+|   |   |   |   |               server-reference-manifest.json
+|   |   |   |   |               
 |   |   |   |   +---health
 |   |   |   |   |   \---prisma
 |   |   |   |   |       |   route.js
@@ -1672,6 +1683,8 @@ C:.
 |   |   |   |   [root-of-the-server]__0e43a126._.js.map
 |   |   |   |   [root-of-the-server]__2a005fc9._.js
 |   |   |   |   [root-of-the-server]__2a005fc9._.js.map
+|   |   |   |   [root-of-the-server]__2caefe68._.js
+|   |   |   |   [root-of-the-server]__2caefe68._.js.map
 |   |   |   |   [root-of-the-server]__3a228d2f._.js
 |   |   |   |   [root-of-the-server]__3a228d2f._.js.map
 |   |   |   |   [root-of-the-server]__3d510304._.js
@@ -1686,8 +1699,6 @@ C:.
 |   |   |   |   [root-of-the-server]__5e792a0f._.js.map
 |   |   |   |   [root-of-the-server]__6e7a5963._.js
 |   |   |   |   [root-of-the-server]__6e7a5963._.js.map
-|   |   |   |   [root-of-the-server]__726cff5e._.js
-|   |   |   |   [root-of-the-server]__726cff5e._.js.map
 |   |   |   |   [root-of-the-server]__80597b5e._.js
 |   |   |   |   [root-of-the-server]__80597b5e._.js.map
 |   |   |   |   [root-of-the-server]__88924fbd._.js
@@ -1706,6 +1717,8 @@ C:.
 |   |   |   |   [root-of-the-server]__f42cba32._.js.map
 |   |   |   |   [root-of-the-server]__f6b8a4de._.js
 |   |   |   |   [root-of-the-server]__f6b8a4de._.js.map
+|   |   |   |   [root-of-the-server]__fcc64749._.js
+|   |   |   |   [root-of-the-server]__fcc64749._.js.map
 |   |   |   |   [turbopack]_runtime.js
 |   |   |   |   [turbopack]_runtime.js.map
 |   |   |   |   _47b770e9._.js
@@ -1728,6 +1741,8 @@ C:.
 |   |   |   |   _next-internal_server_app_api_company_rules_route_actions_774d72f1.js.map
 |   |   |   |   _next-internal_server_app_api_depots_route_actions_15f1d8d0.js
 |   |   |   |   _next-internal_server_app_api_depots_route_actions_15f1d8d0.js.map
+|   |   |   |   _next-internal_server_app_api_depots_[id]_route_actions_ddf226a0.js
+|   |   |   |   _next-internal_server_app_api_depots_[id]_route_actions_ddf226a0.js.map
 |   |   |   |   _next-internal_server_app_api_health_prisma_route_actions_c9f47495.js
 |   |   |   |   _next-internal_server_app_api_health_prisma_route_actions_c9f47495.js.map
 |   |   |   |   _next-internal_server_app_api_planning_autoschedule_day_route_actions_970e369e.js
@@ -1871,6 +1886,11 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
+|   |   +---9p6FK2tYXWZNHpf9pwPD_
+|   |   |       _buildManifest.js
+|   |   |       _clientMiddlewareManifest.json
+|   |   |       _ssgManifest.js
+|   |   |       
 |   |   +---chunks
 |   |   |       000ea66499535a39.js
 |   |   |       1687260e4d8b05d6.js
@@ -1889,11 +1909,6 @@ C:.
 |   |   |       cdb83a758231f045.js
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
-|   |   |       
-|   |   +---M-D5cOvcCSFXB-OA7NXCF
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
 |   |   |       
 |   |   \---media
 |   |           favicon.0b3bf435.ico
@@ -1922,8 +1937,11 @@ C:.
 |   |   |           route.ts
 |   |   |           
 |   |   +---depots
-|   |   |       route.ts
-|   |   |       
+|   |   |   |   route.ts
+|   |   |   |   
+|   |   |   \---[id]
+|   |   |           route.ts
+|   |   |           
 |   |   +---health
 |   |   |   \---prisma
 |   |   |           route.ts
@@ -2390,6 +2408,8 @@ C:.
 |   |           |   |       README_PATCH.md
 |   |           |   |       
 |   |           |   \---SESSION-20260316-05_A2_BASE-04
+|   |           |           BASE-04.diff
+|   |           |           PATCH__SESSION-20260316-05_A2_BASE-04_FIX-01.diff
 |   |           |           README_PATCH.md
 |   |           |           
 |   |           \---3-SUP
@@ -2417,6 +2437,7 @@ C:.
 |   +---services
 |   |   +---depots
 |   |   |       create-depot.ts
+|   |   |       update-depot.ts
 |   |   |       
 |   |   \---planning
 |   |           assign-draftshift.ts

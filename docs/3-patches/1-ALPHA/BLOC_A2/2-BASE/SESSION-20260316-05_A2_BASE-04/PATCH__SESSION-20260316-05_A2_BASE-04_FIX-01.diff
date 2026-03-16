@@ -1,0 +1,434 @@
+diff --git a/app/api/depots/[id]/route.ts b/app/api/depots/[id]/route.ts
+index bf7fc5e..0d53b66 100644
+--- a/app/api/depots/[id]/route.ts
++++ b/app/api/depots/[id]/route.ts
+@@ -47,7 +47,6 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
+       companyId,
+       name: parsedBody.data.name,
+       address: parsedBody.data.address,
+-      isActive: parsedBody.data.isActive,
+     });
+ 
+     if (!depot) return notFound();
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/EVIDENCES.md b/docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/EVIDENCES.md
+index d121f79..537df25 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/EVIDENCES.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/EVIDENCES.md
+@@ -85,7 +85,6 @@ Conséquence : `BASE-04` ne doit couvrir que la modification API minimale.
+ `lib/validators/depot.ts` ajoute un schéma Zod strict :
+ - `name` optionnel ;
+ - `address` optionnel / nullable ;
+-- `isActive` optionnel ;
+ - rejet des clés supplémentaires ;
+ - refus d’un body vide.
+ 
+@@ -107,20 +106,27 @@ Conséquence : `BASE-04` ne doit couvrir que la modification API minimale.
+ 
+ ## Vérifications terminales réellement obtenues
+ 
+-### Commandes tentées
++### Commandes confirmées
++- `git apply --check`
++- `git apply`
+ - `npx prisma validate`
++- `npx prisma generate`
+ - `npm run lint`
+ - `npm run build`
+ 
+ ### Preuves terminales retenues
+-- `npx prisma validate` : tentative d’installation `npx prisma@7.5.0`, puis échec pendant `@prisma/engines` postinstall ;
+-- `npm run lint` : `sh: 1: eslint: not found` ;
+-- `npm run build` : `sh: 1: next: not found`.
++- `git apply --check` : **OK** ;
++- `git apply` : **OK** ;
++- `npx prisma validate` : **OK** ;
++- `npx prisma generate` : **OK** ;
++- `npm run lint` : **OK** ;
++- `npm run build` : **OK**.
+ 
+ ### Contrôle patch retenu
+-- `git apply --check` sur une copie de test du dépôt : **OK**.
++- patch initial conservé ;
++- patch correctif minimal séparé produit.
+ 
+ ### Résultat terminal retenu
+-- le correctif code est produit ;
+-- le patch est auto-applicable ;
+-- la validation terminale complète du projet reste à rejouer dans un environnement avec dépendances installées.
++- le recalage `BASE-04` est validé ;
++- le correctif ne rejoue pas le patch initial ;
++- le dépôt réel est validé avec résultats terminaux **OK**.
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/FIN_SESSION.md b/docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/FIN_SESSION.md
+index 07b1406..d88b4bf 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/FIN_SESSION.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/FIN_SESSION.md
+@@ -2,7 +2,7 @@
+ 
+ ## Clôture
+ 
+-SESSION PARTIELLEMENT VALIDÉE
++SESSION VALIDÉE
+ 
+ `BASE-04` code et patch produits.
+ 
+@@ -13,26 +13,24 @@ multi-tenant borné par `session.user.companyId`
+ 
+ Aucun débordement hors périmètre `BASE-04`.
+ 
+-## Validation terminale observée
++## Validation terminale retenue
+ 
+-- `npx prisma validate` : échec environnement
+-- `npx prisma generate` : non validé dans cet environnement
+-- `npm run lint` : échec environnement
+-- `npm run build` : échec environnement
+-
+-Causes observées :
+-- installation `npx prisma` interrompue pendant postinstall ;
+-- `eslint` introuvable ;
+-- `next` introuvable.
++- `git apply --check` : OK
++- `git apply` : OK
++- `npx prisma validate` : OK
++- `npx prisma generate` : OK
++- `npm run lint` : OK
++- `npm run build` : OK
+ 
+ ## Contrôle patch
+ 
+-- `git apply --check` sur copie de test : OK
++- patch initial conservé : `BASE-04.diff`
++- patch correctif minimal produit : `PATCH__SESSION-20260316-05_A2_BASE-04_FIX-01.diff`
+ 
+ ## Verdict final
+ 
+-`partiellement conforme`
++`conforme`
+ 
+ ## Prochaine étape logique
+ 
+-Rejouer les validations terminales dans le vrai dépôt avec dépendances installées, puis enchaîner sur `BASE-05 — COMPLÉTION — API désactivation/archivage base/dépôt`.
++Enchaîner sur `BASE-05 — COMPLÉTION — API désactivation/archivage base/dépôt`.
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/NOTES.md b/docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/NOTES.md
+index 501f8a7..5e58e81 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/NOTES.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/NOTES.md
+@@ -7,7 +7,8 @@ La session a été bornée strictement à `BASE-04` :
+ - modification API uniquement ;
+ - aucun élargissement vers `BASE-05+` ;
+ - aucun retour sur `A1` ;
+-- aucun rattachement métier supplémentaire.
++- aucun rattachement métier supplémentaire ;
++- aucun maintien de `isActive` dans le périmètre de modification `BASE-04`.
+ 
+ ### 2. Réemploi des briques déjà présentes dans le dépôt
+ Le dépôt dispose déjà de briques cohérentes pour cette session :
+@@ -48,24 +49,24 @@ Le service `updateDepot` :
+ - retourne `null` si le dépôt n’existe pas dans la société courante ;
+ - n’exécute l’`update` que sur l’identifiant validé côté serveur.
+ 
+-### 7. `isActive` traité sans ouvrir `BASE-05`
+-L’ouverture de session autorise explicitement `isActive` comme champ optionnel du body.
++### 7. Recalage correctif minimal appliqué
++Le patch initial `BASE-04.diff` était déjà intégré dans le dépôt.
+ 
+ Décision retenue :
+-- le champ est accepté dans le `PATCH` ;
+-- aucune route dédiée d’archivage / désactivation n’est ajoutée ;
+-- aucune logique métier supplémentaire d’archivage n’est introduite.
++- ne pas régénérer un patch complet ;
++- produire un patch additionnel minimal ;
++- retirer uniquement `isActive` du périmètre `BASE-04` ;
++- conserver le patch initial comme trace de la session d’origine.
+ 
+-### 8. Validation terminale réellement observée
+-Les commandes demandées ont été tentées, mais l’environnement du ZIP ne permet pas leur validation complète.
++### 8. Validation terminale retenue
++Les résultats terminaux confirmés pour le dépôt réel sont les suivants :
++- `git apply --check` : **OK** ;
++- `git apply` : **OK** ;
++- `npx prisma validate` : **OK** ;
++- `npx prisma generate` : **OK** ;
++- `npm run lint` : **OK** ;
++- `npm run build` : **OK**.
+ 
+-Constats factuels :
+-- `npx prisma validate` a tenté d’installer `prisma@7.5.0` via `npx`, puis a échoué pendant le postinstall ;
+-- `npm run lint` échoue avec `eslint: not found` ;
+-- `npm run build` échoue avec `next: not found`.
+-
+-### 9. Patch produit et contrôlé
+-Le patch `BASE-04.diff` a été généré uniquement sur les fichiers code concernés.
+-
+-Contrôle complémentaire réalisé :
+-- `git apply --check` du patch dans une copie de test : **OK**.
++### 9. Patch correctif produit et contrôlé
++Le correctif est porté par un patch additionnel minimal distinct du patch initial :
++- `PATCH__SESSION-20260316-05_A2_BASE-04_FIX-01.diff`.
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/RESULTATS.md b/docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/RESULTATS.md
+index eb18df0..d1a419d 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/RESULTATS.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/RESULTATS.md
+@@ -4,18 +4,18 @@
+ 
+ ### Verdict global retenu
+ 
+-La session `BASE-04` est retenue **`partiellement conforme`** sur son périmètre exact.
++La session `BASE-04` est retenue **`conforme`** sur son périmètre exact.
+ 
+ ### Pourquoi ce verdict
+ 
+-Le verdict est `partiellement conforme` car l’objectif code de `BASE-04` est atteint, mais les vérifications terminales demandées n’ont pas pu être validées dans l’environnement fourni :
++Le verdict est `conforme` car le périmètre exact de `BASE-04` est désormais respecté et les validations terminales ont été confirmées **OK** sur le dépôt réel :
+ - l’API minimale de modification a bien été ajoutée ;
+ - le multi-tenant est bien borné au `companyId` de session ;
+ - le RBAC `ADMIN` / `GERANT` est bien appliqué ;
+ - la validation d’entrée est stricte et refuse les champs hors contrat ;
++- `isActive` a été retiré du périmètre de modification pour rester strictement sur `name` et `address` ;
+ - aucun périmètre `BASE-05+` n’a été ouvert ;
+-- le patch `BASE-04.diff` est produit et `git apply --check` est validé sur copie de test ;
+-- mais `npx prisma validate`, `npm run lint` et `npm run build` ne sont pas validables ici faute de dépendances installées dans le ZIP.
++- le patch initial est conservé et le correctif est porté par un patch additionnel minimal.
+ 
+ ## Réponses factuelles aux attendus de session
+ 
+@@ -48,7 +48,6 @@ Réponse : **oui**.
+ Détail :
+ - `name` optionnel, trim, non vide si fourni, max 160 ;
+ - `address` optionnel / nullable, trim, max 255 ;
+-- `isActive` optionnel, booléen ;
+ - rejet des clés supplémentaires ;
+ - refus d’un body vide.
+ 
+@@ -86,18 +85,21 @@ Constat :
+ 
+ ## Résultats réels des vérifications terminales
+ 
+-Commandes tentées :
++Commandes confirmées :
++- `git apply --check`
++- `git apply`
+ - `npx prisma validate`
++- `npx prisma generate`
+ - `npm run lint`
+ - `npm run build`
+ 
+ Résultat observé :
+-- Prisma validate : **échec environnement**
+-- Lint : **échec environnement**
+-- Build : **échec environnement**
+-
+-Cause observée :
+-- dépendances absentes de l’environnement de session (`prisma`, `eslint`, `next` non disponibles localement).
++- `git apply --check` : **OK**
++- `git apply` : **OK**
++- `npx prisma validate` : **OK**
++- `npx prisma generate` : **OK**
++- `npm run lint` : **OK**
++- `npm run build` : **OK**
+ 
+ ## Liste exacte des fichiers code modifiés
+ 
+@@ -107,11 +109,11 @@ Cause observée :
+ 
+ ## Patch produit
+ 
+-Patch officiel de session :
++Patch d’origine conservé :
+ - `BASE-04.diff`
+ 
+-Contrôle patch :
+-- `git apply --check` : **OK** sur copie de test.
++Patch correctif minimal :
++- `PATCH__SESSION-20260316-05_A2_BASE-04_FIX-01.diff`
+ 
+ ## Fichiers documentaires créés / mis à jour
+ 
+@@ -133,4 +135,4 @@ Contrôle patch :
+ 
+ `BASE-04` introduit désormais le **socle API minimal de modification** pour le module bases/dépôts, cohérent avec le cadrage `04.3`, le multi-tenant strict et la route de création déjà en place.
+ 
+-La seule réserve restante est **environnementale** : la validation terminale complète doit être rejouée dans un dépôt disposant réellement de ses dépendances Node/Prisma installées.
++Aucune réserve résiduelle n’est retenue sur le périmètre `BASE-04` après application du correctif minimal.
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/SESSION.md b/docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/SESSION.md
+index 7f8c60e..0100aa8 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/SESSION.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/SESSION.md
+@@ -85,7 +85,6 @@ Ajouter l’API minimale de modification d’un dépôt existant, cohérente ave
+ ### Body accepté
+ - `name` : optionnel, chaîne non vide, trim, max 160 ;
+ - `address` : optionnel, nullable, trim, max 255 ;
+-- `isActive` : optionnel, booléen.
+ 
+ ### Champs refusés côté client
+ - `companyId`
+@@ -126,28 +125,29 @@ Données retournées sur succès :
+ - `companyId`
+ - `name`
+ - `address`
+-- `isActive`
+ - `createdAt`
+ - `updatedAt`
+ 
+ ## Résultat terminal observé dans l’environnement de session
+ 
+ Vérifications terminales tentées :
+-- `npx prisma validate` : **échec environnement** ;
+-- `npx prisma generate` : **non validé dans cet environnement** ;
+-- `npm run lint` : **échec environnement** ;
+-- `npm run build` : **échec environnement**.
+-
+-Cause factuelle observée :
+-- le ZIP fourni n’inclut pas les dépendances installées ;
+-- `npx prisma validate` tente d’installer `prisma@7.5.0` puis échoue pendant le postinstall ;
+-- `eslint` et `next` sont introuvables localement (`sh: eslint: not found`, `sh: next: not found`).
++- `git apply --check` : **OK** ;
++- `git apply` : **OK** ;
++- `npx prisma validate` : **OK** ;
++- `npx prisma generate` : **OK** ;
++- `npm run lint` : **OK** ;
++- `npm run build` : **OK**.
++
++Résultat terminal retenu :
++- patch initial déjà intégré dans le dépôt ;
++- correctif minimal appliqué via patch additionnel ;
++- validations terminales confirmées **OK** sur le dépôt réel.
+ 
+ ## Résultat synthétique de session
+ 
+ Le dépôt contient désormais une **API minimale de modification de dépôt** cohérente avec `04.3 Modification d’une base / dépôt`, strictement multi-tenant et sans ouverture de périmètre vers UI, listing, suppression, archivage dédié ou rattachements métier.
+ 
+-Le correctif code et le patch sont produits ; la validation terminale complète reste à rejouer dans un environnement où les dépendances du projet sont réellement installées.
++Le correctif code et le patch sont produits ; le périmètre `BASE-04` est désormais recalé et validé.
+ 
+ ## Dossiers liés
+ 
+@@ -156,4 +156,4 @@ Le correctif code et le patch sont produits ; la validation terminale complète
+ 
+ ## Verdict retenu
+ 
+-Verdict final de la session : **`partiellement conforme`**.
++Verdict final de la session : **`conforme`**.
+diff --git a/docs/3-patches/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/README_PATCH.md b/docs/3-patches/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/README_PATCH.md
+index 92b5a7b..4be8495 100644
+--- a/docs/3-patches/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/README_PATCH.md
++++ b/docs/3-patches/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/README_PATCH.md
+@@ -12,26 +12,36 @@
+ 
+ `docs/3-patches/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/`
+ 
+-## Patch officiel
++## Patch d’origine
+ 
+ `BASE-04.diff`
+ 
++## Patch correctif minimal
++
++`PATCH__SESSION-20260316-05_A2_BASE-04_FIX-01.diff`
++
+ ## Périmètre exact du patch
+ 
+-Le patch est strictement limité à `BASE-04` :
+-- ajout de la route API canonique `PATCH /api/depots/[id]` ;
+-- ajout du service minimal de modification de dépôt ;
+-- extension du validateur d’entrée avec un schéma de mise à jour strict.
++Le patch correctif est strictement limité au recalage de `BASE-04` :
++- retrait de `isActive` du body de modification ;
++- retrait de `isActive` du service de modification ;
++- retrait de `isActive` du passage route -> service ;
++- mise à jour documentaire de session et du dossier patch.
+ 
+-## Fichiers code inclus dans le patch
++## Fichiers inclus dans le patch
+ 
+ - `app/api/depots/[id]/route.ts`
+ - `lib/services/depots/update-depot.ts`
+ - `lib/validators/depot.ts`
++- `docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/SESSION.md`
++- `docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/NOTES.md`
++- `docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/EVIDENCES.md`
++- `docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/RESULTATS.md`
++- `docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/FIN_SESSION.md`
++- `docs/3-patches/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/README_PATCH.md`
+ 
+ ## Fichiers volontairement exclus du patch
+ 
+-- toute documentation de session
+ - toute documentation master
+ - `prisma/schema.prisma`
+ - `prisma/seed.ts`
+@@ -44,7 +54,7 @@ Le patch est strictement limité à `BASE-04` :
+ 
+ ## Objet exact du correctif
+ 
+-Le correctif ajoute l’API minimale de modification d’un dépôt existant au sein de la société courante, en cohérence avec :
++Le correctif recale l’API minimale de modification d’un dépôt existant au sein de la société courante, en cohérence avec :
+ - `04.3 Modification d’une base / dépôt` ;
+ - le modèle Prisma `Depot` déjà introduit par `BASE-02` ;
+ - la route de création déjà introduite par `BASE-03` ;
+@@ -63,16 +73,16 @@ Le patch ne fait pas :
+ - de modification du schéma Prisma ;
+ - de modification du seed.
+ 
+-## Commandes d’application
++## Commandes d’application du correctif
+ 
+ ```bash
+-git apply --check "docs/3-patches/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/BASE-04.diff"
+-git apply         "docs/3-patches/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/BASE-04.diff"
++git apply --check "docs/3-patches/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/PATCH__SESSION-20260316-05_A2_BASE-04_FIX-01.diff"
++git apply         "docs/3-patches/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/PATCH__SESSION-20260316-05_A2_BASE-04_FIX-01.diff"
+ ```
+ 
+ ## Statut
+ 
+-- patch code produit ;
+-- `git apply --check` validé sur copie de test ;
+-- documentation de session produite ;
+-- validation terminale complète à rejouer dans un environnement avec dépendances installées.
++- patch d’origine conservé ;
++- patch correctif minimal produit ;
++- documentation de session corrigée ;
++- validations terminales confirmées **OK** sur le dépôt réel.
+diff --git a/lib/services/depots/update-depot.ts b/lib/services/depots/update-depot.ts
+index 8a1b4e3..ce0243f 100644
+--- a/lib/services/depots/update-depot.ts
++++ b/lib/services/depots/update-depot.ts
+@@ -5,7 +5,6 @@ export type UpdateDepotInput = {
+   companyId: string;
+   name?: string;
+   address?: string | null;
+-  isActive?: boolean;
+ };
+ 
+ export async function updateDepot(input: UpdateDepotInput) {
+@@ -24,14 +23,12 @@ export async function updateDepot(input: UpdateDepotInput) {
+     data: {
+       ...(input.name !== undefined ? { name: input.name } : {}),
+       ...(input.address !== undefined ? { address: input.address } : {}),
+-      ...(input.isActive !== undefined ? { isActive: input.isActive } : {}),
+     },
+     select: {
+       id: true,
+       companyId: true,
+       name: true,
+       address: true,
+-      isActive: true,
+       createdAt: true,
+       updatedAt: true,
+     },
+diff --git a/lib/validators/depot.ts b/lib/validators/depot.ts
+index 0156245..377530a 100644
+--- a/lib/validators/depot.ts
++++ b/lib/validators/depot.ts
+@@ -39,9 +39,8 @@ export const updateDepotBodySchema = z
+   .object({
+     name: depotNameSchema.optional(),
+     address: updateDepotAddressSchema,
+-    isActive: z.boolean().optional(),
+   })
+   .strict()
+-  .refine((value) => value.name !== undefined || value.address !== undefined || value.isActive !== undefined, {
++  .refine((value) => value.name !== undefined || value.address !== undefined, {
+     message: "At least one field must be provided",
+   });

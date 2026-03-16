@@ -42,6 +42,27 @@ RÈGLE DE TRAVAIL
 - 1 DoD
 - 1 validation
 
+RÈGLE IMPÉRATIVE — GOUVERNANCE DES PATCHS
+
+Appliquer strictement les règles suivantes :
+
+1. Le premier patch produit pour la session est le **patch principal de référence**.
+2. Si ce patch principal a déjà été appliqué, il est **interdit** de régénérer un patch complet rejouant toute la session.
+3. Toute correction ultérieure doit être fournie sous forme de **patch correctif minimal séparé**.
+4. Un patch correctif ne doit contenir **que** les modifications restantes à apporter.
+5. Les fichiers documentaires `.md` ne doivent **pas** être mélangés au patch principal code.
+6. Les documents de session doivent être mis à jour **à la fin**, une fois le code validé, dans un **patch documentaire séparé**.
+
+### Nommage attendu
+- patch principal : `XXX.diff`
+- correctif : `XXX_FIX-01.diff`
+- documentation finale : `XXX_DOCS.diff`
+
+### Interdictions
+- ne pas rejouer tout le patch principal dans un correctif ;
+- ne pas produire un patch global de remplacement si seul un fix est attendu ;
+- ne pas mélanger inutilement code et documentation finale.
+
 CONTRAINTE  
 - Ne traiter que le périmètre validé
 - Ne pas élargir le scope

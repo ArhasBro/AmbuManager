@@ -11,6 +11,7 @@ Date : 09/03/2026
 - [5. Règle de traitement de l’existant](#5-règle-de-traitement-de-lexistant)
 - [6. Convention de lecture des sessions](#6-convention-de-lecture-des-sessions)
 - [7. Règle de livrable par session](#7-règle-de-livrable-par-session)
+- [7.1 Règle de gouvernance des patchs](#7.1-Règle-de-gouvernance-des-patchs)
 - [8. Verdict obligatoire de sortie pour toute session AUDIT](#8-verdict-obligatoire-de-sortie-pour-toute-session-audit)
 - [9. Convention de structuration du plan](#9-convention-de-structuration-du-plan)
 - [10. Ordre global de développement retenu](#10-ordre-global-de-développement-retenu)
@@ -139,6 +140,53 @@ Conséquence :
 - une session **AUDIT** peut conclure sans modification de code
 - une session **VALIDATION** peut conclure sans modification de code
 - mais dans tous les cas, la session doit produire un livrable formel, explicite, documenté et validable
+
+## 7.1 Règle de gouvernance des patchs
+
+Pour chaque session, la production des patchs suit obligatoirement l’ordre suivant :
+
+### 1. Patch principal code
+Le premier patch produit est le patch principal de référence de la session.
+Il contient le code de la session et les fichiers strictement nécessaires à son implémentation.
+
+Règle :
+- un patch principal déjà appliqué ne doit jamais être régénéré intégralement.
+
+### 2. Patch(s) correctif(s) minimal(aux)
+Si un écart, une erreur ou un oubli est détecté après application du patch principal, la correction doit être fournie dans un patch séparé de type fix.
+
+Règles :
+- le correctif doit être minimal ;
+- il ne doit contenir que les modifications restantes à apporter ;
+- il ne doit jamais rejouer tout le patch principal.
+
+### 3. Validation terminale finale
+Avant clôture, la session doit être rejouée dans le vrai dépôt avec les vérifications terminales requises par le périmètre concerné.
+
+### 4. Patch documentaire final
+Les fichiers `.md` de session ne doivent pas être inclus dans le patch principal code.
+Ils doivent être finalisés à la fin, une fois le code validé, dans un patch documentaire séparé.
+
+Ce patch documentaire final regroupe uniquement les éléments documentaires attendus, par exemple :
+- `SESSION.md`
+- `NOTES.md`
+- `EVIDENCES.md`
+- `RESULTATS.md`
+- `FIN_SESSION.md`
+- `README_PATCH.md` si nécessaire
+
+### Convention attendue
+Exemple :
+- patch principal : `XXX.diff`
+- correctif : `XXX_FIX-01.diff`
+- correctif suivant : `XXX_FIX-02.diff`
+- documentation finale : `XXX_DOCS.diff`
+
+### Interdictions
+Il est interdit de :
+- régénérer un patch complet déjà appliqué ;
+- mélanger documentation finale et correctif code si cela nuit à la lisibilité ;
+- masquer un correctif réel dans une réécriture globale du patch principal.
 
 ## 8. Verdict obligatoire de sortie pour toute session AUDIT
 Toute session **AUDIT** doit se conclure par un verdict formel parmi les suivants :

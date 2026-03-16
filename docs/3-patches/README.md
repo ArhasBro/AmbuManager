@@ -10,6 +10,11 @@ Ce dossier contient les artefacts de patch officiels rattachés aux sessions du 
 - Les sessions de type **CORRECTION** ou **COMPLÉTION** utilisent un dossier de patch dédié avec un `README_PATCH.md`, puis un patch officiel unique quand il existe.
 - Les patchs doivent être appliqués depuis la racine du projet.
 - Les anciens patchs restent archivés dans `docs/patches/ANCIENS_PATCHS/`.
+### Rappel patch
+- 1er patch = patch principal
+- jamais de régénération complète d’un patch déjà appliqué
+- toute correction = fix minimal séparé
+- documentation `.md` = patch documentaire final séparé après validation code
 
 ## Structure cible
 
