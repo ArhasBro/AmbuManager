@@ -10,6 +10,12 @@ export const createVehicleBodySchema = z.object({
   type: z.nativeEnum(VehicleType),
 });
 
+export const assignVehicleDepotBodySchema = z
+  .object({
+    depotId: z.string().uuid().nullable(),
+  })
+  .strict();
+
 export const deleteVehicleQuerySchema = z.object({
   id: z.string().min(1, "id required"),
 });

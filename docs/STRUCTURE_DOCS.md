@@ -273,7 +273,14 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |       |   |       RESULTATS.md
 |   |       |   |       SESSION.md
 |   |       |   |       
-|   |       |   \---SESSION-20260316-08_A2_BASE-07
+|   |       |   +---SESSION-20260316-08_A2_BASE-07
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   \---SESSION-20260316-09_A2_BASE-08
 |   |       |           EVIDENCES.md
 |   |       |           FIN_SESSION.md
 |   |       |           NOTES.md
@@ -429,7 +436,12 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |           |   |       BASE-06.diff
 |           |   |       README_PATCH.md
 |           |   |       
-|           |   \---SESSION-20260316-08_A2_BASE-07
+|           |   +---SESSION-20260316-08_A2_BASE-07
+|           |   |       BASE-07.diff
+|           |   |       PATCH__SESSION-20260316-08_A2_BASE-07_FIX-01.diff
+|           |   |       README_PATCH.md
+|           |   |       
+|           |   \---SESSION-20260316-09_A2_BASE-08
 |           |           README_PATCH.md
 |           |           
 |           \---3-SUP

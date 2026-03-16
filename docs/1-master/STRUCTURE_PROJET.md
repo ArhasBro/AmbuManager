@@ -1927,7 +1927,6 @@ C:.
 |   |   |       05e6c743003c809d.js
 |   |   |       1687260e4d8b05d6.js
 |   |   |       34f7551faf121447.css
-|   |   |       4524ccf59c8b171b.js
 |   |   |       642a00754c8aebb8.js
 |   |   |       672c0168d7981883.js
 |   |   |       82abf2d65f5428ae.js
@@ -1938,17 +1937,18 @@ C:.
 |   |   |       ae064a76748670f1.js
 |   |   |       af7027598a07baa5.js
 |   |   |       b870288de7d3931e.js
+|   |   |       cc07a3e87a46bf5e.js
 |   |   |       cdb83a758231f045.js
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
 |   |   |       
-|   |   +---media
-|   |   |       favicon.0b3bf435.ico
+|   |   +---EkqUqDInuhAufe0LypINo
+|   |   |       _buildManifest.js
+|   |   |       _clientMiddlewareManifest.json
+|   |   |       _ssgManifest.js
 |   |   |       
-|   |   \---rCFn4sOWh10RwmEl6FlE5
-|   |           _buildManifest.js
-|   |           _clientMiddlewareManifest.json
-|   |           _ssgManifest.js
+|   |   \---media
+|   |           favicon.0b3bf435.ico
 |   |           
 |   \---types
 |           routes.d.ts
@@ -2333,7 +2333,14 @@ C:.
 |   |   |       |   |       RESULTATS.md
 |   |   |       |   |       SESSION.md
 |   |   |       |   |       
-|   |   |       |   \---SESSION-20260316-08_A2_BASE-07
+|   |   |       |   +---SESSION-20260316-08_A2_BASE-07
+|   |   |       |   |       EVIDENCES.md
+|   |   |       |   |       FIN_SESSION.md
+|   |   |       |   |       NOTES.md
+|   |   |       |   |       RESULTATS.md
+|   |   |       |   |       SESSION.md
+|   |   |       |   |       
+|   |   |       |   \---SESSION-20260316-09_A2_BASE-08
 |   |   |       |           EVIDENCES.md
 |   |   |       |           FIN_SESSION.md
 |   |   |       |           NOTES.md
@@ -2489,7 +2496,12 @@ C:.
 |   |           |   |       BASE-06.diff
 |   |           |   |       README_PATCH.md
 |   |           |   |       
-|   |           |   \---SESSION-20260316-08_A2_BASE-07
+|   |           |   +---SESSION-20260316-08_A2_BASE-07
+|   |           |   |       BASE-07.diff
+|   |           |   |       PATCH__SESSION-20260316-08_A2_BASE-07_FIX-01.diff
+|   |           |   |       README_PATCH.md
+|   |           |   |       
+|   |           |   \---SESSION-20260316-09_A2_BASE-08
 |   |           |           README_PATCH.md
 |   |           |           
 |   |           \---3-SUP

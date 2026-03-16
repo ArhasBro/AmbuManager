@@ -64,8 +64,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260316-08_A2_BASE-07
-- BASE-07 — COMPLÉTION** — Rattachement d’un véhicule à une base
+- SESSION-20260316-09_A2_BASE-08
+- BASE-08 — COMPLÉTION** — Rattachement d’un utilisateur à une base
 
 sortie propre + retour du terminal + aucune erreur = validé
 

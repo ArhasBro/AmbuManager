@@ -133,6 +133,8 @@ model Depot {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  vehicles Vehicle[]
+
   @@unique([companyId, name])
   @@index([companyId])
   @@index([companyId, isActive])
@@ -265,6 +267,9 @@ model Vehicle {
   companyId String  @db.Uuid
   company   Company @relation(fields: [companyId], references: [id])
 
+  depotId String? @db.Uuid
+  depot   Depot?  @relation(fields: [depotId], references: [id], onDelete: SetNull)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -276,6 +281,7 @@ model Vehicle {
 
   @@unique([companyId, immatriculation])
   @@index([companyId])
+  @@index([depotId])
 }
 
 // ✅ 4.1 — Run d'automatisation (une génération)

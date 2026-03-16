@@ -18,26 +18,49 @@ export default async function VehiclesPage() {
 
   const companyId = user.companyId;
 
-  const vehicles = await prisma.vehicle.findMany({
-    where: { companyId },
-    orderBy: { createdAt: "desc" },
-    select: {
-      id: true,
-      immatriculation: true,
-      type: true,
-      status: true,
-      createdAt: true,
-    },
-  });
+  const [vehicles, depots] = await Promise.all([
+    prisma.vehicle.findMany({
+      where: { companyId },
+      orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        immatriculation: true,
+        type: true,
+        status: true,
+        depotId: true,
+        createdAt: true,
+        depot: {
+          select: {
+            id: true,
+            name: true,
+            isActive: true,
+          },
+        },
+      },
+    }),
+    prisma.depot.findMany({
+      where: { companyId, isActive: true },
+      orderBy: { name: "asc" },
+      select: {
+        id: true,
+        name: true,
+        isActive: true,
+      },
+    }),
+  ]);
 
   return (
     <div style={{ padding: 40 }}>
       <h1>Véhicules</h1>
+      <p style={{ marginTop: 8, opacity: 0.8 }}>
+        Gestion minimale des véhicules et rattachement optionnel à une base active de la société courante.
+      </p>
       <VehiclesClient
         initialVehicles={vehicles.map((v) => ({
           ...v,
           createdAt: v.createdAt.toISOString(),
         }))}
+        availableDepots={depots}
       />
     </div>
   );

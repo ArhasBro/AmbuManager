@@ -13,6 +13,23 @@ const listQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(500).optional().default(200),
 });
 
+const vehicleSelect = {
+  id: true,
+  immatriculation: true,
+  type: true,
+  status: true,
+  depotId: true,
+  createdAt: true,
+  updatedAt: true,
+  depot: {
+    select: {
+      id: true,
+      name: true,
+      isActive: true,
+    },
+  },
+} as const;
+
 function getErrorMessage(e: unknown): string {
   if (e instanceof Error) return e.message;
   if (typeof e === "string") return e;
@@ -33,8 +50,6 @@ export async function GET(req: Request) {
   const allowed = await canManageVehicles(userId, session.user.role);
   if (!allowed) return forbidden();
 
-
-  // ✅ Support ?limit=...
   const url = new URL(req.url);
   const parsed = listQuerySchema.safeParse({
     limit: url.searchParams.get("limit") ?? undefined,
@@ -47,17 +62,9 @@ export async function GET(req: Request) {
     where: { companyId },
     orderBy: { immatriculation: "asc" },
     take: limit,
-    select: {
-      id: true,
-      immatriculation: true,
-      type: true,
-      status: true,
-      createdAt: true,
-      updatedAt: true,
-    },
+    select: vehicleSelect,
   });
 
-  // ✅ ICI : on renvoie directement la liste
   return ok(vehicles.map(serializeDates));
 }
 
@@ -82,17 +89,9 @@ export async function POST(req: Request) {
         type,
         status: "ACTIVE",
       },
-      select: {
-        id: true,
-        immatriculation: true,
-        type: true,
-        status: true,
-        createdAt: true,
-        updatedAt: true,
-      },
+      select: vehicleSelect,
     });
 
-    // ✅ POST ok : renvoie un vehicle dans data
     return ok(serializeDates(vehicle), 201);
   } catch (e: unknown) {
     const mapped = prismaToHttp(e);
