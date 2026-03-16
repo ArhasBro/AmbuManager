@@ -113,6 +113,9 @@ Les règles suivantes deviennent obligatoires pour toutes les sessions :
 4. **La documentation de session doit être livrée à la fin dans un patch documentaire séparé.**
    - Ce patch documentaire final ne doit être produit qu’après validation complète du code.
    - Il regroupe uniquement les fichiers documentaires attendus de la session.
+   -Précision importante :
+les fichiers documentaires de session (`SESSION.md`, `NOTES.md`, `EVIDENCES.md`, `RESULTATS.md`, `FIN_SESSION.md`) sont créés automatiquement lors de l’ouverture de session.
+le fichier documentaire de patches (`README.md`) est créé automatiquement lors de l’ouverture de session.
 
 ### Conséquences
 Cette règle impose désormais une séparation stricte entre :

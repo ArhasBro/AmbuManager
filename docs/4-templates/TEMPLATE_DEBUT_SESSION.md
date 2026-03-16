@@ -58,6 +58,10 @@ Appliquer strictement les règles suivantes :
 - correctif : `XXX_FIX-01.diff`
 - documentation finale : `XXX_DOCS.diff`
 
+Précision importante :
+les fichiers documentaires de session (`SESSION.md`, `NOTES.md`, `EVIDENCES.md`, `RESULTATS.md`, `FIN_SESSION.md`) sont créés automatiquement lors de l’ouverture de session.
+le fichier documentaire de patches (`README.md`) est créé automatiquement lors de l’ouverture de session.
+
 ### Interdictions
 - ne pas rejouer tout le patch principal dans un correctif ;
 - ne pas produire un patch global de remplacement si seul un fix est attendu ;

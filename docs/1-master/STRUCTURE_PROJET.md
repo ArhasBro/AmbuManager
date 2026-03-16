@@ -2409,6 +2409,8 @@ C:.
 |   |           |   |       
 |   |           |   \---SESSION-20260316-05_A2_BASE-04
 |   |           |           BASE-04.diff
+|   |           |           PATCH__SESSION-20260316-05_A2_BASE-04_DOCS-01.diff
+|   |           |           PATCH__SESSION-20260316-05_A2_BASE-04_DOCS-02.diff
 |   |           |           PATCH__SESSION-20260316-05_A2_BASE-04_FIX-01.diff
 |   |           |           README_PATCH.md
 |   |           |           

@@ -175,6 +175,13 @@ Ce patch documentaire final regroupe uniquement les éléments documentaires att
 - `FIN_SESSION.md`
 - `README_PATCH.md` si nécessaire
 
+Précision importante :
+les fichiers documentaires de session (`SESSION.md`, `NOTES.md`, `EVIDENCES.md`, `RESULTATS.md`, `FIN_SESSION.md`) sont créés automatiquement lors de l’ouverture de session.
+le fichier documentaire de patches (`README.md`) est créé automatiquement lors de l’ouverture de session.
+
+En conséquence, le patch documentaire final ne doit pas recréer ces fichiers.
+Il doit uniquement contenir leurs modifications de contenu une fois le code validé.
+
 ### Convention attendue
 Exemple :
 - patch principal : `XXX.diff`
