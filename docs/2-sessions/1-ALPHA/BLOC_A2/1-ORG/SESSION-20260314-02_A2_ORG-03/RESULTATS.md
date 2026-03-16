@@ -2,24 +2,20 @@
 
 ## Résultats obtenus
 
-- UI minimale `Profil société` ajoutée ;
-- consultation et édition bornées aux champs `name`, `managerNames`, `address`, `phone`, `siret` ;
+- hotfix incrémental minimal `ORG-03` appliqué sur le ZIP actuel MAJ ;
+- consultation et édition restent bornées aux champs `name`, `managerNames`, `address`, `phone`, `siret` ;
 - bornage à `companyId` conservé ;
 - accès `ADMIN` / `GERANT` conservé ;
-- correctif appliqué sans migration ni ajout de champ ;
-- accès Prisma typé sur `managerNames` évité dans le code ajouté.
+- correction ciblée du build sur l'usage Prisma typé de `managerNames` ;
+- aucun ajout de champ, aucune migration, aucun élargissement hors `ORG-03`.
 
 ## Documents modifiés
 
 ### Code
-- `app/dashboard/page.tsx`
-- `app/company/page.tsx`
-- `app/company/company-profile-form.tsx`
 - `app/api/company/profile/route.ts`
-- `lib/validators/company-profile.ts`
+- `app/company/page.tsx`
 
 ### Session / patch
-- `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/SESSION.md`
 - `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/NOTES.md`
 - `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/EVIDENCES.md`
 - `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/RESULTATS.md`

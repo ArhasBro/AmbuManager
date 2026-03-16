@@ -7,6 +7,14 @@ import { prisma } from "@/lib/prisma";
 
 import CompanyProfileForm from "./company-profile-form";
 
+type CompanyProfileRow = {
+  name: string;
+  managerNames: string | null;
+  address: string | null;
+  phone: string | null;
+  siret: string | null;
+};
+
 function canManageCompanyProfile(role?: string) {
   return role === "ADMIN" || role === "GERANT";
 }
@@ -18,17 +26,19 @@ export default async function CompanyPage() {
   if (!user?.id || !user.companyId) redirect("/login");
   if (!canManageCompanyProfile(user.role)) redirect("/login");
 
-  const company = await prisma.company.findUnique({
-    where: { id: user.companyId },
-    select: {
-      name: true,
-      managerNames: true,
-      address: true,
-      phone: true,
-      siret: true,
-    },
-  });
+  const rows = await prisma.$queryRaw<CompanyProfileRow[]>`
+    SELECT
+      "name",
+      "managerNames",
+      "address",
+      "phone",
+      "siret"
+    FROM "Company"
+    WHERE "id" = ${user.companyId}
+    LIMIT 1
+  `;
 
+  const company = rows[0];
   if (!company) redirect("/login");
 
   return (

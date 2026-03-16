@@ -2,9 +2,8 @@
 
 ## Méthode / observations
 
-- audit du ZIP actuel réellement disponible ;
-- constat : `app/company/page.tsx`, `app/company/company-profile-form.tsx`, `app/api/company/profile/route.ts` et `lib/validators/company-profile.ts` étaient absents du ZIP ;
-- audit des patchs précédemment générés hors ZIP pour identifier leur base de calcul ;
-- constat : les patchs précédents avaient été calculés contre des working trees différents, ce qui explique leurs échecs sur un dépôt local déjà divergent ;
-- choix de mise en oeuvre : lecture / écriture minimales via SQL brut Prisma (`$queryRaw` / `$executeRaw`) pour éviter le blocage TypeScript observé sur `managerNames` dans `CompanySelect<DefaultArgs>` ;
-- aucun élargissement à `ORG-04`, `BASE-*`, `SUP-*`, onboarding, multi-sociétés ou migrations.
+- audit du ZIP actuel MAJ réellement fourni ;
+- constat : le code `ORG-03` est déjà présent dans le dépôt (`app/company/page.tsx`, `app/company/company-profile-form.tsx`, `app/api/company/profile/route.ts`, `lib/validators/company-profile.ts`) ;
+- constat : le build casse sur `managerNames` dans `app/api/company/profile/route.ts` à cause d'un `select` Prisma typé non aligné avec `CompanySelect<DefaultArgs>` ;
+- hotfix incrémental minimal : suppression de l'accès Prisma typé sur `managerNames` dans la route API, et réalignement de la lecture serveur `app/company/page.tsx` pour éviter un rebloquage immédiat sur le même champ ;
+- aucun élargissement à `ORG-04`, `BASE-*`, `SUP-*`, onboarding, multi-sociétés, migration ou schéma Prisma.

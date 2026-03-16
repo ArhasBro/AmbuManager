@@ -17,37 +17,25 @@
 
 ### Code réel inspecté
 - `app/dashboard/page.tsx`
+- `app/company/page.tsx`
+- `app/company/company-profile-form.tsx`
+- `app/api/company/profile/route.ts`
+- `lib/validators/company-profile.ts`
 - `prisma/schema.prisma`
-- `lib/permissions.ts`
-- `app/api/company/rules/route.ts`
 
-## État réel du ZIP avant correction
+## État réel du ZIP avant hotfix
 
 Constat factuel :
 - `app/dashboard/page.tsx` présent ;
-- `app/company/page.tsx` absent ;
-- `app/company/company-profile-form.tsx` absent ;
-- `app/api/company/profile/route.ts` absent ;
-- `lib/validators/company-profile.ts` absent ;
-- les fichiers de session `.md` existaient déjà au format placeholder.
+- `app/company/page.tsx` présent ;
+- `app/company/company-profile-form.tsx` présent ;
+- `app/api/company/profile/route.ts` présent ;
+- `lib/validators/company-profile.ts` présent ;
+- l'erreur build active est le `select` Prisma typé sur `managerNames` dans `app/api/company/profile/route.ts`.
 
-## Audit des patchs précédents
+## Preuves du hotfix
 
-Patchs audités hors ZIP :
-- `ORG-03.diff`
-- `ORG-03-rectif-01.diff`
-- `ORG-03-rectif-02.diff`
-- `ORG-03-rectif-03.diff`
-
-Constat :
-- `ORG-03.diff` installe la session depuis un état sans code `ORG-03`, mais utilise Prisma typé sur `managerNames` ;
-- `ORG-03-rectif-01.diff` suppose que `ORG-03.diff` a déjà été appliqué ;
-- `ORG-03-rectif-02.diff` et `ORG-03-rectif-03.diff` sont calculés contre d'autres working trees documentaires ;
-- ces patches ne peuvent donc pas être présumés applicables sur un dépôt local déjà divergent du ZIP reçu.
-
-## Preuves de la correction finale
-
-- `app/company/page.tsx` lit le profil société courant via `companyId` ;
-- `app/company/company-profile-form.tsx` expose exactement les 5 champs attendus ;
-- `app/api/company/profile/route.ts` met à jour le profil société courant sans `select` Prisma typé sur `managerNames` ;
-- `app/dashboard/page.tsx` expose le lien `Profil société` pour `ADMIN` / `GERANT`.
+- `app/api/company/profile/route.ts` n'utilise plus `prisma.company.update({ select: { managerNames: true } })` ;
+- `app/api/company/profile/route.ts` met à jour le profil société courant via SQL Prisma brut et retourne les 5 champs attendus ;
+- `app/company/page.tsx` lit désormais le profil société courant sans `select` Prisma typé sur `managerNames` ;
+- `app/company/company-profile-form.tsx` reste borné exactement aux 5 champs attendus.
