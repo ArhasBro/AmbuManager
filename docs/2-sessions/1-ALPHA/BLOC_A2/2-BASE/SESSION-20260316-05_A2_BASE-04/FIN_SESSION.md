@@ -2,7 +2,7 @@
 
 ## Clôture
 
-SESSION PARTIELLEMENT VALIDÉE
+SESSION VALIDÉE
 
 `BASE-04` code et patch produits.
 
@@ -13,26 +13,24 @@ multi-tenant borné par `session.user.companyId`
 
 Aucun débordement hors périmètre `BASE-04`.
 
-## Validation terminale observée
+## Validation terminale retenue
 
-- `npx prisma validate` : échec environnement
-- `npx prisma generate` : non validé dans cet environnement
-- `npm run lint` : échec environnement
-- `npm run build` : échec environnement
-
-Causes observées :
-- installation `npx prisma` interrompue pendant postinstall ;
-- `eslint` introuvable ;
-- `next` introuvable.
+- `git apply --check` : OK
+- `git apply` : OK
+- `npx prisma validate` : OK
+- `npx prisma generate` : OK
+- `npm run lint` : OK
+- `npm run build` : OK
 
 ## Contrôle patch
 
-- `git apply --check` sur copie de test : OK
+- patch initial conservé : `BASE-04.diff`
+- patch documentaire final produit séparément, sans rejeu du patch principal
 
 ## Verdict final
 
-`partiellement conforme`
+`conforme`
 
 ## Prochaine étape logique
 
-Rejouer les validations terminales dans le vrai dépôt avec dépendances installées, puis enchaîner sur `BASE-05 — COMPLÉTION — API désactivation/archivage base/dépôt`.
+Enchaîner sur `BASE-05 — COMPLÉTION — API désactivation/archivage base/dépôt`.

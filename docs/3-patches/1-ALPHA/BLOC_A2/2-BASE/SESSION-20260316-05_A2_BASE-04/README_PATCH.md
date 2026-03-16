@@ -16,68 +16,72 @@
 
 `BASE-04.diff`
 
-## Patch documentaire final
+## Correctif appliqué
 
-`PATCH__SESSION-20260316-05_A2_BASE-04_DOCS-02.diff`
+Correctif minimal réalisé en complément du patch d’origine, sans régénérer `BASE-04.diff`.
 
-## Périmètre exact du patch
+## Périmètre exact retenu
 
-Le patch documentaire final est strictement limité à la traçabilité rejouable de `BASE-04` sur l’état réel du dépôt :
-- aucun code n’est inclus ;
-- aucun fix code n’est rejoué ;
-- mise à jour des documents de session et du dossier patch ;
-- conservation du patch initial `BASE-04.diff` comme trace d’origine.
+`BASE-04` est strictement limité à l’ajout de l’API de modification d’un dépôt existant :
 
-## Fichiers inclus dans le patch
+- route `PATCH /api/depots/[id]`
+- body autorisé limité à :
+  - `name`
+  - `address`
 
-- `docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/NOTES.md`
-- `docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/RESULTATS.md`
-- `docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/FIN_SESSION.md`
-- `docs/3-patches/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/README_PATCH.md`
+## Recalage effectué
 
-## Fichiers volontairement exclus du patch
+Le correctif final retire `isActive` du périmètre `BASE-04`.
 
-- toute documentation master
-- `prisma/schema.prisma`
-- `prisma/seed.ts`
-- toute UI bases/dépôts
-- toute route de listing
-- toute route de suppression
-- toute route dédiée d’archivage / désactivation
-- tout périmètre `BASE-05+`
-- tout périmètre `SUP-*`
+Le périmètre retenu est donc strictement :
 
-## Objet exact du correctif
+- `name`
+- `address`
 
-Le correctif documentaire final acte que l’API minimale de modification d’un dépôt existant est déjà au bon état dans le dépôt, en cohérence avec :
-- `04.3 Modification d’une base / dépôt` ;
-- le modèle Prisma `Depot` déjà introduit par `BASE-02` ;
-- la route de création déjà introduite par `BASE-03` ;
-- le multi-tenant strict via `session.user.companyId` ;
-- le format API standard `{ ok:true, data } / { ok:false, error, details? }`.
+## Règles conservées
 
-## Ce que le patch ne fait pas
+- `companyId` ne vient jamais du client
+- modification bornée au tenant courant via `session.user.companyId`
+- cross-tenant interdit
+- accès limité à `ADMIN` / `GERANT`
+- validation Zod stricte
+- contrat API standard :
+  - succès : `{ ok:true, data }`
+  - erreur : `{ ok:false, error }` ou `{ ok:false, error, details }`
 
-Le patch ne fait pas :
-- de listing des dépôts ;
-- de suppression de dépôt ;
-- de route dédiée d’archivage / désactivation ;
-- d’UI de gestion ;
-- de permission dédiée ;
-- de rattachement `Vehicle`, `User`, `Shift`, `DraftShift`, `ShiftTemplate` ;
-- de modification du schéma Prisma ;
-- de modification du seed.
+## Fichiers code concernés par BASE-04
 
-## Commandes d’application du correctif
+- `app/api/depots/[id]/route.ts`
+- `lib/services/depots/update-depot.ts`
+- `lib/validators/depot.ts`
 
-```bash
-git apply --check "docs/3-patches/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/PATCH__SESSION-20260316-05_A2_BASE-04_DOCS-02.diff"
-git apply         "docs/3-patches/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/PATCH__SESSION-20260316-05_A2_BASE-04_DOCS-02.diff"
-```
+## Éléments hors périmètre
 
-## Statut
+Le correctif ne fait pas :
 
-- patch d’origine conservé ;
-- code `BASE-04` déjà conforme sur l’état réel du dépôt ;
-- patch documentaire final produit ;
-- validations terminales confirmées **OK** sur le dépôt réel.
+- de UI dépôts
+- de listing dépôts
+- de suppression dépôt
+- d’archivage dépôt
+- de rattachements `Vehicle` / `User` / `Shift`
+- de permissions catalogue dédiées
+- de multi-agence
+- de modification du modèle Prisma hors nécessité factuelle
+- de modification des documents master
+- d’ouverture de `BASE-05+`
+
+## Résultats terminaux confirmés
+
+- `git apply --check` : OK
+- `git apply` : OK
+- `npx prisma validate` : OK
+- `npx prisma generate` : OK
+- `npm run lint` : OK
+- `npm run build` : OK
+
+## Statut final
+
+- patch d’origine conservé
+- code `BASE-04` corrigé sur le dépôt réel
+- périmètre recalé strictement à `name` et `address`
+- session documentée et clôturée proprement

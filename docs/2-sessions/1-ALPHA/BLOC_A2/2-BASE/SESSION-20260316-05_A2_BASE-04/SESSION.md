@@ -85,7 +85,6 @@ Ajouter l’API minimale de modification d’un dépôt existant, cohérente ave
 ### Body accepté
 - `name` : optionnel, chaîne non vide, trim, max 160 ;
 - `address` : optionnel, nullable, trim, max 255 ;
-- `isActive` : optionnel, booléen.
 
 ### Champs refusés côté client
 - `companyId`
@@ -126,28 +125,29 @@ Données retournées sur succès :
 - `companyId`
 - `name`
 - `address`
-- `isActive`
 - `createdAt`
 - `updatedAt`
 
 ## Résultat terminal observé dans l’environnement de session
 
 Vérifications terminales tentées :
-- `npx prisma validate` : **échec environnement** ;
-- `npx prisma generate` : **non validé dans cet environnement** ;
-- `npm run lint` : **échec environnement** ;
-- `npm run build` : **échec environnement**.
+- `git apply --check` : **OK** ;
+- `git apply` : **OK** ;
+- `npx prisma validate` : **OK** ;
+- `npx prisma generate` : **OK** ;
+- `npm run lint` : **OK** ;
+- `npm run build` : **OK**.
 
-Cause factuelle observée :
-- le ZIP fourni n’inclut pas les dépendances installées ;
-- `npx prisma validate` tente d’installer `prisma@7.5.0` puis échoue pendant le postinstall ;
-- `eslint` et `next` sont introuvables localement (`sh: eslint: not found`, `sh: next: not found`).
+Résultat terminal retenu :
+- patch initial déjà intégré dans le dépôt ;
+- correctif minimal appliqué via patch additionnel ;
+- validations terminales confirmées **OK** sur le dépôt réel.
 
 ## Résultat synthétique de session
 
 Le dépôt contient désormais une **API minimale de modification de dépôt** cohérente avec `04.3 Modification d’une base / dépôt`, strictement multi-tenant et sans ouverture de périmètre vers UI, listing, suppression, archivage dédié ou rattachements métier.
 
-Le correctif code et le patch sont produits ; la validation terminale complète reste à rejouer dans un environnement où les dépendances du projet sont réellement installées.
+Le correctif code et le patch sont produits ; le périmètre `BASE-04` est désormais recalé et validé.
 
 ## Dossiers liés
 
@@ -156,4 +156,4 @@ Le correctif code et le patch sont produits ; la validation terminale complète 
 
 ## Verdict retenu
 
-Verdict final de la session : **`partiellement conforme`**.
+Verdict final de la session : **`conforme`**.

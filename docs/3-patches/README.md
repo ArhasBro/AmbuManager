@@ -4,17 +4,16 @@ Ce dossier contient les artefacts de patch officiels rattachés aux sessions du 
 
 ## Règles
 
-- **1 session = 1 patch officiel maximum**.
 - Les dossiers `docs/patches/` reflètent la même arborescence que `docs/sessions/`.
 - Les sessions de type **AUDIT** ou **VALIDATION** ne produisent pas de patch code : elles contiennent un `NO_PATCH.md`.
 - Les sessions de type **CORRECTION** ou **COMPLÉTION** utilisent un dossier de patch dédié avec un `README_PATCH.md`, puis un patch officiel unique quand il existe.
 - Les patchs doivent être appliqués depuis la racine du projet.
 - Les anciens patchs restent archivés dans `docs/patches/ANCIENS_PATCHS/`.
 ### Rappel patch
-- 1er patch = patch principal
-- jamais de régénération complète d’un patch déjà appliqué
-- toute correction = fix minimal séparé
-- documentation `.md` = patch documentaire final séparé après validation code
+Une session n’est plus limitée à un patch unique.
+Le premier patch est le patch principal.
+Toute correction ultérieure doit être fournie sous forme de patch fix minimal séparé.
+La documentation finale `.md` doit être livrée à la fin dans un patch documentaire séparé de mise à jour, sans recréation des fichiers de session.
 
 ## Structure cible
 

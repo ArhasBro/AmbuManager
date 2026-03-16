@@ -60,8 +60,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260316-05_A2_BASE-04
-- BASE-04 — COMPLÉTION** — API modification base/dépôt
+- SESSION-20260316-06_A2_BASE-05
+- BASE-05 — COMPLÉTION** — API désactivation/archivage base/dépôt
 
 sortie propre + retour du terminal + aucune erreur = validé
 

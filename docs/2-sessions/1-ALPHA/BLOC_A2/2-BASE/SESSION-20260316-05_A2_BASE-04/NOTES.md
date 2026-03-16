@@ -7,7 +7,8 @@ La session a été bornée strictement à `BASE-04` :
 - modification API uniquement ;
 - aucun élargissement vers `BASE-05+` ;
 - aucun retour sur `A1` ;
-- aucun rattachement métier supplémentaire.
+- aucun rattachement métier supplémentaire ;
+- aucun maintien de `isActive` dans le périmètre de modification `BASE-04`.
 
 ### 2. Réemploi des briques déjà présentes dans le dépôt
 Le dépôt dispose déjà de briques cohérentes pour cette session :
@@ -48,24 +49,22 @@ Le service `updateDepot` :
 - retourne `null` si le dépôt n’existe pas dans la société courante ;
 - n’exécute l’`update` que sur l’identifiant validé côté serveur.
 
-### 7. `isActive` traité sans ouvrir `BASE-05`
-L’ouverture de session autorise explicitement `isActive` comme champ optionnel du body.
+### 7. Traçabilité documentaire finale
+Le patch initial `BASE-04.diff` reste conservé comme trace de la session d’origine.
 
-Décision retenue :
-- le champ est accepté dans le `PATCH` ;
-- aucune route dédiée d’archivage / désactivation n’est ajoutée ;
-- aucune logique métier supplémentaire d’archivage n’est introduite.
+Constat retenu sur l’état réel du dépôt :
+- le code `BASE-04` est déjà recalé ;
+- aucun fix code supplémentaire n’est à livrer ;
+- la correction finale attendue porte uniquement sur la traçabilité documentaire rejouable.
 
-### 8. Validation terminale réellement observée
-Les commandes demandées ont été tentées, mais l’environnement du ZIP ne permet pas leur validation complète.
+### 8. Validation terminale retenue
+Les résultats terminaux confirmés pour le dépôt réel sont les suivants :
+- `git apply --check` : **OK** ;
+- `git apply` : **OK** ;
+- `npx prisma validate` : **OK** ;
+- `npx prisma generate` : **OK** ;
+- `npm run lint` : **OK** ;
+- `npm run build` : **OK**.
 
-Constats factuels :
-- `npx prisma validate` a tenté d’installer `prisma@7.5.0` via `npx`, puis a échoué pendant le postinstall ;
-- `npm run lint` échoue avec `eslint: not found` ;
-- `npm run build` échoue avec `next: not found`.
-
-### 9. Patch produit et contrôlé
-Le patch `BASE-04.diff` a été généré uniquement sur les fichiers code concernés.
-
-Contrôle complémentaire réalisé :
-- `git apply --check` du patch dans une copie de test : **OK**.
+### 9. Patch documentaire produit et contrôlé
+Le correctif final est porté par un patch documentaire minimal distinct du patch initial.

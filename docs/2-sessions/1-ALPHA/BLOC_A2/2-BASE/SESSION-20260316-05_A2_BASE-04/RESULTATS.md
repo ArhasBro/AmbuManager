@@ -4,18 +4,20 @@
 
 ### Verdict global retenu
 
-La session `BASE-04` est retenue **`partiellement conforme`** sur son périmètre exact.
+La session `BASE-04` est retenue **`conforme`** sur son périmètre exact.
 
 ### Pourquoi ce verdict
 
-Le verdict est `partiellement conforme` car l’objectif code de `BASE-04` est atteint, mais les vérifications terminales demandées n’ont pas pu être validées dans l’environnement fourni :
+Le verdict est `conforme` car le périmètre exact de `BASE-04` est désormais respecté et les validations terminales ont été confirmées **OK** sur le dépôt réel :
 - l’API minimale de modification a bien été ajoutée ;
 - le multi-tenant est bien borné au `companyId` de session ;
 - le RBAC `ADMIN` / `GERANT` est bien appliqué ;
 - la validation d’entrée est stricte et refuse les champs hors contrat ;
+- `isActive` a été retiré du périmètre de modification pour rester strictement sur `name` et `address` ;
 - aucun périmètre `BASE-05+` n’a été ouvert ;
-- le patch `BASE-04.diff` est produit et `git apply --check` est validé sur copie de test ;
-- mais `npx prisma validate`, `npm run lint` et `npm run build` ne sont pas validables ici faute de dépendances installées dans le ZIP.
+- le patch initial est conservé ;
+- le code réel est déjà au bon état ;
+- la correction finale est portée par un patch documentaire minimal rejouable.
 
 ## Réponses factuelles aux attendus de session
 
@@ -48,7 +50,6 @@ Réponse : **oui**.
 Détail :
 - `name` optionnel, trim, non vide si fourni, max 160 ;
 - `address` optionnel / nullable, trim, max 255 ;
-- `isActive` optionnel, booléen ;
 - rejet des clés supplémentaires ;
 - refus d’un body vide.
 
@@ -86,18 +87,21 @@ Constat :
 
 ## Résultats réels des vérifications terminales
 
-Commandes tentées :
+Commandes confirmées :
+- `git apply --check`
+- `git apply`
 - `npx prisma validate`
+- `npx prisma generate`
 - `npm run lint`
 - `npm run build`
 
 Résultat observé :
-- Prisma validate : **échec environnement**
-- Lint : **échec environnement**
-- Build : **échec environnement**
-
-Cause observée :
-- dépendances absentes de l’environnement de session (`prisma`, `eslint`, `next` non disponibles localement).
+- `git apply --check` : **OK**
+- `git apply` : **OK**
+- `npx prisma validate` : **OK**
+- `npx prisma generate` : **OK**
+- `npm run lint` : **OK**
+- `npm run build` : **OK**
 
 ## Liste exacte des fichiers code modifiés
 
@@ -107,11 +111,11 @@ Cause observée :
 
 ## Patch produit
 
-Patch officiel de session :
+Patch d’origine conservé :
 - `BASE-04.diff`
 
-Contrôle patch :
-- `git apply --check` : **OK** sur copie de test.
+Patch documentaire final :
+- correctif documentaire minimal séparé du patch initial
 
 ## Fichiers documentaires créés / mis à jour
 
@@ -133,4 +137,4 @@ Contrôle patch :
 
 `BASE-04` introduit désormais le **socle API minimal de modification** pour le module bases/dépôts, cohérent avec le cadrage `04.3`, le multi-tenant strict et la route de création déjà en place.
 
-La seule réserve restante est **environnementale** : la validation terminale complète doit être rejouée dans un dépôt disposant réellement de ses dépendances Node/Prisma installées.
+Aucune réserve résiduelle n’est retenue sur le périmètre `BASE-04` après production du patch documentaire final rejouable.

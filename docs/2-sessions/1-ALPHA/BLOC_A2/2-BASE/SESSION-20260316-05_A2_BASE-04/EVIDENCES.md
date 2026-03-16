@@ -85,7 +85,6 @@ Conséquence : `BASE-04` ne doit couvrir que la modification API minimale.
 `lib/validators/depot.ts` ajoute un schéma Zod strict :
 - `name` optionnel ;
 - `address` optionnel / nullable ;
-- `isActive` optionnel ;
 - rejet des clés supplémentaires ;
 - refus d’un body vide.
 
@@ -107,20 +106,27 @@ Conséquence : `BASE-04` ne doit couvrir que la modification API minimale.
 
 ## Vérifications terminales réellement obtenues
 
-### Commandes tentées
+### Commandes confirmées
+- `git apply --check`
+- `git apply`
 - `npx prisma validate`
+- `npx prisma generate`
 - `npm run lint`
 - `npm run build`
 
 ### Preuves terminales retenues
-- `npx prisma validate` : tentative d’installation `npx prisma@7.5.0`, puis échec pendant `@prisma/engines` postinstall ;
-- `npm run lint` : `sh: 1: eslint: not found` ;
-- `npm run build` : `sh: 1: next: not found`.
+- `git apply --check` : **OK** ;
+- `git apply` : **OK** ;
+- `npx prisma validate` : **OK** ;
+- `npx prisma generate` : **OK** ;
+- `npm run lint` : **OK** ;
+- `npm run build` : **OK**.
 
 ### Contrôle patch retenu
-- `git apply --check` sur une copie de test du dépôt : **OK**.
+- patch initial conservé ;
+- patch correctif minimal séparé produit.
 
 ### Résultat terminal retenu
-- le correctif code est produit ;
-- le patch est auto-applicable ;
-- la validation terminale complète du projet reste à rejouer dans un environnement avec dépendances installées.
+- le recalage `BASE-04` est validé ;
+- le correctif ne rejoue pas le patch initial ;
+- le dépôt réel est validé avec résultats terminaux **OK**.

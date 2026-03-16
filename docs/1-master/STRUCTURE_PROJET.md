@@ -2275,7 +2275,14 @@ C:.
 |   |   |       |           RESULTATS.md
 |   |   |       |           SESSION.md
 |   |   |       |           
-|   |   |       \---3-SUP
+|   |   |       +---3-SUP
+|   |   |       \---SESSION-20260316-06_A2_BASE-05
+|   |   |               EVIDENCES.md
+|   |   |               FIN_SESSION.md
+|   |   |               NOTES.md
+|   |   |               RESULTATS.md
+|   |   |               SESSION.md
+|   |   |               
 |   |   \---SESSION-YYYYMMDD-XX
 |   |           EVIDENCES.md
 |   |           FIN_SESSION.md
@@ -2411,10 +2418,14 @@ C:.
 |   |           |           BASE-04.diff
 |   |           |           PATCH__SESSION-20260316-05_A2_BASE-04_DOCS-01.diff
 |   |           |           PATCH__SESSION-20260316-05_A2_BASE-04_DOCS-02.diff
+|   |           |           PATCH__SESSION-20260316-05_A2_BASE-04_DOCS-04.diff
 |   |           |           PATCH__SESSION-20260316-05_A2_BASE-04_FIX-01.diff
 |   |           |           README_PATCH.md
 |   |           |           
-|   |           \---3-SUP
+|   |           +---3-SUP
+|   |           \---SESSION-20260316-06_A2_BASE-05
+|   |                   README_PATCH.md
+|   |                   
 |   +---4-templates
 |   |       TEMPLATE_DEBUT_SESSION.md
 |   |       TEMPLATE_DOD_4_4.md
