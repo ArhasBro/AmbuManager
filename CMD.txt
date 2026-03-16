@@ -51,6 +51,10 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
    - Uniquement les information concernant la session concerné.
    - Si besoin de ressources suplémentaire il s'aide du ZIP joint
 
+   Etape :
+   - 1 le patch
+   - 2 Validation + génération des docs de la sessions et Readme patch.
+
 2. **Prompt de contrôle**
    - À rédiger pour la discussion de contrôle qualité.
    - Il doit servir à analyser et évaluer la réponse issue de la discussion de production UNIQUEMENT.
@@ -60,8 +64,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260316-07_A2_BASE-06
-- BASE-06 — COMPLÉTION** — UI gestion des bases/dépôts
+- SESSION-20260316-08_A2_BASE-07
+- BASE-07 — COMPLÉTION** — Rattachement d’un véhicule à une base
 
 sortie propre + retour du terminal + aucune erreur = validé
 
@@ -83,3 +87,17 @@ Je n'ai pas intégré :
 
 Il seront à crée dans le patch docs quand la session sera validé pour qu'il soient complet.
 
+
+
+
+
+
+
+
+DOCUMENTS À PRODUIRE quand je te le demande (après que je valide le patch). 
+SESSION.md 
+NOTES.md 
+EVIDENCES.md 
+RESULTATS.md 
+FIN_SESSION.md 
+README_PATCH.md

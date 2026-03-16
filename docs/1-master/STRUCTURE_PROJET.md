@@ -1537,6 +1537,19 @@ C:.
 |   |   |   |           react-loadable-manifest.json
 |   |   |   |           server-reference-manifest.json
 |   |   |   |           
+|   |   |   +---depots
+|   |   |   |   |   page.js
+|   |   |   |   |   page.js.map
+|   |   |   |   |   page.js.nft.json
+|   |   |   |   |   page_client-reference-manifest.js
+|   |   |   |   |   
+|   |   |   |   \---page
+|   |   |   |           app-paths-manifest.json
+|   |   |   |           build-manifest.json
+|   |   |   |           next-font-manifest.json
+|   |   |   |           react-loadable-manifest.json
+|   |   |   |           server-reference-manifest.json
+|   |   |   |           
 |   |   |   +---favicon.ico
 |   |   |   |   |   route.js
 |   |   |   |   |   route.js.map
@@ -1830,18 +1843,20 @@ C:.
 |   |   |           [root-of-the-server]__8731afda._.js.map
 |   |   |           [root-of-the-server]__87883845._.js
 |   |   |           [root-of-the-server]__87883845._.js.map
+|   |   |           [root-of-the-server]__9aa3e15e._.js
+|   |   |           [root-of-the-server]__9aa3e15e._.js.map
 |   |   |           [root-of-the-server]__9d5e3ced._.js
 |   |   |           [root-of-the-server]__9d5e3ced._.js.map
 |   |   |           [root-of-the-server]__a457c799._.js
 |   |   |           [root-of-the-server]__a457c799._.js.map
 |   |   |           [root-of-the-server]__b9356576._.js
 |   |   |           [root-of-the-server]__b9356576._.js.map
-|   |   |           [root-of-the-server]__c4d88a62._.js
-|   |   |           [root-of-the-server]__c4d88a62._.js.map
+|   |   |           [root-of-the-server]__c4a7c7d0._.js
+|   |   |           [root-of-the-server]__c4a7c7d0._.js.map
+|   |   |           [root-of-the-server]__cd75d4d8._.js
+|   |   |           [root-of-the-server]__cd75d4d8._.js.map
 |   |   |           [root-of-the-server]__d7d7eec3._.js
 |   |   |           [root-of-the-server]__d7d7eec3._.js.map
-|   |   |           [root-of-the-server]__d9175139._.js
-|   |   |           [root-of-the-server]__d9175139._.js.map
 |   |   |           [root-of-the-server]__e0a07927._.js
 |   |   |           [root-of-the-server]__e0a07927._.js.map
 |   |   |           [root-of-the-server]__e1b2e646._.js
@@ -1864,12 +1879,16 @@ C:.
 |   |   |           _5f02a5a9._.js.map
 |   |   |           _6139f1ce._.js
 |   |   |           _6139f1ce._.js.map
+|   |   |           _74c1132d._.js
+|   |   |           _74c1132d._.js.map
 |   |   |           _a70391a9._.js
 |   |   |           _a70391a9._.js.map
 |   |   |           _b2ebc7ca._.js
 |   |   |           _b2ebc7ca._.js.map
 |   |   |           _c23fb881._.js
 |   |   |           _c23fb881._.js.map
+|   |   |           _dbd3f975._.js
+|   |   |           _dbd3f975._.js.map
 |   |   |           _f92ad8b9._.js
 |   |   |           _f92ad8b9._.js.map
 |   |   |           _ffa8fc97._.js
@@ -1878,6 +1897,8 @@ C:.
 |   |   |           _next-internal_server_app_company_page_actions_ca33e7ac.js.map
 |   |   |           _next-internal_server_app_dashboard_page_actions_7f01ccec.js
 |   |   |           _next-internal_server_app_dashboard_page_actions_7f01ccec.js.map
+|   |   |           _next-internal_server_app_depots_page_actions_4ef2fb4b.js
+|   |   |           _next-internal_server_app_depots_page_actions_4ef2fb4b.js.map
 |   |   |           _next-internal_server_app_login_page_actions_0e9aafc0.js
 |   |   |           _next-internal_server_app_login_page_actions_0e9aafc0.js.map
 |   |   |           _next-internal_server_app_page_actions_39d4fc33.js
@@ -1903,6 +1924,7 @@ C:.
 |   +---static
 |   |   +---chunks
 |   |   |       000ea66499535a39.js
+|   |   |       05e6c743003c809d.js
 |   |   |       1687260e4d8b05d6.js
 |   |   |       34f7551faf121447.css
 |   |   |       4524ccf59c8b171b.js
@@ -1923,7 +1945,7 @@ C:.
 |   |   +---media
 |   |   |       favicon.0b3bf435.ico
 |   |   |       
-|   |   \---yrzH_ar-lUlFsF7QA1DKo
+|   |   \---rCFn4sOWh10RwmEl6FlE5
 |   |           _buildManifest.js
 |   |           _clientMiddlewareManifest.json
 |   |           _ssgManifest.js
@@ -2016,6 +2038,10 @@ C:.
 |   |       
 |   +---dashboard
 |   |       logout-button.tsx
+|   |       page.tsx
+|   |       
+|   +---depots
+|   |       depots-client.tsx
 |   |       page.tsx
 |   |       
 |   +---login
@@ -2300,7 +2326,14 @@ C:.
 |   |   |       |   |       RESULTATS.md
 |   |   |       |   |       SESSION.md
 |   |   |       |   |       
-|   |   |       |   \---SESSION-20260316-07_A2_BASE-06
+|   |   |       |   +---SESSION-20260316-07_A2_BASE-06
+|   |   |       |   |       EVIDENCES.md
+|   |   |       |   |       FIN_SESSION.md
+|   |   |       |   |       NOTES.md
+|   |   |       |   |       RESULTATS.md
+|   |   |       |   |       SESSION.md
+|   |   |       |   |       
+|   |   |       |   \---SESSION-20260316-08_A2_BASE-07
 |   |   |       |           EVIDENCES.md
 |   |   |       |           FIN_SESSION.md
 |   |   |       |           NOTES.md
@@ -2452,7 +2485,11 @@ C:.
 |   |           |   |       PATCH__SESSION-20260316-06_A2_BASE-05_DOCS-01.diff
 |   |           |   |       README_PATCH.md
 |   |           |   |       
-|   |           |   \---SESSION-20260316-07_A2_BASE-06
+|   |           |   +---SESSION-20260316-07_A2_BASE-06
+|   |           |   |       BASE-06.diff
+|   |           |   |       README_PATCH.md
+|   |           |   |       
+|   |           |   \---SESSION-20260316-08_A2_BASE-07
 |   |           |           README_PATCH.md
 |   |           |           
 |   |           \---3-SUP

@@ -1,0 +1,393 @@
+--- a/app/dashboard/page.tsx
++++ b/app/dashboard/page.tsx
+@@ -26,6 +26,7 @@
+     : [false, false, false];
+ 
+   const companyProfileAllowed = user.role === "ADMIN" || user.role === "GERANT";
++  const depotsAllowed = user.role === "ADMIN" || user.role === "GERANT";
+ 
+   return (
+     <div style={{ padding: 16, display: "grid", gap: 12 }}>
+@@ -43,6 +44,7 @@
+           <h2 style={{ margin: 0 }}>Dashboard admin</h2>
+           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+             {companyProfileAllowed ? <Link href="/company">Profil société</Link> : null}
++            {depotsAllowed ? <Link href="/depots">Bases / dépôts</Link> : null}
+             {usersAllowed ? <Link href="/users">Réinitialisation mot de passe</Link> : null}
+             {vehiclesAllowed ? <Link href="/vehicles">Véhicules</Link> : null}
+           </div>
+--- /dev/null
++++ b/app/depots/page.tsx
+@@ -0,0 +1,56 @@
++import Link from "next/link";
++import { getServerSession } from "next-auth/next";
++import { redirect } from "next/navigation";
++
++import { authOptions } from "@/lib/auth";
++import { prisma } from "@/lib/prisma";
++
++import DepotsClient from "./depots-client";
++
++function canManageDepots(role?: string) {
++  return role === "ADMIN" || role === "GERANT";
++}
++
++export default async function DepotsPage() {
++  const session = await getServerSession(authOptions);
++  const user = session?.user;
++
++  if (!user?.id || !user.companyId) redirect("/login");
++  if (!canManageDepots(user.role)) redirect("/login");
++
++  const depots = await prisma.depot.findMany({
++    where: { companyId: user.companyId },
++    orderBy: [{ isActive: "desc" }, { name: "asc" }],
++    select: {
++      id: true,
++      name: true,
++      address: true,
++      isActive: true,
++      createdAt: true,
++      updatedAt: true,
++    },
++  });
++
++  return (
++    <div style={{ padding: 16, display: "grid", gap: 16 }}>
++      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
++        <div>
++          <h1 style={{ margin: 0 }}>Bases / dépôts</h1>
++          <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
++            Gestion minimale ALPHA des dépôts de la société courante : création, édition de nom/adresse et archivage logique.
++          </p>
++        </div>
++
++        <Link href="/dashboard">Retour dashboard</Link>
++      </div>
++
++      <DepotsClient
++        initialDepots={depots.map((depot) => ({
++          ...depot,
++          createdAt: depot.createdAt.toISOString(),
++          updatedAt: depot.updatedAt.toISOString(),
++        }))}
++      />
++    </div>
++  );
++}
+--- /dev/null
++++ b/app/depots/depots-client.tsx
+@@ -0,0 +1,313 @@
++"use client";
++
++import { useState } from "react";
++
++type Depot = {
++  id: string;
++  name: string;
++  address: string | null;
++  isActive: boolean;
++  createdAt: string;
++  updatedAt: string;
++};
++
++type DepotForm = {
++  name: string;
++  address: string;
++};
++
++type ApiSuccess<T> = { ok: true; data: T };
++type ApiFailure = { ok: false; error: string; details?: unknown };
++type ApiResponse<T> = ApiSuccess<T> | ApiFailure;
++
++function getApiError<T>(payload: ApiResponse<T> | null, fallback: string) {
++  return payload && !payload.ok ? payload.error : fallback;
++}
++
++function sortDepots(items: Depot[]) {
++  return [...items].sort((a, b) => {
++    if (a.isActive !== b.isActive) return a.isActive ? -1 : 1;
++    return a.name.localeCompare(b.name, "fr", { sensitivity: "base" });
++  });
++}
++
++function toDepotForm(depot: Depot): DepotForm {
++  return {
++    name: depot.name,
++    address: depot.address ?? "",
++  };
++}
++
++function buildForms(items: Depot[]) {
++  return Object.fromEntries(items.map((item) => [item.id, toDepotForm(item)]));
++}
++
++export default function DepotsClient({
++  initialDepots,
++}: {
++  initialDepots: Depot[];
++}) {
++  const [depots, setDepots] = useState<Depot[]>(() => sortDepots(initialDepots));
++  const [forms, setForms] = useState<Record<string, DepotForm>>(() => buildForms(initialDepots));
++  const [createForm, setCreateForm] = useState<DepotForm>({ name: "", address: "" });
++  const [isCreating, setIsCreating] = useState(false);
++  const [savingId, setSavingId] = useState<string | null>(null);
++  const [archivingId, setArchivingId] = useState<string | null>(null);
++  const [error, setError] = useState<string | null>(null);
++  const [success, setSuccess] = useState<string | null>(null);
++
++  function updateCreateForm(key: keyof DepotForm, value: string) {
++    setCreateForm((prev) => ({ ...prev, [key]: value }));
++  }
++
++  function updateDepotForm(id: string, key: keyof DepotForm, value: string) {
++    setForms((prev) => ({
++      ...prev,
++      [id]: {
++        ...(prev[id] ?? { name: "", address: "" }),
++        [key]: value,
++      },
++    }));
++  }
++
++  async function handleCreate(event: React.FormEvent<HTMLFormElement>) {
++    event.preventDefault();
++    setIsCreating(true);
++    setError(null);
++    setSuccess(null);
++
++    try {
++      const res = await fetch("/api/depots", {
++        method: "POST",
++        headers: { "Content-Type": "application/json" },
++        body: JSON.stringify({
++          name: createForm.name,
++          address: createForm.address,
++        }),
++      });
++
++      const data = (await res.json().catch(() => null)) as ApiResponse<Depot> | null;
++
++      if (!res.ok || !data?.ok) {
++        throw new Error(getApiError(data, "Erreur lors de la création du dépôt"));
++      }
++
++      setDepots((prev) => sortDepots([data.data, ...prev]));
++      setForms((prev) => ({ ...prev, [data.data.id]: toDepotForm(data.data) }));
++      setCreateForm({ name: "", address: "" });
++      setSuccess("Dépôt créé.");
++    } catch (e: unknown) {
++      setError(e instanceof Error ? e.message : "Erreur inconnue");
++    } finally {
++      setIsCreating(false);
++    }
++  }
++
++  async function handleSave(id: string) {
++    const form = forms[id];
++    if (!form) return;
++
++    setSavingId(id);
++    setError(null);
++    setSuccess(null);
++
++    try {
++      const res = await fetch(`/api/depots/${id}`, {
++        method: "PATCH",
++        headers: { "Content-Type": "application/json" },
++        body: JSON.stringify({
++          name: form.name,
++          address: form.address,
++        }),
++      });
++
++      const data = (await res.json().catch(() => null)) as ApiResponse<Depot> | null;
++
++      if (!res.ok || !data?.ok) {
++        throw new Error(getApiError(data, "Erreur lors de la modification du dépôt"));
++      }
++
++      setDepots((prev) =>
++        sortDepots(prev.map((item) => (item.id === id ? data.data : item)))
++      );
++      setForms((prev) => ({ ...prev, [id]: toDepotForm(data.data) }));
++      setSuccess("Dépôt mis à jour.");
++    } catch (e: unknown) {
++      setError(e instanceof Error ? e.message : "Erreur inconnue");
++    } finally {
++      setSavingId(null);
++    }
++  }
++
++  async function handleArchive(id: string) {
++    const confirmed = window.confirm("Archiver ce dépôt ?");
++    if (!confirmed) return;
++
++    setArchivingId(id);
++    setError(null);
++    setSuccess(null);
++
++    try {
++      const res = await fetch(`/api/depots/${id}/archive`, {
++        method: "POST",
++      });
++
++      const data = (await res.json().catch(() => null)) as ApiResponse<Depot> | null;
++
++      if (!res.ok || !data?.ok) {
++        throw new Error(getApiError(data, "Erreur lors de l'archivage du dépôt"));
++      }
++
++      setDepots((prev) =>
++        sortDepots(prev.map((item) => (item.id === id ? data.data : item)))
++      );
++      setForms((prev) => ({ ...prev, [id]: toDepotForm(data.data) }));
++      setSuccess("Dépôt archivé.");
++    } catch (e: unknown) {
++      setError(e instanceof Error ? e.message : "Erreur inconnue");
++    } finally {
++      setArchivingId(null);
++    }
++  }
++
++  return (
++    <div style={{ display: "grid", gap: 16 }}>
++      <form
++        onSubmit={handleCreate}
++        style={{
++          display: "grid",
++          gap: 12,
++          padding: 16,
++          border: "1px solid #ddd",
++          borderRadius: 10,
++          maxWidth: 720,
++        }}
++      >
++        <h2 style={{ margin: 0 }}>Créer un dépôt</h2>
++
++        <label style={{ display: "grid", gap: 6 }}>
++          <span>Nom</span>
++          <input
++            value={createForm.name}
++            onChange={(event) => updateCreateForm("name", event.target.value)}
++            disabled={isCreating}
++            required
++            style={{ padding: 10 }}
++          />
++        </label>
++
++        <label style={{ display: "grid", gap: 6 }}>
++          <span>Adresse</span>
++          <input
++            value={createForm.address}
++            onChange={(event) => updateCreateForm("address", event.target.value)}
++            disabled={isCreating}
++            style={{ padding: 10 }}
++          />
++        </label>
++
++        <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
++          <button type="submit" disabled={isCreating} style={{ padding: "10px 14px" }}>
++            {isCreating ? "Création..." : "Créer le dépôt"}
++          </button>
++        </div>
++      </form>
++
++      {success ? (
++        <div style={{ padding: 12, border: "1px solid #335533", borderRadius: 8 }}>{success}</div>
++      ) : null}
++
++      {error ? (
++        <div style={{ padding: 12, border: "1px solid #663333", borderRadius: 8 }}>Erreur : {error}</div>
++      ) : null}
++
++      <div style={{ display: "grid", gap: 12 }}>
++        <h2 style={{ margin: 0 }}>Liste des dépôts</h2>
++
++        {depots.length === 0 ? (
++          <div style={{ padding: 16, border: "1px solid #ddd", borderRadius: 10 }}>
++            Aucun dépôt enregistré pour cette société.
++          </div>
++        ) : (
++          depots.map((depot) => {
++            const form = forms[depot.id] ?? toDepotForm(depot);
++            const isSaving = savingId === depot.id;
++            const isArchiving = archivingId === depot.id;
++            const isBusy = isSaving || isArchiving;
++
++            return (
++              <div
++                key={depot.id}
++                style={{
++                  display: "grid",
++                  gap: 12,
++                  padding: 16,
++                  border: "1px solid #ddd",
++                  borderRadius: 10,
++                  opacity: depot.isActive ? 1 : 0.8,
++                }}
++              >
++                <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
++                  <div>
++                    <strong>{depot.name}</strong>
++                    <div style={{ marginTop: 6, opacity: 0.8 }}>
++                      Statut : {depot.isActive ? "actif" : "archivé"}
++                    </div>
++                  </div>
++
++                  <span
++                    style={{
++                      padding: "4px 10px",
++                      border: "1px solid #ccc",
++                      borderRadius: 999,
++                    }}
++                  >
++                    {depot.isActive ? "Actif" : "Archivé"}
++                  </span>
++                </div>
++
++                <label style={{ display: "grid", gap: 6 }}>
++                  <span>Nom</span>
++                  <input
++                    value={form.name}
++                    onChange={(event) => updateDepotForm(depot.id, "name", event.target.value)}
++                    disabled={isBusy}
++                    required
++                    style={{ padding: 10 }}
++                  />
++                </label>
++
++                <label style={{ display: "grid", gap: 6 }}>
++                  <span>Adresse</span>
++                  <input
++                    value={form.address}
++                    onChange={(event) => updateDepotForm(depot.id, "address", event.target.value)}
++                    disabled={isBusy}
++                    style={{ padding: 10 }}
++                  />
++                </label>
++
++                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
++                  <button type="button" onClick={() => handleSave(depot.id)} disabled={isBusy} style={{ padding: "10px 14px" }}>
++                    {isSaving ? "Enregistrement..." : "Enregistrer"}
++                  </button>
++
++                  {depot.isActive ? (
++                    <button
++                      type="button"
++                      onClick={() => handleArchive(depot.id)}
++                      disabled={isBusy}
++                      style={{ padding: "10px 14px" }}
++                    >
++                      {isArchiving ? "Archivage..." : "Archiver"}
++                    </button>
++                  ) : null}
++                </div>
++              </div>
++            );
++          })
++        )}
++      </div>
++    </div>
++  );
++}
