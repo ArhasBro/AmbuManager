@@ -60,8 +60,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260316-06_A2_BASE-05
-- BASE-05 — COMPLÉTION** — API désactivation/archivage base/dépôt
+- SESSION-20260316-07_A2_BASE-06
+- BASE-06 — COMPLÉTION** — UI gestion des bases/dépôts
 
 sortie propre + retour du terminal + aucune erreur = validé
 
@@ -77,5 +77,9 @@ npm run build
 
 Attend le retour du terminal avant de me répondre.
 Si il y a d'autre cmd a faire n'hésite pas a me dire.
+Je n'ai pas intégré : 
+-les fichiers documentaires de session (`SESSION.md`, `NOTES.md`, `EVIDENCES.md`, `RESULTATS.md`, `FIN_SESSION.md`)
+-le fichier documentaire de patches (`README.md`)
 
+Il seront à crée dans le patch docs quand la session sera validé pour qu'il soient complet.
 

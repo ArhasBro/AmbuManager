@@ -252,21 +252,28 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |       |   |       RESULTATS.md
 |   |       |   |       SESSION.md
 |   |       |   |       
-|   |       |   \---SESSION-20260316-05_A2_BASE-04
+|   |       |   +---SESSION-20260316-05_A2_BASE-04
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260316-06_A2_BASE-05
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   \---SESSION-20260316-07_A2_BASE-06
 |   |       |           EVIDENCES.md
 |   |       |           FIN_SESSION.md
 |   |       |           NOTES.md
 |   |       |           RESULTATS.md
 |   |       |           SESSION.md
 |   |       |           
-|   |       +---3-SUP
-|   |       \---SESSION-20260316-06_A2_BASE-05
-|   |               EVIDENCES.md
-|   |               FIN_SESSION.md
-|   |               NOTES.md
-|   |               RESULTATS.md
-|   |               SESSION.md
-|   |               
+|   |       \---3-SUP
 |   \---SESSION-YYYYMMDD-XX
 |           EVIDENCES.md
 |           FIN_SESSION.md
@@ -398,18 +405,23 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |           |   |       BASE-03.diff
 |           |   |       README_PATCH.md
 |           |   |       
-|           |   \---SESSION-20260316-05_A2_BASE-04
-|           |           BASE-04.diff
-|           |           PATCH__SESSION-20260316-05_A2_BASE-04_DOCS-01.diff
-|           |           PATCH__SESSION-20260316-05_A2_BASE-04_DOCS-02.diff
-|           |           PATCH__SESSION-20260316-05_A2_BASE-04_DOCS-04.diff
-|           |           PATCH__SESSION-20260316-05_A2_BASE-04_FIX-01.diff
+|           |   +---SESSION-20260316-05_A2_BASE-04
+|           |   |       BASE-04.diff
+|           |   |       PATCH__SESSION-20260316-05_A2_BASE-04_DOCS-01.diff
+|           |   |       PATCH__SESSION-20260316-05_A2_BASE-04_DOCS-02.diff
+|           |   |       PATCH__SESSION-20260316-05_A2_BASE-04_DOCS-04.diff
+|           |   |       PATCH__SESSION-20260316-05_A2_BASE-04_FIX-01.diff
+|           |   |       README_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260316-06_A2_BASE-05
+|           |   |       BASE-05.diff
+|           |   |       PATCH__SESSION-20260316-06_A2_BASE-05_DOCS-01.diff
+|           |   |       README_PATCH.md
+|           |   |       
+|           |   \---SESSION-20260316-07_A2_BASE-06
 |           |           README_PATCH.md
 |           |           
-|           +---3-SUP
-|           \---SESSION-20260316-06_A2_BASE-05
-|                   README_PATCH.md
-|                   
+|           \---3-SUP
 +---4-templates
 |       TEMPLATE_DEBUT_SESSION.md
 |       TEMPLATE_DOD_4_4.md

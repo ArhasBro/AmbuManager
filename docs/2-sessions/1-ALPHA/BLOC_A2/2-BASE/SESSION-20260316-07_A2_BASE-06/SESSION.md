@@ -2,7 +2,7 @@
 
 ## ID SESSION
 
-SESSION-20260316-06_A2_BASE-05
+SESSION-20260316-07_A2_BASE-06
 
 ## Date
 
@@ -15,7 +15,7 @@ Sous-projet : Ambulance Manager
 Maturite : 1-ALPHA  
 Bloc : A2  
 Type : COMPLETION  
-Intitule : API désactivation/archivage base/dépôt
+Intitule : UI gestion des bases/dépôts
 
 ## Objectif de la session
 
@@ -31,5 +31,5 @@ INFORMATION NON FOURNIE - A CONFIRMER
 
 ## Dossiers lies
 
-- Session : docs/2-sessions/1-ALPHA/BLOC_A2/SESSION-20260316-06_A2_BASE-05
-- Patchs  : docs/3-patches/1-ALPHA/BLOC_A2/SESSION-20260316-06_A2_BASE-05
+- Session : docs/2-sessions/1-ALPHA/BLOC_A2/SESSION-20260316-07_A2_BASE-06
+- Patchs  : docs/3-patches/1-ALPHA/BLOC_A2/SESSION-20260316-07_A2_BASE-06

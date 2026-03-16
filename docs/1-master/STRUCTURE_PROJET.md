@@ -1325,6 +1325,17 @@ C:.
 |   |   |   |   |       |   route.js.nft.json
 |   |   |   |   |       |   route_client-reference-manifest.js
 |   |   |   |   |       |   
+|   |   |   |   |       +---archive
+|   |   |   |   |       |   |   route.js
+|   |   |   |   |       |   |   route.js.map
+|   |   |   |   |       |   |   route.js.nft.json
+|   |   |   |   |       |   |   route_client-reference-manifest.js
+|   |   |   |   |       |   |   
+|   |   |   |   |       |   \---route
+|   |   |   |   |       |           app-paths-manifest.json
+|   |   |   |   |       |           build-manifest.json
+|   |   |   |   |       |           server-reference-manifest.json
+|   |   |   |   |       |           
 |   |   |   |   |       \---route
 |   |   |   |   |               app-paths-manifest.json
 |   |   |   |   |               build-manifest.json
@@ -1705,6 +1716,8 @@ C:.
 |   |   |   |   [root-of-the-server]__88924fbd._.js.map
 |   |   |   |   [root-of-the-server]__c3997a41._.js
 |   |   |   |   [root-of-the-server]__c3997a41._.js.map
+|   |   |   |   [root-of-the-server]__d810e8d1._.js
+|   |   |   |   [root-of-the-server]__d810e8d1._.js.map
 |   |   |   |   [root-of-the-server]__e6c5e537._.js
 |   |   |   |   [root-of-the-server]__e6c5e537._.js.map
 |   |   |   |   [root-of-the-server]__ecb56e79._.js
@@ -1741,6 +1754,8 @@ C:.
 |   |   |   |   _next-internal_server_app_api_company_rules_route_actions_774d72f1.js.map
 |   |   |   |   _next-internal_server_app_api_depots_route_actions_15f1d8d0.js
 |   |   |   |   _next-internal_server_app_api_depots_route_actions_15f1d8d0.js.map
+|   |   |   |   _next-internal_server_app_api_depots_[id]_archive_route_actions_f3951954.js
+|   |   |   |   _next-internal_server_app_api_depots_[id]_archive_route_actions_f3951954.js.map
 |   |   |   |   _next-internal_server_app_api_depots_[id]_route_actions_ddf226a0.js
 |   |   |   |   _next-internal_server_app_api_depots_[id]_route_actions_ddf226a0.js.map
 |   |   |   |   _next-internal_server_app_api_health_prisma_route_actions_c9f47495.js
@@ -1886,11 +1901,6 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
-|   |   +---9p6FK2tYXWZNHpf9pwPD_
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
-|   |   |       
 |   |   +---chunks
 |   |   |       000ea66499535a39.js
 |   |   |       1687260e4d8b05d6.js
@@ -1910,8 +1920,13 @@ C:.
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
 |   |   |       
-|   |   \---media
-|   |           favicon.0b3bf435.ico
+|   |   +---media
+|   |   |       favicon.0b3bf435.ico
+|   |   |       
+|   |   \---yrzH_ar-lUlFsF7QA1DKo
+|   |           _buildManifest.js
+|   |           _clientMiddlewareManifest.json
+|   |           _ssgManifest.js
 |   |           
 |   \---types
 |           routes.d.ts
@@ -1940,8 +1955,11 @@ C:.
 |   |   |   |   route.ts
 |   |   |   |   
 |   |   |   \---[id]
-|   |   |           route.ts
-|   |   |           
+|   |   |       |   route.ts
+|   |   |       |   
+|   |   |       \---archive
+|   |   |               route.ts
+|   |   |               
 |   |   +---health
 |   |   |   \---prisma
 |   |   |           route.ts
@@ -2268,21 +2286,28 @@ C:.
 |   |   |       |   |       RESULTATS.md
 |   |   |       |   |       SESSION.md
 |   |   |       |   |       
-|   |   |       |   \---SESSION-20260316-05_A2_BASE-04
+|   |   |       |   +---SESSION-20260316-05_A2_BASE-04
+|   |   |       |   |       EVIDENCES.md
+|   |   |       |   |       FIN_SESSION.md
+|   |   |       |   |       NOTES.md
+|   |   |       |   |       RESULTATS.md
+|   |   |       |   |       SESSION.md
+|   |   |       |   |       
+|   |   |       |   +---SESSION-20260316-06_A2_BASE-05
+|   |   |       |   |       EVIDENCES.md
+|   |   |       |   |       FIN_SESSION.md
+|   |   |       |   |       NOTES.md
+|   |   |       |   |       RESULTATS.md
+|   |   |       |   |       SESSION.md
+|   |   |       |   |       
+|   |   |       |   \---SESSION-20260316-07_A2_BASE-06
 |   |   |       |           EVIDENCES.md
 |   |   |       |           FIN_SESSION.md
 |   |   |       |           NOTES.md
 |   |   |       |           RESULTATS.md
 |   |   |       |           SESSION.md
 |   |   |       |           
-|   |   |       +---3-SUP
-|   |   |       \---SESSION-20260316-06_A2_BASE-05
-|   |   |               EVIDENCES.md
-|   |   |               FIN_SESSION.md
-|   |   |               NOTES.md
-|   |   |               RESULTATS.md
-|   |   |               SESSION.md
-|   |   |               
+|   |   |       \---3-SUP
 |   |   \---SESSION-YYYYMMDD-XX
 |   |           EVIDENCES.md
 |   |           FIN_SESSION.md
@@ -2414,18 +2439,23 @@ C:.
 |   |           |   |       BASE-03.diff
 |   |           |   |       README_PATCH.md
 |   |           |   |       
-|   |           |   \---SESSION-20260316-05_A2_BASE-04
-|   |           |           BASE-04.diff
-|   |           |           PATCH__SESSION-20260316-05_A2_BASE-04_DOCS-01.diff
-|   |           |           PATCH__SESSION-20260316-05_A2_BASE-04_DOCS-02.diff
-|   |           |           PATCH__SESSION-20260316-05_A2_BASE-04_DOCS-04.diff
-|   |           |           PATCH__SESSION-20260316-05_A2_BASE-04_FIX-01.diff
+|   |           |   +---SESSION-20260316-05_A2_BASE-04
+|   |           |   |       BASE-04.diff
+|   |           |   |       PATCH__SESSION-20260316-05_A2_BASE-04_DOCS-01.diff
+|   |           |   |       PATCH__SESSION-20260316-05_A2_BASE-04_DOCS-02.diff
+|   |           |   |       PATCH__SESSION-20260316-05_A2_BASE-04_DOCS-04.diff
+|   |           |   |       PATCH__SESSION-20260316-05_A2_BASE-04_FIX-01.diff
+|   |           |   |       README_PATCH.md
+|   |           |   |       
+|   |           |   +---SESSION-20260316-06_A2_BASE-05
+|   |           |   |       BASE-05.diff
+|   |           |   |       PATCH__SESSION-20260316-06_A2_BASE-05_DOCS-01.diff
+|   |           |   |       README_PATCH.md
+|   |           |   |       
+|   |           |   \---SESSION-20260316-07_A2_BASE-06
 |   |           |           README_PATCH.md
 |   |           |           
-|   |           +---3-SUP
-|   |           \---SESSION-20260316-06_A2_BASE-05
-|   |                   README_PATCH.md
-|   |                   
+|   |           \---3-SUP
 |   +---4-templates
 |   |       TEMPLATE_DEBUT_SESSION.md
 |   |       TEMPLATE_DOD_4_4.md
@@ -2449,6 +2479,7 @@ C:.
 |   |       
 |   +---services
 |   |   +---depots
+|   |   |       archive-depot.ts
 |   |   |       create-depot.ts
 |   |   |       update-depot.ts
 |   |   |       
