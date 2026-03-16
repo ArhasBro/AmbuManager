@@ -134,6 +134,7 @@ model Depot {
   updatedAt DateTime @updatedAt
 
   vehicles Vehicle[]
+  users    User[]
 
   @@unique([companyId, name])
   @@index([companyId])
@@ -148,6 +149,10 @@ model User {
   role      Role // (on garde 1 rôle POUR L’INSTANT, multi-rôles ensuite)
   companyId String   @db.Uuid
   company   Company  @relation(fields: [companyId], references: [id])
+
+  depotId String? @db.Uuid
+  depot   Depot?  @relation(fields: [depotId], references: [id], onDelete: SetNull)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -173,6 +178,7 @@ model User {
   planningAuditLogs PlanningAuditLog[] @relation("PlanningAuditLogActor")
 
   @@index([companyId])
+  @@index([depotId])
 }
 
 model Permission {

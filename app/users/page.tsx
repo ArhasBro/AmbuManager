@@ -4,8 +4,10 @@ import { redirect } from "next/navigation";
 
 import { authOptions } from "@/lib/auth";
 import { canManageUsers } from "@/lib/permissions";
+import { prisma } from "@/lib/prisma";
 
 import ResetPasswordClient from "./reset-password-client";
+import UserDepotAssignmentClient from "./user-depot-assignment-client";
 
 export default async function UsersPage() {
   const session = await getServerSession(authOptions);
@@ -14,19 +16,30 @@ export default async function UsersPage() {
   if (!user?.id || !user.companyId) redirect("/login");
   if (!(await canManageUsers(user.id, user.role))) redirect("/login");
 
+  const depots = await prisma.depot.findMany({
+    where: { companyId: user.companyId },
+    orderBy: [{ isActive: "desc" }, { name: "asc" }],
+    select: {
+      id: true,
+      name: true,
+      isActive: true,
+    },
+  });
+
   return (
     <div style={{ padding: 16, display: "grid", gap: 16 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
         <div>
-          <h1 style={{ margin: 0 }}>Utilisateurs — réinitialisation mot de passe</h1>
+          <h1 style={{ margin: 0 }}>Utilisateurs</h1>
           <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
-            Action réservée à l&apos;admin / gérant ou à un profil disposant de la permission fine de gestion utilisateurs.
+            Gestion minimale ALPHA du module utilisateurs : réinitialisation de mot de passe et rattachement à une base.
           </p>
         </div>
 
         <Link href="/dashboard">Retour dashboard</Link>
       </div>
 
+      <UserDepotAssignmentClient availableDepots={depots} />
       <ResetPasswordClient actorUserId={user.id} />
     </div>
   );

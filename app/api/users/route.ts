@@ -51,6 +51,14 @@ export async function GET(req: Request) {
         email: true,
         role: true,
         companyId: true,
+        depotId: true,
+        depot: {
+          select: {
+            id: true,
+            name: true,
+            isActive: true,
+          },
+        },
         createdAt: true,
         updatedAt: true,
       },

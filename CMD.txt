@@ -64,8 +64,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260316-09_A2_BASE-08
-- BASE-08 — COMPLÉTION** — Rattachement d’un utilisateur à une base
+- SESSION-20260316-10_A2_BASE-09
+- BASE-09 — COMPLÉTION** — Rattachement d’un shift à une base
 
 sortie propre + retour du terminal + aucune erreur = validé
 
@@ -76,6 +76,8 @@ Voici sa réponse ainsi que les documents généré :
 Je vais intégrer le .diff et je te renvoi le retour terminal de :
 git apply --check ".\"
 git apply ".\"
+npx prisma validate
+npx prisma generate
 npm run lint
 npm run build
 

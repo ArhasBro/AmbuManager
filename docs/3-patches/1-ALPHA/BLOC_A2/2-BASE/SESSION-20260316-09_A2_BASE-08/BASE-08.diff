@@ -1,0 +1,602 @@
+diff --git a/app/api/users/[id]/depot/route.ts b/app/api/users/[id]/depot/route.ts
+new file mode 100644
+index 0000000..d27d29f
+--- /dev/null
++++ b/app/api/users/[id]/depot/route.ts
+@@ -0,0 +1,64 @@
++import { getServerSession } from "next-auth/next";
++import { z } from "zod";
++
++import { authOptions } from "@/lib/auth";
++import { badRequest, forbidden, notFound, ok, serverError, unauthorized } from "@/lib/api/response";
++import { canManageUsers } from "@/lib/permissions";
++import { serializeDates } from "@/lib/serializers";
++import { assignUserDepot } from "@/lib/services/users/assign-user-depot";
++import { assignUserDepotBodySchema } from "@/lib/validators/user";
++
++const paramsSchema = z
++  .object({
++    id: z.string().uuid(),
++  })
++  .strict();
++
++function getErrorMessage(e: unknown): string {
++  if (e instanceof Error) return e.message;
++  if (typeof e === "string") return e;
++  try {
++    return JSON.stringify(e);
++  } catch {
++    return "Unknown error";
++  }
++}
++
++export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }> }) {
++  const session = await getServerSession(authOptions);
++  const actorUserId = session?.user?.id;
++  const companyId = session?.user?.companyId;
++  const role = session?.user?.role;
++
++  if (!actorUserId || !companyId) return unauthorized();
++  if (!(await canManageUsers(actorUserId, role))) return forbidden();
++
++  const rawParams = await ctx.params.catch(() => null);
++  const parsedParams = paramsSchema.safeParse(rawParams);
++  if (!parsedParams.success) return badRequest("VALIDATION_ERROR", parsedParams.error.flatten());
++
++  let body: unknown;
++  try {
++    body = await req.json();
++  } catch {
++    return badRequest("INVALID_JSON");
++  }
++
++  const parsedBody = assignUserDepotBodySchema.safeParse(body);
++  if (!parsedBody.success) return badRequest("VALIDATION_ERROR", parsedBody.error.flatten());
++
++  try {
++    const result = await assignUserDepot({
++      userId: parsedParams.data.id,
++      companyId,
++      depotId: parsedBody.data.depotId,
++    });
++
++    if (result.status === "USER_NOT_FOUND") return notFound();
++    if (result.status === "DEPOT_NOT_FOUND") return notFound();
++
++    return ok(serializeDates(result.user));
++  } catch (e: unknown) {
++    return serverError(getErrorMessage(e));
++  }
++}
+diff --git a/app/api/users/route.ts b/app/api/users/route.ts
+index 4d274d7..6ee2c97 100644
+--- a/app/api/users/route.ts
++++ b/app/api/users/route.ts
+@@ -51,6 +51,14 @@ export async function GET(req: Request) {
+         email: true,
+         role: true,
+         companyId: true,
++        depotId: true,
++        depot: {
++          select: {
++            id: true,
++            name: true,
++            isActive: true,
++          },
++        },
+         createdAt: true,
+         updatedAt: true,
+       },
+diff --git a/app/users/page.tsx b/app/users/page.tsx
+index ab216da..019514c 100644
+--- a/app/users/page.tsx
++++ b/app/users/page.tsx
+@@ -4,8 +4,10 @@ import { redirect } from "next/navigation";
+ 
+ import { authOptions } from "@/lib/auth";
+ import { canManageUsers } from "@/lib/permissions";
++import { prisma } from "@/lib/prisma";
+ 
+ import ResetPasswordClient from "./reset-password-client";
++import UserDepotAssignmentClient from "./user-depot-assignment-client";
+ 
+ export default async function UsersPage() {
+   const session = await getServerSession(authOptions);
+@@ -14,19 +16,30 @@ export default async function UsersPage() {
+   if (!user?.id || !user.companyId) redirect("/login");
+   if (!(await canManageUsers(user.id, user.role))) redirect("/login");
+ 
++  const depots = await prisma.depot.findMany({
++    where: { companyId: user.companyId },
++    orderBy: [{ isActive: "desc" }, { name: "asc" }],
++    select: {
++      id: true,
++      name: true,
++      isActive: true,
++    },
++  });
++
+   return (
+     <div style={{ padding: 16, display: "grid", gap: 16 }}>
+-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
++      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+         <div>
+-          <h1 style={{ margin: 0 }}>Utilisateurs — réinitialisation mot de passe</h1>
++          <h1 style={{ margin: 0 }}>Utilisateurs</h1>
+           <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
+-            Action réservée à l&apos;admin / gérant ou à un profil disposant de la permission fine de gestion utilisateurs.
++            Gestion minimale ALPHA du module utilisateurs : réinitialisation de mot de passe et rattachement à une base.
+           </p>
+         </div>
+ 
+         <Link href="/dashboard">Retour dashboard</Link>
+       </div>
+ 
++      <UserDepotAssignmentClient availableDepots={depots} />
+       <ResetPasswordClient actorUserId={user.id} />
+     </div>
+   );
+diff --git a/app/users/user-depot-assignment-client.tsx b/app/users/user-depot-assignment-client.tsx
+new file mode 100644
+index 0000000..ddb950c
+--- /dev/null
++++ b/app/users/user-depot-assignment-client.tsx
+@@ -0,0 +1,303 @@
++"use client";
++
++import { useEffect, useMemo, useState } from "react";
++
++type ApiOk<T> = {
++  ok: true;
++  data: T;
++};
++
++type ApiErr = {
++  ok: false;
++  error: string;
++  details?: unknown;
++};
++
++type DepotOption = {
++  id: string;
++  name: string;
++  isActive: boolean;
++};
++
++type UserLite = {
++  id: string;
++  name: string;
++  email: string | null;
++  role: string;
++  depotId: string | null;
++  depot: DepotOption | null;
++};
++
++function isApiOk<T>(value: unknown): value is ApiOk<T> {
++  return typeof value === "object" && value !== null && "ok" in value && (value as { ok?: unknown }).ok === true;
++}
++
++function isApiErr(value: unknown): value is ApiErr {
++  return typeof value === "object" && value !== null && "ok" in value && (value as { ok?: unknown }).ok === false;
++}
++
++function getDepotLabel(depot: DepotOption) {
++  return depot.isActive ? depot.name : `${depot.name} (archivé)`;
++}
++
++function buildInitialSelectedDepotIds(users: UserLite[]) {
++  return Object.fromEntries(users.map((user) => [user.id, user.depotId ?? ""]));
++}
++
++export default function UserDepotAssignmentClient({ availableDepots }: { availableDepots: DepotOption[] }) {
++  const [users, setUsers] = useState<UserLite[]>([]);
++  const [selectedUserId, setSelectedUserId] = useState("");
++  const [selectedDepotIds, setSelectedDepotIds] = useState<Record<string, string>>({});
++  const [loading, setLoading] = useState(true);
++  const [saving, setSaving] = useState(false);
++  const [error, setError] = useState<string | null>(null);
++  const [success, setSuccess] = useState<string | null>(null);
++
++  useEffect(() => {
++    let cancelled = false;
++
++    async function loadUsers() {
++      setLoading(true);
++      setError(null);
++
++      try {
++        const res = await fetch("/api/users?limit=500", { cache: "no-store" });
++        const json: unknown = await res.json();
++
++        if (!res.ok || !isApiOk<unknown[]>(json) || !Array.isArray(json.data)) {
++          const msg = isApiErr(json) ? json.error : `HTTP_${res.status}`;
++          throw new Error(msg);
++        }
++
++        const mapped = json.data
++          .map((item): UserLite | null => {
++            if (typeof item !== "object" || item === null) return null;
++
++            const record = item as Record<string, unknown>;
++            const id = typeof record.id === "string" ? record.id : null;
++            const name = typeof record.name === "string" ? record.name : null;
++            const email = typeof record.email === "string" ? record.email : null;
++            const role = typeof record.role === "string" ? record.role : null;
++            const depotId = typeof record.depotId === "string" ? record.depotId : null;
++            const depotRecord = typeof record.depot === "object" && record.depot !== null
++              ? (record.depot as Record<string, unknown>)
++              : null;
++            const depot = depotRecord
++              && typeof depotRecord.id === "string"
++              && typeof depotRecord.name === "string"
++              && typeof depotRecord.isActive === "boolean"
++              ? {
++                  id: depotRecord.id,
++                  name: depotRecord.name,
++                  isActive: depotRecord.isActive,
++                }
++              : null;
++
++            if (!id || !name || !role) return null;
++            return { id, name, email, role, depotId, depot };
++          })
++          .filter((item): item is UserLite => Boolean(item));
++
++        if (!cancelled) {
++          setUsers(mapped);
++          setSelectedDepotIds(buildInitialSelectedDepotIds(mapped));
++          setSelectedUserId((current) => {
++            if (current && mapped.some((user) => user.id === current)) return current;
++            return mapped[0]?.id ?? "";
++          });
++        }
++      } catch (e: unknown) {
++        if (!cancelled) {
++          setUsers([]);
++          setSelectedUserId("");
++          setSelectedDepotIds({});
++          setError(e instanceof Error ? e.message : "Unknown error");
++        }
++      } finally {
++        if (!cancelled) setLoading(false);
++      }
++    }
++
++    void loadUsers();
++
++    return () => {
++      cancelled = true;
++    };
++  }, []);
++
++  const selectedUser = useMemo(
++    () => users.find((user) => user.id === selectedUserId) ?? null,
++    [users, selectedUserId],
++  );
++
++  const depotOptions = useMemo(() => {
++    if (!selectedUser?.depot?.id) return availableDepots.filter((depot) => depot.isActive);
++    return availableDepots.filter((depot) => depot.isActive || depot.id === selectedUser.depot?.id);
++  }, [availableDepots, selectedUser]);
++
++  const hasPendingChange = selectedUser
++    ? (selectedDepotIds[selectedUser.id] ?? "") !== (selectedUser.depotId ?? "")
++    : false;
++
++  async function handleSave() {
++    if (!selectedUser) return;
++
++    setSaving(true);
++    setError(null);
++    setSuccess(null);
++
++    try {
++      const depotId = selectedDepotIds[selectedUser.id] || null;
++      const res = await fetch(`/api/users/${encodeURIComponent(selectedUser.id)}/depot`, {
++        method: "PATCH",
++        headers: { "Content-Type": "application/json" },
++        body: JSON.stringify({ depotId }),
++      });
++
++      const json: unknown = await res.json();
++
++      if (!res.ok || !isApiOk<unknown>(json)) {
++        const msg = isApiErr(json) ? json.error : `HTTP_${res.status}`;
++        throw new Error(msg);
++      }
++
++      const record = typeof json.data === "object" && json.data !== null ? (json.data as Record<string, unknown>) : null;
++      const nextDepot = record && typeof record.depot === "object" && record.depot !== null
++        ? (record.depot as Record<string, unknown>)
++        : null;
++      const updatedDepot = nextDepot
++        && typeof nextDepot.id === "string"
++        && typeof nextDepot.name === "string"
++        && typeof nextDepot.isActive === "boolean"
++        ? { id: nextDepot.id, name: nextDepot.name, isActive: nextDepot.isActive }
++        : null;
++      const updatedDepotId = record && typeof record.depotId === "string" ? record.depotId : null;
++
++      setUsers((prev) =>
++        prev.map((user) => (
++          user.id === selectedUser.id
++            ? {
++                ...user,
++                depotId: updatedDepotId,
++                depot: updatedDepot,
++              }
++            : user
++        )),
++      );
++      setSelectedDepotIds((prev) => ({
++        ...prev,
++        [selectedUser.id]: updatedDepotId ?? "",
++      }));
++      setSuccess(`Base enregistrée pour ${selectedUser.name}.`);
++    } catch (e: unknown) {
++      setError(e instanceof Error ? e.message : "Unknown error");
++    } finally {
++      setSaving(false);
++    }
++  }
++
++  return (
++    <div style={{ display: "grid", gap: 16, maxWidth: 720 }}>
++      <div style={{ padding: 12, border: "1px solid #333", borderRadius: 8 }}>
++        <h2 style={{ marginTop: 0 }}>Rattachement à une base</h2>
++        <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
++          Affectation minimale d&apos;un utilisateur à un dépôt unique de la société courante. L&apos;utilisateur peut aussi rester sans base.
++        </p>
++      </div>
++
++      <div style={{ display: "grid", gap: 12, padding: 12, border: "1px solid #333", borderRadius: 8 }}>
++        <label style={{ display: "grid", gap: 6 }}>
++          <span>Utilisateur cible</span>
++          <select
++            value={selectedUserId}
++            onChange={(e) => {
++              setSelectedUserId(e.target.value);
++              setError(null);
++              setSuccess(null);
++            }}
++            disabled={loading || users.length === 0 || saving}
++          >
++            {users.map((user) => (
++              <option key={user.id} value={user.id}>
++                {user.name} — {user.role}
++              </option>
++            ))}
++          </select>
++        </label>
++
++        {loading ? <p style={{ margin: 0 }}>Chargement des utilisateurs...</p> : null}
++
++        {!loading && users.length === 0 ? (
++          <div style={{ padding: 10, border: "1px solid #555", borderRadius: 8 }}>
++            Aucun utilisateur disponible dans la société courante.
++          </div>
++        ) : null}
++
++        {selectedUser ? (
++          <>
++            <div style={{ padding: 10, border: "1px solid #333", borderRadius: 8 }}>
++              <div>
++                <strong>{selectedUser.name}</strong>
++                {selectedUser.email ? ` (${selectedUser.email})` : ""} — rôle {selectedUser.role}
++              </div>
++              <div style={{ marginTop: 6, opacity: 0.8 }}>
++                Base actuelle : {selectedUser.depot ? getDepotLabel(selectedUser.depot) : "Aucune"}
++              </div>
++            </div>
++
++            <label style={{ display: "grid", gap: 6 }}>
++              <span>Nouvelle base</span>
++              <select
++                value={selectedDepotIds[selectedUser.id] ?? ""}
++                onChange={(e) => {
++                  const value = e.target.value;
++                  setSelectedDepotIds((prev) => ({
++                    ...prev,
++                    [selectedUser.id]: value,
++                  }));
++                  setError(null);
++                  setSuccess(null);
++                }}
++                disabled={saving}
++              >
++                <option value="">Aucune base</option>
++                {depotOptions.map((depot) => (
++                  <option key={depot.id} value={depot.id}>
++                    {getDepotLabel(depot)}
++                  </option>
++                ))}
++              </select>
++            </label>
++
++            {availableDepots.filter((depot) => depot.isActive).length === 0 ? (
++              <div style={{ padding: 10, border: "1px solid #555", borderRadius: 8 }}>
++                Aucun dépôt actif disponible pour rattacher un utilisateur.
++              </div>
++            ) : null}
++          </>
++        ) : null}
++
++        {error ? (
++          <div style={{ padding: 10, border: "1px solid #663333", borderRadius: 8 }}>
++            Erreur : {error}
++          </div>
++        ) : null}
++
++        {success ? (
++          <div style={{ padding: 10, border: "1px solid #335533", borderRadius: 8 }}>
++            {success}
++          </div>
++        ) : null}
++
++        <button
++          type="button"
++          onClick={() => void handleSave()}
++          disabled={loading || saving || !selectedUser || !hasPendingChange}
++          style={{ justifySelf: "start", padding: "10px 14px" }}
++        >
++          {saving ? "Enregistrement..." : "Enregistrer la base"}
++        </button>
++      </div>
++    </div>
++  );
++}
+diff --git a/lib/services/users/assign-user-depot.ts b/lib/services/users/assign-user-depot.ts
+new file mode 100644
+index 0000000..ae91315
+--- /dev/null
++++ b/lib/services/users/assign-user-depot.ts
+@@ -0,0 +1,88 @@
++import { prisma } from "@/lib/prisma";
++
++type AssignedUser = {
++  id: string;
++  name: string;
++  email: string;
++  role: string;
++  companyId: string;
++  depotId: string | null;
++  depot: {
++    id: string;
++    name: string;
++    isActive: boolean;
++  } | null;
++  createdAt: Date;
++  updatedAt: Date;
++};
++
++const userDepotSelect = {
++  id: true,
++  name: true,
++  email: true,
++  role: true,
++  companyId: true,
++  depotId: true,
++  depot: {
++    select: {
++      id: true,
++      name: true,
++      isActive: true,
++    },
++  },
++  createdAt: true,
++  updatedAt: true,
++} as const;
++
++export type AssignUserDepotInput = {
++  userId: string;
++  companyId: string;
++  depotId: string | null;
++};
++
++export type AssignUserDepotResult =
++  | { status: "USER_NOT_FOUND" }
++  | { status: "DEPOT_NOT_FOUND" }
++  | { status: "OK"; user: AssignedUser };
++
++async function findUserByTenant(userId: string, companyId: string) {
++  return prisma.user.findFirst({
++    where: {
++      id: userId,
++      companyId,
++    },
++    select: {
++      id: true,
++      companyId: true,
++    },
++  });
++}
++
++export async function assignUserDepot(input: AssignUserDepotInput): Promise<AssignUserDepotResult> {
++  const existingUser = await findUserByTenant(input.userId, input.companyId);
++  if (!existingUser) return { status: "USER_NOT_FOUND" };
++
++  if (input.depotId !== null) {
++    const depot = await prisma.depot.findFirst({
++      where: {
++        id: input.depotId,
++        companyId: input.companyId,
++        isActive: true,
++      },
++      select: {
++        id: true,
++        companyId: true,
++      },
++    });
++
++    if (!depot) return { status: "DEPOT_NOT_FOUND" };
++  }
++
++  const user = await prisma.user.update({
++    where: { id: existingUser.id },
++    data: { depotId: input.depotId },
++    select: userDepotSelect,
++  });
++
++  return { status: "OK", user };
++}
+diff --git a/lib/validators/user.ts b/lib/validators/user.ts
+new file mode 100644
+index 0000000..19866d2
+--- /dev/null
++++ b/lib/validators/user.ts
+@@ -0,0 +1,7 @@
++import { z } from "zod";
++
++export const assignUserDepotBodySchema = z
++  .object({
++    depotId: z.string().uuid().nullable(),
++  })
++  .strict();
+diff --git a/prisma/migrations/20260316203000_base08_attach_user_to_depot/migration.sql b/prisma/migrations/20260316203000_base08_attach_user_to_depot/migration.sql
+new file mode 100644
+index 0000000..71edb55
+--- /dev/null
++++ b/prisma/migrations/20260316203000_base08_attach_user_to_depot/migration.sql
+@@ -0,0 +1,11 @@
++-- BASE-08 — rattachement minimal d'un utilisateur à un dépôt
++ALTER TABLE "User"
++ADD COLUMN "depotId" UUID;
++
++-- CreateIndex
++CREATE INDEX "User_depotId_idx" ON "User"("depotId");
++
++-- AddForeignKey
++ALTER TABLE "User"
++ADD CONSTRAINT "User_depotId_fkey"
++FOREIGN KEY ("depotId") REFERENCES "Depot"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+diff --git a/prisma/schema.prisma b/prisma/schema.prisma
+index 9219c88..83cc0c9 100644
+--- a/prisma/schema.prisma
++++ b/prisma/schema.prisma
+@@ -134,6 +134,7 @@ model Depot {
+   updatedAt DateTime @updatedAt
+ 
+   vehicles Vehicle[]
++  users    User[]
+ 
+   @@unique([companyId, name])
+   @@index([companyId])
+@@ -148,6 +149,10 @@ model User {
+   role      Role // (on garde 1 rôle POUR L’INSTANT, multi-rôles ensuite)
+   companyId String   @db.Uuid
+   company   Company  @relation(fields: [companyId], references: [id])
++
++  depotId String? @db.Uuid
++  depot   Depot?  @relation(fields: [depotId], references: [id], onDelete: SetNull)
++
+   createdAt DateTime @default(now())
+   updatedAt DateTime @updatedAt
+ 
+@@ -173,6 +178,7 @@ model User {
+   planningAuditLogs PlanningAuditLog[] @relation("PlanningAuditLogActor")
+ 
+   @@index([companyId])
++  @@index([depotId])
+ }
+ 
+ model Permission {

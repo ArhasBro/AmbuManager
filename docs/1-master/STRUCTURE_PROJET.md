@@ -1489,6 +1489,17 @@ C:.
 |   |   |   |   |   |       server-reference-manifest.json
 |   |   |   |   |   |       
 |   |   |   |   |   \---[id]
+|   |   |   |   |       +---depot
+|   |   |   |   |       |   |   route.js
+|   |   |   |   |       |   |   route.js.map
+|   |   |   |   |       |   |   route.js.nft.json
+|   |   |   |   |       |   |   route_client-reference-manifest.js
+|   |   |   |   |       |   |   
+|   |   |   |   |       |   \---route
+|   |   |   |   |       |           app-paths-manifest.json
+|   |   |   |   |       |           build-manifest.json
+|   |   |   |   |       |           server-reference-manifest.json
+|   |   |   |   |       |           
 |   |   |   |   |       \---reset-password
 |   |   |   |   |           |   route.js
 |   |   |   |   |           |   route.js.map
@@ -1729,6 +1740,8 @@ C:.
 |   |   |   |   [root-of-the-server]__88924fbd._.js.map
 |   |   |   |   [root-of-the-server]__c3997a41._.js
 |   |   |   |   [root-of-the-server]__c3997a41._.js.map
+|   |   |   |   [root-of-the-server]__d2c6e75d._.js
+|   |   |   |   [root-of-the-server]__d2c6e75d._.js.map
 |   |   |   |   [root-of-the-server]__d810e8d1._.js
 |   |   |   |   [root-of-the-server]__d810e8d1._.js.map
 |   |   |   |   [root-of-the-server]__e6c5e537._.js
@@ -1785,6 +1798,8 @@ C:.
 |   |   |   |   _next-internal_server_app_api_planning_shifts_[id]_assign_route_actions_75edfcab.js.map
 |   |   |   |   _next-internal_server_app_api_users_route_actions_4b9121e3.js
 |   |   |   |   _next-internal_server_app_api_users_route_actions_4b9121e3.js.map
+|   |   |   |   _next-internal_server_app_api_users_[id]_depot_route_actions_75bb32be.js
+|   |   |   |   _next-internal_server_app_api_users_[id]_depot_route_actions_75bb32be.js.map
 |   |   |   |   _next-internal_server_app_api_users_[id]_reset-password_route_actions_d12d905c.js
 |   |   |   |   _next-internal_server_app_api_users_[id]_reset-password_route_actions_d12d905c.js.map
 |   |   |   |   _next-internal_server_app_api_vehicles_route_actions_7bc5da8c.js
@@ -1837,14 +1852,14 @@ C:.
 |   |   |           [root-of-the-server]__3e4277b6._.js.map
 |   |   |           [root-of-the-server]__5218791f._.js
 |   |   |           [root-of-the-server]__5218791f._.js.map
+|   |   |           [root-of-the-server]__583f1383._.js
+|   |   |           [root-of-the-server]__583f1383._.js.map
 |   |   |           [root-of-the-server]__84823185._.js
 |   |   |           [root-of-the-server]__84823185._.js.map
 |   |   |           [root-of-the-server]__8731afda._.js
 |   |   |           [root-of-the-server]__8731afda._.js.map
 |   |   |           [root-of-the-server]__87883845._.js
 |   |   |           [root-of-the-server]__87883845._.js.map
-|   |   |           [root-of-the-server]__9aa3e15e._.js
-|   |   |           [root-of-the-server]__9aa3e15e._.js.map
 |   |   |           [root-of-the-server]__9d5e3ced._.js
 |   |   |           [root-of-the-server]__9d5e3ced._.js.map
 |   |   |           [root-of-the-server]__a457c799._.js
@@ -1863,8 +1878,6 @@ C:.
 |   |   |           [root-of-the-server]__e1b2e646._.js.map
 |   |   |           [turbopack]_runtime.js
 |   |   |           [turbopack]_runtime.js.map
-|   |   |           _05e07409._.js
-|   |   |           _05e07409._.js.map
 |   |   |           _27f38564._.js
 |   |   |           _27f38564._.js.map
 |   |   |           _2c715f22._.js
@@ -1873,6 +1886,8 @@ C:.
 |   |   |           _30e06fe7._.js.map
 |   |   |           _5516c59e._.js
 |   |   |           _5516c59e._.js.map
+|   |   |           _5b6cb8df._.js
+|   |   |           _5b6cb8df._.js.map
 |   |   |           _5c5d5a9d._.js
 |   |   |           _5c5d5a9d._.js.map
 |   |   |           _5f02a5a9._.js
@@ -1934,15 +1949,15 @@ C:.
 |   |   |       96a8fcc9ec5b00e6.js
 |   |   |       a6dad97d9634a72d.js
 |   |   |       a6dad97d9634a72d.js.map
-|   |   |       ae064a76748670f1.js
 |   |   |       af7027598a07baa5.js
 |   |   |       b870288de7d3931e.js
+|   |   |       c1a988e9a3e1a928.js
 |   |   |       cc07a3e87a46bf5e.js
 |   |   |       cdb83a758231f045.js
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
 |   |   |       
-|   |   +---EkqUqDInuhAufe0LypINo
+|   |   +---em645yQU0x4u-qw1uJcwY
 |   |   |       _buildManifest.js
 |   |   |       _clientMiddlewareManifest.json
 |   |   |       _ssgManifest.js
@@ -2026,6 +2041,9 @@ C:.
 |   |   |   |   route.ts
 |   |   |   |   
 |   |   |   \---[id]
+|   |   |       +---depot
+|   |   |       |       route.ts
+|   |   |       |       
 |   |   |       \---reset-password
 |   |   |               route.ts
 |   |   |               
@@ -2054,6 +2072,7 @@ C:.
 |   +---users
 |   |       page.tsx
 |   |       reset-password-client.tsx
+|   |       user-depot-assignment-client.tsx
 |   |       
 |   \---vehicles
 |           add-vehicle-form.tsx
@@ -2347,7 +2366,14 @@ C:.
 |   |   |       |           RESULTATS.md
 |   |   |       |           SESSION.md
 |   |   |       |           
-|   |   |       \---3-SUP
+|   |   |       +---3-SUP
+|   |   |       \---SESSION-20260316-10_A2_BASE-09
+|   |   |               EVIDENCES.md
+|   |   |               FIN_SESSION.md
+|   |   |               NOTES.md
+|   |   |               RESULTATS.md
+|   |   |               SESSION.md
+|   |   |               
 |   |   \---SESSION-YYYYMMDD-XX
 |   |           EVIDENCES.md
 |   |           FIN_SESSION.md
@@ -2502,9 +2528,13 @@ C:.
 |   |           |   |       README_PATCH.md
 |   |           |   |       
 |   |           |   \---SESSION-20260316-09_A2_BASE-08
+|   |           |           BASE-08.diff
 |   |           |           README_PATCH.md
 |   |           |           
-|   |           \---3-SUP
+|   |           +---3-SUP
+|   |           \---SESSION-20260316-10_A2_BASE-09
+|   |                   README_PATCH.md
+|   |                   
 |   +---4-templates
 |   |       TEMPLATE_DEBUT_SESSION.md
 |   |       TEMPLATE_DOD_4_4.md
@@ -2532,13 +2562,16 @@ C:.
 |   |   |       create-depot.ts
 |   |   |       update-depot.ts
 |   |   |       
-|   |   \---planning
-|   |           assign-draftshift.ts
-|   |           assign-shift.ts
-|   |           autoschedule-match.ts
-|   |           matching-quality.ts
-|   |           matching.service.ts
-|   |           planning-audit.ts
+|   |   +---planning
+|   |   |       assign-draftshift.ts
+|   |   |       assign-shift.ts
+|   |   |       autoschedule-match.ts
+|   |   |       matching-quality.ts
+|   |   |       matching.service.ts
+|   |   |       planning-audit.ts
+|   |   |       
+|   |   \---users
+|   |           assign-user-depot.ts
 |   |           
 |   +---types
 |   |       planning.ts
@@ -2547,6 +2580,7 @@ C:.
 |           company-profile.ts
 |           depot.ts
 |           planning-assign.ts
+|           user.ts
 |           vehicle.ts
 |           
 +---node_modules
@@ -38790,7 +38824,10 @@ C:.
 |       +---20260314143000_org02_company_profile
 |       |       migration.sql
 |       |       
-|       \---20260316153000_base02_create_depot_model
+|       +---20260316153000_base02_create_depot_model
+|       |       migration.sql
+|       |       
+|       \---20260316203000_base08_attach_user_to_depot
 |               migration.sql
 |               
 +---public
