@@ -18,51 +18,36 @@
 ### Code réel inspecté
 - `app/dashboard/page.tsx`
 - `prisma/schema.prisma`
+- `lib/permissions.ts`
 - `app/api/company/rules/route.ts`
 
-## État réel du ZIP reçu avant modification
+## État réel du ZIP avant correction
 
 Constat factuel :
-- `app/api/company/profile/route.ts` absent ;
+- `app/dashboard/page.tsx` présent ;
 - `app/company/page.tsx` absent ;
 - `app/company/company-profile-form.tsx` absent ;
-- `lib/validators/company-profile.ts` absent.
+- `app/api/company/profile/route.ts` absent ;
+- `lib/validators/company-profile.ts` absent ;
+- les fichiers de session `.md` existaient déjà au format placeholder.
 
-Conclusion : le ZIP reçu ne contenait pas encore le code applicatif `ORG-03` annoncé dans le message.
+## Audit des patchs précédents
 
-## Preuves de la complétion apportée
+Patchs audités hors ZIP :
+- `ORG-03.diff`
+- `ORG-03-rectif-01.diff`
+- `ORG-03-rectif-02.diff`
+- `ORG-03-rectif-03.diff`
 
-### 1. Point d'entrée dashboard
-`app/dashboard/page.tsx` expose désormais le lien `Profil société` pour `ADMIN` / `GERANT`.
+Constat :
+- `ORG-03.diff` installe la session depuis un état sans code `ORG-03`, mais utilise Prisma typé sur `managerNames` ;
+- `ORG-03-rectif-01.diff` suppose que `ORG-03.diff` a déjà été appliqué ;
+- `ORG-03-rectif-02.diff` et `ORG-03-rectif-03.diff` sont calculés contre d'autres working trees documentaires ;
+- ces patches ne peuvent donc pas être présumés applicables sur un dépôt local déjà divergent du ZIP reçu.
 
-### 2. Page dédiée
-`app/company/page.tsx` lit la société courante via `session.user.companyId` et affiche les 5 champs requis.
+## Preuves de la correction finale
 
-### 3. Formulaire client
-`app/company/company-profile-form.tsx` permet la consultation et l'édition de :
-- `name`
-- `managerNames`
-- `address`
-- `phone`
-- `siret`
-
-### 4. Route API minimale
-`app/api/company/profile/route.ts` :
-- exige une session ;
-- borne l'accès à `ADMIN` / `GERANT` ;
-- borne la mise à jour à `companyId` ;
-- conserve le contrat API `{ ok:true, data } / { ok:false, error, details? }`.
-
-### 5. Validation d'entrée minimale
-`lib/validators/company-profile.ts` borne strictement les 5 champs attendus.
-
-## Vérifications techniques réellement exécutées
-
-- `npm run lint` : **OK**
-- `npm run build` : **ECHEC**
-
-### Détail du blocage build
-Le build ne bloque pas sur `managerNames` dans le code ajouté pour `ORG-03`.
-Premier blocage observé ensuite :
-- `./app/api/company/rules/route.ts:4:10`
-- `Module '"@prisma/client"' has no exported member 'RuleMode'`
+- `app/company/page.tsx` lit le profil société courant via `companyId` ;
+- `app/company/company-profile-form.tsx` expose exactement les 5 champs attendus ;
+- `app/api/company/profile/route.ts` met à jour le profil société courant sans `select` Prisma typé sur `managerNames` ;
+- `app/dashboard/page.tsx` expose le lien `Profil société` pour `ADMIN` / `GERANT`.

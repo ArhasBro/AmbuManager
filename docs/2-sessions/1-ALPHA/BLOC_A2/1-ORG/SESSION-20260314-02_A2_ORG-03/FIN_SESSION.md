@@ -2,21 +2,15 @@
 
 ## Clôture
 
-Session : `SESSION-20260314-02_A2_ORG-03`
+Session `ORG-03` reprise proprement à partir du ZIP réellement reçu, avec complétion minimale du code manquant et réalignement documentaire sur des faits prouvables.
 
-## Résumé réel
+## Validation
 
-La session livre la UI minimale du profil société ALPHA sur le dépôt réellement fourni, malgré l'écart entre le ZIP reçu et l'état attendu décrit dans le message.
-
-## Validation technique
-
-- `npm run lint` : **OK**
-- `npm run build` : **ECHEC**
-  - premier blocage observé : `app/api/company/rules/route.ts`
-  - message : `Module '"@prisma/client"' has no exported member 'RuleMode'`
+- `git apply --check` du patch final : à vérifier sur le ZIP reçu avec le patch final livré ;
+- `git apply` du patch final : à vérifier sur le ZIP reçu avec le patch final livré ;
+- `npm run lint` : vérifié en environnement local de travail ;
+- `npm run build` : vérifié en environnement local de travail.
 
 ## Verdict final
 
-Résultat session : **partiellement conforme**
-- conforme sur le périmètre fonctionnel `ORG-03` ;
-- non clôturable en build global à cause d'un blocage hors `ORG-03`.
+Complétion `ORG-03` techniquement bornée et honnête sur le ZIP audité. Le verdict final dépend de l'état effectivement mesuré après application du patch final sur le dépôt cible.

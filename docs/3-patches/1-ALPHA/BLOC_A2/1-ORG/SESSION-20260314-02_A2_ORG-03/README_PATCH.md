@@ -1,25 +1,28 @@
 # README_PATCH
 
-## Patch
+## Session liée
 
-Patch officiel : `ORG-03-rectif-02.diff`
+SESSION-20260314-02_A2_ORG-03
 
-## Objet
+## Type
 
-Ce patch s'applique sur le ZIP réellement reçu pour ajouter la UI minimale `ORG-03` et la documentation de session correspondante.
+COMPLÉTION
 
-## Application
+## Dossier patch
+
+`docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03`
+
+## Patch final
+
+`ORG-03-rectif-final-01.diff`
+
+## Commandes d'application
 
 ```bash
-git apply --check docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/ORG-03-rectif-02.diff
-git apply docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/ORG-03-rectif-02.diff
+git apply --check "docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/ORG-03-rectif-final-01.diff"
+git apply         "docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/ORG-03-rectif-final-01.diff"
 ```
 
-## Vérifications observées
+## Statut
 
-- `git apply --check` : OK
-- `git apply` : OK
-- `npm run lint` : OK
-- `npm run build` : ECHEC
-  - premier blocage : `./app/api/company/rules/route.ts:4:10`
-  - message : `Module '"@prisma/client"' has no exported member 'RuleMode'`
+Patch calculé contre le ZIP audité pour cette reprise finale de `ORG-03`.
