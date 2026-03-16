@@ -113,8 +113,29 @@ model Company {
   // ✅ 4.2 — Planning final
   shifts Shift[]
 
+  // ✅ A2 BASE-02 — Bases / dépôts (data)
+  depots Depot[]
+
   // ✅ 4.7 — Audit planning minimal
   planningAuditLogs PlanningAuditLog[]
+}
+
+model Depot {
+  id String @id @default(uuid()) @db.Uuid
+
+  companyId String  @db.Uuid
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  name     String
+  address  String?
+  isActive Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([companyId, name])
+  @@index([companyId])
+  @@index([companyId, isActive])
 }
 
 model User {

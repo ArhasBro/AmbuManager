@@ -60,7 +60,20 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260316-03_A2_BASE-02
-- BASE-02 — COMPLÉTION** — Création du modèle base/dépôt
+- SESSION-20260316-04_A2_BASE-03
+- BASE-03 — COMPLÉTION** — API création base/dépôt
 
 sortie propre + retour du terminal + aucune erreur = validé
+
+Voici sa réponse ainsi que les documents généré : 
+
+
+
+Je vais intégrer le .diff et je te renvoi le retour teminal de :
+git apply --check ".\"
+git apply ".\"
+npm run lint
+npm run build
+
+Attend le retour du terminal avant de me répondre.
+Si il y a d'autre cmd a faire n'hésite pas a me dire.

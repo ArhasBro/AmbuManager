@@ -1878,7 +1878,7 @@ C:.
 |   |   +---media
 |   |   |       favicon.0b3bf435.ico
 |   |   |       
-|   |   \---sQbOfyJb_BBHN2i5mZqvW
+|   |   \---XDcKvt0MHW3_WMRlcofst
 |   |           _buildManifest.js
 |   |           _clientMiddlewareManifest.json
 |   |           _ssgManifest.js
@@ -2218,7 +2218,14 @@ C:.
 |   |   |       |   |       RESULTATS.md
 |   |   |       |   |       SESSION.md
 |   |   |       |   |       
-|   |   |       |   \---SESSION-20260316-03_A2_BASE-02
+|   |   |       |   +---SESSION-20260316-03_A2_BASE-02
+|   |   |       |   |       EVIDENCES.md
+|   |   |       |   |       FIN_SESSION.md
+|   |   |       |   |       NOTES.md
+|   |   |       |   |       RESULTATS.md
+|   |   |       |   |       SESSION.md
+|   |   |       |   |       
+|   |   |       |   \---SESSION-20260316-04_A2_BASE-03
 |   |   |       |           EVIDENCES.md
 |   |   |       |           FIN_SESSION.md
 |   |   |       |           NOTES.md
@@ -2349,7 +2356,11 @@ C:.
 |   |           |   +---SESSION-20260316-02_A2_BASE-01
 |   |           |   |       NO_PATCH.md
 |   |           |   |       
-|   |           |   \---SESSION-20260316-03_A2_BASE-02
+|   |           |   +---SESSION-20260316-03_A2_BASE-02
+|   |           |   |       BASE-02.diff
+|   |           |   |       README_PATCH.md
+|   |           |   |       
+|   |           |   \---SESSION-20260316-04_A2_BASE-03
 |   |           |           README_PATCH.md
 |   |           |           
 |   |           \---3-SUP
@@ -38629,7 +38640,10 @@ C:.
 |       +---20260313120000_rename_role_dea_to_ade
 |       |       migration.sql
 |       |       
-|       \---20260314143000_org02_company_profile
+|       +---20260314143000_org02_company_profile
+|       |       migration.sql
+|       |       
+|       \---20260316153000_base02_create_depot_model
 |               migration.sql
 |               
 +---public
