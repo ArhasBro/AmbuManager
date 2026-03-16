@@ -10,6 +10,7 @@ Date : 09/03/2026
 - [4. Architecture technique cible](#4-architecture-technique-cible)
 - [5. Stack technologique](#5-stack-technologique)
 - [6. Modélisation des données (Prisma)](#6-modélisation-des-données-prisma)
+- [6.1 Règle Prisma Client](#61-règle-prisma-client)
 - [7. Conventions API (format unique)](#7-conventions-api-format-unique)
 - [8. Modules fonctionnels (périmètre)](#8-modules-fonctionnels-périmètre)
 - [9. Roadmap technique 4.4 → 5.0](#9-roadmap-technique-44--50)
@@ -74,6 +75,22 @@ Socle technique actuel du projet :
 ## 6. Modélisation des données (Prisma)
 Le modèle Prisma constitue la référence de structure côté données.  
 La logique métier observée dans le code et les documents validés prime sur toute hypothèse non prouvée.
+
+
+### 6.1 Règle Prisma Client
+Toute session introduisant un nouveau modèle Prisma ou utilisant un modèle nouvellement ajouté doit inclure dans la vérification terminale :
+
+```bash
+npx prisma validate
+npx prisma generate
+npm run lint
+npm run build
+```
+
+Cela permet d’éviter les erreurs TypeScript du type :
+
+`Property 'model' does not exist on type PrismaClient`
+
 
 ## 7. Conventions API (format unique)
 Format attendu :

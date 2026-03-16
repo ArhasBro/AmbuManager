@@ -1308,6 +1308,17 @@ C:.
 |   |   |   |   |               build-manifest.json
 |   |   |   |   |               server-reference-manifest.json
 |   |   |   |   |               
+|   |   |   |   +---depots
+|   |   |   |   |   |   route.js
+|   |   |   |   |   |   route.js.map
+|   |   |   |   |   |   route.js.nft.json
+|   |   |   |   |   |   route_client-reference-manifest.js
+|   |   |   |   |   |   
+|   |   |   |   |   \---route
+|   |   |   |   |           app-paths-manifest.json
+|   |   |   |   |           build-manifest.json
+|   |   |   |   |           server-reference-manifest.json
+|   |   |   |   |           
 |   |   |   |   +---health
 |   |   |   |   |   \---prisma
 |   |   |   |   |       |   route.js
@@ -1675,6 +1686,8 @@ C:.
 |   |   |   |   [root-of-the-server]__5e792a0f._.js.map
 |   |   |   |   [root-of-the-server]__6e7a5963._.js
 |   |   |   |   [root-of-the-server]__6e7a5963._.js.map
+|   |   |   |   [root-of-the-server]__726cff5e._.js
+|   |   |   |   [root-of-the-server]__726cff5e._.js.map
 |   |   |   |   [root-of-the-server]__80597b5e._.js
 |   |   |   |   [root-of-the-server]__80597b5e._.js.map
 |   |   |   |   [root-of-the-server]__88924fbd._.js
@@ -1713,6 +1726,8 @@ C:.
 |   |   |   |   _next-internal_server_app_api_company_profile_route_actions_9bff62e4.js.map
 |   |   |   |   _next-internal_server_app_api_company_rules_route_actions_774d72f1.js
 |   |   |   |   _next-internal_server_app_api_company_rules_route_actions_774d72f1.js.map
+|   |   |   |   _next-internal_server_app_api_depots_route_actions_15f1d8d0.js
+|   |   |   |   _next-internal_server_app_api_depots_route_actions_15f1d8d0.js.map
 |   |   |   |   _next-internal_server_app_api_health_prisma_route_actions_c9f47495.js
 |   |   |   |   _next-internal_server_app_api_health_prisma_route_actions_c9f47495.js.map
 |   |   |   |   _next-internal_server_app_api_planning_autoschedule_day_route_actions_970e369e.js
@@ -1875,13 +1890,13 @@ C:.
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
 |   |   |       
-|   |   +---media
-|   |   |       favicon.0b3bf435.ico
+|   |   +---M-D5cOvcCSFXB-OA7NXCF
+|   |   |       _buildManifest.js
+|   |   |       _clientMiddlewareManifest.json
+|   |   |       _ssgManifest.js
 |   |   |       
-|   |   \---XDcKvt0MHW3_WMRlcofst
-|   |           _buildManifest.js
-|   |           _clientMiddlewareManifest.json
-|   |           _ssgManifest.js
+|   |   \---media
+|   |           favicon.0b3bf435.ico
 |   |           
 |   \---types
 |           routes.d.ts
@@ -1906,6 +1921,9 @@ C:.
 |   |   |   \---rules
 |   |   |           route.ts
 |   |   |           
+|   |   +---depots
+|   |   |       route.ts
+|   |   |       
 |   |   +---health
 |   |   |   \---prisma
 |   |   |           route.ts
@@ -2225,7 +2243,14 @@ C:.
 |   |   |       |   |       RESULTATS.md
 |   |   |       |   |       SESSION.md
 |   |   |       |   |       
-|   |   |       |   \---SESSION-20260316-04_A2_BASE-03
+|   |   |       |   +---SESSION-20260316-04_A2_BASE-03
+|   |   |       |   |       EVIDENCES.md
+|   |   |       |   |       FIN_SESSION.md
+|   |   |       |   |       NOTES.md
+|   |   |       |   |       RESULTATS.md
+|   |   |       |   |       SESSION.md
+|   |   |       |   |       
+|   |   |       |   \---SESSION-20260316-05_A2_BASE-04
 |   |   |       |           EVIDENCES.md
 |   |   |       |           FIN_SESSION.md
 |   |   |       |           NOTES.md
@@ -2360,7 +2385,11 @@ C:.
 |   |           |   |       BASE-02.diff
 |   |           |   |       README_PATCH.md
 |   |           |   |       
-|   |           |   \---SESSION-20260316-04_A2_BASE-03
+|   |           |   +---SESSION-20260316-04_A2_BASE-03
+|   |           |   |       BASE-03.diff
+|   |           |   |       README_PATCH.md
+|   |           |   |       
+|   |           |   \---SESSION-20260316-05_A2_BASE-04
 |   |           |           README_PATCH.md
 |   |           |           
 |   |           \---3-SUP
@@ -2386,6 +2415,9 @@ C:.
 |   |       response.ts
 |   |       
 |   +---services
+|   |   +---depots
+|   |   |       create-depot.ts
+|   |   |       
 |   |   \---planning
 |   |           assign-draftshift.ts
 |   |           assign-shift.ts
@@ -2399,6 +2431,7 @@ C:.
 |   |       
 |   \---validators
 |           company-profile.ts
+|           depot.ts
 |           planning-assign.ts
 |           vehicle.ts
 |           

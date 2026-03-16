@@ -1,14 +1,32 @@
-﻿# FIN_SESSION
+# FIN_SESSION
 
-## ClÃ´ture
+## Clôture
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+SESSION VALIDÉE
 
-## Validation
+BASE-03 conforme.
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+API `POST /api/depots` opérationnelle  
+RBAC `ADMIN` / `GERANT`  
+validation Zod stricte  
+multi-tenant borné par `session.user.companyId`
+
+Aucun débordement hors périmètre `BASE-03`.
+
+## Validation terminale réelle
+
+- `npx prisma validate` : OK
+- `npx prisma generate` : OK
+- `npm run lint` : OK
+- `npm run build` : OK
+
+Route détectée dans le build :
+- `ƒ /api/depots`
 
 ## Verdict final
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+`conforme`
 
+## Prochaine étape logique
+
+`BASE-04 — COMPLÉTION — API modification base/dépôt`

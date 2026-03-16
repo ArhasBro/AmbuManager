@@ -1,0 +1,51 @@
+import { getServerSession } from "next-auth/next";
+
+import { authOptions } from "@/lib/auth";
+import { badRequest, conflict, forbidden, ok, serverError, unauthorized } from "@/lib/api/response";
+import { prismaToHttp } from "@/lib/api/prisma-error";
+import { requireRole } from "@/lib/rbac";
+import { serializeDates } from "@/lib/serializers";
+import { createDepot } from "@/lib/services/depots/create-depot";
+import { createDepotBodySchema } from "@/lib/validators/depot";
+
+const ALLOWED_ROLES = ["ADMIN", "GERANT"];
+
+function getErrorMessage(e: unknown): string {
+  if (e instanceof Error) return e.message;
+  if (typeof e === "string") return e;
+  try {
+    return JSON.stringify(e);
+  } catch {
+    return "Unknown error";
+  }
+}
+
+export async function POST(req: Request) {
+  const session = await getServerSession(authOptions);
+  const companyId = session?.user?.companyId;
+  const role = session?.user?.role;
+
+  if (!companyId) return unauthorized();
+  if (!requireRole(role, ALLOWED_ROLES)) return forbidden();
+
+  const jsonBody: unknown = await req.json().catch(() => null);
+  const parsed = createDepotBodySchema.safeParse(jsonBody);
+  if (!parsed.success) return badRequest("VALIDATION_ERROR", parsed.error.flatten());
+
+  try {
+    const depot = await createDepot({
+      companyId,
+      name: parsed.data.name,
+      address: parsed.data.address,
+    });
+
+    return ok(serializeDates(depot), 201);
+  } catch (e: unknown) {
+    const mapped = prismaToHttp(e);
+    if (mapped?.status === 409) {
+      return conflict(mapped.error, { message: "Un dépôt portant ce nom existe déjà dans cette société." });
+    }
+
+    return serverError(mapped ?? getErrorMessage(e));
+  }
+}

@@ -1,0 +1,119 @@
+diff --git a/app/api/depots/route.ts b/app/api/depots/route.ts
+new file mode 100644
+index 0000000..c04a187
+--- /dev/null
++++ b/app/api/depots/route.ts
+@@ -0,0 +1,51 @@
++import { getServerSession } from "next-auth/next";
++
++import { authOptions } from "@/lib/auth";
++import { badRequest, conflict, forbidden, ok, serverError, unauthorized } from "@/lib/api/response";
++import { prismaToHttp } from "@/lib/api/prisma-error";
++import { requireRole } from "@/lib/rbac";
++import { serializeDates } from "@/lib/serializers";
++import { createDepot } from "@/lib/services/depots/create-depot";
++import { createDepotBodySchema } from "@/lib/validators/depot";
++
++const ALLOWED_ROLES = ["ADMIN", "GERANT"];
++
++function getErrorMessage(e: unknown): string {
++  if (e instanceof Error) return e.message;
++  if (typeof e === "string") return e;
++  try {
++    return JSON.stringify(e);
++  } catch {
++    return "Unknown error";
++  }
++}
++
++export async function POST(req: Request) {
++  const session = await getServerSession(authOptions);
++  const companyId = session?.user?.companyId;
++  const role = session?.user?.role;
++
++  if (!companyId) return unauthorized();
++  if (!requireRole(role, ALLOWED_ROLES)) return forbidden();
++
++  const jsonBody: unknown = await req.json().catch(() => null);
++  const parsed = createDepotBodySchema.safeParse(jsonBody);
++  if (!parsed.success) return badRequest("VALIDATION_ERROR", parsed.error.flatten());
++
++  try {
++    const depot = await createDepot({
++      companyId,
++      name: parsed.data.name,
++      address: parsed.data.address,
++    });
++
++    return ok(serializeDates(depot), 201);
++  } catch (e: unknown) {
++    const mapped = prismaToHttp(e);
++    if (mapped?.status === 409) {
++      return conflict(mapped.error, { message: "Un dépôt portant ce nom existe déjà dans cette société." });
++    }
++
++    return serverError(mapped ?? getErrorMessage(e));
++  }
++}
+
+diff --git a/lib/services/depots/create-depot.ts b/lib/services/depots/create-depot.ts
+new file mode 100644
+index 0000000..76bd11f
+--- /dev/null
++++ b/lib/services/depots/create-depot.ts
+@@ -0,0 +1,26 @@
++import { prisma } from "@/lib/prisma";
++
++export type CreateDepotInput = {
++  companyId: string;
++  name: string;
++  address: string | null;
++};
++
++export async function createDepot(input: CreateDepotInput) {
++  return prisma.depot.create({
++    data: {
++      companyId: input.companyId,
++      name: input.name,
++      address: input.address,
++    },
++    select: {
++      id: true,
++      companyId: true,
++      name: true,
++      address: true,
++      isActive: true,
++      createdAt: true,
++      updatedAt: true,
++    },
++  });
++}
+
+diff --git a/lib/validators/depot.ts b/lib/validators/depot.ts
+new file mode 100644
+index 0000000..e2a3df4
+--- /dev/null
++++ b/lib/validators/depot.ts
+@@ -0,0 +1,21 @@
++import { z } from "zod";
++
++export const createDepotBodySchema = z
++  .object({
++    name: z
++      .string()
++      .trim()
++      .min(1, "name required")
++      .max(160, "name too long"),
++    address: z
++      .string()
++      .trim()
++      .max(255, "address too long")
++      .optional()
++      .nullable()
++      .transform((value) => {
++        if (typeof value !== "string") return null;
++        return value.length > 0 ? value : null;
++      }),
++  })
++  .strict();
+
