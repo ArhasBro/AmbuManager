@@ -308,6 +308,36 @@ C:.
 |   |   |               00000390.meta
 |   |   |               00000391.meta
 |   |   |               00000392.meta
+|   |   |               00000393.sst
+|   |   |               00000394.sst
+|   |   |               00000395.sst
+|   |   |               00000396.sst
+|   |   |               00000397.sst
+|   |   |               00000398.meta
+|   |   |               00000399.meta
+|   |   |               00000400.meta
+|   |   |               00000401.meta
+|   |   |               00000402.meta
+|   |   |               00000403.sst
+|   |   |               00000404.sst
+|   |   |               00000405.sst
+|   |   |               00000406.sst
+|   |   |               00000407.sst
+|   |   |               00000408.meta
+|   |   |               00000409.meta
+|   |   |               00000410.meta
+|   |   |               00000411.meta
+|   |   |               00000412.meta
+|   |   |               00000413.sst
+|   |   |               00000414.sst
+|   |   |               00000415.sst
+|   |   |               00000416.sst
+|   |   |               00000417.sst
+|   |   |               00000418.meta
+|   |   |               00000419.meta
+|   |   |               00000420.meta
+|   |   |               00000421.meta
+|   |   |               00000422.meta
 |   |   |               CURRENT
 |   |   |               LOG
 |   |   |               
@@ -642,6 +672,18 @@ C:.
 |   |   |   |   |               build-manifest.json
 |   |   |   |   |               server-reference-manifest.json
 |   |   |   |   |               
+|   |   |   |   +---company
+|   |   |   |   |   |   page.js
+|   |   |   |   |   |   page.js.map
+|   |   |   |   |   |   page_client-reference-manifest.js
+|   |   |   |   |   |   
+|   |   |   |   |   \---page
+|   |   |   |   |           app-paths-manifest.json
+|   |   |   |   |           build-manifest.json
+|   |   |   |   |           next-font-manifest.json
+|   |   |   |   |           react-loadable-manifest.json
+|   |   |   |   |           server-reference-manifest.json
+|   |   |   |   |           
 |   |   |   |   +---dashboard
 |   |   |   |   |   |   page.js
 |   |   |   |   |   |   page.js.map
@@ -826,6 +868,8 @@ C:.
 |   |   |   |   \---ssr
 |   |   |   |           app_b9b1292a._.js
 |   |   |   |           app_b9b1292a._.js.map
+|   |   |   |           app_company_company-profile-form_tsx_87216146._.js
+|   |   |   |           app_company_company-profile-form_tsx_87216146._.js.map
 |   |   |   |           app_dashboard_logout-button_tsx_efb5e489._.js
 |   |   |   |           app_dashboard_logout-button_tsx_efb5e489._.js.map
 |   |   |   |           app_planning_planning-client_tsx_ec2e83fd._.js
@@ -846,6 +890,8 @@ C:.
 |   |   |   |           node_modules_next-auth_0305d6f4._.js.map
 |   |   |   |           node_modules_next_085844e9._.js
 |   |   |   |           node_modules_next_085844e9._.js.map
+|   |   |   |           node_modules_next_2f9fc03c._.js
+|   |   |   |           node_modules_next_2f9fc03c._.js.map
 |   |   |   |           node_modules_next_693d4d37._.js
 |   |   |   |           node_modules_next_693d4d37._.js.map
 |   |   |   |           node_modules_next_89900bf3._.js
@@ -898,6 +944,8 @@ C:.
 |   |   |   |           [root-of-the-server]__66f4477e._.js.map
 |   |   |   |           [root-of-the-server]__76415c59._.js
 |   |   |   |           [root-of-the-server]__76415c59._.js.map
+|   |   |   |           [root-of-the-server]__8706a357._.js
+|   |   |   |           [root-of-the-server]__8706a357._.js.map
 |   |   |   |           [root-of-the-server]__8e0ab4e7._.js
 |   |   |   |           [root-of-the-server]__8e0ab4e7._.js.map
 |   |   |   |           [root-of-the-server]__a6219db3._.js
@@ -914,6 +962,8 @@ C:.
 |   |   |   |           [turbopack]_runtime.js.map
 |   |   |   |           _52875ac4._.js
 |   |   |   |           _52875ac4._.js.map
+|   |   |   |           _next-internal_server_app_company_page_actions_ca33e7ac.js
+|   |   |   |           _next-internal_server_app_company_page_actions_ca33e7ac.js.map
 |   |   |   |           _next-internal_server_app_dashboard_page_actions_7f01ccec.js
 |   |   |   |           _next-internal_server_app_dashboard_page_actions_7f01ccec.js.map
 |   |   |   |           _next-internal_server_app_login_page_actions_0e9aafc0.js
@@ -934,6 +984,7 @@ C:.
 |   |   |           
 |   |   +---static
 |   |   |   +---chunks
+|   |   |   |       app_company_page_tsx_993d70a0._.js
 |   |   |   |       app_dashboard_logout-button_tsx_ead64921._.js
 |   |   |   |       app_dashboard_logout-button_tsx_ead64921._.js.map
 |   |   |   |       app_dashboard_page_tsx_993d70a0._.js
@@ -974,6 +1025,8 @@ C:.
 |   |   |   |       [turbopack]_browser_dev_hmr-client_hmr-client_ts_c7192189._.js
 |   |   |   |       [turbopack]_browser_dev_hmr-client_hmr-client_ts_c8c997ce._.js
 |   |   |   |       [turbopack]_browser_dev_hmr-client_hmr-client_ts_c8c997ce._.js.map
+|   |   |   |       _20ecca79._.js
+|   |   |   |       _20ecca79._.js.map
 |   |   |   |       _2361d2c9._.js
 |   |   |   |       _2361d2c9._.js.map
 |   |   |   |       _23a915ee._.js.map
@@ -2143,7 +2196,14 @@ C:.
 |   |   |       |   |       RESULTATS.md
 |   |   |       |   |       SESSION.md
 |   |   |       |   |       
-|   |   |       |   \---SESSION-20260314-02_A2_ORG-03
+|   |   |       |   +---SESSION-20260314-02_A2_ORG-03
+|   |   |       |   |       EVIDENCES.md
+|   |   |       |   |       FIN_SESSION.md
+|   |   |       |   |       NOTES.md
+|   |   |       |   |       RESULTATS.md
+|   |   |       |   |       SESSION.md
+|   |   |       |   |       
+|   |   |       |   \---SESSION-20260316-01_A2_ORG-04
 |   |   |       |           EVIDENCES.md
 |   |   |       |           FIN_SESSION.md
 |   |   |       |           NOTES.md
@@ -2151,14 +2211,7 @@ C:.
 |   |   |       |           SESSION.md
 |   |   |       |           
 |   |   |       +---2-BASE
-|   |   |       +---3-SUP
-|   |   |       \---SESSION-20260316-01_A2_ORG-04
-|   |   |               EVIDENCES.md
-|   |   |               FIN_SESSION.md
-|   |   |               NOTES.md
-|   |   |               RESULTATS.md
-|   |   |               SESSION.md
-|   |   |               
+|   |   |       \---3-SUP
 |   |   \---SESSION-YYYYMMDD-XX
 |   |           EVIDENCES.md
 |   |           FIN_SESSION.md
@@ -2271,15 +2324,15 @@ C:.
 |   |           |   |       ORG-02.diff
 |   |           |   |       README_PATCH.md
 |   |           |   |       
-|   |           |   \---SESSION-20260314-02_A2_ORG-03
-|   |           |           ORG-03-codehotfix-01.diff
-|   |           |           README_PATCH.md
+|   |           |   +---SESSION-20260314-02_A2_ORG-03
+|   |           |   |       ORG-03-codehotfix-01.diff
+|   |           |   |       README_PATCH.md
+|   |           |   |       
+|   |           |   \---SESSION-20260316-01_A2_ORG-04
+|   |           |           NO_PATCH.md
 |   |           |           
 |   |           +---2-BASE
-|   |           +---3-SUP
-|   |           \---SESSION-20260316-01_A2_ORG-04
-|   |                   NO_PATCH.md
-|   |                   
+|   |           \---3-SUP
 |   +---4-templates
 |   |       TEMPLATE_DEBUT_SESSION.md
 |   |       TEMPLATE_DOD_4_4.md
