@@ -1,12 +1,136 @@
-﻿# RESULTATS
+# RESULTATS
 
-## RÃ©sultats obtenus
+## Résultats obtenus
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+### Verdict global retenu
 
----
+La session `BASE-04` est retenue **`partiellement conforme`** sur son périmètre exact.
 
-## Documents modifiÃ©s
+### Pourquoi ce verdict
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+Le verdict est `partiellement conforme` car l’objectif code de `BASE-04` est atteint, mais les vérifications terminales demandées n’ont pas pu être validées dans l’environnement fourni :
+- l’API minimale de modification a bien été ajoutée ;
+- le multi-tenant est bien borné au `companyId` de session ;
+- le RBAC `ADMIN` / `GERANT` est bien appliqué ;
+- la validation d’entrée est stricte et refuse les champs hors contrat ;
+- aucun périmètre `BASE-05+` n’a été ouvert ;
+- le patch `BASE-04.diff` est produit et `git apply --check` est validé sur copie de test ;
+- mais `npx prisma validate`, `npm run lint` et `npm run build` ne sont pas validables ici faute de dépendances installées dans le ZIP.
 
+## Réponses factuelles aux attendus de session
+
+### 1. Une route API dédiée de modification base/dépôt a-t-elle été ajoutée ?
+Réponse : **oui**.
+
+Fichier :
+- `app/api/depots/[id]/route.ts`
+
+Méthode couverte :
+- `PATCH` uniquement.
+
+### 2. La modification est-elle bornée au tenant courant via `session.user.companyId` ?
+Réponse : **oui**.
+
+Constat :
+- le `companyId` utilisé en lecture préalable vient exclusivement de la session ;
+- aucun `companyId` client n’est consommé.
+
+### 3. Une tentative cross-tenant est-elle refusée ?
+Réponse : **oui**.
+
+Constat :
+- le service cherche le dépôt avec `id + companyId` ;
+- si aucun dépôt du tenant courant n’est trouvé, la route retourne `404`.
+
+### 4. La validation d’entrée minimale est-elle cohérente avec le modèle ?
+Réponse : **oui**.
+
+Détail :
+- `name` optionnel, trim, non vide si fourni, max 160 ;
+- `address` optionnel / nullable, trim, max 255 ;
+- `isActive` optionnel, booléen ;
+- rejet des clés supplémentaires ;
+- refus d’un body vide.
+
+### 5. Le contrôle d’accès respecte-t-il le cadrage `ADMIN` / `GERANT` uniquement ?
+Réponse : **oui**.
+
+Constat :
+- `requireRole(role, ["ADMIN", "GERANT"])` est appliqué ;
+- aucune permission dédiée n’est ajoutée.
+
+### 6. Les erreurs minimales demandées sont-elles couvertes ?
+Réponse : **oui**.
+
+Couverture effective :
+- `401` : `UNAUTHORIZED`
+- `403` : `FORBIDDEN`
+- `404` : `NOT_FOUND`
+- `400` : `VALIDATION_ERROR`
+- `409` : `CONFLICT`
+- `500` : `SERVER_ERROR`
+
+### 7. Le succès respecte-t-il le format API standard ?
+Réponse : **oui**.
+
+Détail :
+- HTTP `200`
+- réponse : `{ ok:true, data }`
+
+### 8. Le schéma Prisma et le seed ont-ils été laissés intacts hors nécessité ?
+Réponse : **oui**.
+
+Constat :
+- `prisma/schema.prisma` n’a pas été modifié ;
+- `prisma/seed.ts` n’a pas été modifié.
+
+## Résultats réels des vérifications terminales
+
+Commandes tentées :
+- `npx prisma validate`
+- `npm run lint`
+- `npm run build`
+
+Résultat observé :
+- Prisma validate : **échec environnement**
+- Lint : **échec environnement**
+- Build : **échec environnement**
+
+Cause observée :
+- dépendances absentes de l’environnement de session (`prisma`, `eslint`, `next` non disponibles localement).
+
+## Liste exacte des fichiers code modifiés
+
+- `app/api/depots/[id]/route.ts`
+- `lib/services/depots/update-depot.ts`
+- `lib/validators/depot.ts`
+
+## Patch produit
+
+Patch officiel de session :
+- `BASE-04.diff`
+
+Contrôle patch :
+- `git apply --check` : **OK** sur copie de test.
+
+## Fichiers documentaires créés / mis à jour
+
+### Documentation de session
+- `docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/SESSION.md`
+- `docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/NOTES.md`
+- `docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/EVIDENCES.md`
+- `docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/RESULTATS.md`
+- `docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/FIN_SESSION.md`
+
+### Dossier patch
+- `docs/3-patches/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/BASE-04.diff`
+- `docs/3-patches/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/README_PATCH.md`
+
+### Documentation master
+- aucune modification.
+
+## Conclusion
+
+`BASE-04` introduit désormais le **socle API minimal de modification** pour le module bases/dépôts, cohérent avec le cadrage `04.3`, le multi-tenant strict et la route de création déjà en place.
+
+La seule réserve restante est **environnementale** : la validation terminale complète doit être rejouée dans un dépôt disposant réellement de ses dépendances Node/Prisma installées.

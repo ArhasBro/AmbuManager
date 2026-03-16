@@ -1,35 +1,159 @@
-﻿# SESSION
+# SESSION
 
 ## ID SESSION
 
-SESSION-20260316-05_A2_BASE-04
+`SESSION-20260316-05_A2_BASE-04`
 
 ## Date
 
-16/03/2026
+`2026-03-16`
 
 ## Contexte
 
-Projet : Investissement  
-Sous-projet : Ambulance Manager  
-Maturite : 1-ALPHA  
-Bloc : A2  
-Type : COMPLETION  
-Intitule : API modification base/dépôt
+Projet : `Investissement`  
+Sous-projet : `Ambulance Manager`  
+Maturité : `1-ALPHA`  
+Bloc : `A2`  
+Type : `COMPLÉTION`  
+Intitulé : `API modification base/dépôt`
 
-## Objectif de la session
+Cette session est une **complétion strictement bornée à `BASE-04`**.
+Elle reprend comme acquis de bornage :
+- `BASE-01` : audit du module bases/dépôts ;
+- `BASE-02` : modèle Prisma canonique `Depot` ;
+- `BASE-03` : route `POST /api/depots` et briques associées.
 
-INFORMATION NON FOURNIE - A CONFIRMER
+## Références de travail retenues
 
-## Perimetre exact traite
+### Références documentaires prioritaires
+- `docs/1-master/DOCUMENT_MAITRE.md`
+- `docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
+- `docs/1-master/PLAN_DE_DEVELOPPEMENT.md`
+- `docs/1-master/ETAT_GLOBAL_PROJET.md`
+- `docs/1-master/REGISTRE_DECISIONS.md`
+- `docs/1-master/RECAP_DISCUSSIONS.md`
+- `docs/1-master/STRUCTURE_PROJET.md`
+- `docs/SOURCES_AUTORISEES.md`
+- `docs/STRUCTURE_DOCS.md`
+- `docs/PROTOCOLE_SESSION.md`
+- `docs/4-templates/TEMPLATE_DEBUT_SESSION.md`
 
-INFORMATION NON FOURNIE - A CONFIRMER
+### Historique repris sans réouverture
+- `A1` n’est pas rouvert ;
+- `ORG-*`, `BASE-01`, `BASE-02` et `BASE-03` sont repris uniquement pour le bornage ;
+- aucune session `BASE-05+` n’est ouverte ;
+- aucun périmètre `SUP-*` n’est ouvert.
 
-## Resultat synthetique de session
+### Code réellement concerné
+- `app/api/depots/[id]/route.ts`
+- `lib/services/depots/update-depot.ts`
+- `lib/validators/depot.ts`
 
-INFORMATION NON FOURNIE - A CONFIRMER
+## Objectif exact
 
-## Dossiers lies
+Ajouter l’API minimale de modification d’un dépôt existant, cohérente avec le modèle `Depot`, la route de création `BASE-03`, le multi-tenant strict via `session.user.companyId` et la convention API standard `{ ok:true, data } / { ok:false, error, details? }`.
 
-- Session : docs/2-sessions/1-ALPHA/BLOC_A2/SESSION-20260316-05_A2_BASE-04
-- Patchs  : docs/3-patches/1-ALPHA/BLOC_A2/SESSION-20260316-05_A2_BASE-04
+## Périmètre exact traité
+
+### Travail effectivement réalisé
+- ajout d’une route `PATCH` canonique `app/api/depots/[id]/route.ts` ;
+- ajout d’un service minimal `updateDepot` borné au tenant courant ;
+- extension du validateur dépôts avec un schéma strict de mise à jour ;
+- refus des champs client hors contrat, dont `companyId`.
+
+### Fichiers code réellement modifiés
+- `app/api/depots/[id]/route.ts`
+- `lib/services/depots/update-depot.ts`
+- `lib/validators/depot.ts`
+
+### Hors périmètre explicite
+- aucune UI bases/dépôts ;
+- aucune route de listing ;
+- aucune route de suppression ;
+- aucune route dédiée d’archivage / désactivation `BASE-05` ;
+- aucun rattachement `Vehicle`, `User`, `Shift`, `DraftShift`, `ShiftTemplate` ;
+- aucune permission catalogue dédiée ;
+- aucune modification de `prisma/schema.prisma` ;
+- aucune modification de `prisma/seed.ts` ;
+- aucune modification des documents master.
+
+## Contrat API retenu
+
+### Route
+- `PATCH /api/depots/[id]`
+
+### Body accepté
+- `name` : optionnel, chaîne non vide, trim, max 160 ;
+- `address` : optionnel, nullable, trim, max 255 ;
+- `isActive` : optionnel, booléen.
+
+### Champs refusés côté client
+- `companyId`
+- tout autre champ hors contrat
+
+Le schéma est volontairement `.strict()` pour empêcher toute tentative de pilotage cross-tenant par payload.
+
+## Auth / RBAC / multi-tenant retenus
+
+### Auth
+- `401` si session absente ou `companyId` absent.
+
+### RBAC
+- accès limité à `ADMIN` et `GERANT` ;
+- aucune permission dédiée n’est introduite dans cette session.
+
+### Multi-tenant
+- le dépôt ciblé est recherché avec le couple `id + companyId` ;
+- si le dépôt n’appartient pas au tenant courant, la route répond `404` ;
+- aucune valeur du body ne peut substituer le tenant serveur.
+
+## Gestion des erreurs retenue
+
+- `400` : `VALIDATION_ERROR` sur params/body invalides ;
+- `401` : `UNAUTHORIZED` ;
+- `403` : `FORBIDDEN` ;
+- `404` : `NOT_FOUND` si dépôt introuvable dans le tenant ;
+- `409` : `CONFLICT` si unicité `(companyId, name)` violée ;
+- `500` : `SERVER_ERROR` sur erreur non prévue.
+
+## Format de succès retenu
+
+- HTTP `200`
+- payload : `{ ok:true, data }`
+
+Données retournées sur succès :
+- `id`
+- `companyId`
+- `name`
+- `address`
+- `isActive`
+- `createdAt`
+- `updatedAt`
+
+## Résultat terminal observé dans l’environnement de session
+
+Vérifications terminales tentées :
+- `npx prisma validate` : **échec environnement** ;
+- `npx prisma generate` : **non validé dans cet environnement** ;
+- `npm run lint` : **échec environnement** ;
+- `npm run build` : **échec environnement**.
+
+Cause factuelle observée :
+- le ZIP fourni n’inclut pas les dépendances installées ;
+- `npx prisma validate` tente d’installer `prisma@7.5.0` puis échoue pendant le postinstall ;
+- `eslint` et `next` sont introuvables localement (`sh: eslint: not found`, `sh: next: not found`).
+
+## Résultat synthétique de session
+
+Le dépôt contient désormais une **API minimale de modification de dépôt** cohérente avec `04.3 Modification d’une base / dépôt`, strictement multi-tenant et sans ouverture de périmètre vers UI, listing, suppression, archivage dédié ou rattachements métier.
+
+Le correctif code et le patch sont produits ; la validation terminale complète reste à rejouer dans un environnement où les dépendances du projet sont réellement installées.
+
+## Dossiers liés
+
+- Session : `docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/`
+- Patch : `docs/3-patches/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260316-05_A2_BASE-04/`
+
+## Verdict retenu
+
+Verdict final de la session : **`partiellement conforme`**.
