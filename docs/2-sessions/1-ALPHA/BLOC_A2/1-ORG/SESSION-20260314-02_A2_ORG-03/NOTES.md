@@ -1,9 +1,24 @@
 # NOTES
 
-## Méthode / observations
+## Synthèse de clôture
 
-- audit du ZIP actuel MAJ réellement fourni ;
-- constat : le code `ORG-03` est déjà présent dans le dépôt (`app/company/page.tsx`, `app/company/company-profile-form.tsx`, `app/api/company/profile/route.ts`, `lib/validators/company-profile.ts`) ;
-- constat : le build casse sur `managerNames` dans `app/api/company/profile/route.ts` à cause d'un `select` Prisma typé non aligné avec `CompanySelect<DefaultArgs>` ;
-- hotfix incrémental minimal : suppression de l'accès Prisma typé sur `managerNames` dans la route API, et réalignement de la lecture serveur `app/company/page.tsx` pour éviter un rebloquage immédiat sur le même champ ;
-- aucun élargissement à `ORG-04`, `BASE-*`, `SUP-*`, onboarding, multi-sociétés, migration ou schéma Prisma.
+La session `ORG-03` est clôturée proprement sur la base de l'état réellement validé du dépôt local.
+
+Point important de traçabilité :
+- plusieurs patches intermédiaires `ORG-03` ont été produits au cours de la reprise ;
+- ces patches intermédiaires ne sont **pas** retenus comme référence finale ;
+- le seul patch valide final de référence est `ORG-03-codehotfix-01.diff`.
+
+## Correctif final réellement retenu
+
+Le correctif final validé est un **hotfix code-only** strictement borné au problème de build restant sur `managerNames`.
+
+Fichiers code réellement concernés par le correctif final :
+- `app/api/company/profile/route.ts`
+- `app/company/page.tsx`
+
+Le patch final validé :
+- ne modifie aucun fichier documentaire ;
+- ne modifie pas le schéma Prisma ;
+- ne crée aucune migration ;
+- n'élargit pas le périmètre fonctionnel de `ORG-03`.

@@ -224,7 +224,14 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |       |           SESSION.md
 |   |       |           
 |   |       +---2-BASE
-|   |       \---3-SUP
+|   |       +---3-SUP
+|   |       \---SESSION-20260316-01_A2_ORG-04
+|   |               EVIDENCES.md
+|   |               FIN_SESSION.md
+|   |               NOTES.md
+|   |               RESULTATS.md
+|   |               SESSION.md
+|   |               
 |   \---SESSION-YYYYMMDD-XX
 |           EVIDENCES.md
 |           FIN_SESSION.md
@@ -342,7 +349,10 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |           |           README_PATCH.md
 |           |           
 |           +---2-BASE
-|           \---3-SUP
+|           +---3-SUP
+|           \---SESSION-20260316-01_A2_ORG-04
+|                   NO_PATCH.md
+|                   
 +---4-templates
 |       TEMPLATE_DEBUT_SESSION.md
 |       TEMPLATE_DOD_4_4.md

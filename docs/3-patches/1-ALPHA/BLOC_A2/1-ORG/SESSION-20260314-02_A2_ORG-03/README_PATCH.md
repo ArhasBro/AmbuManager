@@ -2,27 +2,27 @@
 
 ## Session liée
 
-SESSION-20260314-02_A2_ORG-03
+`SESSION-20260314-02_A2_ORG-03`
 
-## Type
+## Patch valide final de référence
 
-HOTFIX INCRÉMENTAL
-
-## Dossier patch
-
-`docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03`
-
-## Patch de hotfix
-
-`ORG-03-hotfix-final-01.diff`
-
-## Commandes d'application
-
-```bash
-git apply --check "docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/ORG-03-hotfix-final-01.diff"
-git apply         "docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/ORG-03-hotfix-final-01.diff"
-```
+`ORG-03-codehotfix-01.diff`
 
 ## Statut
 
-Patch calculé contre le ZIP actuel MAJ audité pour ce hotfix ciblé `ORG-03`.
+Ce patch est le **seul patch valide final de référence** pour la clôture de `ORG-03`.
+
+## Commandes d'application de référence
+
+```bash
+git apply --check "docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/ORG-03-codehotfix-01.diff"
+git apply         "docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03/ORG-03-codehotfix-01.diff"
+```
+
+
+## Vérifications finales réelles associées au patch de référence
+
+- `git apply --check` : `OK`
+- `git apply` : `OK`
+- `npm run lint` : `OK`
+- `npm run build` : `OK`

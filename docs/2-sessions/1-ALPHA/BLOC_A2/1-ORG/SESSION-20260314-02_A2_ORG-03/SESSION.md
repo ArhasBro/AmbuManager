@@ -2,40 +2,41 @@
 
 ## ID SESSION
 
-SESSION-20260314-02_A2_ORG-03
+`SESSION-20260314-02_A2_ORG-03`
 
 ## Date
 
-14/03/2026
+`14/03/2026`
 
 ## Contexte
 
-- Projet : Investissement
-- Sous-projet : Ambulance Manager
-- Maturité : 1-ALPHA
-- Bloc : A2
-- Type : COMPLÉTION
-- Intitulé : Édition UI du profil société
+- Projet : `Investissement`
+- Sous-projet : `Ambulance Manager`
+- Stage : `1-ALPHA`
+- Bloc : `A2`
+- Type : `COMPLÉTION`
+- Intitulé : `Édition UI du profil société`
 
-## Objectif de la session
+## Objectif de session
 
-Ajouter une UI minimale permettant à la société connectée d'afficher et modifier son profil société ALPHA sur les champs `name`, `managerNames`, `address`, `phone` et `siret`.
+Ajouter une UI minimale permettant à la société connectée d'afficher et modifier son profil société ALPHA sur les champs :
+- `name`
+- `managerNames`
+- `address`
+- `phone`
+- `siret`
 
-## Périmètre exact traité
+## Périmètre final retenu
 
-- ajout d'un lien `Profil société` dans le dashboard admin ;
-- ajout d'une page dédiée `/company` ;
-- ajout d'un formulaire client minimal ;
-- ajout d'une route `PATCH /api/company/profile` ;
-- ajout de la validation Zod minimale associée ;
-- bornage strict à la société courante via `companyId` ;
-- accès borné à `ADMIN` / `GERANT`.
+- UI minimale profil société ALPHA ;
+- cohérence de lecture / écriture sur la société courante via `companyId` ;
+- aucun changement de schéma Prisma ;
+- aucune migration ;
+- aucun élargissement vers `ORG-04`, `BASE-*`, `SUP-*`, onboarding ou multi-sociétés.
 
-## Résultat synthétique de session
+## Clôture réelle de session
 
-Complétion minimale `ORG-03` livrée sur le ZIP effectivement reçu. Le correctif évite l'usage Prisma typé sur `managerNames` dans le code ajouté afin de ne pas réintroduire le blocage TypeScript déjà constaté sur ce champ.
+`ORG-03` est finalement validée via un **hotfix code-only** de référence :
+`ORG-03-codehotfix-01.diff`
 
-## Dossiers liés
-
-- Session : `docs/2-sessions/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03`
-- Patchs : `docs/3-patches/1-ALPHA/BLOC_A2/1-ORG/SESSION-20260314-02_A2_ORG-03`
+Ce patch final validé ne modifie pas la documentation et ne touche qu'au correctif technique minimal nécessaire sur le code déjà présent.

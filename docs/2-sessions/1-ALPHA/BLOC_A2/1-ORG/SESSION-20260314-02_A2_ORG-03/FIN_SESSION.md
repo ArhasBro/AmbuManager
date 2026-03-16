@@ -2,15 +2,21 @@
 
 ## Clôture
 
-Session `ORG-03` conservée en hotfix incrémental minimal sur le ZIP actuel MAJ, sans recréation de la complétion complète.
+Session `ORG-03` clôturée proprement sur l'état réellement validé du dépôt local.
 
-## Validation
+## Patch final retenu
 
-- `git apply --check` du hotfix : à vérifier sur le ZIP actuel MAJ avec le patch livré ;
-- `git apply` du hotfix : à vérifier sur le ZIP actuel MAJ avec le patch livré ;
-- `npm run lint` : attendu `OK` sur le dépôt local cible ;
-- `npm run build` : attendu sans blocage `managerNames` dans `app/api/company/profile/route.ts`.
+Patch valide final de référence :
+- `ORG-03-codehotfix-01.diff`
+
+
+## Validation finale réelle
+
+- `git apply --check` : `OK`
+- `git apply` : `OK`
+- `npm run lint` : `OK`
+- `npm run build` : `OK`
 
 ## Verdict final
 
-Hotfix `ORG-03` strictement borné au point de build signalé. Le verdict final dépend des résultats réellement mesurés après application du patch sur le dépôt cible.
+`conforme`
