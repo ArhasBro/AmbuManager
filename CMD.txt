@@ -80,6 +80,11 @@ npx prisma validate
 npx prisma generate
 npm run lint
 npm run build
+git status --short
+git diff -- prisma/schema.prisma
+git diff -- app/api/planning/shifts/[id]/route.ts
+git diff -- lib/services/planning/update-shift.ts
+git diff -- prisma/migrations
 
 Attend le retour du terminal avant de me répondre.
 Si il y a d'autre cmd a faire n'hésite pas a me dire.

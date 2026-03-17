@@ -1,0 +1,15 @@
+diff --git a/prisma/migrations/20260317213000_base09_fix_attach_shift_to_depot/migration.sql b/prisma/migrations/20260317213000_base09_fix_attach_shift_to_depot/migration.sql
+new file mode 100644
+index 0000000..8c4cc89
+--- /dev/null
++++ b/prisma/migrations/20260317213000_base09_fix_attach_shift_to_depot/migration.sql
+@@ -0,0 +1,9 @@
++-- BASE-09-FIX — matérialisation SQL manquante du rattachement Shift -> Depot
++ALTER TABLE "Shift"
++ADD COLUMN "depotId" UUID;
++
++CREATE INDEX "Shift_depotId_idx" ON "Shift"("depotId");
++
++ALTER TABLE "Shift"
++ADD CONSTRAINT "Shift_depotId_fkey"
++FOREIGN KEY ("depotId") REFERENCES "Depot"("id") ON DELETE SET NULL ON UPDATE CASCADE;

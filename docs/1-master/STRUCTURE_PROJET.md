@@ -59,6 +59,7 @@ C:.
 |   +---dev
 |   |   |   build-manifest.json
 |   |   |   fallback-build-manifest.json
+|   |   |   lock
 |   |   |   package.json
 |   |   |   prerender-manifest.json
 |   |   |   routes-manifest.json
@@ -384,6 +385,44 @@ C:.
 |   |   |               00000466.meta
 |   |   |               00000467.meta
 |   |   |               00000468.meta
+|   |   |               00000469.sst
+|   |   |               00000470.sst
+|   |   |               00000471.sst
+|   |   |               00000472.sst
+|   |   |               00000473.sst
+|   |   |               00000474.meta
+|   |   |               00000475.meta
+|   |   |               00000476.meta
+|   |   |               00000477.meta
+|   |   |               00000478.meta
+|   |   |               00000479.sst
+|   |   |               00000480.sst
+|   |   |               00000481.sst
+|   |   |               00000482.sst
+|   |   |               00000483.sst
+|   |   |               00000484.meta
+|   |   |               00000485.meta
+|   |   |               00000486.meta
+|   |   |               00000487.meta
+|   |   |               00000488.meta
+|   |   |               00000489.sst
+|   |   |               00000490.sst
+|   |   |               00000491.sst
+|   |   |               00000492.meta
+|   |   |               00000493.meta
+|   |   |               00000494.meta
+|   |   |               00000495.sst
+|   |   |               00000496.sst
+|   |   |               00000497.sst
+|   |   |               00000498.meta
+|   |   |               00000499.meta
+|   |   |               00000500.meta
+|   |   |               00000501.sst
+|   |   |               00000502.sst
+|   |   |               00000503.sst
+|   |   |               00000504.meta
+|   |   |               00000505.meta
+|   |   |               00000506.meta
 |   |   |               CURRENT
 |   |   |               LOG
 |   |   |               
@@ -2042,13 +2081,13 @@ C:.
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
 |   |   |       
-|   |   +---jJm5dezLKR91PY8_IrJ2c
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
+|   |   +---media
+|   |   |       favicon.0b3bf435.ico
 |   |   |       
-|   |   \---media
-|   |           favicon.0b3bf435.ico
+|   |   \---w0sMf7NlHW4zx7WcwhsIT
+|   |           _buildManifest.js
+|   |           _clientMiddlewareManifest.json
+|   |           _ssgManifest.js
 |   |           
 |   \---types
 |           routes.d.ts
@@ -2674,7 +2713,8 @@ C:.
 |   |           |   |       README_PATCH.md
 |   |           |   |       
 |   |           |   \---SESSION-20260317-05_A2_BASE-09-FIX
-|   |           |           NO_PATCH.md
+|   |           |           BASE-09-FIX.diff
+|   |           |           README_PATCH_BASE-09-FIX.md
 |   |           |           
 |   |           \---3-SUP
 |   +---4-templates
@@ -38975,7 +39015,10 @@ C:.
 |       +---20260316203000_base08_attach_user_to_depot
 |       |       migration.sql
 |       |       
-|       \---20260317201000_base07_fix_attach_vehicle_to_depot
+|       +---20260317201000_base07_fix_attach_vehicle_to_depot
+|       |       migration.sql
+|       |       
+|       \---20260317213000_base09_fix_attach_shift_to_depot
 |               migration.sql
 |               
 +---public

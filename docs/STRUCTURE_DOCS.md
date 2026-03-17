@@ -506,7 +506,8 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |           |   |       README_PATCH.md
 |           |   |       
 |           |   \---SESSION-20260317-05_A2_BASE-09-FIX
-|           |           NO_PATCH.md
+|           |           BASE-09-FIX.diff
+|           |           README_PATCH_BASE-09-FIX.md
 |           |           
 |           \---3-SUP
 +---4-templates
