@@ -1586,11 +1586,23 @@ C:.
 |   |   |   |       |   route.js.nft.json
 |   |   |   |       |   route_client-reference-manifest.js
 |   |   |   |       |   
-|   |   |   |       \---route
-|   |   |   |               app-paths-manifest.json
-|   |   |   |               build-manifest.json
-|   |   |   |               server-reference-manifest.json
-|   |   |   |               
+|   |   |   |       +---route
+|   |   |   |       |       app-paths-manifest.json
+|   |   |   |       |       build-manifest.json
+|   |   |   |       |       server-reference-manifest.json
+|   |   |   |       |       
+|   |   |   |       \---[id]
+|   |   |   |           \---depot
+|   |   |   |               |   route.js
+|   |   |   |               |   route.js.map
+|   |   |   |               |   route.js.nft.json
+|   |   |   |               |   route_client-reference-manifest.js
+|   |   |   |               |   
+|   |   |   |               \---route
+|   |   |   |                       app-paths-manifest.json
+|   |   |   |                       build-manifest.json
+|   |   |   |                       server-reference-manifest.json
+|   |   |   |                       
 |   |   |   +---company
 |   |   |   |   |   page.js
 |   |   |   |   |   page.js.map
@@ -1795,8 +1807,6 @@ C:.
 |   |   |   |   [root-of-the-server]__3d510304._.js.map
 |   |   |   |   [root-of-the-server]__466e0aef._.js
 |   |   |   |   [root-of-the-server]__466e0aef._.js.map
-|   |   |   |   [root-of-the-server]__51fd3f4a._.js
-|   |   |   |   [root-of-the-server]__51fd3f4a._.js.map
 |   |   |   |   [root-of-the-server]__58fa01f8._.js
 |   |   |   |   [root-of-the-server]__58fa01f8._.js.map
 |   |   |   |   [root-of-the-server]__5e792a0f._.js
@@ -1805,8 +1815,12 @@ C:.
 |   |   |   |   [root-of-the-server]__6e7a5963._.js.map
 |   |   |   |   [root-of-the-server]__80597b5e._.js
 |   |   |   |   [root-of-the-server]__80597b5e._.js.map
+|   |   |   |   [root-of-the-server]__80b2adce._.js
+|   |   |   |   [root-of-the-server]__80b2adce._.js.map
 |   |   |   |   [root-of-the-server]__88924fbd._.js
 |   |   |   |   [root-of-the-server]__88924fbd._.js.map
+|   |   |   |   [root-of-the-server]__8f393996._.js
+|   |   |   |   [root-of-the-server]__8f393996._.js.map
 |   |   |   |   [root-of-the-server]__c3997a41._.js
 |   |   |   |   [root-of-the-server]__c3997a41._.js.map
 |   |   |   |   [root-of-the-server]__d2c6e75d._.js
@@ -1873,6 +1887,8 @@ C:.
 |   |   |   |   _next-internal_server_app_api_users_[id]_reset-password_route_actions_d12d905c.js.map
 |   |   |   |   _next-internal_server_app_api_vehicles_route_actions_7bc5da8c.js
 |   |   |   |   _next-internal_server_app_api_vehicles_route_actions_7bc5da8c.js.map
+|   |   |   |   _next-internal_server_app_api_vehicles_[id]_depot_route_actions_9e091d71.js
+|   |   |   |   _next-internal_server_app_api_vehicles_[id]_depot_route_actions_9e091d71.js.map
 |   |   |   |   _next-internal_server_app_favicon_ico_route_actions_353150a5.js
 |   |   |   |   _next-internal_server_app_favicon_ico_route_actions_353150a5.js.map
 |   |   |   |   
@@ -2006,11 +2022,6 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
-|   |   +---7bt61J1XVw955Ys9TCflQ
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
-|   |   |       
 |   |   +---chunks
 |   |   |       05e6c743003c809d.js
 |   |   |       1687260e4d8b05d6.js
@@ -2030,6 +2041,11 @@ C:.
 |   |   |       cdb83a758231f045.js
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
+|   |   |       
+|   |   +---jJm5dezLKR91PY8_IrJ2c
+|   |   |       _buildManifest.js
+|   |   |       _clientMiddlewareManifest.json
+|   |   |       _ssgManifest.js
 |   |   |       
 |   |   \---media
 |   |           favicon.0b3bf435.ico
@@ -2117,8 +2133,12 @@ C:.
 |   |   |               route.ts
 |   |   |               
 |   |   \---vehicles
-|   |           route.ts
-|   |           
+|   |       |   route.ts
+|   |       |   
+|   |       \---[id]
+|   |           \---depot
+|   |                   route.ts
+|   |                   
 |   +---company
 |   |       company-profile-form.tsx
 |   |       page.tsx
@@ -2650,7 +2670,8 @@ C:.
 |   |           |   |       README.md
 |   |           |   |       
 |   |           |   +---SESSION-20260317-04_A2_BASE-07-FIX
-|   |           |   |       NO_PATCH.md
+|   |           |   |       BASE-07-FIX.diff
+|   |           |   |       README_PATCH.md
 |   |           |   |       
 |   |           |   \---SESSION-20260317-05_A2_BASE-09-FIX
 |   |           |           NO_PATCH.md
@@ -2691,8 +2712,11 @@ C:.
 |   |   |       matching.service.ts
 |   |   |       planning-audit.ts
 |   |   |       
-|   |   \---users
-|   |           assign-user-depot.ts
+|   |   +---users
+|   |   |       assign-user-depot.ts
+|   |   |       
+|   |   \---vehicles
+|   |           assign-vehicle-depot.ts
 |   |           
 |   +---types
 |   |       planning.ts
@@ -38948,7 +38972,10 @@ C:.
 |       +---20260316153000_base02_create_depot_model
 |       |       migration.sql
 |       |       
-|       \---20260316203000_base08_attach_user_to_depot
+|       +---20260316203000_base08_attach_user_to_depot
+|       |       migration.sql
+|       |       
+|       \---20260317201000_base07_fix_attach_vehicle_to_depot
 |               migration.sql
 |               
 +---public

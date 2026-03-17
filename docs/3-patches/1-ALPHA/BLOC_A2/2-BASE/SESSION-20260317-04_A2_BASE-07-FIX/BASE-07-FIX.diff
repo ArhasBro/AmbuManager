@@ -1,0 +1,178 @@
+diff --git a/app/api/vehicles/[id]/depot/route.ts b/app/api/vehicles/[id]/depot/route.ts
+new file mode 100644
+index 0000000..ebb1cc0
+--- /dev/null
++++ b/app/api/vehicles/[id]/depot/route.ts
+@@ -0,0 +1,64 @@
++import { getServerSession } from "next-auth/next";
++import { z } from "zod";
++
++import { authOptions } from "@/lib/auth";
++import { badRequest, forbidden, notFound, ok, serverError, unauthorized } from "@/lib/api/response";
++import { canManageVehicles } from "@/lib/permissions";
++import { serializeDates } from "@/lib/serializers";
++import { assignVehicleDepot } from "@/lib/services/vehicles/assign-vehicle-depot";
++import { assignVehicleDepotBodySchema } from "@/lib/validators/vehicle";
++
++const paramsSchema = z
++  .object({
++    id: z.string().uuid(),
++  })
++  .strict();
++
++function getErrorMessage(e: unknown): string {
++  if (e instanceof Error) return e.message;
++  if (typeof e === "string") return e;
++  try {
++    return JSON.stringify(e);
++  } catch {
++    return "Unknown error";
++  }
++}
++
++export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }> }) {
++  const session = await getServerSession(authOptions);
++  const actorUserId = session?.user?.id;
++  const companyId = session?.user?.companyId;
++  const role = session?.user?.role;
++
++  if (!actorUserId || !companyId) return unauthorized();
++  if (!(await canManageVehicles(actorUserId, role))) return forbidden();
++
++  const rawParams = await ctx.params.catch(() => null);
++  const parsedParams = paramsSchema.safeParse(rawParams);
++  if (!parsedParams.success) return badRequest("VALIDATION_ERROR", parsedParams.error.flatten());
++
++  let body: unknown;
++  try {
++    body = await req.json();
++  } catch {
++    return badRequest("INVALID_JSON");
++  }
++
++  const parsedBody = assignVehicleDepotBodySchema.safeParse(body);
++  if (!parsedBody.success) return badRequest("VALIDATION_ERROR", parsedBody.error.flatten());
++
++  try {
++    const result = await assignVehicleDepot({
++      vehicleId: parsedParams.data.id,
++      companyId,
++      depotId: parsedBody.data.depotId,
++    });
++
++    if (result.status === "VEHICLE_NOT_FOUND") return notFound();
++    if (result.status === "DEPOT_NOT_FOUND") return notFound();
++
++    return ok(serializeDates(result.vehicle));
++  } catch (e: unknown) {
++    return serverError(getErrorMessage(e));
++  }
++}
+diff --git a/lib/services/vehicles/assign-vehicle-depot.ts b/lib/services/vehicles/assign-vehicle-depot.ts
+new file mode 100644
+index 0000000..03415c1
+--- /dev/null
++++ b/lib/services/vehicles/assign-vehicle-depot.ts
+@@ -0,0 +1,88 @@
++import { prisma } from "@/lib/prisma";
++
++type AssignedVehicle = {
++  id: string;
++  immatriculation: string;
++  type: string;
++  status: string;
++  companyId: string;
++  depotId: string | null;
++  depot: {
++    id: string;
++    name: string;
++    isActive: boolean;
++  } | null;
++  createdAt: Date;
++  updatedAt: Date;
++};
++
++const vehicleDepotSelect = {
++  id: true,
++  immatriculation: true,
++  type: true,
++  status: true,
++  companyId: true,
++  depotId: true,
++  depot: {
++    select: {
++      id: true,
++      name: true,
++      isActive: true,
++    },
++  },
++  createdAt: true,
++  updatedAt: true,
++} as const;
++
++export type AssignVehicleDepotInput = {
++  vehicleId: string;
++  companyId: string;
++  depotId: string | null;
++};
++
++export type AssignVehicleDepotResult =
++  | { status: "VEHICLE_NOT_FOUND" }
++  | { status: "DEPOT_NOT_FOUND" }
++  | { status: "OK"; vehicle: AssignedVehicle };
++
++async function findVehicleByTenant(vehicleId: string, companyId: string) {
++  return prisma.vehicle.findFirst({
++    where: {
++      id: vehicleId,
++      companyId,
++    },
++    select: {
++      id: true,
++      companyId: true,
++    },
++  });
++}
++
++export async function assignVehicleDepot(input: AssignVehicleDepotInput): Promise<AssignVehicleDepotResult> {
++  const existingVehicle = await findVehicleByTenant(input.vehicleId, input.companyId);
++  if (!existingVehicle) return { status: "VEHICLE_NOT_FOUND" };
++
++  if (input.depotId !== null) {
++    const depot = await prisma.depot.findFirst({
++      where: {
++        id: input.depotId,
++        companyId: input.companyId,
++        isActive: true,
++      },
++      select: {
++        id: true,
++        companyId: true,
++      },
++    });
++
++    if (!depot) return { status: "DEPOT_NOT_FOUND" };
++  }
++
++  const vehicle = await prisma.vehicle.update({
++    where: { id: existingVehicle.id },
++    data: { depotId: input.depotId },
++    select: vehicleDepotSelect,
++  });
++
++  return { status: "OK", vehicle };
++}
+diff --git a/prisma/migrations/20260317201000_base07_fix_attach_vehicle_to_depot/migration.sql b/prisma/migrations/20260317201000_base07_fix_attach_vehicle_to_depot/migration.sql
+new file mode 100644
+index 0000000..8d78852
+--- /dev/null
++++ b/prisma/migrations/20260317201000_base07_fix_attach_vehicle_to_depot/migration.sql
+@@ -0,0 +1,8 @@
++ALTER TABLE "Vehicle"
++ADD COLUMN "depotId" UUID;
++
++CREATE INDEX "Vehicle_depotId_idx" ON "Vehicle"("depotId");
++
++ALTER TABLE "Vehicle"
++ADD CONSTRAINT "Vehicle_depotId_fkey"
++FOREIGN KEY ("depotId") REFERENCES "Depot"("id") ON DELETE SET NULL ON UPDATE CASCADE;
