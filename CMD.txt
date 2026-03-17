@@ -64,8 +64,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260316-10_A2_BASE-09
-- BASE-09 — COMPLÉTION** — Rattachement d’un shift à une base
+- SESSION-20260317-01_A2_BASE-10
+- BASE-10 — AUDIT** — Arbitrage technique et produit du lien template ↔ base
 
 sortie propre + retour du terminal + aucune erreur = validé
 

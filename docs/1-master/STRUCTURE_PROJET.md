@@ -2442,7 +2442,14 @@ C:.
 |   |   |       |   |       RESULTATS.md
 |   |   |       |   |       SESSION.md
 |   |   |       |   |       
-|   |   |       |   \---SESSION-20260317-01_A2_BASE-10
+|   |   |       |   +---SESSION-20260317-01_A2_BASE-10
+|   |   |       |   |       EVIDENCES.md
+|   |   |       |   |       FIN_SESSION.md
+|   |   |       |   |       NOTES.md
+|   |   |       |   |       RESULTATS.md
+|   |   |       |   |       SESSION.md
+|   |   |       |   |       
+|   |   |       |   \---SESSION-20260317-02_A2_BASE-11
 |   |   |       |           EVIDENCES.md
 |   |   |       |           FIN_SESSION.md
 |   |   |       |           NOTES.md
@@ -2611,7 +2618,10 @@ C:.
 |   |           |   |       BASE-09.diff
 |   |           |   |       README_PATCH.md
 |   |           |   |       
-|   |           |   \---SESSION-20260317-01_A2_BASE-10
+|   |           |   +---SESSION-20260317-01_A2_BASE-10
+|   |           |   |       NO_PATCH.md
+|   |           |   |       
+|   |           |   \---SESSION-20260317-02_A2_BASE-11
 |   |           |           NO_PATCH.md
 |   |           |           
 |   |           \---3-SUP

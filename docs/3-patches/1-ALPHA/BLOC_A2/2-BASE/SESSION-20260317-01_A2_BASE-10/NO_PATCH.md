@@ -1,10 +1,11 @@
-﻿# NO_PATCH
+# NO_PATCH
 
-Session : SESSION-20260317-01_A2_BASE-10
+Session : `SESSION-20260317-01_A2_BASE-10`
 
-Type : AUDIT
+Type : `AUDIT`
 
 Raison :
-- Session documentaire de type AUDIT.
-- Aucun patch officiel a produire pour cette session.
-- Le dossier patch reste present pour conserver le miroir avec docs/2-sessions.
+- session strictement bornée à un audit documentaire + code ;
+- aucun patch code n’est autorisé dans `BASE-10` ;
+- l’audit conclut par un arbitrage formel sans implémentation ;
+- le dossier patch est conservé uniquement pour la traçabilité documentaire.
