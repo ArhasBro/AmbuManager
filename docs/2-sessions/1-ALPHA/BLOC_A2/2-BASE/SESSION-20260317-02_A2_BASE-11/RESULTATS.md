@@ -9,17 +9,9 @@ La session `SESSION-20260317-02_A2_BASE-11` est retenue **`partiellement conform
 ### Pourquoi ce verdict
 
 Le bloc bases/dépôts n’est pas homogène dans son état réel :
-- `BASE-02` : conforme ;
-- `BASE-03` : conforme ;
-- `BASE-04` : non conforme ;
-- `BASE-05` : conforme ;
-- `BASE-06` : conforme ;
-- `BASE-07` : non conforme ;
-- `BASE-08` : conforme ;
-- `BASE-09` : partiellement conforme ;
-- `BASE-10` : conforme.
-
-Ces écarts empêchent une validation globale `conforme` du bloc `BASE-02` à `BASE-10`.
+- plusieurs sous-sessions sont effectivement livrées et exploitables ;
+- mais le dépôt réel contient encore des écarts formels majeurs par rapport à ce qui est documenté ;
+- ces écarts empêchent une validation globale `conforme` du bloc `BASE-02` à `BASE-10`.
 
 ---
 
@@ -41,8 +33,10 @@ Constats :
 
 Constats :
 - route `app/api/depots/route.ts` réellement présente ;
-- tenant : bornage via `session.user.companyId` ; auth : session requise ; RBAC : limité à `ADMIN` / `GERANT` ; contrat API : respecté avec `{ ok:true,data }` / `{ ok:false,error,details? }` ;
-- validation Zod stricte.
+- auth / tenant via session ;
+- RBAC limité à `ADMIN` / `GERANT` ;
+- validation Zod stricte ;
+- contrat API respecté : `{ ok:true,data }` / `{ ok:false,error,details? }`.
 
 ### BASE-04 — `PATCH /api/depots/[id]`
 
@@ -50,7 +44,8 @@ Constats :
 
 Constats :
 - route réellement présente ;
-- tenant : bornage via `session.user.companyId` ; auth : session requise ; RBAC : limité à `ADMIN` / `GERANT` ; contrat API : respecté avec `{ ok:true,data }` / `{ ok:false,error,details? }` ;
+- bornage tenant correct ;
+- contrat API correct ;
 - **écart majeur** : la modification n’est pas bornée à `name` et `address` seulement.
 
 Preuves dans l’état réel :
@@ -67,9 +62,9 @@ Conséquence :
 
 Constats :
 - route `app/api/depots/[id]/archive/route.ts` réellement présente ;
-- tenant : bornage via `session.user.companyId` ; auth : session requise ; RBAC : limité à `ADMIN` / `GERANT` ; contrat API : respecté avec `{ ok:true,data }` / `{ ok:false,error,details? }` ;
 - désactivation logique cohérente par passage à `isActive:false` ;
-- aucune suppression physique détectée.
+- aucune suppression physique détectée ;
+- bornage tenant respecté.
 
 ### BASE-06 — UI `/depots`
 
@@ -78,7 +73,7 @@ Constats :
 Constats :
 - page `app/depots/page.tsx` réellement présente ;
 - client `app/depots/depots-client.tsx` réellement présent ;
-- auth / RBAC UI : accès borné côté page à `ADMIN` / `GERANT` ; appels API cohérents avec `POST /api/depots`, `PATCH /api/depots/[id]` et `POST /api/depots/[id]/archive` ;
+- accès borné côté page à `ADMIN` / `GERANT` ;
 - création / édition / archivage cohérents avec les routes réelles du module dépôts.
 
 ### BASE-07 — rattachement `Vehicle -> Depot`
@@ -88,7 +83,6 @@ Constats :
 Constats :
 - le schéma Prisma contient bien `Vehicle.depotId` et `Vehicle.depot` ;
 - l’UI véhicules expose un sélecteur de base ;
-- auth / RBAC / contrat API : **INFORMATION NON FOURNIE — À CONFIRMER** sur la route dédiée revendiquée, car `app/api/vehicles/[id]/depot/route.ts` est absente du dépôt réel ;
 - **mais l’implémentation réellement requise n’est pas complète dans le dépôt**.
 
 Écarts réels :
@@ -108,8 +102,8 @@ Constats :
 - `User.depotId` et `User.depot` réellement présents ;
 - migration réellement présente ;
 - route `app/api/users/[id]/depot/route.ts` réellement présente ;
-- tenant : bornage via `session.user.companyId` ; auth : session requise ; RBAC : contrôlé par le module utilisateurs ; contrat API : cohérent avec les helpers standards `{ ok:true,data }` / `{ ok:false,error,details? }` ;
-- UI dédiée réellement présente.
+- UI dédiée réellement présente ;
+- tenant / RBAC cohérents avec le module utilisateurs.
 
 ### BASE-09 — rattachement `Shift -> Depot`
 
@@ -118,7 +112,6 @@ Constats :
 Constats positifs :
 - `Shift.depotId` et `Shift.depot` sont présents dans le schéma ;
 - la route `app/api/planning/shifts/[id]/assign/route.ts` gère `depotId` sur shift publié ;
-- tenant : bornage via société courante ; auth : session requise ; RBAC : bornage planning réel ; contrat API : cohérent avec les helpers standards `{ ok:true,data }` / `{ ok:false,error,details? }` ;
 - les dépôts sont chargés dans `app/planning/page.tsx` ;
 - l’UI planning expose le champ base ;
 - `DraftShift` n’est pas étendu ;
@@ -136,7 +129,6 @@ Conséquence :
 
 Constats :
 - audit bien borné ;
-- auth / tenant / RBAC / contrat API : non applicables à cette session d’audit documentaire ;
 - aucun patch code produit ;
 - artefact `NO_PATCH.md` réellement présent ;
 - pas de réouverture abusive du périmètre planning/templates.
@@ -206,6 +198,8 @@ Ce point ne renverse pas à lui seul les constats code, mais interdit de s’en 
 ## Conclusion
 
 Le bloc `BASE-02` à `BASE-10` n’est pas rejeté en totalité, mais il ne peut pas être validé `conforme` en l’état réel du dépôt.
+
+La validation BASE-11 confirme que les écarts identifiés sont structurels et nécessitent des sessions correctives dédiées, sans remise en cause du cadre méthodologique du bloc.
 
 Le verdict formel retenu pour `BASE-11` est donc :
 
