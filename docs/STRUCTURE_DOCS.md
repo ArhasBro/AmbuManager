@@ -498,7 +498,8 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |           |   |       NO_PATCH.md
 |           |   |       
 |           |   +---SESSION-20260317-03_A2_BASE-04-FIX
-|           |   |       NO_PATCH.md
+|           |   |       BASE-04-FIX.diff
+|           |   |       README.md
 |           |   |       
 |           |   +---SESSION-20260317-04_A2_BASE-07-FIX
 |           |   |       NO_PATCH.md

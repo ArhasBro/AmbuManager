@@ -47,7 +47,6 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
       companyId,
       name: parsedBody.data.name,
       address: parsedBody.data.address,
-      isActive: parsedBody.data.isActive,
     });
 
     if (!depot) return notFound();

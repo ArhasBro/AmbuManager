@@ -39,9 +39,8 @@ export const updateDepotBodySchema = z
   .object({
     name: depotNameSchema.optional(),
     address: updateDepotAddressSchema,
-    isActive: z.boolean().optional(),
   })
   .strict()
-  .refine((value) => value.name !== undefined || value.address !== undefined || value.isActive !== undefined, {
+  .refine((value) => value.name !== undefined || value.address !== undefined, {
     message: "At least one field must be provided",
   });

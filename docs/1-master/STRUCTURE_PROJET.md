@@ -2006,6 +2006,11 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
+|   |   +---7bt61J1XVw955Ys9TCflQ
+|   |   |       _buildManifest.js
+|   |   |       _clientMiddlewareManifest.json
+|   |   |       _ssgManifest.js
+|   |   |       
 |   |   +---chunks
 |   |   |       05e6c743003c809d.js
 |   |   |       1687260e4d8b05d6.js
@@ -2026,13 +2031,8 @@ C:.
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
 |   |   |       
-|   |   +---media
-|   |   |       favicon.0b3bf435.ico
-|   |   |       
-|   |   \---Z-13gY7aazJJ_RPynC4Cs
-|   |           _buildManifest.js
-|   |           _clientMiddlewareManifest.json
-|   |           _ssgManifest.js
+|   |   \---media
+|   |           favicon.0b3bf435.ico
 |   |           
 |   \---types
 |           routes.d.ts
@@ -2646,7 +2646,8 @@ C:.
 |   |           |   |       NO_PATCH.md
 |   |           |   |       
 |   |           |   +---SESSION-20260317-03_A2_BASE-04-FIX
-|   |           |   |       NO_PATCH.md
+|   |           |   |       BASE-04-FIX.diff
+|   |           |   |       README.md
 |   |           |   |       
 |   |           |   +---SESSION-20260317-04_A2_BASE-07-FIX
 |   |           |   |       NO_PATCH.md

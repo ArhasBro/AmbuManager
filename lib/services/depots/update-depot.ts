@@ -5,7 +5,6 @@ export type UpdateDepotInput = {
   companyId: string;
   name?: string;
   address?: string | null;
-  isActive?: boolean;
 };
 
 export async function updateDepot(input: UpdateDepotInput) {
@@ -24,7 +23,6 @@ export async function updateDepot(input: UpdateDepotInput) {
     data: {
       ...(input.name !== undefined ? { name: input.name } : {}),
       ...(input.address !== undefined ? { address: input.address } : {}),
-      ...(input.isActive !== undefined ? { isActive: input.isActive } : {}),
     },
     select: {
       id: true,
