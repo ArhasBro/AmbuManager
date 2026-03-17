@@ -1,4 +1,4 @@
-﻿# SESSION
+# SESSION
 
 ## ID SESSION
 
@@ -12,24 +12,39 @@ SESSION-20260317-02_A2_BASE-11
 
 Projet : Investissement  
 Sous-projet : Ambulance Manager  
-Maturite : 1-ALPHA  
+Maturité : 1-ALPHA  
 Bloc : A2  
 Type : VALIDATION  
-Intitule : Validation du bloc bases/dépôts
+Intitulé : Validation du bloc bases/dépôts
 
 ## Objectif de la session
 
-INFORMATION NON FOURNIE - A CONFIRMER
+Valider formellement l’état réel du bloc `BASE-02` à `BASE-10` à partir du cadrage fonctionnel, du code réel, des patchs présents et des documents de session déjà produits, sans corriger le code et sans ouvrir de nouveau périmètre.
 
-## Perimetre exact traite
+## Périmètre exact traité
 
-INFORMATION NON FOURNIE - A CONFIRMER
+- `BASE-02` à `BASE-10` uniquement
+- vérification croisée :
+  - documentation master
+  - code réel du dépôt
+  - artefacts de patch
+  - documents de session existants
+- exclusion explicite :
+  - A1
+  - ORG / SUP
+  - BASE-12+
+  - toute implémentation corrective
 
-## Resultat synthetique de session
+## Résultat synthétique de session
 
-INFORMATION NON FOURNIE - A CONFIRMER
+Verdict bloc : **partiellement conforme**
 
-## Dossiers lies
+Synthèse :
+- conformes ou globalement conformes : `BASE-02`, `BASE-03`, `BASE-05`, `BASE-06`, `BASE-08`, `BASE-10`
+- non conforme sur bornage : `BASE-04`
+- non conformes / incomplets sur état réel du dépôt : `BASE-07`, `BASE-09`
 
-- Session : docs/2-sessions/1-ALPHA/BLOC_A2/SESSION-20260317-02_A2_BASE-11
-- Patchs  : docs/3-patches/1-ALPHA/BLOC_A2/SESSION-20260317-02_A2_BASE-11
+## Dossiers liés
+
+- Session : `docs/2-sessions/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260317-02_A2_BASE-11`
+- Patchs  : `docs/3-patches/1-ALPHA/BLOC_A2/2-BASE/SESSION-20260317-02_A2_BASE-11`

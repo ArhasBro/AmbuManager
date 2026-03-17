@@ -2457,6 +2457,13 @@ C:.
 |   |   |       |           SESSION.md
 |   |   |       |           
 |   |   |       \---3-SUP
+|   |   |           \---SESSION-20260317-03_A2_SUP-01
+|   |   |                   EVIDENCES.md
+|   |   |                   FIN_SESSION.md
+|   |   |                   NOTES.md
+|   |   |                   RESULTATS.md
+|   |   |                   SESSION.md
+|   |   |                   
 |   |   \---SESSION-YYYYMMDD-XX
 |   |           EVIDENCES.md
 |   |           FIN_SESSION.md
@@ -2625,6 +2632,9 @@ C:.
 |   |           |           NO_PATCH.md
 |   |           |           
 |   |           \---3-SUP
+|   |               \---SESSION-20260317-03_A2_SUP-01
+|   |                       NO_PATCH.md
+|   |                       
 |   +---4-templates
 |   |       TEMPLATE_DEBUT_SESSION.md
 |   |       TEMPLATE_DOD_4_4.md
