@@ -301,7 +301,28 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |       |   |       RESULTATS.md
 |   |       |   |       SESSION.md
 |   |       |   |       
-|   |       |   \---SESSION-20260317-02_A2_BASE-11
+|   |       |   +---SESSION-20260317-02_A2_BASE-11
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260317-03_A2_BASE-04-FIX
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260317-04_A2_BASE-07-FIX
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   \---SESSION-20260317-05_A2_BASE-09-FIX
 |   |       |           EVIDENCES.md
 |   |       |           FIN_SESSION.md
 |   |       |           NOTES.md
@@ -309,13 +330,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |       |           SESSION.md
 |   |       |           
 |   |       \---3-SUP
-|   |           \---SESSION-20260317-03_A2_SUP-01
-|   |                   EVIDENCES.md
-|   |                   FIN_SESSION.md
-|   |                   NOTES.md
-|   |                   RESULTATS.md
-|   |                   SESSION.md
-|   |                   
 |   \---SESSION-YYYYMMDD-XX
 |           EVIDENCES.md
 |           FIN_SESSION.md
@@ -480,13 +494,19 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |           |   +---SESSION-20260317-01_A2_BASE-10
 |           |   |       NO_PATCH.md
 |           |   |       
-|           |   \---SESSION-20260317-02_A2_BASE-11
+|           |   +---SESSION-20260317-02_A2_BASE-11
+|           |   |       NO_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260317-03_A2_BASE-04-FIX
+|           |   |       NO_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260317-04_A2_BASE-07-FIX
+|           |   |       NO_PATCH.md
+|           |   |       
+|           |   \---SESSION-20260317-05_A2_BASE-09-FIX
 |           |           NO_PATCH.md
 |           |           
 |           \---3-SUP
-|               \---SESSION-20260317-03_A2_SUP-01
-|                       NO_PATCH.md
-|                       
 +---4-templates
 |       TEMPLATE_DEBUT_SESSION.md
 |       TEMPLATE_DOD_4_4.md

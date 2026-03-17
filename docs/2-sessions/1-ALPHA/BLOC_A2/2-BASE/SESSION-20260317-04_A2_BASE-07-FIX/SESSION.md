@@ -2,7 +2,7 @@
 
 ## ID SESSION
 
-SESSION-20260317-03_A2_SUP-01
+SESSION-20260317-04_A2_BASE-07-FIX
 
 ## Date
 
@@ -14,8 +14,8 @@ Projet : Investissement
 Sous-projet : Ambulance Manager  
 Maturite : 1-ALPHA  
 Bloc : A2  
-Type : AUDIT  
-Intitule : Audit du besoin réel support propriétaire dans l’existant
+Type : CORRECTION  
+Intitule : CORRECTIF Rattachement d’un véhicule à une base
 
 ## Objectif de la session
 
@@ -31,5 +31,5 @@ INFORMATION NON FOURNIE - A CONFIRMER
 
 ## Dossiers lies
 
-- Session : docs/2-sessions/1-ALPHA/BLOC_A2/SESSION-20260317-03_A2_SUP-01
-- Patchs  : docs/3-patches/1-ALPHA/BLOC_A2/SESSION-20260317-03_A2_SUP-01
+- Session : docs/2-sessions/1-ALPHA/BLOC_A2/SESSION-20260317-04_A2_BASE-07-FIX
+- Patchs  : docs/3-patches/1-ALPHA/BLOC_A2/SESSION-20260317-04_A2_BASE-07-FIX
