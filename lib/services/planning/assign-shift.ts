@@ -12,6 +12,7 @@ export type AssignShiftInput = {
   userId: string | null;
   user2Id: string | null;
   vehicleId: string | null;
+  depotId: string | null;
 };
 
 export type AssignShiftResult =
@@ -56,6 +57,7 @@ export async function assignShift(input: AssignShiftInput): Promise<AssignShiftR
   const userId = normalized.userId;
   const user2Id = normalized.user2Id;
   const vehicleId = input.vehicleId;
+  const depotId = input.depotId;
 
   if (userId && user2Id && userId === user2Id) {
     return { ok: false, error: err("DUPLICATE_USER_IN_SAME_SHIFT", "Le même employé ne peut pas être affecté aux deux slots.") };
@@ -72,6 +74,7 @@ export async function assignShift(input: AssignShiftInput): Promise<AssignShiftR
       userId: true,
       user2Id: true,
       vehicleId: true,
+      depotId: true,
       runId: true,
       template: { select: { category: true } },
     },
@@ -225,12 +228,13 @@ export async function assignShift(input: AssignShiftInput): Promise<AssignShiftR
     shift.userId !== userId ? "userId" : null,
     shift.user2Id !== user2Id ? "user2Id" : null,
     shift.vehicleId !== vehicleId ? "vehicleId" : null,
+    shift.depotId !== depotId ? "depotId" : null,
   ].filter((field): field is string => field !== null);
 
   await prisma.$transaction(async (tx) => {
     await tx.shift.update({
       where: { id: shiftId },
-      data: { userId, user2Id, vehicleId },
+      data: { userId, user2Id, vehicleId, depotId },
     });
 
     if (changedFields.length > 0) {
@@ -248,11 +252,13 @@ export async function assignShift(input: AssignShiftInput): Promise<AssignShiftR
             userId: shift.userId,
             user2Id: shift.user2Id,
             vehicleId: shift.vehicleId,
+            depotId: shift.depotId,
           },
           next: {
             userId,
             user2Id,
             vehicleId,
+            depotId,
           },
         },
       });

@@ -338,6 +338,52 @@ C:.
 |   |   |               00000420.meta
 |   |   |               00000421.meta
 |   |   |               00000422.meta
+|   |   |               00000423.sst
+|   |   |               00000424.sst
+|   |   |               00000425.sst
+|   |   |               00000426.sst
+|   |   |               00000427.sst
+|   |   |               00000428.meta
+|   |   |               00000429.meta
+|   |   |               00000430.meta
+|   |   |               00000431.meta
+|   |   |               00000432.meta
+|   |   |               00000433.sst
+|   |   |               00000434.sst
+|   |   |               00000435.sst
+|   |   |               00000436.sst
+|   |   |               00000437.sst
+|   |   |               00000438.meta
+|   |   |               00000439.meta
+|   |   |               00000440.meta
+|   |   |               00000441.meta
+|   |   |               00000442.meta
+|   |   |               00000443.sst
+|   |   |               00000444.sst
+|   |   |               00000445.sst
+|   |   |               00000446.sst
+|   |   |               00000447.sst
+|   |   |               00000448.meta
+|   |   |               00000449.meta
+|   |   |               00000450.meta
+|   |   |               00000451.meta
+|   |   |               00000452.meta
+|   |   |               00000453.sst
+|   |   |               00000454.sst
+|   |   |               00000455.sst
+|   |   |               00000456.meta
+|   |   |               00000457.meta
+|   |   |               00000458.meta
+|   |   |               00000459.sst
+|   |   |               00000460.sst
+|   |   |               00000461.sst
+|   |   |               00000462.sst
+|   |   |               00000463.sst
+|   |   |               00000464.meta
+|   |   |               00000465.meta
+|   |   |               00000466.meta
+|   |   |               00000467.meta
+|   |   |               00000468.meta
 |   |   |               CURRENT
 |   |   |               LOG
 |   |   |               
@@ -696,6 +742,18 @@ C:.
 |   |   |   |   |           react-loadable-manifest.json
 |   |   |   |   |           server-reference-manifest.json
 |   |   |   |   |           
+|   |   |   |   +---depots
+|   |   |   |   |   |   page.js
+|   |   |   |   |   |   page.js.map
+|   |   |   |   |   |   page_client-reference-manifest.js
+|   |   |   |   |   |   
+|   |   |   |   |   \---page
+|   |   |   |   |           app-paths-manifest.json
+|   |   |   |   |           build-manifest.json
+|   |   |   |   |           next-font-manifest.json
+|   |   |   |   |           react-loadable-manifest.json
+|   |   |   |   |           server-reference-manifest.json
+|   |   |   |   |           
 |   |   |   |   +---login
 |   |   |   |   |   |   page.js
 |   |   |   |   |   |   page.js.map
@@ -872,6 +930,8 @@ C:.
 |   |   |   |           app_company_company-profile-form_tsx_87216146._.js.map
 |   |   |   |           app_dashboard_logout-button_tsx_efb5e489._.js
 |   |   |   |           app_dashboard_logout-button_tsx_efb5e489._.js.map
+|   |   |   |           app_depots_depots-client_tsx_0adc4040._.js
+|   |   |   |           app_depots_depots-client_tsx_0adc4040._.js.map
 |   |   |   |           app_planning_planning-client_tsx_ec2e83fd._.js
 |   |   |   |           app_planning_planning-client_tsx_ec2e83fd._.js.map
 |   |   |   |           app_users_reset-password-client_tsx_021b3d78._.js
@@ -896,6 +956,8 @@ C:.
 |   |   |   |           node_modules_next_693d4d37._.js.map
 |   |   |   |           node_modules_next_89900bf3._.js
 |   |   |   |           node_modules_next_89900bf3._.js.map
+|   |   |   |           node_modules_next_97b91f65._.js
+|   |   |   |           node_modules_next_97b91f65._.js.map
 |   |   |   |           node_modules_next_d4a9fa90._.js
 |   |   |   |           node_modules_next_d4a9fa90._.js.map
 |   |   |   |           node_modules_next_de66f925._.js
@@ -936,6 +998,8 @@ C:.
 |   |   |   |           [root-of-the-server]__19910943._.js.map
 |   |   |   |           [root-of-the-server]__1b3bd7c9._.js
 |   |   |   |           [root-of-the-server]__1b3bd7c9._.js.map
+|   |   |   |           [root-of-the-server]__2a48ba9f._.js
+|   |   |   |           [root-of-the-server]__2a48ba9f._.js.map
 |   |   |   |           [root-of-the-server]__4e9dd690._.js
 |   |   |   |           [root-of-the-server]__4e9dd690._.js.map
 |   |   |   |           [root-of-the-server]__60f0131a._.js
@@ -966,6 +1030,8 @@ C:.
 |   |   |   |           _next-internal_server_app_company_page_actions_ca33e7ac.js.map
 |   |   |   |           _next-internal_server_app_dashboard_page_actions_7f01ccec.js
 |   |   |   |           _next-internal_server_app_dashboard_page_actions_7f01ccec.js.map
+|   |   |   |           _next-internal_server_app_depots_page_actions_4ef2fb4b.js
+|   |   |   |           _next-internal_server_app_depots_page_actions_4ef2fb4b.js.map
 |   |   |   |           _next-internal_server_app_login_page_actions_0e9aafc0.js
 |   |   |   |           _next-internal_server_app_login_page_actions_0e9aafc0.js.map
 |   |   |   |           _next-internal_server_app_page_actions_39d4fc33.js
@@ -988,6 +1054,7 @@ C:.
 |   |   |   |       app_dashboard_logout-button_tsx_ead64921._.js
 |   |   |   |       app_dashboard_logout-button_tsx_ead64921._.js.map
 |   |   |   |       app_dashboard_page_tsx_993d70a0._.js
+|   |   |   |       app_depots_page_tsx_993d70a0._.js
 |   |   |   |       app_favicon_ico_mjs_745fddaf._.js
 |   |   |   |       app_globals_71f961d1.css
 |   |   |   |       app_globals_71f961d1.css.map
@@ -1030,6 +1097,8 @@ C:.
 |   |   |   |       _2361d2c9._.js
 |   |   |   |       _2361d2c9._.js.map
 |   |   |   |       _23a915ee._.js.map
+|   |   |   |       _23c5895a._.js
+|   |   |   |       _23c5895a._.js.map
 |   |   |   |       _36300989._.js
 |   |   |   |       _36300989._.js.map
 |   |   |   |       _6a5cc714._.js
@@ -1938,7 +2007,6 @@ C:.
 |   |           
 |   +---static
 |   |   +---chunks
-|   |   |       000ea66499535a39.js
 |   |   |       05e6c743003c809d.js
 |   |   |       1687260e4d8b05d6.js
 |   |   |       34f7551faf121447.css
@@ -1949,6 +2017,7 @@ C:.
 |   |   |       96a8fcc9ec5b00e6.js
 |   |   |       a6dad97d9634a72d.js
 |   |   |       a6dad97d9634a72d.js.map
+|   |   |       adae5604c0a9f968.js
 |   |   |       af7027598a07baa5.js
 |   |   |       b870288de7d3931e.js
 |   |   |       c1a988e9a3e1a928.js
@@ -1957,13 +2026,13 @@ C:.
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
 |   |   |       
-|   |   +---em645yQU0x4u-qw1uJcwY
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
+|   |   +---media
+|   |   |       favicon.0b3bf435.ico
 |   |   |       
-|   |   \---media
-|   |           favicon.0b3bf435.ico
+|   |   \---Z-13gY7aazJJ_RPynC4Cs
+|   |           _buildManifest.js
+|   |           _clientMiddlewareManifest.json
+|   |           _ssgManifest.js
 |   |           
 |   \---types
 |           routes.d.ts
@@ -2366,7 +2435,14 @@ C:.
 |   |   |       |   |       RESULTATS.md
 |   |   |       |   |       SESSION.md
 |   |   |       |   |       
-|   |   |       |   \---SESSION-20260316-10_A2_BASE-09
+|   |   |       |   +---SESSION-20260316-10_A2_BASE-09
+|   |   |       |   |       EVIDENCES.md
+|   |   |       |   |       FIN_SESSION.md
+|   |   |       |   |       NOTES.md
+|   |   |       |   |       RESULTATS.md
+|   |   |       |   |       SESSION.md
+|   |   |       |   |       
+|   |   |       |   \---SESSION-20260317-01_A2_BASE-10
 |   |   |       |           EVIDENCES.md
 |   |   |       |           FIN_SESSION.md
 |   |   |       |           NOTES.md
@@ -2531,8 +2607,12 @@ C:.
 |   |           |   |       BASE-08.diff
 |   |           |   |       README_PATCH.md
 |   |           |   |       
-|   |           |   \---SESSION-20260316-10_A2_BASE-09
-|   |           |           README_PATCH.md
+|   |           |   +---SESSION-20260316-10_A2_BASE-09
+|   |           |   |       BASE-09.diff
+|   |           |   |       README_PATCH.md
+|   |           |   |       
+|   |           |   \---SESSION-20260317-01_A2_BASE-10
+|   |           |           NO_PATCH.md
 |   |           |           
 |   |           \---3-SUP
 |   +---4-templates

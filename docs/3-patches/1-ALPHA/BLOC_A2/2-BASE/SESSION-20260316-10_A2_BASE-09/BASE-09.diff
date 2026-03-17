@@ -1,0 +1,412 @@
+diff --git a/app/api/planning/shifts/[id]/assign/route.ts b/app/api/planning/shifts/[id]/assign/route.ts
+index 3195b36..d91dd9b 100644
+--- a/app/api/planning/shifts/[id]/assign/route.ts
++++ b/app/api/planning/shifts/[id]/assign/route.ts
+@@ -13,9 +13,10 @@ const BodySchema = z
+     userId: z.string().uuid().nullable().optional(),
+     user2Id: z.string().uuid().nullable().optional(),
+     vehicleId: z.string().uuid().nullable().optional(),
++    depotId: z.string().uuid().nullable().optional(),
+   })
+-  .refine((v) => v.userId !== undefined || v.user2Id !== undefined || v.vehicleId !== undefined, {
+-    message: "At least one of userId, user2Id or vehicleId must be provided",
++  .refine((v) => v.userId !== undefined || v.user2Id !== undefined || v.vehicleId !== undefined || v.depotId !== undefined, {
++    message: "At least one of userId, user2Id, vehicleId or depotId must be provided",
+   });
+ 
+ function json(status: number, payload: unknown) {
+@@ -61,7 +62,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+     return json(400, { ok: false, error: "INVALID_BODY", details: parsed.error.flatten() });
+   }
+ 
+-  const { userId, user2Id, vehicleId } = parsed.data;
++  const { userId, user2Id, vehicleId, depotId } = parsed.data;
+ 
+   // 5) DraftShift (priorité UI)
+   const draft = await prisma.draftShift.findFirst({
+@@ -89,6 +90,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+           userId: true,
+           user2Id: true,
+           vehicleId: true,
++          depotId: true,
+           template: { select: { category: true } },
+         },
+       })
+@@ -97,6 +99,10 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+   const current = draft ?? shift;
+   if (!current) return json(404, { ok: false, error: "NOT_FOUND" });
+ 
++  if (draft && depotId !== undefined) {
++    return json(400, { ok: false, error: "DEPOT_ASSIGNMENT_NOT_SUPPORTED_ON_DRAFT" });
++  }
++
+   const category = (current.template?.category ?? null) as Category | null;
+   const slots = allowedUserSlots(category);
+ 
+@@ -124,6 +130,14 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+     return !!v;
+   };
+ 
++  const assertActiveDepotInCompany = async (did: string) => {
++    const depot = await prisma.depot.findFirst({
++      where: { id: did, companyId, isActive: true },
++      select: { id: true },
++    });
++    return !!depot;
++  };
++
+   if (userId !== undefined && userId !== null) {
+     const ok = await assertUserInCompany(userId);
+     if (!ok) return json(400, { ok: false, error: "INVALID_USER" });
+@@ -139,6 +153,11 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+     if (!ok) return json(400, { ok: false, error: "INVALID_VEHICLE" });
+   }
+ 
++  if (depotId !== undefined && depotId !== null) {
++    const ok = await assertActiveDepotInCompany(depotId);
++    if (!ok) return json(400, { ok: false, error: "INVALID_DEPOT" });
++  }
++
+   // 8) DraftShift : logique métier via Service
+   if (draft) {
+     const nextVehicle = vehicleId !== undefined ? vehicleId : current.vehicleId ?? null;
+@@ -218,6 +237,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+   if (!shift) return json(404, { ok: false, error: "NOT_FOUND" });
+ 
+   const nextVehicle = vehicleId !== undefined ? vehicleId : current.vehicleId ?? null;
++  const nextDepot = depotId !== undefined ? depotId : shift.depotId ?? null;
+ 
+   const result = await assignShift({
+     companyId,
+@@ -226,6 +246,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+     userId: nextUser1,
+     user2Id: nextUser2,
+     vehicleId: nextVehicle,
++    depotId: nextDepot,
+   });
+ 
+   if (!result.ok) {
+@@ -258,6 +279,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+       user: { select: { id: true, name: true, email: true, role: true } },
+       user2: { select: { id: true, name: true, email: true, role: true } },
+       vehicle: { select: { id: true, immatriculation: true, type: true, status: true } },
++      depot: { select: { id: true, name: true, isActive: true } },
+       template: { select: { id: true, name: true, category: true } },
+       run: { select: { id: true, status: true, scope: true, day: true, weekStart: true, createdAt: true } },
+     },
+diff --git a/app/api/planning/shifts/route.ts b/app/api/planning/shifts/route.ts
+index e7e9a0a..b3361d4 100644
+--- a/app/api/planning/shifts/route.ts
++++ b/app/api/planning/shifts/route.ts
+@@ -91,6 +91,7 @@ export async function GET(req: NextRequest) {
+         // ✅ NOUVEAU : user2
+         user2: { select: { id: true, name: true, email: true, role: true } },
+         vehicle: { select: { id: true, immatriculation: true, type: true, status: true } },
++        depot: { select: { id: true, name: true, isActive: true } },
+         template: { select: { id: true, name: true, category: true } },
+         run: { select: { id: true, scope: true, status: true, day: true, weekStart: true, createdAt: true } },
+       },
+diff --git a/app/planning/page.tsx b/app/planning/page.tsx
+index 25ec16e..9cff4dc 100644
+--- a/app/planning/page.tsx
++++ b/app/planning/page.tsx
+@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth/next";
+ import { redirect } from "next/navigation";
+ 
+ import { authOptions } from "@/lib/auth";
++import { prisma } from "@/lib/prisma";
+ 
+ import PlanningClient from "./planning-client";
+ 
+@@ -11,10 +12,20 @@ export default async function PlanningPage() {
+ 
+   if (!user?.id || !user.companyId) redirect("/login");
+ 
++  const depots = await prisma.depot.findMany({
++    where: { companyId: user.companyId, isActive: true },
++    orderBy: { name: "asc" },
++    select: {
++      id: true,
++      name: true,
++      isActive: true,
++    },
++  });
++
+   return (
+     <main style={{ padding: 24 }}>
+       <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 12 }}>Planning</h1>
+-      <PlanningClient />
++      <PlanningClient availableDepots={depots} />
+     </main>
+   );
+ }
+diff --git a/app/planning/planning-client.tsx b/app/planning/planning-client.tsx
+index 96652ff..83d12c0 100644
+--- a/app/planning/planning-client.tsx
++++ b/app/planning/planning-client.tsx
+@@ -12,11 +12,13 @@ type Shift = {
+   user2?: { id: string; name: string; email: string } | null;
+ 
+   vehicle?: { id: string; immatriculation: string; type: string } | null;
++  depot?: { id: string; name: string; isActive: boolean } | null;
+   template?: { id: string; name: string; category: string } | null;
+ };
+ 
+ type UserLite = { id: string; name: string; email?: string };
+ type VehicleLite = { id: string; immatriculation: string; type: string };
++type DepotLite = { id: string; name: string; isActive: boolean };
+ 
+ type RunAuditLog = {
+   id: string;
+@@ -286,7 +288,11 @@ function countApplied(items: MatchingApplyItem[]) {
+   return { applied, notApplied };
+ }
+ 
+-export default function PlanningClient() {
++function getDepotLabel(depot: DepotLite) {
++  return depot.isActive ? depot.name : `${depot.name} (inactive)`;
++}
++
++export default function PlanningClient({ availableDepots }: { availableDepots: DepotLite[] }) {
+   const [weekStart, setWeekStart] = useState<Date>(() => startOfWeekMonday(new Date()));
+   const [mode, setMode] = useState<ViewMode>("SIMPLE");
+ 
+@@ -390,6 +396,15 @@ export default function PlanningClient() {
+     [vehiclesAll, vehicleOptionsFromItems]
+   );
+ 
++  const depotOptions = useMemo<DepotLite[]>(() => {
++    const map = new Map<string, DepotLite>();
++    for (const depot of availableDepots) map.set(depot.id, depot);
++    for (const s of items) {
++      if (s.depot?.id) map.set(s.depot.id, { id: s.depot.id, name: s.depot.name, isActive: s.depot.isActive });
++    }
++    return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name, "fr"));
++  }, [availableDepots, items]);
++
+   const loadShiftsForWeek = useCallback(async (weekStartISO: string) => {
+     setLoading(true);
+     setError(null);
+@@ -1088,7 +1103,10 @@ export default function PlanningClient() {
+   }, [lastRunId, lastRunStatus, loadRunInfo]);
+ 
+   const assignOnDraftShift = useCallback(
+-    async (shiftId: string, patch: { userId?: string | null; user2Id?: string | null; vehicleId?: string | null }) => {
++    async (
++      shiftId: string,
++      patch: { userId?: string | null; user2Id?: string | null; vehicleId?: string | null; depotId?: string | null }
++    ) => {
+       setAssignLoadingId(shiftId);
+       setAssignMsgById((m) => ({ ...m, [shiftId]: null }));
+       setPubMsg(null);
+@@ -1522,6 +1540,7 @@ export default function PlanningClient() {
+                           editable={canAdminSave(role)}
+                           users={userOptions}
+                           vehicles={vehicleOptions}
++                          depots={depotOptions}
+                           loading={assignLoadingId === s.id}
+                           msg={assignMsgById[s.id] ?? null}
+                           onAssign={assignOnDraftShift}
+@@ -1533,6 +1552,7 @@ export default function PlanningClient() {
+                           editable={canAdminSave(role)}
+                           users={userOptions}
+                           vehicles={vehicleOptions}
++                          depots={depotOptions}
+                           loading={assignLoadingId === s.id}
+                           msg={assignMsgById[s.id] ?? null}
+                           onAssign={assignOnDraftShift}
+@@ -1555,6 +1575,7 @@ function ShiftCardSimple({
+   editable,
+   users,
+   vehicles,
++  depots,
+   loading,
+   msg,
+   onAssign,
+@@ -1563,9 +1584,10 @@ function ShiftCardSimple({
+   editable: boolean;
+   users: UserLite[];
+   vehicles: VehicleLite[];
++  depots: DepotLite[];
+   loading: boolean;
+   msg: string | null;
+-  onAssign: (id: string, patch: { userId?: string | null; user2Id?: string | null; vehicleId?: string | null }) => Promise<void>;
++  onAssign: (id: string, patch: { userId?: string | null; user2Id?: string | null; vehicleId?: string | null; depotId?: string | null }) => Promise<void>;
+ }) {
+   const cat = String(s.template?.category ?? "").toUpperCase();
+   const two = requiresTwoEmployees(cat);
+@@ -1579,7 +1601,7 @@ function ShiftCardSimple({
+       </div>
+ 
+       <div style={{ opacity: 0.9 }}>
+-        {usersSummary} • {s.vehicle?.immatriculation ?? "—"}
++        {usersSummary} • {s.vehicle?.immatriculation ?? "—"} • {s.depot ? getDepotLabel(s.depot) : "Aucune base"}
+       </div>
+ 
+       <div style={{ opacity: 0.7 }}>{s.template?.name ?? "—"}</div>
+@@ -1645,6 +1667,25 @@ function ShiftCardSimple({
+             </select>
+           </div>
+ 
++          <div style={{ display: "grid", gap: 4 }}>
++            <label style={{ fontSize: 12, opacity: 0.75 }}>Base</label>
++            <select
++              value={s.depot?.id ?? ""}
++              disabled={loading}
++              onChange={(e) => {
++                const v = e.target.value;
++                onAssign(s.id, { depotId: v === "" ? null : v });
++              }}
++            >
++              <option value="">— Aucune base —</option>
++              {depots.map((depot) => (
++                <option key={depot.id} value={depot.id}>
++                  {getDepotLabel(depot)}
++                </option>
++              ))}
++            </select>
++          </div>
++
+           {msg && <div style={{ fontSize: 12, opacity: 0.9 }}>{msg}</div>}
+         </div>
+       )}
+@@ -1657,6 +1698,7 @@ function ShiftCardAmbulance({
+   editable,
+   users,
+   vehicles,
++  depots,
+   loading,
+   msg,
+   onAssign,
+@@ -1665,9 +1707,10 @@ function ShiftCardAmbulance({
+   editable: boolean;
+   users: UserLite[];
+   vehicles: VehicleLite[];
++  depots: DepotLite[];
+   loading: boolean;
+   msg: string | null;
+-  onAssign: (id: string, patch: { userId?: string | null; user2Id?: string | null; vehicleId?: string | null }) => Promise<void>;
++  onAssign: (id: string, patch: { userId?: string | null; user2Id?: string | null; vehicleId?: string | null; depotId?: string | null }) => Promise<void>;
+ }) {
+   const cat = String(s.template?.category ?? "—").toUpperCase();
+   const two = requiresTwoEmployees(cat);
+@@ -1709,6 +1752,7 @@ function ShiftCardAmbulance({
+           <Row label="Employé" value={s.user?.name ?? "—"} />
+         )}
+         <Row label="Véhicule" value={s.vehicle?.immatriculation ?? "—"} />
++        <Row label="Base" value={s.depot ? getDepotLabel(s.depot) : "Aucune"} />
+         <Row label="Mission" value={s.template?.name ?? "—"} />
+       </div>
+ 
+@@ -1773,6 +1817,25 @@ function ShiftCardAmbulance({
+             </select>
+           </div>
+ 
++          <div style={{ display: "grid", gap: 4 }}>
++            <label style={{ fontSize: 12, opacity: 0.75 }}>Base</label>
++            <select
++              value={s.depot?.id ?? ""}
++              disabled={loading}
++              onChange={(e) => {
++                const v = e.target.value;
++                onAssign(s.id, { depotId: v === "" ? null : v });
++              }}
++            >
++              <option value="">— Aucune base —</option>
++              {depots.map((depot) => (
++                <option key={depot.id} value={depot.id}>
++                  {getDepotLabel(depot)}
++                </option>
++              ))}
++            </select>
++          </div>
++
+           {msg && <div style={{ fontSize: 12, opacity: 0.9 }}>{msg}</div>}
+         </div>
+       )}
+diff --git a/lib/services/planning/assign-shift.ts b/lib/services/planning/assign-shift.ts
+index f9921e4..03e4149 100644
+--- a/lib/services/planning/assign-shift.ts
++++ b/lib/services/planning/assign-shift.ts
+@@ -12,6 +12,7 @@ export type AssignShiftInput = {
+   userId: string | null;
+   user2Id: string | null;
+   vehicleId: string | null;
++  depotId: string | null;
+ };
+ 
+ export type AssignShiftResult =
+@@ -56,6 +57,7 @@ export async function assignShift(input: AssignShiftInput): Promise<AssignShiftR
+   const userId = normalized.userId;
+   const user2Id = normalized.user2Id;
+   const vehicleId = input.vehicleId;
++  const depotId = input.depotId;
+ 
+   if (userId && user2Id && userId === user2Id) {
+     return { ok: false, error: err("DUPLICATE_USER_IN_SAME_SHIFT", "Le même employé ne peut pas être affecté aux deux slots.") };
+@@ -72,6 +74,7 @@ export async function assignShift(input: AssignShiftInput): Promise<AssignShiftR
+       userId: true,
+       user2Id: true,
+       vehicleId: true,
++      depotId: true,
+       runId: true,
+       template: { select: { category: true } },
+     },
+@@ -225,12 +228,13 @@ export async function assignShift(input: AssignShiftInput): Promise<AssignShiftR
+     shift.userId !== userId ? "userId" : null,
+     shift.user2Id !== user2Id ? "user2Id" : null,
+     shift.vehicleId !== vehicleId ? "vehicleId" : null,
++    shift.depotId !== depotId ? "depotId" : null,
+   ].filter((field): field is string => field !== null);
+ 
+   await prisma.$transaction(async (tx) => {
+     await tx.shift.update({
+       where: { id: shiftId },
+-      data: { userId, user2Id, vehicleId },
++      data: { userId, user2Id, vehicleId, depotId },
+     });
+ 
+     if (changedFields.length > 0) {
+@@ -248,11 +252,13 @@ export async function assignShift(input: AssignShiftInput): Promise<AssignShiftR
+             userId: shift.userId,
+             user2Id: shift.user2Id,
+             vehicleId: shift.vehicleId,
++            depotId: shift.depotId,
+           },
+           next: {
+             userId,
+             user2Id,
+             vehicleId,
++            depotId,
+           },
+         },
+       });
+diff --git a/prisma/schema.prisma b/prisma/schema.prisma
+index 83cc0c9..d9f341d 100644
+--- a/prisma/schema.prisma
++++ b/prisma/schema.prisma
+@@ -135,6 +135,7 @@ model Depot {
+ 
+   vehicles Vehicle[]
+   users    User[]
++  shifts   Shift[]
+ 
+   @@unique([companyId, name])
+   @@index([companyId])
+@@ -386,6 +387,9 @@ model Shift {
+   vehicleId String?  @db.Uuid
+   vehicle   Vehicle? @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
+ 
++  depotId String? @db.Uuid
++  depot   Depot?  @relation(fields: [depotId], references: [id], onDelete: SetNull)
++
+   // Trace d'où ça vient (optionnel mais utile)
+   runId String?
+   run   AutoScheduleRun? @relation(fields: [runId], references: [id], onDelete: SetNull)
+@@ -406,4 +410,5 @@ model Shift {
+   @@index([companyId, userId, startAt])
+   @@index([companyId, user2Id, startAt])
+   @@index([companyId, vehicleId, startAt])
++  @@index([depotId])
+ }
+\ No newline at end of file

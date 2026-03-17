@@ -135,6 +135,7 @@ model Depot {
 
   vehicles Vehicle[]
   users    User[]
+  shifts   Shift[]
 
   @@unique([companyId, name])
   @@index([companyId])
@@ -386,6 +387,9 @@ model Shift {
   vehicleId String?  @db.Uuid
   vehicle   Vehicle? @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
 
+  depotId String? @db.Uuid
+  depot   Depot?  @relation(fields: [depotId], references: [id], onDelete: SetNull)
+
   // Trace d'où ça vient (optionnel mais utile)
   runId String?
   run   AutoScheduleRun? @relation(fields: [runId], references: [id], onDelete: SetNull)
@@ -406,4 +410,5 @@ model Shift {
   @@index([companyId, userId, startAt])
   @@index([companyId, user2Id, startAt])
   @@index([companyId, vehicleId, startAt])
+  @@index([depotId])
 }

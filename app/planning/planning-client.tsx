@@ -12,11 +12,13 @@ type Shift = {
   user2?: { id: string; name: string; email: string } | null;
 
   vehicle?: { id: string; immatriculation: string; type: string } | null;
+  depot?: { id: string; name: string; isActive: boolean } | null;
   template?: { id: string; name: string; category: string } | null;
 };
 
 type UserLite = { id: string; name: string; email?: string };
 type VehicleLite = { id: string; immatriculation: string; type: string };
+type DepotLite = { id: string; name: string; isActive: boolean };
 
 type RunAuditLog = {
   id: string;
@@ -286,7 +288,11 @@ function countApplied(items: MatchingApplyItem[]) {
   return { applied, notApplied };
 }
 
-export default function PlanningClient() {
+function getDepotLabel(depot: DepotLite) {
+  return depot.isActive ? depot.name : `${depot.name} (inactive)`;
+}
+
+export default function PlanningClient({ availableDepots }: { availableDepots: DepotLite[] }) {
   const [weekStart, setWeekStart] = useState<Date>(() => startOfWeekMonday(new Date()));
   const [mode, setMode] = useState<ViewMode>("SIMPLE");
 
@@ -389,6 +395,15 @@ export default function PlanningClient() {
     () => (vehiclesAll.length > 0 ? vehiclesAll : vehicleOptionsFromItems),
     [vehiclesAll, vehicleOptionsFromItems]
   );
+
+  const depotOptions = useMemo<DepotLite[]>(() => {
+    const map = new Map<string, DepotLite>();
+    for (const depot of availableDepots) map.set(depot.id, depot);
+    for (const s of items) {
+      if (s.depot?.id) map.set(s.depot.id, { id: s.depot.id, name: s.depot.name, isActive: s.depot.isActive });
+    }
+    return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name, "fr"));
+  }, [availableDepots, items]);
 
   const loadShiftsForWeek = useCallback(async (weekStartISO: string) => {
     setLoading(true);
@@ -1088,7 +1103,10 @@ export default function PlanningClient() {
   }, [lastRunId, lastRunStatus, loadRunInfo]);
 
   const assignOnDraftShift = useCallback(
-    async (shiftId: string, patch: { userId?: string | null; user2Id?: string | null; vehicleId?: string | null }) => {
+    async (
+      shiftId: string,
+      patch: { userId?: string | null; user2Id?: string | null; vehicleId?: string | null; depotId?: string | null }
+    ) => {
       setAssignLoadingId(shiftId);
       setAssignMsgById((m) => ({ ...m, [shiftId]: null }));
       setPubMsg(null);
@@ -1522,6 +1540,7 @@ export default function PlanningClient() {
                           editable={canAdminSave(role)}
                           users={userOptions}
                           vehicles={vehicleOptions}
+                          depots={depotOptions}
                           loading={assignLoadingId === s.id}
                           msg={assignMsgById[s.id] ?? null}
                           onAssign={assignOnDraftShift}
@@ -1533,6 +1552,7 @@ export default function PlanningClient() {
                           editable={canAdminSave(role)}
                           users={userOptions}
                           vehicles={vehicleOptions}
+                          depots={depotOptions}
                           loading={assignLoadingId === s.id}
                           msg={assignMsgById[s.id] ?? null}
                           onAssign={assignOnDraftShift}
@@ -1555,6 +1575,7 @@ function ShiftCardSimple({
   editable,
   users,
   vehicles,
+  depots,
   loading,
   msg,
   onAssign,
@@ -1563,9 +1584,10 @@ function ShiftCardSimple({
   editable: boolean;
   users: UserLite[];
   vehicles: VehicleLite[];
+  depots: DepotLite[];
   loading: boolean;
   msg: string | null;
-  onAssign: (id: string, patch: { userId?: string | null; user2Id?: string | null; vehicleId?: string | null }) => Promise<void>;
+  onAssign: (id: string, patch: { userId?: string | null; user2Id?: string | null; vehicleId?: string | null; depotId?: string | null }) => Promise<void>;
 }) {
   const cat = String(s.template?.category ?? "").toUpperCase();
   const two = requiresTwoEmployees(cat);
@@ -1579,7 +1601,7 @@ function ShiftCardSimple({
       </div>
 
       <div style={{ opacity: 0.9 }}>
-        {usersSummary} • {s.vehicle?.immatriculation ?? "—"}
+        {usersSummary} • {s.vehicle?.immatriculation ?? "—"} • {s.depot ? getDepotLabel(s.depot) : "Aucune base"}
       </div>
 
       <div style={{ opacity: 0.7 }}>{s.template?.name ?? "—"}</div>
@@ -1645,6 +1667,25 @@ function ShiftCardSimple({
             </select>
           </div>
 
+          <div style={{ display: "grid", gap: 4 }}>
+            <label style={{ fontSize: 12, opacity: 0.75 }}>Base</label>
+            <select
+              value={s.depot?.id ?? ""}
+              disabled={loading}
+              onChange={(e) => {
+                const v = e.target.value;
+                onAssign(s.id, { depotId: v === "" ? null : v });
+              }}
+            >
+              <option value="">— Aucune base —</option>
+              {depots.map((depot) => (
+                <option key={depot.id} value={depot.id}>
+                  {getDepotLabel(depot)}
+                </option>
+              ))}
+            </select>
+          </div>
+
           {msg && <div style={{ fontSize: 12, opacity: 0.9 }}>{msg}</div>}
         </div>
       )}
@@ -1657,6 +1698,7 @@ function ShiftCardAmbulance({
   editable,
   users,
   vehicles,
+  depots,
   loading,
   msg,
   onAssign,
@@ -1665,9 +1707,10 @@ function ShiftCardAmbulance({
   editable: boolean;
   users: UserLite[];
   vehicles: VehicleLite[];
+  depots: DepotLite[];
   loading: boolean;
   msg: string | null;
-  onAssign: (id: string, patch: { userId?: string | null; user2Id?: string | null; vehicleId?: string | null }) => Promise<void>;
+  onAssign: (id: string, patch: { userId?: string | null; user2Id?: string | null; vehicleId?: string | null; depotId?: string | null }) => Promise<void>;
 }) {
   const cat = String(s.template?.category ?? "—").toUpperCase();
   const two = requiresTwoEmployees(cat);
@@ -1709,6 +1752,7 @@ function ShiftCardAmbulance({
           <Row label="Employé" value={s.user?.name ?? "—"} />
         )}
         <Row label="Véhicule" value={s.vehicle?.immatriculation ?? "—"} />
+        <Row label="Base" value={s.depot ? getDepotLabel(s.depot) : "Aucune"} />
         <Row label="Mission" value={s.template?.name ?? "—"} />
       </div>
 
@@ -1768,6 +1812,25 @@ function ShiftCardAmbulance({
               {vehicles.map((v) => (
                 <option key={v.id} value={v.id}>
                   {v.immatriculation} ({v.type})
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div style={{ display: "grid", gap: 4 }}>
+            <label style={{ fontSize: 12, opacity: 0.75 }}>Base</label>
+            <select
+              value={s.depot?.id ?? ""}
+              disabled={loading}
+              onChange={(e) => {
+                const v = e.target.value;
+                onAssign(s.id, { depotId: v === "" ? null : v });
+              }}
+            >
+              <option value="">— Aucune base —</option>
+              {depots.map((depot) => (
+                <option key={depot.id} value={depot.id}>
+                  {getDepotLabel(depot)}
                 </option>
               ))}
             </select>

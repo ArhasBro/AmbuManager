@@ -91,6 +91,7 @@ export async function GET(req: NextRequest) {
         // ✅ NOUVEAU : user2
         user2: { select: { id: true, name: true, email: true, role: true } },
         vehicle: { select: { id: true, immatriculation: true, type: true, status: true } },
+        depot: { select: { id: true, name: true, isActive: true } },
         template: { select: { id: true, name: true, category: true } },
         run: { select: { id: true, scope: true, status: true, day: true, weekStart: true, createdAt: true } },
       },

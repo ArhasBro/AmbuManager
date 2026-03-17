@@ -13,9 +13,10 @@ const BodySchema = z
     userId: z.string().uuid().nullable().optional(),
     user2Id: z.string().uuid().nullable().optional(),
     vehicleId: z.string().uuid().nullable().optional(),
+    depotId: z.string().uuid().nullable().optional(),
   })
-  .refine((v) => v.userId !== undefined || v.user2Id !== undefined || v.vehicleId !== undefined, {
-    message: "At least one of userId, user2Id or vehicleId must be provided",
+  .refine((v) => v.userId !== undefined || v.user2Id !== undefined || v.vehicleId !== undefined || v.depotId !== undefined, {
+    message: "At least one of userId, user2Id, vehicleId or depotId must be provided",
   });
 
 function json(status: number, payload: unknown) {
@@ -61,7 +62,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     return json(400, { ok: false, error: "INVALID_BODY", details: parsed.error.flatten() });
   }
 
-  const { userId, user2Id, vehicleId } = parsed.data;
+  const { userId, user2Id, vehicleId, depotId } = parsed.data;
 
   // 5) DraftShift (priorité UI)
   const draft = await prisma.draftShift.findFirst({
@@ -89,6 +90,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
           userId: true,
           user2Id: true,
           vehicleId: true,
+          depotId: true,
           template: { select: { category: true } },
         },
       })
@@ -96,6 +98,10 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
 
   const current = draft ?? shift;
   if (!current) return json(404, { ok: false, error: "NOT_FOUND" });
+
+  if (draft && depotId !== undefined) {
+    return json(400, { ok: false, error: "DEPOT_ASSIGNMENT_NOT_SUPPORTED_ON_DRAFT" });
+  }
 
   const category = (current.template?.category ?? null) as Category | null;
   const slots = allowedUserSlots(category);
@@ -124,6 +130,14 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     return !!v;
   };
 
+  const assertActiveDepotInCompany = async (did: string) => {
+    const depot = await prisma.depot.findFirst({
+      where: { id: did, companyId, isActive: true },
+      select: { id: true },
+    });
+    return !!depot;
+  };
+
   if (userId !== undefined && userId !== null) {
     const ok = await assertUserInCompany(userId);
     if (!ok) return json(400, { ok: false, error: "INVALID_USER" });
@@ -137,6 +151,11 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
   if (vehicleId !== undefined && vehicleId !== null) {
     const ok = await assertVehicleInCompany(vehicleId);
     if (!ok) return json(400, { ok: false, error: "INVALID_VEHICLE" });
+  }
+
+  if (depotId !== undefined && depotId !== null) {
+    const ok = await assertActiveDepotInCompany(depotId);
+    if (!ok) return json(400, { ok: false, error: "INVALID_DEPOT" });
   }
 
   // 8) DraftShift : logique métier via Service
@@ -218,6 +237,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
   if (!shift) return json(404, { ok: false, error: "NOT_FOUND" });
 
   const nextVehicle = vehicleId !== undefined ? vehicleId : current.vehicleId ?? null;
+  const nextDepot = depotId !== undefined ? depotId : shift.depotId ?? null;
 
   const result = await assignShift({
     companyId,
@@ -226,6 +246,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     userId: nextUser1,
     user2Id: nextUser2,
     vehicleId: nextVehicle,
+    depotId: nextDepot,
   });
 
   if (!result.ok) {
@@ -258,6 +279,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
       user: { select: { id: true, name: true, email: true, role: true } },
       user2: { select: { id: true, name: true, email: true, role: true } },
       vehicle: { select: { id: true, immatriculation: true, type: true, status: true } },
+      depot: { select: { id: true, name: true, isActive: true } },
       template: { select: { id: true, name: true, category: true } },
       run: { select: { id: true, status: true, scope: true, day: true, weekStart: true, createdAt: true } },
     },
