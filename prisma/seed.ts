@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { PrismaClient, Role, PlanningTemplateCategory, VehicleType, VehicleStatus } from "@prisma/client";
+import { PlatformRole, PrismaClient, Role, PlanningTemplateCategory, VehicleType, VehicleStatus } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { Pool } from "pg";
 import bcrypt from "bcrypt";
@@ -25,6 +25,47 @@ function readSeedPassword(envName: string, fallback: string): string {
   throw new Error(
     `Missing ${envName}. Define it in the environment or set ALLOW_INSECURE_SEED_DEFAULTS=true for local demo data.`
   );
+}
+
+function readOptionalSeedString(envName: string): string | undefined {
+  const value = process.env[envName];
+  if (typeof value !== "string") return undefined;
+
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : undefined;
+}
+
+type SupportSeedIdentity = {
+  email: string;
+  name: string;
+  password: string;
+};
+
+function readSupportSeedIdentity(): SupportSeedIdentity | null {
+  const name = readOptionalSeedString("SEED_SUPPORT_NAME");
+  const email = readOptionalSeedString("SEED_SUPPORT_EMAIL");
+  const password = readOptionalSeedString("SEED_SUPPORT_PASSWORD");
+
+  const providedCount = [name, email, password].filter((value) => typeof value === "string").length;
+
+  if (providedCount === 0) {
+    console.warn(
+      "ℹ️  Compte support non créé : définir SEED_SUPPORT_NAME, SEED_SUPPORT_EMAIL et SEED_SUPPORT_PASSWORD pour activer le seed nominatif support."
+    );
+    return null;
+  }
+
+  if (providedCount !== 3) {
+    throw new Error(
+      "Incomplete support seed configuration. Define SEED_SUPPORT_NAME, SEED_SUPPORT_EMAIL and SEED_SUPPORT_PASSWORD together, or leave all three undefined."
+    );
+  }
+
+  return {
+    name,
+    email: email.toLowerCase(),
+    password,
+  };
 }
 
 type SeedCompany = {
@@ -88,6 +129,7 @@ async function upsertUser(params: { email: string; password: string; name: strin
     update: {
       name: params.name,
       role: params.role,
+      platformRole: null,
       companyId: params.companyId,
       password: hashedPassword,
     },
@@ -96,7 +138,35 @@ async function upsertUser(params: { email: string; password: string; name: strin
       password: hashedPassword,
       name: params.name,
       role: params.role,
+      platformRole: null,
       companyId: params.companyId,
+    },
+  });
+
+  return user;
+}
+
+async function upsertSupportUser(params: { email: string; password: string; name: string }) {
+  const hashedPassword = await bcrypt.hash(params.password, 10);
+
+  const user = await prisma.user.upsert({
+    where: { email: params.email },
+    update: {
+      name: params.name,
+      password: hashedPassword,
+      platformRole: PlatformRole.SUPPORT,
+      role: null,
+      companyId: null,
+      depotId: null,
+    },
+    create: {
+      email: params.email,
+      password: hashedPassword,
+      name: params.name,
+      platformRole: PlatformRole.SUPPORT,
+      role: null,
+      companyId: null,
+      depotId: null,
     },
   });
 
@@ -191,6 +261,7 @@ async function main() {
   // =========================
   const adminPasswordA = readSeedPassword("SEED_ADMIN_PASSWORD", "admin123");
   const adminPasswordB = process.env.SEED_ADMIN_B_PASSWORD ?? adminPasswordA;
+  const supportIdentity = readSupportSeedIdentity();
 
   const userPassword = readSeedPassword("SEED_USER_PASSWORD", "user123");
   const now = new Date();
@@ -201,7 +272,16 @@ async function main() {
   await ensurePermissions();
 
   // =========================
-  // 2) Tenants A/B + users + vehicles + templates
+  // 2) Compte support global nominatif (hors société)
+  // =========================
+  if (supportIdentity) {
+    const supportUser = await upsertSupportUser(supportIdentity);
+    await setUserPermissions(supportUser.id, []);
+    console.log("✅ Support user upserted:", supportUser.email, supportUser.id, "(platformRole=SUPPORT, role=null, companyId=null)");
+  }
+
+  // =========================
+  // 3) Tenants A/B + users + vehicles + templates
   // =========================
   const companies: SeedCompany[] = [
     {
@@ -353,7 +433,7 @@ async function main() {
     await prisma.company.update({ where: { id: company.id }, data: { updatedAt: now } });
   }
 
-  console.log("✅ Seed OK (A/B ready for DoD 4.4 tests)");
+  console.log("✅ Seed OK (support + A/B ready for DoD 4.4 tests)");
 }
 
 main()

@@ -73,17 +73,18 @@ Voici sa réponse ainsi que les documents généré :
 
 
 
-Je vais intégrer le .diff et je te renvoi le retour terminal de :
+Je vais intégrer le .diff et je te renvoi le retour terminal de (Si faut enlever ou rajouter des cmd fait moi un copier/coller de ce que tu veux que je fasse):
 git apply --check ".\"
 git apply ".\"
 npx prisma validate
 npx prisma generate
+npm run db:seed
 npm run lint
 npm run build
 git status --short
 
 Attend le retour du terminal avant de me répondre.
-Si il y a d'autre cmd a faire n'hésite pas a me dire.
+Si il y a Fix a faire rédige le prompt. (Il ne doit pas le refaire en entier, juste faire un fix sur les erreurs)
 Je n'ai pas intégré : 
 -les fichiers documentaires de session (`SESSION.md`, `NOTES.md`, `EVIDENCES.md`, `RESULTATS.md`, `FIN_SESSION.md`)
 -le fichier documentaire de patches (`README.md`)
