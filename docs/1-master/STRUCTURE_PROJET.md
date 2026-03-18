@@ -2015,11 +2015,6 @@ C:.
 |   |           middleware-manifest.json
 |   |           
 |   +---static
-|   |   +---BTx7yK1cDaJjtp0AFaZI6
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
-|   |   |       
 |   |   +---chunks
 |   |   |       05e6c743003c809d.js
 |   |   |       1687260e4d8b05d6.js
@@ -2040,8 +2035,13 @@ C:.
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
 |   |   |       
-|   |   \---media
-|   |           favicon.0b3bf435.ico
+|   |   +---media
+|   |   |       favicon.0b3bf435.ico
+|   |   |       
+|   |   \---oS5BPcXJqIj8EmE7RrmQZ
+|   |           _buildManifest.js
+|   |           _clientMiddlewareManifest.json
+|   |           _ssgManifest.js
 |   |           
 |   \---types
 |           routes.d.ts
@@ -2721,6 +2721,7 @@ C:.
 |   |               +---SESSION-20260318-03_A2_SUP-03
 |   |               |       README_PATCH.md
 |   |               |       SUP-03-FIX-02.diff
+|   |               |       SUP-03-FIX-03.diff
 |   |               |       SUP-03-FIX-APPLY.diff
 |   |               |       SUP-03-FIX.diff
 |   |               |       SUP-03.diff

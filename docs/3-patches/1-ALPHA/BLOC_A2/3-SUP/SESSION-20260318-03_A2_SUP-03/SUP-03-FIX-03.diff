@@ -1,0 +1,141 @@
+diff --git a/prisma/seed.ts b/prisma/seed.ts
+index 9acb6a6..910cc91 100644
+--- a/prisma/seed.ts
++++ b/prisma/seed.ts
+@@ -1,5 +1,5 @@
+ import "dotenv/config";
+-import { PrismaClient, Role, PlanningTemplateCategory, VehicleType, VehicleStatus } from "@prisma/client";
++import { PrismaClient, Role, PlatformRole, PlanningTemplateCategory, VehicleType, VehicleStatus } from "@prisma/client";
+ import { PrismaPg } from "@prisma/adapter-pg";
+ import { Pool } from "pg";
+ import bcrypt from "bcrypt";
+@@ -27,6 +27,57 @@ function readSeedPassword(envName: string, fallback: string): string {
+   );
+ }
+ 
++type SupportSeedIdentity = {
++  name: string;
++  email: string;
++  password: string;
++};
++
++function readOptionalSeedValue(envName: string): string | null {
++  const value = process.env[envName];
++  if (typeof value !== "string") return null;
++
++  const trimmed = value.trim();
++  return trimmed.length > 0 ? trimmed : null;
++}
++
++function readSupportSeedIdentity(): SupportSeedIdentity | null {
++  const nameValue = readOptionalSeedValue("SEED_SUPPORT_NAME");
++  const emailValue = readOptionalSeedValue("SEED_SUPPORT_EMAIL");
++  const passwordValue = readOptionalSeedValue("SEED_SUPPORT_PASSWORD");
++
++  const providedValues = [nameValue, emailValue, passwordValue].filter((value): value is string => value !== null).length;
++
++  if (providedValues === 0) return null;
++
++  if (providedValues !== 3 || nameValue === null || emailValue === null || passwordValue === null) {
++    throw new Error(
++      "Incomplete support seed configuration. Define SEED_SUPPORT_NAME, SEED_SUPPORT_EMAIL and SEED_SUPPORT_PASSWORD together."
++    );
++  }
++
++  return {
++    name: nameValue,
++    email: emailValue.toLowerCase(),
++    password: passwordValue,
++  };
++}
++
++function getErrorMessage(error: unknown): string {
++  if (error instanceof Error) return error.message;
++  return String(error);
++}
++
++function isMissingPlatformRoleColumnError(error: unknown): boolean {
++  const message = getErrorMessage(error).toLowerCase();
++
++  return (
++    message.includes("platformrole") &&
++    message.includes("column") &&
++    (message.includes("does not exist") || message.includes("unknown column") || message.includes("missing"))
++  );
++}
++
+ type SeedCompany = {
+   name: string;
+   managerNames: string;
+@@ -103,6 +154,50 @@ async function upsertUser(params: { email: string; password: string; name: strin
+   return user;
+ }
+ 
++
++async function upsertSupportUser(identity: SupportSeedIdentity) {
++  const hashedPassword = await bcrypt.hash(identity.password, 10);
++
++  try {
++    const user = await prisma.user.upsert({
++      where: { email: identity.email },
++      update: {
++        name: identity.name,
++        password: hashedPassword,
++        platformRole: PlatformRole.SUPPORT,
++        role: null,
++        companyId: null,
++        depotId: null,
++      },
++      create: {
++        email: identity.email,
++        password: hashedPassword,
++        name: identity.name,
++        platformRole: PlatformRole.SUPPORT,
++        role: null,
++        companyId: null,
++        depotId: null,
++      },
++    });
++
++    await prisma.userPermission.deleteMany({
++      where: { userId: user.id },
++    });
++
++    console.log("✅ Support user upserted:", user.email, user.id);
++    return user;
++  } catch (error) {
++    if (isMissingPlatformRoleColumnError(error)) {
++      console.warn(
++        "⚠️  Compte support non seedé : colonne User.platformRole absente de la base courante. Aligner la base avec les migrations SUP-02 avant d'activer le seed support."
++      );
++      return null;
++    }
++
++    throw error;
++  }
++}
++
+ async function ensurePermissions() {
+   const created = [];
+   for (const p of ALPHA_PERMISSION_CATALOG) {
+@@ -201,7 +296,19 @@ async function main() {
+   await ensurePermissions();
+ 
+   // =========================
+-  // 2) Tenants A/B + users + vehicles + templates
++  // 2) Support platform account (optional)
++  // =========================
++  const supportIdentity = readSupportSeedIdentity();
++  if (supportIdentity === null) {
++    console.log(
++      "ℹ️  Compte support non créé : définir SEED_SUPPORT_NAME, SEED_SUPPORT_EMAIL et SEED_SUPPORT_PASSWORD pour activer le seed nominatif support."
++    );
++  } else {
++    await upsertSupportUser(supportIdentity);
++  }
++
++  // =========================
++  // 3) Tenants A/B + users + vehicles + templates
+   // =========================
+   const companies: SeedCompany[] = [
+     {

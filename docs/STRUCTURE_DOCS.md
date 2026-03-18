@@ -560,6 +560,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |               +---SESSION-20260318-03_A2_SUP-03
 |               |       README_PATCH.md
 |               |       SUP-03-FIX-02.diff
+|               |       SUP-03-FIX-03.diff
 |               |       SUP-03-FIX-APPLY.diff
 |               |       SUP-03-FIX.diff
 |               |       SUP-03.diff
