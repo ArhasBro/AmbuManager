@@ -4,8 +4,8 @@ type AssignedUser = {
   id: string;
   name: string;
   email: string;
-  role: string;
-  companyId: string;
+  role: string | null;
+  companyId: string | null;
   depotId: string | null;
   depot: {
     id: string;

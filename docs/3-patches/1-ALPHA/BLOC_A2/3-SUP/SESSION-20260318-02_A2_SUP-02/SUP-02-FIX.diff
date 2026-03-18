@@ -1,0 +1,10 @@
+--- /tmp/schema_broken_sup02.prisma	2026-03-18 15:03:03.914783729 +0000
++++ prisma/schema.prisma	2026-03-18 15:03:05.770020071 +0000
+@@ -294,7 +294,6 @@
+ 
+   @@unique([companyId, immatriculation])
+   @@index([companyId])
+-  @@index([platformRole])
+   @@index([depotId])
+ }
+ 

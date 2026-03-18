@@ -141,9 +141,12 @@ export async function computeDraftShiftMatchingByRole(
 
   const usersByRole = new Map<Role, Array<{ id: string }>>();
   for (const u of users) {
-    const arr = usersByRole.get(u.role) ?? [];
+    const userRole = toRoleEnum(u.role);
+    if (!userRole) continue;
+
+    const arr = usersByRole.get(userRole) ?? [];
     arr.push({ id: u.id });
-    usersByRole.set(u.role, arr);
+    usersByRole.set(userRole, arr);
   }
 
   const busy = new Map<string, BusyWindow[]>();

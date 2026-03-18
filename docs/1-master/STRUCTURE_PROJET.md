@@ -1847,56 +1847,56 @@ C:.
 |   |   |   |   [externals]_next_dist_a6d89067._.js.map
 |   |   |   |   [externals]__39d4c878._.js
 |   |   |   |   [externals]__39d4c878._.js.map
-|   |   |   |   [root-of-the-server]__0863918c._.js
-|   |   |   |   [root-of-the-server]__0863918c._.js.map
-|   |   |   |   [root-of-the-server]__0dee59aa._.js
-|   |   |   |   [root-of-the-server]__0dee59aa._.js.map
 |   |   |   |   [root-of-the-server]__0e43a126._.js
 |   |   |   |   [root-of-the-server]__0e43a126._.js.map
-|   |   |   |   [root-of-the-server]__2a005fc9._.js
-|   |   |   |   [root-of-the-server]__2a005fc9._.js.map
-|   |   |   |   [root-of-the-server]__2caefe68._.js
-|   |   |   |   [root-of-the-server]__2caefe68._.js.map
-|   |   |   |   [root-of-the-server]__3a228d2f._.js
-|   |   |   |   [root-of-the-server]__3a228d2f._.js.map
-|   |   |   |   [root-of-the-server]__3d510304._.js
-|   |   |   |   [root-of-the-server]__3d510304._.js.map
+|   |   |   |   [root-of-the-server]__275a5a46._.js
+|   |   |   |   [root-of-the-server]__275a5a46._.js.map
+|   |   |   |   [root-of-the-server]__3edddbfb._.js
+|   |   |   |   [root-of-the-server]__3edddbfb._.js.map
 |   |   |   |   [root-of-the-server]__466e0aef._.js
 |   |   |   |   [root-of-the-server]__466e0aef._.js.map
-|   |   |   |   [root-of-the-server]__58fa01f8._.js
-|   |   |   |   [root-of-the-server]__58fa01f8._.js.map
+|   |   |   |   [root-of-the-server]__4acb48f2._.js
+|   |   |   |   [root-of-the-server]__4acb48f2._.js.map
+|   |   |   |   [root-of-the-server]__5d11d34e._.js
+|   |   |   |   [root-of-the-server]__5d11d34e._.js.map
 |   |   |   |   [root-of-the-server]__5e792a0f._.js
 |   |   |   |   [root-of-the-server]__5e792a0f._.js.map
-|   |   |   |   [root-of-the-server]__6e7a5963._.js
-|   |   |   |   [root-of-the-server]__6e7a5963._.js.map
-|   |   |   |   [root-of-the-server]__80597b5e._.js
-|   |   |   |   [root-of-the-server]__80597b5e._.js.map
-|   |   |   |   [root-of-the-server]__80b2adce._.js
-|   |   |   |   [root-of-the-server]__80b2adce._.js.map
-|   |   |   |   [root-of-the-server]__88924fbd._.js
-|   |   |   |   [root-of-the-server]__88924fbd._.js.map
-|   |   |   |   [root-of-the-server]__8f393996._.js
-|   |   |   |   [root-of-the-server]__8f393996._.js.map
+|   |   |   |   [root-of-the-server]__67ebb79c._.js
+|   |   |   |   [root-of-the-server]__67ebb79c._.js.map
+|   |   |   |   [root-of-the-server]__71746ff4._.js
+|   |   |   |   [root-of-the-server]__71746ff4._.js.map
+|   |   |   |   [root-of-the-server]__85fe93be._.js
+|   |   |   |   [root-of-the-server]__85fe93be._.js.map
+|   |   |   |   [root-of-the-server]__88aa372d._.js
+|   |   |   |   [root-of-the-server]__88aa372d._.js.map
+|   |   |   |   [root-of-the-server]__9211ad2c._.js
+|   |   |   |   [root-of-the-server]__9211ad2c._.js.map
+|   |   |   |   [root-of-the-server]__95453b2d._.js
+|   |   |   |   [root-of-the-server]__95453b2d._.js.map
+|   |   |   |   [root-of-the-server]__957451cb._.js
+|   |   |   |   [root-of-the-server]__957451cb._.js.map
+|   |   |   |   [root-of-the-server]__a80a03b0._.js
+|   |   |   |   [root-of-the-server]__a80a03b0._.js.map
+|   |   |   |   [root-of-the-server]__b7025cff._.js
+|   |   |   |   [root-of-the-server]__b7025cff._.js.map
+|   |   |   |   [root-of-the-server]__b740ebb6._.js
+|   |   |   |   [root-of-the-server]__b740ebb6._.js.map
+|   |   |   |   [root-of-the-server]__be307af6._.js
+|   |   |   |   [root-of-the-server]__be307af6._.js.map
+|   |   |   |   [root-of-the-server]__be5097af._.js
+|   |   |   |   [root-of-the-server]__be5097af._.js.map
 |   |   |   |   [root-of-the-server]__c3997a41._.js
 |   |   |   |   [root-of-the-server]__c3997a41._.js.map
-|   |   |   |   [root-of-the-server]__d2c6e75d._.js
-|   |   |   |   [root-of-the-server]__d2c6e75d._.js.map
-|   |   |   |   [root-of-the-server]__d810e8d1._.js
-|   |   |   |   [root-of-the-server]__d810e8d1._.js.map
+|   |   |   |   [root-of-the-server]__d5f44ffd._.js
+|   |   |   |   [root-of-the-server]__d5f44ffd._.js.map
 |   |   |   |   [root-of-the-server]__e6c5e537._.js
 |   |   |   |   [root-of-the-server]__e6c5e537._.js.map
 |   |   |   |   [root-of-the-server]__ecb56e79._.js
 |   |   |   |   [root-of-the-server]__ecb56e79._.js.map
-|   |   |   |   [root-of-the-server]__ee9de6b5._.js
-|   |   |   |   [root-of-the-server]__ee9de6b5._.js.map
-|   |   |   |   [root-of-the-server]__f10b53bb._.js
-|   |   |   |   [root-of-the-server]__f10b53bb._.js.map
-|   |   |   |   [root-of-the-server]__f42cba32._.js
-|   |   |   |   [root-of-the-server]__f42cba32._.js.map
-|   |   |   |   [root-of-the-server]__f6b8a4de._.js
-|   |   |   |   [root-of-the-server]__f6b8a4de._.js.map
-|   |   |   |   [root-of-the-server]__fcc64749._.js
-|   |   |   |   [root-of-the-server]__fcc64749._.js.map
+|   |   |   |   [root-of-the-server]__f321fa95._.js
+|   |   |   |   [root-of-the-server]__f321fa95._.js.map
+|   |   |   |   [root-of-the-server]__f3458ec0._.js
+|   |   |   |   [root-of-the-server]__f3458ec0._.js.map
 |   |   |   |   [turbopack]_runtime.js
 |   |   |   |   [turbopack]_runtime.js.map
 |   |   |   |   _47b770e9._.js
@@ -1991,10 +1991,8 @@ C:.
 |   |   |           [root-of-the-server]__36ebbb9f._.js.map
 |   |   |           [root-of-the-server]__3e4277b6._.js
 |   |   |           [root-of-the-server]__3e4277b6._.js.map
-|   |   |           [root-of-the-server]__5218791f._.js
-|   |   |           [root-of-the-server]__5218791f._.js.map
-|   |   |           [root-of-the-server]__583f1383._.js
-|   |   |           [root-of-the-server]__583f1383._.js.map
+|   |   |           [root-of-the-server]__4556a15e._.js
+|   |   |           [root-of-the-server]__4556a15e._.js.map
 |   |   |           [root-of-the-server]__84823185._.js
 |   |   |           [root-of-the-server]__84823185._.js.map
 |   |   |           [root-of-the-server]__8731afda._.js
@@ -2005,12 +2003,14 @@ C:.
 |   |   |           [root-of-the-server]__9d5e3ced._.js.map
 |   |   |           [root-of-the-server]__a457c799._.js
 |   |   |           [root-of-the-server]__a457c799._.js.map
+|   |   |           [root-of-the-server]__a63cb763._.js
+|   |   |           [root-of-the-server]__a63cb763._.js.map
+|   |   |           [root-of-the-server]__b60f9c53._.js
+|   |   |           [root-of-the-server]__b60f9c53._.js.map
 |   |   |           [root-of-the-server]__b9356576._.js
 |   |   |           [root-of-the-server]__b9356576._.js.map
 |   |   |           [root-of-the-server]__c4a7c7d0._.js
 |   |   |           [root-of-the-server]__c4a7c7d0._.js.map
-|   |   |           [root-of-the-server]__cd75d4d8._.js
-|   |   |           [root-of-the-server]__cd75d4d8._.js.map
 |   |   |           [root-of-the-server]__d7d7eec3._.js
 |   |   |           [root-of-the-server]__d7d7eec3._.js.map
 |   |   |           [root-of-the-server]__e0a07927._.js
@@ -2101,7 +2101,7 @@ C:.
 |   |   +---media
 |   |   |       favicon.0b3bf435.ico
 |   |   |       
-|   |   \---w0sMf7NlHW4zx7WcwhsIT
+|   |   \---YE8gj666Jbpi3UKJ5APfJ
 |   |           _buildManifest.js
 |   |           _clientMiddlewareManifest.json
 |   |           _ssgManifest.js
@@ -2569,11 +2569,7 @@ C:.
 |   |   |           |       SESSION.md
 |   |   |           |       
 |   |   |           +---SESSION-20260318-03_A2_SUP-03
-|   |   |           |       EVIDENCES.md
 |   |   |           |       FIN_SESSION.md
-|   |   |           |       NOTES.md
-|   |   |           |       RESULTATS.md
-|   |   |           |       SESSION.md
 |   |   |           |       
 |   |   |           +---SESSION-20260318-04_A2_SUP-04
 |   |   |           |       EVIDENCES.md
@@ -2781,6 +2777,9 @@ C:.
 |   |               |       
 |   |               +---SESSION-20260318-02_A2_SUP-02
 |   |               |       README_PATCH.md
+|   |               |       SUP-02-FIX-APPLY.diff
+|   |               |       SUP-02-FIX.diff
+|   |               |       SUP-02.diff
 |   |               |       
 |   |               +---SESSION-20260318-03_A2_SUP-03
 |   |               |       README_PATCH.md
@@ -39095,7 +39094,10 @@ C:.
 |       +---20260317201000_base07_fix_attach_vehicle_to_depot
 |       |       migration.sql
 |       |       
-|       \---20260317213000_base09_fix_attach_shift_to_depot
+|       +---20260317213000_base09_fix_attach_shift_to_depot
+|       |       migration.sql
+|       |       
+|       \---20260318203000_sup02_platform_support_role
 |               migration.sql
 |               
 +---public

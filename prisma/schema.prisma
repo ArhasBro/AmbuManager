@@ -19,6 +19,10 @@ enum Role {
   REGULATEUR
 }
 
+enum PlatformRole {
+  SUPPORT
+}
+
 enum VehicleType {
   AMBULANCE
   VSL
@@ -143,13 +147,14 @@ model Depot {
 }
 
 model User {
-  id        String   @id @default(uuid()) @db.Uuid
-  email     String   @unique
-  password  String
-  name      String
-  role      Role // (on garde 1 rôle POUR L’INSTANT, multi-rôles ensuite)
-  companyId String   @db.Uuid
-  company   Company  @relation(fields: [companyId], references: [id])
+  id           String        @id @default(uuid()) @db.Uuid
+  email        String        @unique
+  password     String
+  name         String
+  role         Role? // null uniquement pour les comptes plateforme globaux
+  platformRole PlatformRole?
+  companyId    String?       @db.Uuid
+  company      Company?      @relation(fields: [companyId], references: [id])
 
   depotId String? @db.Uuid
   depot   Depot?  @relation(fields: [depotId], references: [id], onDelete: SetNull)
@@ -179,6 +184,7 @@ model User {
   planningAuditLogs PlanningAuditLog[] @relation("PlanningAuditLogActor")
 
   @@index([companyId])
+  @@index([platformRole])
   @@index([depotId])
 }
 

@@ -1,7 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import type { AlphaPermissionCode } from "@/lib/permission-catalog";
+import type { PlatformRole } from "@prisma/client";
+import { isGlobalSupport } from "@/lib/rbac";
 
-function hasNativeAccess(role?: string): boolean {
+function hasNativeAccess(role?: string | null): boolean {
   return role === "ADMIN" || role === "GERANT";
 }
 
@@ -33,49 +35,52 @@ export async function hasAnyPermission(userId: string, codes: readonly AlphaPerm
 
 async function hasPermissionAccess(params: {
   userId: string;
-  role?: string;
+  role?: string | null;
+  platformRole?: PlatformRole | string | null;
   codes: readonly AlphaPermissionCode[];
 }): Promise<boolean> {
+  if (isGlobalSupport(params.platformRole)) return false;
   if (hasNativeAccess(params.role)) return true;
   return hasAnyPermission(params.userId, params.codes);
 }
 
-export async function canAutoSchedule(userId: string, role?: string): Promise<boolean> {
-  return hasPermissionAccess({ userId, role, codes: ["PLANNING_AUTOSCHEDULE"] });
+export async function canAutoSchedule(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
+  return hasPermissionAccess({ userId, role, platformRole, codes: ["PLANNING_AUTOSCHEDULE"] });
 }
 
-export async function canPublishAutoSchedule(userId: string, role?: string): Promise<boolean> {
-  return hasPermissionAccess({ userId, role, codes: ["PLANNING_AUTOSCHEDULE_PUBLISH"] });
+export async function canPublishAutoSchedule(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
+  return hasPermissionAccess({ userId, role, platformRole, codes: ["PLANNING_AUTOSCHEDULE_PUBLISH"] });
 }
 
-export async function canCancelAutoSchedule(userId: string, role?: string): Promise<boolean> {
+export async function canCancelAutoSchedule(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
   return hasPermissionAccess({
     userId,
     role,
+    platformRole,
     codes: ["PLANNING_AUTOSCHEDULE_CANCEL", "PLANNING_AUTOSCHEDULE"],
   });
 }
 
-export async function canManageUsers(userId: string, role?: string): Promise<boolean> {
-  return hasPermissionAccess({ userId, role, codes: ["USERS_MANAGE"] });
+export async function canManageUsers(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
+  return hasPermissionAccess({ userId, role, platformRole, codes: ["USERS_MANAGE"] });
 }
 
-export async function canManageVehicles(userId: string, role?: string): Promise<boolean> {
-  return hasPermissionAccess({ userId, role, codes: ["VEHICLES_MANAGE"] });
+export async function canManageVehicles(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
+  return hasPermissionAccess({ userId, role, platformRole, codes: ["VEHICLES_MANAGE"] });
 }
 
-export async function canManageCompanyRules(userId: string, role?: string): Promise<boolean> {
-  return hasPermissionAccess({ userId, role, codes: ["COMPANY_RULES_MANAGE"] });
+export async function canManageCompanyRules(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
+  return hasPermissionAccess({ userId, role, platformRole, codes: ["COMPANY_RULES_MANAGE"] });
 }
 
-export async function canViewAudit(userId: string, role?: string): Promise<boolean> {
-  return hasPermissionAccess({ userId, role, codes: ["AUDIT_VIEW"] });
+export async function canViewAudit(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
+  return hasPermissionAccess({ userId, role, platformRole, codes: ["AUDIT_VIEW"] });
 }
 
-export async function canEditPlanning(userId: string, role?: string): Promise<boolean> {
-  return hasPermissionAccess({ userId, role, codes: ["PLANNING_EDIT"] });
+export async function canEditPlanning(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
+  return hasPermissionAccess({ userId, role, platformRole, codes: ["PLANNING_EDIT"] });
 }
 
-export async function canAccessAdminDashboard(userId: string, role?: string): Promise<boolean> {
-  return hasPermissionAccess({ userId, role, codes: ["DASHBOARD_ADMIN_ACCESS"] });
+export async function canAccessAdminDashboard(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
+  return hasPermissionAccess({ userId, role, platformRole, codes: ["DASHBOARD_ADMIN_ACCESS"] });
 }

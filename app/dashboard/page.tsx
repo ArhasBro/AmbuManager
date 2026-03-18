@@ -19,9 +19,9 @@ export default async function DashboardPage() {
 
   const [adminDashboardAllowed, usersAllowed, vehiclesAllowed] = userId
     ? await Promise.all([
-        canAccessAdminDashboard(userId, user.role),
-        canManageUsers(userId, user.role),
-        canManageVehicles(userId, user.role),
+        canAccessAdminDashboard(userId, user.role, user.platformRole),
+        canManageUsers(userId, user.role, user.platformRole),
+        canManageVehicles(userId, user.role, user.platformRole),
       ])
     : [false, false, false];
 

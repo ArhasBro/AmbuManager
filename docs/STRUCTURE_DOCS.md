@@ -345,11 +345,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |           |       SESSION.md
 |   |           |       
 |   |           +---SESSION-20260318-03_A2_SUP-03
-|   |           |       EVIDENCES.md
 |   |           |       FIN_SESSION.md
-|   |           |       NOTES.md
-|   |           |       RESULTATS.md
-|   |           |       SESSION.md
 |   |           |       
 |   |           +---SESSION-20260318-04_A2_SUP-04
 |   |           |       EVIDENCES.md
@@ -557,6 +553,9 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |               |       
 |               +---SESSION-20260318-02_A2_SUP-02
 |               |       README_PATCH.md
+|               |       SUP-02-FIX-APPLY.diff
+|               |       SUP-02-FIX.diff
+|               |       SUP-02.diff
 |               |       
 |               +---SESSION-20260318-03_A2_SUP-03
 |               |       README_PATCH.md

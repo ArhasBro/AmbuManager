@@ -58,14 +58,14 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 2. **Prompt de contrôle**
    - À rédiger pour la discussion de contrôle qualité.
    - Il doit servir à analyser et évaluer la réponse issue de la discussion de production UNIQUEMENT.
-   - Il devra être utilisé seulement et uniquement après que j'aurai transmis la réponse de la discussion de production.
+   - Tu doit attendre que je t'ai transmis la réponse de la discussion de production.
    - Faire un prompt de réponse adapté pour la discussion production.
    - Le prompt doit être cours et concis.
 
 Références de la session :
 
-- SESSION-20260317-03_A2_SUP-01
-- SUP-01 — AUDIT** — Audit du besoin réel support propriétaire dans l’existant
+- SESSION-20260318-03_A2_SUP-03
+- SUP-03 — COMPLÉTION** — Ajout du compte support nominatif
 
 sortie propre + retour du terminal + aucune erreur = validé
 
@@ -81,10 +81,6 @@ npx prisma generate
 npm run lint
 npm run build
 git status --short
-git diff -- prisma/schema.prisma
-git diff -- app/api/planning/shifts/[id]/route.ts
-git diff -- lib/services/planning/update-shift.ts
-git diff -- prisma/migrations
 
 Attend le retour du terminal avant de me répondre.
 Si il y a d'autre cmd a faire n'hésite pas a me dire.
@@ -92,7 +88,7 @@ Je n'ai pas intégré :
 -les fichiers documentaires de session (`SESSION.md`, `NOTES.md`, `EVIDENCES.md`, `RESULTATS.md`, `FIN_SESSION.md`)
 -le fichier documentaire de patches (`README.md`)
 
-Il seront à crée dans le patch docs quand la session sera validé pour qu'il soient complet.
+Il seront à crée dans le patch docs en 1 ZIP téléchargebale sans sous dossier, quand la session sera validé pour qu'il soient complet.
 
 
 

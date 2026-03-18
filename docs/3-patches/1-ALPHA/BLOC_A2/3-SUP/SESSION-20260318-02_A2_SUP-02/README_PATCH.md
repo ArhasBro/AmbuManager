@@ -1,24 +1,44 @@
-﻿# README_PATCH
+# README_PATCH
 
-## Session liee
-SESSION-20260318-02_A2_SUP-02
+## Session liée
+`SESSION-20260318-02_A2_SUP-02`
 
 ## Type
-COMPLETION
+`COMPLETION`
 
 ## Dossier patch
-docs/3-patches/1-ALPHA/BLOC_A2/SESSION-20260318-02_A2_SUP-02
+`docs/3-patches/1-ALPHA/BLOC_A2/3-SUP/SESSION-20260318-02_A2_SUP-02`
 
-## Patch officiel attendu
-PATCH__SESSION-20260318-02_A2_SUP-02.diff
+## Patch officiel
+`SUP-02.diff`
 
-## Commandes d'application
+## Portée du patch
 
-`ash
-git apply --check "docs/3-patches/1-ALPHA/BLOC_A2/SESSION-20260318-02_A2_SUP-02/PATCH__SESSION-20260318-02_A2_SUP-02.diff"
-git apply         "docs/3-patches/1-ALPHA/BLOC_A2/SESSION-20260318-02_A2_SUP-02/PATCH__SESSION-20260318-02_A2_SUP-02.diff"
-`
+Patch unique strictement borné à `SUP-02` :
+- modélisation du rôle support global distinct des rôles client ;
+- enrichissement auth/session ;
+- adaptation minimale RBAC ;
+- maintien du cloisonnement multi-tenant ;
+- aucune logique support métier `SUP-03+`.
+
+## Commandes d’application
+
+```bash
+git apply --check "docs/3-patches/1-ALPHA/BLOC_A2/3-SUP/SESSION-20260318-02_A2_SUP-02/SUP-02.diff"
+git apply         "docs/3-patches/1-ALPHA/BLOC_A2/3-SUP/SESSION-20260318-02_A2_SUP-02/SUP-02.diff"
+```
+
+## Validations à rejouer localement
+
+```bash
+npx prisma validate
+npx prisma generate
+npm run lint
+npm run build
+```
 
 ## Statut
-- Dossier patch initialise.
-- Patch officiel a produire dans cette session si du code est modifie.
+
+- patch produit ;
+- documentation de session produite ;
+- validations terminales locales à confirmer sur le dépôt réel.
