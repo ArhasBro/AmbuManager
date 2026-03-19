@@ -50,6 +50,8 @@ async function findUserByTenant(userId: string, companyId: string) {
     where: {
       id: userId,
       companyId,
+      platformRole: null,
+      role: { not: null },
     },
     select: {
       id: true,

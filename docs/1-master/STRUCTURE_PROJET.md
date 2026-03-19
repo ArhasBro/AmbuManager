@@ -2081,6 +2081,7 @@ C:.
 |   |   +---chunks
 |   |   |       05e6c743003c809d.js
 |   |   |       1687260e4d8b05d6.js
+|   |   |       25afe73b7d509b10.js
 |   |   |       34f7551faf121447.css
 |   |   |       642a00754c8aebb8.js
 |   |   |       672c0168d7981883.js
@@ -2092,7 +2093,6 @@ C:.
 |   |   |       adae5604c0a9f968.js
 |   |   |       af7027598a07baa5.js
 |   |   |       b870288de7d3931e.js
-|   |   |       c1a988e9a3e1a928.js
 |   |   |       cc07a3e87a46bf5e.js
 |   |   |       cdb83a758231f045.js
 |   |   |       ff1a16fafef87110.js
@@ -2101,7 +2101,7 @@ C:.
 |   |   +---media
 |   |   |       favicon.0b3bf435.ico
 |   |   |       
-|   |   \---ycWxGNFz5nCh9yBQIAvgv
+|   |   \---zeq6Jo7Tz3GRBrBFdZlCL
 |   |           _buildManifest.js
 |   |           _clientMiddlewareManifest.json
 |   |           _ssgManifest.js
@@ -2796,6 +2796,7 @@ C:.
 |   |               |       
 |   |               +---SESSION-20260318-04_A2_SUP-04
 |   |               |       README_PATCH.md
+|   |               |       SUP-04.diff
 |   |               |       
 |   |               +---SESSION-20260318-05_A2_SUP-05
 |   |               |       README_PATCH.md

@@ -38,9 +38,10 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
   const actorUserId = session?.user?.id;
   const companyId = session?.user?.companyId;
   const role = session?.user?.role;
+  const platformRole = session?.user?.platformRole;
 
   if (!actorUserId || !companyId) return unauthorized();
-  if (!(await canManageUsers(actorUserId, role))) return forbidden();
+  if (!(await canManageUsers(actorUserId, role, platformRole))) return forbidden();
 
   let body: unknown;
   try {
@@ -63,6 +64,8 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
       where: {
         id: targetUserId,
         companyId,
+        platformRole: null,
+        role: { not: null },
       },
       select: {
         id: true,
@@ -81,6 +84,8 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
         where: {
           id: targetUser.id,
           companyId,
+          platformRole: null,
+          role: { not: null },
         },
         data: { password: hashedPassword },
       }),
@@ -88,6 +93,8 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
         where: {
           id: targetUser.id,
           companyId,
+          platformRole: null,
+          role: { not: null },
         },
         select: {
           id: true,

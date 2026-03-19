@@ -25,12 +25,12 @@ export async function GET(req: Request) {
   const session = await getServerSession(authOptions);
   const companyId = session?.user?.companyId;
   const userId = session?.user?.id;
+  const platformRole = session?.user?.platformRole;
 
   if (!companyId || !userId) return unauthorized();
 
-  const allowed = await canManageUsers(userId, session.user.role);
+  const allowed = await canManageUsers(userId, session.user.role, platformRole);
   if (!allowed) return forbidden();
-
 
   const url = new URL(req.url);
   const parsed = listQuerySchema.safeParse({
@@ -42,7 +42,11 @@ export async function GET(req: Request) {
 
   try {
     const users = await prisma.user.findMany({
-      where: { companyId },
+      where: {
+        companyId,
+        platformRole: null,
+        role: { not: null },
+      },
       orderBy: { name: "asc" },
       take: limit,
       select: {

@@ -148,7 +148,7 @@ export default function ResetPasswordClient({ actorUserId }: Props) {
         {loading ? <p style={{ marginBottom: 0 }}>Chargement des utilisateurs...</p> : null}
 
         {!loading && users.length === 0 ? (
-          <p style={{ marginBottom: 0 }}>Aucun autre utilisateur de la société n&apos;est disponible pour un reset.</p>
+          <p style={{ marginBottom: 0 }}>Aucun autre utilisateur de société administrable n&apos;est disponible pour un reset.</p>
         ) : null}
 
         {!loading && users.length > 0 ? (

@@ -572,6 +572,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |               |       
 |               +---SESSION-20260318-04_A2_SUP-04
 |               |       README_PATCH.md
+|               |       SUP-04.diff
 |               |       
 |               +---SESSION-20260318-05_A2_SUP-05
 |               |       README_PATCH.md

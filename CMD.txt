@@ -34,8 +34,6 @@ npm run db:seed
 npm run db:reset
 npm run db:studio
 
-.\docs\3-patches\1-ALPHA\BLOC_A1\SESSION-20260313-07_A1_RBAC-06\PATCH__SESSION-20260313-07_A1_RBAC-06.diff
-
 GPT :
 
 Session validée, nous passons à la suivante.
@@ -70,33 +68,18 @@ Références de la session :
 sortie propre + retour du terminal + aucune erreur = validé
 
 Voici sa réponse ainsi que les documents généré : 
-
-
-
 Je vais intégrer le .diff et je te renvoi le retour terminal de (Si faut enlever ou rajouter des cmd fait moi un copier/coller de ce que tu veux que je fasse):
 git apply --check ".\"
 git apply ".\"
-npx prisma validate
-npx prisma generate
-npm run db:seed
 npm run lint
 npm run build
-git status --short
 
 Attend le retour du terminal avant de me répondre.
 Si il y a Fix a faire rédige le prompt. (Il ne doit pas le refaire en entier, juste faire un fix sur les erreurs)
 Je n'ai pas intégré : 
 -les fichiers documentaires de session (`SESSION.md`, `NOTES.md`, `EVIDENCES.md`, `RESULTATS.md`, `FIN_SESSION.md`)
 -le fichier documentaire de patches (`README.md`)
-
 Il seront à crée dans le patch docs en 1 ZIP téléchargebale sans sous dossier, quand la session sera validé pour qu'il soient complet.
-
-
-
-
-
-
-
 
 DOCUMENTS À PRODUIRE quand je te le demande (après que je valide le patch). 
 SESSION.md 

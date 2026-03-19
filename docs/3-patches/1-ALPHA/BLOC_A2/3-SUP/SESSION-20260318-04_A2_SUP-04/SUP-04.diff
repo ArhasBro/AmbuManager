@@ -1,0 +1,147 @@
+--- a/app/api/users/route.ts
++++ b/app/api/users/route.ts
+@@ -25,12 +25,12 @@
+   const session = await getServerSession(authOptions);
+   const companyId = session?.user?.companyId;
+   const userId = session?.user?.id;
++  const platformRole = session?.user?.platformRole;
+ 
+   if (!companyId || !userId) return unauthorized();
+ 
+-  const allowed = await canManageUsers(userId, session.user.role);
++  const allowed = await canManageUsers(userId, session.user.role, platformRole);
+   if (!allowed) return forbidden();
+-
+ 
+   const url = new URL(req.url);
+   const parsed = listQuerySchema.safeParse({
+@@ -42,7 +42,11 @@
+ 
+   try {
+     const users = await prisma.user.findMany({
+-      where: { companyId },
++      where: {
++        companyId,
++        platformRole: null,
++        role: { not: null },
++      },
+       orderBy: { name: "asc" },
+       take: limit,
+       select: {
+--- a/app/api/users/[id]/reset-password/route.ts
++++ b/app/api/users/[id]/reset-password/route.ts
+@@ -38,9 +38,10 @@
+   const actorUserId = session?.user?.id;
+   const companyId = session?.user?.companyId;
+   const role = session?.user?.role;
++  const platformRole = session?.user?.platformRole;
+ 
+   if (!actorUserId || !companyId) return unauthorized();
+-  if (!(await canManageUsers(actorUserId, role))) return forbidden();
++  if (!(await canManageUsers(actorUserId, role, platformRole))) return forbidden();
+ 
+   let body: unknown;
+   try {
+@@ -63,6 +64,8 @@
+       where: {
+         id: targetUserId,
+         companyId,
++        platformRole: null,
++        role: { not: null },
+       },
+       select: {
+         id: true,
+@@ -81,6 +84,8 @@
+         where: {
+           id: targetUser.id,
+           companyId,
++          platformRole: null,
++          role: { not: null },
+         },
+         data: { password: hashedPassword },
+       }),
+@@ -88,6 +93,8 @@
+         where: {
+           id: targetUser.id,
+           companyId,
++          platformRole: null,
++          role: { not: null },
+         },
+         select: {
+           id: true,
+--- a/app/api/users/[id]/depot/route.ts
++++ b/app/api/users/[id]/depot/route.ts
+@@ -29,9 +29,10 @@
+   const actorUserId = session?.user?.id;
+   const companyId = session?.user?.companyId;
+   const role = session?.user?.role;
++  const platformRole = session?.user?.platformRole;
+ 
+   if (!actorUserId || !companyId) return unauthorized();
+-  if (!(await canManageUsers(actorUserId, role))) return forbidden();
++  if (!(await canManageUsers(actorUserId, role, platformRole))) return forbidden();
+ 
+   const rawParams = await ctx.params.catch(() => null);
+   const parsedParams = paramsSchema.safeParse(rawParams);
+--- a/lib/services/users/assign-user-depot.ts
++++ b/lib/services/users/assign-user-depot.ts
+@@ -50,6 +50,8 @@
+     where: {
+       id: userId,
+       companyId,
++      platformRole: null,
++      role: { not: null },
+     },
+     select: {
+       id: true,
+--- a/app/users/page.tsx
++++ b/app/users/page.tsx
+@@ -14,7 +14,7 @@
+   const user = session?.user;
+ 
+   if (!user?.id || !user.companyId) redirect("/login");
+-  if (!(await canManageUsers(user.id, user.role))) redirect("/login");
++  if (!(await canManageUsers(user.id, user.role, user.platformRole))) redirect("/login");
+ 
+   const depots = await prisma.depot.findMany({
+     where: { companyId: user.companyId },
+@@ -32,7 +32,7 @@
+         <div>
+           <h1 style={{ margin: 0 }}>Utilisateurs</h1>
+           <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
+-            Gestion minimale ALPHA du module utilisateurs : réinitialisation de mot de passe et rattachement à une base.
++            Gestion minimale ALPHA des utilisateurs de société : réinitialisation de mot de passe et rattachement à une base. Les comptes support globaux sont exclus de ces flux client.
+           </p>
+         </div>
+ 
+--- a/app/users/reset-password-client.tsx
++++ b/app/users/reset-password-client.tsx
+@@ -148,7 +148,7 @@
+         {loading ? <p style={{ marginBottom: 0 }}>Chargement des utilisateurs...</p> : null}
+ 
+         {!loading && users.length === 0 ? (
+-          <p style={{ marginBottom: 0 }}>Aucun autre utilisateur de la société n&apos;est disponible pour un reset.</p>
++          <p style={{ marginBottom: 0 }}>Aucun autre utilisateur de société administrable n&apos;est disponible pour un reset.</p>
+         ) : null}
+ 
+         {!loading && users.length > 0 ? (
+--- a/app/users/user-depot-assignment-client.tsx
++++ b/app/users/user-depot-assignment-client.tsx
+@@ -201,7 +201,7 @@
+       <div style={{ padding: 12, border: "1px solid #333", borderRadius: 8 }}>
+         <h2 style={{ marginTop: 0 }}>Rattachement à une base</h2>
+         <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
+-          Affectation minimale d&apos;un utilisateur à un dépôt unique de la société courante. L&apos;utilisateur peut aussi rester sans base.
++          Affectation minimale d&apos;un utilisateur de société à un dépôt unique de la société courante. Les comptes support globaux sont exclus. L&apos;utilisateur peut aussi rester sans base.
+         </p>
+       </div>
+ 
+@@ -229,7 +229,7 @@
+ 
+         {!loading && users.length === 0 ? (
+           <div style={{ padding: 10, border: "1px solid #555", borderRadius: 8 }}>
+-            Aucun utilisateur disponible dans la société courante.
++            Aucun utilisateur de société administrable disponible dans la société courante.
+           </div>
+         ) : null}
+ 

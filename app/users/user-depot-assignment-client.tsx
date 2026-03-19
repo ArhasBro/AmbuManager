@@ -201,7 +201,7 @@ export default function UserDepotAssignmentClient({ availableDepots }: { availab
       <div style={{ padding: 12, border: "1px solid #333", borderRadius: 8 }}>
         <h2 style={{ marginTop: 0 }}>Rattachement à une base</h2>
         <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
-          Affectation minimale d&apos;un utilisateur à un dépôt unique de la société courante. L&apos;utilisateur peut aussi rester sans base.
+          Affectation minimale d&apos;un utilisateur de société à un dépôt unique de la société courante. Les comptes support globaux sont exclus. L&apos;utilisateur peut aussi rester sans base.
         </p>
       </div>
 
@@ -229,7 +229,7 @@ export default function UserDepotAssignmentClient({ availableDepots }: { availab
 
         {!loading && users.length === 0 ? (
           <div style={{ padding: 10, border: "1px solid #555", borderRadius: 8 }}>
-            Aucun utilisateur disponible dans la société courante.
+            Aucun utilisateur de société administrable disponible dans la société courante.
           </div>
         ) : null}
 

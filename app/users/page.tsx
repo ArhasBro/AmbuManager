@@ -14,7 +14,7 @@ export default async function UsersPage() {
   const user = session?.user;
 
   if (!user?.id || !user.companyId) redirect("/login");
-  if (!(await canManageUsers(user.id, user.role))) redirect("/login");
+  if (!(await canManageUsers(user.id, user.role, user.platformRole))) redirect("/login");
 
   const depots = await prisma.depot.findMany({
     where: { companyId: user.companyId },
@@ -32,7 +32,7 @@ export default async function UsersPage() {
         <div>
           <h1 style={{ margin: 0 }}>Utilisateurs</h1>
           <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
-            Gestion minimale ALPHA du module utilisateurs : réinitialisation de mot de passe et rattachement à une base.
+            Gestion minimale ALPHA des utilisateurs de société : réinitialisation de mot de passe et rattachement à une base. Les comptes support globaux sont exclus de ces flux client.
           </p>
         </div>
 

@@ -29,9 +29,10 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
   const actorUserId = session?.user?.id;
   const companyId = session?.user?.companyId;
   const role = session?.user?.role;
+  const platformRole = session?.user?.platformRole;
 
   if (!actorUserId || !companyId) return unauthorized();
-  if (!(await canManageUsers(actorUserId, role))) return forbidden();
+  if (!(await canManageUsers(actorUserId, role, platformRole))) return forbidden();
 
   const rawParams = await ctx.params.catch(() => null);
   const parsedParams = paramsSchema.safeParse(rawParams);
