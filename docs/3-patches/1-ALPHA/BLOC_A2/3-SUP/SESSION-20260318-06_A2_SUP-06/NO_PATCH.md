@@ -1,10 +1,15 @@
-﻿# NO_PATCH
+# NO_PATCH.md
 
-Session : SESSION-20260318-06_A2_SUP-06
+## Session concernée
+- `SESSION-20260318-06_A2_SUP-06`
+- Type : `VALIDATION`
 
-Type : VALIDATION
+## Décision
+Aucun patch code ni patch documentaire dépôt n’est produit dans cette session.
 
-Raison :
-- Session documentaire de type VALIDATION.
-- Aucun patch officiel a produire pour cette session.
-- Le dossier patch reste present pour conserver le miroir avec docs/2-sessions.
+## Motif
+La session consiste en une validation bornée du bloc support propriétaire.
+Le travail réalisé ici est un contrôle d’état réel et une production documentaire de session hors dépôt.
+
+## Rappel
+Le verdict final retenu pour le bloc est : **`partiellement conforme`**.
