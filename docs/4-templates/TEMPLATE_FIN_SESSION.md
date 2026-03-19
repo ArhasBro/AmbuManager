@@ -62,10 +62,22 @@ CODE (SI FOURNI)
 - Si oui : validation explicite présente ? Oui / Non
 
 ━━━━━━━━━━━━━━━━━━━━  
-5️⃣ STATUT FINAL  
+5️⃣ CLÔTURE DE BLOC (SI APPLICABLE)  
 ━━━━━━━━━━━━━━━━━━━━  
-- Session clôturable : Oui / Non  
-- Prochaine étape logique : à renseigner  
+- Session de clôture de bloc : Oui / Non
+- Code réel vérifié : Oui / Non / Sans objet
+- Patchs réels vérifiés : Oui / Non / Sans objet
+- Documentation finale vérifiée : Oui / Non / Sans objet
+- Validations terminales vérifiées : Oui / Non / Sans objet
+- Correctif final minimal produit : Oui / Non / Sans objet
+- `BLOC <ID> CLÔTURABLE DÉFINITIVEMENT : OUI / NON`
+- Passage au bloc suivant autorisé : Oui / Non
+
+━━━━━━━━━━━━━━━━━━━━  
+6️⃣ STATUT FINAL  
+━━━━━━━━━━━━━━━━━━━━  
+- Session clôturable : Oui / Non
+- Prochaine étape logique : à renseigner
 - Point restant ouvert : à renseigner
 
 RÈGLE FINALE  
@@ -76,3 +88,5 @@ RÈGLE FINALE
   - 1 patch
   - 1 DoD
   - 1 validation
+  - 1 session de clôture explicite par bloc
+- Aucun passage au bloc suivant sans verdict explicite de clôture.

@@ -1,7 +1,7 @@
 # Ambulance Manager — REGISTRE_DECISIONS
 
-Version : V1.5.7 (MASTER)  
-Date : 09/03/2026
+Version : V1.5.8 (MASTER)  
+Date : 19/03/2026
 
 ## Sommaire
 - [1. Rôle](#1-rôle)
@@ -10,7 +10,8 @@ Date : 09/03/2026
 - [4. Décisions en attente](#4-décisions-en-attente)
 - [5. Alignement statuts (référence ETAT_GLOBAL_PROJET)](#5-alignement-statuts-référence-etat_global_projet)
 - [6. Gouvernance de mise à jour](#6-gouvernance-de-mise-à-jour)
-- [7. Gouvernance des patchs de session](#7-Gouvernance-des-patchs-de-session)
+- [7. Gouvernance des patchs de session](#7-gouvernance-des-patchs-de-session)
+- [8. Gouvernance de clôture de bloc](#8-gouvernance-de-clôture-de-bloc)
 - [Vérifications par le code (ZIP)](#vérifications-par-le-code-zip)
 
 ## 1. Rôle
@@ -58,19 +59,28 @@ Format unique attendu :
   - Le document `docs/master/DOCUMENT_CADRAGE_FONCTIONNEL.md` devient la base officielle produit.
   - Ce document est figé et ne doit pas être modifié sans validation explicite.
   - Pour la suite, ne pas revenir sur ce cadrage sans demande explicite.
-  - La prochaine étape attendue est la refonte du plan de développement.
+  - La prochaine étape attendue est la mise en œuvre des clôtures de bloc explicites dans l’exécution courante.
   - Cette refonte devra respecter strictement :
     - 1 session = 1 point clair
     - 1 fonctionnalité
     - 1 patch
     - 1 DoD
     - 1 validation
+- DEC-20260319-01 — Clôture de bloc obligatoire.
+  - Chaque bloc doit se terminer par une session dédiée de clôture de bloc.
+  - Cette session vérifie le code réel, les patchs réels, la documentation finale et les validations terminales.
+  - Elle décide si le bloc est clôturable définitivement.
+  - Si un résiduel subsiste, elle peut produire un unique correctif final minimal.
+  - Le passage au bloc suivant n’est autorisé qu’après verdict explicite :
+    - `BLOC <ID> CLÔTURABLE DÉFINITIVEMENT : OUI`
+    - ou `BLOC <ID> CLÔTURABLE DÉFINITIVEMENT : NON`
+  - Le dossier dédié de clôture de bloc devient obligatoire en fin de bloc, par exemple `4-CLOTURE_A2`.
 
 ## 4. Décisions en attente
 - PEND-20260306-01 — Suite 4.7 hors 4.7.2 : périmètre exact à confirmer.
 - Historique/versioning planning global au-delà du run courant : niveau minimal à définir.
 - Flotte & conformité : périmètre data + priorisation.
-- Refonte complète de `docs/master/PLAN_DE_DEVELOPPEMENT.md` : à faire plus tard, sur la base du cadrage validé.
+- Exécution de la session `CLOTURE_A2` avant tout passage à `A3` : à réaliser.
 - Les points restant réellement ouverts du cadrage fonctionnel demeurent portés par `docs/master/DOCUMENT_CADRAGE_FONCTIONNEL.md`.
 
 ## 5. Alignement statuts (référence ETAT_GLOBAL_PROJET)
@@ -79,7 +89,7 @@ Format unique attendu :
 - 4.6 : VALIDÉ (session `docs/sessions/SESSION-20260305-01/EVIDENCES.md`).
 - 4.7 : EN COURS (4.7.1 et 4.7.2 validés, sessions `docs/sessions/SESSION-20260306-01/EVIDENCES.md` et `docs/sessions/SESSION-20260307-01/EVIDENCES.md`).
 - Le cadrage fonctionnel est VALIDÉ comme base officielle produit.
-- La prochaine étape attendue est la refonte du plan de développement.
+- La prochaine étape attendue est la mise en œuvre des clôtures de bloc explicites dans l’exécution courante.
 - 5.0 : À FAIRE.
 
 ## 6. Gouvernance de mise à jour
@@ -138,6 +148,28 @@ Cette règle impose désormais une séparation stricte entre :
 - isoler clairement les correctifs ;
 - sécuriser la validation ;
 - séparer proprement code et documentation.
+
+## 8. Gouvernance de clôture de bloc
+
+### Statut
+Validée
+
+### Décision
+La clôture de bloc devient une étape méthodologique obligatoire pour tous les blocs du plan.
+
+### Règles obligatoires
+1. chaque bloc se termine par une session dédiée de clôture ;
+2. cette session vérifie le code réel, les patchs réels, la documentation finale et les validations terminales ;
+3. cette session décide si le bloc est clôturable définitivement ;
+4. si un résiduel subsiste, elle peut produire un unique correctif final minimal ;
+5. le passage au bloc suivant n’est autorisé qu’après verdict explicite de clôture.
+
+### Convention associée
+- dossier dédié de fin de bloc, par exemple `4-CLOTURE_A2` ;
+- session nommée dans le plan selon la convention `CLOTURE_<BLOC>` ;
+- verdict final obligatoire :
+  - `BLOC <ID> CLÔTURABLE DÉFINITIVEMENT : OUI`
+  - `BLOC <ID> CLÔTURABLE DÉFINITIVEMENT : NON`
 
 ## Vérifications par le code (ZIP)
 - Matching preview/apply + UI présents (4.6) :

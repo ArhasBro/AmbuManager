@@ -1,7 +1,7 @@
 # Ambulance Manager — DOCUMENT_MAITRE
 
-Version : V1.5.7 (MASTER)  
-Date : 09/03/2026
+Version : V1.5.8 (MASTER)  
+Date : 19/03/2026
 
 ## Sommaire
 - [1. Vision du projet](#1-vision-du-projet)
@@ -51,6 +51,33 @@ Conséquence :
 - Structure documentaire pilotée
 - Aucune validation implicite sans preuve
 - Toute information non prouvée : **INFORMATION NON FOURNIE — À CONFIRMER**
+
+### 3.1 Règle obligatoire de clôture de bloc
+Chaque bloc du plan de développement doit désormais se terminer par une **session dédiée de clôture de bloc**.
+
+Cette session de clôture vérifie obligatoirement :
+- le code réel du bloc ;
+- les patchs réellement produits ;
+- la documentation finale du bloc ;
+- les validations terminales réellement relancées ou constatées.
+
+Cette session :
+- décide explicitement si le bloc est **clôturable définitivement** ;
+- peut produire **un unique correctif final minimal** si un résiduel subsiste ;
+- conditionne l’ouverture du bloc suivant.
+
+Conséquence :
+- aucun passage au bloc suivant sans verdict explicite de clôture ;
+- le verdict final de clôture doit être formulé sous la forme :
+  - `BLOC <ID> CLÔTURABLE DÉFINITIVEMENT : OUI`
+  - ou `BLOC <ID> CLÔTURABLE DÉFINITIVEMENT : NON`
+
+### 3.2 Convention documentaire associée
+La clôture de bloc doit disposer d’un dossier dédié en fin de bloc, par exemple :
+- `docs/2-sessions/1-ALPHA/BLOC_A2/4-CLOTURE_A2/`
+- `docs/3-patches/1-ALPHA/BLOC_A2/4-CLOTURE_A2/`
+
+Le nom de session attendu dans le plan doit suivre la convention `CLOTURE_<BLOC>`.
 
 ## 4. Architecture technique cible
 Ordre cible :
@@ -134,7 +161,7 @@ Le cadrage produit officiel est porté par :
 - `docs/master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
 
 La prochaine étape attendue est :
-- la refonte du plan de développement
+- l’application effective des sessions de clôture de bloc explicites dans l’exécution courante
 
 ## 10. Documentation de référence
 Documents de référence principaux :
@@ -148,4 +175,5 @@ Documents de référence principaux :
 
 Règle :
 - `DOCUMENT_CADRAGE_FONCTIONNEL.md` = base officielle produit
-- `PLAN_DE_DEVELOPPEMENT.md` sera refondu ensuite sur cette base
+- `PLAN_DE_DEVELOPPEMENT.md` doit intégrer pour chaque bloc une étape finale `CLOTURE_<BLOC>`
+- le passage au bloc suivant n’est autorisé qu’après verdict explicite de clôture

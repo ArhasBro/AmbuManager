@@ -1,7 +1,7 @@
 # Ambulance Manager — PLAN_DE_DEVELOPPEMENT
 
-Version : V2.0 (MASTER)  
-Date : 09/03/2026
+Version : V2.1 (MASTER)  
+Date : 19/03/2026
 
 ## Sommaire
 - [1. Rôle du document](#1-rôle-du-document)
@@ -11,7 +11,7 @@ Date : 09/03/2026
 - [5. Règle de traitement de l’existant](#5-règle-de-traitement-de-lexistant)
 - [6. Convention de lecture des sessions](#6-convention-de-lecture-des-sessions)
 - [7. Règle de livrable par session](#7-règle-de-livrable-par-session)
-- [7.1 Règle de gouvernance des patchs](#7.1-Règle-de-gouvernance-des-patchs)
+- [7.1 Règle de gouvernance des patchs](#71-règle-de-gouvernance-des-patchs)
 - [8. Verdict obligatoire de sortie pour toute session AUDIT](#8-verdict-obligatoire-de-sortie-pour-toute-session-audit)
 - [9. Convention de structuration du plan](#9-convention-de-structuration-du-plan)
 - [10. Ordre global de développement retenu](#10-ordre-global-de-développement-retenu)
@@ -70,12 +70,13 @@ Cela signifie :
 
 Aucun élément déjà codé n’est considéré comme définitivement acquis par défaut.
 
-Chaque bloc du produit suit la logique :
+Chaque bloc du produit suit désormais la logique :
 1. audit de l’existant
 2. verdict
 3. traitement adapté
-4. validation
-5. extension éventuelle si le cadrage l’exige
+4. validation des sessions métier du bloc
+5. clôture finale du bloc
+6. passage explicite au bloc suivant uniquement si le bloc est clôturable définitivement
 
 ## 5. Règle de traitement de l’existant
 Pour chaque fonctionnalité ou sous-module déjà présent dans le code :
@@ -118,6 +119,7 @@ Pour un même sous-sujet, l’enchaînement naturel devient :
 - AUDIT
 - CORRECTION ou COMPLÉTION si nécessaire
 - VALIDATION
+- CLOTURE_<BLOC> en fin de bloc
 
 ## 7. Règle de livrable par session
 Chaque session doit produire **un seul livrable principal**.
@@ -257,6 +259,34 @@ Chaque session future doit pouvoir être lue comme :
 - DoD unique
 - validation unique
 
+### 9.5 Convention obligatoire de clôture de bloc
+Chaque bloc doit se terminer par une session dédiée de type **VALIDATION** nommée selon la convention :
+- `CLOTURE_<BLOC>`
+
+Exemples :
+- `CLOTURE_A1`
+- `CLOTURE_A2`
+- `CLOTURE_B1`
+
+Cette session de clôture doit obligatoirement :
+- vérifier le code réel du bloc ;
+- vérifier les patchs réels du bloc ;
+- vérifier la documentation finale du bloc ;
+- vérifier les validations terminales réellement rejouées ou constatées ;
+- décider si le bloc est clôturable définitivement.
+
+Si un résiduel subsiste, cette session peut produire **un unique correctif final minimal** avant verdict.
+
+### 9.6 Dossier dédié de clôture
+Chaque fin de bloc doit disposer d’un dossier dédié, par exemple :
+- `4-CLOTURE_A2`
+
+Le verdict final de clôture doit être formulé explicitement sous l’une des deux formes suivantes :
+- `BLOC <ID> CLÔTURABLE DÉFINITIVEMENT : OUI`
+- `BLOC <ID> CLÔTURABLE DÉFINITIVEMENT : NON`
+
+Aucun passage au bloc suivant n’est autorisé sans ce verdict explicite.
+
 ## 10. Ordre global de développement retenu
 Ordre global retenu pour l’ALPHA :
 
@@ -315,6 +345,8 @@ Reprendre tout le socle d’accès et de gouvernance technique pour vérifier l�
 - **API-04 — CORRECTION** — Harmonisation minimale des erreurs critiques
 - **API-05 — VALIDATION** — Vérification de cohérence API/UI sur les modules déjà présents
 - **API-06 — VALIDATION** — Validation du socle API ALPHA
+- **CLOTURE_A1 — VALIDATION** — Clôture finale du bloc A1
+
 
 #### Résultat attendu
 - authentification recontrôlée
@@ -353,6 +385,8 @@ Mettre en place la structure d’exploitation réelle de la société pilote, y 
 - **SUP-04 — COMPLÉTION** — Gestion de la visibilité support côté client
 - **SUP-05 — COMPLÉTION** — Traçabilité renforcée des actions support
 - **SUP-06 — VALIDATION** — Validation du bloc support propriétaire
+- **CLOTURE_A2 — VALIDATION** — Clôture finale du bloc A2
+
 
 #### Résultat attendu
 - profil société exploitable
@@ -382,6 +416,8 @@ Reprendre entièrement l’administration utilisateurs pour obtenir un module r�
 - **USERS-14 — COMPLÉTION** — UI indisponibilités / absences
 - **USERS-15 — COMPLÉTION** — Consultation du planning utilisateur / collègues selon permissions
 - **USERS-16 — VALIDATION** — Validation complète du bloc users
+- **CLOTURE_A3 — VALIDATION** — Clôture finale du bloc A3
+
 
 #### Résultat attendu
 - vrai module users administrable
@@ -412,6 +448,8 @@ Reprendre le module flotte pour le rendre réellement complet, correct et confor
 - **VEH-15 — COMPLÉTION** — UI édition des données de conformité documentaire minimale
 - **VEH-16 — COMPLÉTION** — État visuel simple `conforme / bientôt expiré / expiré`
 - **VEH-17 — VALIDATION** — Validation du bloc flotte ALPHA
+- **CLOTURE_A4 — VALIDATION** — Clôture finale du bloc A4
+
 
 #### Résultat attendu
 - flotte complète
@@ -434,6 +472,8 @@ Reprendre les règles existantes et les transformer en paramètres réellement m
 - **RULES-07 — COMPLÉTION** — UI paramètres métier ALPHA
 - **RULES-08 — COMPLÉTION** — Gestion des droits de modification des règles
 - **RULES-09 — VALIDATION** — Validation du bloc règles métier
+- **CLOTURE_A5 — VALIDATION** — Clôture finale du bloc A5
+
 
 #### Résultat attendu
 - règles utilisables côté produit
@@ -461,6 +501,8 @@ Reprendre totalement les templates existants pour les rendre autonomes, vérifi�
 - **TPL-12 — COMPLÉTION** — Support des shifts non horodatés
 - **TPL-13 — COMPLÉTION** — Couleurs libres et lisibilité visuelle
 - **TPL-14 — VALIDATION** — Validation du bloc templates
+- **CLOTURE_A6 — VALIDATION** — Clôture finale du bloc A6
+
 
 #### Résultat attendu
 - templates réellement administrables
@@ -493,6 +535,8 @@ Il ne commence pas comme :
 - **DASH-06 — COMPLÉTION** — Ajout des indicateurs simples admin/gérant si les données sont stabilisées
 - **DASH-07 — COMPLÉTION** — Ajout de la vue dashboard terrain selon permissions
 - **DASH-08 — VALIDATION** — Validation du bloc dashboard
+- **CLOTURE_A7 — VALIDATION** — Clôture finale du bloc A7
+
 
 #### Résultat attendu
 - vrai point d’entrée produit
@@ -525,6 +569,8 @@ Reprendre l’existant planning pour le vérifier de fond en comble et le rendre
 - **PLAN-17 — CORRECTION** — Remise à niveau de l’historique minimal planning si non conforme
 - **PLAN-18 — COMPLÉTION** — Compléter l’historique minimal planning si incomplet
 - **PLAN-19 — VALIDATION** — Validation complète du bloc planning
+- **CLOTURE_A8 — VALIDATION** — Clôture finale du bloc A8
+
 
 #### Résultat attendu
 - planning manuel solide
@@ -553,6 +599,8 @@ Reprendre le moteur existant pour vérifier qu’il est réellement cohérent, c
 - **AUTO-13 — CORRECTION** — Correction des libellés autoschedule non conformes en français
 - **AUTO-14 — COMPLÉTION** — Compléter la traduction française des éléments autoschedule manquants
 - **AUTO-15 — VALIDATION** — Validation du bloc autoschedule ALPHA
+- **CLOTURE_A9 — VALIDATION** — Clôture finale du bloc A9
+
 
 #### Résultat attendu
 - moteur revérifié
@@ -577,6 +625,8 @@ Reprendre le matching existant pour le réaligner sur le cadrage validé.
 - **MATCH-08 — COMPLÉTION** — Score qualité visible au niveau shift
 - **MATCH-09 — COMPLÉTION** — Variante 1 / 2 / 3 simple
 - **MATCH-10 — VALIDATION** — Validation du bloc matching ALPHA
+- **CLOTURE_A10 — VALIDATION** — Clôture finale du bloc A10
+
 
 #### Résultat attendu
 - matching contrôlé et réaligné
@@ -600,6 +650,8 @@ Reprendre l’audit minimal existant et le transformer en vraie traçabilité ex
 - **AUDIT-08 — COMPLÉTION** — Modèle d’accès audit : rôles natifs + permission dédiée
 - **AUDIT-09 — COMPLÉTION** — Audit renforcé des actions support
 - **AUDIT-10 — VALIDATION** — Validation complète du bloc audit
+- **CLOTURE_A11 — VALIDATION** — Clôture finale du bloc A11
+
 
 #### Résultat attendu
 - audit réellement exploitable
@@ -631,6 +683,8 @@ Rendre l’installation et l’exploitation d’une société pilote réalistes,
 - **IMPORT-08 — COMPLÉTION** — Validation manuelle d’import
 - **IMPORT-09 — COMPLÉTION** — Rapport d’erreurs import
 - **IMPORT-10 — VALIDATION** — Validation du bloc onboarding/import/export
+- **CLOTURE_A12 — VALIDATION** — Clôture finale du bloc A12
+
 
 #### Résultat attendu
 - société pilote installable
@@ -661,6 +715,8 @@ Finaliser l’ALPHA avec une vraie logique de contrôle qualité et une document
 - **ALPHA-01 — AUDIT** — Audit final de cohérence ALPHA
 - **ALPHA-02 — CORRECTION** — Corrections finales ALPHA
 - **ALPHA-03 — VALIDATION** — Go / No-Go société pilote
+- **CLOTURE_A13 — VALIDATION** — Clôture finale du bloc A13
+
 
 #### Résultat attendu
 - ALPHA testable
@@ -680,6 +736,7 @@ Traiter les alertes UI globales après stabilisation de l’ALPHA.
 - **ALERT-04 — COMPLÉTION** — Alertes véhicule / conformité
 - **ALERT-05 — COMPLÉTION** — Alertes audit importantes
 - **ALERT-06 — VALIDATION** — Validation du bloc alertes
+- **CLOTURE_B1 — VALIDATION** — Clôture finale du bloc B1
 
 ### BLOC B2 — Autoschedule mensuel et règles avancées
 **Objectif du bloc**  
@@ -691,6 +748,7 @@ Traiter les alertes UI globales après stabilisation de l’ALPHA.
 - **RULES-ADV-01 — AUDIT** — Audit du besoin OFF / ALERT / BLOCK / BOTH
 - **RULES-ADV-02 — COMPLÉTION** — Implémentation des modes avancés
 - **RULES-ADV-03 — VALIDATION** — Validation du bloc règles avancées
+- **CLOTURE_B2 — VALIDATION** — Clôture finale du bloc B2
 
 ### BLOC B3 — RBAC enrichi et multi-rôle
 **Objectif du bloc**  
@@ -701,6 +759,7 @@ Traiter les alertes UI globales après stabilisation de l’ALPHA.
 - **RBAC-ADV-02 — COMPLÉTION** — Modèle multi-rôle
 - **RBAC-ADV-03 — COMPLÉTION** — UI multi-rôle
 - **RBAC-ADV-04 — VALIDATION** — Validation du bloc RBAC avancé
+- **CLOTURE_B3 — VALIDATION** — Clôture finale du bloc B3
 
 ### BLOC B4 — Historique enrichi
 **Objectif du bloc**  
@@ -711,6 +770,8 @@ Rendre l’historique et la relecture métier plus riches après stabilisation d
 - **HIST-02 — COMPLÉTION** — Historique de planning enrichi
 - **HIST-03 — COMPLÉTION** — Ajout d’un audit métier plus lisible
 - **HIST-04 — VALIDATION** — Validation du bloc historique
+- **CLOTURE_B4 — VALIDATION** — Clôture finale du bloc B4
+
 
 ## 13. VERSION OFFICIELLE V2.x — Plan refondu
 
@@ -725,6 +786,7 @@ Rendre l’historique et la relecture métier plus riches après stabilisation d
 - **INTEG-02 — COMPLÉTION** — Intégrations externes priorisées
 - **MOBILE-01 — AUDIT** — Audit du besoin mobile
 - **MOBILE-02 — COMPLÉTION** — Stratégie mobile
+- **CLOTURE_V2-1 — VALIDATION** — Clôture finale du bloc V2-1
 
 ### BLOC V2-2 — SaaS étendu
 **Objectif du bloc**  
@@ -735,6 +797,8 @@ Faire passer Ambulance Manager vers une logique SaaS plus complète.
 - **BILL-01 — COMPLÉTION** — Billing / abonnement
 - **ONB-SELF-01 — COMPLÉTION** — Onboarding self-service avancé
 - **VEH-ADV-01 — COMPLÉTION** — Maintenance flotte avancée
+- **CLOTURE_V2-2 — VALIDATION** — Clôture finale du bloc V2-2
+
 
 ## 14. Prochaine étape logique recommandée
 Le premier bloc recommandé pour démarrer cette refonte méthodique est :
@@ -754,10 +818,12 @@ Pourquoi :
 - ce plan doit rester aligné sur `docs/master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
 - il ne doit pas recontester le cadrage validé
 - une session validée ne supprime pas la nécessité d’une validation explicite utilisateur
+- aucun bloc ne peut être considéré comme terminé sans session dédiée de clôture
 - toute évolution importante du plan doit être justifiée
 - toute future refonte du plan doit rester compatible avec :
   - 1 session = 1 point clair
   - 1 fonctionnalité
+  - 1 session de clôture explicite par bloc
   - 1 livrable principal
   - 1 DoD
   - 1 validation

@@ -5,6 +5,7 @@ Ce dossier contient les traces documentaires officielles des sessions de travail
 ## Règles
 
 - **1 session = 1 point clair, 1 fonctionnalité, 1 DoD, 1 validation**.
+- Chaque bloc se termine par une **session dédiée de clôture de bloc**.
 - Les sessions actives sont classées par maturité puis par bloc.
 - Les sessions historiques au format précédent restent archivées dans `ANCIEN_FORMAT_SESSION/`.
 - Le dossier `SESSION-YYYYMMDD-XX/` sert de modèle de fichiers pour `create_session.ps1`.
@@ -16,13 +17,19 @@ docs/sessions/
 ├── README.md
 ├── 1-ALPHA/
 │   ├── BLOC_A1/
-│   │   └── SESSION-YYYYMMDD-XX_A1_AUTH-01/
-│   │       ├── SESSION.md
-│   │       ├── NOTES.md
-│   │       ├── EVIDENCES.md
-│   │       ├── RESULTATS.md
-│   │       └── FIN_SESSION.md
+│   │   ├── 1-AUTH/
+│   │   ├── 2-TENANT/
+│   │   ├── 3-RBAC/
+│   │   ├── 4-API/
+│   │   └── 5-CLOTURE_A1/
+│   │       └── SESSION-YYYYMMDD-XX_A1_CLOTURE_A1/
+│   │           ├── SESSION.md
+│   │           ├── NOTES.md
+│   │           ├── EVIDENCES.md
+│   │           ├── RESULTATS.md
+│   │           └── FIN_SESSION.md
 │   └── BLOC_A2/
+│       └── 4-CLOTURE_A2/
 ├── 2-BETA/
 │   ├── BLOC_B1/
 │   ├── BLOC_B2/
@@ -51,3 +58,16 @@ Exemple :
 
 - `1-ALPHA`
 - `2-BETA`
+
+## Clôture de bloc
+
+La fin de chaque bloc doit disposer d’un sous-dossier dédié de type :
+- `4-CLOTURE_A2`
+
+La session de clôture :
+- vérifie le code réel, les patchs réels, la documentation finale et les validations terminales ;
+- rend obligatoirement le verdict :
+  - `BLOC <ID> CLÔTURABLE DÉFINITIVEMENT : OUI`
+  - ou `BLOC <ID> CLÔTURABLE DÉFINITIVEMENT : NON`
+
+Aucun bloc suivant ne doit être ouvert sans ce verdict explicite.

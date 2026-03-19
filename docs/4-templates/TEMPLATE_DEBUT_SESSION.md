@@ -34,6 +34,8 @@ CONTEXTE DE SESSION
 - Version cible : à renseigner
 - Phase / bloc : à renseigner
 - Objectif unique de la session : à renseigner
+- Session de clôture de bloc : Oui / Non
+- Dossier de clôture dédié : à renseigner / Sans objet
 
 RÈGLE DE TRAVAIL  
 - 1 session = 1 point clair
@@ -41,6 +43,7 @@ RÈGLE DE TRAVAIL
 - 1 patch
 - 1 DoD
 - 1 validation
+- en fin de bloc : 1 session dédiée de clôture explicite
 
 RÈGLE IMPÉRATIVE — GOUVERNANCE DES PATCHS
 
@@ -66,6 +69,23 @@ le fichier documentaire de patches (`README.md`) est créé automatiquement lors
 - ne pas rejouer tout le patch principal dans un correctif ;
 - ne pas produire un patch global de remplacement si seul un fix est attendu ;
 - ne pas mélanger inutilement code et documentation finale.
+
+RÈGLE IMPÉRATIVE — CLÔTURE DE BLOC
+
+Quand une session correspond à la fin d’un bloc, appliquer strictement les règles suivantes :
+
+1. la clôture du bloc doit être traitée dans une **session dédiée** ;
+2. cette session est de type **VALIDATION** ;
+3. elle vérifie le code réel, les patchs réels, la documentation finale et les validations terminales ;
+4. elle peut produire **un unique correctif final minimal** si un résiduel subsiste ;
+5. elle doit rendre le verdict obligatoire :
+   - `BLOC <ID> CLÔTURABLE DÉFINITIVEMENT : OUI`
+   - ou `BLOC <ID> CLÔTURABLE DÉFINITIVEMENT : NON`
+6. aucun passage au bloc suivant n’est autorisé sans ce verdict explicite.
+
+### Convention de dossier
+- dossier dédié de fin de bloc, par exemple : `4-CLOTURE_A2`
+- session attendue dans le plan : `CLOTURE_<BLOC>`
 
 CONTRAINTE  
 - Ne traiter que le périmètre validé
