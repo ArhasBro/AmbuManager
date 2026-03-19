@@ -3,12 +3,12 @@
 ## Verdict par sous-session
 
 ### SUP-01 — AUDIT
-Verdict : **cohérent comme audit de référence**.
+Verdict sous-session : **cohérent comme audit de référence**.
 
 L’audit initial identifiait correctement un besoin support propriétaire absent dans l’existant. Il reste cohérent comme photographie de départ et ne contredit pas les évolutions ultérieures du dépôt.
 
 ### SUP-02 — COMPLÉTION
-Verdict : **conforme sur le code réel**.
+Verdict sous-session : **conforme sur le code réel**.
 
 Constats validés :
 - rôle plateforme `SUPPORT` distinct des rôles client ;
@@ -18,7 +18,7 @@ Constats validés :
 - aucun cross-company implicite ouvert.
 
 ### SUP-03 — COMPLÉTION
-Verdict : **globalement cohérent sur le dépôt, avec réserve runtime héritée**.
+Verdict sous-session : **globalement cohérent sur le dépôt, avec réserve runtime héritée**.
 
 Constats validés :
 - seed nominatif support présent ;
@@ -29,7 +29,7 @@ Constats validés :
 Réserve : `db:seed` n’a pas été relancé dans cette session de validation et le verdict historique `partiellement conforme` de SUP-03 n’est donc pas ré-ouvert ici.
 
 ### SUP-04 — COMPLÉTION
-Verdict : **conforme sur le code réel**.
+Verdict sous-session : **conforme sur le code réel**.
 
 Constats validés :
 - support absent des listes utilisateurs client ;
@@ -38,7 +38,7 @@ Constats validés :
 - aucun droit supplémentaire introduit.
 
 ### SUP-05 — COMPLÉTION
-Verdict : **partiellement conforme**.
+Verdict sous-session : **partiellement conforme**.
 
 Ce qui est effectivement présent :
 - fonction de traçabilité dédiée ;
@@ -79,7 +79,7 @@ Le support n’obtient aucun bypass implicite. Ce point est sain du point de vue
 ### 7. Cohérence entre code, patchs, sessions et validations terminales
 **Non totalement**.
 
-Le code est cohérent sur la structure du bloc, mais les documents `SUP-02` à `SUP-05` annonçant des validations terminales totalement vertes ne sont pas reproduits dans l’environnement courant de validation.
+Le code est cohérent sur la structure du bloc, mais les validations terminales entièrement vertes sont documentées explicitement dans les dossiers de session `SUP-02`, `SUP-03`, `SUP-04` et `SUP-05`, sans être reproduites dans l’environnement courant de validation.
 
 ## Validations terminales réellement observées dans cette session
 - `npx prisma validate` : **NOK dans l’environnement courant**
@@ -95,7 +95,7 @@ Le bloc support propriétaire est **structurellement bien avancé** : rôle dist
 
 Le bloc n’est toutefois **pas pleinement conforme** pour deux raisons :
 1. la traçabilité support SUP-05 n’est pas effectivement opérable par le compte support global nominal tel qu’il est modélisé ;
-2. la chaîne de validation terminale annoncée par les sessions précédentes n’est pas reproductible telle quelle dans l’environnement courant.
+2. les validations terminales documentées dans `SUP-02`, `SUP-03`, `SUP-04` et `SUP-05` ne sont pas reproductibles telles quelles dans l’environnement courant.
 
 ## Prochaine étape logique
 Ouvrir une session corrective dédiée, bornée et distincte, pour traiter l’un des deux axes suivants sans réélargir le scope :
