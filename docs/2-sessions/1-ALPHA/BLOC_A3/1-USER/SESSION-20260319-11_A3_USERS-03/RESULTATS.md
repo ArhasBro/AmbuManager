@@ -1,12 +1,5 @@
-﻿# RESULTATS
+# RESULTATS — SESSION-20260319-11_A3_USERS-03
 
-## RÃ©sultats obtenus
-
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
-
----
-
-## Documents modifiÃ©s
-
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
-
+Liste utilisateurs stabilisée
+API paginée + recherche + filtre
+UI exploitable

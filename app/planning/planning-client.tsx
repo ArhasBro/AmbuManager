@@ -507,7 +507,11 @@ export default function PlanningClient({ availableDepots }: { availableDepots: D
 
       if (u.res.ok && jsonOkPayload(u.json)) {
         const data = isRecord(u.json) ? u.json.data : null;
-        const arr = Array.isArray(data) ? data : [];
+        const arr = Array.isArray(data)
+          ? data
+          : isRecord(data) && Array.isArray(data.items)
+            ? data.items
+            : [];
 
         const mapped: UserLite[] = arr
           .map((x): UserLite | null => {

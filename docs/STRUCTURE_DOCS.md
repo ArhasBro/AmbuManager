@@ -725,6 +725,8 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |           |   |       NO_PATCH.md
 |           |   |       
 |           |   +---SESSION-20260319-11_A3_USERS-03
+|           |   |       PATCH__SESSION-20260319-11_A3_USERS-03.diff
+|           |   |       PATCH__SESSION-20260319-11_A3_USERS-03_FIX_APPLICABLE.diff
 |           |   |       README_PATCH.md
 |           |   |       
 |           |   +---SESSION-20260319-12_A3_USERS-04

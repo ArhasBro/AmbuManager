@@ -1,10 +1,6 @@
-﻿# EVIDENCES
+# EVIDENCES — SESSION-20260319-11_A3_USERS-03
 
-Ã‰lÃ©ments factuels utilisÃ©s pendant la session.
-
----
-
-## Sources utilisÃ©es
-
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
-
+git apply --check : OK
+git apply : OK
+npm run lint : OK
+npm run build : OK

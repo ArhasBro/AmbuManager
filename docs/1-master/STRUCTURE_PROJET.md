@@ -258,57 +258,41 @@ C:.
 |   |   |               00000337.meta
 |   |   |               00000338.meta
 |   |   |               00000340.meta
-|   |   |               00000342.sst
 |   |   |               00000343.sst
-|   |   |               00000344.sst
 |   |   |               00000345.sst
 |   |   |               00000346.meta
-|   |   |               00000347.meta
-|   |   |               00000349.sst
 |   |   |               00000350.sst
 |   |   |               00000351.sst
 |   |   |               00000352.sst
 |   |   |               00000353.sst
 |   |   |               00000354.meta
 |   |   |               00000355.meta
-|   |   |               00000356.meta
 |   |   |               00000357.meta
 |   |   |               00000358.meta
-|   |   |               00000359.sst
 |   |   |               00000360.sst
 |   |   |               00000361.sst
 |   |   |               00000362.meta
 |   |   |               00000363.meta
-|   |   |               00000364.meta
-|   |   |               00000365.sst
 |   |   |               00000366.sst
 |   |   |               00000367.sst
 |   |   |               00000368.sst
 |   |   |               00000369.sst
 |   |   |               00000370.meta
 |   |   |               00000371.meta
-|   |   |               00000372.meta
 |   |   |               00000373.meta
 |   |   |               00000374.meta
 |   |   |               00000375.sst
-|   |   |               00000376.sst
 |   |   |               00000377.sst
 |   |   |               00000378.meta
 |   |   |               00000379.meta
-|   |   |               00000380.meta
-|   |   |               00000381.sst
 |   |   |               00000382.sst
 |   |   |               00000383.sst
 |   |   |               00000384.meta
 |   |   |               00000385.meta
-|   |   |               00000386.meta
 |   |   |               00000387.sst
-|   |   |               00000388.sst
 |   |   |               00000389.sst
 |   |   |               00000390.meta
 |   |   |               00000391.meta
-|   |   |               00000392.meta
-|   |   |               00000393.sst
 |   |   |               00000394.sst
 |   |   |               00000395.sst
 |   |   |               00000396.sst
@@ -316,19 +300,15 @@ C:.
 |   |   |               00000398.meta
 |   |   |               00000399.meta
 |   |   |               00000400.meta
-|   |   |               00000401.meta
 |   |   |               00000402.meta
 |   |   |               00000403.sst
-|   |   |               00000404.sst
 |   |   |               00000405.sst
 |   |   |               00000406.sst
 |   |   |               00000407.sst
 |   |   |               00000408.meta
 |   |   |               00000409.meta
 |   |   |               00000410.meta
-|   |   |               00000411.meta
 |   |   |               00000412.meta
-|   |   |               00000413.sst
 |   |   |               00000414.sst
 |   |   |               00000415.sst
 |   |   |               00000416.sst
@@ -336,20 +316,16 @@ C:.
 |   |   |               00000418.meta
 |   |   |               00000419.meta
 |   |   |               00000420.meta
-|   |   |               00000421.meta
 |   |   |               00000422.meta
-|   |   |               00000423.sst
 |   |   |               00000424.sst
 |   |   |               00000425.sst
 |   |   |               00000426.sst
 |   |   |               00000427.sst
 |   |   |               00000428.meta
 |   |   |               00000429.meta
-|   |   |               00000430.meta
 |   |   |               00000431.meta
 |   |   |               00000432.meta
 |   |   |               00000433.sst
-|   |   |               00000434.sst
 |   |   |               00000435.sst
 |   |   |               00000436.sst
 |   |   |               00000437.sst
@@ -357,44 +333,34 @@ C:.
 |   |   |               00000439.meta
 |   |   |               00000440.meta
 |   |   |               00000441.meta
-|   |   |               00000442.meta
-|   |   |               00000443.sst
 |   |   |               00000444.sst
 |   |   |               00000445.sst
 |   |   |               00000446.sst
 |   |   |               00000447.sst
 |   |   |               00000448.meta
 |   |   |               00000449.meta
-|   |   |               00000450.meta
 |   |   |               00000451.meta
 |   |   |               00000452.meta
 |   |   |               00000453.sst
-|   |   |               00000454.sst
 |   |   |               00000455.sst
 |   |   |               00000456.meta
 |   |   |               00000457.meta
-|   |   |               00000458.meta
 |   |   |               00000459.sst
-|   |   |               00000460.sst
 |   |   |               00000461.sst
 |   |   |               00000462.sst
 |   |   |               00000463.sst
 |   |   |               00000464.meta
 |   |   |               00000465.meta
 |   |   |               00000466.meta
-|   |   |               00000467.meta
 |   |   |               00000468.meta
-|   |   |               00000469.sst
 |   |   |               00000470.sst
 |   |   |               00000471.sst
 |   |   |               00000472.sst
 |   |   |               00000473.sst
 |   |   |               00000474.meta
 |   |   |               00000475.meta
-|   |   |               00000476.meta
 |   |   |               00000477.meta
 |   |   |               00000478.meta
-|   |   |               00000479.sst
 |   |   |               00000480.sst
 |   |   |               00000481.sst
 |   |   |               00000482.sst
@@ -402,45 +368,31 @@ C:.
 |   |   |               00000484.meta
 |   |   |               00000485.meta
 |   |   |               00000486.meta
-|   |   |               00000487.meta
 |   |   |               00000488.meta
-|   |   |               00000489.sst
 |   |   |               00000490.sst
 |   |   |               00000491.sst
 |   |   |               00000492.meta
 |   |   |               00000493.meta
-|   |   |               00000494.meta
 |   |   |               00000495.sst
-|   |   |               00000496.sst
 |   |   |               00000497.sst
 |   |   |               00000498.meta
 |   |   |               00000499.meta
-|   |   |               00000500.meta
-|   |   |               00000501.sst
 |   |   |               00000502.sst
 |   |   |               00000503.sst
 |   |   |               00000504.meta
 |   |   |               00000505.meta
-|   |   |               00000506.meta
 |   |   |               00000507.sst
-|   |   |               00000508.sst
 |   |   |               00000509.sst
 |   |   |               00000510.meta
 |   |   |               00000511.meta
-|   |   |               00000512.meta
-|   |   |               00000513.sst
 |   |   |               00000514.sst
 |   |   |               00000515.sst
 |   |   |               00000516.meta
-|   |   |               00000517.meta
 |   |   |               00000518.meta
 |   |   |               00000519.sst
-|   |   |               00000520.sst
 |   |   |               00000521.sst
 |   |   |               00000522.meta
 |   |   |               00000523.meta
-|   |   |               00000524.meta
-|   |   |               00000525.sst
 |   |   |               00000526.sst
 |   |   |               00000527.sst
 |   |   |               00000528.sst
@@ -448,18 +400,43 @@ C:.
 |   |   |               00000530.meta
 |   |   |               00000531.meta
 |   |   |               00000532.meta
-|   |   |               00000533.meta
 |   |   |               00000534.meta
 |   |   |               00000535.sst
-|   |   |               00000536.sst
 |   |   |               00000537.sst
 |   |   |               00000538.sst
 |   |   |               00000539.sst
 |   |   |               00000540.meta
 |   |   |               00000541.meta
 |   |   |               00000542.meta
-|   |   |               00000543.meta
 |   |   |               00000544.meta
+|   |   |               00000546.sst
+|   |   |               00000547.sst
+|   |   |               00000548.sst
+|   |   |               00000549.sst
+|   |   |               00000550.meta
+|   |   |               00000551.meta
+|   |   |               00000553.meta
+|   |   |               00000554.meta
+|   |   |               00000555.sst
+|   |   |               00000556.sst
+|   |   |               00000557.meta
+|   |   |               00000558.del
+|   |   |               00000559.sst
+|   |   |               00000560.sst
+|   |   |               00000561.sst
+|   |   |               00000562.sst
+|   |   |               00000563.sst
+|   |   |               00000564.meta
+|   |   |               00000565.meta
+|   |   |               00000566.meta
+|   |   |               00000567.meta
+|   |   |               00000568.meta
+|   |   |               00000569.sst
+|   |   |               00000570.sst
+|   |   |               00000571.sst
+|   |   |               00000572.meta
+|   |   |               00000573.meta
+|   |   |               00000574.meta
 |   |   |               CURRENT
 |   |   |               LOG
 |   |   |               
@@ -1076,6 +1053,8 @@ C:.
 |   |   |   |           [root-of-the-server]__1b3bd7c9._.js.map
 |   |   |   |           [root-of-the-server]__2a48ba9f._.js
 |   |   |   |           [root-of-the-server]__2a48ba9f._.js.map
+|   |   |   |           [root-of-the-server]__30bb5536._.js
+|   |   |   |           [root-of-the-server]__30bb5536._.js.map
 |   |   |   |           [root-of-the-server]__39658c39._.js
 |   |   |   |           [root-of-the-server]__39658c39._.js.map
 |   |   |   |           [root-of-the-server]__4e9dd690._.js
@@ -1977,8 +1956,12 @@ C:.
 |   |   |           app_cd194de2._.js.map
 |   |   |           app_planning_planning-client_tsx_ec2e83fd._.js
 |   |   |           app_planning_planning-client_tsx_ec2e83fd._.js.map
+|   |   |           app_users_9cc9c283._.js
+|   |   |           app_users_9cc9c283._.js.map
 |   |   |           app_vehicles_vehicles-client_tsx_94295d31._.js
 |   |   |           app_vehicles_vehicles-client_tsx_94295d31._.js.map
+|   |   |           node_modules_127bfa28._.js
+|   |   |           node_modules_127bfa28._.js.map
 |   |   |           node_modules_eee573be._.js
 |   |   |           node_modules_eee573be._.js.map
 |   |   |           node_modules_next_dist_27457240._.js
@@ -2003,6 +1986,8 @@ C:.
 |   |   |           node_modules_next_dist_esm_build_templates_app-page_b8e1111a.js.map
 |   |   |           node_modules_next_dist_f21d913a._.js
 |   |   |           node_modules_next_dist_f21d913a._.js.map
+|   |   |           [root-of-the-server]__0aae9cc7._.js
+|   |   |           [root-of-the-server]__0aae9cc7._.js.map
 |   |   |           [root-of-the-server]__0d5ae7ad._.js
 |   |   |           [root-of-the-server]__0d5ae7ad._.js.map
 |   |   |           [root-of-the-server]__1beaccf2._.js
@@ -2025,8 +2010,6 @@ C:.
 |   |   |           [root-of-the-server]__9d5e3ced._.js.map
 |   |   |           [root-of-the-server]__a457c799._.js
 |   |   |           [root-of-the-server]__a457c799._.js.map
-|   |   |           [root-of-the-server]__a63cb763._.js
-|   |   |           [root-of-the-server]__a63cb763._.js.map
 |   |   |           [root-of-the-server]__b60f9c53._.js
 |   |   |           [root-of-the-server]__b60f9c53._.js.map
 |   |   |           [root-of-the-server]__b9356576._.js
@@ -2049,8 +2032,6 @@ C:.
 |   |   |           _30e06fe7._.js.map
 |   |   |           _5516c59e._.js
 |   |   |           _5516c59e._.js.map
-|   |   |           _5b6cb8df._.js
-|   |   |           _5b6cb8df._.js.map
 |   |   |           _5c5d5a9d._.js
 |   |   |           _5c5d5a9d._.js.map
 |   |   |           _5f02a5a9._.js
@@ -2103,24 +2084,24 @@ C:.
 |   |   +---chunks
 |   |   |       05e6c743003c809d.js
 |   |   |       1687260e4d8b05d6.js
-|   |   |       25afe73b7d509b10.js
 |   |   |       34f7551faf121447.css
 |   |   |       642a00754c8aebb8.js
 |   |   |       672c0168d7981883.js
+|   |   |       6fe188a4ac2c58d8.js
 |   |   |       82abf2d65f5428ae.js
 |   |   |       899b7782e7cb92a1.js
 |   |   |       96a8fcc9ec5b00e6.js
 |   |   |       a6dad97d9634a72d.js
 |   |   |       a6dad97d9634a72d.js.map
-|   |   |       adae5604c0a9f968.js
 |   |   |       af7027598a07baa5.js
 |   |   |       b870288de7d3931e.js
 |   |   |       cc07a3e87a46bf5e.js
 |   |   |       cdb83a758231f045.js
+|   |   |       f6bb1d2727f3c5af.js
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
 |   |   |       
-|   |   +---gNxa4EzP3F8fSVWA98E4_
+|   |   +---hQfUlOri2DoFxo_1VpMfc
 |   |   |       _buildManifest.js
 |   |   |       _clientMiddlewareManifest.json
 |   |   |       _ssgManifest.js
@@ -2240,6 +2221,7 @@ C:.
 |   |       page.tsx
 |   |       reset-password-client.tsx
 |   |       user-depot-assignment-client.tsx
+|   |       users-list-client.tsx
 |   |       
 |   \---vehicles
 |           add-vehicle-form.tsx
@@ -2971,6 +2953,8 @@ C:.
 |   |           |   |       NO_PATCH.md
 |   |           |   |       
 |   |           |   +---SESSION-20260319-11_A3_USERS-03
+|   |           |   |       PATCH__SESSION-20260319-11_A3_USERS-03.diff
+|   |           |   |       PATCH__SESSION-20260319-11_A3_USERS-03_FIX_APPLICABLE.diff
 |   |           |   |       README_PATCH.md
 |   |           |   |       
 |   |           |   +---SESSION-20260319-12_A3_USERS-04

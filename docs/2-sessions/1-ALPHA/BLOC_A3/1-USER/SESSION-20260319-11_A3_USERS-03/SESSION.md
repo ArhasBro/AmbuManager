@@ -1,35 +1,13 @@
-﻿# SESSION
+# SESSION — SESSION-20260319-11_A3_USERS-03
 
-## ID SESSION
+## Identification
+- Projet : Investissement
+- Sous-projet : Ambulance Manager
+- Maturité : 1-ALPHA
+- Bloc : A3
+- Code session : USERS-03
+- Type : CORRECTION
+- Intitulé : Correction / stabilisation de la liste utilisateurs
 
-SESSION-20260319-11_A3_USERS-03
-
-## Date
-
-19/03/2026
-
-## Contexte
-
-Projet : Investissement  
-Sous-projet : Ambulance Manager  
-Maturite : 1-ALPHA  
-Bloc : A3  
-Type : CORRECTION  
-Intitule : Correction / stabilisation de la liste
-
-## Objectif de la session
-
-INFORMATION NON FOURNIE - A CONFIRMER
-
-## Perimetre exact traite
-
-INFORMATION NON FOURNIE - A CONFIRMER
-
-## Resultat synthetique de session
-
-INFORMATION NON FOURNIE - A CONFIRMER
-
-## Dossiers lies
-
-- Session : docs/2-sessions/1-ALPHA/BLOC_A3/SESSION-20260319-11_A3_USERS-03
-- Patchs  : docs/3-patches/1-ALPHA/BLOC_A3/SESSION-20260319-11_A3_USERS-03
+## Objectif
+À partir du constat validé en USERS-02, stabiliser la liste utilisateurs existante pour en faire une base exploitable du bloc A3, sans construire encore un module users complet.

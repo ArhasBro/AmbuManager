@@ -1,10 +1,8 @@
-﻿# NOTES
+# NOTES — SESSION-20260319-11_A3_USERS-03
 
-Notes de travail de la session.
+## Constat de départ
+- API minimale existante
+- UI non exploitable
 
----
-
-## MÃ©thode / observations
-
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
-
+## Patch validé
+PATCH__SESSION-20260319-11_A3_USERS-03_FIX_APPLICABLE.diff

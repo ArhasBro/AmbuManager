@@ -1,24 +1,43 @@
-﻿# README_PATCH
+# README_PATCH — SESSION-20260319-11_A3_USERS-03
 
-## Session liee
-SESSION-20260319-11_A3_USERS-03
+## Session
+- Projet : Investissement
+- Sous-projet : Ambulance Manager
+- Maturité : 1-ALPHA
+- Bloc : A3
+- Code session : USERS-03
+- Type : CORRECTION
+- Intitulé : Correction / stabilisation de la liste utilisateurs
 
-## Type
-CORRECTION
+## Patch code retenu
+- `PATCH__SESSION-20260319-11_A3_USERS-03_FIX_APPLICABLE.diff`
 
-## Dossier patch
-docs/3-patches/1-ALPHA/BLOC_A3/SESSION-20260319-11_A3_USERS-03
+## Objet du patch
+Ce patch stabilise la liste utilisateurs existante sans ouvrir encore un module users complet.
 
-## Patch officiel attendu
-PATCH__SESSION-20260319-11_A3_USERS-03.diff
+Il couvre :
+- la route `app/api/users/route.ts`
+- la page `app/users/page.tsx`
+- le composant de liste users
+- l’adaptation des consommateurs existants au nouveau format API
 
-## Commandes d'application
+## Contenu fonctionnel
+- pagination réelle
+- recherche simple
+- filtre rôle simple
+- réponse API normalisée
+- vraie liste tabulaire côté `/users`
+- états loading / vide / erreur
+- pagination UI simple
+- sélection utilisateur claire
 
-`ash
-git apply --check "docs/3-patches/1-ALPHA/BLOC_A3/SESSION-20260319-11_A3_USERS-03/PATCH__SESSION-20260319-11_A3_USERS-03.diff"
-git apply         "docs/3-patches/1-ALPHA/BLOC_A3/SESSION-20260319-11_A3_USERS-03/PATCH__SESSION-20260319-11_A3_USERS-03.diff"
-`
+## Correctif d’applicabilité
+Le patch principal initial ciblait des chemins tronqués.
+Le patch retenu corrige les chemins du diff pour viser les chemins réels du dépôt sous `app/...`.
 
-## Statut
-- Dossier patch initialise.
-- Patch officiel a produire dans cette session si du code est modifie.
+## Validation prouvée
+Commandes validées :
+- `git apply --check` : OK
+- `git apply` : OK
+- `npm run lint` : OK
+- `npm run build` : OK

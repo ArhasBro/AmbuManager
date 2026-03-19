@@ -53,12 +53,20 @@ export default function ResetPasswordClient({ actorUserId }: Props) {
         const res = await fetch("/api/users?limit=500", { cache: "no-store" });
         const json: unknown = await res.json();
 
-        if (!res.ok || !isApiOk<unknown[]>(json) || !Array.isArray(json.data)) {
+        const payload = isApiOk<unknown>(json)
+          ? Array.isArray(json.data)
+            ? json.data
+            : typeof json.data === "object" && json.data !== null && Array.isArray((json.data as { items?: unknown }).items)
+              ? (json.data as { items: unknown[] }).items
+              : null
+          : null;
+
+        if (!res.ok || !payload) {
           const msg = isApiErr(json) ? json.error : `HTTP_${res.status}`;
           throw new Error(msg);
         }
 
-        const mapped = json.data
+        const mapped = payload
           .map((item): UserLite | null => {
             if (typeof item !== "object" || item === null) return null;
 

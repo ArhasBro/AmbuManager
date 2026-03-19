@@ -1,0 +1,631 @@
+--- app/api/users/route.ts
++++ app/api/users/route.ts
+@@ -1,14 +1,31 @@
+ import { getServerSession } from "next-auth/next";
++import { z } from "zod";
++import { Prisma, Role } from "@prisma/client";
++
+ import { authOptions } from "@/lib/auth";
+ import { prisma } from "@/lib/prisma";
+-
+ import { ok, badRequest, unauthorized, forbidden, serverError } from "@/lib/api/response";
+ import { canManageUsers } from "@/lib/permissions";
+ import { serializeDates } from "@/lib/serializers";
+-import { z } from "zod";
++
++const optionalTrimmedString = z.preprocess((value) => {
++  if (typeof value !== "string") return undefined;
++  const trimmed = value.trim();
++  return trimmed.length > 0 ? trimmed : undefined;
++}, z.string().optional());
++
++const optionalRoleSchema = z.preprocess((value) => {
++  if (typeof value !== "string") return undefined;
++  const trimmed = value.trim();
++  return trimmed.length > 0 ? trimmed : undefined;
++}, z.nativeEnum(Role).optional());
+ 
+ const listQuerySchema = z.object({
+-  limit: z.coerce.number().int().min(1).max(500).optional().default(200),
++  page: z.coerce.number().int().min(1).optional().default(1),
++  pageSize: z.coerce.number().int().min(1).max(500).optional(),
++  limit: z.coerce.number().int().min(1).max(500).optional(),
++  q: optionalTrimmedString,
++  role: optionalRoleSchema,
+ });
+ 
+ function getErrorMessage(e: unknown): string {
+@@ -34,41 +51,80 @@
+ 
+   const url = new URL(req.url);
+   const parsed = listQuerySchema.safeParse({
++    page: url.searchParams.get("page") ?? undefined,
++    pageSize: url.searchParams.get("pageSize") ?? undefined,
+     limit: url.searchParams.get("limit") ?? undefined,
++    q: url.searchParams.get("q") ?? undefined,
++    role: url.searchParams.get("role") ?? undefined,
+   });
+   if (!parsed.success) return badRequest("VALIDATION_ERROR", parsed.error.flatten());
+ 
+-  const { limit } = parsed.data;
++  const { page, pageSize, limit, q, role } = parsed.data;
++  const effectivePageSize = limit ?? pageSize ?? 20;
++  const skip = (page - 1) * effectivePageSize;
+ 
+   try {
+-    const users = await prisma.user.findMany({
+-      where: {
+-        companyId,
+-        platformRole: null,
+-        role: { not: null },
++    const where: Prisma.UserWhereInput = {
++      companyId,
++      platformRole: null,
++      role: {
++        not: null,
++        ...(role ? { equals: role } : {}),
+       },
+-      orderBy: { name: "asc" },
+-      take: limit,
+-      select: {
+-        id: true,
+-        name: true,
+-        email: true,
+-        role: true,
+-        companyId: true,
+-        depotId: true,
+-        depot: {
+-          select: {
+-            id: true,
+-            name: true,
+-            isActive: true,
++      ...(q
++        ? {
++            OR: [
++              { name: { contains: q, mode: "insensitive" as const } },
++              { email: { contains: q, mode: "insensitive" as const } },
++            ],
++          }
++        : {}),
++    };
++
++    const [totalItems, users] = await prisma.$transaction([
++      prisma.user.count({ where }),
++      prisma.user.findMany({
++        where,
++        orderBy: [{ name: "asc" }, { email: "asc" }],
++        skip,
++        take: effectivePageSize,
++        select: {
++          id: true,
++          name: true,
++          email: true,
++          role: true,
++          companyId: true,
++          depotId: true,
++          depot: {
++            select: {
++              id: true,
++              name: true,
++              isActive: true,
++            },
+           },
++          createdAt: true,
++          updatedAt: true,
+         },
+-        createdAt: true,
+-        updatedAt: true,
++      }),
++    ]);
++
++    const totalPages = Math.max(1, Math.ceil(totalItems / effectivePageSize));
++
++    return ok({
++      items: users.map(serializeDates),
++      pagination: {
++        page,
++        pageSize: effectivePageSize,
++        totalItems,
++        totalPages,
++        hasPreviousPage: page > 1,
++        hasNextPage: page < totalPages,
++      },
++      filters: {
++        q: q ?? "",
++        role: role ?? null,
+       },
+     });
+-
+-    return ok(users.map(serializeDates));
+   } catch (e: unknown) {
+     return serverError(getErrorMessage(e));
+   }
+--- app/planning/planning-client.tsx
++++ app/planning/planning-client.tsx
+@@ -507,7 +507,11 @@
+ 
+       if (u.res.ok && jsonOkPayload(u.json)) {
+         const data = isRecord(u.json) ? u.json.data : null;
+-        const arr = Array.isArray(data) ? data : [];
++        const arr = Array.isArray(data)
++          ? data
++          : isRecord(data) && Array.isArray(data.items)
++            ? data.items
++            : [];
+ 
+         const mapped: UserLite[] = arr
+           .map((x): UserLite | null => {
+--- app/users/page.tsx
++++ app/users/page.tsx
+@@ -8,6 +8,7 @@
+ 
+ import ResetPasswordClient from "./reset-password-client";
+ import UserDepotAssignmentClient from "./user-depot-assignment-client";
++import UsersListClient from "./users-list-client";
+ 
+ export default async function UsersPage() {
+   const session = await getServerSession(authOptions);
+@@ -32,13 +33,14 @@
+         <div>
+           <h1 style={{ margin: 0 }}>Utilisateurs</h1>
+           <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
+-            Gestion minimale ALPHA des utilisateurs de société : réinitialisation de mot de passe et rattachement à une base. Les comptes support globaux sont exclus de ces flux client.
++            Base exploitable du bloc A3 : liste utilisateurs lisible avec recherche et pagination, en conservant les actions minimales déjà présentes de réinitialisation de mot de passe et de rattachement à une base.
+           </p>
+         </div>
+ 
+         <Link href="/dashboard">Retour dashboard</Link>
+       </div>
+ 
++      <UsersListClient />
+       <UserDepotAssignmentClient availableDepots={depots} />
+       <ResetPasswordClient actorUserId={user.id} />
+     </div>
+--- app/users/reset-password-client.tsx
++++ app/users/reset-password-client.tsx
+@@ -30,6 +30,14 @@
+ 
+ function isApiErr(value: unknown): value is ApiErr {
+   return typeof value === "object" && value !== null && "ok" in value && (value as { ok?: unknown }).ok === false;
++}
++
++function getUsersArrayFromApiData(value: unknown): unknown[] {
++  if (Array.isArray(value)) return value;
++  if (typeof value !== "object" || value === null) return [];
++
++  const record = value as Record<string, unknown>;
++  return Array.isArray(record.items) ? record.items : [];
+ }
+ 
+ export default function ResetPasswordClient({ actorUserId }: Props) {
+@@ -53,12 +61,12 @@
+         const res = await fetch("/api/users?limit=500", { cache: "no-store" });
+         const json: unknown = await res.json();
+ 
+-        if (!res.ok || !isApiOk<unknown[]>(json) || !Array.isArray(json.data)) {
++        if (!res.ok || !isApiOk<unknown>(json)) {
+           const msg = isApiErr(json) ? json.error : `HTTP_${res.status}`;
+           throw new Error(msg);
+         }
+ 
+-        const mapped = json.data
++        const mapped = getUsersArrayFromApiData(json.data)
+           .map((item): UserLite | null => {
+             if (typeof item !== "object" || item === null) return null;
+ 
+--- app/users/user-depot-assignment-client.tsx
++++ app/users/user-depot-assignment-client.tsx
+@@ -36,6 +36,14 @@
+   return typeof value === "object" && value !== null && "ok" in value && (value as { ok?: unknown }).ok === false;
+ }
+ 
++function getUsersArrayFromApiData(value: unknown): unknown[] {
++  if (Array.isArray(value)) return value;
++  if (typeof value !== "object" || value === null) return [];
++
++  const record = value as Record<string, unknown>;
++  return Array.isArray(record.items) ? record.items : [];
++}
++
+ function getDepotLabel(depot: DepotOption) {
+   return depot.isActive ? depot.name : `${depot.name} (archivé)`;
+ }
+@@ -64,12 +72,12 @@
+         const res = await fetch("/api/users?limit=500", { cache: "no-store" });
+         const json: unknown = await res.json();
+ 
+-        if (!res.ok || !isApiOk<unknown[]>(json) || !Array.isArray(json.data)) {
++        if (!res.ok || !isApiOk<unknown>(json)) {
+           const msg = isApiErr(json) ? json.error : `HTTP_${res.status}`;
+           throw new Error(msg);
+         }
+ 
+-        const mapped = json.data
++        const mapped = getUsersArrayFromApiData(json.data)
+           .map((item): UserLite | null => {
+             if (typeof item !== "object" || item === null) return null;
+ 
+--- /dev/null
++++ app/users/users-list-client.tsx
+@@ -0,0 +1,381 @@
++"use client";
++
++import { useEffect, useMemo, useState, type FormEvent } from "react";
++
++type ApiOk<T> = {
++  ok: true;
++  data: T;
++};
++
++type ApiErr = {
++  ok: false;
++  error: string;
++  details?: unknown;
++};
++
++type DepotLite = {
++  id: string;
++  name: string;
++  isActive: boolean;
++};
++
++type UserListItem = {
++  id: string;
++  name: string;
++  email: string | null;
++  role: string;
++  depotId: string | null;
++  depot: DepotLite | null;
++};
++
++type UsersListResponse = {
++  items: UserListItem[];
++  pagination: {
++    page: number;
++    pageSize: number;
++    totalItems: number;
++    totalPages: number;
++    hasPreviousPage: boolean;
++    hasNextPage: boolean;
++  };
++  filters: {
++    q: string;
++    role: string | null;
++  };
++};
++
++const ROLE_OPTIONS = ["ADMIN", "GERANT", "BUREAU", "ADE", "AA", "TAXI", "REGULATEUR"] as const;
++
++function isApiOk<T>(value: unknown): value is ApiOk<T> {
++  return typeof value === "object" && value !== null && "ok" in value && (value as { ok?: unknown }).ok === true;
++}
++
++function isApiErr(value: unknown): value is ApiErr {
++  return typeof value === "object" && value !== null && "ok" in value && (value as { ok?: unknown }).ok === false;
++}
++
++function parseUsersListResponse(value: unknown): UsersListResponse | null {
++  if (typeof value !== "object" || value === null) return null;
++
++  const record = value as Record<string, unknown>;
++  const itemsRaw = Array.isArray(record.items) ? record.items : null;
++  const paginationRaw = typeof record.pagination === "object" && record.pagination !== null
++    ? (record.pagination as Record<string, unknown>)
++    : null;
++  const filtersRaw = typeof record.filters === "object" && record.filters !== null
++    ? (record.filters as Record<string, unknown>)
++    : null;
++
++  if (!itemsRaw || !paginationRaw || !filtersRaw) return null;
++
++  const items = itemsRaw
++    .map((item): UserListItem | null => {
++      if (typeof item !== "object" || item === null) return null;
++
++      const user = item as Record<string, unknown>;
++      const depotRecord = typeof user.depot === "object" && user.depot !== null
++        ? (user.depot as Record<string, unknown>)
++        : null;
++      const depot = depotRecord
++        && typeof depotRecord.id === "string"
++        && typeof depotRecord.name === "string"
++        && typeof depotRecord.isActive === "boolean"
++        ? {
++            id: depotRecord.id,
++            name: depotRecord.name,
++            isActive: depotRecord.isActive,
++          }
++        : null;
++
++      if (
++        typeof user.id !== "string"
++        || typeof user.name !== "string"
++        || typeof user.role !== "string"
++      ) {
++        return null;
++      }
++
++      return {
++        id: user.id,
++        name: user.name,
++        email: typeof user.email === "string" ? user.email : null,
++        role: user.role,
++        depotId: typeof user.depotId === "string" ? user.depotId : null,
++        depot,
++      };
++    })
++    .filter((item): item is UserListItem => Boolean(item));
++
++  if (
++    typeof paginationRaw.page !== "number"
++    || typeof paginationRaw.pageSize !== "number"
++    || typeof paginationRaw.totalItems !== "number"
++    || typeof paginationRaw.totalPages !== "number"
++    || typeof paginationRaw.hasPreviousPage !== "boolean"
++    || typeof paginationRaw.hasNextPage !== "boolean"
++  ) {
++    return null;
++  }
++
++  if (typeof filtersRaw.q !== "string") return null;
++  if (filtersRaw.role !== null && typeof filtersRaw.role !== "string") return null;
++
++  const page = paginationRaw.page;
++  const pageSize = paginationRaw.pageSize;
++  const totalItems = paginationRaw.totalItems;
++  const totalPages = paginationRaw.totalPages;
++  const hasPreviousPage = paginationRaw.hasPreviousPage;
++  const hasNextPage = paginationRaw.hasNextPage;
++  const q = filtersRaw.q as string;
++  const role = filtersRaw.role as string | null;
++
++  return {
++    items,
++    pagination: {
++      page,
++      pageSize,
++      totalItems,
++      totalPages,
++      hasPreviousPage,
++      hasNextPage,
++    },
++    filters: {
++      q,
++      role,
++    },
++  };
++}
++
++function getDepotLabel(depot: DepotLite | null) {
++  if (!depot) return "Aucune";
++  return depot.isActive ? depot.name : `${depot.name} (archivé)`;
++}
++
++export default function UsersListClient() {
++  const [searchInput, setSearchInput] = useState("");
++  const [appliedSearch, setAppliedSearch] = useState("");
++  const [roleFilter, setRoleFilter] = useState("");
++  const [page, setPage] = useState(1);
++  const [pageSize, setPageSize] = useState(10);
++  const [data, setData] = useState<UsersListResponse | null>(null);
++  const [selectedUserId, setSelectedUserId] = useState("");
++  const [loading, setLoading] = useState(true);
++  const [error, setError] = useState<string | null>(null);
++
++  useEffect(() => {
++    let cancelled = false;
++
++    async function loadUsers() {
++      setLoading(true);
++      setError(null);
++
++      try {
++        const params = new URLSearchParams({
++          page: String(page),
++          pageSize: String(pageSize),
++        });
++
++        if (appliedSearch) params.set("q", appliedSearch);
++        if (roleFilter) params.set("role", roleFilter);
++
++        const res = await fetch(`/api/users?${params.toString()}`, { cache: "no-store" });
++        const json: unknown = await res.json();
++
++        if (!res.ok || !isApiOk<unknown>(json)) {
++          const msg = isApiErr(json) ? json.error : `HTTP_${res.status}`;
++          throw new Error(msg);
++        }
++
++        const parsed = parseUsersListResponse(json.data);
++        if (!parsed) throw new Error("INVALID_USERS_LIST_RESPONSE");
++
++        if (!cancelled) {
++          setData(parsed);
++          setSelectedUserId((current) => {
++            if (current && parsed.items.some((user) => user.id === current)) return current;
++            return parsed.items[0]?.id ?? "";
++          });
++        }
++      } catch (e: unknown) {
++        if (!cancelled) {
++          setData(null);
++          setSelectedUserId("");
++          setError(e instanceof Error ? e.message : "Unknown error");
++        }
++      } finally {
++        if (!cancelled) setLoading(false);
++      }
++    }
++
++    void loadUsers();
++
++    return () => {
++      cancelled = true;
++    };
++  }, [appliedSearch, page, pageSize, roleFilter]);
++
++  const selectedUser = useMemo(
++    () => data?.items.find((user) => user.id === selectedUserId) ?? null,
++    [data, selectedUserId],
++  );
++
++  function onSubmit(event: FormEvent<HTMLFormElement>) {
++    event.preventDefault();
++    setPage(1);
++    setAppliedSearch(searchInput.trim());
++  }
++
++  function resetFilters() {
++    setSearchInput("");
++    setAppliedSearch("");
++    setRoleFilter("");
++    setPage(1);
++  }
++
++  return (
++    <div style={{ display: "grid", gap: 16 }}>
++      <div style={{ padding: 12, border: "1px solid #333", borderRadius: 8, display: "grid", gap: 12 }}>
++        <div>
++          <h2 style={{ margin: 0 }}>Liste utilisateurs</h2>
++          <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
++            Liste tabulaire minimale du bloc A3 avec recherche, filtre rôle, pagination simple et sélection claire d&apos;un utilisateur.
++          </p>
++        </div>
++
++        <form onSubmit={onSubmit} style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "end" }}>
++          <label style={{ display: "grid", gap: 6, minWidth: 240, flex: "1 1 240px" }}>
++            <span>Recherche</span>
++            <input
++              type="text"
++              value={searchInput}
++              onChange={(e) => setSearchInput(e.target.value)}
++              placeholder="Nom ou email"
++            />
++          </label>
++
++          <label style={{ display: "grid", gap: 6, minWidth: 180 }}>
++            <span>Rôle</span>
++            <select
++              value={roleFilter}
++              onChange={(e) => {
++                setRoleFilter(e.target.value);
++                setPage(1);
++              }}
++            >
++              <option value="">Tous les rôles</option>
++              {ROLE_OPTIONS.map((role) => (
++                <option key={role} value={role}>{role}</option>
++              ))}
++            </select>
++          </label>
++
++          <label style={{ display: "grid", gap: 6, minWidth: 120 }}>
++            <span>Par page</span>
++            <select
++              value={String(pageSize)}
++              onChange={(e) => {
++                setPageSize(Number(e.target.value));
++                setPage(1);
++              }}
++            >
++              <option value="10">10</option>
++              <option value="20">20</option>
++              <option value="50">50</option>
++            </select>
++          </label>
++
++          <button type="submit">Rechercher</button>
++          <button type="button" onClick={resetFilters}>Réinitialiser</button>
++        </form>
++
++        {loading ? <p style={{ margin: 0 }}>Chargement de la liste utilisateurs...</p> : null}
++
++        {error ? (
++          <div style={{ padding: 10, border: "1px solid #663333", borderRadius: 8 }}>
++            Erreur : {error}
++          </div>
++        ) : null}
++
++        {!loading && !error && data && data.items.length === 0 ? (
++          <div style={{ padding: 10, border: "1px solid #555", borderRadius: 8 }}>
++            Aucun utilisateur ne correspond aux filtres courants.
++          </div>
++        ) : null}
++
++        {!loading && !error && data && data.items.length > 0 ? (
++          <>
++            <div style={{ overflowX: "auto" }}>
++              <table style={{ width: "100%", borderCollapse: "collapse" }}>
++                <thead>
++                  <tr>
++                    <th style={{ textAlign: "left", padding: "10px 8px", borderBottom: "1px solid #333" }}>Sélection</th>
++                    <th style={{ textAlign: "left", padding: "10px 8px", borderBottom: "1px solid #333" }}>Nom</th>
++                    <th style={{ textAlign: "left", padding: "10px 8px", borderBottom: "1px solid #333" }}>Email</th>
++                    <th style={{ textAlign: "left", padding: "10px 8px", borderBottom: "1px solid #333" }}>Rôle</th>
++                    <th style={{ textAlign: "left", padding: "10px 8px", borderBottom: "1px solid #333" }}>Base</th>
++                  </tr>
++                </thead>
++                <tbody>
++                  {data.items.map((user) => {
++                    const selected = user.id === selectedUserId;
++
++                    return (
++                      <tr key={user.id} style={{ background: selected ? "rgba(255,255,255,0.08)" : "transparent" }}>
++                        <td style={{ padding: "10px 8px", borderBottom: "1px solid #222" }}>
++                          <button type="button" onClick={() => setSelectedUserId(user.id)}>
++                            {selected ? "Sélectionné" : "Sélectionner"}
++                          </button>
++                        </td>
++                        <td style={{ padding: "10px 8px", borderBottom: "1px solid #222" }}>{user.name}</td>
++                        <td style={{ padding: "10px 8px", borderBottom: "1px solid #222" }}>{user.email ?? "—"}</td>
++                        <td style={{ padding: "10px 8px", borderBottom: "1px solid #222" }}>{user.role}</td>
++                        <td style={{ padding: "10px 8px", borderBottom: "1px solid #222" }}>{getDepotLabel(user.depot)}</td>
++                      </tr>
++                    );
++                  })}
++                </tbody>
++              </table>
++            </div>
++
++            <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
++              <div style={{ opacity: 0.8 }}>
++                Page {data.pagination.page} / {data.pagination.totalPages} — {data.pagination.totalItems} utilisateur(s)
++              </div>
++
++              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
++                <button
++                  type="button"
++                  onClick={() => setPage((current) => Math.max(1, current - 1))}
++                  disabled={!data.pagination.hasPreviousPage}
++                >
++                  Précédent
++                </button>
++                <button
++                  type="button"
++                  onClick={() => setPage((current) => current + 1)}
++                  disabled={!data.pagination.hasNextPage}
++                >
++                  Suivant
++                </button>
++              </div>
++            </div>
++          </>
++        ) : null}
++      </div>
++
++      <div style={{ padding: 12, border: "1px solid #333", borderRadius: 8 }}>
++        <h3 style={{ marginTop: 0 }}>Utilisateur sélectionné</h3>
++        {selectedUser ? (
++          <div style={{ display: "grid", gap: 6 }}>
++            <div><strong>{selectedUser.name}</strong></div>
++            <div>Email : {selectedUser.email ?? "Non renseigné"}</div>
++            <div>Rôle : {selectedUser.role}</div>
++            <div>Base : {getDepotLabel(selectedUser.depot)}</div>
++          </div>
++        ) : (
++          <p style={{ marginBottom: 0 }}>Aucun utilisateur sélectionné sur la page courante.</p>
++        )}
++      </div>
++    </div>
++  );
++}
