@@ -53,6 +53,8 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
       userId: parsedParams.data.id,
       companyId,
       depotId: parsedBody.data.depotId,
+      actorUserId,
+      actorPlatformRole: platformRole,
     });
 
     if (result.status === "USER_NOT_FOUND") return notFound();

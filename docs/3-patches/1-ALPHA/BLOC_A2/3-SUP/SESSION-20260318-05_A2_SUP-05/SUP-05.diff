@@ -1,0 +1,845 @@
+--- a/lib/services/audit/support-action-trace.ts
++++ b/lib/services/audit/support-action-trace.ts
+@@ -0,0 +1,31 @@
++import { Prisma, PrismaClient, PlatformRole } from "@prisma/client";
++
++import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
++
++type AuditDb = Prisma.TransactionClient | PrismaClient;
++
++export type SupportActionTraceInput = {
++  companyId: string;
++  actorUserId?: string | null;
++  actorPlatformRole?: PlatformRole | string | null;
++  action: string;
++  entityType: string;
++  entityId: string;
++  summary: string;
++  payload?: Prisma.InputJsonValue;
++};
++
++export async function traceSupportAction(db: AuditDb, input: SupportActionTraceInput) {
++  if (!input.actorUserId) return null;
++  if (input.actorPlatformRole !== PlatformRole.SUPPORT) return null;
++
++  return writePlanningAudit(db, {
++    companyId: input.companyId,
++    actorUserId: input.actorUserId,
++    action: input.action,
++    entityType: input.entityType,
++    entityId: input.entityId,
++    summary: input.summary,
++    payload: input.payload,
++  });
++}
+--- a/lib/services/users/assign-user-depot.ts
++++ b/lib/services/users/assign-user-depot.ts
+@@ -1,4 +1,7 @@
++import { PlatformRole } from "@prisma/client";
++
+ import { prisma } from "@/lib/prisma";
++import { traceSupportAction } from "@/lib/services/audit/support-action-trace";
+ 
+ type AssignedUser = {
+   id: string;
+@@ -38,6 +41,8 @@
+   userId: string;
+   companyId: string;
+   depotId: string | null;
++  actorUserId?: string;
++  actorPlatformRole?: PlatformRole | string | null;
+ };
+ 
+ export type AssignUserDepotResult =
+@@ -56,6 +61,14 @@
+     select: {
+       id: true,
+       companyId: true,
++      depotId: true,
++      depot: {
++        select: {
++          id: true,
++          name: true,
++          isActive: true,
++        },
++      },
+     },
+   });
+ }
+@@ -64,8 +77,10 @@
+   const existingUser = await findUserByTenant(input.userId, input.companyId);
+   if (!existingUser) return { status: "USER_NOT_FOUND" };
+ 
++  let nextDepot: { id: string; companyId: string; name: string; isActive: boolean } | null = null;
++
+   if (input.depotId !== null) {
+-    const depot = await prisma.depot.findFirst({
++    nextDepot = await prisma.depot.findFirst({
+       where: {
+         id: input.depotId,
+         companyId: input.companyId,
+@@ -74,16 +89,62 @@
+       select: {
+         id: true,
+         companyId: true,
++        name: true,
++        isActive: true,
+       },
+     });
+ 
+-    if (!depot) return { status: "DEPOT_NOT_FOUND" };
++    if (!nextDepot) return { status: "DEPOT_NOT_FOUND" };
+   }
+ 
+-  const user = await prisma.user.update({
+-    where: { id: existingUser.id },
+-    data: { depotId: input.depotId },
+-    select: userDepotSelect,
++  const user = await prisma.$transaction(async (tx) => {
++    const updatedUser = await tx.user.update({
++      where: { id: existingUser.id },
++      data: { depotId: input.depotId },
++      select: userDepotSelect,
++    });
++
++    await traceSupportAction(tx, {
++      companyId: input.companyId,
++      actorUserId: input.actorUserId,
++      actorPlatformRole: input.actorPlatformRole,
++      action: "SUPPORT_ASSIGN_USER_DEPOT",
++      entityType: "USER",
++      entityId: updatedUser.id,
++      summary: `Support assignment du dépôt utilisateur ${updatedUser.id}`,
++      payload: {
++        module: "users",
++        changedFields: ["depotId"],
++        previous: {
++          depotId: existingUser.depotId,
++          depot: existingUser.depot
++            ? {
++                id: existingUser.depot.id,
++                name: existingUser.depot.name,
++                isActive: existingUser.depot.isActive,
++              }
++            : null,
++        },
++        next: {
++          depotId: updatedUser.depotId,
++          depot: updatedUser.depot
++            ? {
++                id: updatedUser.depot.id,
++                name: updatedUser.depot.name,
++                isActive: updatedUser.depot.isActive,
++              }
++            : null,
++        },
++        details: {
++          targetType: "user",
++          requestedDepotId: input.depotId,
++          resolvedDepotId: nextDepot?.id ?? null,
++          resolvedDepotName: nextDepot?.name ?? null,
++        },
++      },
++    });
++
++    return updatedUser;
+   });
+ 
+   return { status: "OK", user };
+--- a/lib/services/vehicles/assign-vehicle-depot.ts
++++ b/lib/services/vehicles/assign-vehicle-depot.ts
+@@ -1,4 +1,7 @@
++import { PlatformRole } from "@prisma/client";
++
+ import { prisma } from "@/lib/prisma";
++import { traceSupportAction } from "@/lib/services/audit/support-action-trace";
+ 
+ type AssignedVehicle = {
+   id: string;
+@@ -38,6 +41,8 @@
+   vehicleId: string;
+   companyId: string;
+   depotId: string | null;
++  actorUserId?: string;
++  actorPlatformRole?: PlatformRole | string | null;
+ };
+ 
+ export type AssignVehicleDepotResult =
+@@ -54,6 +59,15 @@
+     select: {
+       id: true,
+       companyId: true,
++      depotId: true,
++      immatriculation: true,
++      depot: {
++        select: {
++          id: true,
++          name: true,
++          isActive: true,
++        },
++      },
+     },
+   });
+ }
+@@ -62,8 +76,10 @@
+   const existingVehicle = await findVehicleByTenant(input.vehicleId, input.companyId);
+   if (!existingVehicle) return { status: "VEHICLE_NOT_FOUND" };
+ 
++  let nextDepot: { id: string; companyId: string; name: string; isActive: boolean } | null = null;
++
+   if (input.depotId !== null) {
+-    const depot = await prisma.depot.findFirst({
++    nextDepot = await prisma.depot.findFirst({
+       where: {
+         id: input.depotId,
+         companyId: input.companyId,
+@@ -72,16 +88,63 @@
+       select: {
+         id: true,
+         companyId: true,
++        name: true,
++        isActive: true,
+       },
+     });
+ 
+-    if (!depot) return { status: "DEPOT_NOT_FOUND" };
++    if (!nextDepot) return { status: "DEPOT_NOT_FOUND" };
+   }
+ 
+-  const vehicle = await prisma.vehicle.update({
+-    where: { id: existingVehicle.id },
+-    data: { depotId: input.depotId },
+-    select: vehicleDepotSelect,
++  const vehicle = await prisma.$transaction(async (tx) => {
++    const updatedVehicle = await tx.vehicle.update({
++      where: { id: existingVehicle.id },
++      data: { depotId: input.depotId },
++      select: vehicleDepotSelect,
++    });
++
++    await traceSupportAction(tx, {
++      companyId: input.companyId,
++      actorUserId: input.actorUserId,
++      actorPlatformRole: input.actorPlatformRole,
++      action: "SUPPORT_ASSIGN_VEHICLE_DEPOT",
++      entityType: "VEHICLE",
++      entityId: updatedVehicle.id,
++      summary: `Support assignment du dépôt véhicule ${updatedVehicle.immatriculation}`,
++      payload: {
++        module: "vehicles",
++        changedFields: ["depotId"],
++        previous: {
++          depotId: existingVehicle.depotId,
++          depot: existingVehicle.depot
++            ? {
++                id: existingVehicle.depot.id,
++                name: existingVehicle.depot.name,
++                isActive: existingVehicle.depot.isActive,
++              }
++            : null,
++        },
++        next: {
++          depotId: updatedVehicle.depotId,
++          depot: updatedVehicle.depot
++            ? {
++                id: updatedVehicle.depot.id,
++                name: updatedVehicle.depot.name,
++                isActive: updatedVehicle.depot.isActive,
++              }
++            : null,
++        },
++        details: {
++          targetType: "vehicle",
++          immatriculation: existingVehicle.immatriculation,
++          requestedDepotId: input.depotId,
++          resolvedDepotId: nextDepot?.id ?? null,
++          resolvedDepotName: nextDepot?.name ?? null,
++        },
++      },
++    });
++
++    return updatedVehicle;
+   });
+ 
+   return { status: "OK", vehicle };
+--- a/lib/services/depots/create-depot.ts
++++ b/lib/services/depots/create-depot.ts
+@@ -1,26 +1,58 @@
++import { PlatformRole } from "@prisma/client";
++
+ import { prisma } from "@/lib/prisma";
++import { traceSupportAction } from "@/lib/services/audit/support-action-trace";
+ 
+ export type CreateDepotInput = {
+   companyId: string;
+   name: string;
+   address: string | null;
++  actorUserId?: string;
++  actorPlatformRole?: PlatformRole | string | null;
+ };
+ 
+ export async function createDepot(input: CreateDepotInput) {
+-  return prisma.depot.create({
+-    data: {
++  return prisma.$transaction(async (tx) => {
++    const depot = await tx.depot.create({
++      data: {
++        companyId: input.companyId,
++        name: input.name,
++        address: input.address,
++      },
++      select: {
++        id: true,
++        companyId: true,
++        name: true,
++        address: true,
++        isActive: true,
++        createdAt: true,
++        updatedAt: true,
++      },
++    });
++
++    await traceSupportAction(tx, {
+       companyId: input.companyId,
+-      name: input.name,
+-      address: input.address,
+-    },
+-    select: {
+-      id: true,
+-      companyId: true,
+-      name: true,
+-      address: true,
+-      isActive: true,
+-      createdAt: true,
+-      updatedAt: true,
+-    },
++      actorUserId: input.actorUserId,
++      actorPlatformRole: input.actorPlatformRole,
++      action: "SUPPORT_CREATE_DEPOT",
++      entityType: "DEPOT",
++      entityId: depot.id,
++      summary: `Support création du dépôt ${depot.name}`,
++      payload: {
++        module: "depots",
++        changedFields: ["name", "address", "isActive"],
++        previous: null,
++        next: {
++          name: depot.name,
++          address: depot.address,
++          isActive: depot.isActive,
++        },
++        details: {
++          targetType: "depot",
++        },
++      },
++    });
++
++    return depot;
+   });
+ }
+--- a/lib/services/depots/update-depot.ts
++++ b/lib/services/depots/update-depot.ts
+@@ -1,10 +1,15 @@
++import { PlatformRole } from "@prisma/client";
++
+ import { prisma } from "@/lib/prisma";
++import { traceSupportAction } from "@/lib/services/audit/support-action-trace";
+ 
+ export type UpdateDepotInput = {
+   id: string;
+   companyId: string;
+   name?: string;
+   address?: string | null;
++  actorUserId?: string;
++  actorPlatformRole?: PlatformRole | string | null;
+ };
+ 
+ export async function updateDepot(input: UpdateDepotInput) {
+@@ -13,25 +18,64 @@
+       id: input.id,
+       companyId: input.companyId,
+     },
+-    select: { id: true },
+-  });
+-
+-  if (!existing) return null;
+-
+-  return prisma.depot.update({
+-    where: { id: existing.id },
+-    data: {
+-      ...(input.name !== undefined ? { name: input.name } : {}),
+-      ...(input.address !== undefined ? { address: input.address } : {}),
+-    },
+     select: {
+       id: true,
+-      companyId: true,
+       name: true,
+       address: true,
+       isActive: true,
+-      createdAt: true,
+-      updatedAt: true,
+     },
+   });
++
++  if (!existing) return null;
++
++  return prisma.$transaction(async (tx) => {
++    const depot = await tx.depot.update({
++      where: { id: existing.id },
++      data: {
++        ...(input.name !== undefined ? { name: input.name } : {}),
++        ...(input.address !== undefined ? { address: input.address } : {}),
++      },
++      select: {
++        id: true,
++        companyId: true,
++        name: true,
++        address: true,
++        isActive: true,
++        createdAt: true,
++        updatedAt: true,
++      },
++    });
++
++    const changedFields = [
++      ...(input.name !== undefined && input.name !== existing.name ? ["name"] : []),
++      ...(input.address !== undefined && input.address !== existing.address ? ["address"] : []),
++    ];
++
++    await traceSupportAction(tx, {
++      companyId: input.companyId,
++      actorUserId: input.actorUserId,
++      actorPlatformRole: input.actorPlatformRole,
++      action: "SUPPORT_UPDATE_DEPOT",
++      entityType: "DEPOT",
++      entityId: depot.id,
++      summary: `Support mise à jour du dépôt ${depot.name}`,
++      payload: {
++        module: "depots",
++        changedFields,
++        previous: {
++          name: existing.name,
++          address: existing.address,
++        },
++        next: {
++          name: depot.name,
++          address: depot.address,
++        },
++        details: {
++          targetType: "depot",
++        },
++      },
++    });
++
++    return depot;
++  });
+ }
+--- a/lib/services/depots/archive-depot.ts
++++ b/lib/services/depots/archive-depot.ts
+@@ -1,4 +1,7 @@
++import { PlatformRole } from "@prisma/client";
++
+ import { prisma } from "@/lib/prisma";
++import { traceSupportAction } from "@/lib/services/audit/support-action-trace";
+ 
+ type ArchivedDepot = {
+   id: string;
+@@ -13,6 +16,8 @@
+ export type ArchiveDepotInput = {
+   id: string;
+   companyId: string;
++  actorUserId?: string;
++  actorPlatformRole?: PlatformRole | string | null;
+ };
+ 
+ const depotSelect = {
+@@ -37,9 +42,36 @@
+   if (!existing) return null;
+   if (!existing.isActive) return existing;
+ 
+-  return prisma.depot.update({
+-    where: { id: existing.id },
+-    data: { isActive: false },
+-    select: depotSelect,
++  return prisma.$transaction(async (tx) => {
++    const depot = await tx.depot.update({
++      where: { id: existing.id },
++      data: { isActive: false },
++      select: depotSelect,
++    });
++
++    await traceSupportAction(tx, {
++      companyId: input.companyId,
++      actorUserId: input.actorUserId,
++      actorPlatformRole: input.actorPlatformRole,
++      action: "SUPPORT_ARCHIVE_DEPOT",
++      entityType: "DEPOT",
++      entityId: depot.id,
++      summary: `Support archivage du dépôt ${depot.name}`,
++      payload: {
++        module: "depots",
++        changedFields: ["isActive"],
++        previous: {
++          isActive: existing.isActive,
++        },
++        next: {
++          isActive: depot.isActive,
++        },
++        details: {
++          targetType: "depot",
++        },
++      },
++    });
++
++    return depot;
+   });
+ }
+--- a/app/api/users/[id]/depot/route.ts
++++ b/app/api/users/[id]/depot/route.ts
+@@ -53,6 +53,8 @@
+       userId: parsedParams.data.id,
+       companyId,
+       depotId: parsedBody.data.depotId,
++      actorUserId,
++      actorPlatformRole: platformRole,
+     });
+ 
+     if (result.status === "USER_NOT_FOUND") return notFound();
+--- a/app/api/users/[id]/reset-password/route.ts
++++ b/app/api/users/[id]/reset-password/route.ts
+@@ -7,6 +7,7 @@
+ import { badRequest, forbidden, notFound, ok, serverError, unauthorized } from "@/lib/api/response";
+ import { canManageUsers } from "@/lib/permissions";
+ import { serializeDates } from "@/lib/serializers";
++import { traceSupportAction } from "@/lib/services/audit/support-action-trace";
+ 
+ const resetPasswordBodySchema = z
+   .object({
+@@ -79,8 +80,8 @@
+ 
+     const hashedPassword = await bcrypt.hash(parsed.data.newPassword, 10);
+ 
+-    const [, updatedUser] = await prisma.$transaction([
+-      prisma.user.updateMany({
++    const updatedUser = await prisma.$transaction(async (tx) => {
++      await tx.user.updateMany({
+         where: {
+           id: targetUser.id,
+           companyId,
+@@ -88,8 +89,9 @@
+           role: { not: null },
+         },
+         data: { password: hashedPassword },
+-      }),
+-      prisma.user.findFirst({
++      });
++
++      const user = await tx.user.findFirst({
+         where: {
+           id: targetUser.id,
+           companyId,
+@@ -100,8 +102,38 @@
+           id: true,
+           updatedAt: true,
+         },
+-      }),
+-    ]);
++      });
++
++      if (!user) return null;
++
++      await traceSupportAction(tx, {
++        companyId,
++        actorUserId,
++        actorPlatformRole: platformRole,
++        action: "SUPPORT_RESET_USER_PASSWORD",
++        entityType: "USER",
++        entityId: targetUser.id,
++        summary: `Support reset mot de passe utilisateur ${targetUser.email}`,
++        payload: {
++          module: "users",
++          changedFields: ["password"],
++          previous: {
++            password: "REDACTED",
++          },
++          next: {
++            password: "REDACTED",
++          },
++          details: {
++            targetType: "user",
++            targetEmail: targetUser.email,
++            targetName: targetUser.name,
++            targetRole: targetUser.role,
++          },
++        },
++      });
++
++      return user;
++    });
+ 
+     if (!updatedUser) return notFound();
+ 
+--- a/app/api/vehicles/[id]/depot/route.ts
++++ b/app/api/vehicles/[id]/depot/route.ts
+@@ -29,9 +29,10 @@
+   const actorUserId = session?.user?.id;
+   const companyId = session?.user?.companyId;
+   const role = session?.user?.role;
++  const platformRole = session?.user?.platformRole;
+ 
+   if (!actorUserId || !companyId) return unauthorized();
+-  if (!(await canManageVehicles(actorUserId, role))) return forbidden();
++  if (!(await canManageVehicles(actorUserId, role, platformRole))) return forbidden();
+ 
+   const rawParams = await ctx.params.catch(() => null);
+   const parsedParams = paramsSchema.safeParse(rawParams);
+@@ -52,6 +53,8 @@
+       vehicleId: parsedParams.data.id,
+       companyId,
+       depotId: parsedBody.data.depotId,
++      actorUserId,
++      actorPlatformRole: platformRole,
+     });
+ 
+     if (result.status === "VEHICLE_NOT_FOUND") return notFound();
+--- a/app/api/vehicles/route.ts
++++ b/app/api/vehicles/route.ts
+@@ -7,6 +7,7 @@
+ import { createVehicleBodySchema, deleteVehicleQuerySchema } from "@/lib/validators/vehicle";
+ import { serializeDates } from "@/lib/serializers";
+ import { canManageVehicles } from "@/lib/permissions";
++import { traceSupportAction } from "@/lib/services/audit/support-action-trace";
+ import { z } from "zod";
+ 
+ const listQuerySchema = z.object({
+@@ -44,10 +45,11 @@
+   const session = await getServerSession(authOptions);
+   const companyId = session?.user?.companyId;
+   const userId = session?.user?.id;
++  const platformRole = session?.user?.platformRole;
+ 
+   if (!companyId || !userId) return unauthorized();
+ 
+-  const allowed = await canManageVehicles(userId, session.user.role);
++  const allowed = await canManageVehicles(userId, session.user.role, platformRole);
+   if (!allowed) return forbidden();
+ 
+   const url = new URL(req.url);
+@@ -70,9 +72,11 @@
+ 
+ export async function POST(req: Request) {
+   const session = await getServerSession(authOptions);
++  const actorUserId = session?.user?.id;
+   const companyId = session?.user?.companyId;
++  const platformRole = session?.user?.platformRole;
+ 
+-  if (!companyId) return unauthorized();
++  if (!actorUserId || !companyId) return unauthorized();
+   if (session.user.role !== "ADMIN") return forbidden();
+ 
+   const jsonBody: unknown = await req.json().catch(() => null);
+@@ -82,14 +86,41 @@
+   const { immatriculation, type } = parsed.data;
+ 
+   try {
+-    const vehicle = await prisma.vehicle.create({
+-      data: {
++    const vehicle = await prisma.$transaction(async (tx) => {
++      const createdVehicle = await tx.vehicle.create({
++        data: {
++          companyId,
++          immatriculation,
++          type,
++          status: "ACTIVE",
++        },
++        select: vehicleSelect,
++      });
++
++      await traceSupportAction(tx, {
+         companyId,
+-        immatriculation,
+-        type,
+-        status: "ACTIVE",
+-      },
+-      select: vehicleSelect,
++        actorUserId,
++        actorPlatformRole: platformRole,
++        action: "SUPPORT_CREATE_VEHICLE",
++        entityType: "VEHICLE",
++        entityId: createdVehicle.id,
++        summary: `Support création véhicule ${createdVehicle.immatriculation}`,
++        payload: {
++          module: "vehicles",
++          changedFields: ["immatriculation", "type", "status"],
++          previous: null,
++          next: {
++            immatriculation: createdVehicle.immatriculation,
++            type: createdVehicle.type,
++            status: createdVehicle.status,
++          },
++          details: {
++            targetType: "vehicle",
++          },
++        },
++      });
++
++      return createdVehicle;
+     });
+ 
+     return ok(serializeDates(vehicle), 201);
+@@ -104,9 +135,11 @@
+ 
+ export async function DELETE(req: Request) {
+   const session = await getServerSession(authOptions);
++  const actorUserId = session?.user?.id;
+   const companyId = session?.user?.companyId;
++  const platformRole = session?.user?.platformRole;
+ 
+-  if (!companyId) return unauthorized();
++  if (!actorUserId || !companyId) return unauthorized();
+   if (session.user.role !== "ADMIN") return forbidden();
+ 
+   const url = new URL(req.url);
+@@ -118,8 +151,65 @@
+   const { id } = parsed.data;
+ 
+   try {
+-    const deleted = await prisma.vehicle.deleteMany({
+-      where: { id, companyId },
++    const deleted = await prisma.$transaction(async (tx) => {
++      const existingVehicle = await tx.vehicle.findFirst({
++        where: { id, companyId },
++        select: {
++          id: true,
++          immatriculation: true,
++          type: true,
++          status: true,
++          depotId: true,
++          depot: {
++            select: {
++              id: true,
++              name: true,
++              isActive: true,
++            },
++          },
++        },
++      });
++
++      if (!existingVehicle) {
++        return { count: 0 as const };
++      }
++
++      await tx.vehicle.delete({
++        where: { id: existingVehicle.id },
++      });
++
++      await traceSupportAction(tx, {
++        companyId,
++        actorUserId,
++        actorPlatformRole: platformRole,
++        action: "SUPPORT_DELETE_VEHICLE",
++        entityType: "VEHICLE",
++        entityId: existingVehicle.id,
++        summary: `Support suppression véhicule ${existingVehicle.immatriculation}`,
++        payload: {
++          module: "vehicles",
++          changedFields: ["deleted"],
++          previous: {
++            immatriculation: existingVehicle.immatriculation,
++            type: existingVehicle.type,
++            status: existingVehicle.status,
++            depotId: existingVehicle.depotId,
++            depot: existingVehicle.depot
++              ? {
++                  id: existingVehicle.depot.id,
++                  name: existingVehicle.depot.name,
++                  isActive: existingVehicle.depot.isActive,
++                }
++              : null,
++          },
++          next: null,
++          details: {
++            targetType: "vehicle",
++          },
++        },
++      });
++
++      return { count: 1 as const };
+     });
+ 
+     if (deleted.count === 0) return notFound();
+--- a/app/api/depots/route.ts
++++ b/app/api/depots/route.ts
+@@ -22,10 +22,12 @@
+ 
+ export async function POST(req: Request) {
+   const session = await getServerSession(authOptions);
++  const actorUserId = session?.user?.id;
+   const companyId = session?.user?.companyId;
+   const role = session?.user?.role;
++  const platformRole = session?.user?.platformRole;
+ 
+-  if (!companyId) return unauthorized();
++  if (!actorUserId || !companyId) return unauthorized();
+   if (!requireRole(role, ALLOWED_ROLES)) return forbidden();
+ 
+   const jsonBody: unknown = await req.json().catch(() => null);
+@@ -37,6 +39,8 @@
+       companyId,
+       name: parsed.data.name,
+       address: parsed.data.address,
++      actorUserId,
++      actorPlatformRole: platformRole,
+     });
+ 
+     return ok(serializeDates(depot), 201);
+--- a/app/api/depots/[id]/route.ts
++++ b/app/api/depots/[id]/route.ts
+@@ -27,10 +27,12 @@
+ 
+ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }> }) {
+   const session = await getServerSession(authOptions);
++  const actorUserId = session?.user?.id;
+   const companyId = session?.user?.companyId;
+   const role = session?.user?.role;
++  const platformRole = session?.user?.platformRole;
+ 
+-  if (!companyId) return unauthorized();
++  if (!actorUserId || !companyId) return unauthorized();
+   if (!requireRole(role, ALLOWED_ROLES)) return forbidden();
+ 
+   const rawParams = await ctx.params.catch(() => null);
+@@ -47,6 +49,8 @@
+       companyId,
+       name: parsedBody.data.name,
+       address: parsedBody.data.address,
++      actorUserId,
++      actorPlatformRole: platformRole,
+     });
+ 
+     if (!depot) return notFound();
+--- a/app/api/depots/[id]/archive/route.ts
++++ b/app/api/depots/[id]/archive/route.ts
+@@ -28,10 +28,12 @@
+ 
+ export async function POST(_req: Request, ctx: { params: Promise<{ id: string }> }) {
+   const session = await getServerSession(authOptions);
++  const actorUserId = session?.user?.id;
+   const companyId = session?.user?.companyId;
+   const role = session?.user?.role;
++  const platformRole = session?.user?.platformRole;
+ 
+-  if (!companyId) return unauthorized();
++  if (!actorUserId || !companyId) return unauthorized();
+   if (!requireRole(role, ALLOWED_ROLES)) return forbidden();
+ 
+   const rawParams = await ctx.params.catch(() => null);
+@@ -42,6 +44,8 @@
+     const depot = await archiveDepot({
+       id: parsedParams.data.id,
+       companyId,
++      actorUserId,
++      actorPlatformRole: platformRole,
+     });
+ 
+     if (!depot) return notFound();

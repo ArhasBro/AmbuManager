@@ -28,10 +28,12 @@ function getErrorMessage(e: unknown): string {
 
 export async function POST(_req: Request, ctx: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
+  const actorUserId = session?.user?.id;
   const companyId = session?.user?.companyId;
   const role = session?.user?.role;
+  const platformRole = session?.user?.platformRole;
 
-  if (!companyId) return unauthorized();
+  if (!actorUserId || !companyId) return unauthorized();
   if (!requireRole(role, ALLOWED_ROLES)) return forbidden();
 
   const rawParams = await ctx.params.catch(() => null);
@@ -42,6 +44,8 @@ export async function POST(_req: Request, ctx: { params: Promise<{ id: string }>
     const depot = await archiveDepot({
       id: parsedParams.data.id,
       companyId,
+      actorUserId,
+      actorPlatformRole: platformRole,
     });
 
     if (!depot) return notFound();

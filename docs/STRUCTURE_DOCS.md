@@ -576,6 +576,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |               |       
 |               +---SESSION-20260318-05_A2_SUP-05
 |               |       README_PATCH.md
+|               |       SUP-05.diff
 |               |       
 |               \---SESSION-20260318-06_A2_SUP-06
 |                       NO_PATCH.md

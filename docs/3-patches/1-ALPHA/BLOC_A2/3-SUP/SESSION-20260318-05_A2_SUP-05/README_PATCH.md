@@ -1,24 +1,41 @@
-﻿# README_PATCH
+# README PATCH — SUP-05
 
-## Session liee
+## Session liée
 SESSION-20260318-05_A2_SUP-05
 
-## Type
-COMPLETION
+## Périmètre
+Patch strictement limité à la traçabilité renforcée des actions support.
 
-## Dossier patch
-docs/3-patches/1-ALPHA/BLOC_A2/SESSION-20260318-05_A2_SUP-05
+## Contenu du patch code
+- ajout du helper `lib/services/audit/support-action-trace.ts`
+- journalisation conditionnelle via `PlanningAuditLog`
+- transmission de l’acteur support depuis les routes vers les services
+- traçage des mutations Users / Vehicles / Depots ciblées par la session
 
-## Patch officiel attendu
-PATCH__SESSION-20260318-05_A2_SUP-05.diff
+## Garanties
+- aucun changement auth / NextAuth
+- aucun changement RBAC global
+- aucun changement UI
+- aucun changement Prisma schema
+- aucun système d’audit avancé complet
+- aucune extension vers SUP-04 ou SUP-06
 
-## Commandes d'application
+## Patch exportable
+- fichier : `SUP-05.diff`
 
-`ash
-git apply --check "docs/3-patches/1-ALPHA/BLOC_A2/SESSION-20260318-05_A2_SUP-05/PATCH__SESSION-20260318-05_A2_SUP-05.diff"
-git apply         "docs/3-patches/1-ALPHA/BLOC_A2/SESSION-20260318-05_A2_SUP-05/PATCH__SESSION-20260318-05_A2_SUP-05.diff"
-`
+## Commandes d’application
+```bash
+git apply --check "docs/3-patches/1-ALPHA/BLOC_A2/3-SUP/SESSION-20260318-05_A2_SUP-05/SUP-05.diff"
+git apply         "docs/3-patches/1-ALPHA/BLOC_A2/3-SUP/SESSION-20260318-05_A2_SUP-05/SUP-05.diff"
+```
 
-## Statut
-- Dossier patch initialise.
-- Patch officiel a produire dans cette session si du code est modifie.
+## Validation réelle associée au patch
+- `git apply --check SUP-05.diff` : OK
+- `git apply SUP-05.diff` : OK
+- `npx prisma validate` : OK
+- `npx prisma generate` : OK
+- `npm run lint` : OK
+- `npm run build` : OK
+
+## Statut final
+Le patch SUP-05 est documenté comme `conforme`.

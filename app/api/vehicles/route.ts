@@ -7,6 +7,7 @@ import { prismaToHttp } from "@/lib/api/prisma-error";
 import { createVehicleBodySchema, deleteVehicleQuerySchema } from "@/lib/validators/vehicle";
 import { serializeDates } from "@/lib/serializers";
 import { canManageVehicles } from "@/lib/permissions";
+import { traceSupportAction } from "@/lib/services/audit/support-action-trace";
 import { z } from "zod";
 
 const listQuerySchema = z.object({
@@ -44,10 +45,11 @@ export async function GET(req: Request) {
   const session = await getServerSession(authOptions);
   const companyId = session?.user?.companyId;
   const userId = session?.user?.id;
+  const platformRole = session?.user?.platformRole;
 
   if (!companyId || !userId) return unauthorized();
 
-  const allowed = await canManageVehicles(userId, session.user.role);
+  const allowed = await canManageVehicles(userId, session.user.role, platformRole);
   if (!allowed) return forbidden();
 
   const url = new URL(req.url);
@@ -70,9 +72,11 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
+  const actorUserId = session?.user?.id;
   const companyId = session?.user?.companyId;
+  const platformRole = session?.user?.platformRole;
 
-  if (!companyId) return unauthorized();
+  if (!actorUserId || !companyId) return unauthorized();
   if (session.user.role !== "ADMIN") return forbidden();
 
   const jsonBody: unknown = await req.json().catch(() => null);
@@ -82,14 +86,41 @@ export async function POST(req: Request) {
   const { immatriculation, type } = parsed.data;
 
   try {
-    const vehicle = await prisma.vehicle.create({
-      data: {
+    const vehicle = await prisma.$transaction(async (tx) => {
+      const createdVehicle = await tx.vehicle.create({
+        data: {
+          companyId,
+          immatriculation,
+          type,
+          status: "ACTIVE",
+        },
+        select: vehicleSelect,
+      });
+
+      await traceSupportAction(tx, {
         companyId,
-        immatriculation,
-        type,
-        status: "ACTIVE",
-      },
-      select: vehicleSelect,
+        actorUserId,
+        actorPlatformRole: platformRole,
+        action: "SUPPORT_CREATE_VEHICLE",
+        entityType: "VEHICLE",
+        entityId: createdVehicle.id,
+        summary: `Support création véhicule ${createdVehicle.immatriculation}`,
+        payload: {
+          module: "vehicles",
+          changedFields: ["immatriculation", "type", "status"],
+          previous: null,
+          next: {
+            immatriculation: createdVehicle.immatriculation,
+            type: createdVehicle.type,
+            status: createdVehicle.status,
+          },
+          details: {
+            targetType: "vehicle",
+          },
+        },
+      });
+
+      return createdVehicle;
     });
 
     return ok(serializeDates(vehicle), 201);
@@ -104,9 +135,11 @@ export async function POST(req: Request) {
 
 export async function DELETE(req: Request) {
   const session = await getServerSession(authOptions);
+  const actorUserId = session?.user?.id;
   const companyId = session?.user?.companyId;
+  const platformRole = session?.user?.platformRole;
 
-  if (!companyId) return unauthorized();
+  if (!actorUserId || !companyId) return unauthorized();
   if (session.user.role !== "ADMIN") return forbidden();
 
   const url = new URL(req.url);
@@ -118,8 +151,65 @@ export async function DELETE(req: Request) {
   const { id } = parsed.data;
 
   try {
-    const deleted = await prisma.vehicle.deleteMany({
-      where: { id, companyId },
+    const deleted = await prisma.$transaction(async (tx) => {
+      const existingVehicle = await tx.vehicle.findFirst({
+        where: { id, companyId },
+        select: {
+          id: true,
+          immatriculation: true,
+          type: true,
+          status: true,
+          depotId: true,
+          depot: {
+            select: {
+              id: true,
+              name: true,
+              isActive: true,
+            },
+          },
+        },
+      });
+
+      if (!existingVehicle) {
+        return { count: 0 as const };
+      }
+
+      await tx.vehicle.delete({
+        where: { id: existingVehicle.id },
+      });
+
+      await traceSupportAction(tx, {
+        companyId,
+        actorUserId,
+        actorPlatformRole: platformRole,
+        action: "SUPPORT_DELETE_VEHICLE",
+        entityType: "VEHICLE",
+        entityId: existingVehicle.id,
+        summary: `Support suppression véhicule ${existingVehicle.immatriculation}`,
+        payload: {
+          module: "vehicles",
+          changedFields: ["deleted"],
+          previous: {
+            immatriculation: existingVehicle.immatriculation,
+            type: existingVehicle.type,
+            status: existingVehicle.status,
+            depotId: existingVehicle.depotId,
+            depot: existingVehicle.depot
+              ? {
+                  id: existingVehicle.depot.id,
+                  name: existingVehicle.depot.name,
+                  isActive: existingVehicle.depot.isActive,
+                }
+              : null,
+          },
+          next: null,
+          details: {
+            targetType: "vehicle",
+          },
+        },
+      });
+
+      return { count: 1 as const };
     });
 
     if (deleted.count === 0) return notFound();

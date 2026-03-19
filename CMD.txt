@@ -62,8 +62,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260318-04_A2_SUP-04
-- SUP-04 — COMPLÉTION** — Gestion de la visibilité support côté client
+- SESSION-20260318-06_A2_SUP-06
+- SUP-06 — VALIDATION** — Validation du bloc support propriétaire
 
 sortie propre + retour du terminal + aucune erreur = validé
 

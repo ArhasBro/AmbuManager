@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma";
 import { badRequest, forbidden, notFound, ok, serverError, unauthorized } from "@/lib/api/response";
 import { canManageUsers } from "@/lib/permissions";
 import { serializeDates } from "@/lib/serializers";
+import { traceSupportAction } from "@/lib/services/audit/support-action-trace";
 
 const resetPasswordBodySchema = z
   .object({
@@ -79,8 +80,8 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
 
     const hashedPassword = await bcrypt.hash(parsed.data.newPassword, 10);
 
-    const [, updatedUser] = await prisma.$transaction([
-      prisma.user.updateMany({
+    const updatedUser = await prisma.$transaction(async (tx) => {
+      await tx.user.updateMany({
         where: {
           id: targetUser.id,
           companyId,
@@ -88,8 +89,9 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
           role: { not: null },
         },
         data: { password: hashedPassword },
-      }),
-      prisma.user.findFirst({
+      });
+
+      const user = await tx.user.findFirst({
         where: {
           id: targetUser.id,
           companyId,
@@ -100,8 +102,38 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
           id: true,
           updatedAt: true,
         },
-      }),
-    ]);
+      });
+
+      if (!user) return null;
+
+      await traceSupportAction(tx, {
+        companyId,
+        actorUserId,
+        actorPlatformRole: platformRole,
+        action: "SUPPORT_RESET_USER_PASSWORD",
+        entityType: "USER",
+        entityId: targetUser.id,
+        summary: `Support reset mot de passe utilisateur ${targetUser.email}`,
+        payload: {
+          module: "users",
+          changedFields: ["password"],
+          previous: {
+            password: "REDACTED",
+          },
+          next: {
+            password: "REDACTED",
+          },
+          details: {
+            targetType: "user",
+            targetEmail: targetUser.email,
+            targetName: targetUser.name,
+            targetRole: targetUser.role,
+          },
+        },
+      });
+
+      return user;
+    });
 
     if (!updatedUser) return notFound();
 

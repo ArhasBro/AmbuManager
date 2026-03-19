@@ -22,10 +22,12 @@ function getErrorMessage(e: unknown): string {
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
+  const actorUserId = session?.user?.id;
   const companyId = session?.user?.companyId;
   const role = session?.user?.role;
+  const platformRole = session?.user?.platformRole;
 
-  if (!companyId) return unauthorized();
+  if (!actorUserId || !companyId) return unauthorized();
   if (!requireRole(role, ALLOWED_ROLES)) return forbidden();
 
   const jsonBody: unknown = await req.json().catch(() => null);
@@ -37,6 +39,8 @@ export async function POST(req: Request) {
       companyId,
       name: parsed.data.name,
       address: parsed.data.address,
+      actorUserId,
+      actorPlatformRole: platformRole,
     });
 
     return ok(serializeDates(depot), 201);
