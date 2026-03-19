@@ -64,8 +64,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260318-03_A2_SUP-03
-- SUP-03 — COMPLÉTION** — Ajout du compte support nominatif
+- SESSION-20260318-04_A2_SUP-04
+- SUP-04 — COMPLÉTION** — Gestion de la visibilité support côté client
 
 sortie propre + retour du terminal + aucune erreur = validé
 
