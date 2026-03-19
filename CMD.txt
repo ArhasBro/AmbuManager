@@ -89,10 +89,3 @@ RESULTATS.md
 FIN_SESSION.md 
 README_PATCH.md
 
-SESSION
-- ID : SESSION-20260317-03_A2_BASE-04-FIX
-- Maturite : 1-ALPHA
-- Bloc : A2
-- Code session : BASE-04-FIX
-- Type : CORRECTION
-- Intitule : Correctif API modification base/dépôt

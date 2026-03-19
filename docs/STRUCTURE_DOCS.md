@@ -590,7 +590,9 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |           |           
 |           \---4-CLOTURE_A
 |               \---SESSION-20260319-08_A2_CLOTURE-A2
-|                       NO_PATCH.md
+|                       CLOTURE-A2-FINAL.diff
+|                       CLOTURE-A2-PATCH-FIX.diff
+|                       README_PATCH.md
 |                       
 +---4-templates
 |       TEMPLATE_DEBUT_SESSION.md

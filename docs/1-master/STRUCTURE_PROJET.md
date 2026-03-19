@@ -2120,13 +2120,13 @@ C:.
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
 |   |   |       
-|   |   +---media
-|   |   |       favicon.0b3bf435.ico
+|   |   +---gNxa4EzP3F8fSVWA98E4_
+|   |   |       _buildManifest.js
+|   |   |       _clientMiddlewareManifest.json
+|   |   |       _ssgManifest.js
 |   |   |       
-|   |   \---Z4G7l5pey5TrdqiahBJ3R
-|   |           _buildManifest.js
-|   |           _clientMiddlewareManifest.json
-|   |           _ssgManifest.js
+|   |   \---media
+|   |           favicon.0b3bf435.ico
 |   |           
 |   \---types
 |           routes.d.ts
@@ -2836,7 +2836,9 @@ C:.
 |   |           |           
 |   |           \---4-CLOTURE_A
 |   |               \---SESSION-20260319-08_A2_CLOTURE-A2
-|   |                       NO_PATCH.md
+|   |                       CLOTURE-A2-FINAL.diff
+|   |                       CLOTURE-A2-PATCH-FIX.diff
+|   |                       README_PATCH.md
 |   |                       
 |   +---4-templates
 |   |       TEMPLATE_DEBUT_SESSION.md

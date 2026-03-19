@@ -1,0 +1,33 @@
+diff --git a/docs/3-patches/1-ALPHA/BLOC_A2/4-CLOTURE_A/SESSION-20260319-08_A2_CLOTURE-A2/NO_PATCH.md b/docs/3-patches/1-ALPHA/BLOC_A2/4-CLOTURE_A2/SESSION-20260319-08_A2_CLOTURE-A2/README_PATCH.md
+similarity index 18%
+rename from docs/3-patches/1-ALPHA/BLOC_A2/4-CLOTURE_A/SESSION-20260319-08_A2_CLOTURE-A2/NO_PATCH.md
+rename to docs/3-patches/1-ALPHA/BLOC_A2/4-CLOTURE_A2/SESSION-20260319-08_A2_CLOTURE-A2/README_PATCH.md
+index 105094a..ab969ea 100644
+--- a/docs/3-patches/1-ALPHA/BLOC_A2/4-CLOTURE_A/SESSION-20260319-08_A2_CLOTURE-A2/NO_PATCH.md
++++ b/docs/3-patches/1-ALPHA/BLOC_A2/4-CLOTURE_A2/SESSION-20260319-08_A2_CLOTURE-A2/README_PATCH.md
+@@ -1,10 +1,18 @@
+-﻿# NO_PATCH
++# README_PATCH.md
+ 
+-Session : SESSION-20260319-08_A2_CLOTURE-A2
++## Session liée
++`SESSION-20260319-08_A2_CLOTURE-A2`
+ 
+-Type : VALIDATION
++## Type
++`VALIDATION`
+ 
+-Raison :
+-- Session documentaire de type VALIDATION.
+-- Aucun patch officiel a produire pour cette session.
+-- Le dossier patch reste present pour conserver le miroir avec docs/2-sessions.
++## Chemin de référence conservé
++`docs/3-patches/1-ALPHA/BLOC_A2/4-CLOTURE_A2/SESSION-20260319-08_A2_CLOTURE-A2/`
++
++## Correction apportée
++- réalignement du dossier patch de clôture de `4-CLOTURE_A` vers `4-CLOTURE_A2` ;
++- remplacement du placeholder `NO_PATCH.md` par `README_PATCH.md` ;
++- aucun changement applicatif, Prisma ou RBAC.
++
++## Motif
++Le chemin `4-CLOTURE_A2` est la référence réelle conservée car il est cohérent avec le dossier session existant `docs/2-sessions/1-ALPHA/BLOC_A2/4-CLOTURE_A2/` et avec la règle maître de clôture de bloc.
