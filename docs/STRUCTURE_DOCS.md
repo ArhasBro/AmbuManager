@@ -381,126 +381,126 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |               
 |   |   \---BLOC_A3
 |   |       +---1-USER
-|   |       |   \---SESSION-20260319-09_A3_USERS-01
+|   |       |   +---SESSION-20260319-09_A3_USERS-01
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260319-10_A3_USERS-02
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260319-11_A3_USERS-03
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260319-12_A3_USERS-04
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260319-13_A3_USERS-05
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260319-14_A3_USERS-06
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260319-15_A3_USERS-07
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260319-16_A3_USERS-08
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260319-17_A3_USERS-09
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260319-18_A3_USERS-10
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260319-19_A3_USERS-11
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260319-20_A3_USERS-12
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260319-21_A3_USERS-13
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260319-22_A3_USERS-14
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260319-23_A3_USERS-15
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260319-24_A3_USERS-16
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   \---SESSION-20260319-25_A3_CLOTURE-A3
 |   |       |           EVIDENCES.md
 |   |       |           FIN_SESSION.md
 |   |       |           NOTES.md
 |   |       |           RESULTATS.md
 |   |       |           SESSION.md
 |   |       |           
-|   |       +---2-CLOTURE
-|   |       +---SESSION-20260319-10_A3_USERS-02
-|   |       |       EVIDENCES.md
-|   |       |       FIN_SESSION.md
-|   |       |       NOTES.md
-|   |       |       RESULTATS.md
-|   |       |       SESSION.md
-|   |       |       
-|   |       +---SESSION-20260319-11_A3_USERS-03
-|   |       |       EVIDENCES.md
-|   |       |       FIN_SESSION.md
-|   |       |       NOTES.md
-|   |       |       RESULTATS.md
-|   |       |       SESSION.md
-|   |       |       
-|   |       +---SESSION-20260319-12_A3_USERS-04
-|   |       |       EVIDENCES.md
-|   |       |       FIN_SESSION.md
-|   |       |       NOTES.md
-|   |       |       RESULTATS.md
-|   |       |       SESSION.md
-|   |       |       
-|   |       +---SESSION-20260319-13_A3_USERS-05
-|   |       |       EVIDENCES.md
-|   |       |       FIN_SESSION.md
-|   |       |       NOTES.md
-|   |       |       RESULTATS.md
-|   |       |       SESSION.md
-|   |       |       
-|   |       +---SESSION-20260319-14_A3_USERS-06
-|   |       |       EVIDENCES.md
-|   |       |       FIN_SESSION.md
-|   |       |       NOTES.md
-|   |       |       RESULTATS.md
-|   |       |       SESSION.md
-|   |       |       
-|   |       +---SESSION-20260319-15_A3_USERS-07
-|   |       |       EVIDENCES.md
-|   |       |       FIN_SESSION.md
-|   |       |       NOTES.md
-|   |       |       RESULTATS.md
-|   |       |       SESSION.md
-|   |       |       
-|   |       +---SESSION-20260319-16_A3_USERS-08
-|   |       |       EVIDENCES.md
-|   |       |       FIN_SESSION.md
-|   |       |       NOTES.md
-|   |       |       RESULTATS.md
-|   |       |       SESSION.md
-|   |       |       
-|   |       +---SESSION-20260319-17_A3_USERS-09
-|   |       |       EVIDENCES.md
-|   |       |       FIN_SESSION.md
-|   |       |       NOTES.md
-|   |       |       RESULTATS.md
-|   |       |       SESSION.md
-|   |       |       
-|   |       +---SESSION-20260319-18_A3_USERS-10
-|   |       |       EVIDENCES.md
-|   |       |       FIN_SESSION.md
-|   |       |       NOTES.md
-|   |       |       RESULTATS.md
-|   |       |       SESSION.md
-|   |       |       
-|   |       +---SESSION-20260319-19_A3_USERS-11
-|   |       |       EVIDENCES.md
-|   |       |       FIN_SESSION.md
-|   |       |       NOTES.md
-|   |       |       RESULTATS.md
-|   |       |       SESSION.md
-|   |       |       
-|   |       +---SESSION-20260319-20_A3_USERS-12
-|   |       |       EVIDENCES.md
-|   |       |       FIN_SESSION.md
-|   |       |       NOTES.md
-|   |       |       RESULTATS.md
-|   |       |       SESSION.md
-|   |       |       
-|   |       +---SESSION-20260319-21_A3_USERS-13
-|   |       |       EVIDENCES.md
-|   |       |       FIN_SESSION.md
-|   |       |       NOTES.md
-|   |       |       RESULTATS.md
-|   |       |       SESSION.md
-|   |       |       
-|   |       +---SESSION-20260319-22_A3_USERS-14
-|   |       |       EVIDENCES.md
-|   |       |       FIN_SESSION.md
-|   |       |       NOTES.md
-|   |       |       RESULTATS.md
-|   |       |       SESSION.md
-|   |       |       
-|   |       +---SESSION-20260319-23_A3_USERS-15
-|   |       |       EVIDENCES.md
-|   |       |       FIN_SESSION.md
-|   |       |       NOTES.md
-|   |       |       RESULTATS.md
-|   |       |       SESSION.md
-|   |       |       
-|   |       +---SESSION-20260319-24_A3_USERS-16
-|   |       |       EVIDENCES.md
-|   |       |       FIN_SESSION.md
-|   |       |       NOTES.md
-|   |       |       RESULTATS.md
-|   |       |       SESSION.md
-|   |       |       
-|   |       \---SESSION-20260319-25_A3_CLOTURE-A3
-|   |               EVIDENCES.md
-|   |               FIN_SESSION.md
-|   |               NOTES.md
-|   |               RESULTATS.md
-|   |               SESSION.md
-|   |               
+|   |       \---2-CLOTURE
 |   \---SESSION-YYYYMMDD-XX
 |           EVIDENCES.md
 |           FIN_SESSION.md
@@ -718,58 +718,58 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |       |               
 |       \---BLOC_A3
 |           +---1-USER
-|           |   \---SESSION-20260319-09_A3_USERS-01
+|           |   +---SESSION-20260319-09_A3_USERS-01
+|           |   |       NO_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260319-10_A3_USERS-02
+|           |   |       NO_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260319-11_A3_USERS-03
+|           |   |       README_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260319-12_A3_USERS-04
+|           |   |       README_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260319-13_A3_USERS-05
+|           |   |       README_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260319-14_A3_USERS-06
+|           |   |       README_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260319-15_A3_USERS-07
+|           |   |       README_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260319-16_A3_USERS-08
+|           |   |       README_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260319-17_A3_USERS-09
+|           |   |       NO_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260319-18_A3_USERS-10
+|           |   |       README_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260319-19_A3_USERS-11
+|           |   |       README_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260319-20_A3_USERS-12
+|           |   |       NO_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260319-21_A3_USERS-13
+|           |   |       README_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260319-22_A3_USERS-14
+|           |   |       README_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260319-23_A3_USERS-15
+|           |   |       README_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260319-24_A3_USERS-16
+|           |   |       NO_PATCH.md
+|           |   |       
+|           |   \---SESSION-20260319-25_A3_CLOTURE-A3
 |           |           NO_PATCH.md
 |           |           
-|           +---2-CLOTURE
-|           +---SESSION-20260319-10_A3_USERS-02
-|           |       NO_PATCH.md
-|           |       
-|           +---SESSION-20260319-11_A3_USERS-03
-|           |       README_PATCH.md
-|           |       
-|           +---SESSION-20260319-12_A3_USERS-04
-|           |       README_PATCH.md
-|           |       
-|           +---SESSION-20260319-13_A3_USERS-05
-|           |       README_PATCH.md
-|           |       
-|           +---SESSION-20260319-14_A3_USERS-06
-|           |       README_PATCH.md
-|           |       
-|           +---SESSION-20260319-15_A3_USERS-07
-|           |       README_PATCH.md
-|           |       
-|           +---SESSION-20260319-16_A3_USERS-08
-|           |       README_PATCH.md
-|           |       
-|           +---SESSION-20260319-17_A3_USERS-09
-|           |       NO_PATCH.md
-|           |       
-|           +---SESSION-20260319-18_A3_USERS-10
-|           |       README_PATCH.md
-|           |       
-|           +---SESSION-20260319-19_A3_USERS-11
-|           |       README_PATCH.md
-|           |       
-|           +---SESSION-20260319-20_A3_USERS-12
-|           |       NO_PATCH.md
-|           |       
-|           +---SESSION-20260319-21_A3_USERS-13
-|           |       README_PATCH.md
-|           |       
-|           +---SESSION-20260319-22_A3_USERS-14
-|           |       README_PATCH.md
-|           |       
-|           +---SESSION-20260319-23_A3_USERS-15
-|           |       README_PATCH.md
-|           |       
-|           +---SESSION-20260319-24_A3_USERS-16
-|           |       NO_PATCH.md
-|           |       
-|           \---SESSION-20260319-25_A3_CLOTURE-A3
-|                   NO_PATCH.md
-|                   
+|           \---2-CLOTURE
 +---4-templates
 |       TEMPLATE_DEBUT_SESSION.md
 |       TEMPLATE_DOD_4_4.md
