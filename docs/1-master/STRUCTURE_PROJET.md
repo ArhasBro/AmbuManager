@@ -2445,186 +2445,196 @@ C:.
 |   |   |   |               RESULTATS.md
 |   |   |   |               SESSION.md
 |   |   |   |               
-|   |   |   \---BLOC_A2
-|   |   |       +---1-ORG
-|   |   |       |   +---SESSION-20260313-17_A2_ORG-01
-|   |   |       |   |       EVIDENCES.md
-|   |   |       |   |       FIN_SESSION.md
-|   |   |       |   |       NOTES.md
-|   |   |       |   |       RESULTATS.md
-|   |   |       |   |       SESSION.md
-|   |   |       |   |       
-|   |   |       |   +---SESSION-20260314-01_A2_ORG-02
-|   |   |       |   |       EVIDENCES.md
-|   |   |       |   |       FIN_SESSION.md
-|   |   |       |   |       NOTES.md
-|   |   |       |   |       RESULTATS.md
-|   |   |       |   |       SESSION.md
-|   |   |       |   |       
-|   |   |       |   +---SESSION-20260314-02_A2_ORG-03
-|   |   |       |   |       EVIDENCES.md
-|   |   |       |   |       FIN_SESSION.md
-|   |   |       |   |       NOTES.md
-|   |   |       |   |       RESULTATS.md
-|   |   |       |   |       SESSION.md
-|   |   |       |   |       
-|   |   |       |   \---SESSION-20260316-01_A2_ORG-04
+|   |   |   +---BLOC_A2
+|   |   |   |   +---1-ORG
+|   |   |   |   |   +---SESSION-20260313-17_A2_ORG-01
+|   |   |   |   |   |       EVIDENCES.md
+|   |   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |   |       NOTES.md
+|   |   |   |   |   |       RESULTATS.md
+|   |   |   |   |   |       SESSION.md
+|   |   |   |   |   |       
+|   |   |   |   |   +---SESSION-20260314-01_A2_ORG-02
+|   |   |   |   |   |       EVIDENCES.md
+|   |   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |   |       NOTES.md
+|   |   |   |   |   |       RESULTATS.md
+|   |   |   |   |   |       SESSION.md
+|   |   |   |   |   |       
+|   |   |   |   |   +---SESSION-20260314-02_A2_ORG-03
+|   |   |   |   |   |       EVIDENCES.md
+|   |   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |   |       NOTES.md
+|   |   |   |   |   |       RESULTATS.md
+|   |   |   |   |   |       SESSION.md
+|   |   |   |   |   |       
+|   |   |   |   |   \---SESSION-20260316-01_A2_ORG-04
+|   |   |   |   |           EVIDENCES.md
+|   |   |   |   |           FIN_SESSION.md
+|   |   |   |   |           NOTES.md
+|   |   |   |   |           RESULTATS.md
+|   |   |   |   |           SESSION.md
+|   |   |   |   |           
+|   |   |   |   +---2-BASE
+|   |   |   |   |   +---SESSION-20260316-02_A2_BASE-01
+|   |   |   |   |   |       EVIDENCES.md
+|   |   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |   |       NOTES.md
+|   |   |   |   |   |       RESULTATS.md
+|   |   |   |   |   |       SESSION.md
+|   |   |   |   |   |       
+|   |   |   |   |   +---SESSION-20260316-03_A2_BASE-02
+|   |   |   |   |   |       EVIDENCES.md
+|   |   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |   |       NOTES.md
+|   |   |   |   |   |       RESULTATS.md
+|   |   |   |   |   |       SESSION.md
+|   |   |   |   |   |       
+|   |   |   |   |   +---SESSION-20260316-04_A2_BASE-03
+|   |   |   |   |   |       EVIDENCES.md
+|   |   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |   |       NOTES.md
+|   |   |   |   |   |       RESULTATS.md
+|   |   |   |   |   |       SESSION.md
+|   |   |   |   |   |       
+|   |   |   |   |   +---SESSION-20260316-05_A2_BASE-04
+|   |   |   |   |   |       EVIDENCES.md
+|   |   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |   |       NOTES.md
+|   |   |   |   |   |       RESULTATS.md
+|   |   |   |   |   |       SESSION.md
+|   |   |   |   |   |       
+|   |   |   |   |   +---SESSION-20260316-06_A2_BASE-05
+|   |   |   |   |   |       EVIDENCES.md
+|   |   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |   |       NOTES.md
+|   |   |   |   |   |       RESULTATS.md
+|   |   |   |   |   |       SESSION.md
+|   |   |   |   |   |       
+|   |   |   |   |   +---SESSION-20260316-07_A2_BASE-06
+|   |   |   |   |   |       EVIDENCES.md
+|   |   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |   |       NOTES.md
+|   |   |   |   |   |       RESULTATS.md
+|   |   |   |   |   |       SESSION.md
+|   |   |   |   |   |       
+|   |   |   |   |   +---SESSION-20260316-08_A2_BASE-07
+|   |   |   |   |   |       EVIDENCES.md
+|   |   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |   |       NOTES.md
+|   |   |   |   |   |       RESULTATS.md
+|   |   |   |   |   |       SESSION.md
+|   |   |   |   |   |       
+|   |   |   |   |   +---SESSION-20260316-09_A2_BASE-08
+|   |   |   |   |   |       EVIDENCES.md
+|   |   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |   |       NOTES.md
+|   |   |   |   |   |       RESULTATS.md
+|   |   |   |   |   |       SESSION.md
+|   |   |   |   |   |       
+|   |   |   |   |   +---SESSION-20260316-10_A2_BASE-09
+|   |   |   |   |   |       EVIDENCES.md
+|   |   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |   |       NOTES.md
+|   |   |   |   |   |       RESULTATS.md
+|   |   |   |   |   |       SESSION.md
+|   |   |   |   |   |       
+|   |   |   |   |   +---SESSION-20260317-01_A2_BASE-10
+|   |   |   |   |   |       EVIDENCES.md
+|   |   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |   |       NOTES.md
+|   |   |   |   |   |       RESULTATS.md
+|   |   |   |   |   |       SESSION.md
+|   |   |   |   |   |       
+|   |   |   |   |   +---SESSION-20260317-02_A2_BASE-11
+|   |   |   |   |   |       EVIDENCES.md
+|   |   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |   |       NOTES.md
+|   |   |   |   |   |       RESULTATS.md
+|   |   |   |   |   |       SESSION.md
+|   |   |   |   |   |       
+|   |   |   |   |   +---SESSION-20260317-03_A2_BASE-04-FIX
+|   |   |   |   |   |       EVIDENCES.md
+|   |   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |   |       NOTES.md
+|   |   |   |   |   |       RESULTATS.md
+|   |   |   |   |   |       SESSION.md
+|   |   |   |   |   |       
+|   |   |   |   |   +---SESSION-20260317-04_A2_BASE-07-FIX
+|   |   |   |   |   |       EVIDENCES.md
+|   |   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |   |       NOTES.md
+|   |   |   |   |   |       RESULTATS.md
+|   |   |   |   |   |       SESSION.md
+|   |   |   |   |   |       
+|   |   |   |   |   \---SESSION-20260317-05_A2_BASE-09-FIX
+|   |   |   |   |           EVIDENCES.md
+|   |   |   |   |           FIN_SESSION.md
+|   |   |   |   |           NOTES.md
+|   |   |   |   |           RESULTATS.md
+|   |   |   |   |           SESSION.md
+|   |   |   |   |           
+|   |   |   |   +---3-SUP
+|   |   |   |   |   +---SESSION-20260318-01_A2_SUP-01
+|   |   |   |   |   |       EVIDENCES.md
+|   |   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |   |       NOTES.md
+|   |   |   |   |   |       RESULTATS.md
+|   |   |   |   |   |       SESSION.md
+|   |   |   |   |   |       
+|   |   |   |   |   +---SESSION-20260318-02_A2_SUP-02
+|   |   |   |   |   |       EVIDENCES.md
+|   |   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |   |       NOTES.md
+|   |   |   |   |   |       RESULTATS.md
+|   |   |   |   |   |       SESSION.md
+|   |   |   |   |   |       
+|   |   |   |   |   +---SESSION-20260318-03_A2_SUP-03
+|   |   |   |   |   |       EVIDENCES.md
+|   |   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |   |       NOTES.md
+|   |   |   |   |   |       RESULTATS.md
+|   |   |   |   |   |       SESSION.md
+|   |   |   |   |   |       
+|   |   |   |   |   +---SESSION-20260318-04_A2_SUP-04
+|   |   |   |   |   |       EVIDENCES.md
+|   |   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |   |       NOTES.md
+|   |   |   |   |   |       RESULTATS.md
+|   |   |   |   |   |       SESSION.md
+|   |   |   |   |   |       
+|   |   |   |   |   +---SESSION-20260318-05_A2_SUP-05
+|   |   |   |   |   |       EVIDENCES.md
+|   |   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |   |       NOTES.md
+|   |   |   |   |   |       RESULTATS.md
+|   |   |   |   |   |       SESSION.md
+|   |   |   |   |   |       
+|   |   |   |   |   \---SESSION-20260318-06_A2_SUP-06
+|   |   |   |   |           EVIDENCES.md
+|   |   |   |   |           FIN_SESSION.md
+|   |   |   |   |           NOTES.md
+|   |   |   |   |           RESULTATS.md
+|   |   |   |   |           SESSION.md
+|   |   |   |   |           
+|   |   |   |   \---4-CLOTURE_A2
+|   |   |   |       \---SESSION-20260319-08_A2_CLOTURE-A2
+|   |   |   |               EVIDENCES.md
+|   |   |   |               FIN_SESSION.md
+|   |   |   |               NOTES.md
+|   |   |   |               RESULTATS.md
+|   |   |   |               SESSION.md
+|   |   |   |               
+|   |   |   \---BLOC_A3
+|   |   |       +---1-USER
+|   |   |       |   \---SESSION-20260319-09_A3_USERS-01
 |   |   |       |           EVIDENCES.md
 |   |   |       |           FIN_SESSION.md
 |   |   |       |           NOTES.md
 |   |   |       |           RESULTATS.md
 |   |   |       |           SESSION.md
 |   |   |       |           
-|   |   |       +---2-BASE
-|   |   |       |   +---SESSION-20260316-02_A2_BASE-01
-|   |   |       |   |       EVIDENCES.md
-|   |   |       |   |       FIN_SESSION.md
-|   |   |       |   |       NOTES.md
-|   |   |       |   |       RESULTATS.md
-|   |   |       |   |       SESSION.md
-|   |   |       |   |       
-|   |   |       |   +---SESSION-20260316-03_A2_BASE-02
-|   |   |       |   |       EVIDENCES.md
-|   |   |       |   |       FIN_SESSION.md
-|   |   |       |   |       NOTES.md
-|   |   |       |   |       RESULTATS.md
-|   |   |       |   |       SESSION.md
-|   |   |       |   |       
-|   |   |       |   +---SESSION-20260316-04_A2_BASE-03
-|   |   |       |   |       EVIDENCES.md
-|   |   |       |   |       FIN_SESSION.md
-|   |   |       |   |       NOTES.md
-|   |   |       |   |       RESULTATS.md
-|   |   |       |   |       SESSION.md
-|   |   |       |   |       
-|   |   |       |   +---SESSION-20260316-05_A2_BASE-04
-|   |   |       |   |       EVIDENCES.md
-|   |   |       |   |       FIN_SESSION.md
-|   |   |       |   |       NOTES.md
-|   |   |       |   |       RESULTATS.md
-|   |   |       |   |       SESSION.md
-|   |   |       |   |       
-|   |   |       |   +---SESSION-20260316-06_A2_BASE-05
-|   |   |       |   |       EVIDENCES.md
-|   |   |       |   |       FIN_SESSION.md
-|   |   |       |   |       NOTES.md
-|   |   |       |   |       RESULTATS.md
-|   |   |       |   |       SESSION.md
-|   |   |       |   |       
-|   |   |       |   +---SESSION-20260316-07_A2_BASE-06
-|   |   |       |   |       EVIDENCES.md
-|   |   |       |   |       FIN_SESSION.md
-|   |   |       |   |       NOTES.md
-|   |   |       |   |       RESULTATS.md
-|   |   |       |   |       SESSION.md
-|   |   |       |   |       
-|   |   |       |   +---SESSION-20260316-08_A2_BASE-07
-|   |   |       |   |       EVIDENCES.md
-|   |   |       |   |       FIN_SESSION.md
-|   |   |       |   |       NOTES.md
-|   |   |       |   |       RESULTATS.md
-|   |   |       |   |       SESSION.md
-|   |   |       |   |       
-|   |   |       |   +---SESSION-20260316-09_A2_BASE-08
-|   |   |       |   |       EVIDENCES.md
-|   |   |       |   |       FIN_SESSION.md
-|   |   |       |   |       NOTES.md
-|   |   |       |   |       RESULTATS.md
-|   |   |       |   |       SESSION.md
-|   |   |       |   |       
-|   |   |       |   +---SESSION-20260316-10_A2_BASE-09
-|   |   |       |   |       EVIDENCES.md
-|   |   |       |   |       FIN_SESSION.md
-|   |   |       |   |       NOTES.md
-|   |   |       |   |       RESULTATS.md
-|   |   |       |   |       SESSION.md
-|   |   |       |   |       
-|   |   |       |   +---SESSION-20260317-01_A2_BASE-10
-|   |   |       |   |       EVIDENCES.md
-|   |   |       |   |       FIN_SESSION.md
-|   |   |       |   |       NOTES.md
-|   |   |       |   |       RESULTATS.md
-|   |   |       |   |       SESSION.md
-|   |   |       |   |       
-|   |   |       |   +---SESSION-20260317-02_A2_BASE-11
-|   |   |       |   |       EVIDENCES.md
-|   |   |       |   |       FIN_SESSION.md
-|   |   |       |   |       NOTES.md
-|   |   |       |   |       RESULTATS.md
-|   |   |       |   |       SESSION.md
-|   |   |       |   |       
-|   |   |       |   +---SESSION-20260317-03_A2_BASE-04-FIX
-|   |   |       |   |       EVIDENCES.md
-|   |   |       |   |       FIN_SESSION.md
-|   |   |       |   |       NOTES.md
-|   |   |       |   |       RESULTATS.md
-|   |   |       |   |       SESSION.md
-|   |   |       |   |       
-|   |   |       |   +---SESSION-20260317-04_A2_BASE-07-FIX
-|   |   |       |   |       EVIDENCES.md
-|   |   |       |   |       FIN_SESSION.md
-|   |   |       |   |       NOTES.md
-|   |   |       |   |       RESULTATS.md
-|   |   |       |   |       SESSION.md
-|   |   |       |   |       
-|   |   |       |   \---SESSION-20260317-05_A2_BASE-09-FIX
-|   |   |       |           EVIDENCES.md
-|   |   |       |           FIN_SESSION.md
-|   |   |       |           NOTES.md
-|   |   |       |           RESULTATS.md
-|   |   |       |           SESSION.md
-|   |   |       |           
-|   |   |       +---3-SUP
-|   |   |       |   +---SESSION-20260318-01_A2_SUP-01
-|   |   |       |   |       EVIDENCES.md
-|   |   |       |   |       FIN_SESSION.md
-|   |   |       |   |       NOTES.md
-|   |   |       |   |       RESULTATS.md
-|   |   |       |   |       SESSION.md
-|   |   |       |   |       
-|   |   |       |   +---SESSION-20260318-02_A2_SUP-02
-|   |   |       |   |       EVIDENCES.md
-|   |   |       |   |       FIN_SESSION.md
-|   |   |       |   |       NOTES.md
-|   |   |       |   |       RESULTATS.md
-|   |   |       |   |       SESSION.md
-|   |   |       |   |       
-|   |   |       |   +---SESSION-20260318-03_A2_SUP-03
-|   |   |       |   |       EVIDENCES.md
-|   |   |       |   |       FIN_SESSION.md
-|   |   |       |   |       NOTES.md
-|   |   |       |   |       RESULTATS.md
-|   |   |       |   |       SESSION.md
-|   |   |       |   |       
-|   |   |       |   +---SESSION-20260318-04_A2_SUP-04
-|   |   |       |   |       EVIDENCES.md
-|   |   |       |   |       FIN_SESSION.md
-|   |   |       |   |       NOTES.md
-|   |   |       |   |       RESULTATS.md
-|   |   |       |   |       SESSION.md
-|   |   |       |   |       
-|   |   |       |   +---SESSION-20260318-05_A2_SUP-05
-|   |   |       |   |       EVIDENCES.md
-|   |   |       |   |       FIN_SESSION.md
-|   |   |       |   |       NOTES.md
-|   |   |       |   |       RESULTATS.md
-|   |   |       |   |       SESSION.md
-|   |   |       |   |       
-|   |   |       |   \---SESSION-20260318-06_A2_SUP-06
-|   |   |       |           EVIDENCES.md
-|   |   |       |           FIN_SESSION.md
-|   |   |       |           NOTES.md
-|   |   |       |           RESULTATS.md
-|   |   |       |           SESSION.md
-|   |   |       |           
-|   |   |       \---4-CLOTURE_A2
-|   |   |           \---SESSION-20260319-08_A2_CLOTURE-A2
-|   |   |                   EVIDENCES.md
-|   |   |                   FIN_SESSION.md
-|   |   |                   NOTES.md
-|   |   |                   RESULTATS.md
-|   |   |                   SESSION.md
-|   |   |                   
+|   |   |       \---2-CLOTURE
 |   |   \---SESSION-YYYYMMDD-XX
 |   |           EVIDENCES.md
 |   |           FIN_SESSION.md
@@ -2728,118 +2738,124 @@ C:.
 |   |       |       \---SESSION-20260313-16_A1_API-06
 |   |       |               NO_PATCH.md
 |   |       |               
-|   |       \---BLOC_A2
-|   |           +---1-ORG
-|   |           |   +---SESSION-20260313-17_A2_ORG-01
-|   |           |   |       NO_PATCH.md
-|   |           |   |       
-|   |           |   +---SESSION-20260314-01_A2_ORG-02
-|   |           |   |       ORG-02.diff
-|   |           |   |       README_PATCH.md
-|   |           |   |       
-|   |           |   +---SESSION-20260314-02_A2_ORG-03
-|   |           |   |       ORG-03-codehotfix-01.diff
-|   |           |   |       README_PATCH.md
-|   |           |   |       
-|   |           |   \---SESSION-20260316-01_A2_ORG-04
+|   |       +---BLOC_A2
+|   |       |   +---1-ORG
+|   |       |   |   +---SESSION-20260313-17_A2_ORG-01
+|   |       |   |   |       NO_PATCH.md
+|   |       |   |   |       
+|   |       |   |   +---SESSION-20260314-01_A2_ORG-02
+|   |       |   |   |       ORG-02.diff
+|   |       |   |   |       README_PATCH.md
+|   |       |   |   |       
+|   |       |   |   +---SESSION-20260314-02_A2_ORG-03
+|   |       |   |   |       ORG-03-codehotfix-01.diff
+|   |       |   |   |       README_PATCH.md
+|   |       |   |   |       
+|   |       |   |   \---SESSION-20260316-01_A2_ORG-04
+|   |       |   |           NO_PATCH.md
+|   |       |   |           
+|   |       |   +---2-BASE
+|   |       |   |   +---SESSION-20260316-02_A2_BASE-01
+|   |       |   |   |       NO_PATCH.md
+|   |       |   |   |       
+|   |       |   |   +---SESSION-20260316-03_A2_BASE-02
+|   |       |   |   |       BASE-02.diff
+|   |       |   |   |       README_PATCH.md
+|   |       |   |   |       
+|   |       |   |   +---SESSION-20260316-04_A2_BASE-03
+|   |       |   |   |       BASE-03.diff
+|   |       |   |   |       README_PATCH.md
+|   |       |   |   |       
+|   |       |   |   +---SESSION-20260316-05_A2_BASE-04
+|   |       |   |   |       BASE-04.diff
+|   |       |   |   |       PATCH__SESSION-20260316-05_A2_BASE-04_DOCS-01.diff
+|   |       |   |   |       PATCH__SESSION-20260316-05_A2_BASE-04_DOCS-02.diff
+|   |       |   |   |       PATCH__SESSION-20260316-05_A2_BASE-04_DOCS-04.diff
+|   |       |   |   |       PATCH__SESSION-20260316-05_A2_BASE-04_FIX-01.diff
+|   |       |   |   |       README_PATCH.md
+|   |       |   |   |       
+|   |       |   |   +---SESSION-20260316-06_A2_BASE-05
+|   |       |   |   |       BASE-05.diff
+|   |       |   |   |       PATCH__SESSION-20260316-06_A2_BASE-05_DOCS-01.diff
+|   |       |   |   |       README_PATCH.md
+|   |       |   |   |       
+|   |       |   |   +---SESSION-20260316-07_A2_BASE-06
+|   |       |   |   |       BASE-06.diff
+|   |       |   |   |       README_PATCH.md
+|   |       |   |   |       
+|   |       |   |   +---SESSION-20260316-08_A2_BASE-07
+|   |       |   |   |       BASE-07.diff
+|   |       |   |   |       PATCH__SESSION-20260316-08_A2_BASE-07_FIX-01.diff
+|   |       |   |   |       README_PATCH.md
+|   |       |   |   |       
+|   |       |   |   +---SESSION-20260316-09_A2_BASE-08
+|   |       |   |   |       BASE-08.diff
+|   |       |   |   |       README_PATCH.md
+|   |       |   |   |       
+|   |       |   |   +---SESSION-20260316-10_A2_BASE-09
+|   |       |   |   |       BASE-09.diff
+|   |       |   |   |       README_PATCH.md
+|   |       |   |   |       
+|   |       |   |   +---SESSION-20260317-01_A2_BASE-10
+|   |       |   |   |       NO_PATCH.md
+|   |       |   |   |       
+|   |       |   |   +---SESSION-20260317-02_A2_BASE-11
+|   |       |   |   |       NO_PATCH.md
+|   |       |   |   |       
+|   |       |   |   +---SESSION-20260317-03_A2_BASE-04-FIX
+|   |       |   |   |       BASE-04-FIX.diff
+|   |       |   |   |       README.md
+|   |       |   |   |       
+|   |       |   |   +---SESSION-20260317-04_A2_BASE-07-FIX
+|   |       |   |   |       BASE-07-FIX.diff
+|   |       |   |   |       README_PATCH.md
+|   |       |   |   |       
+|   |       |   |   \---SESSION-20260317-05_A2_BASE-09-FIX
+|   |       |   |           BASE-09-FIX.diff
+|   |       |   |           README_PATCH_BASE-09-FIX.md
+|   |       |   |           
+|   |       |   +---3-SUP
+|   |       |   |   +---SESSION-20260318-01_A2_SUP-01
+|   |       |   |   |       NO_PATCH.md
+|   |       |   |   |       
+|   |       |   |   +---SESSION-20260318-02_A2_SUP-02
+|   |       |   |   |       README_PATCH.md
+|   |       |   |   |       SUP-02-FIX-APPLY.diff
+|   |       |   |   |       SUP-02-FIX.diff
+|   |       |   |   |       SUP-02.diff
+|   |       |   |   |       
+|   |       |   |   +---SESSION-20260318-03_A2_SUP-03
+|   |       |   |   |       README_PATCH.md
+|   |       |   |   |       SUP-03-FIX-02.diff
+|   |       |   |   |       SUP-03-FIX-03.diff
+|   |       |   |   |       SUP-03-FIX-04.diff
+|   |       |   |   |       SUP-03-FIX-APPLY.diff
+|   |       |   |   |       SUP-03-FIX.diff
+|   |       |   |   |       SUP-03.diff
+|   |       |   |   |       
+|   |       |   |   +---SESSION-20260318-04_A2_SUP-04
+|   |       |   |   |       README_PATCH.md
+|   |       |   |   |       SUP-04.diff
+|   |       |   |   |       
+|   |       |   |   +---SESSION-20260318-05_A2_SUP-05
+|   |       |   |   |       README_PATCH.md
+|   |       |   |   |       SUP-05.diff
+|   |       |   |   |       
+|   |       |   |   \---SESSION-20260318-06_A2_SUP-06
+|   |       |   |           NO_PATCH.md
+|   |       |   |           
+|   |       |   \---4-CLOTURE_A
+|   |       |       \---SESSION-20260319-08_A2_CLOTURE-A2
+|   |       |               CLOTURE-A2-FINAL.diff
+|   |       |               CLOTURE-A2-PATCH-FIX.diff
+|   |       |               README_PATCH.md
+|   |       |               
+|   |       \---BLOC_A3
+|   |           +---1-USER
+|   |           |   \---SESSION-20260319-09_A3_USERS-01
 |   |           |           NO_PATCH.md
 |   |           |           
-|   |           +---2-BASE
-|   |           |   +---SESSION-20260316-02_A2_BASE-01
-|   |           |   |       NO_PATCH.md
-|   |           |   |       
-|   |           |   +---SESSION-20260316-03_A2_BASE-02
-|   |           |   |       BASE-02.diff
-|   |           |   |       README_PATCH.md
-|   |           |   |       
-|   |           |   +---SESSION-20260316-04_A2_BASE-03
-|   |           |   |       BASE-03.diff
-|   |           |   |       README_PATCH.md
-|   |           |   |       
-|   |           |   +---SESSION-20260316-05_A2_BASE-04
-|   |           |   |       BASE-04.diff
-|   |           |   |       PATCH__SESSION-20260316-05_A2_BASE-04_DOCS-01.diff
-|   |           |   |       PATCH__SESSION-20260316-05_A2_BASE-04_DOCS-02.diff
-|   |           |   |       PATCH__SESSION-20260316-05_A2_BASE-04_DOCS-04.diff
-|   |           |   |       PATCH__SESSION-20260316-05_A2_BASE-04_FIX-01.diff
-|   |           |   |       README_PATCH.md
-|   |           |   |       
-|   |           |   +---SESSION-20260316-06_A2_BASE-05
-|   |           |   |       BASE-05.diff
-|   |           |   |       PATCH__SESSION-20260316-06_A2_BASE-05_DOCS-01.diff
-|   |           |   |       README_PATCH.md
-|   |           |   |       
-|   |           |   +---SESSION-20260316-07_A2_BASE-06
-|   |           |   |       BASE-06.diff
-|   |           |   |       README_PATCH.md
-|   |           |   |       
-|   |           |   +---SESSION-20260316-08_A2_BASE-07
-|   |           |   |       BASE-07.diff
-|   |           |   |       PATCH__SESSION-20260316-08_A2_BASE-07_FIX-01.diff
-|   |           |   |       README_PATCH.md
-|   |           |   |       
-|   |           |   +---SESSION-20260316-09_A2_BASE-08
-|   |           |   |       BASE-08.diff
-|   |           |   |       README_PATCH.md
-|   |           |   |       
-|   |           |   +---SESSION-20260316-10_A2_BASE-09
-|   |           |   |       BASE-09.diff
-|   |           |   |       README_PATCH.md
-|   |           |   |       
-|   |           |   +---SESSION-20260317-01_A2_BASE-10
-|   |           |   |       NO_PATCH.md
-|   |           |   |       
-|   |           |   +---SESSION-20260317-02_A2_BASE-11
-|   |           |   |       NO_PATCH.md
-|   |           |   |       
-|   |           |   +---SESSION-20260317-03_A2_BASE-04-FIX
-|   |           |   |       BASE-04-FIX.diff
-|   |           |   |       README.md
-|   |           |   |       
-|   |           |   +---SESSION-20260317-04_A2_BASE-07-FIX
-|   |           |   |       BASE-07-FIX.diff
-|   |           |   |       README_PATCH.md
-|   |           |   |       
-|   |           |   \---SESSION-20260317-05_A2_BASE-09-FIX
-|   |           |           BASE-09-FIX.diff
-|   |           |           README_PATCH_BASE-09-FIX.md
-|   |           |           
-|   |           +---3-SUP
-|   |           |   +---SESSION-20260318-01_A2_SUP-01
-|   |           |   |       NO_PATCH.md
-|   |           |   |       
-|   |           |   +---SESSION-20260318-02_A2_SUP-02
-|   |           |   |       README_PATCH.md
-|   |           |   |       SUP-02-FIX-APPLY.diff
-|   |           |   |       SUP-02-FIX.diff
-|   |           |   |       SUP-02.diff
-|   |           |   |       
-|   |           |   +---SESSION-20260318-03_A2_SUP-03
-|   |           |   |       README_PATCH.md
-|   |           |   |       SUP-03-FIX-02.diff
-|   |           |   |       SUP-03-FIX-03.diff
-|   |           |   |       SUP-03-FIX-04.diff
-|   |           |   |       SUP-03-FIX-APPLY.diff
-|   |           |   |       SUP-03-FIX.diff
-|   |           |   |       SUP-03.diff
-|   |           |   |       
-|   |           |   +---SESSION-20260318-04_A2_SUP-04
-|   |           |   |       README_PATCH.md
-|   |           |   |       SUP-04.diff
-|   |           |   |       
-|   |           |   +---SESSION-20260318-05_A2_SUP-05
-|   |           |   |       README_PATCH.md
-|   |           |   |       SUP-05.diff
-|   |           |   |       
-|   |           |   \---SESSION-20260318-06_A2_SUP-06
-|   |           |           NO_PATCH.md
-|   |           |           
-|   |           \---4-CLOTURE_A
-|   |               \---SESSION-20260319-08_A2_CLOTURE-A2
-|   |                       CLOTURE-A2-FINAL.diff
-|   |                       CLOTURE-A2-PATCH-FIX.diff
-|   |                       README_PATCH.md
-|   |                       
+|   |           \---2-CLOTURE
 |   +---4-templates
 |   |       TEMPLATE_DEBUT_SESSION.md
 |   |       TEMPLATE_DOD_4_4.md
