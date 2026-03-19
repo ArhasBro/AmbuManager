@@ -14,6 +14,7 @@ et contenir les fichiers :
 
 SESSION.md  
 NOTES.md  
+FIN_SESSION.md
 EVIDENCES.md  
 RESULTATS.md  
 
@@ -24,6 +25,9 @@ Résumé structuré de la session.
 
 NOTES.md  
 Notes de travail pendant la session.
+
+FIN_SESSION.md
+Résumé final, Verdict final, Prochaine étape logique, autre.
 
 EVIDENCES.md  
 Éléments factuels utilisés pendant la session :

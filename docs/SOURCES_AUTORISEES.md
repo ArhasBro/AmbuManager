@@ -26,10 +26,20 @@ docs/README.md
 
 ## Sessions de travail
 
-docs/sessions/SESSION-YYYYMMDD-XX/SESSION.md  
-docs/sessions/SESSION-YYYYMMDD-XX/NOTES.md  
-docs/sessions/SESSION-YYYYMMDD-XX/EVIDENCES.md  
-docs/sessions/SESSION-YYYYMMDD-XX/RESULTATS.md  
+docs/2-sessions/"Maturité"/"Bloc"/"XXX"/SESSION-YYYYMMDD-XX/SESSION.md  
+docs/2-sessions/"Maturité"/"Bloc"/"XXX"/SESSION-YYYYMMDD-XX/NOTES.md  
+docs/2-sessions/"Maturité"/"Bloc"/"XXX"/SESSION-YYYYMMDD-XX/FIN_SESSION.md  
+docs/2-sessions/"Maturité"/"Bloc"/"XXX"/SESSION-YYYYMMDD-XX/EVIDENCES.md  
+docs/2-sessions/"Maturité"/"Bloc"/"XXX"/SESSION-YYYYMMDD-XX/RESULTATS.md  
+
+## Patch
+
+docs\3-patches\"Maturité"/"Bloc"/"XXX"/SESSION-YYYYMMDD-XX/PATCH.diff
+
+docs\3-patches\"Maturité"/"Bloc"/"XXX"/SESSION-YYYYMMDD-XX/READDME.md
+OU
+docs\3-patches\"Maturité"/"Bloc"/"XXX"/SESSION-YYYYMMDD-XX/NO_PATCH
+
 
 ## Templates
 

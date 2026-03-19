@@ -1,7 +1,6 @@
 ﻿Structure du dossier pour le volume Windows
 Le numÚro de sÚrie du volume est 123E-4DB7
 C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
-|   NE_PAS_UTILISER.md
 |   PROTOCOLE_SESSION.md
 |   README.md
 |   SOURCES_AUTORISEES.md
@@ -329,49 +328,50 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |       |           RESULTATS.md
 |   |       |           SESSION.md
 |   |       |           
-|   |       \---3-SUP
-|   |           +---SESSION-20260318-01_A2_SUP-01
-|   |           |       EVIDENCES.md
-|   |           |       FIN_SESSION.md
-|   |           |       NOTES.md
-|   |           |       RESULTATS.md
-|   |           |       SESSION.md
-|   |           |       
-|   |           +---SESSION-20260318-02_A2_SUP-02
-|   |           |       EVIDENCES.md
-|   |           |       FIN_SESSION.md
-|   |           |       NOTES.md
-|   |           |       RESULTATS.md
-|   |           |       SESSION.md
-|   |           |       
-|   |           +---SESSION-20260318-03_A2_SUP-03
-|   |           |       EVIDENCES.md
-|   |           |       FIN_SESSION.md
-|   |           |       NOTES.md
-|   |           |       RESULTATS.md
-|   |           |       SESSION.md
-|   |           |       
-|   |           +---SESSION-20260318-04_A2_SUP-04
-|   |           |       EVIDENCES.md
-|   |           |       FIN_SESSION.md
-|   |           |       NOTES.md
-|   |           |       RESULTATS.md
-|   |           |       SESSION.md
-|   |           |       
-|   |           +---SESSION-20260318-05_A2_SUP-05
-|   |           |       EVIDENCES.md
-|   |           |       FIN_SESSION.md
-|   |           |       NOTES.md
-|   |           |       RESULTATS.md
-|   |           |       SESSION.md
-|   |           |       
-|   |           \---SESSION-20260318-06_A2_SUP-06
-|   |                   EVIDENCES.md
-|   |                   FIN_SESSION.md
-|   |                   NOTES.md
-|   |                   RESULTATS.md
-|   |                   SESSION.md
-|   |                   
+|   |       +---3-SUP
+|   |       |   +---SESSION-20260318-01_A2_SUP-01
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260318-02_A2_SUP-02
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260318-03_A2_SUP-03
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260318-04_A2_SUP-04
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260318-05_A2_SUP-05
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   \---SESSION-20260318-06_A2_SUP-06
+|   |       |           EVIDENCES.md
+|   |       |           FIN_SESSION.md
+|   |       |           NOTES.md
+|   |       |           RESULTATS.md
+|   |       |           SESSION.md
+|   |       |           
+|   |       \---4-CLOTURE_A2
 |   \---SESSION-YYYYMMDD-XX
 |           EVIDENCES.md
 |           FIN_SESSION.md
@@ -551,36 +551,37 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |           |           BASE-09-FIX.diff
 |           |           README_PATCH_BASE-09-FIX.md
 |           |           
-|           \---3-SUP
-|               +---SESSION-20260318-01_A2_SUP-01
-|               |       NO_PATCH.md
-|               |       
-|               +---SESSION-20260318-02_A2_SUP-02
-|               |       README_PATCH.md
-|               |       SUP-02-FIX-APPLY.diff
-|               |       SUP-02-FIX.diff
-|               |       SUP-02.diff
-|               |       
-|               +---SESSION-20260318-03_A2_SUP-03
-|               |       README_PATCH.md
-|               |       SUP-03-FIX-02.diff
-|               |       SUP-03-FIX-03.diff
-|               |       SUP-03-FIX-04.diff
-|               |       SUP-03-FIX-APPLY.diff
-|               |       SUP-03-FIX.diff
-|               |       SUP-03.diff
-|               |       
-|               +---SESSION-20260318-04_A2_SUP-04
-|               |       README_PATCH.md
-|               |       SUP-04.diff
-|               |       
-|               +---SESSION-20260318-05_A2_SUP-05
-|               |       README_PATCH.md
-|               |       SUP-05.diff
-|               |       
-|               \---SESSION-20260318-06_A2_SUP-06
-|                       NO_PATCH.md
-|                       
+|           +---3-SUP
+|           |   +---SESSION-20260318-01_A2_SUP-01
+|           |   |       NO_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260318-02_A2_SUP-02
+|           |   |       README_PATCH.md
+|           |   |       SUP-02-FIX-APPLY.diff
+|           |   |       SUP-02-FIX.diff
+|           |   |       SUP-02.diff
+|           |   |       
+|           |   +---SESSION-20260318-03_A2_SUP-03
+|           |   |       README_PATCH.md
+|           |   |       SUP-03-FIX-02.diff
+|           |   |       SUP-03-FIX-03.diff
+|           |   |       SUP-03-FIX-04.diff
+|           |   |       SUP-03-FIX-APPLY.diff
+|           |   |       SUP-03-FIX.diff
+|           |   |       SUP-03.diff
+|           |   |       
+|           |   +---SESSION-20260318-04_A2_SUP-04
+|           |   |       README_PATCH.md
+|           |   |       SUP-04.diff
+|           |   |       
+|           |   +---SESSION-20260318-05_A2_SUP-05
+|           |   |       README_PATCH.md
+|           |   |       SUP-05.diff
+|           |   |       
+|           |   \---SESSION-20260318-06_A2_SUP-06
+|           |           NO_PATCH.md
+|           |           
+|           \---4-CLOTURE_A
 +---4-templates
 |       TEMPLATE_DEBUT_SESSION.md
 |       TEMPLATE_DOD_4_4.md
