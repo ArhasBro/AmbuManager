@@ -2634,7 +2634,14 @@ C:.
 |   |   |       |           RESULTATS.md
 |   |   |       |           SESSION.md
 |   |   |       |           
-|   |   |       \---2-CLOTURE
+|   |   |       +---2-CLOTURE
+|   |   |       \---SESSION-20260319-10_A3_USERS-02
+|   |   |               EVIDENCES.md
+|   |   |               FIN_SESSION.md
+|   |   |               NOTES.md
+|   |   |               RESULTATS.md
+|   |   |               SESSION.md
+|   |   |               
 |   |   \---SESSION-YYYYMMDD-XX
 |   |           EVIDENCES.md
 |   |           FIN_SESSION.md
@@ -2855,7 +2862,10 @@ C:.
 |   |           |   \---SESSION-20260319-09_A3_USERS-01
 |   |           |           NO_PATCH.md
 |   |           |           
-|   |           \---2-CLOTURE
+|   |           +---2-CLOTURE
+|   |           \---SESSION-20260319-10_A3_USERS-02
+|   |                   NO_PATCH.md
+|   |                   
 |   +---4-templates
 |   |       TEMPLATE_DEBUT_SESSION.md
 |   |       TEMPLATE_DOD_4_4.md
