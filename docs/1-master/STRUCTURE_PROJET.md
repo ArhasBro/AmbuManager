@@ -17,21 +17,11 @@ C:.
 |   tsconfig.json
 |   
 +---.next
-|   |   app-path-routes-manifest.json
 |   |   build-manifest.json
-|   |   BUILD_ID
-|   |   export-marker.json
 |   |   fallback-build-manifest.json
-|   |   images-manifest.json
 |   |   next-minimal-server.js.nft.json
 |   |   next-server.js.nft.json
 |   |   package.json
-|   |   prerender-manifest.json
-|   |   required-server-files.js
-|   |   required-server-files.json
-|   |   routes-manifest.json
-|   |   trace
-|   |   trace-build
 |   |   turbopack
 |   |   
 |   +---build
@@ -1365,7 +1355,6 @@ C:.
 |   |                   
 |   +---server
 |   |   |   app-paths-manifest.json
-|   |   |   functions-config-manifest.json
 |   |   |   interception-route-rewrite-manifest.js
 |   |   |   middleware-build-manifest.js
 |   |   |   middleware-manifest.json
@@ -1379,24 +1368,10 @@ C:.
 |   |   |   server-reference-manifest.json
 |   |   |   
 |   |   +---app
-|   |   |   |   favicon.ico.body
-|   |   |   |   favicon.ico.meta
-|   |   |   |   index.html
-|   |   |   |   index.meta
-|   |   |   |   index.rsc
-|   |   |   |   login.html
-|   |   |   |   login.meta
-|   |   |   |   login.rsc
 |   |   |   |   page.js
 |   |   |   |   page.js.map
 |   |   |   |   page.js.nft.json
 |   |   |   |   page_client-reference-manifest.js
-|   |   |   |   _global-error.html
-|   |   |   |   _global-error.meta
-|   |   |   |   _global-error.rsc
-|   |   |   |   _not-found.html
-|   |   |   |   _not-found.meta
-|   |   |   |   _not-found.rsc
 |   |   |   |   
 |   |   |   +---api
 |   |   |   |   +---auth
@@ -1729,13 +1704,6 @@ C:.
 |   |   |   |           app-paths-manifest.json
 |   |   |   |           build-manifest.json
 |   |   |   |           
-|   |   |   +---index.segments
-|   |   |   |       _full.segment.rsc
-|   |   |   |       _head.segment.rsc
-|   |   |   |       _index.segment.rsc
-|   |   |   |       _tree.segment.rsc
-|   |   |   |       __PAGE__.segment.rsc
-|   |   |   |       
 |   |   |   +---login
 |   |   |   |   |   page.js
 |   |   |   |   |   page.js.map
@@ -1748,16 +1716,6 @@ C:.
 |   |   |   |           next-font-manifest.json
 |   |   |   |           react-loadable-manifest.json
 |   |   |   |           server-reference-manifest.json
-|   |   |   |           
-|   |   |   +---login.segments
-|   |   |   |   |   login.segment.rsc
-|   |   |   |   |   _full.segment.rsc
-|   |   |   |   |   _head.segment.rsc
-|   |   |   |   |   _index.segment.rsc
-|   |   |   |   |   _tree.segment.rsc
-|   |   |   |   |   
-|   |   |   |   \---login
-|   |   |   |           __PAGE__.segment.rsc
 |   |   |   |           
 |   |   |   +---page
 |   |   |   |       app-paths-manifest.json
@@ -1818,35 +1776,18 @@ C:.
 |   |   |   |           react-loadable-manifest.json
 |   |   |   |           server-reference-manifest.json
 |   |   |   |           
-|   |   |   +---_global-error.segments
-|   |   |   |       _full.segment.rsc
-|   |   |   |       _head.segment.rsc
-|   |   |   |       _index.segment.rsc
-|   |   |   |       _tree.segment.rsc
-|   |   |   |       __PAGE__.segment.rsc
-|   |   |   |       
-|   |   |   +---_not-found
-|   |   |   |   |   page.js
-|   |   |   |   |   page.js.map
-|   |   |   |   |   page.js.nft.json
-|   |   |   |   |   page_client-reference-manifest.js
-|   |   |   |   |   
-|   |   |   |   \---page
-|   |   |   |           app-paths-manifest.json
-|   |   |   |           build-manifest.json
-|   |   |   |           next-font-manifest.json
-|   |   |   |           react-loadable-manifest.json
-|   |   |   |           server-reference-manifest.json
-|   |   |   |           
-|   |   |   \---_not-found.segments
-|   |   |       |   _full.segment.rsc
-|   |   |       |   _head.segment.rsc
-|   |   |       |   _index.segment.rsc
-|   |   |       |   _not-found.segment.rsc
-|   |   |       |   _tree.segment.rsc
+|   |   |   \---_not-found
+|   |   |       |   page.js
+|   |   |       |   page.js.map
+|   |   |       |   page.js.nft.json
+|   |   |       |   page_client-reference-manifest.js
 |   |   |       |   
-|   |   |       \---_not-found
-|   |   |               __PAGE__.segment.rsc
+|   |   |       \---page
+|   |   |               app-paths-manifest.json
+|   |   |               build-manifest.json
+|   |   |               next-font-manifest.json
+|   |   |               react-loadable-manifest.json
+|   |   |               server-reference-manifest.json
 |   |   |               
 |   |   +---chunks
 |   |   |   |   bec2d_app_api_planning_autoschedule_runs_[id]_match_apply_route_actions_4ed003d4.js
@@ -1869,6 +1810,8 @@ C:.
 |   |   |   |   [externals]_next_dist_a6d89067._.js.map
 |   |   |   |   [externals]__39d4c878._.js
 |   |   |   |   [externals]__39d4c878._.js.map
+|   |   |   |   [root-of-the-server]__00ed1d32._.js
+|   |   |   |   [root-of-the-server]__00ed1d32._.js.map
 |   |   |   |   [root-of-the-server]__0e43a126._.js
 |   |   |   |   [root-of-the-server]__0e43a126._.js.map
 |   |   |   |   [root-of-the-server]__181c374f._.js
@@ -1877,20 +1820,18 @@ C:.
 |   |   |   |   [root-of-the-server]__275a5a46._.js.map
 |   |   |   |   [root-of-the-server]__2d31c873._.js
 |   |   |   |   [root-of-the-server]__2d31c873._.js.map
-|   |   |   |   [root-of-the-server]__2f4a670c._.js
-|   |   |   |   [root-of-the-server]__2f4a670c._.js.map
 |   |   |   |   [root-of-the-server]__466e0aef._.js
 |   |   |   |   [root-of-the-server]__466e0aef._.js.map
 |   |   |   |   [root-of-the-server]__4acb48f2._.js
 |   |   |   |   [root-of-the-server]__4acb48f2._.js.map
+|   |   |   |   [root-of-the-server]__4b548634._.js
+|   |   |   |   [root-of-the-server]__4b548634._.js.map
 |   |   |   |   [root-of-the-server]__54479175._.js
 |   |   |   |   [root-of-the-server]__54479175._.js.map
 |   |   |   |   [root-of-the-server]__5d11d34e._.js
 |   |   |   |   [root-of-the-server]__5d11d34e._.js.map
 |   |   |   |   [root-of-the-server]__5e792a0f._.js
 |   |   |   |   [root-of-the-server]__5e792a0f._.js.map
-|   |   |   |   [root-of-the-server]__64a98e00._.js
-|   |   |   |   [root-of-the-server]__64a98e00._.js.map
 |   |   |   |   [root-of-the-server]__87fabf7c._.js
 |   |   |   |   [root-of-the-server]__87fabf7c._.js.map
 |   |   |   |   [root-of-the-server]__9211ad2c._.js
@@ -1911,10 +1852,10 @@ C:.
 |   |   |   |   [root-of-the-server]__c3997a41._.js.map
 |   |   |   |   [root-of-the-server]__c5606340._.js
 |   |   |   |   [root-of-the-server]__c5606340._.js.map
+|   |   |   |   [root-of-the-server]__d085b866._.js
+|   |   |   |   [root-of-the-server]__d085b866._.js.map
 |   |   |   |   [root-of-the-server]__d5f44ffd._.js
 |   |   |   |   [root-of-the-server]__d5f44ffd._.js.map
-|   |   |   |   [root-of-the-server]__db62380b._.js
-|   |   |   |   [root-of-the-server]__db62380b._.js.map
 |   |   |   |   [root-of-the-server]__e6c5e537._.js
 |   |   |   |   [root-of-the-server]__e6c5e537._.js.map
 |   |   |   |   [root-of-the-server]__ecb56e79._.js
@@ -1935,6 +1876,8 @@ C:.
 |   |   |   |   _6f8813bf._.js.map
 |   |   |   |   _701e00e8._.js
 |   |   |   |   _701e00e8._.js.map
+|   |   |   |   _7cdceae8._.js
+|   |   |   |   _7cdceae8._.js.map
 |   |   |   |   _bec5ea43._.js
 |   |   |   |   _bec5ea43._.js.map
 |   |   |   |   _next-internal_server_app_api_auth_[___nextauth]_route_actions_1c865db8.js
@@ -2102,22 +2045,24 @@ C:.
 |   |   |           _next-internal_server_app__not-found_page_actions_554ec2bf.js
 |   |   |           _next-internal_server_app__not-found_page_actions_554ec2bf.js.map
 |   |   |           
-|   |   +---middleware
-|   |   |       middleware-manifest.json
-|   |   |       
-|   |   \---pages
-|   |           404.html
-|   |           500.html
+|   |   \---middleware
+|   |           middleware-manifest.json
 |   |           
 |   +---static
+|   |   +---5kSjS4jjHzLJK9H-5WDue
+|   |   |       _buildManifest.js
+|   |   |       _clientMiddlewareManifest.json
+|   |   |       _ssgManifest.js
+|   |   |       
 |   |   +---chunks
 |   |   |       05e6c743003c809d.js
-|   |   |       14a872e021737b59.js
 |   |   |       1687260e4d8b05d6.js
 |   |   |       34f7551faf121447.css
 |   |   |       642a00754c8aebb8.js
 |   |   |       672c0168d7981883.js
 |   |   |       6fe188a4ac2c58d8.js
+|   |   |       7c92e96509cd355e.js
+|   |   |       812f4eca813cce4a.js
 |   |   |       82abf2d65f5428ae.js
 |   |   |       899b7782e7cb92a1.js
 |   |   |       96a8fcc9ec5b00e6.js
@@ -2129,11 +2074,6 @@ C:.
 |   |   |       cdb83a758231f045.js
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
-|   |   |       
-|   |   +---JuWBefNga985cHabocus7
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
 |   |   |       
 |   |   \---media
 |   |           favicon.0b3bf435.ico
@@ -3023,6 +2963,8 @@ C:.
 |   |           |   |       README_PATCH.md
 |   |           |   |       
 |   |           |   +---SESSION-20260319-18_A3_USERS-10
+|   |           |   |       PATCH__SESSION-20260319-18_A3_USERS-10.diff
+|   |           |   |       PATCH__SESSION-20260319-18_A3_USERS-10_FIX-01.diff
 |   |           |   |       README_PATCH.md
 |   |           |   |       
 |   |           |   +---SESSION-20260319-19_A3_USERS-11

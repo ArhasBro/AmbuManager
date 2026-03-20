@@ -62,8 +62,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260319-18_A3_USERS-10
-- USERS-10 — COMPLÉTION** — Affectation rôle principal + permissions lors de l’édition
+- SESSION-20260319-19_A3_USERS-11
+- USERS-11 — COMPLÉTION** — Rattachement utilisateur à une base
 
 sortie propre + retour du terminal + aucune erreur = validé
 

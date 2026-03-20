@@ -1,0 +1,603 @@
+diff --git a/app/api/users/[id]/route.ts b/app/api/users/[id]/route.ts
+index ec323ee..9a73132 100644
+--- a/app/api/users/[id]/route.ts
++++ b/app/api/users/[id]/route.ts
+@@ -1,9 +1,10 @@
+ import { getServerSession } from "next-auth/next";
+ import { z } from "zod";
+ 
+-import { authOptions } from "@/lib/auth";
+ import { badRequest, conflict, forbidden, notFound, ok, serverError, unauthorized } from "@/lib/api/response";
+ import { prismaToHttp } from "@/lib/api/prisma-error";
++import { authOptions } from "@/lib/auth";
++import { ALPHA_PERMISSION_CODES, type AlphaPermissionCode } from "@/lib/permission-catalog";
+ import { canManageUsers } from "@/lib/permissions";
+ import { prisma } from "@/lib/prisma";
+ import { serializeDates } from "@/lib/serializers";
+@@ -15,6 +16,8 @@ const paramsSchema = z
+   })
+   .strict();
+ 
++const alphaPermissionOrder = new Map(ALPHA_PERMISSION_CODES.map((code, index) => [code, index]));
++
+ const userSelect = {
+   id: true,
+   name: true,
+@@ -31,8 +34,43 @@ const userSelect = {
+   },
+   createdAt: true,
+   updatedAt: true,
++  userPermissions: {
++    where: {
++      permission: {
++        code: { in: [...ALPHA_PERMISSION_CODES] },
++      },
++    },
++    select: {
++      permission: {
++        select: {
++          code: true,
++        },
++      },
++    },
++  },
+ } as const;
+ 
++type EditableUserRecord = {
++  id: string;
++  name: string;
++  email: string;
++  role: string | null;
++  companyId: string | null;
++  depotId: string | null;
++  depot: {
++    id: string;
++    name: string;
++    isActive: boolean;
++  } | null;
++  createdAt: Date;
++  updatedAt: Date;
++  userPermissions: Array<{
++    permission: {
++      code: string;
++    };
++  }>;
++};
++
+ function getErrorMessage(e: unknown): string {
+   if (e instanceof Error) return e.message;
+   if (typeof e === "string") return e;
+@@ -43,6 +81,66 @@ function getErrorMessage(e: unknown): string {
+   }
+ }
+ 
++function normalizePermissionCodes(codes: readonly string[]): AlphaPermissionCode[] {
++  return [...codes]
++    .filter((code): code is AlphaPermissionCode => alphaPermissionOrder.has(code as AlphaPermissionCode))
++    .sort((a, b) => (alphaPermissionOrder.get(a) ?? Number.MAX_SAFE_INTEGER) - (alphaPermissionOrder.get(b) ?? Number.MAX_SAFE_INTEGER));
++}
++
++function serializeEditableUser(user: EditableUserRecord) {
++  const permissionCodes = normalizePermissionCodes(user.userPermissions.map((item) => item.permission.code));
++
++  return serializeDates({
++    id: user.id,
++    name: user.name,
++    email: user.email,
++    role: user.role,
++    companyId: user.companyId,
++    depotId: user.depotId,
++    depot: user.depot,
++    createdAt: user.createdAt,
++    updatedAt: user.updatedAt,
++    permissionCodes,
++  });
++}
++
++async function findEditableUser(id: string, companyId: string) {
++  return prisma.user.findFirst({
++    where: {
++      id,
++      companyId,
++      isActive: true,
++      platformRole: null,
++      role: { not: null },
++    },
++    select: userSelect,
++  });
++}
++
++export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> }) {
++  const session = await getServerSession(authOptions);
++  const actorUserId = session?.user?.id;
++  const companyId = session?.user?.companyId;
++  const role = session?.user?.role;
++  const platformRole = session?.user?.platformRole;
++
++  if (!actorUserId || !companyId) return unauthorized();
++  if (!(await canManageUsers(actorUserId, role, platformRole))) return forbidden();
++
++  const rawParams = await ctx.params.catch(() => null);
++  const parsedParams = paramsSchema.safeParse(rawParams);
++  if (!parsedParams.success) return badRequest("VALIDATION_ERROR", parsedParams.error.flatten());
++
++  try {
++    const user = await findEditableUser(parsedParams.data.id, companyId);
++    if (!user) return notFound();
++
++    return ok(serializeEditableUser(user));
++  } catch (e: unknown) {
++    return serverError(getErrorMessage(e));
++  }
++}
++
+ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }> }) {
+   const session = await getServerSession(authOptions);
+   const actorUserId = session?.user?.id;
+@@ -68,32 +166,76 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
+   if (!parsedBody.success) return badRequest("VALIDATION_ERROR", parsedBody.error.flatten());
+ 
+   try {
+-    const existingUser = await prisma.user.findFirst({
+-      where: {
+-        id: parsedParams.data.id,
+-        companyId,
+-        isActive: true,
+-        platformRole: null,
+-        role: { not: null },
+-      },
+-      select: {
+-        id: true,
+-      },
+-    });
+-
++    const existingUser = await findEditableUser(parsedParams.data.id, companyId);
+     if (!existingUser) return notFound();
+ 
+-    const updatedUser = await prisma.user.update({
+-      where: { id: existingUser.id },
+-      data: {
+-        ...(parsedBody.data.name !== undefined ? { name: parsedBody.data.name } : {}),
+-        ...(parsedBody.data.email !== undefined ? { email: parsedBody.data.email } : {}),
+-        ...(parsedBody.data.role !== undefined ? { role: parsedBody.data.role } : {}),
+-      },
+-      select: userSelect,
++    const nextPermissionCodes = parsedBody.data.permissionCodes;
++    const alphaPermissions = nextPermissionCodes !== undefined
++      ? await prisma.permission.findMany({
++          where: { code: { in: [...ALPHA_PERMISSION_CODES] } },
++          select: { id: true, code: true },
++        })
++      : [];
++
++    const alphaPermissionIds = alphaPermissions.map((permission) => permission.id);
++    const resolvedPermissionIds = nextPermissionCodes !== undefined
++      ? alphaPermissions
++          .filter((permission) => nextPermissionCodes.includes(permission.code as AlphaPermissionCode))
++          .map((permission) => permission.id)
++      : [];
++
++    if (nextPermissionCodes !== undefined && resolvedPermissionIds.length !== nextPermissionCodes.length) {
++      return badRequest("VALIDATION_ERROR", {
++        message: "Certaines permissions demandées ne sont pas disponibles dans le catalogue ALPHA réel.",
++      });
++    }
++
++    const updatedUser = await prisma.$transaction(async (tx) => {
++      await tx.user.update({
++        where: { id: existingUser.id },
++        data: {
++          ...(parsedBody.data.name !== undefined ? { name: parsedBody.data.name } : {}),
++          ...(parsedBody.data.email !== undefined ? { email: parsedBody.data.email } : {}),
++          ...(parsedBody.data.role !== undefined ? { role: parsedBody.data.role } : {}),
++        },
++      });
++
++      if (nextPermissionCodes !== undefined) {
++        if (alphaPermissionIds.length > 0) {
++          await tx.userPermission.deleteMany({
++            where: {
++              userId: existingUser.id,
++              permissionId: { in: alphaPermissionIds },
++            },
++          });
++        }
++
++        if (resolvedPermissionIds.length > 0) {
++          await tx.userPermission.createMany({
++            data: resolvedPermissionIds.map((permissionId) => ({
++              userId: existingUser.id,
++              permissionId,
++            })),
++            skipDuplicates: true,
++          });
++        }
++      }
++
++      return tx.user.findFirst({
++        where: {
++          id: existingUser.id,
++          companyId,
++          isActive: true,
++          platformRole: null,
++          role: { not: null },
++        },
++        select: userSelect,
++      });
+     });
+ 
+-    return ok(serializeDates(updatedUser));
++    if (!updatedUser) return notFound();
++
++    return ok(serializeEditableUser(updatedUser));
+   } catch (e: unknown) {
+     const mapped = prismaToHttp(e);
+     if (mapped?.status === 404) return notFound();
+diff --git a/app/users/user-edit-client.tsx b/app/users/user-edit-client.tsx
+index 5e01ba2..8042c52 100644
+--- a/app/users/user-edit-client.tsx
++++ b/app/users/user-edit-client.tsx
+@@ -2,6 +2,8 @@
+ 
+ import { useEffect, useMemo, useState, type FormEvent } from "react";
+ 
++import { ALPHA_PERMISSION_CATALOG, type AlphaPermissionCode } from "@/lib/permission-catalog";
++
+ import { depotLabel, USER_ROLE_OPTIONS, type UserListRow } from "./users-client-shared";
+ import { USERS_SELECTION_EVENT, dispatchUsersRefresh, dispatchUsersSelection, type UsersSelectionEventDetail } from "./users-refresh";
+ 
+@@ -16,7 +18,11 @@ type ApiErr = {
+   details?: unknown;
+ };
+ 
+-type UpdatedUser = Pick<UserListRow, "id" | "name" | "email" | "role" | "depotId" | "depot">;
++type EditableUser = Pick<UserListRow, "id" | "name" | "email" | "role" | "depotId" | "depot"> & {
++  permissionCodes: AlphaPermissionCode[];
++};
++
++const permissionOrder = new Map(ALPHA_PERMISSION_CATALOG.map((permission, index) => [permission.code, index]));
+ 
+ function isApiOk<T>(value: unknown): value is ApiOk<T> {
+   return typeof value === "object" && value !== null && "ok" in value && (value as { ok?: unknown }).ok === true;
+@@ -37,13 +43,55 @@ function readApiError(value: unknown, status: number) {
+   return value.error;
+ }
+ 
++function normalizePermissionCodes(codes: readonly AlphaPermissionCode[]) {
++  return [...new Set(codes)].sort((a, b) => (permissionOrder.get(a) ?? Number.MAX_SAFE_INTEGER) - (permissionOrder.get(b) ?? Number.MAX_SAFE_INTEGER));
++}
++
++function arePermissionSetsEqual(a: readonly AlphaPermissionCode[], b: readonly AlphaPermissionCode[]) {
++  if (a.length !== b.length) return false;
++  return a.every((code, index) => code === b[index]);
++}
++
++function toEditableUser(value: unknown): EditableUser | null {
++  if (typeof value !== "object" || value === null) return null;
++
++  const record = value as Record<string, unknown>;
++  const id = typeof record.id === "string" ? record.id : null;
++  const name = typeof record.name === "string" ? record.name : null;
++  const email = typeof record.email === "string" ? record.email : null;
++  const role = typeof record.role === "string" ? record.role : null;
++  const depotId = typeof record.depotId === "string" ? record.depotId : null;
++  const permissionCodesRaw = Array.isArray(record.permissionCodes) ? record.permissionCodes : null;
++  const permissionCodes = permissionCodesRaw
++    ?.filter((code): code is AlphaPermissionCode => typeof code === "string" && permissionOrder.has(code as AlphaPermissionCode));
++
++  const depotRecord = typeof record.depot === "object" && record.depot !== null ? (record.depot as Record<string, unknown>) : null;
++  const depot = depotRecord
++    && typeof depotRecord.id === "string"
++    && typeof depotRecord.name === "string"
++    && typeof depotRecord.isActive === "boolean"
++    ? {
++        id: depotRecord.id,
++        name: depotRecord.name,
++        isActive: depotRecord.isActive,
++      }
++    : null;
++
++  if (!id || !name || !role || !permissionCodes) return null;
++  return { id, name, email, role, depotId, depot, permissionCodes: normalizePermissionCodes(permissionCodes) };
++}
++
+ export default function UserEditClient() {
+   const [selectedUser, setSelectedUser] = useState<UserListRow | null>(null);
++  const [loadedUser, setLoadedUser] = useState<EditableUser | null>(null);
+   const [name, setName] = useState("");
+   const [email, setEmail] = useState("");
+   const [role, setRole] = useState("");
++  const [permissionCodes, setPermissionCodes] = useState<AlphaPermissionCode[]>([]);
+   const [submitting, setSubmitting] = useState(false);
++  const [loadingDetails, setLoadingDetails] = useState(false);
+   const [error, setError] = useState<string | null>(null);
++  const [detailsError, setDetailsError] = useState<string | null>(null);
+   const [success, setSuccess] = useState<string | null>(null);
+ 
+   useEffect(() => {
+@@ -52,10 +100,13 @@ export default function UserEditClient() {
+       const nextSelectedUser = detail?.user ?? null;
+ 
+       setSelectedUser(nextSelectedUser);
++      setLoadedUser(null);
+       setName(nextSelectedUser?.name ?? "");
+       setEmail(nextSelectedUser?.email ?? "");
+       setRole(nextSelectedUser?.role ?? "");
++      setPermissionCodes([]);
+       setError(null);
++      setDetailsError(null);
+       setSuccess(null);
+     }
+ 
+@@ -63,21 +114,77 @@ export default function UserEditClient() {
+     return () => window.removeEventListener(USERS_SELECTION_EVENT, handleUsersSelection as EventListener);
+   }, []);
+ 
+-  const hasPendingChange = useMemo(() => {
+-    if (!selectedUser) return false;
++  useEffect(() => {
++    if (!selectedUser?.id) return;
++
++    let cancelled = false;
++
++    async function loadUserDetails() {
++      setLoadingDetails(true);
++      setDetailsError(null);
++
++      try {
++        const res = await fetch(`/api/users/${encodeURIComponent(selectedUser.id)}`, { cache: "no-store" });
++        const json: unknown = await res.json();
++
++        if (!res.ok || !isApiOk<unknown>(json)) {
++          throw new Error(readApiError(json, res.status));
++        }
++
++        const user = toEditableUser(json.data);
++        if (!user) throw new Error("Réponse invalide de l’API d’édition utilisateur.");
++
++        if (!cancelled) {
++          setLoadedUser(user);
++          setName(user.name);
++          setEmail(user.email ?? "");
++          setRole(user.role);
++          setPermissionCodes(user.permissionCodes);
++        }
++      } catch (e: unknown) {
++        if (!cancelled) {
++          setLoadedUser(null);
++          setPermissionCodes([]);
++          setDetailsError(e instanceof Error ? e.message : "Erreur inconnue");
++        }
++      } finally {
++        if (!cancelled) setLoadingDetails(false);
++      }
++    }
+ 
+-    return name.trim() !== selectedUser.name
+-      || email.trim() !== (selectedUser.email ?? "")
+-      || role !== selectedUser.role;
+-  }, [email, name, role, selectedUser]);
++    void loadUserDetails();
++
++    return () => {
++      cancelled = true;
++    };
++  }, [selectedUser?.id]);
++
++  const hasPendingChange = useMemo(() => {
++    if (!selectedUser || !loadedUser) return false;
++
++    return name.trim() !== loadedUser.name
++      || email.trim() !== (loadedUser.email ?? "")
++      || role !== loadedUser.role
++      || !arePermissionSetsEqual(permissionCodes, loadedUser.permissionCodes);
++  }, [email, loadedUser, name, permissionCodes, role, selectedUser]);
++
++  function togglePermission(code: AlphaPermissionCode) {
++    setPermissionCodes((current) => {
++      const next = current.includes(code)
++        ? current.filter((value) => value !== code)
++        : [...current, code];
++
++      return normalizePermissionCodes(next);
++    });
++  }
+ 
+   async function onSubmit(event: FormEvent<HTMLFormElement>) {
+     event.preventDefault();
+     setError(null);
+     setSuccess(null);
+ 
+-    if (!selectedUser) {
+-      setError("Sélectionnez d'abord un utilisateur dans la liste ci-dessus.");
++    if (!selectedUser || !loadedUser) {
++      setError("Sélectionnez d'abord un utilisateur et attendez le chargement complet du formulaire.");
+       return;
+     }
+ 
+@@ -114,20 +221,25 @@ export default function UserEditClient() {
+           name: trimmedName,
+           email: trimmedEmail,
+           role,
++          permissionCodes,
+         }),
+       });
+ 
+       const json: unknown = await res.json();
+ 
+-      if (!res.ok || !isApiOk<UpdatedUser>(json)) {
++      if (!res.ok || !isApiOk<unknown>(json)) {
+         throw new Error(readApiError(json, res.status));
+       }
+ 
+-      const updatedUser = json.data;
++      const updatedUser = toEditableUser(json.data);
++      if (!updatedUser) throw new Error("Réponse invalide de l’API d’édition utilisateur.");
++
+       setSelectedUser(updatedUser);
++      setLoadedUser(updatedUser);
+       setName(updatedUser.name);
+       setEmail(updatedUser.email ?? "");
+       setRole(updatedUser.role);
++      setPermissionCodes(updatedUser.permissionCodes);
+       setSuccess(`Utilisateur modifié : ${updatedUser.name}${updatedUser.email ? ` (${updatedUser.email})` : ""}.`);
+       dispatchUsersSelection(updatedUser);
+       dispatchUsersRefresh();
+@@ -139,11 +251,12 @@ export default function UserEditClient() {
+   }
+ 
+   return (
+-    <form onSubmit={onSubmit} style={{ display: "grid", gap: 12, padding: 12, border: "1px solid #333", borderRadius: 8, maxWidth: 720 }}>
++    <form onSubmit={onSubmit} style={{ display: "grid", gap: 12, padding: 12, border: "1px solid #333", borderRadius: 8, maxWidth: 920 }}>
+       <div>
+         <h2 style={{ margin: 0 }}>Modifier un utilisateur</h2>
+         <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
+-          Sélectionnez d&apos;abord un utilisateur dans la liste ci-dessus pour modifier uniquement les champs couverts par USERS-06 : nom, email et rôle.
++          Sélectionnez d&apos;abord un utilisateur dans la liste ci-dessus pour modifier les champs déjà couverts par USERS-06/07,
++          puis ajuster ici ses permissions applicatives ALPHA.
+         </p>
+       </div>
+ 
+@@ -163,6 +276,18 @@ export default function UserEditClient() {
+             </div>
+           </div>
+ 
++          {loadingDetails ? (
++            <div style={{ padding: 10, border: "1px solid #444", borderRadius: 8 }}>
++              Chargement des permissions et du détail d’édition...
++            </div>
++          ) : null}
++
++          {detailsError ? (
++            <div style={{ padding: 10, border: "1px solid #663333", borderRadius: 8 }}>
++              Erreur de chargement du détail utilisateur : {detailsError}
++            </div>
++          ) : null}
++
+           <label style={{ display: "grid", gap: 6 }}>
+             <span>Nom</span>
+             <input
+@@ -170,7 +295,7 @@ export default function UserEditClient() {
+               value={name}
+               onChange={(event) => setName(event.target.value)}
+               placeholder="Nom complet"
+-              disabled={submitting}
++              disabled={submitting || loadingDetails || Boolean(detailsError)}
+               maxLength={160}
+             />
+           </label>
+@@ -182,14 +307,14 @@ export default function UserEditClient() {
+               value={email}
+               onChange={(event) => setEmail(event.target.value)}
+               placeholder="prenom.nom@entreprise.fr"
+-              disabled={submitting}
++              disabled={submitting || loadingDetails || Boolean(detailsError)}
+               autoComplete="email"
+             />
+           </label>
+ 
+           <label style={{ display: "grid", gap: 6 }}>
+-            <span>Rôle</span>
+-            <select value={role} onChange={(event) => setRole(event.target.value)} disabled={submitting}>
++            <span>Rôle principal</span>
++            <select value={role} onChange={(event) => setRole(event.target.value)} disabled={submitting || loadingDetails || Boolean(detailsError)}>
+               <option value="">Sélectionner un rôle</option>
+               {USER_ROLE_OPTIONS.map((option) => (
+                 <option key={option} value={option}>
+@@ -198,6 +323,34 @@ export default function UserEditClient() {
+               ))}
+             </select>
+           </label>
++
++          <fieldset style={{ display: "grid", gap: 10, padding: 12, border: "1px solid #333", borderRadius: 8 }} disabled={submitting || loadingDetails || Boolean(detailsError)}>
++            <legend>Permissions applicatives ALPHA</legend>
++            <p style={{ margin: 0, opacity: 0.8 }}>
++              Le rôle principal reste unique via le champ <code>role</code>. Les cases ci-dessous ajoutent ou retirent uniquement les permissions applicatives ALPHA du compte sélectionné.
++            </p>
++
++            <div style={{ display: "grid", gap: 10, gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))" }}>
++              {ALPHA_PERMISSION_CATALOG.map((permission) => {
++                const checked = permissionCodes.includes(permission.code);
++
++                return (
++                  <label key={permission.code} style={{ display: "grid", gap: 4, padding: 10, border: "1px solid #333", borderRadius: 8 }}>
++                    <span style={{ display: "flex", gap: 8, alignItems: "center" }}>
++                      <input
++                        type="checkbox"
++                        checked={checked}
++                        onChange={() => togglePermission(permission.code)}
++                      />
++                      <strong>{permission.label}</strong>
++                    </span>
++                    <span style={{ fontSize: 13, opacity: 0.8 }}>{permission.description}</span>
++                    <span style={{ fontSize: 12, opacity: 0.65 }}>{permission.code}</span>
++                  </label>
++                );
++              })}
++            </div>
++          </fieldset>
+         </>
+       )}
+ 
+@@ -213,7 +366,11 @@ export default function UserEditClient() {
+         </div>
+       ) : null}
+ 
+-      <button type="submit" disabled={submitting || !selectedUser || !hasPendingChange} style={{ justifySelf: "start", padding: "10px 14px" }}>
++      <button
++        type="submit"
++        disabled={submitting || !selectedUser || !loadedUser || loadingDetails || Boolean(detailsError) || !hasPendingChange}
++        style={{ justifySelf: "start", padding: "10px 14px" }}
++      >
+         {submitting ? "Enregistrement..." : "Enregistrer les modifications"}
+       </button>
+     </form>
+diff --git a/lib/validators/user.ts b/lib/validators/user.ts
+index bf209aa..1b0adeb 100644
+--- a/lib/validators/user.ts
++++ b/lib/validators/user.ts
+@@ -1,6 +1,25 @@
+ import { Role } from "@prisma/client";
+ import { z } from "zod";
+ 
++import { ALPHA_PERMISSION_CODES } from "@/lib/permission-catalog";
++
++const alphaPermissionCodeSet = new Set<string>(ALPHA_PERMISSION_CODES);
++
++const permissionCodesSchema = z
++  .array(z.string())
++  .max(ALPHA_PERMISSION_CODES.length, "too many permission codes")
++  .transform((codes) => Array.from(new Set(codes)))
++  .superRefine((codes, ctx) => {
++    for (const code of codes) {
++      if (!alphaPermissionCodeSet.has(code)) {
++        ctx.addIssue({
++          code: z.ZodIssueCode.custom,
++          message: `invalid permission code: ${code}`,
++        });
++      }
++    }
++  });
++
+ export const assignUserDepotBodySchema = z
+   .object({
+     depotId: z.string().uuid().nullable(),
+@@ -21,8 +40,15 @@ export const updateUserBodySchema = z
+     email: z.string().trim().email("email invalid").optional(),
+     name: z.string().trim().min(1, "name required").max(160, "name too long").optional(),
+     role: z.nativeEnum(Role).optional(),
++    permissionCodes: permissionCodesSchema.optional(),
+   })
+   .strict()
+-  .refine((value) => value.email !== undefined || value.name !== undefined || value.role !== undefined, {
+-    message: "At least one editable field is required",
+-  });
++  .refine(
++    (value) => value.email !== undefined
++      || value.name !== undefined
++      || value.role !== undefined
++      || value.permissionCodes !== undefined,
++    {
++      message: "At least one editable field is required",
++    },
++  );
