@@ -1,14 +1,17 @@
-﻿# FIN_SESSION
+# FIN_SESSION — SESSION-20260319-12_A3_USERS-04
 
-## ClÃ´ture
+## Statut
+VALIDÉE
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+## Motif
+La session est validée car :
+- le patch final retenu est applicable ;
+- les validations terminales demandées sont toutes prouvées ;
+- le périmètre USERS-04 a été respecté ;
+- l’API de création utilisateur est livrée de manière exploitable pour la suite.
 
-## Validation
+## Patch final retenu
+`PATCH__SESSION-20260319-12_A3_USERS-04_FIX_V2.diff`
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
-
-## Verdict final
-
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
-
+## Prochaine étape logique
+USERS-05 — UI création utilisateur

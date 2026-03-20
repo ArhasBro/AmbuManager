@@ -43,7 +43,7 @@ Avant de préparer quoi que ce soit, relis attentivement tous les fichiers `.md`
 Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 1. **Prompt de production**
-   - À rédiger en t’appuyant sur le `TEMPLATE_DEBUT_SESSION.md` ainsi que sur les règles définies dans les fichiers de `./docs`.
+   - À rédiger avec le `TEMPLATE_DEBUT_SESSION.md` ainsi que sur les règles définies dans les fichiers de `./docs`.
    - Il s’agit du prompt principal.
    - Il doit permettre d’exécuter la session dans la discussion de production.
    - Uniquement les information concernant la session concerné.
@@ -62,8 +62,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260318-06_A2_SUP-06
-- SUP-06 — VALIDATION** — Validation du bloc support propriétaire
+- SESSION-20260319-13_A3_USERS-05
+- USERS-05 — COMPLÉTION** — UI création utilisateur
 
 sortie propre + retour du terminal + aucune erreur = validé
 

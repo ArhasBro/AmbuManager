@@ -2,12 +2,33 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
-import { ok, badRequest, unauthorized, forbidden, serverError } from "@/lib/api/response";
+import { ok, badRequest, unauthorized, forbidden, conflict, serverError } from "@/lib/api/response";
 import { canManageUsers } from "@/lib/permissions";
 import { serializeDates } from "@/lib/serializers";
+import { prismaToHttp } from "@/lib/api/prisma-error";
+import { createUserBodySchema } from "@/lib/validators/user";
+import bcrypt from "bcrypt";
 import { z } from "zod";
 
 const USER_ROLES = ["ADMIN", "GERANT", "BUREAU", "ADE", "AA", "TAXI", "REGULATEUR"] as const;
+
+const userSelect = {
+  id: true,
+  name: true,
+  email: true,
+  role: true,
+  companyId: true,
+  depotId: true,
+  depot: {
+    select: {
+      id: true,
+      name: true,
+      isActive: true,
+    },
+  },
+  createdAt: true,
+  updatedAt: true,
+} as const;
 
 const listQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(500).optional(),
@@ -114,5 +135,51 @@ export async function GET(req: Request) {
     });
   } catch (e: unknown) {
     return serverError(getErrorMessage(e));
+  }
+}
+
+
+export async function POST(req: Request) {
+  const session = await getServerSession(authOptions);
+  const actorUserId = session?.user?.id;
+  const companyId = session?.user?.companyId;
+  const role = session?.user?.role;
+  const platformRole = session?.user?.platformRole;
+
+  if (!actorUserId || !companyId) return unauthorized();
+  if (!(await canManageUsers(actorUserId, role, platformRole))) return forbidden();
+
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch {
+    return badRequest("INVALID_JSON");
+  }
+
+  const parsed = createUserBodySchema.safeParse(body);
+  if (!parsed.success) return badRequest("VALIDATION_ERROR", parsed.error.flatten());
+
+  try {
+    const hashedPassword = await bcrypt.hash(parsed.data.password, 10);
+
+    const user = await prisma.user.create({
+      data: {
+        email: parsed.data.email,
+        password: hashedPassword,
+        name: parsed.data.name,
+        role: parsed.data.role,
+        companyId,
+      },
+      select: userSelect,
+    });
+
+    return ok(serializeDates(user), 201);
+  } catch (e: unknown) {
+    const mapped = prismaToHttp(e);
+    if (mapped?.status === 409) {
+      return conflict(mapped.error, { message: "Un utilisateur avec cet email existe déjà." });
+    }
+
+    return serverError(mapped ?? getErrorMessage(e));
   }
 }

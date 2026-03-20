@@ -1,35 +1,24 @@
-﻿# SESSION
+# SESSION — SESSION-20260319-12_A3_USERS-04
 
-## ID SESSION
+## Identification
+- Projet : Investissement
+- Sous-projet : Ambulance Manager
+- Maturité : 1-ALPHA
+- Bloc : A3
+- Code session : USERS-04
+- Type : COMPLETION
+- Intitulé : API création utilisateur
 
-SESSION-20260319-12_A3_USERS-04
+## Objet
+Documenter la livraison finale validée de la session USERS-04 concernant l’API de création utilisateur.
 
-## Date
+## Portée réelle
+- ajout de la capacité de création utilisateur côté API ;
+- aucun travail UI ;
+- aucun élargissement vers l’édition, l’archivage ou d’autres sous-périmètres du bloc A3 ;
+- documentation finale uniquement pour cette livraison.
 
-19/03/2026
+## Livraison finale retenue
+Le patch retenu pour la session est :
 
-## Contexte
-
-Projet : Investissement  
-Sous-projet : Ambulance Manager  
-Maturite : 1-ALPHA  
-Bloc : A3  
-Type : COMPLETION  
-Intitule : API création utilisateur
-
-## Objectif de la session
-
-INFORMATION NON FOURNIE - A CONFIRMER
-
-## Perimetre exact traite
-
-INFORMATION NON FOURNIE - A CONFIRMER
-
-## Resultat synthetique de session
-
-INFORMATION NON FOURNIE - A CONFIRMER
-
-## Dossiers lies
-
-- Session : docs/2-sessions/1-ALPHA/BLOC_A3/SESSION-20260319-12_A3_USERS-04
-- Patchs  : docs/3-patches/1-ALPHA/BLOC_A3/SESSION-20260319-12_A3_USERS-04
+`PATCH__SESSION-20260319-12_A3_USERS-04_FIX_V2.diff`
