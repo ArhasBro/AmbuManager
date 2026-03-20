@@ -1,0 +1,607 @@
+diff --git a/app/api/users/[id]/absences/[absenceId]/route.ts b/app/api/users/[id]/absences/[absenceId]/route.ts
+new file mode 100644
+index 0000000..7ff0f0e
+--- /dev/null
++++ b/app/api/users/[id]/absences/[absenceId]/route.ts
+@@ -0,0 +1,103 @@
++import { getServerSession } from "next-auth/next";
++import { z } from "zod";
++
++import { badRequest, conflict, forbidden, notFound, ok, serverError, unauthorized } from "@/lib/api/response";
++import { authOptions } from "@/lib/auth";
++import { canManageUsers } from "@/lib/permissions";
++import { serializeDates } from "@/lib/serializers";
++import { deleteUserAbsence, updateUserAbsence } from "@/lib/services/users/user-absence";
++import { updateUserAbsenceBodySchema } from "@/lib/validators/user-absence";
++
++const paramsSchema = z
++  .object({
++    id: z.string().uuid(),
++    absenceId: z.string().uuid(),
++  })
++  .strict();
++
++function getErrorMessage(e: unknown): string {
++  if (e instanceof Error) return e.message;
++  if (typeof e === "string") return e;
++  try {
++    return JSON.stringify(e);
++  } catch {
++    return "Unknown error";
++  }
++}
++
++export async function PATCH(req: Request, ctx: { params: Promise<{ id: string; absenceId: string }> }) {
++  const session = await getServerSession(authOptions);
++  const actorUserId = session?.user?.id;
++  const companyId = session?.user?.companyId;
++  const role = session?.user?.role;
++  const platformRole = session?.user?.platformRole;
++
++  if (!actorUserId || !companyId) return unauthorized();
++  if (!(await canManageUsers(actorUserId, role, platformRole))) return forbidden();
++
++  const rawParams = await ctx.params.catch(() => null);
++  const parsedParams = paramsSchema.safeParse(rawParams);
++  if (!parsedParams.success) return badRequest("VALIDATION_ERROR", parsedParams.error.flatten());
++
++  const jsonBody: unknown = await req.json().catch(() => null);
++  const parsedBody = updateUserAbsenceBodySchema.safeParse(jsonBody);
++  if (!parsedBody.success) return badRequest("VALIDATION_ERROR", parsedBody.error.flatten());
++
++  try {
++    const result = await updateUserAbsence({
++      companyId,
++      userId: parsedParams.data.id,
++      absenceId: parsedParams.data.absenceId,
++      reason: parsedBody.data.reason,
++      startAt: parsedBody.data.startAt,
++      endAt: parsedBody.data.endAt,
++    });
++
++    if (result.status === "USER_NOT_FOUND" || result.status === "ABSENCE_NOT_FOUND") return notFound();
++    if (result.status === "INVALID_INTERVAL") {
++      return badRequest("VALIDATION_ERROR", { message: "L'intervalle d'indisponibilité est invalide." });
++    }
++    if (result.status === "OVERLAP") {
++      return conflict("ABSENCE_OVERLAP", {
++        message: "Une indisponibilité se chevauche déjà sur cet intervalle.",
++        conflict: serializeDates(result.conflict),
++      });
++    }
++
++    return ok(serializeDates(result.absence));
++  } catch (e: unknown) {
++    return serverError(getErrorMessage(e));
++  }
++}
++
++export async function DELETE(_req: Request, ctx: { params: Promise<{ id: string; absenceId: string }> }) {
++  const session = await getServerSession(authOptions);
++  const actorUserId = session?.user?.id;
++  const companyId = session?.user?.companyId;
++  const role = session?.user?.role;
++  const platformRole = session?.user?.platformRole;
++
++  if (!actorUserId || !companyId) return unauthorized();
++  if (!(await canManageUsers(actorUserId, role, platformRole))) return forbidden();
++
++  const rawParams = await ctx.params.catch(() => null);
++  const parsedParams = paramsSchema.safeParse(rawParams);
++  if (!parsedParams.success) return badRequest("VALIDATION_ERROR", parsedParams.error.flatten());
++
++  try {
++    const result = await deleteUserAbsence({
++      companyId,
++      userId: parsedParams.data.id,
++      absenceId: parsedParams.data.absenceId,
++    });
++
++    if (result.status === "USER_NOT_FOUND" || result.status === "ABSENCE_NOT_FOUND") return notFound();
++
++    return ok({
++      deleted: true,
++      absence: serializeDates(result.absence),
++    });
++  } catch (e: unknown) {
++    return serverError(getErrorMessage(e));
++  }
++}
+diff --git a/app/api/users/[id]/absences/route.ts b/app/api/users/[id]/absences/route.ts
+new file mode 100644
+index 0000000..9ef07d0
+--- /dev/null
++++ b/app/api/users/[id]/absences/route.ts
+@@ -0,0 +1,115 @@
++import { getServerSession } from "next-auth/next";
++import { z } from "zod";
++
++import { badRequest, conflict, forbidden, notFound, ok, serverError, unauthorized } from "@/lib/api/response";
++import { authOptions } from "@/lib/auth";
++import { canManageUsers } from "@/lib/permissions";
++import { serializeDates } from "@/lib/serializers";
++import { createUserAbsence, listUserAbsences } from "@/lib/services/users/user-absence";
++import { createUserAbsenceBodySchema, listUserAbsencesQuerySchema } from "@/lib/validators/user-absence";
++
++const paramsSchema = z
++  .object({
++    id: z.string().uuid(),
++  })
++  .strict();
++
++function getErrorMessage(e: unknown): string {
++  if (e instanceof Error) return e.message;
++  if (typeof e === "string") return e;
++  try {
++    return JSON.stringify(e);
++  } catch {
++    return "Unknown error";
++  }
++}
++
++export async function GET(req: Request, ctx: { params: Promise<{ id: string }> }) {
++  const session = await getServerSession(authOptions);
++  const actorUserId = session?.user?.id;
++  const companyId = session?.user?.companyId;
++  const role = session?.user?.role;
++  const platformRole = session?.user?.platformRole;
++
++  if (!actorUserId || !companyId) return unauthorized();
++  if (!(await canManageUsers(actorUserId, role, platformRole))) return forbidden();
++
++  const rawParams = await ctx.params.catch(() => null);
++  const parsedParams = paramsSchema.safeParse(rawParams);
++  if (!parsedParams.success) return badRequest("VALIDATION_ERROR", parsedParams.error.flatten());
++
++  const url = new URL(req.url);
++  const parsedQuery = listUserAbsencesQuerySchema.safeParse({
++    from: url.searchParams.get("from") ?? undefined,
++    to: url.searchParams.get("to") ?? undefined,
++    limit: url.searchParams.get("limit") ?? undefined,
++  });
++  if (!parsedQuery.success) return badRequest("VALIDATION_ERROR", parsedQuery.error.flatten());
++
++  try {
++    const result = await listUserAbsences({
++      companyId,
++      userId: parsedParams.data.id,
++      from: parsedQuery.data.from,
++      to: parsedQuery.data.to,
++      limit: parsedQuery.data.limit,
++    });
++
++    if (result.status === "USER_NOT_FOUND") return notFound();
++
++    return ok({
++      items: result.items.map(serializeDates),
++      filters: {
++        from: parsedQuery.data.from ? parsedQuery.data.from.toISOString() : null,
++        to: parsedQuery.data.to ? parsedQuery.data.to.toISOString() : null,
++        limit: parsedQuery.data.limit,
++      },
++    });
++  } catch (e: unknown) {
++    return serverError(getErrorMessage(e));
++  }
++}
++
++export async function POST(req: Request, ctx: { params: Promise<{ id: string }> }) {
++  const session = await getServerSession(authOptions);
++  const actorUserId = session?.user?.id;
++  const companyId = session?.user?.companyId;
++  const role = session?.user?.role;
++  const platformRole = session?.user?.platformRole;
++
++  if (!actorUserId || !companyId) return unauthorized();
++  if (!(await canManageUsers(actorUserId, role, platformRole))) return forbidden();
++
++  const rawParams = await ctx.params.catch(() => null);
++  const parsedParams = paramsSchema.safeParse(rawParams);
++  if (!parsedParams.success) return badRequest("VALIDATION_ERROR", parsedParams.error.flatten());
++
++  const jsonBody: unknown = await req.json().catch(() => null);
++  const parsedBody = createUserAbsenceBodySchema.safeParse(jsonBody);
++  if (!parsedBody.success) return badRequest("VALIDATION_ERROR", parsedBody.error.flatten());
++
++  try {
++    const result = await createUserAbsence({
++      companyId,
++      userId: parsedParams.data.id,
++      reason: parsedBody.data.reason,
++      startAt: parsedBody.data.startAt,
++      endAt: parsedBody.data.endAt,
++    });
++
++    if (result.status === "USER_NOT_FOUND") return notFound();
++    if (result.status === "INVALID_INTERVAL") {
++      return badRequest("VALIDATION_ERROR", { message: "L'intervalle d'indisponibilité est invalide." });
++    }
++    if (result.status === "OVERLAP") {
++      return conflict("ABSENCE_OVERLAP", {
++        message: "Une indisponibilité se chevauche déjà sur cet intervalle.",
++        conflict: serializeDates(result.conflict),
++      });
++    }
++
++    return ok(serializeDates(result.absence), 201);
++  } catch (e: unknown) {
++    return serverError(getErrorMessage(e));
++  }
++}
+diff --git a/lib/services/users/user-absence.ts b/lib/services/users/user-absence.ts
+new file mode 100644
+index 0000000..17ef10d
+--- /dev/null
++++ b/lib/services/users/user-absence.ts
+@@ -0,0 +1,224 @@
++import { Prisma } from "@prisma/client";
++
++import { prisma } from "@/lib/prisma";
++
++const userAbsenceSelect = Prisma.validator<Prisma.UserAbsenceSelect>()({
++  id: true,
++  companyId: true,
++  userId: true,
++  reason: true,
++  startAt: true,
++  endAt: true,
++  createdAt: true,
++  updatedAt: true,
++});
++
++const overlapSelect = Prisma.validator<Prisma.UserAbsenceSelect>()({
++  id: true,
++  startAt: true,
++  endAt: true,
++});
++
++type UserAbsenceRecord = Prisma.UserAbsenceGetPayload<{ select: typeof userAbsenceSelect }>;
++type OverlapRecord = Prisma.UserAbsenceGetPayload<{ select: typeof overlapSelect }>;
++
++export type ListUserAbsencesInput = {
++  companyId: string;
++  userId: string;
++  from?: Date;
++  to?: Date;
++  limit?: number;
++};
++
++export type ListUserAbsencesResult =
++  | { status: "USER_NOT_FOUND" }
++  | { status: "OK"; items: UserAbsenceRecord[] };
++
++export type CreateUserAbsenceInput = {
++  companyId: string;
++  userId: string;
++  reason?: string | null;
++  startAt: Date;
++  endAt: Date;
++};
++
++export type CreateUserAbsenceResult =
++  | { status: "USER_NOT_FOUND" }
++  | { status: "INVALID_INTERVAL" }
++  | { status: "OVERLAP"; conflict: OverlapRecord }
++  | { status: "OK"; absence: UserAbsenceRecord };
++
++export type UpdateUserAbsenceInput = {
++  companyId: string;
++  userId: string;
++  absenceId: string;
++  reason?: string | null;
++  startAt?: Date;
++  endAt?: Date;
++};
++
++export type UpdateUserAbsenceResult =
++  | { status: "USER_NOT_FOUND" }
++  | { status: "ABSENCE_NOT_FOUND" }
++  | { status: "INVALID_INTERVAL" }
++  | { status: "OVERLAP"; conflict: OverlapRecord }
++  | { status: "OK"; absence: UserAbsenceRecord };
++
++export type DeleteUserAbsenceInput = {
++  companyId: string;
++  userId: string;
++  absenceId: string;
++};
++
++export type DeleteUserAbsenceResult =
++  | { status: "USER_NOT_FOUND" }
++  | { status: "ABSENCE_NOT_FOUND" }
++  | { status: "OK"; absence: UserAbsenceRecord };
++
++async function findManagedUser(userId: string, companyId: string) {
++  return prisma.user.findFirst({
++    where: {
++      id: userId,
++      companyId,
++      isActive: true,
++      platformRole: null,
++      role: { not: null },
++    },
++    select: {
++      id: true,
++    },
++  });
++}
++
++async function findUserAbsenceByTenant(absenceId: string, userId: string, companyId: string) {
++  return prisma.userAbsence.findFirst({
++    where: {
++      id: absenceId,
++      userId,
++      companyId,
++    },
++    select: userAbsenceSelect,
++  });
++}
++
++async function findOverlappingUserAbsence(input: {
++  companyId: string;
++  userId: string;
++  startAt: Date;
++  endAt: Date;
++  excludeAbsenceId?: string;
++}) {
++  return prisma.userAbsence.findFirst({
++    where: {
++      companyId: input.companyId,
++      userId: input.userId,
++      ...(input.excludeAbsenceId ? { id: { not: input.excludeAbsenceId } } : {}),
++      startAt: { lt: input.endAt },
++      endAt: { gt: input.startAt },
++    },
++    orderBy: { startAt: "asc" },
++    select: overlapSelect,
++  });
++}
++
++export async function listUserAbsences(input: ListUserAbsencesInput): Promise<ListUserAbsencesResult> {
++  const user = await findManagedUser(input.userId, input.companyId);
++  if (!user) return { status: "USER_NOT_FOUND" };
++
++  const items = await prisma.userAbsence.findMany({
++    where: {
++      companyId: input.companyId,
++      userId: input.userId,
++      ...(input.from && input.to
++        ? {
++            startAt: { lt: input.to },
++            endAt: { gt: input.from },
++          }
++        : input.from
++          ? {
++              endAt: { gt: input.from },
++            }
++          : input.to
++            ? {
++                startAt: { lt: input.to },
++              }
++            : {}),
++    },
++    orderBy: [{ startAt: "asc" }, { endAt: "asc" }],
++    take: input.limit ?? 100,
++    select: userAbsenceSelect,
++  });
++
++  return { status: "OK", items };
++}
++
++export async function createUserAbsence(input: CreateUserAbsenceInput): Promise<CreateUserAbsenceResult> {
++  const user = await findManagedUser(input.userId, input.companyId);
++  if (!user) return { status: "USER_NOT_FOUND" };
++  if (input.startAt >= input.endAt) return { status: "INVALID_INTERVAL" };
++
++  const overlap = await findOverlappingUserAbsence(input);
++  if (overlap) return { status: "OVERLAP", conflict: overlap };
++
++  const absence = await prisma.userAbsence.create({
++    data: {
++      companyId: input.companyId,
++      userId: input.userId,
++      reason: input.reason ?? null,
++      startAt: input.startAt,
++      endAt: input.endAt,
++    },
++    select: userAbsenceSelect,
++  });
++
++  return { status: "OK", absence };
++}
++
++export async function updateUserAbsence(input: UpdateUserAbsenceInput): Promise<UpdateUserAbsenceResult> {
++  const user = await findManagedUser(input.userId, input.companyId);
++  if (!user) return { status: "USER_NOT_FOUND" };
++
++  const existing = await findUserAbsenceByTenant(input.absenceId, input.userId, input.companyId);
++  if (!existing) return { status: "ABSENCE_NOT_FOUND" };
++
++  const nextStartAt = input.startAt ?? existing.startAt;
++  const nextEndAt = input.endAt ?? existing.endAt;
++
++  if (nextStartAt >= nextEndAt) return { status: "INVALID_INTERVAL" };
++
++  const overlap = await findOverlappingUserAbsence({
++    companyId: input.companyId,
++    userId: input.userId,
++    startAt: nextStartAt,
++    endAt: nextEndAt,
++    excludeAbsenceId: existing.id,
++  });
++  if (overlap) return { status: "OVERLAP", conflict: overlap };
++
++  const absence = await prisma.userAbsence.update({
++    where: { id: existing.id },
++    data: {
++      ...(input.reason !== undefined ? { reason: input.reason } : {}),
++      ...(input.startAt !== undefined ? { startAt: input.startAt } : {}),
++      ...(input.endAt !== undefined ? { endAt: input.endAt } : {}),
++    },
++    select: userAbsenceSelect,
++  });
++
++  return { status: "OK", absence };
++}
++
++export async function deleteUserAbsence(input: DeleteUserAbsenceInput): Promise<DeleteUserAbsenceResult> {
++  const user = await findManagedUser(input.userId, input.companyId);
++  if (!user) return { status: "USER_NOT_FOUND" };
++
++  const existing = await findUserAbsenceByTenant(input.absenceId, input.userId, input.companyId);
++  if (!existing) return { status: "ABSENCE_NOT_FOUND" };
++
++  const absence = await prisma.userAbsence.delete({
++    where: { id: existing.id },
++    select: userAbsenceSelect,
++  });
++
++  return { status: "OK", absence };
++}
+diff --git a/lib/validators/user-absence.ts b/lib/validators/user-absence.ts
+new file mode 100644
+index 0000000..8988fcb
+--- /dev/null
++++ b/lib/validators/user-absence.ts
+@@ -0,0 +1,55 @@
++import { z } from "zod";
++
++const reasonSchema = z
++  .string()
++  .trim()
++  .max(160, "reason too long")
++  .transform((value) => value || null);
++
++export const listUserAbsencesQuerySchema = z
++  .object({
++    from: z.coerce.date().optional(),
++    to: z.coerce.date().optional(),
++    limit: z.coerce.number().int().min(1).max(500).optional().default(100),
++  })
++  .strict()
++  .superRefine((value, ctx) => {
++    if (value.from && value.to && value.from >= value.to) {
++      ctx.addIssue({
++        code: z.ZodIssueCode.custom,
++        path: ["to"],
++        message: "to must be greater than from",
++      });
++    }
++  });
++
++export const createUserAbsenceBodySchema = z
++  .object({
++    reason: reasonSchema.optional(),
++    startAt: z.coerce.date(),
++    endAt: z.coerce.date(),
++  })
++  .strict()
++  .superRefine((value, ctx) => {
++    if (value.startAt >= value.endAt) {
++      ctx.addIssue({
++        code: z.ZodIssueCode.custom,
++        path: ["endAt"],
++        message: "endAt must be greater than startAt",
++      });
++    }
++  });
++
++export const updateUserAbsenceBodySchema = z
++  .object({
++    reason: reasonSchema.nullable().optional(),
++    startAt: z.coerce.date().optional(),
++    endAt: z.coerce.date().optional(),
++  })
++  .strict()
++  .refine(
++    (value) => value.reason !== undefined || value.startAt !== undefined || value.endAt !== undefined,
++    {
++      message: "At least one editable field is required",
++    }
++  );
+diff --git a/prisma/migrations/20260320190000_users13_add_user_absence_model/migration.sql b/prisma/migrations/20260320190000_users13_add_user_absence_model/migration.sql
+new file mode 100644
+index 0000000..d7843c1
+--- /dev/null
++++ b/prisma/migrations/20260320190000_users13_add_user_absence_model/migration.sql
+@@ -0,0 +1,29 @@
++-- USERS-13 — création du modèle minimal d'indisponibilités / absences utilisateur
++CREATE TABLE "UserAbsence" (
++    "id" UUID NOT NULL,
++    "companyId" UUID NOT NULL,
++    "userId" UUID NOT NULL,
++    "reason" TEXT,
++    "startAt" TIMESTAMP(3) NOT NULL,
++    "endAt" TIMESTAMP(3) NOT NULL,
++    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
++    "updatedAt" TIMESTAMP(3) NOT NULL,
++
++    CONSTRAINT "UserAbsence_pkey" PRIMARY KEY ("id")
++);
++
++-- CreateIndex
++CREATE INDEX "UserAbsence_companyId_userId_startAt_idx" ON "UserAbsence"("companyId", "userId", "startAt");
++
++-- CreateIndex
++CREATE INDEX "UserAbsence_companyId_startAt_idx" ON "UserAbsence"("companyId", "startAt");
++
++-- AddForeignKey
++ALTER TABLE "UserAbsence"
++ADD CONSTRAINT "UserAbsence_companyId_fkey"
++FOREIGN KEY ("companyId") REFERENCES "Company"("id") ON DELETE CASCADE ON UPDATE CASCADE;
++
++-- AddForeignKey
++ALTER TABLE "UserAbsence"
++ADD CONSTRAINT "UserAbsence_userId_fkey"
++FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+diff --git a/prisma/schema.prisma b/prisma/schema.prisma
+index 6ccbad1..c7e2f2c 100644
+--- a/prisma/schema.prisma
++++ b/prisma/schema.prisma
+@@ -122,6 +122,9 @@ model Company {
+ 
+   // ✅ 4.7 — Audit planning minimal
+   planningAuditLogs PlanningAuditLog[]
++
++  // ✅ A3 USERS-13 — indisponibilités / absences utilisateur
++  userAbsences UserAbsence[]
+ }
+ 
+ model Depot {
+@@ -185,12 +188,36 @@ model User {
+   // ✅ 4.7 — Audit planning minimal
+   planningAuditLogs PlanningAuditLog[] @relation("PlanningAuditLogActor")
+ 
++  // ✅ A3 USERS-13 — indisponibilités / absences utilisateur
++  absences UserAbsence[]
++
+   @@index([companyId])
+   @@index([companyId, isActive])
+   @@index([platformRole])
+   @@index([depotId])
+ }
+ 
++model UserAbsence {
++  id String @id @default(uuid()) @db.Uuid
++
++  companyId String  @db.Uuid
++  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
++
++  userId String @db.Uuid
++  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
++
++  reason String?
++
++  startAt DateTime
++  endAt   DateTime
++
++  createdAt DateTime @default(now())
++  updatedAt DateTime @updatedAt
++
++  @@index([companyId, userId, startAt])
++  @@index([companyId, startAt])
++}
++
+ model Permission {
+   id          String   @id @default(cuid())
+   code        String   @unique

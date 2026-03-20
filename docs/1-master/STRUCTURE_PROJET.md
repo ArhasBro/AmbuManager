@@ -1620,6 +1620,28 @@ C:.
 |   |   |   |   |       |   route.js.nft.json
 |   |   |   |   |       |   route_client-reference-manifest.js
 |   |   |   |   |       |   
+|   |   |   |   |       +---absences
+|   |   |   |   |       |   |   route.js
+|   |   |   |   |       |   |   route.js.map
+|   |   |   |   |       |   |   route.js.nft.json
+|   |   |   |   |       |   |   route_client-reference-manifest.js
+|   |   |   |   |       |   |   
+|   |   |   |   |       |   +---route
+|   |   |   |   |       |   |       app-paths-manifest.json
+|   |   |   |   |       |   |       build-manifest.json
+|   |   |   |   |       |   |       server-reference-manifest.json
+|   |   |   |   |       |   |       
+|   |   |   |   |       |   \---[absenceId]
+|   |   |   |   |       |       |   route.js
+|   |   |   |   |       |       |   route.js.map
+|   |   |   |   |       |       |   route.js.nft.json
+|   |   |   |   |       |       |   route_client-reference-manifest.js
+|   |   |   |   |       |       |   
+|   |   |   |   |       |       \---route
+|   |   |   |   |       |               app-paths-manifest.json
+|   |   |   |   |       |               build-manifest.json
+|   |   |   |   |       |               server-reference-manifest.json
+|   |   |   |   |       |               
 |   |   |   |   |       +---archive
 |   |   |   |   |       |   |   route.js
 |   |   |   |   |       |   |   route.js.map
@@ -1861,6 +1883,8 @@ C:.
 |   |   |   |   ce889_server_app_api_planning_autoschedule_runs_[id]_publish_route_actions_cac50c52.js.map
 |   |   |   |   ce889_server_app_api_planning_autoschedule_runs_[id]_route_actions_049023b4.js
 |   |   |   |   ce889_server_app_api_planning_autoschedule_runs_[id]_route_actions_049023b4.js.map
+|   |   |   |   ce889_server_app_api_users_[id]_absences_[absenceId]_route_actions_85b61270.js
+|   |   |   |   ce889_server_app_api_users_[id]_absences_[absenceId]_route_actions_85b61270.js.map
 |   |   |   |   node_modules_next_dist_esm_build_templates_app-route_d6a474cc.js
 |   |   |   |   node_modules_next_dist_esm_build_templates_app-route_d6a474cc.js.map
 |   |   |   |   node_modules_next_f2da0d3e._.js
@@ -1873,8 +1897,6 @@ C:.
 |   |   |   |   [root-of-the-server]__00ed1d32._.js.map
 |   |   |   |   [root-of-the-server]__0e43a126._.js
 |   |   |   |   [root-of-the-server]__0e43a126._.js.map
-|   |   |   |   [root-of-the-server]__181c374f._.js
-|   |   |   |   [root-of-the-server]__181c374f._.js.map
 |   |   |   |   [root-of-the-server]__275a5a46._.js
 |   |   |   |   [root-of-the-server]__275a5a46._.js.map
 |   |   |   |   [root-of-the-server]__2d31c873._.js
@@ -1885,6 +1907,8 @@ C:.
 |   |   |   |   [root-of-the-server]__4acb48f2._.js.map
 |   |   |   |   [root-of-the-server]__4b548634._.js
 |   |   |   |   [root-of-the-server]__4b548634._.js.map
+|   |   |   |   [root-of-the-server]__521042e3._.js
+|   |   |   |   [root-of-the-server]__521042e3._.js.map
 |   |   |   |   [root-of-the-server]__54479175._.js
 |   |   |   |   [root-of-the-server]__54479175._.js.map
 |   |   |   |   [root-of-the-server]__5d11d34e._.js
@@ -1895,22 +1919,24 @@ C:.
 |   |   |   |   [root-of-the-server]__87fabf7c._.js.map
 |   |   |   |   [root-of-the-server]__9211ad2c._.js
 |   |   |   |   [root-of-the-server]__9211ad2c._.js.map
+|   |   |   |   [root-of-the-server]__935043d7._.js
+|   |   |   |   [root-of-the-server]__935043d7._.js.map
 |   |   |   |   [root-of-the-server]__95453b2d._.js
 |   |   |   |   [root-of-the-server]__95453b2d._.js.map
-|   |   |   |   [root-of-the-server]__a14f8910._.js
-|   |   |   |   [root-of-the-server]__a14f8910._.js.map
 |   |   |   |   [root-of-the-server]__a80a03b0._.js
 |   |   |   |   [root-of-the-server]__a80a03b0._.js.map
 |   |   |   |   [root-of-the-server]__b7025cff._.js
 |   |   |   |   [root-of-the-server]__b7025cff._.js.map
+|   |   |   |   [root-of-the-server]__bcf122bf._.js
+|   |   |   |   [root-of-the-server]__bcf122bf._.js.map
 |   |   |   |   [root-of-the-server]__be307af6._.js
 |   |   |   |   [root-of-the-server]__be307af6._.js.map
-|   |   |   |   [root-of-the-server]__c0ddc7b5._.js
-|   |   |   |   [root-of-the-server]__c0ddc7b5._.js.map
 |   |   |   |   [root-of-the-server]__c3997a41._.js
 |   |   |   |   [root-of-the-server]__c3997a41._.js.map
 |   |   |   |   [root-of-the-server]__c5606340._.js
 |   |   |   |   [root-of-the-server]__c5606340._.js.map
+|   |   |   |   [root-of-the-server]__c64b00e6._.js
+|   |   |   |   [root-of-the-server]__c64b00e6._.js.map
 |   |   |   |   [root-of-the-server]__d085b866._.js
 |   |   |   |   [root-of-the-server]__d085b866._.js.map
 |   |   |   |   [root-of-the-server]__d5f44ffd._.js
@@ -1919,6 +1945,8 @@ C:.
 |   |   |   |   [root-of-the-server]__e6c5e537._.js.map
 |   |   |   |   [root-of-the-server]__ecb56e79._.js
 |   |   |   |   [root-of-the-server]__ecb56e79._.js.map
+|   |   |   |   [root-of-the-server]__eda41dc1._.js
+|   |   |   |   [root-of-the-server]__eda41dc1._.js.map
 |   |   |   |   [root-of-the-server]__f3458ec0._.js
 |   |   |   |   [root-of-the-server]__f3458ec0._.js.map
 |   |   |   |   [root-of-the-server]__f705a7e6._.js
@@ -1965,6 +1993,8 @@ C:.
 |   |   |   |   _next-internal_server_app_api_planning_shifts_[id]_assign_route_actions_75edfcab.js.map
 |   |   |   |   _next-internal_server_app_api_users_route_actions_4b9121e3.js
 |   |   |   |   _next-internal_server_app_api_users_route_actions_4b9121e3.js.map
+|   |   |   |   _next-internal_server_app_api_users_[id]_absences_route_actions_719d36bc.js
+|   |   |   |   _next-internal_server_app_api_users_[id]_absences_route_actions_719d36bc.js.map
 |   |   |   |   _next-internal_server_app_api_users_[id]_archive_route_actions_990387d3.js
 |   |   |   |   _next-internal_server_app_api_users_[id]_archive_route_actions_990387d3.js.map
 |   |   |   |   _next-internal_server_app_api_users_[id]_depot_route_actions_75bb32be.js
@@ -2112,7 +2142,7 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
-|   |   +---8sfqCyY8nLJhsCMtxkmN2
+|   |   +---7TV8xtTfsAyuGQ6vkgr3q
 |   |   |       _buildManifest.js
 |   |   |       _clientMiddlewareManifest.json
 |   |   |       _ssgManifest.js
@@ -2219,6 +2249,12 @@ C:.
 |   |   |   \---[id]
 |   |   |       |   route.ts
 |   |   |       |   
+|   |   |       +---absences
+|   |   |       |   |   route.ts
+|   |   |       |   |   
+|   |   |       |   \---[absenceId]
+|   |   |       |           route.ts
+|   |   |       |           
 |   |   |       +---archive
 |   |   |       |       route.ts
 |   |   |       |       
@@ -3040,6 +3076,7 @@ C:.
 |   |           |   |       README_PATCH.md
 |   |           |   |       
 |   |           |   +---SESSION-20260319-21_A3_USERS-13
+|   |           |   |       PATCH__SESSION-20260319-21_A3_USERS-13.diff
 |   |           |   |       README_PATCH.md
 |   |           |   |       
 |   |           |   +---SESSION-20260319-22_A3_USERS-14
@@ -3096,6 +3133,7 @@ C:.
 |   |   +---users
 |   |   |       archive-user.ts
 |   |   |       assign-user-depot.ts
+|   |   |       user-absence.ts
 |   |   |       
 |   |   \---vehicles
 |   |           assign-vehicle-depot.ts
@@ -3107,6 +3145,7 @@ C:.
 |           company-profile.ts
 |           depot.ts
 |           planning-assign.ts
+|           user-absence.ts
 |           user.ts
 |           vehicle.ts
 |           
@@ -39366,7 +39405,10 @@ C:.
 |       +---20260318203000_sup02_platform_support_role
 |       |       migration.sql
 |       |       
-|       \---20260320173000_users08_archive_user
+|       +---20260320173000_users08_archive_user
+|       |       migration.sql
+|       |       
+|       \---20260320190000_users13_add_user_absence_model
 |               migration.sql
 |               
 +---public

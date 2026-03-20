@@ -122,6 +122,9 @@ model Company {
 
   // ✅ 4.7 — Audit planning minimal
   planningAuditLogs PlanningAuditLog[]
+
+  // ✅ A3 USERS-13 — indisponibilités / absences utilisateur
+  userAbsences UserAbsence[]
 }
 
 model Depot {
@@ -185,10 +188,34 @@ model User {
   // ✅ 4.7 — Audit planning minimal
   planningAuditLogs PlanningAuditLog[] @relation("PlanningAuditLogActor")
 
+  // ✅ A3 USERS-13 — indisponibilités / absences utilisateur
+  absences UserAbsence[]
+
   @@index([companyId])
   @@index([companyId, isActive])
   @@index([platformRole])
   @@index([depotId])
+}
+
+model UserAbsence {
+  id String @id @default(uuid()) @db.Uuid
+
+  companyId String  @db.Uuid
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  reason String?
+
+  startAt DateTime
+  endAt   DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([companyId, userId, startAt])
+  @@index([companyId, startAt])
 }
 
 model Permission {
