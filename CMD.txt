@@ -62,8 +62,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260319-20_A3_USERS-12
-- USERS-12 — AUDIT** — Audit du besoin absences / indisponibilités
+- SESSION-20260319-22_A3_USERS-14
+- USERS-14 — COMPLÉTION** — UI indisponibilités / absences
 
 sortie propre + retour du terminal + aucune erreur = validé
 
