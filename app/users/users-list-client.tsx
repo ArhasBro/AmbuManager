@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 
+import { USERS_REFRESH_EVENT } from "./users-refresh";
+
 type ApiOk<T> = {
   ok: true;
   data: T;
@@ -94,6 +96,7 @@ export default function UsersListClient() {
   const [error, setError] = useState<string | null>(null);
   const [rows, setRows] = useState<UserRow[]>([]);
   const [selectedUserId, setSelectedUserId] = useState("");
+  const [reloadKey, setReloadKey] = useState(0);
   const [pagination, setPagination] = useState<UserListResponse["pagination"]>({
     page: 1,
     pageSize: PAGE_SIZE,
@@ -115,6 +118,16 @@ export default function UsersListClient() {
   useEffect(() => {
     setPage(1);
   }, [role]);
+
+  useEffect(() => {
+    function handleUsersRefresh() {
+      setPage(1);
+      setReloadKey((current) => current + 1);
+    }
+
+    window.addEventListener(USERS_REFRESH_EVENT, handleUsersRefresh);
+    return () => window.removeEventListener(USERS_REFRESH_EVENT, handleUsersRefresh);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -188,7 +201,7 @@ export default function UsersListClient() {
     return () => {
       cancelled = true;
     };
-  }, [page, role, search]);
+  }, [page, reloadKey, role, search]);
 
   const selectedUser = useMemo(
     () => rows.find((user) => user.id === selectedUserId) ?? null,

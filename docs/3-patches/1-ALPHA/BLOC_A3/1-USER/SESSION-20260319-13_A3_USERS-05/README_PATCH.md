@@ -1,24 +1,31 @@
-﻿# README_PATCH
+﻿# README_PATCH — SESSION-20260319-13_A3_USERS-05
 
-## Session liee
-SESSION-20260319-13_A3_USERS-05
+## Patch retenu
+`PATCH__SESSION-20260319-13_A3_USERS-05.diff`
 
-## Type
-COMPLETION
+## Objet
+Ajouter l’UI de création utilisateur sur `/users`, en continuité directe de l’API de création déjà livrée et validée en USERS-04.
 
-## Dossier patch
-docs/3-patches/1-ALPHA/BLOC_A3/SESSION-20260319-13_A3_USERS-05
+## Périmètre couvert
+- formulaire minimal de création utilisateur ;
+- champs exposés : `name`, `email`, `role`, `password` ;
+- appel direct à `POST /api/users` ;
+- gestion des états UI utiles : saisie, chargement, succès, erreur ;
+- maintien de l’exploitabilité de la page utilisateurs après création.
 
-## Patch officiel attendu
-PATCH__SESSION-20260319-13_A3_USERS-05.diff
+## Hors périmètre confirmé
+- aucune modification Prisma ;
+- aucune refonte API ;
+- aucune modification RBAC ;
+- aucune édition utilisateur ;
+- aucun archivage / désactivation ;
+- aucun rôle support attribuable côté client.
 
-## Commandes d'application
-
-`ash
-git apply --check "docs/3-patches/1-ALPHA/BLOC_A3/SESSION-20260319-13_A3_USERS-05/PATCH__SESSION-20260319-13_A3_USERS-05.diff"
-git apply         "docs/3-patches/1-ALPHA/BLOC_A3/SESSION-20260319-13_A3_USERS-05/PATCH__SESSION-20260319-13_A3_USERS-05.diff"
-`
+## Validation retenue
+- `git apply --check` : OK ;
+- `git apply` : OK ;
+- `npm run lint` : OK ;
+- `npm run build` : OK.
 
 ## Statut
-- Dossier patch initialise.
-- Patch officiel a produire dans cette session si du code est modifie.
+Patch retenu, intégré et validé pour la session USERS-05.

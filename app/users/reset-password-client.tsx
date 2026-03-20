@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 
+import { USERS_REFRESH_EVENT } from "./users-refresh";
+
 type ApiOk<T> = {
   ok: true;
   data: T;
@@ -41,6 +43,16 @@ export default function ResetPasswordClient({ actorUserId }: Props) {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
+
+  useEffect(() => {
+    function handleUsersRefresh() {
+      setReloadKey((current) => current + 1);
+    }
+
+    window.addEventListener(USERS_REFRESH_EVENT, handleUsersRefresh);
+    return () => window.removeEventListener(USERS_REFRESH_EVENT, handleUsersRefresh);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -105,7 +117,7 @@ export default function ResetPasswordClient({ actorUserId }: Props) {
     return () => {
       cancelled = true;
     };
-  }, [actorUserId]);
+  }, [actorUserId, reloadKey]);
 
   const selectedUser = useMemo(
     () => users.find((user) => user.id === selectedUserId) ?? null,

@@ -1,35 +1,35 @@
-﻿# SESSION
+﻿# SESSION — SESSION-20260319-13_A3_USERS-05
 
-## ID SESSION
+## Identification
+- Projet : Investissement
+- Sous-projet : Ambulance Manager
+- Maturité : 1-ALPHA
+- Bloc : A3
+- Code session : USERS-05
+- Type : COMPLETION
+- Intitulé : UI création utilisateur
 
-SESSION-20260319-13_A3_USERS-05
+## Objet
+Documenter la livraison finale validée de la session USERS-05 concernant l’UI de création utilisateur.
 
-## Date
+## Portée réelle
+- ajout d’une UI de création utilisateur sur `/users` ;
+- formulaire minimal strictement aligné sur l’API de création déjà livrée en USERS-04 ;
+- champs exposés : `name`, `email`, `role`, `password` ;
+- appel direct à `POST /api/users` ;
+- conservation des actions existantes de la page utilisateurs ;
+- aucun élargissement vers l’édition, l’archivage, Prisma, RBAC ou une refonte globale du module.
 
-19/03/2026
+## Livraison finale retenue
+Le patch retenu pour la session est :
 
-## Contexte
+`PATCH__SESSION-20260319-13_A3_USERS-05.diff`
 
-Projet : Investissement  
-Sous-projet : Ambulance Manager  
-Maturite : 1-ALPHA  
-Bloc : A3  
-Type : COMPLETION  
-Intitule : UI création utilisateur
+## Statut validé retenu
+La session code USERS-05 est validée dans le dépôt intégré.
 
-## Objectif de la session
-
-INFORMATION NON FOURNIE - A CONFIRMER
-
-## Perimetre exact traite
-
-INFORMATION NON FOURNIE - A CONFIRMER
-
-## Resultat synthetique de session
-
-INFORMATION NON FOURNIE - A CONFIRMER
-
-## Dossiers lies
-
-- Session : docs/2-sessions/1-ALPHA/BLOC_A3/SESSION-20260319-13_A3_USERS-05
-- Patchs  : docs/3-patches/1-ALPHA/BLOC_A3/SESSION-20260319-13_A3_USERS-05
+Validations terminales retenues :
+- `git apply --check` : OK ;
+- `git apply` : OK ;
+- `npm run lint` : OK ;
+- `npm run build` : OK.

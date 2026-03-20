@@ -1,14 +1,21 @@
-﻿# FIN_SESSION
+﻿# FIN_SESSION — SESSION-20260319-13_A3_USERS-05
 
-## ClÃ´ture
+## Statut
+VALIDÉE
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+## Synthèse de clôture
+La session USERS-05 clôt le point prévu du bloc A3 concernant l’UI de création utilisateur.
 
-## Validation
+La livraison retenue est strictement bornée à l’interface de création sur `/users`, en appui direct sur l’API de création déjà validée en USERS-04.
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+## Validation terminale retenue
+- `git apply --check` : OK ;
+- `git apply` : OK ;
+- `npm run lint` : OK ;
+- `npm run build` : OK.
 
-## Verdict final
+## Patch principal
+`PATCH__SESSION-20260319-13_A3_USERS-05.diff`
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
-
+## Prochaine étape logique
+Poursuivre le bloc A3 sur la session suivante prévue au plan, sans réouvrir USERS-05.

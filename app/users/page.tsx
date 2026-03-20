@@ -7,6 +7,7 @@ import { canManageUsers } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 
 import ResetPasswordClient from "./reset-password-client";
+import UserCreationClient from "./user-creation-client";
 import UserDepotAssignmentClient from "./user-depot-assignment-client";
 import UsersListClient from "./users-list-client";
 
@@ -40,6 +41,7 @@ export default async function UsersPage() {
         <Link href="/dashboard">Retour dashboard</Link>
       </div>
 
+      <UserCreationClient />
       <UsersListClient />
       <UserDepotAssignmentClient availableDepots={depots} />
       <ResetPasswordClient actorUserId={user.id} />
