@@ -1,14 +1,18 @@
-﻿# FIN_SESSION
+# FIN_SESSION — SESSION-20260319-19_A3_USERS-11
 
-## ClÃ´ture
+## Clôture
+Session clôturée dans le périmètre strict USERS-11.
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+## Bilan final
+- objectif fonctionnel atteint ;
+- patch minimal retenu ;
+- sujet traité uniquement : rattachement utilisateur ↔ base ;
+- aucun élargissement vers d'autres chantiers du module users.
 
-## Validation
+## Validation finale retenue
+- patch applicable ;
+- lint OK ;
+- build OK.
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
-
-## Verdict final
-
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
-
+## Décision de clôture
+USERS-11 peut être considérée comme terminée et documentée.

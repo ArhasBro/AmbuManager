@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-import { USERS_REFRESH_EVENT } from "./users-refresh";
+import { USERS_REFRESH_EVENT, dispatchUsersRefresh, dispatchUsersSelection } from "./users-refresh";
 
 type ApiOk<T> = {
   ok: true;
@@ -193,14 +193,16 @@ export default function UserDepotAssignmentClient({ availableDepots }: { availab
         : null;
       const updatedDepotId = record && typeof record.depotId === "string" ? record.depotId : null;
 
+      const nextSelectedUser = {
+        ...selectedUser,
+        depotId: updatedDepotId,
+        depot: updatedDepot,
+      };
+
       setUsers((prev) =>
         prev.map((user) => (
           user.id === selectedUser.id
-            ? {
-                ...user,
-                depotId: updatedDepotId,
-                depot: updatedDepot,
-              }
+            ? nextSelectedUser
             : user
         )),
       );
@@ -208,6 +210,8 @@ export default function UserDepotAssignmentClient({ availableDepots }: { availab
         ...prev,
         [selectedUser.id]: updatedDepotId ?? "",
       }));
+      dispatchUsersSelection(nextSelectedUser);
+      dispatchUsersRefresh();
       setSuccess(`Base enregistrée pour ${selectedUser.name}.`);
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Unknown error");

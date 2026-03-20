@@ -62,8 +62,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260319-19_A3_USERS-11
-- USERS-11 — COMPLÉTION** — Rattachement utilisateur à une base
+- SESSION-20260319-20_A3_USERS-12
+- USERS-12 — AUDIT** — Audit du besoin absences / indisponibilités
 
 sortie propre + retour du terminal + aucune erreur = validé
 
@@ -79,7 +79,7 @@ Si il y a Fix a faire rédige le prompt. (Il ne doit pas le refaire en entier, j
 Je n'ai pas intégré : 
 -les fichiers documentaires de session (`SESSION.md`, `NOTES.md`, `EVIDENCES.md`, `RESULTATS.md`, `FIN_SESSION.md`)
 -le fichier documentaire de patches (`README.md`)
-Il seront à crée dans le patch docs en 1 ZIP téléchargebale sans sous dossier, quand la session sera validé pour qu'il soient complet.
+Il seront à crée dans le patch docs en 1 ZIP téléchargeable sans sous dossier, quand la session sera validé pour qu'il soient complet.
 
 DOCUMENTS À PRODUIRE quand je te le demande (après que je valide le patch). 
 SESSION.md 

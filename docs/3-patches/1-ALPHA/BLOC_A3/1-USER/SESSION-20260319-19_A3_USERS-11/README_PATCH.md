@@ -1,24 +1,31 @@
-﻿# README_PATCH
+# README_PATCH — SESSION-20260319-19_A3_USERS-11
 
-## Session liee
-SESSION-20260319-19_A3_USERS-11
+## Patch retenu
+- `PATCH__SESSION-20260319-19_A3_USERS-11.diff`
 
-## Type
-COMPLETION
+## Objet
+Finaliser le flux réel de rattachement utilisateur à une base en corrigeant uniquement la resynchronisation UI après changement de base dans `/users`.
 
-## Dossier patch
-docs/3-patches/1-ALPHA/BLOC_A3/SESSION-20260319-19_A3_USERS-11
+## Point de départ réel
+Avant patch, le flux USERS-11 existait déjà presque entièrement :
+- backend déjà en place ;
+- bornage multi-tenant déjà en place ;
+- exclusion des comptes support globaux déjà en place ;
+- garde-fous métier déjà en place ;
+- UI de rattachement déjà intégrée.
 
-## Patch officiel attendu
-PATCH__SESSION-20260319-19_A3_USERS-11.diff
+## Contenu exact du patch
+Le correctif appliqué dans `app/users/user-depot-assignment-client.tsx` consiste à :
+- republier la sélection utilisateur mise à jour ;
+- relancer le refresh partagé du module users.
 
-## Commandes d'application
+## Portée
+- un seul fichier applicatif modifié ;
+- aucun changement backend ;
+- aucune refonte ;
+- aucun élargissement hors USERS-11.
 
-`ash
-git apply --check "docs/3-patches/1-ALPHA/BLOC_A3/SESSION-20260319-19_A3_USERS-11/PATCH__SESSION-20260319-19_A3_USERS-11.diff"
-git apply         "docs/3-patches/1-ALPHA/BLOC_A3/SESSION-20260319-19_A3_USERS-11/PATCH__SESSION-20260319-19_A3_USERS-11.diff"
-`
-
-## Statut
-- Dossier patch initialise.
-- Patch officiel a produire dans cette session si du code est modifie.
+## Validation retenue
+- patch applicable ;
+- lint OK ;
+- build OK.
