@@ -9,6 +9,7 @@ import { prisma } from "@/lib/prisma";
 import ResetPasswordClient from "./reset-password-client";
 import UserCreationClient from "./user-creation-client";
 import UserDepotAssignmentClient from "./user-depot-assignment-client";
+import UserArchiveClient from "./user-archive-client";
 import UserEditClient from "./user-edit-client";
 import UsersListClient from "./users-list-client";
 
@@ -35,7 +36,7 @@ export default async function UsersPage() {
         <div>
           <h1 style={{ margin: 0 }}>Utilisateurs</h1>
           <p style={{ margin: "8px 0 0 0", opacity: 0.8, maxWidth: 960 }}>
-            Base ALPHA d&apos;administration des utilisateurs de société. Cette page fournit une vraie liste exploitable pour consulter les comptes clients, rechercher un utilisateur, filtrer par rôle, puis utiliser les actions minimales déjà disponibles sans exposer les comptes support globaux.
+            Base ALPHA d&apos;administration des utilisateurs de société. Cette page fournit une vraie liste exploitable pour consulter les comptes clients, rechercher un utilisateur, filtrer par rôle, puis utiliser les actions minimales déjà disponibles, dont l’archivage logique, sans exposer les comptes support globaux.
           </p>
         </div>
 
@@ -45,6 +46,7 @@ export default async function UsersPage() {
       <UserCreationClient />
       <UsersListClient />
       <UserEditClient />
+      <UserArchiveClient actorUserId={user.id} />
       <UserDepotAssignmentClient availableDepots={depots} />
       <ResetPasswordClient actorUserId={user.id} />
     </div>

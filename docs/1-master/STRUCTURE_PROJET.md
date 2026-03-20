@@ -1620,6 +1620,17 @@ C:.
 |   |   |   |   |       |   route.js.nft.json
 |   |   |   |   |       |   route_client-reference-manifest.js
 |   |   |   |   |       |   
+|   |   |   |   |       +---archive
+|   |   |   |   |       |   |   route.js
+|   |   |   |   |       |   |   route.js.map
+|   |   |   |   |       |   |   route.js.nft.json
+|   |   |   |   |       |   |   route_client-reference-manifest.js
+|   |   |   |   |       |   |   
+|   |   |   |   |       |   \---route
+|   |   |   |   |       |           app-paths-manifest.json
+|   |   |   |   |       |           build-manifest.json
+|   |   |   |   |       |           server-reference-manifest.json
+|   |   |   |   |       |           
 |   |   |   |   |       +---depot
 |   |   |   |   |       |   |   route.js
 |   |   |   |   |       |   |   route.js.map
@@ -1858,10 +1869,10 @@ C:.
 |   |   |   |   [externals]_next_dist_a6d89067._.js.map
 |   |   |   |   [externals]__39d4c878._.js
 |   |   |   |   [externals]__39d4c878._.js.map
-|   |   |   |   [root-of-the-server]__0dc1f60a._.js
-|   |   |   |   [root-of-the-server]__0dc1f60a._.js.map
 |   |   |   |   [root-of-the-server]__0e43a126._.js
 |   |   |   |   [root-of-the-server]__0e43a126._.js.map
+|   |   |   |   [root-of-the-server]__181c374f._.js
+|   |   |   |   [root-of-the-server]__181c374f._.js.map
 |   |   |   |   [root-of-the-server]__275a5a46._.js
 |   |   |   |   [root-of-the-server]__275a5a46._.js.map
 |   |   |   |   [root-of-the-server]__2d31c873._.js
@@ -1872,6 +1883,8 @@ C:.
 |   |   |   |   [root-of-the-server]__466e0aef._.js.map
 |   |   |   |   [root-of-the-server]__4acb48f2._.js
 |   |   |   |   [root-of-the-server]__4acb48f2._.js.map
+|   |   |   |   [root-of-the-server]__54479175._.js
+|   |   |   |   [root-of-the-server]__54479175._.js.map
 |   |   |   |   [root-of-the-server]__5d11d34e._.js
 |   |   |   |   [root-of-the-server]__5d11d34e._.js.map
 |   |   |   |   [root-of-the-server]__5e792a0f._.js
@@ -1884,24 +1897,24 @@ C:.
 |   |   |   |   [root-of-the-server]__9211ad2c._.js.map
 |   |   |   |   [root-of-the-server]__95453b2d._.js
 |   |   |   |   [root-of-the-server]__95453b2d._.js.map
+|   |   |   |   [root-of-the-server]__a14f8910._.js
+|   |   |   |   [root-of-the-server]__a14f8910._.js.map
 |   |   |   |   [root-of-the-server]__a80a03b0._.js
 |   |   |   |   [root-of-the-server]__a80a03b0._.js.map
 |   |   |   |   [root-of-the-server]__b7025cff._.js
 |   |   |   |   [root-of-the-server]__b7025cff._.js.map
 |   |   |   |   [root-of-the-server]__be307af6._.js
 |   |   |   |   [root-of-the-server]__be307af6._.js.map
+|   |   |   |   [root-of-the-server]__c0ddc7b5._.js
+|   |   |   |   [root-of-the-server]__c0ddc7b5._.js.map
 |   |   |   |   [root-of-the-server]__c3997a41._.js
 |   |   |   |   [root-of-the-server]__c3997a41._.js.map
-|   |   |   |   [root-of-the-server]__d027d715._.js
-|   |   |   |   [root-of-the-server]__d027d715._.js.map
-|   |   |   |   [root-of-the-server]__d470ab26._.js
-|   |   |   |   [root-of-the-server]__d470ab26._.js.map
+|   |   |   |   [root-of-the-server]__c5606340._.js
+|   |   |   |   [root-of-the-server]__c5606340._.js.map
 |   |   |   |   [root-of-the-server]__d5f44ffd._.js
 |   |   |   |   [root-of-the-server]__d5f44ffd._.js.map
 |   |   |   |   [root-of-the-server]__db62380b._.js
 |   |   |   |   [root-of-the-server]__db62380b._.js.map
-|   |   |   |   [root-of-the-server]__e571fd38._.js
-|   |   |   |   [root-of-the-server]__e571fd38._.js.map
 |   |   |   |   [root-of-the-server]__e6c5e537._.js
 |   |   |   |   [root-of-the-server]__e6c5e537._.js.map
 |   |   |   |   [root-of-the-server]__ecb56e79._.js
@@ -1950,6 +1963,8 @@ C:.
 |   |   |   |   _next-internal_server_app_api_planning_shifts_[id]_assign_route_actions_75edfcab.js.map
 |   |   |   |   _next-internal_server_app_api_users_route_actions_4b9121e3.js
 |   |   |   |   _next-internal_server_app_api_users_route_actions_4b9121e3.js.map
+|   |   |   |   _next-internal_server_app_api_users_[id]_archive_route_actions_990387d3.js
+|   |   |   |   _next-internal_server_app_api_users_[id]_archive_route_actions_990387d3.js.map
 |   |   |   |   _next-internal_server_app_api_users_[id]_depot_route_actions_75bb32be.js
 |   |   |   |   _next-internal_server_app_api_users_[id]_depot_route_actions_75bb32be.js.map
 |   |   |   |   _next-internal_server_app_api_users_[id]_reset-password_route_actions_d12d905c.js
@@ -1970,8 +1985,8 @@ C:.
 |   |   |           app_cd194de2._.js.map
 |   |   |           app_planning_planning-client_tsx_ec2e83fd._.js
 |   |   |           app_planning_planning-client_tsx_ec2e83fd._.js.map
-|   |   |           app_users_9ebcc151._.js
-|   |   |           app_users_9ebcc151._.js.map
+|   |   |           app_users_12012575._.js
+|   |   |           app_users_12012575._.js.map
 |   |   |           app_vehicles_vehicles-client_tsx_94295d31._.js
 |   |   |           app_vehicles_vehicles-client_tsx_94295d31._.js.map
 |   |   |           node_modules_127bfa28._.js
@@ -2022,14 +2037,14 @@ C:.
 |   |   |           [root-of-the-server]__9d5e3ced._.js.map
 |   |   |           [root-of-the-server]__a457c799._.js
 |   |   |           [root-of-the-server]__a457c799._.js.map
-|   |   |           [root-of-the-server]__b54554aa._.js
-|   |   |           [root-of-the-server]__b54554aa._.js.map
 |   |   |           [root-of-the-server]__b60f9c53._.js
 |   |   |           [root-of-the-server]__b60f9c53._.js.map
 |   |   |           [root-of-the-server]__b9356576._.js
 |   |   |           [root-of-the-server]__b9356576._.js.map
 |   |   |           [root-of-the-server]__c4a7c7d0._.js
 |   |   |           [root-of-the-server]__c4a7c7d0._.js.map
+|   |   |           [root-of-the-server]__d732b107._.js
+|   |   |           [root-of-the-server]__d732b107._.js.map
 |   |   |           [root-of-the-server]__d7d7eec3._.js
 |   |   |           [root-of-the-server]__d7d7eec3._.js.map
 |   |   |           [root-of-the-server]__e0a07927._.js
@@ -2095,14 +2110,9 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
-|   |   +----Zti40RxBcmG8zr_K172X
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
-|   |   |       
 |   |   +---chunks
-|   |   |       0361c1366f120374.js
 |   |   |       05e6c743003c809d.js
+|   |   |       14a872e021737b59.js
 |   |   |       1687260e4d8b05d6.js
 |   |   |       34f7551faf121447.css
 |   |   |       642a00754c8aebb8.js
@@ -2119,6 +2129,11 @@ C:.
 |   |   |       cdb83a758231f045.js
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
+|   |   |       
+|   |   +---JuWBefNga985cHabocus7
+|   |   |       _buildManifest.js
+|   |   |       _clientMiddlewareManifest.json
+|   |   |       _ssgManifest.js
 |   |   |       
 |   |   \---media
 |   |           favicon.0b3bf435.ico
@@ -2201,6 +2216,9 @@ C:.
 |   |   |   \---[id]
 |   |   |       |   route.ts
 |   |   |       |   
+|   |   |       +---archive
+|   |   |       |       route.ts
+|   |   |       |       
 |   |   |       +---depot
 |   |   |       |       route.ts
 |   |   |       |       
@@ -2236,6 +2254,7 @@ C:.
 |   +---users
 |   |       page.tsx
 |   |       reset-password-client.tsx
+|   |       user-archive-client.tsx
 |   |       user-creation-client.tsx
 |   |       user-depot-assignment-client.tsx
 |   |       user-edit-client.tsx
@@ -2996,6 +3015,7 @@ C:.
 |   |           |   |       README_PATCH.md
 |   |           |   |       
 |   |           |   +---SESSION-20260319-16_A3_USERS-08
+|   |           |   |       PATCH__SESSION-20260319-16_A3_USERS-08.diff
 |   |           |   |       README_PATCH.md
 |   |           |   |       
 |   |           |   +---SESSION-20260319-17_A3_USERS-09
@@ -3065,6 +3085,7 @@ C:.
 |   |   |       planning-audit.ts
 |   |   |       
 |   |   +---users
+|   |   |       archive-user.ts
 |   |   |       assign-user-depot.ts
 |   |   |       
 |   |   \---vehicles
@@ -39333,7 +39354,10 @@ C:.
 |       +---20260317213000_base09_fix_attach_shift_to_depot
 |       |       migration.sql
 |       |       
-|       \---20260318203000_sup02_platform_support_role
+|       +---20260318203000_sup02_platform_support_role
+|       |       migration.sql
+|       |       
+|       \---20260320173000_users08_archive_user
 |               migration.sql
 |               
 +---public

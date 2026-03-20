@@ -207,7 +207,7 @@ export default function UsersListClient() {
         <div>
           <h2 style={{ margin: 0 }}>Liste utilisateurs</h2>
           <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
-            Recherche simple, filtre rôle et pagination minimale pour préparer les sessions suivantes du bloc A3.
+            Recherche simple, filtre rôle et pagination minimale sur les comptes actifs de la société.
           </p>
         </div>
 

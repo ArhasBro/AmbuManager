@@ -62,8 +62,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260319-16_A3_USERS-08
-- USERS-08 — COMPLÉTION** — Désactivation / archivage utilisateur
+- SESSION-20260319-17_A3_USERS-09
+- USERS-09 — VALIDATION** — Vérification de l’absence de suppression physique non souhaitée
 
 sortie propre + retour du terminal + aucune erreur = validé
 

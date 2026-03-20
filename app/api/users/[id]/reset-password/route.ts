@@ -65,6 +65,7 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
       where: {
         id: targetUserId,
         companyId,
+        isActive: true,
         platformRole: null,
         role: { not: null },
       },
@@ -85,6 +86,7 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
         where: {
           id: targetUser.id,
           companyId,
+          isActive: true,
           platformRole: null,
           role: { not: null },
         },
@@ -95,6 +97,7 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
         where: {
           id: targetUser.id,
           companyId,
+          isActive: true,
           platformRole: null,
           role: { not: null },
         },

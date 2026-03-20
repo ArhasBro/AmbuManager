@@ -55,10 +55,11 @@ export const authOptions: NextAuthOptions = {
             role: true,
             platformRole: true,
             companyId: true,
+            isActive: true,
           },
         });
 
-        if (!user) return null;
+        if (!user || !user.isActive) return null;
 
         const ok = await bcrypt.compare(password, user.password);
         if (!ok) return null;

@@ -72,6 +72,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
       where: {
         id: parsedParams.data.id,
         companyId,
+        isActive: true,
         platformRole: null,
         role: { not: null },
       },

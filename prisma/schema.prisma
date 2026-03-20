@@ -159,6 +159,8 @@ model User {
   depotId String? @db.Uuid
   depot   Depot?  @relation(fields: [depotId], references: [id], onDelete: SetNull)
 
+  isActive Boolean @default(true)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -184,6 +186,7 @@ model User {
   planningAuditLogs PlanningAuditLog[] @relation("PlanningAuditLogActor")
 
   @@index([companyId])
+  @@index([companyId, isActive])
   @@index([platformRole])
   @@index([depotId])
 }
@@ -282,6 +285,8 @@ model Vehicle {
 
   depotId String? @db.Uuid
   depot   Depot?  @relation(fields: [depotId], references: [id], onDelete: SetNull)
+
+  isActive Boolean @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -77,6 +77,7 @@ export async function GET(req: Request) {
   try {
     const where = {
       companyId,
+      isActive: true,
       platformRole: null,
       role: { not: null, ...(role ? { equals: role } : {}) },
       ...(q
