@@ -441,7 +441,7 @@ export default function PlanningClient({
     } finally {
       setLoading(false);
     }
-  }, [availableUsers]);
+  }, []);
 
   const loadRunInfo = useCallback(async (runId: string) => {
     setRunInfoLoading(true);
@@ -575,7 +575,7 @@ export default function PlanningClient({
       setListsError(msg);
       setListsLoaded(true);
     }
-  }, []);
+  }, [availableUsers]);
 
   useEffect(() => {
     if (!canEditPlanning) return;

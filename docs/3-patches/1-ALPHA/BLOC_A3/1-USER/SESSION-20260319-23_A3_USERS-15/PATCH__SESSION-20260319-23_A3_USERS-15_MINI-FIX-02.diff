@@ -1,0 +1,20 @@
+--- a/app/planning/planning-client.tsx	2026-03-20 20:34:06.000000000 +0000
++++ b/app/planning/planning-client.tsx	2026-03-20 20:47:14.770403020 +0000
+@@ -441,7 +441,7 @@
+     } finally {
+       setLoading(false);
+     }
+-  }, [availableUsers]);
++  }, []);
+ 
+   const loadRunInfo = useCallback(async (runId: string) => {
+     setRunInfoLoading(true);
+@@ -575,7 +575,7 @@
+       setListsError(msg);
+       setListsLoaded(true);
+     }
+-  }, []);
++  }, [availableUsers]);
+ 
+   useEffect(() => {
+     if (!canEditPlanning) return;
