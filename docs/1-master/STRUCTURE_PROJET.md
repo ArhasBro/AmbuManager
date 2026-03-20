@@ -1615,6 +1615,11 @@ C:.
 |   |   |   |   |   |       server-reference-manifest.json
 |   |   |   |   |   |       
 |   |   |   |   |   \---[id]
+|   |   |   |   |       |   route.js
+|   |   |   |   |       |   route.js.map
+|   |   |   |   |       |   route.js.nft.json
+|   |   |   |   |       |   route_client-reference-manifest.js
+|   |   |   |   |       |   
 |   |   |   |   |       +---depot
 |   |   |   |   |       |   |   route.js
 |   |   |   |   |       |   |   route.js.map
@@ -1626,17 +1631,22 @@ C:.
 |   |   |   |   |       |           build-manifest.json
 |   |   |   |   |       |           server-reference-manifest.json
 |   |   |   |   |       |           
-|   |   |   |   |       \---reset-password
-|   |   |   |   |           |   route.js
-|   |   |   |   |           |   route.js.map
-|   |   |   |   |           |   route.js.nft.json
-|   |   |   |   |           |   route_client-reference-manifest.js
-|   |   |   |   |           |   
-|   |   |   |   |           \---route
-|   |   |   |   |                   app-paths-manifest.json
-|   |   |   |   |                   build-manifest.json
-|   |   |   |   |                   server-reference-manifest.json
-|   |   |   |   |                   
+|   |   |   |   |       +---reset-password
+|   |   |   |   |       |   |   route.js
+|   |   |   |   |       |   |   route.js.map
+|   |   |   |   |       |   |   route.js.nft.json
+|   |   |   |   |       |   |   route_client-reference-manifest.js
+|   |   |   |   |       |   |   
+|   |   |   |   |       |   \---route
+|   |   |   |   |       |           app-paths-manifest.json
+|   |   |   |   |       |           build-manifest.json
+|   |   |   |   |       |           server-reference-manifest.json
+|   |   |   |   |       |           
+|   |   |   |   |       \---route
+|   |   |   |   |               app-paths-manifest.json
+|   |   |   |   |               build-manifest.json
+|   |   |   |   |               server-reference-manifest.json
+|   |   |   |   |               
 |   |   |   |   \---vehicles
 |   |   |   |       |   route.js
 |   |   |   |       |   route.js.map
@@ -1848,30 +1858,26 @@ C:.
 |   |   |   |   [externals]_next_dist_a6d89067._.js.map
 |   |   |   |   [externals]__39d4c878._.js
 |   |   |   |   [externals]__39d4c878._.js.map
+|   |   |   |   [root-of-the-server]__0dc1f60a._.js
+|   |   |   |   [root-of-the-server]__0dc1f60a._.js.map
 |   |   |   |   [root-of-the-server]__0e43a126._.js
 |   |   |   |   [root-of-the-server]__0e43a126._.js.map
 |   |   |   |   [root-of-the-server]__275a5a46._.js
 |   |   |   |   [root-of-the-server]__275a5a46._.js.map
-|   |   |   |   [root-of-the-server]__2beff530._.js
-|   |   |   |   [root-of-the-server]__2beff530._.js.map
 |   |   |   |   [root-of-the-server]__2d31c873._.js
 |   |   |   |   [root-of-the-server]__2d31c873._.js.map
-|   |   |   |   [root-of-the-server]__3fd8b6eb._.js
-|   |   |   |   [root-of-the-server]__3fd8b6eb._.js.map
+|   |   |   |   [root-of-the-server]__2f4a670c._.js
+|   |   |   |   [root-of-the-server]__2f4a670c._.js.map
 |   |   |   |   [root-of-the-server]__466e0aef._.js
 |   |   |   |   [root-of-the-server]__466e0aef._.js.map
 |   |   |   |   [root-of-the-server]__4acb48f2._.js
 |   |   |   |   [root-of-the-server]__4acb48f2._.js.map
-|   |   |   |   [root-of-the-server]__54479175._.js
-|   |   |   |   [root-of-the-server]__54479175._.js.map
 |   |   |   |   [root-of-the-server]__5d11d34e._.js
 |   |   |   |   [root-of-the-server]__5d11d34e._.js.map
 |   |   |   |   [root-of-the-server]__5e792a0f._.js
 |   |   |   |   [root-of-the-server]__5e792a0f._.js.map
 |   |   |   |   [root-of-the-server]__64a98e00._.js
 |   |   |   |   [root-of-the-server]__64a98e00._.js.map
-|   |   |   |   [root-of-the-server]__7ba282fb._.js
-|   |   |   |   [root-of-the-server]__7ba282fb._.js.map
 |   |   |   |   [root-of-the-server]__87fabf7c._.js
 |   |   |   |   [root-of-the-server]__87fabf7c._.js.map
 |   |   |   |   [root-of-the-server]__9211ad2c._.js
@@ -1886,10 +1892,16 @@ C:.
 |   |   |   |   [root-of-the-server]__be307af6._.js.map
 |   |   |   |   [root-of-the-server]__c3997a41._.js
 |   |   |   |   [root-of-the-server]__c3997a41._.js.map
+|   |   |   |   [root-of-the-server]__d027d715._.js
+|   |   |   |   [root-of-the-server]__d027d715._.js.map
+|   |   |   |   [root-of-the-server]__d470ab26._.js
+|   |   |   |   [root-of-the-server]__d470ab26._.js.map
 |   |   |   |   [root-of-the-server]__d5f44ffd._.js
 |   |   |   |   [root-of-the-server]__d5f44ffd._.js.map
 |   |   |   |   [root-of-the-server]__db62380b._.js
 |   |   |   |   [root-of-the-server]__db62380b._.js.map
+|   |   |   |   [root-of-the-server]__e571fd38._.js
+|   |   |   |   [root-of-the-server]__e571fd38._.js.map
 |   |   |   |   [root-of-the-server]__e6c5e537._.js
 |   |   |   |   [root-of-the-server]__e6c5e537._.js.map
 |   |   |   |   [root-of-the-server]__ecb56e79._.js
@@ -1942,6 +1954,8 @@ C:.
 |   |   |   |   _next-internal_server_app_api_users_[id]_depot_route_actions_75bb32be.js.map
 |   |   |   |   _next-internal_server_app_api_users_[id]_reset-password_route_actions_d12d905c.js
 |   |   |   |   _next-internal_server_app_api_users_[id]_reset-password_route_actions_d12d905c.js.map
+|   |   |   |   _next-internal_server_app_api_users_[id]_route_actions_e7269cbb.js
+|   |   |   |   _next-internal_server_app_api_users_[id]_route_actions_e7269cbb.js.map
 |   |   |   |   _next-internal_server_app_api_vehicles_route_actions_7bc5da8c.js
 |   |   |   |   _next-internal_server_app_api_vehicles_route_actions_7bc5da8c.js.map
 |   |   |   |   _next-internal_server_app_api_vehicles_[id]_depot_route_actions_9e091d71.js
@@ -2101,7 +2115,7 @@ C:.
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
 |   |   |       
-|   |   +---fhVvOGYY5tkRg-Y1hOI8Y
+|   |   +---iLW7kB0oJXP1So360i1B7
 |   |   |       _buildManifest.js
 |   |   |       _clientMiddlewareManifest.json
 |   |   |       _ssgManifest.js
@@ -2185,6 +2199,8 @@ C:.
 |   |   |   |   route.ts
 |   |   |   |   
 |   |   |   \---[id]
+|   |   |       |   route.ts
+|   |   |       |   
 |   |   |       +---depot
 |   |   |       |       route.ts
 |   |   |       |       
@@ -2970,6 +2986,7 @@ C:.
 |   |           |   |       README_PATCH.md
 |   |           |   |       
 |   |           |   +---SESSION-20260319-14_A3_USERS-06
+|   |           |   |       PATCH__SESSION-20260319-14_A3_USERS-06.diff
 |   |           |   |       README_PATCH.md
 |   |           |   |       
 |   |           |   +---SESSION-20260319-15_A3_USERS-07

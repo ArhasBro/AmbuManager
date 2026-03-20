@@ -62,8 +62,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260319-14_A3_USERS-06
-- USERS-06 — COMPLÉTION** — API modification utilisateur
+- SESSION-20260319-15_A3_USERS-07
+- USERS-07 — COMPLÉTION** — UI modification utilisateur
 
 sortie propre + retour du terminal + aucune erreur = validé
 

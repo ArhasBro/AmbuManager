@@ -15,3 +15,14 @@ export const createUserBodySchema = z
     role: z.nativeEnum(Role),
   })
   .strict();
+
+export const updateUserBodySchema = z
+  .object({
+    email: z.string().trim().email("email invalid").optional(),
+    name: z.string().trim().min(1, "name required").max(160, "name too long").optional(),
+    role: z.nativeEnum(Role).optional(),
+  })
+  .strict()
+  .refine((value) => value.email !== undefined || value.name !== undefined || value.role !== undefined, {
+    message: "At least one editable field is required",
+  });
