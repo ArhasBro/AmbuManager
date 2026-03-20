@@ -1,10 +1,21 @@
-﻿# NO_PATCH
+# NO_PATCH
 
-Session : SESSION-20260319-17_A3_USERS-09
+Session : `SESSION-20260319-17_A3_USERS-09`
 
-Type : VALIDATION
+Type : `VALIDATION`
 
-Raison :
-- Session documentaire de type VALIDATION.
-- Aucun patch officiel a produire pour cette session.
-- Le dossier patch reste present pour conserver le miroir avec docs/2-sessions.
+## Décision
+Aucun correctif code supplémentaire n’est retenu.
+
+## Raisons
+- la session vérifie un point ciblé de validation, pas une nouvelle complétion ;
+- aucune route `DELETE` n’a été trouvée dans `app/api/users/**` ;
+- aucune occurrence `prisma.user.delete(...)` ou `prisma.user.deleteMany(...)` n’a été trouvée ;
+- le flux réel d’archivage passe par `isActive: false` ;
+- aucune action UI de suppression définitive n’est exposée.
+
+## Conséquences
+- aucun fichier `.diff` ;
+- `git apply --check` : non applicable ;
+- `git apply` : non applicable ;
+- le dossier patch est conservé pour la traçabilité documentaire.
