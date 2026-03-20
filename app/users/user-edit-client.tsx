@@ -117,6 +117,7 @@ export default function UserEditClient() {
   useEffect(() => {
     if (!selectedUser?.id) return;
 
+    const selectedUserId = selectedUser.id;
     let cancelled = false;
 
     async function loadUserDetails() {
@@ -124,7 +125,7 @@ export default function UserEditClient() {
       setDetailsError(null);
 
       try {
-        const res = await fetch(`/api/users/${encodeURIComponent(selectedUser.id)}`, { cache: "no-store" });
+        const res = await fetch(`/api/users/${encodeURIComponent(selectedUserId)}`, { cache: "no-store" });
         const json: unknown = await res.json();
 
         if (!res.ok || !isApiOk<unknown>(json)) {
