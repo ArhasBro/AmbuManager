@@ -20,6 +20,16 @@ type UserLite = { id: string; name: string; email?: string };
 type VehicleLite = { id: string; immatriculation: string; type: string };
 type DepotLite = { id: string; name: string; isActive: boolean };
 
+type PlanningClientProps = {
+  availableDepots: DepotLite[];
+  availableUsers: UserLite[];
+  currentUser: UserLite;
+  canViewGlobal: boolean;
+  canEditPlanning: boolean;
+  canAutoSchedule: boolean;
+  canManageCompanyMode: boolean;
+};
+
 type RunAuditLog = {
   id: string;
   createdAt: string;
@@ -32,7 +42,6 @@ type RunAuditLog = {
 };
 
 type ViewMode = "SIMPLE" | "AMBULANCE";
-type Role = "ADMIN" | "GERANT" | "BUREAU" | "ADE" | "AA" | "TAXI" | "REGULATEUR" | string;
 
 type RestWarning = {
   code: "MIN_REST_VIOLATION";
@@ -221,9 +230,6 @@ function dateTimeFR(iso: string) {
   });
 }
 
-function canAdminSave(role: Role | null) {
-  return role === "ADMIN" || role === "GERANT";
-}
 
 function requiresTwoEmployees(category: string | null | undefined) {
   const c = String(category ?? "").toUpperCase();
@@ -292,15 +298,22 @@ function getDepotLabel(depot: DepotLite) {
   return depot.isActive ? depot.name : `${depot.name} (inactive)`;
 }
 
-export default function PlanningClient({ availableDepots }: { availableDepots: DepotLite[] }) {
+export default function PlanningClient({
+  availableDepots,
+  availableUsers,
+  currentUser,
+  canViewGlobal,
+  canEditPlanning,
+  canAutoSchedule,
+  canManageCompanyMode,
+}: PlanningClientProps) {
   const [weekStart, setWeekStart] = useState<Date>(() => startOfWeekMonday(new Date()));
   const [mode, setMode] = useState<ViewMode>("SIMPLE");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [items, setItems] = useState<Shift[]>([]);
-
-  const [role, setRole] = useState<Role | null>(null);
+  const [selectedUserId, setSelectedUserId] = useState(currentUser.id);
 
   const [companyRuleLoaded, setCompanyRuleLoaded] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -391,6 +404,11 @@ export default function PlanningClient({ availableDepots }: { availableDepots: D
     [usersAll, userOptionsFromItems]
   );
 
+  const selectedUser = useMemo(
+    () => availableUsers.find((candidate) => candidate.id === selectedUserId) ?? currentUser,
+    [availableUsers, currentUser, selectedUserId]
+  );
+
   const vehicleOptions = useMemo<VehicleLite[]>(
     () => (vehiclesAll.length > 0 ? vehiclesAll : vehicleOptionsFromItems),
     [vehiclesAll, vehicleOptionsFromItems]
@@ -405,11 +423,12 @@ export default function PlanningClient({ availableDepots }: { availableDepots: D
     return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name, "fr"));
   }, [availableDepots, items]);
 
-  const loadShiftsForWeek = useCallback(async (weekStartISO: string) => {
+  const loadShiftsForWeek = useCallback(async (weekStartISO: string, targetUserId: string) => {
     setLoading(true);
     setError(null);
     try {
-      const { res, json } = await fetchJson(`/api/planning/shifts?weekStart=${weekStartISO}`);
+      const params = new URLSearchParams({ weekStart: weekStartISO, userId: targetUserId });
+      const { res, json } = await fetchJson(`/api/planning/shifts?${params.toString()}`);
       if (!res.ok || !jsonOkPayload(json)) {
         const err = jsonErrPayload(json) ? getString(json.error) : `HTTP_${res.status}`;
         throw new Error(err);
@@ -526,8 +545,7 @@ export default function PlanningClient({ availableDepots }: { availableDepots: D
 
         setUsersAll(mapped);
       } else {
-        const err = jsonErrPayload(u.json) ? getString(u.json.error) : `HTTP_${u.res.status}`;
-        throw new Error(`users: ${err}`);
+        setUsersAll(availableUsers);
       }
 
       if (v.res.ok && jsonOkPayload(v.json)) {
@@ -560,34 +578,10 @@ export default function PlanningClient({ availableDepots }: { availableDepots: D
   }, []);
 
   useEffect(() => {
-    let cancelled = false;
-
-    async function loadRole() {
-      try {
-        const { res, json } = await fetchJson("/api/auth/session");
-        if (!res.ok) return;
-
-        if (!isRecord(json)) return;
-        const u = isRecord(json.user) ? json.user : null;
-        const r = u && typeof u.role === "string" ? (u.role as Role) : null;
-
-        if (!cancelled) setRole(r);
-      } catch {
-        // ignore
-      }
-    }
-
-    void loadRole();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!canAdminSave(role)) return;
+    if (!canEditPlanning) return;
     if (listsLoaded) return;
     void loadCompanyLists();
-  }, [role, listsLoaded, loadCompanyLists]);
+  }, [canEditPlanning, listsLoaded, loadCompanyLists]);
 
   useEffect(() => {
     let cancelled = false;
@@ -627,14 +621,14 @@ export default function PlanningClient({ availableDepots }: { availableDepots: D
 
     async function run() {
       if (cancelled) return;
-      await loadShiftsForWeek(weekStartStr);
+      await loadShiftsForWeek(weekStartStr, selectedUserId);
     }
 
     void run();
     return () => {
       cancelled = true;
     };
-  }, [weekStartStr, loadShiftsForWeek]);
+  }, [weekStartStr, selectedUserId, loadShiftsForWeek]);
 
   const title = useMemo(() => {
     const end = addDays(weekStart, 6);
@@ -947,7 +941,7 @@ export default function PlanningClient({ availableDepots }: { availableDepots: D
       const { applied: appliedCount, notApplied } = countApplied(applied);
       setMatchMsg(`Application OK ✅ — applied:${appliedCount}, skipped:${notApplied}`);
 
-      await loadShiftsForWeek(weekStartStr);
+      await loadShiftsForWeek(weekStartStr, selectedUserId);
       await loadRunInfo(lastRunId);
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Unknown error";
@@ -964,6 +958,7 @@ export default function PlanningClient({ availableDepots }: { availableDepots: D
     lastRunStatus,
     lastRunDraftCount,
     loadShiftsForWeek,
+    selectedUserId,
     weekStartStr,
   ]);
 
@@ -1058,7 +1053,7 @@ export default function PlanningClient({ availableDepots }: { availableDepots: D
       if (warnings.length > 0) setPubMsg(`Brouillon publié ✅ avec ${warnings.length} avertissement(s).`);
       else setPubMsg("Brouillon publié ✅ (run: PUBLISHED)");
 
-      await loadShiftsForWeek(weekStartStr);
+      await loadShiftsForWeek(weekStartStr, selectedUserId);
       await loadRunInfo(lastRunId);
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Unknown error";
@@ -1066,7 +1061,7 @@ export default function PlanningClient({ availableDepots }: { availableDepots: D
     } finally {
       setPubLoading(false);
     }
-  }, [lastRunId, lastRunStatus, lastRunDraftCount, loadRunInfo, loadShiftsForWeek, weekStartStr]);
+  }, [lastRunId, lastRunStatus, lastRunDraftCount, loadRunInfo, loadShiftsForWeek, selectedUserId, weekStartStr]);
 
   const cancelLastRun = useCallback(async () => {
     if (!lastRunId) return;
@@ -1158,13 +1153,13 @@ export default function PlanningClient({ availableDepots }: { availableDepots: D
 
         setAssignMsgById((m) => ({ ...m, [shiftId]: "Affectation enregistrée ✅" }));
 
-        await loadShiftsForWeek(weekStartStr);
+        await loadShiftsForWeek(weekStartStr, selectedUserId);
         if (lastRunId) await loadRunInfo(lastRunId);
       } finally {
         setAssignLoadingId(null);
       }
     },
-    [lastRunId, loadRunInfo, loadShiftsForWeek, weekStartStr]
+    [lastRunId, loadRunInfo, loadShiftsForWeek, selectedUserId, weekStartStr]
   );
 
   const publishDisabled =
@@ -1208,6 +1203,40 @@ export default function PlanningClient({ availableDepots }: { availableDepots: D
 
         <div style={{ marginLeft: 8, fontWeight: 700 }}>{title}</div>
 
+        <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+          <span style={{ opacity: 0.8 }}>Planning affiché :</span>
+          {canViewGlobal ? (
+            <select
+              value={selectedUserId}
+              onChange={(e) => {
+                setSelectedUserId(e.target.value);
+                setLastRunId(null);
+                setLastRunStatus(null);
+                setLastRunDraftCount(null);
+                setRunAuditLogs([]);
+                setPubWarnings([]);
+                setPubConflict(null);
+                setGenMsg(null);
+                setDayGenMsg(null);
+                setPubMsg(null);
+                setCancelMsg(null);
+                clearMatchUi();
+              }}
+            >
+              {availableUsers.map((user) => (
+                <option key={user.id} value={user.id}>
+                  {user.id === currentUser.id ? `Moi — ${user.name}` : user.name}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <strong>{currentUser.name}</strong>
+          )}
+          <span style={{ fontSize: 12, opacity: 0.7 }}>
+            {selectedUser.id === currentUser.id ? "Vue personnelle" : `Collègue sélectionné : ${selectedUser.name}`}
+          </span>
+        </div>
+
         <div style={{ marginLeft: "auto", display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>
           <span style={{ opacity: 0.85 }}>Vue :</span>
 
@@ -1235,23 +1264,25 @@ export default function PlanningClient({ availableDepots }: { availableDepots: D
             Ambulance
           </button>
 
-          {canAdminSave(role) && (
-            <>
-              <button
-                onClick={saveCompanyMode}
-                disabled={saving || !companyRuleLoaded}
-                style={{
-                  marginLeft: 8,
-                  border: "1px solid rgba(255,255,255,0.25)",
-                  padding: "6px 10px",
-                  borderRadius: 8,
-                  opacity: saving ? 0.7 : 1,
-                }}
-                title={!companyRuleLoaded ? "Chargement du réglage entreprise…" : "Sauvegarder pour l’entreprise"}
-              >
-                {saving ? "Sauvegarde…" : "Sauvegarder (entreprise)"}
-              </button>
+          {canManageCompanyMode && (
+            <button
+              onClick={saveCompanyMode}
+              disabled={saving || !companyRuleLoaded}
+              style={{
+                marginLeft: 8,
+                border: "1px solid rgba(255,255,255,0.25)",
+                padding: "6px 10px",
+                borderRadius: 8,
+                opacity: saving ? 0.7 : 1,
+              }}
+              title={!companyRuleLoaded ? "Chargement du réglage entreprise…" : "Sauvegarder pour l’entreprise"}
+            >
+              {saving ? "Sauvegarde…" : "Sauvegarder (entreprise)"}
+            </button>
+          )}
 
+          {canAutoSchedule && (
+            <>
               <button
                 onClick={previewMatch}
                 disabled={matchDisabled}
@@ -1279,53 +1310,63 @@ export default function PlanningClient({ availableDepots }: { availableDepots: D
               >
                 {matchApplyLoading ? "Application…" : "Appliquer auto-assign"}
               </button>
-
-              {listsError && <span style={{ fontSize: 12, opacity: 0.8 }}>Listes: erreur ({listsError})</span>}
             </>
           )}
 
-          <button
-            onClick={generateWeek}
-            disabled={genLoading}
-            style={{
-              border: "1px solid rgba(255,255,255,0.25)",
-              padding: "6px 10px",
-              borderRadius: 8,
-              opacity: genLoading ? 0.7 : 1,
-            }}
-            title="Génère un brouillon (DraftShifts) pour la semaine affichée"
-          >
-            {genLoading ? "Génération…" : "Générer cette semaine"}
-          </button>
+          {canEditPlanning && listsError && <span style={{ fontSize: 12, opacity: 0.8 }}>Listes: erreur ({listsError})</span>}
 
-          <button
-            onClick={publishLastRun}
-            disabled={publishDisabled}
-            style={{
-              border: "1px solid rgba(255,255,255,0.25)",
-              padding: "6px 10px",
-              borderRadius: 8,
-              opacity: publishDisabled ? 0.6 : 1,
-            }}
-            title="Publie le dernier run DRAFT"
-          >
-            {pubLoading ? "Publication…" : "Publier le brouillon"}
-          </button>
+          {canAutoSchedule && (
+            <>
+              <button
+                onClick={generateWeek}
+                disabled={genLoading}
+                style={{
+                  border: "1px solid rgba(255,255,255,0.25)",
+                  padding: "6px 10px",
+                  borderRadius: 8,
+                  opacity: genLoading ? 0.7 : 1,
+                }}
+                title="Génère un brouillon (DraftShifts) pour la semaine affichée"
+              >
+                {genLoading ? "Génération…" : "Générer cette semaine"}
+              </button>
 
-          <button
-            onClick={cancelLastRun}
-            disabled={cancelLoading || !lastRunId || (lastRunStatus !== null && lastRunStatus !== "DRAFT")}
-            style={{
-              border: "1px solid rgba(255,255,255,0.25)",
-              padding: "6px 10px",
-              borderRadius: 8,
-              opacity: cancelLoading ? 0.7 : 1,
-            }}
-            title="Annule le dernier run DRAFT"
-          >
-            {cancelLoading ? "Annulation…" : "Annuler le brouillon"}
-          </button>
+              <button
+                onClick={publishLastRun}
+                disabled={publishDisabled}
+                style={{
+                  border: "1px solid rgba(255,255,255,0.25)",
+                  padding: "6px 10px",
+                  borderRadius: 8,
+                  opacity: publishDisabled ? 0.6 : 1,
+                }}
+                title="Publie le dernier run DRAFT"
+              >
+                {pubLoading ? "Publication…" : "Publier le brouillon"}
+              </button>
+
+              <button
+                onClick={cancelLastRun}
+                disabled={cancelLoading || !lastRunId || (lastRunStatus !== null && lastRunStatus !== "DRAFT")}
+                style={{
+                  border: "1px solid rgba(255,255,255,0.25)",
+                  padding: "6px 10px",
+                  borderRadius: 8,
+                  opacity: cancelLoading ? 0.7 : 1,
+                }}
+                title="Annule le dernier run DRAFT"
+              >
+                {cancelLoading ? "Annulation…" : "Annuler le brouillon"}
+              </button>
+            </>
+          )}
         </div>
+      </div>
+
+      <div style={{ border: "1px solid rgba(255,255,255,0.12)", borderRadius: 10, padding: 10, opacity: 0.92 }}>
+        {canViewGlobal
+          ? "Consultation centrée utilisateur : sélectionnez un collègue autorisé pour afficher uniquement son planning."
+          : "Consultation limitée à votre planning personnel selon vos permissions."}
       </div>
 
       {saveMsg && <div style={{ opacity: 0.9 }}>{saveMsg}</div>}
@@ -1513,21 +1554,23 @@ export default function PlanningClient({ availableDepots }: { availableDepots: D
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
                   <div style={{ fontWeight: 800, textTransform: "capitalize" }}>{dayLabelFR(d)}</div>
 
-                  <button
-                    onClick={() => generateDay(key)}
-                    disabled={isDayGenerating || genLoading || pubLoading || cancelLoading}
-                    style={{
-                      border: "1px solid rgba(255,255,255,0.25)",
-                      padding: "4px 8px",
-                      borderRadius: 8,
-                      opacity: isDayGenerating ? 0.7 : 1,
-                      fontSize: 12,
-                      whiteSpace: "nowrap",
-                    }}
-                    title="Génère un brouillon (DraftShifts) pour ce jour"
-                  >
-                    {isDayGenerating ? "Génération…" : "Générer ce jour"}
-                  </button>
+                  {canAutoSchedule && (
+                    <button
+                      onClick={() => generateDay(key)}
+                      disabled={isDayGenerating || genLoading || pubLoading || cancelLoading}
+                      style={{
+                        border: "1px solid rgba(255,255,255,0.25)",
+                        padding: "4px 8px",
+                        borderRadius: 8,
+                        opacity: isDayGenerating ? 0.7 : 1,
+                        fontSize: 12,
+                        whiteSpace: "nowrap",
+                      }}
+                      title="Génère un brouillon (DraftShifts) pour ce jour"
+                    >
+                      {isDayGenerating ? "Génération…" : "Générer ce jour"}
+                    </button>
+                  )}
                 </div>
 
                 <div style={{ opacity: 0.75, marginBottom: 8 }}>{key}</div>
@@ -1541,7 +1584,7 @@ export default function PlanningClient({ availableDepots }: { availableDepots: D
                         <ShiftCardSimple
                           key={s.id}
                           s={s}
-                          editable={canAdminSave(role)}
+                          editable={canEditPlanning}
                           users={userOptions}
                           vehicles={vehicleOptions}
                           depots={depotOptions}
@@ -1553,7 +1596,7 @@ export default function PlanningClient({ availableDepots }: { availableDepots: D
                         <ShiftCardAmbulance
                           key={s.id}
                           s={s}
-                          editable={canAdminSave(role)}
+                          editable={canEditPlanning}
                           users={userOptions}
                           vehicles={vehicleOptions}
                           depots={depotOptions}

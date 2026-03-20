@@ -1,0 +1,11 @@
+--- /mnt/data/work_users15_clean/AmbuManager-main/app/planning/planning-client.tsx	2026-03-20 19:06:57.000000000 +0000
++++ /mnt/data/apply_test_users15/AmbuManager-main/app/planning/planning-client.tsx	2026-03-20 19:46:38.664619995 +0000
+@@ -557,7 +557,7 @@
+       setListsError(msg);
+       setListsLoaded(true);
+     }
+-  }, []);
++  }, [availableUsers]);
+ 
+   useEffect(() => {
+     let cancelled = false;

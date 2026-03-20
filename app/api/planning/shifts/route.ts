@@ -1,13 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { z } from "zod";
 import type { Prisma } from "@prisma/client";
+import { z } from "zod";
+
+import { authOptions } from "@/lib/auth";
+import { canViewGlobalPlanning, canViewSelfPlanning } from "@/lib/permissions";
+import { prisma } from "@/lib/prisma";
 
 const QuerySchema = z.object({
   day: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "day must be YYYY-MM-DD").optional(),
   weekStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "weekStart must be YYYY-MM-DD").optional(),
+  userId: z.string().uuid().optional(),
   limit: z.coerce.number().int().min(1).max(200).optional().default(200),
 });
 
@@ -32,8 +35,8 @@ function addDays(d: Date, days: number): Date {
 
 function toMondayLocal(dayStr: string): Date {
   const base = buildDateTimeLocal(dayStr, "00:00");
-  const jsDay = base.getDay(); // 0=dim,1=lun,...6=sam
-  const diffToMonday = (jsDay + 6) % 7; // lun->0, mar->1, ... dim->6
+  const jsDay = base.getDay();
+  const diffToMonday = (jsDay + 6) % 7;
   return addDays(base, -diffToMonday);
 }
 
@@ -42,15 +45,27 @@ export async function GET(req: NextRequest) {
 
   const companyId = session?.user?.companyId;
   const userId = session?.user?.id;
+  const role = session?.user?.role;
+  const platformRole = session?.user?.platformRole;
 
   if (!companyId || !userId) {
     return NextResponse.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
+  }
+
+  const [canViewSelf, canViewGlobal] = await Promise.all([
+    canViewSelfPlanning(userId, role, platformRole),
+    canViewGlobalPlanning(userId, role, platformRole),
+  ]);
+
+  if (!canViewSelf && !canViewGlobal) {
+    return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });
   }
 
   const url = new URL(req.url);
   const rawQuery: Record<string, string | undefined> = {
     day: url.searchParams.get("day") ?? undefined,
     weekStart: url.searchParams.get("weekStart") ?? undefined,
+    userId: url.searchParams.get("userId") ?? undefined,
     limit: url.searchParams.get("limit") ?? undefined,
   };
 
@@ -59,9 +74,8 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "VALIDATION_ERROR", details: parsed.error.flatten() }, { status: 400 });
   }
 
-  const { day, weekStart, limit } = parsed.data;
+  const { day, weekStart, userId: requestedUserId, limit } = parsed.data;
 
-  // règle: day OU weekStart (ou aucun => on renvoie les derniers limit)
   if (day && weekStart) {
     return NextResponse.json(
       { ok: false, error: "VALIDATION_ERROR", details: { message: "Use day OR weekStart, not both." } },
@@ -69,8 +83,29 @@ export async function GET(req: NextRequest) {
     );
   }
 
+  if (!canViewGlobal && requestedUserId && requestedUserId !== userId) {
+    return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });
+  }
+
+  const targetUserId = canViewGlobal ? requestedUserId ?? userId : userId;
+
   try {
-    let where: Prisma.ShiftWhereInput = { companyId };
+    const targetUser = await prisma.user.findFirst({
+      where: {
+        id: targetUserId,
+        companyId,
+      },
+      select: { id: true },
+    });
+
+    if (!targetUser) {
+      return NextResponse.json({ ok: false, error: "USER_NOT_FOUND" }, { status: 404 });
+    }
+
+    let where: Prisma.ShiftWhereInput = {
+      companyId,
+      OR: [{ userId: targetUserId }, { user2Id: targetUserId }],
+    };
 
     if (day) {
       const start = buildDateTimeLocal(day, "00:00");
@@ -88,7 +123,6 @@ export async function GET(req: NextRequest) {
       take: limit,
       include: {
         user: { select: { id: true, name: true, email: true, role: true } },
-        // ✅ NOUVEAU : user2
         user2: { select: { id: true, name: true, email: true, role: true } },
         vehicle: { select: { id: true, immatriculation: true, type: true, status: true } },
         depot: { select: { id: true, name: true, isActive: true } },
@@ -115,6 +149,11 @@ export async function GET(req: NextRequest) {
             }
           : null,
       })),
+      access: {
+        canViewSelf,
+        canViewGlobal,
+        targetUserId,
+      },
     });
   } catch {
     return NextResponse.json({ ok: false, error: "SERVER_ERROR" }, { status: 500 });

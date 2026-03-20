@@ -1,10 +1,11 @@
-﻿# EVIDENCES
+# EVIDENCES
 
-Ã‰lÃ©ments factuels utilisÃ©s pendant la session.
+## Fichier modifié
+- `app/planning/planning-client.tsx`
 
----
+## Diff utile
+- dépendance `useCallback(loadCompanyLists)` : `[]` -> `[availableUsers]`
 
-## Sources utilisÃ©es
-
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
-
+## Vérification patch
+- `git apply --check` : OK
+- `git apply` : OK

@@ -1,35 +1,13 @@
-﻿# SESSION
+# SESSION
 
-## ID SESSION
-
+## Code session
 SESSION-20260319-23_A3_USERS-15
 
-## Date
+## Type
+COMPLÉTION — mini-fix ciblé
 
-19/03/2026
+## Intitulé
+Consultation du planning utilisateur / collègues selon permissions
 
-## Contexte
-
-Projet : Investissement  
-Sous-projet : Ambulance Manager  
-Maturite : 1-ALPHA  
-Bloc : A3  
-Type : COMPLETION  
-Intitule : Consultation du planning utilisateur / collègues selon permissions
-
-## Objectif de la session
-
-INFORMATION NON FOURNIE - A CONFIRMER
-
-## Perimetre exact traite
-
-INFORMATION NON FOURNIE - A CONFIRMER
-
-## Resultat synthetique de session
-
-INFORMATION NON FOURNIE - A CONFIRMER
-
-## Dossiers lies
-
-- Session : docs/2-sessions/1-ALPHA/BLOC_A3/SESSION-20260319-23_A3_USERS-15
-- Patchs  : docs/3-patches/1-ALPHA/BLOC_A3/SESSION-20260319-23_A3_USERS-15
+## Correctif appliqué
+Ajout de `availableUsers` dans les dépendances du `useCallback` `loadCompanyLists` de `app/planning/planning-client.tsx` pour supprimer le warning `react-hooks/exhaustive-deps`, sans changement de périmètre fonctionnel.

@@ -1,14 +1,9 @@
-﻿# FIN_SESSION
+# FIN_SESSION
 
-## ClÃ´ture
+## Statut
+Session mini-fix préparée sur USERS-15.
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
-
-## Validation
-
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
-
-## Verdict final
-
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
-
+## Clôture factuelle
+- Correctif code appliqué.
+- Patch d'application vérifié.
+- Les validations terminales `npm run lint` et `npm run build` n'ont pas pu être validées de manière fiable dans l'environnement sandbox courant, donc aucun faux OK n'est inscrit.

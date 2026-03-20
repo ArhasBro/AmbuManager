@@ -486,14 +486,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |       |   |       RESULTATS.md
 |   |       |   |       SESSION.md
 |   |       |   |       
-|   |       |   +---SESSION-20260319-24_A3_USERS-16
-|   |       |   |       EVIDENCES.md
-|   |       |   |       FIN_SESSION.md
-|   |       |   |       NOTES.md
-|   |       |   |       RESULTATS.md
-|   |       |   |       SESSION.md
-|   |       |   |       
-|   |       |   \---SESSION-20260319-25_A3_CLOTURE-A3
+|   |       |   \---SESSION-20260319-24_A3_USERS-16
 |   |       |           EVIDENCES.md
 |   |       |           FIN_SESSION.md
 |   |       |           NOTES.md
@@ -501,6 +494,13 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |       |           SESSION.md
 |   |       |           
 |   |       \---2-CLOTURE
+|   |           \---SESSION-20260319-25_A3_CLOTURE-A3
+|   |                   EVIDENCES.md
+|   |                   FIN_SESSION.md
+|   |                   NOTES.md
+|   |                   RESULTATS.md
+|   |                   SESSION.md
+|   |                   
 |   \---SESSION-YYYYMMDD-XX
 |           EVIDENCES.md
 |           FIN_SESSION.md
@@ -778,15 +778,17 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |           |   |       README_PATCH.md
 |           |   |       
 |           |   +---SESSION-20260319-23_A3_USERS-15
+|           |   |       PATCH__SESSION-20260319-23_A3_USERS-15.diff
+|           |   |       PATCH__SESSION-20260319-23_A3_USERS-15_MINI-FIX.diff
 |           |   |       README_PATCH.md
 |           |   |       
-|           |   +---SESSION-20260319-24_A3_USERS-16
-|           |   |       NO_PATCH.md
-|           |   |       
-|           |   \---SESSION-20260319-25_A3_CLOTURE-A3
+|           |   \---SESSION-20260319-24_A3_USERS-16
 |           |           NO_PATCH.md
 |           |           
 |           \---2-CLOTURE
+|               \---SESSION-20260319-25_A3_CLOTURE-A3
+|                       NO_PATCH.md
+|                       
 +---4-templates
 |       TEMPLATE_DEBUT_SESSION.md
 |       TEMPLATE_DOD_4_4.md

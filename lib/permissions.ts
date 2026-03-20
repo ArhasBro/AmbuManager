@@ -44,6 +44,27 @@ async function hasPermissionAccess(params: {
   return hasAnyPermission(params.userId, params.codes);
 }
 
+export async function canViewSelfPlanning(
+  userId: string,
+  role?: string | null,
+  platformRole?: PlatformRole | string | null
+): Promise<boolean> {
+  return hasPermissionAccess({
+    userId,
+    role,
+    platformRole,
+    codes: ["PLANNING_VIEW_SELF", "PLANNING_VIEW_GLOBAL"],
+  });
+}
+
+export async function canViewGlobalPlanning(
+  userId: string,
+  role?: string | null,
+  platformRole?: PlatformRole | string | null
+): Promise<boolean> {
+  return hasPermissionAccess({ userId, role, platformRole, codes: ["PLANNING_VIEW_GLOBAL"] });
+}
+
 export async function canAutoSchedule(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
   return hasPermissionAccess({ userId, role, platformRole, codes: ["PLANNING_AUTOSCHEDULE"] });
 }

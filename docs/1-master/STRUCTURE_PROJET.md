@@ -1917,6 +1917,8 @@ C:.
 |   |   |   |   [root-of-the-server]__5e792a0f._.js.map
 |   |   |   |   [root-of-the-server]__87fabf7c._.js
 |   |   |   |   [root-of-the-server]__87fabf7c._.js.map
+|   |   |   |   [root-of-the-server]__8f437561._.js
+|   |   |   |   [root-of-the-server]__8f437561._.js.map
 |   |   |   |   [root-of-the-server]__9211ad2c._.js
 |   |   |   |   [root-of-the-server]__9211ad2c._.js.map
 |   |   |   |   [root-of-the-server]__935043d7._.js
@@ -1943,8 +1945,6 @@ C:.
 |   |   |   |   [root-of-the-server]__d5f44ffd._.js.map
 |   |   |   |   [root-of-the-server]__e6c5e537._.js
 |   |   |   |   [root-of-the-server]__e6c5e537._.js.map
-|   |   |   |   [root-of-the-server]__ecb56e79._.js
-|   |   |   |   [root-of-the-server]__ecb56e79._.js.map
 |   |   |   |   [root-of-the-server]__eda41dc1._.js
 |   |   |   |   [root-of-the-server]__eda41dc1._.js.map
 |   |   |   |   [root-of-the-server]__f3458ec0._.js
@@ -2049,6 +2049,8 @@ C:.
 |   |   |           node_modules_next_dist_f21d913a._.js.map
 |   |   |           [root-of-the-server]__0d5ae7ad._.js
 |   |   |           [root-of-the-server]__0d5ae7ad._.js.map
+|   |   |           [root-of-the-server]__12ffa5d0._.js
+|   |   |           [root-of-the-server]__12ffa5d0._.js.map
 |   |   |           [root-of-the-server]__1beaccf2._.js
 |   |   |           [root-of-the-server]__1beaccf2._.js.map
 |   |   |           [root-of-the-server]__296a25b5._.js
@@ -2077,8 +2079,6 @@ C:.
 |   |   |           [root-of-the-server]__b9356576._.js.map
 |   |   |           [root-of-the-server]__c4a7c7d0._.js
 |   |   |           [root-of-the-server]__c4a7c7d0._.js.map
-|   |   |           [root-of-the-server]__d7d7eec3._.js
-|   |   |           [root-of-the-server]__d7d7eec3._.js.map
 |   |   |           [root-of-the-server]__e0a07927._.js
 |   |   |           [root-of-the-server]__e0a07927._.js.map
 |   |   |           [root-of-the-server]__e1b2e646._.js
@@ -2148,7 +2148,6 @@ C:.
 |   |   |       34f7551faf121447.css
 |   |   |       642a00754c8aebb8.js
 |   |   |       672c0168d7981883.js
-|   |   |       6fe188a4ac2c58d8.js
 |   |   |       7c92e96509cd355e.js
 |   |   |       82abf2d65f5428ae.js
 |   |   |       83a473d0a72104a5.js
@@ -2160,13 +2159,14 @@ C:.
 |   |   |       b870288de7d3931e.js
 |   |   |       cc07a3e87a46bf5e.js
 |   |   |       cdb83a758231f045.js
+|   |   |       d1c4b1bb7f0f6f89.js
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
 |   |   |       
 |   |   +---media
 |   |   |       favicon.0b3bf435.ico
 |   |   |       
-|   |   \---RwmrLhCR5gtSfpwN--YcM
+|   |   \---YCHLHejZB54HilKUEDiES
 |   |           _buildManifest.js
 |   |           _clientMiddlewareManifest.json
 |   |           _ssgManifest.js
@@ -2793,14 +2793,7 @@ C:.
 |   |   |       |   |       RESULTATS.md
 |   |   |       |   |       SESSION.md
 |   |   |       |   |       
-|   |   |       |   +---SESSION-20260319-24_A3_USERS-16
-|   |   |       |   |       EVIDENCES.md
-|   |   |       |   |       FIN_SESSION.md
-|   |   |       |   |       NOTES.md
-|   |   |       |   |       RESULTATS.md
-|   |   |       |   |       SESSION.md
-|   |   |       |   |       
-|   |   |       |   \---SESSION-20260319-25_A3_CLOTURE-A3
+|   |   |       |   \---SESSION-20260319-24_A3_USERS-16
 |   |   |       |           EVIDENCES.md
 |   |   |       |           FIN_SESSION.md
 |   |   |       |           NOTES.md
@@ -2808,6 +2801,13 @@ C:.
 |   |   |       |           SESSION.md
 |   |   |       |           
 |   |   |       \---2-CLOTURE
+|   |   |           \---SESSION-20260319-25_A3_CLOTURE-A3
+|   |   |                   EVIDENCES.md
+|   |   |                   FIN_SESSION.md
+|   |   |                   NOTES.md
+|   |   |                   RESULTATS.md
+|   |   |                   SESSION.md
+|   |   |                   
 |   |   \---SESSION-YYYYMMDD-XX
 |   |           EVIDENCES.md
 |   |           FIN_SESSION.md
@@ -3085,15 +3085,17 @@ C:.
 |   |           |   |       README_PATCH.md
 |   |           |   |       
 |   |           |   +---SESSION-20260319-23_A3_USERS-15
+|   |           |   |       PATCH__SESSION-20260319-23_A3_USERS-15.diff
+|   |           |   |       PATCH__SESSION-20260319-23_A3_USERS-15_MINI-FIX.diff
 |   |           |   |       README_PATCH.md
 |   |           |   |       
-|   |           |   +---SESSION-20260319-24_A3_USERS-16
-|   |           |   |       NO_PATCH.md
-|   |           |   |       
-|   |           |   \---SESSION-20260319-25_A3_CLOTURE-A3
+|   |           |   \---SESSION-20260319-24_A3_USERS-16
 |   |           |           NO_PATCH.md
 |   |           |           
 |   |           \---2-CLOTURE
+|   |               \---SESSION-20260319-25_A3_CLOTURE-A3
+|   |                       NO_PATCH.md
+|   |                       
 |   +---4-templates
 |   |       TEMPLATE_DEBUT_SESSION.md
 |   |       TEMPLATE_DOD_4_4.md
