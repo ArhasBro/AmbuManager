@@ -441,7 +441,7 @@ export default function PlanningClient({
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [availableUsers]);
 
   const loadRunInfo = useCallback(async (runId: string) => {
     setRunInfoLoading(true);

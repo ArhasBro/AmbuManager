@@ -1,0 +1,11 @@
+--- a/app/planning/planning-client.tsx
++++ b/app/planning/planning-client.tsx
+@@ -441,7 +441,7 @@
+     } finally {
+       setLoading(false);
+     }
+-  }, []);
++  }, [availableUsers]);
+ 
+   const loadRunInfo = useCallback(async (runId: string) => {
+     setRunInfoLoading(true);
