@@ -62,8 +62,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260319-23_A3_USERS-15
-- USERS-15 — COMPLÉTION** — Consultation du planning utilisateur / collègues selon permissions
+- SESSION-20260319-24_A3_USERS-16
+- USERS-16 — VALIDATION** — Validation complète du bloc users
 
 sortie propre + retour du terminal + aucune erreur = validé
 

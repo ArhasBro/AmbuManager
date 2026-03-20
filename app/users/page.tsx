@@ -11,6 +11,7 @@ import UserCreationClient from "./user-creation-client";
 import UserDepotAssignmentClient from "./user-depot-assignment-client";
 import UserArchiveClient from "./user-archive-client";
 import UserEditClient from "./user-edit-client";
+import UserAbsenceClient from "./user-absence-client";
 import UsersListClient from "./users-list-client";
 
 export default async function UsersPage() {
@@ -45,6 +46,7 @@ export default async function UsersPage() {
 
       <UserCreationClient />
       <UsersListClient />
+      <UserAbsenceClient />
       <UserEditClient />
       <UserArchiveClient actorUserId={user.id} />
       <UserDepotAssignmentClient availableDepots={depots} />

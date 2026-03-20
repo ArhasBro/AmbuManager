@@ -1,0 +1,501 @@
+diff --git a/app/users/page.tsx b/app/users/page.tsx
+index ead959f..864b85f 100644
+--- a/app/users/page.tsx
++++ b/app/users/page.tsx
+@@ -11,6 +11,7 @@ import UserCreationClient from "./user-creation-client";
+ import UserDepotAssignmentClient from "./user-depot-assignment-client";
+ import UserArchiveClient from "./user-archive-client";
+ import UserEditClient from "./user-edit-client";
++import UserAbsenceClient from "./user-absence-client";
+ import UsersListClient from "./users-list-client";
+ 
+ export default async function UsersPage() {
+@@ -45,6 +46,7 @@ export default async function UsersPage() {
+ 
+       <UserCreationClient />
+       <UsersListClient />
++      <UserAbsenceClient />
+       <UserEditClient />
+       <UserArchiveClient actorUserId={user.id} />
+       <UserDepotAssignmentClient availableDepots={depots} />
+
+diff --git a/app/users/user-absence-client.tsx b/app/users/user-absence-client.tsx
+new file mode 100644
+index 0000000..65e41d0
+--- /dev/null
++++ b/app/users/user-absence-client.tsx
+@@ -0,0 +1,473 @@
++"use client";
++
++import { useEffect, useMemo, useState, type FormEvent } from "react";
++
++import { type UserListRow } from "./users-client-shared";
++import { USERS_SELECTION_EVENT, type UsersSelectionEventDetail } from "./users-refresh";
++
++type ApiOk<T> = {
++  ok: true;
++  data: T;
++};
++
++type ApiErr = {
++  ok: false;
++  error: string;
++  details?: unknown;
++};
++
++type UserAbsenceRow = {
++  id: string;
++  companyId: string;
++  userId: string;
++  reason: string | null;
++  startAt: string;
++  endAt: string;
++  createdAt: string;
++  updatedAt: string;
++};
++
++type EditableAbsenceForm = {
++  reason: string;
++  startAt: string;
++  endAt: string;
++};
++
++const EMPTY_FORM: EditableAbsenceForm = {
++  reason: "",
++  startAt: "",
++  endAt: "",
++};
++
++function isApiOk<T>(value: unknown): value is ApiOk<T> {
++  return typeof value === "object" && value !== null && "ok" in value && (value as { ok?: unknown }).ok === true;
++}
++
++function isApiErr(value: unknown): value is ApiErr {
++  return typeof value === "object" && value !== null && "ok" in value && (value as { ok?: unknown }).ok === false;
++}
++
++function toAbsenceRow(value: unknown): UserAbsenceRow | null {
++  if (typeof value !== "object" || value === null) return null;
++
++  const record = value as Record<string, unknown>;
++  const id = typeof record.id === "string" ? record.id : null;
++  const companyId = typeof record.companyId === "string" ? record.companyId : null;
++  const userId = typeof record.userId === "string" ? record.userId : null;
++  const reason = typeof record.reason === "string" ? record.reason : record.reason === null ? null : null;
++  const startAt = typeof record.startAt === "string" ? record.startAt : null;
++  const endAt = typeof record.endAt === "string" ? record.endAt : null;
++  const createdAt = typeof record.createdAt === "string" ? record.createdAt : null;
++  const updatedAt = typeof record.updatedAt === "string" ? record.updatedAt : null;
++
++  if (!id || !companyId || !userId || !startAt || !endAt || !createdAt || !updatedAt) return null;
++
++  return {
++    id,
++    companyId,
++    userId,
++    reason,
++    startAt,
++    endAt,
++    createdAt,
++    updatedAt,
++  };
++}
++
++function getErrorMessage(json: unknown, status: number) {
++  if (!isApiErr(json)) return `HTTP_${status}`;
++
++  const details = typeof json.details === "object" && json.details !== null
++    ? (json.details as Record<string, unknown>)
++    : null;
++
++  if (typeof details?.message === "string") return details.message;
++
++  if (json.error === "ABSENCE_OVERLAP") {
++    const conflict = typeof details?.conflict === "object" && details.conflict !== null
++      ? (details.conflict as Record<string, unknown>)
++      : null;
++
++    if (typeof conflict?.startAt === "string" && typeof conflict?.endAt === "string") {
++      return `Une absence existe déjà sur le créneau ${formatIntervalLabel(conflict.startAt, conflict.endAt)}.`;
++    }
++  }
++
++  if (json.error === "VALIDATION_ERROR") {
++    const fieldErrors = details && "fieldErrors" in details ? (details.fieldErrors as Record<string, unknown>) : null;
++    const message = fieldErrors
++      ? Object.values(fieldErrors)
++          .flatMap((value) => Array.isArray(value) ? value : [])
++          .find((value): value is string => typeof value === "string")
++      : null;
++
++    if (message) return message;
++  }
++
++  if (json.error === "NOT_FOUND") return "Utilisateur ou absence introuvable.";
++  if (json.error === "FORBIDDEN") return "Action non autorisée.";
++  if (json.error === "UNAUTHORIZED") return "Session invalide.";
++
++  return json.error;
++}
++
++function formatDateTimeLabel(value: string) {
++  const date = new Date(value);
++  if (Number.isNaN(date.getTime())) return value;
++
++  return new Intl.DateTimeFormat("fr-FR", {
++    dateStyle: "medium",
++    timeStyle: "short",
++  }).format(date);
++}
++
++function formatIntervalLabel(startAt: string, endAt: string) {
++  return `${formatDateTimeLabel(startAt)} → ${formatDateTimeLabel(endAt)}`;
++}
++
++function toDatetimeLocalValue(value: string) {
++  const date = new Date(value);
++  if (Number.isNaN(date.getTime())) return "";
++
++  const localValue = new Date(date.getTime() - date.getTimezoneOffset() * 60_000);
++  return localValue.toISOString().slice(0, 16);
++}
++
++function toIsoString(value: string) {
++  const date = new Date(value);
++  if (Number.isNaN(date.getTime())) return null;
++  return date.toISOString();
++}
++
++function toEditableForm(absence: UserAbsenceRow): EditableAbsenceForm {
++  return {
++    reason: absence.reason ?? "",
++    startAt: toDatetimeLocalValue(absence.startAt),
++    endAt: toDatetimeLocalValue(absence.endAt),
++  };
++}
++
++export default function UserAbsenceClient() {
++  const [selectedUser, setSelectedUser] = useState<UserListRow | null>(null);
++  const [items, setItems] = useState<UserAbsenceRow[]>([]);
++  const [loading, setLoading] = useState(false);
++  const [saving, setSaving] = useState(false);
++  const [deletingId, setDeletingId] = useState<string | null>(null);
++  const [error, setError] = useState<string | null>(null);
++  const [success, setSuccess] = useState<string | null>(null);
++  const [editingAbsenceId, setEditingAbsenceId] = useState<string | null>(null);
++  const [form, setForm] = useState<EditableAbsenceForm>(EMPTY_FORM);
++  const [reloadKey, setReloadKey] = useState(0);
++
++  useEffect(() => {
++    function handleSelection(event: Event) {
++      const detail = (event as CustomEvent<UsersSelectionEventDetail>).detail;
++      setSelectedUser(detail?.user ?? null);
++      setItems([]);
++      setError(null);
++      setSuccess(null);
++      setEditingAbsenceId(null);
++      setForm(EMPTY_FORM);
++    }
++
++    window.addEventListener(USERS_SELECTION_EVENT, handleSelection as EventListener);
++    return () => window.removeEventListener(USERS_SELECTION_EVENT, handleSelection as EventListener);
++  }, []);
++
++  useEffect(() => {
++    let cancelled = false;
++
++    async function loadAbsences() {
++      if (!selectedUser?.id) {
++        setItems([]);
++        setLoading(false);
++        return;
++      }
++
++      setLoading(true);
++      setError(null);
++
++      try {
++        const res = await fetch(`/api/users/${selectedUser.id}/absences?limit=200`, { cache: "no-store" });
++        const json: unknown = await res.json();
++
++        if (!res.ok || !isApiOk<unknown>(json)) {
++          throw new Error(getErrorMessage(json, res.status));
++        }
++
++        const data = json.data as Record<string, unknown>;
++        const rawItems = Array.isArray(data.items) ? data.items : [];
++        const mapped = rawItems.map(toAbsenceRow).filter((item): item is UserAbsenceRow => Boolean(item));
++
++        if (!cancelled) {
++          setItems(mapped);
++        }
++      } catch (e: unknown) {
++        if (!cancelled) {
++          setItems([]);
++          setError(e instanceof Error ? e.message : "Unknown error");
++        }
++      } finally {
++        if (!cancelled) setLoading(false);
++      }
++    }
++
++    void loadAbsences();
++
++    return () => {
++      cancelled = true;
++    };
++  }, [reloadKey, selectedUser?.id]);
++
++  const editingAbsence = useMemo(
++    () => items.find((item) => item.id === editingAbsenceId) ?? null,
++    [editingAbsenceId, items],
++  );
++
++  function resetForm() {
++    setEditingAbsenceId(null);
++    setForm(EMPTY_FORM);
++  }
++
++  function validateForm() {
++    if (!selectedUser?.id) return "Aucun utilisateur sélectionné.";
++    if (!form.startAt || !form.endAt) return "Les dates de début et de fin sont obligatoires.";
++
++    const startAt = toIsoString(form.startAt);
++    const endAt = toIsoString(form.endAt);
++
++    if (!startAt || !endAt) return "Les dates saisies sont invalides.";
++    if (startAt >= endAt) return "La fin doit être strictement après le début.";
++
++    return null;
++  }
++
++  async function onSubmit(event: FormEvent<HTMLFormElement>) {
++    event.preventDefault();
++    setError(null);
++    setSuccess(null);
++
++    const validationMessage = validateForm();
++    if (validationMessage) {
++      setError(validationMessage);
++      return;
++    }
++
++    if (!selectedUser?.id) {
++      setError("Aucun utilisateur sélectionné.");
++      return;
++    }
++
++    const startAt = toIsoString(form.startAt);
++    const endAt = toIsoString(form.endAt);
++    if (!startAt || !endAt) {
++      setError("Les dates saisies sont invalides.");
++      return;
++    }
++
++    setSaving(true);
++
++    try {
++      const isEditing = Boolean(editingAbsenceId);
++      const res = await fetch(
++        isEditing ? `/api/users/${selectedUser.id}/absences/${editingAbsenceId}` : `/api/users/${selectedUser.id}/absences`,
++        {
++          method: isEditing ? "PATCH" : "POST",
++          headers: { "Content-Type": "application/json" },
++          body: JSON.stringify({
++            reason: form.reason,
++            startAt,
++            endAt,
++          }),
++        },
++      );
++
++      const json: unknown = await res.json();
++
++      if (!res.ok || !isApiOk<unknown>(json)) {
++        throw new Error(getErrorMessage(json, res.status));
++      }
++
++      setSuccess(isEditing ? "Absence mise à jour." : "Absence créée.");
++      resetForm();
++      setReloadKey((current) => current + 1);
++    } catch (e: unknown) {
++      setError(e instanceof Error ? e.message : "Unknown error");
++    } finally {
++      setSaving(false);
++    }
++  }
++
++  async function onDelete(absence: UserAbsenceRow) {
++    if (!selectedUser?.id) {
++      setError("Aucun utilisateur sélectionné.");
++      return;
++    }
++
++    const confirmed = window.confirm(`Supprimer l'absence du créneau ${formatIntervalLabel(absence.startAt, absence.endAt)} ?`);
++    if (!confirmed) return;
++
++    setDeletingId(absence.id);
++    setError(null);
++    setSuccess(null);
++
++    try {
++      const res = await fetch(`/api/users/${selectedUser.id}/absences/${absence.id}`, {
++        method: "DELETE",
++      });
++      const json: unknown = await res.json();
++
++      if (!res.ok || !isApiOk<unknown>(json)) {
++        throw new Error(getErrorMessage(json, res.status));
++      }
++
++      if (editingAbsenceId === absence.id) resetForm();
++      setSuccess("Absence supprimée.");
++      setReloadKey((current) => current + 1);
++    } catch (e: unknown) {
++      setError(e instanceof Error ? e.message : "Unknown error");
++    } finally {
++      setDeletingId(null);
++    }
++  }
++
++  function startEdit(absence: UserAbsenceRow) {
++    setEditingAbsenceId(absence.id);
++    setForm(toEditableForm(absence));
++    setError(null);
++    setSuccess(null);
++  }
++
++  return (
++    <section style={{ display: "grid", gap: 16 }}>
++      <div style={{ padding: 12, border: "1px solid #333", borderRadius: 8, display: "grid", gap: 12 }}>
++        <div>
++          <h2 style={{ margin: 0 }}>Indisponibilités / absences</h2>
++          <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
++            Gestion UI minimale branchée sur l&apos;API users existante : lecture, création, modification et suppression des absences pour le salarié actuellement sélectionné dans la liste.
++          </p>
++        </div>
++
++        <div style={{ padding: 12, border: "1px solid #333", borderRadius: 8 }}>
++          <strong>Utilisateur cible :</strong>{" "}
++          {selectedUser
++            ? `${selectedUser.name}${selectedUser.email ? ` (${selectedUser.email})` : ""} — rôle ${selectedUser.role}`
++            : "sélectionnez un utilisateur dans la liste ci-dessus."}
++        </div>
++
++        {selectedUser ? (
++          <>
++            <form onSubmit={onSubmit} style={{ display: "grid", gap: 12, padding: 12, border: "1px solid #333", borderRadius: 8 }}>
++              <h3 style={{ margin: 0 }}>{editingAbsence ? "Modifier une absence" : "Créer une absence"}</h3>
++
++              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12 }}>
++                <label style={{ display: "grid", gap: 6 }}>
++                  <span>Début</span>
++                  <input
++                    type="datetime-local"
++                    value={form.startAt}
++                    onChange={(event) => setForm((current) => ({ ...current, startAt: event.target.value }))}
++                    disabled={saving || loading || deletingId !== null}
++                    required
++                  />
++                </label>
++
++                <label style={{ display: "grid", gap: 6 }}>
++                  <span>Fin</span>
++                  <input
++                    type="datetime-local"
++                    value={form.endAt}
++                    onChange={(event) => setForm((current) => ({ ...current, endAt: event.target.value }))}
++                    disabled={saving || loading || deletingId !== null}
++                    required
++                  />
++                </label>
++              </div>
++
++              <label style={{ display: "grid", gap: 6 }}>
++                <span>Motif</span>
++                <input
++                  type="text"
++                  maxLength={160}
++                  value={form.reason}
++                  onChange={(event) => setForm((current) => ({ ...current, reason: event.target.value }))}
++                  placeholder="Congé, formation, indisponible..."
++                  disabled={saving || loading || deletingId !== null}
++                />
++              </label>
++
++              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
++                <button type="submit" disabled={saving || loading || deletingId !== null}>
++                  {saving ? (editingAbsence ? "Mise à jour..." : "Création...") : (editingAbsence ? "Enregistrer" : "Créer l'absence")}
++                </button>
++
++                <button type="button" onClick={resetForm} disabled={saving || deletingId !== null || (!editingAbsence && !form.reason && !form.startAt && !form.endAt)}>
++                  {editingAbsence ? "Annuler la modification" : "Vider le formulaire"}
++                </button>
++              </div>
++            </form>
++
++            {error ? (
++              <div style={{ padding: 12, border: "1px solid #a33", borderRadius: 8 }}>
++                Erreur : {error}
++              </div>
++            ) : null}
++
++            {success ? (
++              <div style={{ padding: 12, border: "1px solid #335533", borderRadius: 8 }}>
++                {success}
++              </div>
++            ) : null}
++
++            <div style={{ display: "grid", gap: 12, padding: 12, border: "1px solid #333", borderRadius: 8 }}>
++              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
++                <h3 style={{ margin: 0 }}>Absences enregistrées</h3>
++                <span style={{ opacity: 0.8 }}>{items.length} élément{items.length > 1 ? "s" : ""}</span>
++              </div>
++
++              {loading ? <div>Chargement des absences...</div> : null}
++
++              {!loading && items.length === 0 ? (
++                <div style={{ padding: 12, border: "1px solid #444", borderRadius: 8 }}>
++                  Aucune absence enregistrée pour cet utilisateur.
++                </div>
++              ) : null}
++
++              {!loading && items.length > 0 ? (
++                <div style={{ display: "grid", gap: 12 }}>
++                  {items.map((absence) => {
++                    const isEditing = editingAbsenceId === absence.id;
++                    const isDeleting = deletingId === absence.id;
++
++                    return (
++                      <article key={absence.id} style={{ padding: 12, border: "1px solid #333", borderRadius: 8, display: "grid", gap: 8 }}>
++                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", gap: 12, flexWrap: "wrap" }}>
++                          <div style={{ display: "grid", gap: 6 }}>
++                            <strong>{formatIntervalLabel(absence.startAt, absence.endAt)}</strong>
++                            <span>{absence.reason || "Motif non renseigné"}</span>
++                            <span style={{ opacity: 0.7, fontSize: 13 }}>
++                              Dernière mise à jour : {formatDateTimeLabel(absence.updatedAt)}
++                            </span>
++                          </div>
++
++                          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
++                            <button type="button" onClick={() => startEdit(absence)} disabled={saving || isDeleting}>
++                              {isEditing ? "En cours d'édition" : "Modifier"}
++                            </button>
++                            <button type="button" onClick={() => onDelete(absence)} disabled={saving || isDeleting}>
++                              {isDeleting ? "Suppression..." : "Supprimer"}
++                            </button>
++                          </div>
++                        </div>
++                      </article>
++                    );
++                  })}
++                </div>
++              ) : null}
++            </div>
++          </>
++        ) : null}
++      </div>
++    </section>
++  );
++}
+
