@@ -1970,8 +1970,8 @@ C:.
 |   |   |           app_cd194de2._.js.map
 |   |   |           app_planning_planning-client_tsx_ec2e83fd._.js
 |   |   |           app_planning_planning-client_tsx_ec2e83fd._.js.map
-|   |   |           app_users_4a229b6e._.js
-|   |   |           app_users_4a229b6e._.js.map
+|   |   |           app_users_9ebcc151._.js
+|   |   |           app_users_9ebcc151._.js.map
 |   |   |           app_vehicles_vehicles-client_tsx_94295d31._.js
 |   |   |           app_vehicles_vehicles-client_tsx_94295d31._.js.map
 |   |   |           node_modules_127bfa28._.js
@@ -2010,8 +2010,6 @@ C:.
 |   |   |           [root-of-the-server]__36ebbb9f._.js.map
 |   |   |           [root-of-the-server]__3e4277b6._.js
 |   |   |           [root-of-the-server]__3e4277b6._.js.map
-|   |   |           [root-of-the-server]__440023ec._.js
-|   |   |           [root-of-the-server]__440023ec._.js.map
 |   |   |           [root-of-the-server]__4556a15e._.js
 |   |   |           [root-of-the-server]__4556a15e._.js.map
 |   |   |           [root-of-the-server]__84823185._.js
@@ -2024,6 +2022,8 @@ C:.
 |   |   |           [root-of-the-server]__9d5e3ced._.js.map
 |   |   |           [root-of-the-server]__a457c799._.js
 |   |   |           [root-of-the-server]__a457c799._.js.map
+|   |   |           [root-of-the-server]__b54554aa._.js
+|   |   |           [root-of-the-server]__b54554aa._.js.map
 |   |   |           [root-of-the-server]__b60f9c53._.js
 |   |   |           [root-of-the-server]__b60f9c53._.js.map
 |   |   |           [root-of-the-server]__b9356576._.js
@@ -2095,7 +2095,13 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
+|   |   +----Zti40RxBcmG8zr_K172X
+|   |   |       _buildManifest.js
+|   |   |       _clientMiddlewareManifest.json
+|   |   |       _ssgManifest.js
+|   |   |       
 |   |   +---chunks
+|   |   |       0361c1366f120374.js
 |   |   |       05e6c743003c809d.js
 |   |   |       1687260e4d8b05d6.js
 |   |   |       34f7551faf121447.css
@@ -2107,18 +2113,12 @@ C:.
 |   |   |       96a8fcc9ec5b00e6.js
 |   |   |       a6dad97d9634a72d.js
 |   |   |       a6dad97d9634a72d.js.map
-|   |   |       ab92b86c6b16b483.js
 |   |   |       af7027598a07baa5.js
 |   |   |       b870288de7d3931e.js
 |   |   |       cc07a3e87a46bf5e.js
 |   |   |       cdb83a758231f045.js
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
-|   |   |       
-|   |   +---iLW7kB0oJXP1So360i1B7
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
 |   |   |       
 |   |   \---media
 |   |           favicon.0b3bf435.ico
@@ -2238,6 +2238,8 @@ C:.
 |   |       reset-password-client.tsx
 |   |       user-creation-client.tsx
 |   |       user-depot-assignment-client.tsx
+|   |       user-edit-client.tsx
+|   |       users-client-shared.ts
 |   |       users-list-client.tsx
 |   |       users-refresh.ts
 |   |       
@@ -2990,6 +2992,7 @@ C:.
 |   |           |   |       README_PATCH.md
 |   |           |   |       
 |   |           |   +---SESSION-20260319-15_A3_USERS-07
+|   |           |   |       PATCH__SESSION-20260319-15_A3_USERS-07.diff
 |   |           |   |       README_PATCH.md
 |   |           |   |       
 |   |           |   +---SESSION-20260319-16_A3_USERS-08

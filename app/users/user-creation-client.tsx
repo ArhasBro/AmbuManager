@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 
+import { USER_ROLE_OPTIONS } from "./users-client-shared";
 import { dispatchUsersRefresh } from "./users-refresh";
 
 type ApiOk<T> = {
@@ -21,8 +22,6 @@ type CreatedUser = {
   email: string | null;
   role: string;
 };
-
-const ROLE_OPTIONS = ["ADMIN", "GERANT", "BUREAU", "ADE", "AA", "TAXI", "REGULATEUR"] as const;
 
 function isApiOk<T>(value: unknown): value is ApiOk<T> {
   return typeof value === "object" && value !== null && "ok" in value && (value as { ok?: unknown }).ok === true;
@@ -64,7 +63,7 @@ export default function UserCreationClient() {
       return;
     }
 
-    if (!ROLE_OPTIONS.includes(role as (typeof ROLE_OPTIONS)[number])) {
+    if (!USER_ROLE_OPTIONS.includes(role as (typeof USER_ROLE_OPTIONS)[number])) {
       setError("Le rôle est obligatoire.");
       return;
     }
@@ -145,7 +144,7 @@ export default function UserCreationClient() {
         <span>Rôle</span>
         <select value={role} onChange={(event) => setRole(event.target.value)} disabled={submitting}>
           <option value="">Sélectionner un rôle</option>
-          {ROLE_OPTIONS.map((option) => (
+          {USER_ROLE_OPTIONS.map((option) => (
             <option key={option} value={option}>
               {option}
             </option>

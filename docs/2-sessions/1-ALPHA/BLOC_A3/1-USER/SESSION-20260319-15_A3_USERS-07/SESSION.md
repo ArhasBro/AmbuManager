@@ -1,35 +1,41 @@
-﻿# SESSION
-
-## ID SESSION
-
-SESSION-20260319-15_A3_USERS-07
+# SESSION — SESSION-20260319-15_A3_USERS-07
 
 ## Date
-
-19/03/2026
+20/03/2026
 
 ## Contexte
-
 Projet : Investissement  
 Sous-projet : Ambulance Manager  
-Maturite : 1-ALPHA  
+Maturité : 1-ALPHA  
 Bloc : A3  
 Type : COMPLETION  
-Intitule : UI modification utilisateur
+Intitulé : UI modification utilisateur
 
-## Objectif de la session
+## Objectif unique de la session
+Ajouter une UI minimale et exploitable de modification utilisateur sur `/users`, en continuité directe de l’API USERS-06 déjà validée.
 
-INFORMATION NON FOURNIE - A CONFIRMER
+## Périmètre exact traité
+- ajout d’une UI dédiée de modification utilisateur ;
+- sélection d’un utilisateur depuis la liste existante ;
+- préremplissage des champs autorisés ;
+- édition de `name`, `email`, `role` uniquement ;
+- appel de l’API de modification déjà livrée ;
+- affichage des états chargement / erreur / succès ;
+- rafraîchissement cohérent de la liste après modification.
 
-## Perimetre exact traite
+## Hors périmètre confirmé
+- mot de passe ;
+- rattachement dépôt ;
+- archivage / désactivation ;
+- création utilisateur ;
+- refonte API ;
+- refonte complète de `/users` ;
+- modification Prisma ;
+- refonte RBAC.
 
-INFORMATION NON FOURNIE - A CONFIRMER
+## Résultat synthétique
+La session USERS-07 a livré une UI de modification utilisateur propre, minimale et exploitable, strictement bornée au périmètre demandé. Le patch applicatif a été validé localement avec une chaîne de contrôle verte.
 
-## Resultat synthetique de session
-
-INFORMATION NON FOURNIE - A CONFIRMER
-
-## Dossiers lies
-
-- Session : docs/2-sessions/1-ALPHA/BLOC_A3/SESSION-20260319-15_A3_USERS-07
-- Patchs  : docs/3-patches/1-ALPHA/BLOC_A3/SESSION-20260319-15_A3_USERS-07
+## Dossiers liés
+- session : `docs/2-sessions/1-ALPHA/BLOC_A3/1-USER/SESSION-20260319-15_A3_USERS-07/`
+- patch : `docs/3-patches/1-ALPHA/BLOC_A3/1-USER/SESSION-20260319-15_A3_USERS-07/`

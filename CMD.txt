@@ -62,8 +62,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260319-15_A3_USERS-07
-- USERS-07 — COMPLÉTION** — UI modification utilisateur
+- SESSION-20260319-16_A3_USERS-08
+- USERS-08 — COMPLÉTION** — Désactivation / archivage utilisateur
 
 sortie propre + retour du terminal + aucune erreur = validé
 

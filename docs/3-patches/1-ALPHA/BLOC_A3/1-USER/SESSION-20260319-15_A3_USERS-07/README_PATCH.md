@@ -1,24 +1,33 @@
-﻿# README_PATCH
+# README_PATCH — SESSION-20260319-15_A3_USERS-07
 
-## Session liee
-SESSION-20260319-15_A3_USERS-07
+## Patch concerné
+`PATCH__SESSION-20260319-15_A3_USERS-07.diff`
 
-## Type
-COMPLETION
+## Objet
+Livrer l’UI minimale de modification utilisateur sur `/users`, en continuité directe de l’API USERS-06.
 
-## Dossier patch
-docs/3-patches/1-ALPHA/BLOC_A3/SESSION-20260319-15_A3_USERS-07
+## Périmètre couvert
+- sélection d’un utilisateur depuis la liste existante ;
+- formulaire dédié et séparé de modification ;
+- édition de `name`, `email`, `role` ;
+- préremplissage des données ;
+- appel de l’API de modification déjà disponible ;
+- affichage des états UI ;
+- rafraîchissement de la liste après succès.
 
-## Patch officiel attendu
-PATCH__SESSION-20260319-15_A3_USERS-07.diff
+## Hors périmètre confirmé
+- aucun changement mot de passe ;
+- aucun changement dépôt ;
+- aucun archivage / désactivation ;
+- aucune refonte API ;
+- aucune extension vers USERS-08.
 
-## Commandes d'application
-
-`ash
-git apply --check "docs/3-patches/1-ALPHA/BLOC_A3/SESSION-20260319-15_A3_USERS-07/PATCH__SESSION-20260319-15_A3_USERS-07.diff"
-git apply         "docs/3-patches/1-ALPHA/BLOC_A3/SESSION-20260319-15_A3_USERS-07/PATCH__SESSION-20260319-15_A3_USERS-07.diff"
-`
+## Validation retenue
+Validation locale confirmée sur le patch applicatif :
+- `git apply --check` : OK ;
+- `git apply` : OK ;
+- `npm run lint` : OK ;
+- `npm run build` : OK.
 
 ## Statut
-- Dossier patch initialise.
-- Patch officiel a produire dans cette session si du code est modifie.
+Patch applicatif USERS-07 validé.

@@ -9,6 +9,7 @@ import { prisma } from "@/lib/prisma";
 import ResetPasswordClient from "./reset-password-client";
 import UserCreationClient from "./user-creation-client";
 import UserDepotAssignmentClient from "./user-depot-assignment-client";
+import UserEditClient from "./user-edit-client";
 import UsersListClient from "./users-list-client";
 
 export default async function UsersPage() {
@@ -43,6 +44,7 @@ export default async function UsersPage() {
 
       <UserCreationClient />
       <UsersListClient />
+      <UserEditClient />
       <UserDepotAssignmentClient availableDepots={depots} />
       <ResetPasswordClient actorUserId={user.id} />
     </div>

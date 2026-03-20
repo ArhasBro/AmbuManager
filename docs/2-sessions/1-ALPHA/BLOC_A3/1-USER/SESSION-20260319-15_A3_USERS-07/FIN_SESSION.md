@@ -1,14 +1,19 @@
-﻿# FIN_SESSION
+# FIN_SESSION — SESSION-20260319-15_A3_USERS-07
 
-## ClÃ´ture
-
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+## Clôture
+Session finalisée dans le périmètre demandé, sans extension vers USERS-08 et sans reprise fonctionnelle supplémentaire.
 
 ## Validation
-
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+- patch applicatif : validé ;
+- `git apply --check` : OK ;
+- `git apply` : OK ;
+- `npm run lint` : OK ;
+- `npm run build` : OK.
 
 ## Verdict final
+- Objectif fonctionnel USERS-07 : OUI
+- Validation technique de la session : OUI
+- Session clôturable : OUI
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
-
+## Suite
+Aucune reprise complémentaire dans cette livraison documentaire.

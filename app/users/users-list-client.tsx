@@ -2,7 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-import { USERS_REFRESH_EVENT } from "./users-refresh";
+import { depotLabel, USER_ROLE_OPTIONS, type UserListRow } from "./users-client-shared";
+import { USERS_REFRESH_EVENT, dispatchUsersSelection } from "./users-refresh";
 
 type ApiOk<T> = {
   ok: true;
@@ -15,23 +16,9 @@ type ApiErr = {
   details?: unknown;
 };
 
-type DepotLite = {
-  id: string;
-  name: string;
-  isActive: boolean;
-};
-
-type UserRow = {
-  id: string;
-  name: string;
-  email: string | null;
-  role: string;
-  depotId: string | null;
-  depot: DepotLite | null;
-};
 
 type UserListResponse = {
-  items: UserRow[];
+  items: UserListRow[];
   pagination: {
     page: number;
     pageSize: number;
@@ -46,7 +33,7 @@ type UserListResponse = {
   };
 };
 
-const ROLE_OPTIONS = ["", "ADMIN", "GERANT", "BUREAU", "ADE", "AA", "TAXI", "REGULATEUR"] as const;
+const ROLE_FILTER_OPTIONS = ["", ...USER_ROLE_OPTIONS] as const;
 const PAGE_SIZE = 10;
 
 function isApiOk<T>(value: unknown): value is ApiOk<T> {
@@ -57,7 +44,7 @@ function isApiErr(value: unknown): value is ApiErr {
   return typeof value === "object" && value !== null && "ok" in value && (value as { ok?: unknown }).ok === false;
 }
 
-function toUserRow(value: unknown): UserRow | null {
+function toUserRow(value: unknown): UserListRow | null {
   if (typeof value !== "object" || value === null) return null;
 
   const record = value as Record<string, unknown>;
@@ -82,10 +69,6 @@ function toUserRow(value: unknown): UserRow | null {
   return { id, name, email, role, depotId, depot };
 }
 
-function depotLabel(depot: DepotLite | null) {
-  if (!depot) return "Aucune";
-  return depot.isActive ? depot.name : `${depot.name} (archivé)`;
-}
 
 export default function UsersListClient() {
   const [searchInput, setSearchInput] = useState("");
@@ -94,7 +77,7 @@ export default function UsersListClient() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [rows, setRows] = useState<UserRow[]>([]);
+  const [rows, setRows] = useState<UserListRow[]>([]);
   const [selectedUserId, setSelectedUserId] = useState("");
   const [reloadKey, setReloadKey] = useState(0);
   const [pagination, setPagination] = useState<UserListResponse["pagination"]>({
@@ -130,6 +113,12 @@ export default function UsersListClient() {
   }, []);
 
   useEffect(() => {
+    return () => {
+      dispatchUsersSelection(null);
+    };
+  }, []);
+
+  useEffect(() => {
     let cancelled = false;
 
     async function loadUsers() {
@@ -155,7 +144,7 @@ export default function UsersListClient() {
 
         const data = json.data as Record<string, unknown>;
         const items = Array.isArray(data.items) ? data.items : [];
-        const mapped = items.map(toUserRow).filter((item): item is UserRow => Boolean(item));
+        const mapped = items.map(toUserRow).filter((item): item is UserListRow => Boolean(item));
         const nextPaginationRaw = typeof data.pagination === "object" && data.pagination !== null
           ? (data.pagination as Record<string, unknown>)
           : null;
@@ -208,6 +197,10 @@ export default function UsersListClient() {
     [rows, selectedUserId],
   );
 
+  useEffect(() => {
+    dispatchUsersSelection(selectedUser);
+  }, [selectedUser]);
+
   return (
     <section style={{ display: "grid", gap: 16 }}>
       <div style={{ padding: 12, border: "1px solid #333", borderRadius: 8, display: "grid", gap: 12 }}>
@@ -232,7 +225,7 @@ export default function UsersListClient() {
           <label style={{ display: "grid", gap: 6 }}>
             <span>Rôle</span>
             <select value={role} onChange={(event) => setRole(event.target.value)}>
-              {ROLE_OPTIONS.map((value) => (
+              {ROLE_FILTER_OPTIONS.map((value) => (
                 <option key={value || "ALL"} value={value}>
                   {value || "Tous les rôles"}
                 </option>

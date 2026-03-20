@@ -1,0 +1,455 @@
+diff --git a/app/users/page.tsx b/app/users/page.tsx
+index be8c373..da01ee3 100644
+--- a/app/users/page.tsx
++++ b/app/users/page.tsx
+@@ -9,6 +9,7 @@ import { prisma } from "@/lib/prisma";
+ import ResetPasswordClient from "./reset-password-client";
+ import UserCreationClient from "./user-creation-client";
+ import UserDepotAssignmentClient from "./user-depot-assignment-client";
++import UserEditClient from "./user-edit-client";
+ import UsersListClient from "./users-list-client";
+ 
+ export default async function UsersPage() {
+@@ -43,6 +44,7 @@ export default async function UsersPage() {
+ 
+       <UserCreationClient />
+       <UsersListClient />
++      <UserEditClient />
+       <UserDepotAssignmentClient availableDepots={depots} />
+       <ResetPasswordClient actorUserId={user.id} />
+     </div>
+diff --git a/app/users/user-creation-client.tsx b/app/users/user-creation-client.tsx
+index 2d7720e..1b5a10b 100644
+--- a/app/users/user-creation-client.tsx
++++ b/app/users/user-creation-client.tsx
+@@ -2,6 +2,7 @@
+ 
+ import { useState, type FormEvent } from "react";
+ 
++import { USER_ROLE_OPTIONS } from "./users-client-shared";
+ import { dispatchUsersRefresh } from "./users-refresh";
+ 
+ type ApiOk<T> = {
+@@ -22,8 +23,6 @@ type CreatedUser = {
+   role: string;
+ };
+ 
+-const ROLE_OPTIONS = ["ADMIN", "GERANT", "BUREAU", "ADE", "AA", "TAXI", "REGULATEUR"] as const;
+-
+ function isApiOk<T>(value: unknown): value is ApiOk<T> {
+   return typeof value === "object" && value !== null && "ok" in value && (value as { ok?: unknown }).ok === true;
+ }
+@@ -64,7 +63,7 @@ export default function UserCreationClient() {
+       return;
+     }
+ 
+-    if (!ROLE_OPTIONS.includes(role as (typeof ROLE_OPTIONS)[number])) {
++    if (!USER_ROLE_OPTIONS.includes(role as (typeof USER_ROLE_OPTIONS)[number])) {
+       setError("Le rôle est obligatoire.");
+       return;
+     }
+@@ -145,7 +144,7 @@ export default function UserCreationClient() {
+         <span>Rôle</span>
+         <select value={role} onChange={(event) => setRole(event.target.value)} disabled={submitting}>
+           <option value="">Sélectionner un rôle</option>
+-          {ROLE_OPTIONS.map((option) => (
++          {USER_ROLE_OPTIONS.map((option) => (
+             <option key={option} value={option}>
+               {option}
+             </option>
+diff --git a/app/users/users-list-client.tsx b/app/users/users-list-client.tsx
+index a6e28b7..2bce4c6 100644
+--- a/app/users/users-list-client.tsx
++++ b/app/users/users-list-client.tsx
+@@ -2,7 +2,8 @@
+ 
+ import { useEffect, useMemo, useState } from "react";
+ 
+-import { USERS_REFRESH_EVENT } from "./users-refresh";
++import { depotLabel, USER_ROLE_OPTIONS, type UserListRow } from "./users-client-shared";
++import { USERS_REFRESH_EVENT, dispatchUsersSelection } from "./users-refresh";
+ 
+ type ApiOk<T> = {
+   ok: true;
+@@ -15,23 +16,9 @@ type ApiErr = {
+   details?: unknown;
+ };
+ 
+-type DepotLite = {
+-  id: string;
+-  name: string;
+-  isActive: boolean;
+-};
+-
+-type UserRow = {
+-  id: string;
+-  name: string;
+-  email: string | null;
+-  role: string;
+-  depotId: string | null;
+-  depot: DepotLite | null;
+-};
+ 
+ type UserListResponse = {
+-  items: UserRow[];
++  items: UserListRow[];
+   pagination: {
+     page: number;
+     pageSize: number;
+@@ -46,7 +33,7 @@ type UserListResponse = {
+   };
+ };
+ 
+-const ROLE_OPTIONS = ["", "ADMIN", "GERANT", "BUREAU", "ADE", "AA", "TAXI", "REGULATEUR"] as const;
++const ROLE_FILTER_OPTIONS = ["", ...USER_ROLE_OPTIONS] as const;
+ const PAGE_SIZE = 10;
+ 
+ function isApiOk<T>(value: unknown): value is ApiOk<T> {
+@@ -57,7 +44,7 @@ function isApiErr(value: unknown): value is ApiErr {
+   return typeof value === "object" && value !== null && "ok" in value && (value as { ok?: unknown }).ok === false;
+ }
+ 
+-function toUserRow(value: unknown): UserRow | null {
++function toUserRow(value: unknown): UserListRow | null {
+   if (typeof value !== "object" || value === null) return null;
+ 
+   const record = value as Record<string, unknown>;
+@@ -82,10 +69,6 @@ function toUserRow(value: unknown): UserRow | null {
+   return { id, name, email, role, depotId, depot };
+ }
+ 
+-function depotLabel(depot: DepotLite | null) {
+-  if (!depot) return "Aucune";
+-  return depot.isActive ? depot.name : `${depot.name} (archivé)`;
+-}
+ 
+ export default function UsersListClient() {
+   const [searchInput, setSearchInput] = useState("");
+@@ -94,7 +77,7 @@ export default function UsersListClient() {
+   const [page, setPage] = useState(1);
+   const [loading, setLoading] = useState(true);
+   const [error, setError] = useState<string | null>(null);
+-  const [rows, setRows] = useState<UserRow[]>([]);
++  const [rows, setRows] = useState<UserListRow[]>([]);
+   const [selectedUserId, setSelectedUserId] = useState("");
+   const [reloadKey, setReloadKey] = useState(0);
+   const [pagination, setPagination] = useState<UserListResponse["pagination"]>({
+@@ -129,6 +112,12 @@ export default function UsersListClient() {
+     return () => window.removeEventListener(USERS_REFRESH_EVENT, handleUsersRefresh);
+   }, []);
+ 
++  useEffect(() => {
++    return () => {
++      dispatchUsersSelection(null);
++    };
++  }, []);
++
+   useEffect(() => {
+     let cancelled = false;
+ 
+@@ -155,7 +144,7 @@ export default function UsersListClient() {
+ 
+         const data = json.data as Record<string, unknown>;
+         const items = Array.isArray(data.items) ? data.items : [];
+-        const mapped = items.map(toUserRow).filter((item): item is UserRow => Boolean(item));
++        const mapped = items.map(toUserRow).filter((item): item is UserListRow => Boolean(item));
+         const nextPaginationRaw = typeof data.pagination === "object" && data.pagination !== null
+           ? (data.pagination as Record<string, unknown>)
+           : null;
+@@ -208,6 +197,10 @@ export default function UsersListClient() {
+     [rows, selectedUserId],
+   );
+ 
++  useEffect(() => {
++    dispatchUsersSelection(selectedUser);
++  }, [selectedUser]);
++
+   return (
+     <section style={{ display: "grid", gap: 16 }}>
+       <div style={{ padding: 12, border: "1px solid #333", borderRadius: 8, display: "grid", gap: 12 }}>
+@@ -232,7 +225,7 @@ export default function UsersListClient() {
+           <label style={{ display: "grid", gap: 6 }}>
+             <span>Rôle</span>
+             <select value={role} onChange={(event) => setRole(event.target.value)}>
+-              {ROLE_OPTIONS.map((value) => (
++              {ROLE_FILTER_OPTIONS.map((value) => (
+                 <option key={value || "ALL"} value={value}>
+                   {value || "Tous les rôles"}
+                 </option>
+diff --git a/app/users/users-refresh.ts b/app/users/users-refresh.ts
+index 0035a77..ed03be4 100644
+--- a/app/users/users-refresh.ts
++++ b/app/users/users-refresh.ts
+@@ -1,5 +1,18 @@
++import type { UserListRow } from "./users-client-shared";
++
+ export const USERS_REFRESH_EVENT = "users:refresh";
++export const USERS_SELECTION_EVENT = "users:selection";
++
++export type UsersSelectionEventDetail = {
++  user: UserListRow | null;
++};
+ 
+ export function dispatchUsersRefresh() {
+   window.dispatchEvent(new CustomEvent(USERS_REFRESH_EVENT));
+ }
++
++export function dispatchUsersSelection(user: UserListRow | null) {
++  window.dispatchEvent(new CustomEvent<UsersSelectionEventDetail>(USERS_SELECTION_EVENT, {
++    detail: { user },
++  }));
++}
+diff --git a/app/users/user-edit-client.tsx b/app/users/user-edit-client.tsx
+new file mode 100644
+index 0000000..5e01ba2
+--- /dev/null
++++ b/app/users/user-edit-client.tsx
+@@ -0,0 +1,221 @@
++"use client";
++
++import { useEffect, useMemo, useState, type FormEvent } from "react";
++
++import { depotLabel, USER_ROLE_OPTIONS, type UserListRow } from "./users-client-shared";
++import { USERS_SELECTION_EVENT, dispatchUsersRefresh, dispatchUsersSelection, type UsersSelectionEventDetail } from "./users-refresh";
++
++type ApiOk<T> = {
++  ok: true;
++  data: T;
++};
++
++type ApiErr = {
++  ok: false;
++  error: string;
++  details?: unknown;
++};
++
++type UpdatedUser = Pick<UserListRow, "id" | "name" | "email" | "role" | "depotId" | "depot">;
++
++function isApiOk<T>(value: unknown): value is ApiOk<T> {
++  return typeof value === "object" && value !== null && "ok" in value && (value as { ok?: unknown }).ok === true;
++}
++
++function isApiErr(value: unknown): value is ApiErr {
++  return typeof value === "object" && value !== null && "ok" in value && (value as { ok?: unknown }).ok === false;
++}
++
++function readApiError(value: unknown, status: number) {
++  if (!isApiErr(value)) return `HTTP_${status}`;
++
++  if (typeof value.details === "object" && value.details !== null && "message" in (value.details as Record<string, unknown>)) {
++    const message = (value.details as Record<string, unknown>).message;
++    if (typeof message === "string" && message.trim()) return message;
++  }
++
++  return value.error;
++}
++
++export default function UserEditClient() {
++  const [selectedUser, setSelectedUser] = useState<UserListRow | null>(null);
++  const [name, setName] = useState("");
++  const [email, setEmail] = useState("");
++  const [role, setRole] = useState("");
++  const [submitting, setSubmitting] = useState(false);
++  const [error, setError] = useState<string | null>(null);
++  const [success, setSuccess] = useState<string | null>(null);
++
++  useEffect(() => {
++    function handleUsersSelection(event: Event) {
++      const detail = (event as CustomEvent<UsersSelectionEventDetail>).detail;
++      const nextSelectedUser = detail?.user ?? null;
++
++      setSelectedUser(nextSelectedUser);
++      setName(nextSelectedUser?.name ?? "");
++      setEmail(nextSelectedUser?.email ?? "");
++      setRole(nextSelectedUser?.role ?? "");
++      setError(null);
++      setSuccess(null);
++    }
++
++    window.addEventListener(USERS_SELECTION_EVENT, handleUsersSelection as EventListener);
++    return () => window.removeEventListener(USERS_SELECTION_EVENT, handleUsersSelection as EventListener);
++  }, []);
++
++  const hasPendingChange = useMemo(() => {
++    if (!selectedUser) return false;
++
++    return name.trim() !== selectedUser.name
++      || email.trim() !== (selectedUser.email ?? "")
++      || role !== selectedUser.role;
++  }, [email, name, role, selectedUser]);
++
++  async function onSubmit(event: FormEvent<HTMLFormElement>) {
++    event.preventDefault();
++    setError(null);
++    setSuccess(null);
++
++    if (!selectedUser) {
++      setError("Sélectionnez d'abord un utilisateur dans la liste ci-dessus.");
++      return;
++    }
++
++    const trimmedName = name.trim();
++    const trimmedEmail = email.trim();
++
++    if (!trimmedName) {
++      setError("Le nom est obligatoire.");
++      return;
++    }
++
++    if (!trimmedEmail) {
++      setError("L'email est obligatoire.");
++      return;
++    }
++
++    if (!USER_ROLE_OPTIONS.includes(role as (typeof USER_ROLE_OPTIONS)[number])) {
++      setError("Le rôle est obligatoire.");
++      return;
++    }
++
++    if (!hasPendingChange) {
++      setError("Aucune modification détectée.");
++      return;
++    }
++
++    setSubmitting(true);
++
++    try {
++      const res = await fetch(`/api/users/${encodeURIComponent(selectedUser.id)}`, {
++        method: "PATCH",
++        headers: { "Content-Type": "application/json" },
++        body: JSON.stringify({
++          name: trimmedName,
++          email: trimmedEmail,
++          role,
++        }),
++      });
++
++      const json: unknown = await res.json();
++
++      if (!res.ok || !isApiOk<UpdatedUser>(json)) {
++        throw new Error(readApiError(json, res.status));
++      }
++
++      const updatedUser = json.data;
++      setSelectedUser(updatedUser);
++      setName(updatedUser.name);
++      setEmail(updatedUser.email ?? "");
++      setRole(updatedUser.role);
++      setSuccess(`Utilisateur modifié : ${updatedUser.name}${updatedUser.email ? ` (${updatedUser.email})` : ""}.`);
++      dispatchUsersSelection(updatedUser);
++      dispatchUsersRefresh();
++    } catch (e: unknown) {
++      setError(e instanceof Error ? e.message : "Erreur inconnue");
++    } finally {
++      setSubmitting(false);
++    }
++  }
++
++  return (
++    <form onSubmit={onSubmit} style={{ display: "grid", gap: 12, padding: 12, border: "1px solid #333", borderRadius: 8, maxWidth: 720 }}>
++      <div>
++        <h2 style={{ margin: 0 }}>Modifier un utilisateur</h2>
++        <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
++          Sélectionnez d&apos;abord un utilisateur dans la liste ci-dessus pour modifier uniquement les champs couverts par USERS-06 : nom, email et rôle.
++        </p>
++      </div>
++
++      {!selectedUser ? (
++        <div style={{ padding: 10, border: "1px solid #555", borderRadius: 8 }}>
++          Aucun utilisateur sélectionné dans la liste.
++        </div>
++      ) : (
++        <>
++          <div style={{ padding: 10, border: "1px solid #333", borderRadius: 8 }}>
++            <div>
++              <strong>{selectedUser.name}</strong>
++              {selectedUser.email ? ` (${selectedUser.email})` : ""} — rôle {selectedUser.role}
++            </div>
++            <div style={{ marginTop: 6, opacity: 0.8 }}>
++              Base actuelle : {depotLabel(selectedUser.depot)}
++            </div>
++          </div>
++
++          <label style={{ display: "grid", gap: 6 }}>
++            <span>Nom</span>
++            <input
++              type="text"
++              value={name}
++              onChange={(event) => setName(event.target.value)}
++              placeholder="Nom complet"
++              disabled={submitting}
++              maxLength={160}
++            />
++          </label>
++
++          <label style={{ display: "grid", gap: 6 }}>
++            <span>Email</span>
++            <input
++              type="email"
++              value={email}
++              onChange={(event) => setEmail(event.target.value)}
++              placeholder="prenom.nom@entreprise.fr"
++              disabled={submitting}
++              autoComplete="email"
++            />
++          </label>
++
++          <label style={{ display: "grid", gap: 6 }}>
++            <span>Rôle</span>
++            <select value={role} onChange={(event) => setRole(event.target.value)} disabled={submitting}>
++              <option value="">Sélectionner un rôle</option>
++              {USER_ROLE_OPTIONS.map((option) => (
++                <option key={option} value={option}>
++                  {option}
++                </option>
++              ))}
++            </select>
++          </label>
++        </>
++      )}
++
++      {error ? (
++        <div style={{ padding: 10, border: "1px solid #663333", borderRadius: 8 }}>
++          Erreur : {error}
++        </div>
++      ) : null}
++
++      {success ? (
++        <div style={{ padding: 10, border: "1px solid #335533", borderRadius: 8 }}>
++          {success}
++        </div>
++      ) : null}
++
++      <button type="submit" disabled={submitting || !selectedUser || !hasPendingChange} style={{ justifySelf: "start", padding: "10px 14px" }}>
++        {submitting ? "Enregistrement..." : "Enregistrer les modifications"}
++      </button>
++    </form>
++  );
++}
+diff --git a/app/users/users-client-shared.ts b/app/users/users-client-shared.ts
+new file mode 100644
+index 0000000..c4f26a5
+--- /dev/null
++++ b/app/users/users-client-shared.ts
+@@ -0,0 +1,21 @@
++export const USER_ROLE_OPTIONS = ["ADMIN", "GERANT", "BUREAU", "ADE", "AA", "TAXI", "REGULATEUR"] as const;
++
++export type DepotLite = {
++  id: string;
++  name: string;
++  isActive: boolean;
++};
++
++export type UserListRow = {
++  id: string;
++  name: string;
++  email: string | null;
++  role: string;
++  depotId: string | null;
++  depot: DepotLite | null;
++};
++
++export function depotLabel(depot: DepotLite | null) {
++  if (!depot) return "Aucune";
++  return depot.isActive ? depot.name : `${depot.name} (archivé)`;
++}
