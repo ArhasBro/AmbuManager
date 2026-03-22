@@ -7,6 +7,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { canPublishAutoSchedule } from "@/lib/permissions";
 import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
+import { buildUserAbsenceMap, findOverlappingUserAbsence, listUserAbsenceWindows } from "@/lib/services/planning/user-absence";
 
 const ParamsSchema = z.object({
   id: z.string().min(1),
@@ -58,6 +59,64 @@ type DraftForPublish = {
 
 function overlaps(aStart: Date, aEnd: Date, bStart: Date, bEnd: Date): boolean {
   return aStart < bEnd && aEnd > bStart;
+}
+
+async function checkUserAbsenceConflicts(
+  tx: Prisma.TransactionClient,
+  companyId: string,
+  drafts: DraftForPublish[]
+): Promise<
+  | { kind: "OK" }
+  | {
+      kind: "USER_ABSENCE_CONFLICT";
+      conflict: {
+        userId: string;
+        draft: { startAt: string; endAt: string };
+        absence: { id: string; startAt: string; endAt: string; reason: string | null };
+      };
+    }
+> {
+  if (drafts.length === 0) return { kind: "OK" };
+
+  const userIds = Array.from(new Set(drafts.flatMap((d) => [d.userId, d.user2Id]).filter(Boolean))) as string[];
+  if (userIds.length === 0) return { kind: "OK" };
+
+  const minStart = drafts.reduce((min, d) => (d.startAt < min ? d.startAt : min), drafts[0]!.startAt);
+  const maxEnd = drafts.reduce((max, d) => (d.endAt > max ? d.endAt : max), drafts[0]!.endAt);
+
+  const absencesByUser = buildUserAbsenceMap(
+    await listUserAbsenceWindows(tx, {
+      companyId,
+      userIds,
+      startAt: minStart,
+      endAt: maxEnd,
+    })
+  );
+
+  for (const draft of drafts) {
+    const assignedUsers = Array.from(new Set([draft.userId, draft.user2Id].filter(Boolean))) as string[];
+
+    for (const assignedUserId of assignedUsers) {
+      const absence = findOverlappingUserAbsence(absencesByUser, assignedUserId, draft.startAt, draft.endAt);
+      if (!absence) continue;
+
+      return {
+        kind: "USER_ABSENCE_CONFLICT",
+        conflict: {
+          userId: assignedUserId,
+          draft: { startAt: draft.startAt.toISOString(), endAt: draft.endAt.toISOString() },
+          absence: {
+            id: absence.id,
+            startAt: absence.startAt.toISOString(),
+            endAt: absence.endAt.toISOString(),
+            reason: absence.reason ?? null,
+          },
+        },
+      };
+    }
+  }
+
+  return { kind: "OK" };
 }
 
 /**
@@ -389,7 +448,13 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
 
       if (drafts.length === 0) return { kind: "NO_DRAFTS" as const };
 
-      // ✅ 1) Chevauchements (user/vehicle)
+      // ✅ 1) Absences déclaratives utilisateur
+      const absenceCheck = await checkUserAbsenceConflicts(tx, companyId, drafts as DraftForPublish[]);
+      if (absenceCheck.kind === "USER_ABSENCE_CONFLICT") {
+        return { kind: "USER_ABSENCE_CONFLICT" as const, conflict: absenceCheck.conflict };
+      }
+
+      // ✅ 2) Chevauchements (user/vehicle)
       const conflictCheck = await checkConflicts(tx, companyId, drafts as DraftForPublish[]);
       if (conflictCheck.kind === "CONFLICT_USER") {
         return { kind: "CONFLICT_USER" as const, conflict: conflictCheck.conflict };
@@ -398,7 +463,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
         return { kind: "CONFLICT_VEHICLE" as const, conflict: conflictCheck.conflict };
       }
 
-      // ✅ 2) Repos minimum (CompanyRule)
+      // ✅ 3) Repos minimum (CompanyRule)
       const ruleRes = await loadMinRestRule(tx, companyId);
       if (ruleRes.kind === "CONFIG_ERROR") {
         return { kind: "RULE_CONFIG_ERROR" as const, message: ruleRes.message };
@@ -419,7 +484,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
         }
       }
 
-      // ✅ 3) Publication
+      // ✅ 4) Publication
       await tx.shift.createMany({
         data: drafts.map((d) => ({
           companyId: d.companyId,
@@ -467,6 +532,9 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
     }
     if (result.kind === "NO_DRAFTS") {
       return NextResponse.json({ ok: false, error: "NO_DRAFTS" }, { status: 409 });
+    }
+    if (result.kind === "USER_ABSENCE_CONFLICT") {
+      return NextResponse.json({ ok: false, error: "USER_ABSENCE_CONFLICT", details: result.conflict }, { status: 409 });
     }
     if (result.kind === "CONFLICT_USER") {
       return NextResponse.json({ ok: false, error: "CONFLICT_USER", details: result.conflict }, { status: 409 });

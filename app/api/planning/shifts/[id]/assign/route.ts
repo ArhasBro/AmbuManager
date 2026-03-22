@@ -186,6 +186,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
       if (result.error.code === "RUN_NOT_DRAFT") return json(409, { ok: false, error: "RUN_NOT_DRAFT" });
 
       if (
+        result.error.code === "USER_ABSENCE_CONFLICT" ||
         result.error.code === "USER_OVERLAP_CONFLICT" ||
         result.error.code === "VEHICLE_OVERLAP_CONFLICT" ||
         result.error.code === "RULE_BLOCKED"
@@ -262,6 +263,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     }
 
     if (
+      result.error.code === "USER_ABSENCE_CONFLICT" ||
       result.error.code === "USER_OVERLAP_CONFLICT" ||
       result.error.code === "VEHICLE_OVERLAP_CONFLICT" ||
       result.error.code === "RULE_BLOCKED"

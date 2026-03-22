@@ -1,6 +1,7 @@
 // lib/services/planning/assign-shift.ts
 import { prisma } from "@/lib/prisma";
 import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
+import { findFirstUserAbsenceConflict } from "@/lib/services/planning/user-absence";
 import type { PlanningIssue, PlanningIssueCode } from "@/lib/types/planning";
 import { RuleMode } from "@prisma/client";
 
@@ -101,6 +102,29 @@ export async function assignShift(input: AssignShiftInput): Promise<AssignShiftR
 
   const issues: PlanningIssue[] = [];
   const assignedUsers = [userId, user2Id].filter((x): x is string => Boolean(x));
+
+  const absenceConflict =
+    assignedUsers.length > 0
+      ? await findFirstUserAbsenceConflict(prisma, {
+          companyId,
+          userIds: assignedUsers,
+          startAt,
+          endAt,
+        })
+      : null;
+
+  if (absenceConflict) {
+    return {
+      ok: false,
+      error: err("USER_ABSENCE_CONFLICT", "Conflit absence : employé indisponible sur ce créneau.", {
+        userId: absenceConflict.userId,
+        absenceId: absenceConflict.id,
+        absenceStartAt: absenceConflict.startAt.toISOString(),
+        absenceEndAt: absenceConflict.endAt.toISOString(),
+        reason: absenceConflict.reason ?? null,
+      }),
+    };
+  }
 
   // 3) Conflits users — autres Shifts + DraftShifts DRAFT
   if (assignedUsers.length > 0) {

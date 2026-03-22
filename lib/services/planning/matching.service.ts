@@ -1,5 +1,7 @@
 import { PrismaClient, Role } from "@prisma/client";
 
+import { buildUserAbsenceMap, isUserAbsent, listUserAbsenceWindows } from "@/lib/services/planning/user-absence";
+
 export type MatchingReason =
   | "MATCHED"
   | "ALREADY_ASSIGNED"
@@ -139,6 +141,18 @@ export async function computeDraftShiftMatchingByRole(
         })
       : [];
 
+  const candidateUserIds = users.map((u) => u.id);
+  const minStart = draftShifts.reduce((min, s) => (s.startAt < min ? s.startAt : min), draftShifts[0]!.startAt);
+  const maxEnd = draftShifts.reduce((max, s) => (s.endAt > max ? s.endAt : max), draftShifts[0]!.endAt);
+  const absencesByUser = buildUserAbsenceMap(
+    await listUserAbsenceWindows(prisma, {
+      companyId,
+      userIds: candidateUserIds,
+      startAt: minStart,
+      endAt: maxEnd,
+    })
+  );
+
   const usersByRole = new Map<Role, Array<{ id: string }>>();
   for (const u of users) {
     const userRole = toRoleEnum(u.role);
@@ -211,7 +225,9 @@ export async function computeDraftShiftMatchingByRole(
       continue;
     }
 
-    const free = candidates.filter((c) => isUserFree(busy, c.id, shift.startAt, shift.endAt));
+    const free = candidates.filter(
+      (c) => isUserFree(busy, c.id, shift.startAt, shift.endAt) && !isUserAbsent(absencesByUser, c.id, shift.startAt, shift.endAt)
+    );
 
     if (free.length === 0) {
       plan.push({
@@ -276,6 +292,26 @@ export async function applyDraftShiftMatchingPlan(
 
     const byId = new Map(runDrafts.map((d) => [d.id, d]));
 
+    const proposedUserIds = Array.from(
+      new Set(
+        plan
+          .filter((item) => item.reason === "MATCHED" && item.proposedUserId !== null)
+          .map((item) => item.proposedUserId as string)
+      )
+    );
+
+    const absencesByUser =
+      proposedUserIds.length > 0 && runDrafts.length > 0
+        ? buildUserAbsenceMap(
+            await listUserAbsenceWindows(tx, {
+              companyId,
+              userIds: proposedUserIds,
+              startAt: runDrafts.reduce((min, d) => (d.startAt < min ? d.startAt : min), runDrafts[0]!.startAt),
+              endAt: runDrafts.reduce((max, d) => (d.endAt > max ? d.endAt : max), runDrafts[0]!.endAt),
+            })
+          )
+        : new Map();
+
     for (const item of plan) {
       if (item.currentUserId !== null || item.proposedUserId === null || item.reason !== "MATCHED") {
         appliedResults.push({ ...item, applied: false });
@@ -287,6 +323,16 @@ export async function applyDraftShiftMatchingPlan(
       const me = byId.get(item.shiftId);
       if (!me) {
         appliedResults.push({ ...item, applied: false });
+        continue;
+      }
+
+      const absenceConflict = isUserAbsent(absencesByUser, proposedId, me.startAt, me.endAt);
+      if (absenceConflict) {
+        appliedResults.push({
+          ...item,
+          reason: "USER_CONFLICT",
+          applied: false,
+        });
         continue;
       }
 
