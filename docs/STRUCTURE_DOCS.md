@@ -503,7 +503,133 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |               
 |   |   \---BLOC_A4
 |   |       +---1-VEH
+|   |       |   +---SESSION-20260322-01_A4_VEH-01
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260322-02_A4_VEH-02
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260322-03_A4_VEH-03
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260322-04_A4_VEH-04
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260322-05_A4_VEH-05
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260322-06_A4_VEH-06
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260322-07_A4_VEH-07
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260322-08_A4_VEH-08
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260322-09_A4_VEH-09
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260322-10_A4_VEH-10
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260322-11_A4_VEH-11
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260322-12_A4_VEH-12
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260322-13_A4_VEH-13
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260322-14_A4_VEH-14
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260322-15_A4_VEH-15
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   +---SESSION-20260322-16_A4_VEH-16
+|   |       |   |       EVIDENCES.md
+|   |       |   |       FIN_SESSION.md
+|   |       |   |       NOTES.md
+|   |       |   |       RESULTATS.md
+|   |       |   |       SESSION.md
+|   |       |   |       
+|   |       |   \---SESSION-20260322-17_A4_VEH-17
+|   |       |           EVIDENCES.md
+|   |       |           FIN_SESSION.md
+|   |       |           NOTES.md
+|   |       |           RESULTATS.md
+|   |       |           SESSION.md
+|   |       |           
 |   |       \---2-CLOTURE
+|   |           \---SESSION-20260322-18_A4_CLOTURE-A4
+|   |                   EVIDENCES.md
+|   |                   FIN_SESSION.md
+|   |                   NOTES.md
+|   |                   RESULTATS.md
+|   |                   SESSION.md
+|   |                   
 |   \---SESSION-YYYYMMDD-XX
 |           EVIDENCES.md
 |           FIN_SESSION.md
@@ -797,7 +923,61 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |       |               
 |       \---BLOC_A4
 |           +---1-VEH
+|           |   +---SESSION-20260322-01_A4_VEH-01
+|           |   |       NO_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260322-02_A4_VEH-02
+|           |   |       NO_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260322-03_A4_VEH-03
+|           |   |       README_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260322-04_A4_VEH-04
+|           |   |       NO_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260322-05_A4_VEH-05
+|           |   |       README_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260322-06_A4_VEH-06
+|           |   |       README_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260322-07_A4_VEH-07
+|           |   |       README_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260322-08_A4_VEH-08
+|           |   |       README_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260322-09_A4_VEH-09
+|           |   |       README_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260322-10_A4_VEH-10
+|           |   |       NO_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260322-11_A4_VEH-11
+|           |   |       README_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260322-12_A4_VEH-12
+|           |   |       NO_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260322-13_A4_VEH-13
+|           |   |       README_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260322-14_A4_VEH-14
+|           |   |       README_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260322-15_A4_VEH-15
+|           |   |       README_PATCH.md
+|           |   |       
+|           |   +---SESSION-20260322-16_A4_VEH-16
+|           |   |       README_PATCH.md
+|           |   |       
+|           |   \---SESSION-20260322-17_A4_VEH-17
+|           |           NO_PATCH.md
+|           |           
 |           \---2-CLOTURE
+|               \---SESSION-20260322-18_A4_CLOTURE-A4
+|                       NO_PATCH.md
+|                       
 +---4-templates
 |       TEMPLATE_DEBUT_SESSION.md
 |       TEMPLATE_DOD_4_4.md
