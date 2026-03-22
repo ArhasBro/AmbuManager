@@ -1,10 +1,12 @@
-﻿# NO_PATCH
+# NO_PATCH
 
-Session : SESSION-20260322-01_A4_VEH-01
+Session : `SESSION-20260322-01_A4_VEH-01`
 
-Type : AUDIT
+Type : `AUDIT`
 
-Raison :
-- Session documentaire de type AUDIT.
-- Aucun patch officiel a produire pour cette session.
-- Le dossier patch reste present pour conserver le miroir avec docs/2-sessions.
+Décision : aucun patch officiel code n’est produit pour cette session.
+
+Raison prouvée :
+- la session demandée est un audit de l’existant ;
+- aucun mini-fix strictement indispensable à la production du constat n’a été démontré ;
+- le livrable utile de la session est la documentation d’audit, pas une refonte du module.
