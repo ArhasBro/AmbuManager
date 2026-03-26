@@ -62,8 +62,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260322-12_A4_VEH-12
-- VEH-12 — AUDIT** — Audit de l’affectation véhicule au planning existant
+- SESSION-20260322-13_A4_VEH-13
+- VEH-13 — CORRECTION** — Correction/remise à niveau de l’affectation véhicule si nécessaire
 
 sortie propre + retour du terminal + aucune erreur = validé
 
