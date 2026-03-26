@@ -4,28 +4,28 @@
 
 - Relecture préalable du cadrage maître, des templates, du protocole et des sources autorisées.
 - Vérification du contexte amont réel dans le ZIP :
-  - listing véhicule déjà présent ;
-  - création déjà présente ;
-  - suppression physique toujours présente ;
-  - édition API/UI déjà livrées ;
-  - aucun endpoint dédié d’archivage logique véhicule n’était présent.
-- Vérification du modèle réel : `Vehicle.isActive` existe déjà ; aucune migration Prisma n’est nécessaire.
-- Vérification du pattern projet déjà utilisé pour l’archivage logique :
-  - `POST /api/depots/[id]/archive` ;
-  - `POST /api/users/[id]/archive` ;
-  - service dédié + route dédiée + réponse sérialisée.
-- Choix d’implémentation retenu pour rester strictement sur `VEH-08` :
-  - ajouter uniquement un endpoint dédié `POST /api/vehicles/[id]/archive` ;
-  - créer un service dédié `archiveVehicle(...)` ;
-  - ne pas détourner `status` pour l’archivage ;
-  - ne pas rouvrir l’UI d’archivage (`VEH-09`) ;
-  - ne pas toucher à Prisma ni aux migrations ;
-  - ne pas supprimer physiquement le véhicule dans ce flux.
-- Alignement strict minimal réalisé sur le flux standard :
-  - `GET /api/vehicles` ne renvoie plus les véhicules archivés ;
-  - `app/vehicles/page.tsx` n’hydrate plus la page avec des véhicules archivés après rafraîchissement.
-- Contrôle d’accès retenu : `canManageVehicles(...)`, cohérent avec le module, sans élargissement de droits.
-- Idempotence retenue : si le véhicule est déjà archivé, le service retourne l’état existant sans nouvelle écriture.
+  - l’API `POST /api/vehicles/[id]/archive` existe déjà réellement ;
+  - le service `archiveVehicle(...)` existe déjà réellement ;
+  - le flux standard ne remonte déjà plus les véhicules archivés ;
+  - la page `/vehicles` n’expose pas encore l’action UI d’archivage ;
+  - la suppression physique existe encore via `DELETE /api/vehicles`.
+- Choix d’implémentation retenu pour rester strictement sur `VEH-09` :
+  - modifier uniquement `app/vehicles/vehicles-client.tsx` ;
+  - ajouter un bouton `Archiver` dans la liste existante ;
+  - appeler strictement l’endpoint existant `POST /api/vehicles/[id]/archive` ;
+  - ne pas détourner `status` pour représenter l’archivage ;
+  - ne pas créer de vue des archivés ni d’UI de restauration ;
+  - ne pas rouvrir le backend de `VEH-08` ;
+  - ne pas refondre la suppression physique existante, hors coexistence UI minimale.
+- Comportement local retenu après succès :
+  - retrait immédiat du véhicule de la liste active ;
+  - suppression de son entrée dans `selectedDepotIds` ;
+  - fermeture du formulaire d’édition s’il était ouvert sur ce véhicule ;
+  - affichage d’un message de succès.
+- Robustesse locale minimale ajoutée :
+  - état d’archivage ciblé par véhicule ;
+  - désactivation de l’action d’archivage pendant une autre action concurrente sur la même ligne ;
+  - désactivation temporaire des contrôles d’édition / base pendant l’archivage du véhicule concerné.
 
 ## Validation terminale réelle finale
 

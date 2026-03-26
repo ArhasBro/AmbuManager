@@ -62,8 +62,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260322-09_A4_VEH-09
-- VEH-09 — COMPLÉTION** — UI désactivation / archivage véhicule
+- SESSION-20260322-10_A4_VEH-10
+- VEH-10 — VALIDATION** — Contrôle de la non-suppression physique non souhaitée
 
 sortie propre + retour du terminal + aucune erreur = validé
 

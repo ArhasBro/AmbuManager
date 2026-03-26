@@ -71,6 +71,7 @@ export default function VehiclesClient({
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [archivingVehicleId, setArchivingVehicleId] = useState<string | null>(null);
   const [savingDepotVehicleId, setSavingDepotVehicleId] = useState<string | null>(null);
   const [editingVehicleId, setEditingVehicleId] = useState<string | null>(null);
   const [editImmatriculation, setEditImmatriculation] = useState("");
@@ -236,6 +237,41 @@ export default function VehiclesClient({
     }
   }
 
+  async function handleArchiveVehicle(vehicle: Vehicle) {
+    const confirmed = window.confirm(`Archiver le véhicule ${vehicle.immatriculation} ?`);
+    if (!confirmed) return;
+
+    setArchivingVehicleId(vehicle.id);
+    clearFeedback();
+
+    try {
+      const res = await fetch(`/api/vehicles/${encodeURIComponent(vehicle.id)}/archive`, {
+        method: "POST",
+      });
+
+      const data = (await res.json().catch(() => null)) as ApiResponse<Vehicle> | null;
+
+      if (!res.ok || !data?.ok) {
+        throw new Error(getApiError(data, "Erreur lors de l’archivage du véhicule"));
+      }
+
+      setVehicles((prev) => prev.filter((currentVehicle) => currentVehicle.id !== vehicle.id));
+      setSelectedDepotIds((prev) => {
+        const next = { ...prev };
+        delete next[vehicle.id];
+        return next;
+      });
+      if (editingVehicleId === vehicle.id) {
+        resetEditForm();
+      }
+      setSuccessMessage(`Véhicule ${data.data.immatriculation} archivé.`);
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Erreur inconnue");
+    } finally {
+      setArchivingVehicleId(null);
+    }
+  }
+
   return (
     <div style={{ marginTop: 20 }}>
       <div style={{ padding: 16, border: "1px solid #ddd", borderRadius: 10 }}>
@@ -263,6 +299,10 @@ export default function VehiclesClient({
               const hasPendingDepotChange = currentSelection !== (v.depotId ?? "");
               const isEditing = editingVehicleId === v.id;
               const isSavingEdit = savingEditVehicleId === v.id;
+              const isArchiving = archivingVehicleId === v.id;
+              const isSavingDepot = savingDepotVehicleId === v.id;
+              const isDeleting = deletingId === v.id;
+              const isBusy = isArchiving || isSavingDepot || isSavingEdit || isDeleting;
 
               return (
                 <li key={v.id} style={{ marginBottom: 14 }}>
@@ -282,7 +322,7 @@ export default function VehiclesClient({
                           [v.id]: value,
                         }));
                       }}
-                      disabled={savingDepotVehicleId === v.id}
+                      disabled={isSavingDepot || isArchiving}
                       style={{ padding: 8 }}
                     >
                       <option value="">Aucune base</option>
@@ -296,21 +336,21 @@ export default function VehiclesClient({
                     <button
                       type="button"
                       onClick={() => handleSaveDepot(v.id)}
-                      disabled={savingDepotVehicleId === v.id || !hasPendingDepotChange}
+                      disabled={isSavingDepot || !hasPendingDepotChange || isArchiving}
                       style={{ padding: "6px 10px" }}
                     >
-                      {savingDepotVehicleId === v.id ? "Enregistrement..." : "Enregistrer base"}
+                      {isSavingDepot ? "Enregistrement..." : "Enregistrer base"}
                     </button>
 
                     <button
                       type="button"
                       onClick={() => openEditVehicle(v)}
-                      disabled={isSavingEdit}
+                      disabled={isSavingEdit || isArchiving}
                       style={{
                         padding: "4px 10px",
                         border: "1px solid #ccc",
                         borderRadius: 6,
-                        cursor: isSavingEdit ? "not-allowed" : "pointer",
+                        cursor: isSavingEdit || isArchiving ? "not-allowed" : "pointer",
                       }}
                     >
                       {isEditing ? "Édition en cours" : "Modifier"}
@@ -318,16 +358,30 @@ export default function VehiclesClient({
 
                     <button
                       type="button"
-                      onClick={() => handleDeleteVehicle(v.id)}
-                      disabled={deletingId === v.id}
+                      onClick={() => handleArchiveVehicle(v)}
+                      disabled={isBusy}
                       style={{
                         padding: "4px 10px",
                         border: "1px solid #ccc",
                         borderRadius: 6,
-                        cursor: deletingId === v.id ? "not-allowed" : "pointer",
+                        cursor: isBusy ? "not-allowed" : "pointer",
                       }}
                     >
-                      {deletingId === v.id ? "Suppression..." : "Supprimer"}
+                      {isArchiving ? "Archivage..." : "Archiver"}
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteVehicle(v.id)}
+                      disabled={isDeleting || isArchiving}
+                      style={{
+                        padding: "4px 10px",
+                        border: "1px solid #ccc",
+                        borderRadius: 6,
+                        cursor: isDeleting || isArchiving ? "not-allowed" : "pointer",
+                      }}
+                    >
+                      {isDeleting ? "Suppression..." : "Supprimer"}
                     </button>
                   </div>
 
@@ -352,14 +406,14 @@ export default function VehiclesClient({
                         value={editImmatriculation}
                         onChange={(e) => setEditImmatriculation(e.target.value)}
                         placeholder="Immatriculation"
-                        disabled={isSavingEdit}
+                        disabled={isSavingEdit || isArchiving}
                         style={{ padding: 8, minWidth: 180 }}
                       />
 
                       <select
                         value={editType}
                         onChange={(e) => setEditType(getEditableVehicleType(e.target.value))}
-                        disabled={isSavingEdit}
+                        disabled={isSavingEdit || isArchiving}
                         style={{ padding: 8 }}
                       >
                         {VEHICLE_TYPE_OPTIONS.map((type) => (
@@ -372,7 +426,7 @@ export default function VehiclesClient({
                       <select
                         value={editStatus}
                         onChange={(e) => setEditStatus(getEditableVehicleStatus(e.target.value))}
-                        disabled={isSavingEdit}
+                        disabled={isSavingEdit || isArchiving}
                         style={{ padding: 8 }}
                       >
                         {VEHICLE_STATUS_OPTIONS.map((status) => (
@@ -382,19 +436,19 @@ export default function VehiclesClient({
                         ))}
                       </select>
 
-                      <button type="submit" disabled={isSavingEdit} style={{ padding: "6px 10px" }}>
+                      <button type="submit" disabled={isSavingEdit || isArchiving} style={{ padding: "6px 10px" }}>
                         {isSavingEdit ? "Enregistrement..." : "Enregistrer modifications"}
                       </button>
 
                       <button
                         type="button"
                         onClick={resetEditForm}
-                        disabled={isSavingEdit}
+                        disabled={isSavingEdit || isArchiving}
                         style={{
                           padding: "6px 10px",
                           border: "1px solid #ccc",
                           borderRadius: 6,
-                          cursor: isSavingEdit ? "not-allowed" : "pointer",
+                          cursor: isSavingEdit || isArchiving ? "not-allowed" : "pointer",
                         }}
                       >
                         Annuler
