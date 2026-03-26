@@ -83,7 +83,7 @@ export async function POST(req: Request) {
   const parsed = createVehicleBodySchema.safeParse(jsonBody);
   if (!parsed.success) return badRequest("VALIDATION_ERROR", parsed.error.flatten());
 
-  const { immatriculation, type } = parsed.data;
+  const { immatriculation, type, status } = parsed.data;
 
   try {
     const vehicle = await prisma.$transaction(async (tx) => {
@@ -92,7 +92,7 @@ export async function POST(req: Request) {
           companyId,
           immatriculation,
           type,
-          status: "ACTIVE",
+          status,
         },
         select: vehicleSelect,
       });

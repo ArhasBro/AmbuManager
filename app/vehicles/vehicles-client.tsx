@@ -43,9 +43,11 @@ function compareVehiclesByImmatriculation(a: Vehicle, b: Vehicle) {
 export default function VehiclesClient({
   initialVehicles,
   availableDepots,
+  canCreateVehicle,
 }: {
   initialVehicles: Vehicle[];
   availableDepots: DepotOption[];
+  canCreateVehicle: boolean;
 }) {
   const [vehicles, setVehicles] = useState<Vehicle[]>(initialVehicles);
   const [selectedDepotIds, setSelectedDepotIds] = useState<Record<string, string>>(() =>
@@ -62,6 +64,7 @@ export default function VehiclesClient({
   async function handleAddVehicle(payload: {
     immatriculation: string;
     type: string;
+    status: string;
   }) {
     setIsSubmitting(true);
     setError(null);
@@ -156,7 +159,11 @@ export default function VehiclesClient({
     <div style={{ marginTop: 20 }}>
       <div style={{ padding: 16, border: "1px solid #ddd", borderRadius: 10 }}>
         <h2 style={{ marginTop: 0 }}>Ajouter un véhicule</h2>
-        <AddVehicleForm onSubmit={handleAddVehicle} disabled={isSubmitting} />
+        {canCreateVehicle ? (
+          <AddVehicleForm onSubmit={handleAddVehicle} disabled={isSubmitting} />
+        ) : (
+          <p style={{ margin: 0, opacity: 0.8 }}>Création réservée au profil ADMIN.</p>
+        )}
         {error && <p style={{ marginTop: 10, color: "crimson" }}>{error}</p>}
       </div>
 

@@ -62,8 +62,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260322-05_A4_VEH-05
-- VEH-05 — CORRECTION** — Correction de la création véhicule si nécessaire
+- SESSION-20260322-06_A4_VEH-06
+- VEH-06 — COMPLÉTION** — API modification véhicule
 
 sortie propre + retour du terminal + aucune erreur = validé
 

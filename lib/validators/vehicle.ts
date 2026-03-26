@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { VehicleType } from "@prisma/client";
+import { VehicleStatus, VehicleType } from "@prisma/client";
 
 export const createVehicleBodySchema = z.object({
   immatriculation: z
@@ -8,6 +8,7 @@ export const createVehicleBodySchema = z.object({
     .min(1, "Immatriculation required")
     .transform((v) => v.toUpperCase()),
   type: z.nativeEnum(VehicleType),
+  status: z.nativeEnum(VehicleStatus),
 });
 
 export const assignVehicleDepotBodySchema = z

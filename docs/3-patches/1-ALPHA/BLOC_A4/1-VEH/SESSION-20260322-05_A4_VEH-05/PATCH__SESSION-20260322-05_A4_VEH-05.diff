@@ -1,0 +1,159 @@
+--- a/app/api/vehicles/route.ts
++++ b/app/api/vehicles/route.ts
+@@ -83,7 +83,7 @@
+   const parsed = createVehicleBodySchema.safeParse(jsonBody);
+   if (!parsed.success) return badRequest("VALIDATION_ERROR", parsed.error.flatten());
+ 
+-  const { immatriculation, type } = parsed.data;
++  const { immatriculation, type, status } = parsed.data;
+ 
+   try {
+     const vehicle = await prisma.$transaction(async (tx) => {
+@@ -92,7 +92,7 @@
+           companyId,
+           immatriculation,
+           type,
+-          status: "ACTIVE",
++          status,
+         },
+         select: vehicleSelect,
+       });
+--- a/app/vehicles/add-vehicle-form.tsx
++++ b/app/vehicles/add-vehicle-form.tsx
+@@ -3,33 +3,42 @@
+ import { useState } from "react";
+ 
+ type VehicleType = "AMBULANCE" | "VSL" | "TAXI";
++type VehicleStatus = "ACTIVE" | "MAINTENANCE" | "OUT_OF_SERVICE";
+ 
+ export function AddVehicleForm({
+   onSubmit,
+   disabled,
+ }: {
+-  onSubmit: (payload: { immatriculation: string; type: VehicleType }) => Promise<void>;
++  onSubmit: (payload: { immatriculation: string; type: VehicleType; status: VehicleStatus }) => Promise<void>;
+   disabled?: boolean;
+ }) {
+   const [immatriculation, setImmatriculation] = useState("");
+   const [type, setType] = useState<VehicleType>("AMBULANCE");
++  const [status, setStatus] = useState<VehicleStatus>("ACTIVE");
+ 
+   function isVehicleType(value: string): value is VehicleType {
+     return value === "AMBULANCE" || value === "VSL" || value === "TAXI";
+   }
+ 
++  function isVehicleStatus(value: string): value is VehicleStatus {
++    return value === "ACTIVE" || value === "MAINTENANCE" || value === "OUT_OF_SERVICE";
++  }
++
+   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+     e.preventDefault();
+ 
+     const payload = {
+       immatriculation: immatriculation.trim().toUpperCase(),
+       type,
++      status,
+     };
+ 
+     if (!payload.immatriculation) return;
+ 
+     await onSubmit(payload);
+     setImmatriculation("");
++    setType("AMBULANCE");
++    setStatus("ACTIVE");
+   }
+ 
+   return (
+@@ -56,9 +65,23 @@
+         <option value="TAXI">TAXI</option>
+       </select>
+ 
++      <select
++        value={status}
++        onChange={(e) => {
++          const v = e.target.value;
++          if (isVehicleStatus(v)) setStatus(v);
++        }}
++        style={{ padding: 10 }}
++        disabled={disabled}
++      >
++        <option value="ACTIVE">ACTIVE</option>
++        <option value="MAINTENANCE">MAINTENANCE</option>
++        <option value="OUT_OF_SERVICE">OUT_OF_SERVICE</option>
++      </select>
++
+       <button disabled={disabled} style={{ padding: 10 }}>
+         {disabled ? "Ajout..." : "Ajouter"}
+       </button>
+     </form>
+   );
+-}
+\ No newline at end of file
++}
+--- a/app/vehicles/vehicles-client.tsx
++++ b/app/vehicles/vehicles-client.tsx
+@@ -43,9 +43,11 @@
+ export default function VehiclesClient({
+   initialVehicles,
+   availableDepots,
++  canCreateVehicle,
+ }: {
+   initialVehicles: Vehicle[];
+   availableDepots: DepotOption[];
++  canCreateVehicle: boolean;
+ }) {
+   const [vehicles, setVehicles] = useState<Vehicle[]>(initialVehicles);
+   const [selectedDepotIds, setSelectedDepotIds] = useState<Record<string, string>>(() =>
+@@ -62,6 +64,7 @@
+   async function handleAddVehicle(payload: {
+     immatriculation: string;
+     type: string;
++    status: string;
+   }) {
+     setIsSubmitting(true);
+     setError(null);
+@@ -156,7 +159,11 @@
+     <div style={{ marginTop: 20 }}>
+       <div style={{ padding: 16, border: "1px solid #ddd", borderRadius: 10 }}>
+         <h2 style={{ marginTop: 0 }}>Ajouter un véhicule</h2>
+-        <AddVehicleForm onSubmit={handleAddVehicle} disabled={isSubmitting} />
++        {canCreateVehicle ? (
++          <AddVehicleForm onSubmit={handleAddVehicle} disabled={isSubmitting} />
++        ) : (
++          <p style={{ margin: 0, opacity: 0.8 }}>Création réservée au profil ADMIN.</p>
++        )}
+         {error && <p style={{ marginTop: 10, color: "crimson" }}>{error}</p>}
+       </div>
+ 
+--- a/app/vehicles/page.tsx
++++ b/app/vehicles/page.tsx
+@@ -57,7 +57,11 @@
+       <p style={{ marginTop: 8, opacity: 0.8 }}>
+         Gestion minimale des véhicules et rattachement optionnel à une base active de la société courante.
+       </p>
+-      <VehiclesClient initialVehicles={serializeDates(vehicles)} availableDepots={depots} />
++      <VehiclesClient
++        initialVehicles={serializeDates(vehicles)}
++        availableDepots={depots}
++        canCreateVehicle={user.role === "ADMIN"}
++      />
+     </div>
+   );
+ }
+--- a/lib/validators/vehicle.ts
++++ b/lib/validators/vehicle.ts
+@@ -1,5 +1,5 @@
+ import { z } from "zod";
+-import { VehicleType } from "@prisma/client";
++import { VehicleStatus, VehicleType } from "@prisma/client";
+ 
+ export const createVehicleBodySchema = z.object({
+   immatriculation: z
+@@ -8,6 +8,7 @@
+     .min(1, "Immatriculation required")
+     .transform((v) => v.toUpperCase()),
+   type: z.nativeEnum(VehicleType),
++  status: z.nativeEnum(VehicleStatus),
+ });
+ 
+ export const assignVehicleDepotBodySchema = z

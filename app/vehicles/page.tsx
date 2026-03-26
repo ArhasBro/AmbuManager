@@ -57,7 +57,11 @@ export default async function VehiclesPage() {
       <p style={{ marginTop: 8, opacity: 0.8 }}>
         Gestion minimale des véhicules et rattachement optionnel à une base active de la société courante.
       </p>
-      <VehiclesClient initialVehicles={serializeDates(vehicles)} availableDepots={depots} />
+      <VehiclesClient
+        initialVehicles={serializeDates(vehicles)}
+        availableDepots={depots}
+        canCreateVehicle={user.role === "ADMIN"}
+      />
     </div>
   );
 }

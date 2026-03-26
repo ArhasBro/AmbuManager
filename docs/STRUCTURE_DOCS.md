@@ -937,6 +937,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |           |   |       NO_PATCH.md
 |           |   |       
 |           |   +---SESSION-20260322-05_A4_VEH-05
+|           |   |       PATCH__SESSION-20260322-05_A4_VEH-05.diff
 |           |   |       README_PATCH.md
 |           |   |       
 |           |   +---SESSION-20260322-06_A4_VEH-06
