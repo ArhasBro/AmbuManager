@@ -1697,6 +1697,17 @@ C:.
 |   |   |   |           |   route.js.nft.json
 |   |   |   |           |   route_client-reference-manifest.js
 |   |   |   |           |   
+|   |   |   |           +---archive
+|   |   |   |           |   |   route.js
+|   |   |   |           |   |   route.js.map
+|   |   |   |           |   |   route.js.nft.json
+|   |   |   |           |   |   route_client-reference-manifest.js
+|   |   |   |           |   |   
+|   |   |   |           |   \---route
+|   |   |   |           |           app-paths-manifest.json
+|   |   |   |           |           build-manifest.json
+|   |   |   |           |           server-reference-manifest.json
+|   |   |   |           |           
 |   |   |   |           +---depot
 |   |   |   |           |   |   route.js
 |   |   |   |           |   |   route.js.map
@@ -1957,6 +1968,8 @@ C:.
 |   |   |   |   [root-of-the-server]__d085b866._.js.map
 |   |   |   |   [root-of-the-server]__d5f44ffd._.js
 |   |   |   |   [root-of-the-server]__d5f44ffd._.js.map
+|   |   |   |   [root-of-the-server]__d6192505._.js
+|   |   |   |   [root-of-the-server]__d6192505._.js.map
 |   |   |   |   [root-of-the-server]__e6c5e537._.js
 |   |   |   |   [root-of-the-server]__e6c5e537._.js.map
 |   |   |   |   [root-of-the-server]__f18feb80._.js
@@ -2017,6 +2030,8 @@ C:.
 |   |   |   |   _next-internal_server_app_api_users_[id]_route_actions_e7269cbb.js.map
 |   |   |   |   _next-internal_server_app_api_vehicles_route_actions_7bc5da8c.js
 |   |   |   |   _next-internal_server_app_api_vehicles_route_actions_7bc5da8c.js.map
+|   |   |   |   _next-internal_server_app_api_vehicles_[id]_archive_route_actions_0f1c06f2.js
+|   |   |   |   _next-internal_server_app_api_vehicles_[id]_archive_route_actions_0f1c06f2.js.map
 |   |   |   |   _next-internal_server_app_api_vehicles_[id]_depot_route_actions_9e091d71.js
 |   |   |   |   _next-internal_server_app_api_vehicles_[id]_depot_route_actions_9e091d71.js.map
 |   |   |   |   _next-internal_server_app_api_vehicles_[id]_route_actions_1a44529f.js
@@ -2172,7 +2187,7 @@ C:.
 |   |   |       b870288de7d3931e.js
 |   |   |       cdb83a758231f045.js
 |   |   |       d565b1353fae8c3f.js
-|   |   |       df6c0a7cafacdc8f.css
+|   |   |       da008386b765e4fc.css
 |   |   |       ed66f6a695dc1736.js
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
@@ -2180,7 +2195,7 @@ C:.
 |   |   +---media
 |   |   |       favicon.0b3bf435.ico
 |   |   |       
-|   |   \---oyAI2kaEjSmCvX4b-NPYn
+|   |   \---TBTZyIcyfDQaSfDA6nWLV
 |   |           _buildManifest.js
 |   |           _clientMiddlewareManifest.json
 |   |           _ssgManifest.js
@@ -2284,6 +2299,9 @@ C:.
 |   |       \---[id]
 |   |           |   route.ts
 |   |           |   
+|   |           +---archive
+|   |           |       route.ts
+|   |           |       
 |   |           \---depot
 |   |                   route.ts
 |   |                   
@@ -3272,6 +3290,7 @@ C:.
 |   |           |   |       README_PATCH.md
 |   |           |   |       
 |   |           |   +---SESSION-20260322-08_A4_VEH-08
+|   |           |   |       PATCH__SESSION-20260322-08_A4_VEH-08.diff
 |   |           |   |       README_PATCH.md
 |   |           |   |       
 |   |           |   +---SESSION-20260322-09_A4_VEH-09
@@ -3350,6 +3369,7 @@ C:.
 |   |   |       user-absence.ts
 |   |   |       
 |   |   \---vehicles
+|   |           archive-vehicle.ts
 |   |           assign-vehicle-depot.ts
 |   |           
 |   +---types

@@ -21,7 +21,7 @@ export default async function VehiclesPage() {
 
   const [vehicles, depots] = await Promise.all([
     prisma.vehicle.findMany({
-      where: { companyId },
+      where: { companyId, isActive: true },
       orderBy: { immatriculation: "asc" },
       select: {
         id: true,

@@ -61,7 +61,7 @@ export async function GET(req: Request) {
   const { limit } = parsed.data;
 
   const vehicles = await prisma.vehicle.findMany({
-    where: { companyId },
+    where: { companyId, isActive: true },
     orderBy: { immatriculation: "asc" },
     take: limit,
     select: vehicleSelect,
