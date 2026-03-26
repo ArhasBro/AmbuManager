@@ -6,7 +6,7 @@ import { ok, badRequest, unauthorized, forbidden, notFound, conflict, serverErro
 import { prismaToHttp } from "@/lib/api/prisma-error";
 import { createVehicleBodySchema, deleteVehicleQuerySchema } from "@/lib/validators/vehicle";
 import { serializeDates } from "@/lib/serializers";
-import { canManageVehicles } from "@/lib/permissions";
+import { canEditPlanning, canManageVehicles } from "@/lib/permissions";
 import { traceSupportAction } from "@/lib/services/audit/support-action-trace";
 import { z } from "zod";
 
@@ -49,8 +49,11 @@ export async function GET(req: Request) {
 
   if (!companyId || !userId) return unauthorized();
 
-  const allowed = await canManageVehicles(userId, session.user.role, platformRole);
-  if (!allowed) return forbidden();
+  const canListVehicles =
+    (await canManageVehicles(userId, session.user.role, platformRole)) ||
+    (await canEditPlanning(userId, session.user.role, platformRole));
+
+  if (!canListVehicles) return forbidden();
 
   const url = new URL(req.url);
   const parsed = listQuerySchema.safeParse({

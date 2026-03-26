@@ -62,8 +62,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260322-13_A4_VEH-13
-- VEH-13 — CORRECTION** — Correction/remise à niveau de l’affectation véhicule si nécessaire
+- SESSION-20260322-14_A4_VEH-14
+- VEH-14 — COMPLÉTION** — Ajout des champs de conformité documentaire minimale
 
 sortie propre + retour du terminal + aucune erreur = validé
 

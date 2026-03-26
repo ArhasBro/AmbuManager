@@ -1123,18 +1123,18 @@ export default function PlanningClient({
         if (!res.ok || !jsonOkPayload(json)) {
           const err = jsonErrPayload(json) ? getString(json.error) : `HTTP_${res.status}`;
 
-          if (err === "USER_CONFLICT") {
+          if (err === "USER_CONFLICT" || err === "USER_OVERLAP_CONFLICT") {
             setAssignMsgById((m) => ({
               ...m,
-              [shiftId]: "⛔ Conflit employé : déjà affecté sur un autre DraftShift (chevauchement).",
+              [shiftId]: "⛔ Conflit employé : déjà affecté sur un autre shift (chevauchement).",
             }));
             return;
           }
 
-          if (err === "VEHICLE_CONFLICT") {
+          if (err === "VEHICLE_CONFLICT" || err === "VEHICLE_OVERLAP_CONFLICT") {
             setAssignMsgById((m) => ({
               ...m,
-              [shiftId]: "⛔ Conflit véhicule : déjà affecté sur un autre DraftShift (chevauchement).",
+              [shiftId]: "⛔ Conflit véhicule : déjà affecté sur un autre shift (chevauchement).",
             }));
             return;
           }
