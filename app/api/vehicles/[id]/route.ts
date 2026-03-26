@@ -23,6 +23,10 @@ const vehicleSelect = Prisma.validator<Prisma.VehicleSelect>()({
   type: true,
   status: true,
   depotId: true,
+  insuranceExpiresAt: true,
+  technicalInspectionExpiresAt: true,
+  registrationDocumentPresent: true,
+  sanitaryApprovalExpiresAt: true,
   createdAt: true,
   updatedAt: true,
   depot: {
@@ -56,7 +60,18 @@ async function findEditableVehicle(id: string, companyId: string) {
   });
 }
 
-function getChangedFields(existingVehicle: EditableVehicleRecord, nextData: { immatriculation?: string; type?: EditableVehicleRecord["type"]; status?: EditableVehicleRecord["status"] }) {
+function getChangedFields(
+  existingVehicle: EditableVehicleRecord,
+  nextData: {
+    immatriculation?: string;
+    type?: EditableVehicleRecord["type"];
+    status?: EditableVehicleRecord["status"];
+    insuranceExpiresAt?: Date | null;
+    technicalInspectionExpiresAt?: Date | null;
+    registrationDocumentPresent?: boolean;
+    sanitaryApprovalExpiresAt?: Date | null;
+  }
+) {
   const changedFields: string[] = [];
 
   if (nextData.immatriculation !== undefined && nextData.immatriculation !== existingVehicle.immatriculation) {
@@ -69,6 +84,31 @@ function getChangedFields(existingVehicle: EditableVehicleRecord, nextData: { im
 
   if (nextData.status !== undefined && nextData.status !== existingVehicle.status) {
     changedFields.push("status");
+  }
+
+  if (nextData.insuranceExpiresAt !== undefined && nextData.insuranceExpiresAt?.getTime() !== existingVehicle.insuranceExpiresAt?.getTime()) {
+    changedFields.push("insuranceExpiresAt");
+  }
+
+  if (
+    nextData.technicalInspectionExpiresAt !== undefined &&
+    nextData.technicalInspectionExpiresAt?.getTime() !== existingVehicle.technicalInspectionExpiresAt?.getTime()
+  ) {
+    changedFields.push("technicalInspectionExpiresAt");
+  }
+
+  if (
+    nextData.registrationDocumentPresent !== undefined &&
+    nextData.registrationDocumentPresent !== existingVehicle.registrationDocumentPresent
+  ) {
+    changedFields.push("registrationDocumentPresent");
+  }
+
+  if (
+    nextData.sanitaryApprovalExpiresAt !== undefined &&
+    nextData.sanitaryApprovalExpiresAt?.getTime() !== existingVehicle.sanitaryApprovalExpiresAt?.getTime()
+  ) {
+    changedFields.push("sanitaryApprovalExpiresAt");
   }
 
   return changedFields;
@@ -115,6 +155,16 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
           ...(parsedBody.data.immatriculation !== undefined ? { immatriculation: parsedBody.data.immatriculation } : {}),
           ...(parsedBody.data.type !== undefined ? { type: parsedBody.data.type } : {}),
           ...(parsedBody.data.status !== undefined ? { status: parsedBody.data.status } : {}),
+          ...(parsedBody.data.insuranceExpiresAt !== undefined ? { insuranceExpiresAt: parsedBody.data.insuranceExpiresAt } : {}),
+          ...(parsedBody.data.technicalInspectionExpiresAt !== undefined
+            ? { technicalInspectionExpiresAt: parsedBody.data.technicalInspectionExpiresAt }
+            : {}),
+          ...(parsedBody.data.registrationDocumentPresent !== undefined
+            ? { registrationDocumentPresent: parsedBody.data.registrationDocumentPresent }
+            : {}),
+          ...(parsedBody.data.sanitaryApprovalExpiresAt !== undefined
+            ? { sanitaryApprovalExpiresAt: parsedBody.data.sanitaryApprovalExpiresAt }
+            : {}),
         },
         select: vehicleSelect,
       });
@@ -135,6 +185,10 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
             type: existingVehicle.type,
             status: existingVehicle.status,
             depotId: existingVehicle.depotId,
+            insuranceExpiresAt: existingVehicle.insuranceExpiresAt,
+            technicalInspectionExpiresAt: existingVehicle.technicalInspectionExpiresAt,
+            registrationDocumentPresent: existingVehicle.registrationDocumentPresent,
+            sanitaryApprovalExpiresAt: existingVehicle.sanitaryApprovalExpiresAt,
             depot: existingVehicle.depot
               ? {
                   id: existingVehicle.depot.id,
@@ -148,6 +202,10 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
             type: vehicle.type,
             status: vehicle.status,
             depotId: vehicle.depotId,
+            insuranceExpiresAt: vehicle.insuranceExpiresAt,
+            technicalInspectionExpiresAt: vehicle.technicalInspectionExpiresAt,
+            registrationDocumentPresent: vehicle.registrationDocumentPresent,
+            sanitaryApprovalExpiresAt: vehicle.sanitaryApprovalExpiresAt,
             depot: vehicle.depot
               ? {
                   id: vehicle.depot.id,

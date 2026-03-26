@@ -20,6 +20,10 @@ const vehicleSelect = {
   type: true,
   status: true,
   depotId: true,
+  insuranceExpiresAt: true,
+  technicalInspectionExpiresAt: true,
+  registrationDocumentPresent: true,
+  sanitaryApprovalExpiresAt: true,
   createdAt: true,
   updatedAt: true,
   depot: {
@@ -86,7 +90,15 @@ export async function POST(req: Request) {
   const parsed = createVehicleBodySchema.safeParse(jsonBody);
   if (!parsed.success) return badRequest("VALIDATION_ERROR", parsed.error.flatten());
 
-  const { immatriculation, type, status } = parsed.data;
+  const {
+    immatriculation,
+    type,
+    status,
+    insuranceExpiresAt,
+    technicalInspectionExpiresAt,
+    registrationDocumentPresent,
+    sanitaryApprovalExpiresAt,
+  } = parsed.data;
 
   try {
     const vehicle = await prisma.$transaction(async (tx) => {
@@ -96,6 +108,10 @@ export async function POST(req: Request) {
           immatriculation,
           type,
           status,
+          insuranceExpiresAt: insuranceExpiresAt ?? null,
+          technicalInspectionExpiresAt: technicalInspectionExpiresAt ?? null,
+          registrationDocumentPresent: registrationDocumentPresent ?? false,
+          sanitaryApprovalExpiresAt: sanitaryApprovalExpiresAt ?? null,
         },
         select: vehicleSelect,
       });
@@ -110,12 +126,24 @@ export async function POST(req: Request) {
         summary: `Support création véhicule ${createdVehicle.immatriculation}`,
         payload: {
           module: "vehicles",
-          changedFields: ["immatriculation", "type", "status"],
+          changedFields: [
+            "immatriculation",
+            "type",
+            "status",
+            "insuranceExpiresAt",
+            "technicalInspectionExpiresAt",
+            "registrationDocumentPresent",
+            "sanitaryApprovalExpiresAt",
+          ],
           previous: null,
           next: {
             immatriculation: createdVehicle.immatriculation,
             type: createdVehicle.type,
             status: createdVehicle.status,
+            insuranceExpiresAt: createdVehicle.insuranceExpiresAt,
+            technicalInspectionExpiresAt: createdVehicle.technicalInspectionExpiresAt,
+            registrationDocumentPresent: createdVehicle.registrationDocumentPresent,
+            sanitaryApprovalExpiresAt: createdVehicle.sanitaryApprovalExpiresAt,
           },
           details: {
             targetType: "vehicle",
@@ -163,6 +191,10 @@ export async function DELETE(req: Request) {
           type: true,
           status: true,
           depotId: true,
+          insuranceExpiresAt: true,
+          technicalInspectionExpiresAt: true,
+          registrationDocumentPresent: true,
+          sanitaryApprovalExpiresAt: true,
           depot: {
             select: {
               id: true,
@@ -197,6 +229,10 @@ export async function DELETE(req: Request) {
             type: existingVehicle.type,
             status: existingVehicle.status,
             depotId: existingVehicle.depotId,
+            insuranceExpiresAt: existingVehicle.insuranceExpiresAt,
+            technicalInspectionExpiresAt: existingVehicle.technicalInspectionExpiresAt,
+            registrationDocumentPresent: existingVehicle.registrationDocumentPresent,
+            sanitaryApprovalExpiresAt: existingVehicle.sanitaryApprovalExpiresAt,
             depot: existingVehicle.depot
               ? {
                   id: existingVehicle.depot.id,

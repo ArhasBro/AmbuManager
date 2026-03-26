@@ -313,6 +313,11 @@ model Vehicle {
   depotId String? @db.Uuid
   depot   Depot?  @relation(fields: [depotId], references: [id], onDelete: SetNull)
 
+  insuranceExpiresAt           DateTime?
+  technicalInspectionExpiresAt DateTime?
+  registrationDocumentPresent  Boolean   @default(false)
+  sanitaryApprovalExpiresAt    DateTime?
+
   isActive Boolean @default(true)
 
   createdAt DateTime @default(now())

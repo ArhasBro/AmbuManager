@@ -62,8 +62,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260322-14_A4_VEH-14
-- VEH-14 — COMPLÉTION** — Ajout des champs de conformité documentaire minimale
+- SESSION-20260322-16_A4_VEH-16
+- VEH-16 — COMPLÉTION** — État visuel simple `conforme / bientôt expiré / expiré`
 
 sortie propre + retour du terminal + aucune erreur = validé
 
