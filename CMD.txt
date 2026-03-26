@@ -62,8 +62,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260322-01_A4_VEH-01
-- VEH-01 — AUDIT** — Audit complet du module véhicules existant
+- SESSION-20260322-03_A4_VEH-03
+- VEH-03 — CORRECTION** — Correction / stabilisation du listing véhicules si nécessaire
 
 sortie propre + retour du terminal + aucune erreur = validé
 
