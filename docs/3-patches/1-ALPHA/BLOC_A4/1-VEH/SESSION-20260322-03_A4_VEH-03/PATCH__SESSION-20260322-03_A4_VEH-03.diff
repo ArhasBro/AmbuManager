@@ -1,0 +1,103 @@
+--- a/app/vehicles/page.tsx
++++ b/app/vehicles/page.tsx
+@@ -3,6 +3,7 @@
+ import { redirect } from "next/navigation";
+ import { prisma } from "@/lib/prisma";
+ import { canManageVehicles } from "@/lib/permissions";
++import { serializeDates } from "@/lib/serializers";
+ 
+ import VehiclesClient from "./vehicles-client";
+ 
+@@ -13,7 +14,7 @@
+ 
+   const user = session.user;
+ 
+-  if (!user.id || !(await canManageVehicles(user.id, user.role))) redirect("/login");
++  if (!user.id || !(await canManageVehicles(user.id, user.role, user.platformRole))) redirect("/login");
+   if (!user.companyId) redirect("/login");
+ 
+   const companyId = user.companyId;
+@@ -21,7 +22,7 @@
+   const [vehicles, depots] = await Promise.all([
+     prisma.vehicle.findMany({
+       where: { companyId },
+-      orderBy: { createdAt: "desc" },
++      orderBy: { immatriculation: "asc" },
+       select: {
+         id: true,
+         immatriculation: true,
+@@ -29,6 +30,7 @@
+         status: true,
+         depotId: true,
+         createdAt: true,
++        updatedAt: true,
+         depot: {
+           select: {
+             id: true,
+@@ -55,13 +57,7 @@
+       <p style={{ marginTop: 8, opacity: 0.8 }}>
+         Gestion minimale des véhicules et rattachement optionnel à une base active de la société courante.
+       </p>
+-      <VehiclesClient
+-        initialVehicles={vehicles.map((v) => ({
+-          ...v,
+-          createdAt: v.createdAt.toISOString(),
+-        }))}
+-        availableDepots={depots}
+-      />
++      <VehiclesClient initialVehicles={serializeDates(vehicles)} availableDepots={depots} />
+     </div>
+   );
+ }
+--- a/app/vehicles/vehicles-client.tsx
++++ b/app/vehicles/vehicles-client.tsx
+@@ -17,6 +17,7 @@
+   depotId: string | null;
+   depot: DepotOption | null;
+   createdAt: string;
++  updatedAt: string;
+ };
+ 
+ type ApiSuccess<T> = { ok: true; data: T };
+@@ -33,6 +34,10 @@
+ 
+ function getDepotLabel(depot: DepotOption) {
+   return depot.isActive ? depot.name : `${depot.name} (archivé)`;
++}
++
++function compareVehiclesByImmatriculation(a: Vehicle, b: Vehicle) {
++  return a.immatriculation.localeCompare(b.immatriculation, "fr", { sensitivity: "base" });
+ }
+ 
+ export default function VehiclesClient({
+@@ -52,6 +57,7 @@
+   const [savingDepotVehicleId, setSavingDepotVehicleId] = useState<string | null>(null);
+ 
+   const depotOptions = useMemo(() => availableDepots, [availableDepots]);
++  const displayVehicles = useMemo(() => [...vehicles].sort(compareVehiclesByImmatriculation), [vehicles]);
+ 
+   async function handleAddVehicle(payload: {
+     immatriculation: string;
+@@ -73,7 +79,7 @@
+         throw new Error(getApiError(data, "Erreur lors de la création du véhicule"));
+       }
+ 
+-      setVehicles((prev) => [data.data, ...prev]);
++      setVehicles((prev) => [...prev, data.data]);
+       setSelectedDepotIds((prev) => ({
+         ...prev,
+         [data.data.id]: data.data.depotId ?? "",
+@@ -155,11 +161,11 @@
+       </div>
+ 
+       <div style={{ marginTop: 20 }}>
+-        {vehicles.length === 0 ? (
++        {displayVehicles.length === 0 ? (
+           <p>Aucun véhicule pour le moment.</p>
+         ) : (
+           <ul style={{ marginTop: 16, paddingLeft: 16 }}>
+-            {vehicles.map((v) => {
++            {displayVehicles.map((v) => {
+               const currentDepot = v.depot;
+               const currentSelection = selectedDepotIds[v.id] ?? "";
+               const options = currentDepot && !depotOptions.some((depot) => depot.id === currentDepot.id)

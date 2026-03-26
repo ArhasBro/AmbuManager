@@ -17,6 +17,7 @@ type Vehicle = {
   depotId: string | null;
   depot: DepotOption | null;
   createdAt: string;
+  updatedAt: string;
 };
 
 type ApiSuccess<T> = { ok: true; data: T };
@@ -33,6 +34,10 @@ function buildInitialSelectedDepotIds(vehicles: Vehicle[]) {
 
 function getDepotLabel(depot: DepotOption) {
   return depot.isActive ? depot.name : `${depot.name} (archivé)`;
+}
+
+function compareVehiclesByImmatriculation(a: Vehicle, b: Vehicle) {
+  return a.immatriculation.localeCompare(b.immatriculation, "fr", { sensitivity: "base" });
 }
 
 export default function VehiclesClient({
@@ -52,6 +57,7 @@ export default function VehiclesClient({
   const [savingDepotVehicleId, setSavingDepotVehicleId] = useState<string | null>(null);
 
   const depotOptions = useMemo(() => availableDepots, [availableDepots]);
+  const displayVehicles = useMemo(() => [...vehicles].sort(compareVehiclesByImmatriculation), [vehicles]);
 
   async function handleAddVehicle(payload: {
     immatriculation: string;
@@ -73,7 +79,7 @@ export default function VehiclesClient({
         throw new Error(getApiError(data, "Erreur lors de la création du véhicule"));
       }
 
-      setVehicles((prev) => [data.data, ...prev]);
+      setVehicles((prev) => [...prev, data.data]);
       setSelectedDepotIds((prev) => ({
         ...prev,
         [data.data.id]: data.data.depotId ?? "",
@@ -155,11 +161,11 @@ export default function VehiclesClient({
       </div>
 
       <div style={{ marginTop: 20 }}>
-        {vehicles.length === 0 ? (
+        {displayVehicles.length === 0 ? (
           <p>Aucun véhicule pour le moment.</p>
         ) : (
           <ul style={{ marginTop: 16, paddingLeft: 16 }}>
-            {vehicles.map((v) => {
+            {displayVehicles.map((v) => {
               const currentDepot = v.depot;
               const currentSelection = selectedDepotIds[v.id] ?? "";
               const options = currentDepot && !depotOptions.some((depot) => depot.id === currentDepot.id)

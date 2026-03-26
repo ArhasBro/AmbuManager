@@ -3,6 +3,7 @@ import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { canManageVehicles } from "@/lib/permissions";
+import { serializeDates } from "@/lib/serializers";
 
 import VehiclesClient from "./vehicles-client";
 
@@ -13,7 +14,7 @@ export default async function VehiclesPage() {
 
   const user = session.user;
 
-  if (!user.id || !(await canManageVehicles(user.id, user.role))) redirect("/login");
+  if (!user.id || !(await canManageVehicles(user.id, user.role, user.platformRole))) redirect("/login");
   if (!user.companyId) redirect("/login");
 
   const companyId = user.companyId;
@@ -21,7 +22,7 @@ export default async function VehiclesPage() {
   const [vehicles, depots] = await Promise.all([
     prisma.vehicle.findMany({
       where: { companyId },
-      orderBy: { createdAt: "desc" },
+      orderBy: { immatriculation: "asc" },
       select: {
         id: true,
         immatriculation: true,
@@ -29,6 +30,7 @@ export default async function VehiclesPage() {
         status: true,
         depotId: true,
         createdAt: true,
+        updatedAt: true,
         depot: {
           select: {
             id: true,
@@ -55,13 +57,7 @@ export default async function VehiclesPage() {
       <p style={{ marginTop: 8, opacity: 0.8 }}>
         Gestion minimale des véhicules et rattachement optionnel à une base active de la société courante.
       </p>
-      <VehiclesClient
-        initialVehicles={vehicles.map((v) => ({
-          ...v,
-          createdAt: v.createdAt.toISOString(),
-        }))}
-        availableDepots={depots}
-      />
+      <VehiclesClient initialVehicles={serializeDates(vehicles)} availableDepots={depots} />
     </div>
   );
 }
