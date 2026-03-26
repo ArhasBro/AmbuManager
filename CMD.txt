@@ -62,8 +62,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260322-17_A4_VEH-17
-- VEH-17 — VALIDATION** — Validation du bloc flotte ALPHA
+- SESSION-20260322-18_A4_CLOTURE-A4
+- CLOTURE_A4 — VALIDATION** — Clôture finale du bloc A4
 
 sortie propre + retour du terminal + aucune erreur = validé
 
