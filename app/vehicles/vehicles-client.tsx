@@ -15,6 +15,10 @@ type Vehicle = {
   type: string | null;
   status: string | null;
   depotId: string | null;
+  insuranceExpiresAt: string | null;
+  technicalInspectionExpiresAt: string | null;
+  registrationDocumentPresent: boolean;
+  sanitaryApprovalExpiresAt: string | null;
   depot: DepotOption | null;
   createdAt: string;
   updatedAt: string;
@@ -54,6 +58,22 @@ function getEditableVehicleStatus(value: Vehicle["status"]): VehicleStatusOption
   return VEHICLE_STATUS_OPTIONS.find((option) => option === value) ?? "ACTIVE";
 }
 
+function formatDateInputValue(value: string | null) {
+  return value ? value.slice(0, 10) : "";
+}
+
+function formatDocumentDateLabel(value: string | null) {
+  if (!value) return "Non renseignée";
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return date.toLocaleDateString("fr-FR");
+}
+
 export default function VehiclesClient({
   initialVehicles,
   availableDepots,
@@ -77,6 +97,10 @@ export default function VehiclesClient({
   const [editImmatriculation, setEditImmatriculation] = useState("");
   const [editType, setEditType] = useState<VehicleTypeOption>("AMBULANCE");
   const [editStatus, setEditStatus] = useState<VehicleStatusOption>("ACTIVE");
+  const [editInsuranceExpiresAt, setEditInsuranceExpiresAt] = useState("");
+  const [editTechnicalInspectionExpiresAt, setEditTechnicalInspectionExpiresAt] = useState("");
+  const [editRegistrationDocumentPresent, setEditRegistrationDocumentPresent] = useState(false);
+  const [editSanitaryApprovalExpiresAt, setEditSanitaryApprovalExpiresAt] = useState("");
   const [savingEditVehicleId, setSavingEditVehicleId] = useState<string | null>(null);
 
   const depotOptions = useMemo(() => availableDepots, [availableDepots]);
@@ -92,6 +116,10 @@ export default function VehiclesClient({
     setEditImmatriculation("");
     setEditType("AMBULANCE");
     setEditStatus("ACTIVE");
+    setEditInsuranceExpiresAt("");
+    setEditTechnicalInspectionExpiresAt("");
+    setEditRegistrationDocumentPresent(false);
+    setEditSanitaryApprovalExpiresAt("");
   }
 
   function openEditVehicle(vehicle: Vehicle) {
@@ -100,6 +128,10 @@ export default function VehiclesClient({
     setEditImmatriculation(vehicle.immatriculation);
     setEditType(getEditableVehicleType(vehicle.type));
     setEditStatus(getEditableVehicleStatus(vehicle.status));
+    setEditInsuranceExpiresAt(formatDateInputValue(vehicle.insuranceExpiresAt));
+    setEditTechnicalInspectionExpiresAt(formatDateInputValue(vehicle.technicalInspectionExpiresAt));
+    setEditRegistrationDocumentPresent(vehicle.registrationDocumentPresent);
+    setEditSanitaryApprovalExpiresAt(formatDateInputValue(vehicle.sanitaryApprovalExpiresAt));
   }
 
   async function handleAddVehicle(payload: {
@@ -148,6 +180,10 @@ export default function VehiclesClient({
           immatriculation: editImmatriculation,
           type: editType,
           status: editStatus,
+          insuranceExpiresAt: editInsuranceExpiresAt ? editInsuranceExpiresAt : null,
+          technicalInspectionExpiresAt: editTechnicalInspectionExpiresAt ? editTechnicalInspectionExpiresAt : null,
+          registrationDocumentPresent: editRegistrationDocumentPresent,
+          sanitaryApprovalExpiresAt: editSanitaryApprovalExpiresAt ? editSanitaryApprovalExpiresAt : null,
         }),
       });
 
@@ -310,6 +346,13 @@ export default function VehiclesClient({
                     <strong>{v.immatriculation}</strong> — {v.type ?? "-"} — {v.status ?? "-"}
                   </div>
 
+                  <div style={{ marginTop: 6, display: "flex", gap: 16, flexWrap: "wrap" }}>
+                    <span>Assurance : {formatDocumentDateLabel(v.insuranceExpiresAt)}</span>
+                    <span>Contrôle technique : {formatDocumentDateLabel(v.technicalInspectionExpiresAt)}</span>
+                    <span>Carte grise : {v.registrationDocumentPresent ? "Présente" : "Absente"}</span>
+                    <span>Agrément sanitaire : {formatDocumentDateLabel(v.sanitaryApprovalExpiresAt)}</span>
+                  </div>
+
                   <div style={{ marginTop: 6, display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
                     <span>Base actuelle : {v.depot ? getDepotLabel(v.depot) : "Aucune"}</span>
 
@@ -435,6 +478,49 @@ export default function VehiclesClient({
                           </option>
                         ))}
                       </select>
+
+                      <label style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                        <span>Assurance</span>
+                        <input
+                          type="date"
+                          value={editInsuranceExpiresAt}
+                          onChange={(e) => setEditInsuranceExpiresAt(e.target.value)}
+                          disabled={isSavingEdit || isArchiving}
+                          style={{ padding: 8 }}
+                        />
+                      </label>
+
+                      <label style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                        <span>Contrôle technique</span>
+                        <input
+                          type="date"
+                          value={editTechnicalInspectionExpiresAt}
+                          onChange={(e) => setEditTechnicalInspectionExpiresAt(e.target.value)}
+                          disabled={isSavingEdit || isArchiving}
+                          style={{ padding: 8 }}
+                        />
+                      </label>
+
+                      <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        <input
+                          type="checkbox"
+                          checked={editRegistrationDocumentPresent}
+                          onChange={(e) => setEditRegistrationDocumentPresent(e.target.checked)}
+                          disabled={isSavingEdit || isArchiving}
+                        />
+                        <span>Carte grise présente</span>
+                      </label>
+
+                      <label style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                        <span>Agrément sanitaire</span>
+                        <input
+                          type="date"
+                          value={editSanitaryApprovalExpiresAt}
+                          onChange={(e) => setEditSanitaryApprovalExpiresAt(e.target.value)}
+                          disabled={isSavingEdit || isArchiving}
+                          style={{ padding: 8 }}
+                        />
+                      </label>
 
                       <button type="submit" disabled={isSavingEdit || isArchiving} style={{ padding: "6px 10px" }}>
                         {isSavingEdit ? "Enregistrement..." : "Enregistrer modifications"}

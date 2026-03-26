@@ -29,6 +29,10 @@ export default async function VehiclesPage() {
         type: true,
         status: true,
         depotId: true,
+        insuranceExpiresAt: true,
+        technicalInspectionExpiresAt: true,
+        registrationDocumentPresent: true,
+        sanitaryApprovalExpiresAt: true,
         createdAt: true,
         updatedAt: true,
         depot: {
