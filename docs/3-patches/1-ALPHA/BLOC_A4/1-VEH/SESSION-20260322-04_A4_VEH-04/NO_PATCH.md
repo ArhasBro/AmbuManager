@@ -1,10 +1,11 @@
-﻿# NO_PATCH
+# NO_PATCH — SESSION-20260322-04_A4_VEH-04
 
-Session : SESSION-20260322-04_A4_VEH-04
+Aucun patch produit.
 
-Type : VALIDATION
+Motif :
+- session de type `VALIDATION`
+- aucune correction autorisée dans `VEH-04`
+- constats documentés pour report éventuel vers `VEH-05`
 
-Raison :
-- Session documentaire de type VALIDATION.
-- Aucun patch officiel a produire pour cette session.
-- Le dossier patch reste present pour conserver le miroir avec docs/2-sessions.
+Verdict :
+- création véhicule existante : `PARTIELLEMENT CONFORME`

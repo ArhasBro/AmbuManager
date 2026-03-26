@@ -1,35 +1,33 @@
-﻿# SESSION
+# SESSION — SESSION-20260322-04_A4_VEH-04
 
-## ID SESSION
+- Projet : Investissement
+- Sous-projet : Ambulance Manager
+- Maturité : 1-ALPHA
+- Bloc : A4
+- Type : VALIDATION
+- Intitulé : Vérification de la création véhicule existante
 
-SESSION-20260322-04_A4_VEH-04
+## Objectif unique
+Vérifier uniquement si la création véhicule existante couvre réellement le besoin `07.2 Création d’un véhicule` côté API, UI, validation minimale et contrôle d’accès.
 
-## Date
+## Périmètre autorisé effectivement contrôlé
+- `app/api/vehicles/route.ts`
+- `app/vehicles/add-vehicle-form.tsx`
+- `app/vehicles/vehicles-client.tsx`
+- `app/vehicles/page.tsx`
+- `lib/validators/vehicle.ts`
+- `lib/permissions.ts` (lecture)
+- `lib/permission-catalog.ts` (lecture)
+- `prisma/schema.prisma` (lecture)
+- `docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md` (référence produit)
+- `docs/1-master/PLAN_DE_DEVELOPPEMENT.md` (repérage session)
+- `docs/PROTOCOLE_SESSION.md`
+- `docs/SOURCES_AUTORISEES.md`
+- `docs/4-templates/*`
 
-22/03/2026
-
-## Contexte
-
-Projet : Investissement  
-Sous-projet : Ambulance Manager  
-Maturite : 1-ALPHA  
-Bloc : A4  
-Type : VALIDATION  
-Intitule : Vérification de la création véhicule existante
-
-## Objectif de la session
-
-INFORMATION NON FOURNIE - A CONFIRMER
-
-## Perimetre exact traite
-
-INFORMATION NON FOURNIE - A CONFIRMER
-
-## Resultat synthetique de session
-
-INFORMATION NON FOURNIE - A CONFIRMER
-
-## Dossiers lies
-
-- Session : docs/2-sessions/1-ALPHA/BLOC_A4/SESSION-20260322-04_A4_VEH-04
-- Patchs  : docs/3-patches/1-ALPHA/BLOC_A4/SESSION-20260322-04_A4_VEH-04
+## Méthode
+1. Lecture des documents maîtres et du cadrage.
+2. Lecture stricte du code réel du périmètre autorisé.
+3. Vérification des preuves API, UI, validation et accès.
+4. Tentative de relance `npm run lint` et `npm run build`.
+5. Aucun correctif produit dans cette session de VALIDATION.
