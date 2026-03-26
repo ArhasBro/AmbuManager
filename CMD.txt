@@ -62,8 +62,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260322-11_A4_VEH-11
-- VEH-11 — COMPLÉTION** — Rattachement véhicule à une base
+- SESSION-20260322-12_A4_VEH-12
+- VEH-12 — AUDIT** — Audit de l’affectation véhicule au planning existant
 
 sortie propre + retour du terminal + aucune erreur = validé
 
