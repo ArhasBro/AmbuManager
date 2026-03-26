@@ -1,0 +1,178 @@
+import { Prisma } from "@prisma/client";
+import { getServerSession } from "next-auth/next";
+import { z } from "zod";
+
+import { badRequest, conflict, forbidden, notFound, ok, serverError, unauthorized } from "@/lib/api/response";
+import { prismaToHttp } from "@/lib/api/prisma-error";
+import { authOptions } from "@/lib/auth";
+import { canManageVehicles } from "@/lib/permissions";
+import { prisma } from "@/lib/prisma";
+import { serializeDates } from "@/lib/serializers";
+import { traceSupportAction } from "@/lib/services/audit/support-action-trace";
+import { updateVehicleBodySchema } from "@/lib/validators/vehicle";
+
+const paramsSchema = z
+  .object({
+    id: z.string().uuid(),
+  })
+  .strict();
+
+const vehicleSelect = Prisma.validator<Prisma.VehicleSelect>()({
+  id: true,
+  immatriculation: true,
+  type: true,
+  status: true,
+  depotId: true,
+  createdAt: true,
+  updatedAt: true,
+  depot: {
+    select: {
+      id: true,
+      name: true,
+      isActive: true,
+    },
+  },
+});
+
+type EditableVehicleRecord = Prisma.VehicleGetPayload<{ select: typeof vehicleSelect }>;
+
+function getErrorMessage(e: unknown): string {
+  if (e instanceof Error) return e.message;
+  if (typeof e === "string") return e;
+  try {
+    return JSON.stringify(e);
+  } catch {
+    return "Unknown error";
+  }
+}
+
+async function findEditableVehicle(id: string, companyId: string) {
+  return prisma.vehicle.findFirst({
+    where: {
+      id,
+      companyId,
+    },
+    select: vehicleSelect,
+  });
+}
+
+function getChangedFields(existingVehicle: EditableVehicleRecord, nextData: { immatriculation?: string; type?: EditableVehicleRecord["type"]; status?: EditableVehicleRecord["status"] }) {
+  const changedFields: string[] = [];
+
+  if (nextData.immatriculation !== undefined && nextData.immatriculation !== existingVehicle.immatriculation) {
+    changedFields.push("immatriculation");
+  }
+
+  if (nextData.type !== undefined && nextData.type !== existingVehicle.type) {
+    changedFields.push("type");
+  }
+
+  if (nextData.status !== undefined && nextData.status !== existingVehicle.status) {
+    changedFields.push("status");
+  }
+
+  return changedFields;
+}
+
+export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }> }) {
+  const session = await getServerSession(authOptions);
+  const actorUserId = session?.user?.id;
+  const companyId = session?.user?.companyId;
+  const role = session?.user?.role;
+  const platformRole = session?.user?.platformRole;
+
+  if (!actorUserId || !companyId) return unauthorized();
+  if (!(await canManageVehicles(actorUserId, role, platformRole))) return forbidden();
+
+  const rawParams = await ctx.params.catch(() => null);
+  const parsedParams = paramsSchema.safeParse(rawParams);
+  if (!parsedParams.success) return badRequest("VALIDATION_ERROR", parsedParams.error.flatten());
+
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch {
+    return badRequest("INVALID_JSON");
+  }
+
+  const parsedBody = updateVehicleBodySchema.safeParse(body);
+  if (!parsedBody.success) return badRequest("VALIDATION_ERROR", parsedBody.error.flatten());
+
+  try {
+    const existingVehicle = await findEditableVehicle(parsedParams.data.id, companyId);
+    if (!existingVehicle) return notFound();
+
+    const changedFields = getChangedFields(existingVehicle, parsedBody.data);
+
+    if (changedFields.length === 0) {
+      return ok(serializeDates(existingVehicle));
+    }
+
+    const updatedVehicle = await prisma.$transaction(async (tx) => {
+      const vehicle = await tx.vehicle.update({
+        where: { id: existingVehicle.id },
+        data: {
+          ...(parsedBody.data.immatriculation !== undefined ? { immatriculation: parsedBody.data.immatriculation } : {}),
+          ...(parsedBody.data.type !== undefined ? { type: parsedBody.data.type } : {}),
+          ...(parsedBody.data.status !== undefined ? { status: parsedBody.data.status } : {}),
+        },
+        select: vehicleSelect,
+      });
+
+      await traceSupportAction(tx, {
+        companyId,
+        actorUserId,
+        actorPlatformRole: platformRole,
+        action: "SUPPORT_UPDATE_VEHICLE",
+        entityType: "VEHICLE",
+        entityId: vehicle.id,
+        summary: `Support modification véhicule ${vehicle.immatriculation}`,
+        payload: {
+          module: "vehicles",
+          changedFields,
+          previous: {
+            immatriculation: existingVehicle.immatriculation,
+            type: existingVehicle.type,
+            status: existingVehicle.status,
+            depotId: existingVehicle.depotId,
+            depot: existingVehicle.depot
+              ? {
+                  id: existingVehicle.depot.id,
+                  name: existingVehicle.depot.name,
+                  isActive: existingVehicle.depot.isActive,
+                }
+              : null,
+          },
+          next: {
+            immatriculation: vehicle.immatriculation,
+            type: vehicle.type,
+            status: vehicle.status,
+            depotId: vehicle.depotId,
+            depot: vehicle.depot
+              ? {
+                  id: vehicle.depot.id,
+                  name: vehicle.depot.name,
+                  isActive: vehicle.depot.isActive,
+                }
+              : null,
+          },
+          details: {
+            targetType: "vehicle",
+          },
+        },
+      });
+
+      return vehicle;
+    });
+
+    return ok(serializeDates(updatedVehicle));
+  } catch (e: unknown) {
+    const mapped = prismaToHttp(e);
+    if (mapped?.status === 404) return notFound();
+    if (mapped?.status === 409) {
+      return conflict(mapped.error, { message: "Un véhicule avec cette immatriculation existe déjà dans cette société." });
+    }
+
+    return serverError(mapped ?? getErrorMessage(e));
+  }
+}

@@ -1692,17 +1692,27 @@ C:.
 |   |   |   |       |       server-reference-manifest.json
 |   |   |   |       |       
 |   |   |   |       \---[id]
-|   |   |   |           \---depot
-|   |   |   |               |   route.js
-|   |   |   |               |   route.js.map
-|   |   |   |               |   route.js.nft.json
-|   |   |   |               |   route_client-reference-manifest.js
-|   |   |   |               |   
-|   |   |   |               \---route
-|   |   |   |                       app-paths-manifest.json
-|   |   |   |                       build-manifest.json
-|   |   |   |                       server-reference-manifest.json
-|   |   |   |                       
+|   |   |   |           |   route.js
+|   |   |   |           |   route.js.map
+|   |   |   |           |   route.js.nft.json
+|   |   |   |           |   route_client-reference-manifest.js
+|   |   |   |           |   
+|   |   |   |           +---depot
+|   |   |   |           |   |   route.js
+|   |   |   |           |   |   route.js.map
+|   |   |   |           |   |   route.js.nft.json
+|   |   |   |           |   |   route_client-reference-manifest.js
+|   |   |   |           |   |   
+|   |   |   |           |   \---route
+|   |   |   |           |           app-paths-manifest.json
+|   |   |   |           |           build-manifest.json
+|   |   |   |           |           server-reference-manifest.json
+|   |   |   |           |           
+|   |   |   |           \---route
+|   |   |   |                   app-paths-manifest.json
+|   |   |   |                   build-manifest.json
+|   |   |   |                   server-reference-manifest.json
+|   |   |   |                   
 |   |   |   +---company
 |   |   |   |   |   page.js
 |   |   |   |   |   page.js.map
@@ -1903,14 +1913,18 @@ C:.
 |   |   |   |   [root-of-the-server]__2d31c873._.js.map
 |   |   |   |   [root-of-the-server]__334024b0._.js
 |   |   |   |   [root-of-the-server]__334024b0._.js.map
+|   |   |   |   [root-of-the-server]__3562f2d8._.js
+|   |   |   |   [root-of-the-server]__3562f2d8._.js.map
+|   |   |   |   [root-of-the-server]__3f677d57._.js
+|   |   |   |   [root-of-the-server]__3f677d57._.js.map
 |   |   |   |   [root-of-the-server]__466e0aef._.js
 |   |   |   |   [root-of-the-server]__466e0aef._.js.map
+|   |   |   |   [root-of-the-server]__4a56182a._.js
+|   |   |   |   [root-of-the-server]__4a56182a._.js.map
 |   |   |   |   [root-of-the-server]__4acb48f2._.js
 |   |   |   |   [root-of-the-server]__4acb48f2._.js.map
 |   |   |   |   [root-of-the-server]__4b548634._.js
 |   |   |   |   [root-of-the-server]__4b548634._.js.map
-|   |   |   |   [root-of-the-server]__521042e3._.js
-|   |   |   |   [root-of-the-server]__521042e3._.js.map
 |   |   |   |   [root-of-the-server]__54479175._.js
 |   |   |   |   [root-of-the-server]__54479175._.js.map
 |   |   |   |   [root-of-the-server]__5d11d34e._.js
@@ -1925,8 +1939,6 @@ C:.
 |   |   |   |   [root-of-the-server]__87fabf7c._.js.map
 |   |   |   |   [root-of-the-server]__8f437561._.js
 |   |   |   |   [root-of-the-server]__8f437561._.js.map
-|   |   |   |   [root-of-the-server]__935043d7._.js
-|   |   |   |   [root-of-the-server]__935043d7._.js.map
 |   |   |   |   [root-of-the-server]__a80a03b0._.js
 |   |   |   |   [root-of-the-server]__a80a03b0._.js.map
 |   |   |   |   [root-of-the-server]__b7025cff._.js
@@ -1947,8 +1959,8 @@ C:.
 |   |   |   |   [root-of-the-server]__d5f44ffd._.js.map
 |   |   |   |   [root-of-the-server]__e6c5e537._.js
 |   |   |   |   [root-of-the-server]__e6c5e537._.js.map
-|   |   |   |   [root-of-the-server]__eda41dc1._.js
-|   |   |   |   [root-of-the-server]__eda41dc1._.js.map
+|   |   |   |   [root-of-the-server]__f18feb80._.js
+|   |   |   |   [root-of-the-server]__f18feb80._.js.map
 |   |   |   |   [root-of-the-server]__f3458ec0._.js
 |   |   |   |   [root-of-the-server]__f3458ec0._.js.map
 |   |   |   |   [turbopack]_runtime.js
@@ -2007,6 +2019,8 @@ C:.
 |   |   |   |   _next-internal_server_app_api_vehicles_route_actions_7bc5da8c.js.map
 |   |   |   |   _next-internal_server_app_api_vehicles_[id]_depot_route_actions_9e091d71.js
 |   |   |   |   _next-internal_server_app_api_vehicles_[id]_depot_route_actions_9e091d71.js.map
+|   |   |   |   _next-internal_server_app_api_vehicles_[id]_route_actions_1a44529f.js
+|   |   |   |   _next-internal_server_app_api_vehicles_[id]_route_actions_1a44529f.js.map
 |   |   |   |   _next-internal_server_app_favicon_ico_route_actions_353150a5.js
 |   |   |   |   _next-internal_server_app_favicon_ico_route_actions_353150a5.js.map
 |   |   |   |   
@@ -2163,13 +2177,13 @@ C:.
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
 |   |   |       
-|   |   +---G7mHnPXskC01w8rei8nYT
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
+|   |   +---media
+|   |   |       favicon.0b3bf435.ico
 |   |   |       
-|   |   \---media
-|   |           favicon.0b3bf435.ico
+|   |   \---yYEcBk40fIS36UAjXt75N
+|   |           _buildManifest.js
+|   |           _clientMiddlewareManifest.json
+|   |           _ssgManifest.js
 |   |           
 |   \---types
 |           routes.d.ts
@@ -2268,6 +2282,8 @@ C:.
 |   |       |   route.ts
 |   |       |   
 |   |       \---[id]
+|   |           |   route.ts
+|   |           |   
 |   |           \---depot
 |   |                   route.ts
 |   |                   
@@ -3248,6 +3264,7 @@ C:.
 |   |           |   |       README_PATCH.md
 |   |           |   |       
 |   |           |   +---SESSION-20260322-06_A4_VEH-06
+|   |           |   |       PATCH__SESSION-20260322-06_A4_VEH-06.diff
 |   |           |   |       README_PATCH.md
 |   |           |   |       
 |   |           |   +---SESSION-20260322-07_A4_VEH-07

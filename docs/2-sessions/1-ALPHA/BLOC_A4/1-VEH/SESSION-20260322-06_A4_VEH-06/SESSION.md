@@ -1,4 +1,4 @@
-﻿# SESSION
+# SESSION
 
 ## ID SESSION
 
@@ -12,24 +12,67 @@ SESSION-20260322-06_A4_VEH-06
 
 Projet : Investissement  
 Sous-projet : Ambulance Manager  
-Maturite : 1-ALPHA  
+Maturité : 1-ALPHA  
 Bloc : A4  
-Type : COMPLETION  
-Intitule : API modification véhicule
+Type : COMPLÉTION  
+Intitulé : API modification véhicule
 
 ## Objectif de la session
 
-INFORMATION NON FOURNIE - A CONFIRMER
+Ajouter l’API réelle de modification véhicule, minimale et traçable, sur le périmètre `07.3 Édition d’un véhicule`, sans toucher à l’UI d’édition, sans ouvrir l’archivage, et sans intégrer `depotId` dans cette édition générale.
 
-## Perimetre exact traite
+## Périmètre exact traité
 
-INFORMATION NON FOURNIE - A CONFIRMER
+### Code modifié
+- `app/api/vehicles/[id]/route.ts`
+- `lib/validators/vehicle.ts`
 
-## Resultat synthetique de session
+### Code lu seulement pour borne de preuve / alignement
+- `app/api/vehicles/route.ts`
+- `app/api/vehicles/[id]/depot/route.ts`
+- `lib/permissions.ts`
+- `lib/permission-catalog.ts`
+- `lib/services/audit/support-action-trace.ts`
+- `prisma/schema.prisma`
 
-INFORMATION NON FOURNIE - A CONFIRMER
+### Documentation lue pour cadrage
+- `docs/1-master/*`
+- `docs/4-templates/*`
+- `docs/PROTOCOLE_SESSION.md`
+- `docs/SOURCES_AUTORISEES.md`
+- `docs/2-sessions/1-ALPHA/BLOC_A4/1-VEH/SESSION-20260322-05_A4_VEH-05/*`
 
-## Dossiers lies
+## Résultat synthétique de session
 
-- Session : docs/2-sessions/1-ALPHA/BLOC_A4/SESSION-20260322-06_A4_VEH-06
-- Patchs  : docs/3-patches/1-ALPHA/BLOC_A4/SESSION-20260322-06_A4_VEH-06
+Le socle API d’édition véhicule a été ajouté de manière minimale et traçable.
+
+Ajouts réellement réalisés :
+- nouvel endpoint `PATCH /api/vehicles/[id]` ;
+- validation stricte d’un body partiel limité à `immatriculation`, `type`, `status` ;
+- refus des corps vides via validation dédiée ;
+- cloisonnement strict par `companyId` ;
+- réponse homogène avec le reste du module (`ok`, `badRequest`, `forbidden`, `notFound`, `conflict`, `serverError`) ;
+- exclusion explicite de `depotId` du périmètre d’édition générale ;
+- traçabilité support cohérente avec le pattern existant quand un acteur support serait autorisé ultérieurement, sans élargir le scope actuel.
+
+## Validations finales retenues
+
+Commandes reproductibles attendues depuis la racine projet :
+
+```bash
+git apply --check ".\\docs\\3-patches\\1-ALPHA\\BLOC_A4\\1-VEH\\SESSION-20260322-06_A4_VEH-06\\PATCH__SESSION-20260322-06_A4_VEH-06.diff"
+git apply ".\\docs\\3-patches\\1-ALPHA\\BLOC_A4\\1-VEH\\SESSION-20260322-06_A4_VEH-06\\PATCH__SESSION-20260322-06_A4_VEH-06.diff"
+npm run lint
+npm run build
+```
+
+Résultats réels à jour retenus pour la documentation finale :
+- `git apply --check` : OK
+- `git apply` : OK
+- `npm run lint` : OK
+- `npm run build` : OK
+
+## Dossiers liés
+
+- Session : `docs/2-sessions/1-ALPHA/BLOC_A4/1-VEH/SESSION-20260322-06_A4_VEH-06`
+- Patchs  : `docs/3-patches/1-ALPHA/BLOC_A4/1-VEH/SESSION-20260322-06_A4_VEH-06`
