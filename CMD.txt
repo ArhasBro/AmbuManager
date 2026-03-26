@@ -62,8 +62,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260322-10_A4_VEH-10
-- VEH-10 — VALIDATION** — Contrôle de la non-suppression physique non souhaitée
+- SESSION-20260322-11_A4_VEH-11
+- VEH-11 — COMPLÉTION** — Rattachement véhicule à une base
 
 sortie propre + retour du terminal + aucune erreur = validé
 
