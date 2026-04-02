@@ -62,8 +62,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260401-01_A5_RULES-01
-- RULES-01 — AUDIT** — Audit complet du module company rules existant
+- SESSION-20260401-03_A5_RULES-03
+- RULES-03 — AUDIT** — Audit de l’usage réel des règles existantes dans le moteur
 
 sortie propre + retour du terminal + aucune erreur = validé
 
