@@ -1,35 +1,27 @@
-﻿# SESSION
-
-## ID SESSION
-
-SESSION-20260401-01_A5_RULES-01
-
-## Date
-
-01/04/2026
-
-## Contexte
+# SESSION
 
 Projet : Investissement  
 Sous-projet : Ambulance Manager  
-Maturite : 1-ALPHA  
-Bloc : A5  
+Session : SESSION-20260401-01_A5_RULES-01  
+Bloc : A5 — Règles métier et paramètres société  
 Type : AUDIT  
-Intitule : Audit complet du module company rules existant
+Version cible : 1-ALPHA
 
-## Objectif de la session
+## Objectif unique
+Audit complet du module `company rules` réellement présent dans le dépôt actuel.
 
-INFORMATION NON FOURNIE - A CONFIRMER
+## Périmètre prévu
+- modèle `CompanyRule`
+- enum `RuleMode`
+- route `app/api/company/rules/route.ts`
+- usages côté planning
+- usages côté autoschedule
+- permissions réelles utilisées
+- écart réel vs cadrage du module 08
 
-## Perimetre exact traite
-
-INFORMATION NON FOURNIE - A CONFIRMER
-
-## Resultat synthetique de session
-
-INFORMATION NON FOURNIE - A CONFIRMER
-
-## Dossiers lies
-
-- Session : docs/2-sessions/1-ALPHA/BLOC_A5/SESSION-20260401-01_A5_RULES-01
-- Patchs  : docs/3-patches/1-ALPHA/BLOC_A5/SESSION-20260401-01_A5_RULES-01
+## Sources utilisées
+- `docs/1-master/*`
+- `docs/PROTOCOLE_SESSION.md`
+- `docs/SOURCES_AUTORISEES.md`
+- `docs/4-templates/TEMPLATE_DEBUT_SESSION.md`
+- code réel du dépôt joint
