@@ -6,7 +6,7 @@ git push
 
 git status
 
-GPT :
+# GPT
 --------------------------
 Session validée, nous passons à la suivante.
 
@@ -36,6 +36,7 @@ Références de la session :
 
 - SESSION-20260401-10_A5_CLOTURE-A5
 - CLOTURE_A5 — VALIDATION** — Clôture finale du bloc A5
+
 ------------------------------------
 sortie propre + retour du terminal + aucune erreur = validé
 ------------------------------------
@@ -52,6 +53,7 @@ Je n'ai pas intégré :
 -les fichiers documentaires de session (`SESSION.md`, `NOTES.md`, `EVIDENCES.md`, `RESULTATS.md`, `FIN_SESSION.md`)
 -le fichier documentaire de patches (`README.md`)
 Il seront à crée dans le patch docs en 1 ZIP téléchargeable sans sous dossier, quand la session sera validé pour qu'il soient complet.
+
 ------------------------------------
 
 

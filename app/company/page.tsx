@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 
 import { authOptions } from "@/lib/auth";
+import { canManageCompanyRules } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 
 import CompanyProfileForm from "./company-profile-form";
@@ -25,22 +26,30 @@ export default async function CompanyPage() {
   const user = session?.user;
 
   if (!user?.id || !user.companyId) redirect("/login");
-  if (!canManageCompanyProfile(user.role)) redirect("/login");
 
-  const rows = await prisma.$queryRaw<CompanyProfileRow[]>`
-    SELECT
-      "name",
-      "managerNames",
-      "address",
-      "phone",
-      "siret"
-    FROM "Company"
-    WHERE "id" = ${user.companyId}
-    LIMIT 1
-  `;
+  const canManageProfile = canManageCompanyProfile(user.role);
+  const canManageRules = await canManageCompanyRules(user.id, user.role, user.platformRole);
 
-  const company = rows[0];
-  if (!company) redirect("/login");
+  if (!canManageProfile && !canManageRules) redirect("/login");
+
+  let company: CompanyProfileRow | null = null;
+
+  if (canManageProfile) {
+    const rows = await prisma.$queryRaw<CompanyProfileRow[]>`
+      SELECT
+        "name",
+        "managerNames",
+        "address",
+        "phone",
+        "siret"
+      FROM "Company"
+      WHERE "id" = ${user.companyId}
+      LIMIT 1
+    `;
+
+    company = rows[0] ?? null;
+    if (!company) redirect("/login");
+  }
 
   return (
     <div style={{ padding: 16, display: "grid", gap: 16 }}>
@@ -55,17 +64,35 @@ export default async function CompanyPage() {
         <Link href="/dashboard">Retour dashboard</Link>
       </div>
 
-      <CompanyProfileForm
-        initialProfile={{
-          name: company.name ?? "",
-          managerNames: company.managerNames ?? "",
-          address: company.address ?? "",
-          phone: company.phone ?? "",
-          siret: company.siret ?? "",
-        }}
-      />
+      {canManageProfile && company ? (
+        <CompanyProfileForm
+          initialProfile={{
+            name: company.name ?? "",
+            managerNames: company.managerNames ?? "",
+            address: company.address ?? "",
+            phone: company.phone ?? "",
+            siret: company.siret ?? "",
+          }}
+        />
+      ) : (
+        <section
+          style={{
+            display: "grid",
+            gap: 8,
+            padding: 16,
+            border: "1px solid #ddd",
+            borderRadius: 10,
+            maxWidth: 720,
+          }}
+        >
+          <strong>Profil société</strong>
+          <p style={{ margin: 0, opacity: 0.8 }}>
+            L’édition du profil société reste réservée aux comptes ADMIN / GERANT.
+          </p>
+        </section>
+      )}
 
-      <CompanyRulesPanel />
+      {canManageRules ? <CompanyRulesPanel /> : null}
     </div>
   );
 }

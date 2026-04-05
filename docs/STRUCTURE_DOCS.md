@@ -1103,6 +1103,8 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |           \---2-CLOTURE
 |               \---SESSION-20260401-10_A5_CLOTURE-A5
 |                       NO_PATCH.md
+|                       PATCH__SESSION-20260401-10_A5_CLOTURE-A5.diff
+|                       README_PATCH.md
 |                       
 +---4-templates
 |       TEMPLATE_DEBUT_SESSION.md

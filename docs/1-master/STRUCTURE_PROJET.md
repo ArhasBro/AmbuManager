@@ -3,7 +3,7 @@ Le numÚro de sÚrie du volume est 123E-4DB7
 C:.
 |   .env
 |   .gitignore
-|   CMD.txt
+|   CMD.md
 |   create_session.ps1
 |   eslint.config.mjs
 |   next-env.d.ts
@@ -2084,8 +2084,6 @@ C:.
 |   |   |           node_modules_next_dist_esm_build_templates_app-page_b8e1111a.js.map
 |   |   |           node_modules_next_dist_f21d913a._.js
 |   |   |           node_modules_next_dist_f21d913a._.js.map
-|   |   |           [root-of-the-server]__0b9ea83d._.js
-|   |   |           [root-of-the-server]__0b9ea83d._.js.map
 |   |   |           [root-of-the-server]__0d5ae7ad._.js
 |   |   |           [root-of-the-server]__0d5ae7ad._.js.map
 |   |   |           [root-of-the-server]__12ffa5d0._.js
@@ -2096,10 +2094,14 @@ C:.
 |   |   |           [root-of-the-server]__296a25b5._.js.map
 |   |   |           [root-of-the-server]__36ebbb9f._.js
 |   |   |           [root-of-the-server]__36ebbb9f._.js.map
+|   |   |           [root-of-the-server]__37222123._.js
+|   |   |           [root-of-the-server]__37222123._.js.map
+|   |   |           [root-of-the-server]__3c39e5ac._.js
+|   |   |           [root-of-the-server]__3c39e5ac._.js.map
 |   |   |           [root-of-the-server]__3e4277b6._.js
 |   |   |           [root-of-the-server]__3e4277b6._.js.map
-|   |   |           [root-of-the-server]__4556a15e._.js
-|   |   |           [root-of-the-server]__4556a15e._.js.map
+|   |   |           [root-of-the-server]__45298fac._.js
+|   |   |           [root-of-the-server]__45298fac._.js.map
 |   |   |           [root-of-the-server]__84823185._.js
 |   |   |           [root-of-the-server]__84823185._.js.map
 |   |   |           [root-of-the-server]__87883845._.js
@@ -2108,8 +2110,6 @@ C:.
 |   |   |           [root-of-the-server]__9d5e3ced._.js.map
 |   |   |           [root-of-the-server]__a457c799._.js
 |   |   |           [root-of-the-server]__a457c799._.js.map
-|   |   |           [root-of-the-server]__a6582b6d._.js
-|   |   |           [root-of-the-server]__a6582b6d._.js.map
 |   |   |           [root-of-the-server]__b9356576._.js
 |   |   |           [root-of-the-server]__b9356576._.js.map
 |   |   |           [root-of-the-server]__c4a7c7d0._.js
@@ -2181,11 +2181,6 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
-|   |   +---85wzhhdCPQ0TKXlaVcgcW
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
-|   |   |       
 |   |   +---chunks
 |   |   |       017153f9275da7e3.js
 |   |   |       05e6c743003c809d.js
@@ -2206,6 +2201,11 @@ C:.
 |   |   |       daba6dd36b509727.js
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
+|   |   |       
+|   |   +---J0rGxuZwXreTouzgaqwtV
+|   |   |       _buildManifest.js
+|   |   |       _clientMiddlewareManifest.json
+|   |   |       _ssgManifest.js
 |   |   |       
 |   |   \---media
 |   |           favicon.0b3bf435.ico
@@ -3455,6 +3455,8 @@ C:.
 |   |           \---2-CLOTURE
 |   |               \---SESSION-20260401-10_A5_CLOTURE-A5
 |   |                       NO_PATCH.md
+|   |                       PATCH__SESSION-20260401-10_A5_CLOTURE-A5.diff
+|   |                       README_PATCH.md
 |   |                       
 |   +---4-templates
 |   |       TEMPLATE_DEBUT_SESSION.md
