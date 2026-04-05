@@ -3,7 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
 import { findFirstUserAbsenceConflict } from "@/lib/services/planning/user-absence";
 import type { PlanningIssue, PlanningIssueCode } from "@/lib/types/planning";
-import { RuleMode } from "@prisma/client";
+import { COMPANY_PARAMETER_KEYS } from "@/lib/company-rules/catalog";
+import { loadMinRestCompanyRule } from "@/lib/company-rules/runtime";
 
 export type AssignDraftShiftInput = {
   companyId: string;
@@ -28,32 +29,6 @@ function requiredSlotsFromCategory(category: Category | null | undefined): 1 | 2
 function normalizePair(userId: string | null, user2Id: string | null): { userId: string | null; user2Id: string | null } {
   if (!userId && user2Id) return { userId: user2Id, user2Id: null };
   return { userId, user2Id };
-}
-
-type MinRestRuleResult =
-  | { kind: "DISABLED" }
-  | { kind: "OK"; rule: { mode: RuleMode; hours: number } }
-  | { kind: "CONFIG_ERROR"; message: string };
-
-async function loadMinRestRule(companyId: string): Promise<MinRestRuleResult> {
-  const rule = await prisma.companyRule.findUnique({
-    where: { companyId_key: { companyId, key: "PLANNING_MIN_REST_HOURS" } },
-    select: { mode: true, value: true },
-  });
-
-  if (!rule) return { kind: "DISABLED" };
-  if (rule.mode === RuleMode.OFF) return { kind: "DISABLED" };
-
-  const raw = String(rule.value ?? "").trim();
-  const hours = Number(raw);
-  if (!Number.isFinite(hours) || hours <= 0) {
-    return {
-      kind: "CONFIG_ERROR",
-      message: `CompanyRule PLANNING_MIN_REST_HOURS has invalid value "${rule.value}" (expected positive number)`,
-    };
-  }
-
-  return { kind: "OK", rule: { mode: rule.mode, hours } };
 }
 
 function err(code: PlanningIssueCode, message: string, meta?: Record<string, unknown>): PlanningIssue {
@@ -216,9 +191,9 @@ export async function assignDraftShift(input: AssignDraftShiftInput): Promise<As
   }
 
   // 5) Règle entreprise — repos minimum
-  const minRest = await loadMinRestRule(companyId);
+  const minRest = await loadMinRestCompanyRule(prisma, companyId);
   if (minRest.kind === "CONFIG_ERROR") {
-    return { ok: false, error: err("RULE_CONFIG_ERROR", minRest.message, { key: "PLANNING_MIN_REST_HOURS" }) };
+    return { ok: false, error: err("RULE_CONFIG_ERROR", minRest.message, { key: COMPANY_PARAMETER_KEYS.PLANNING_MIN_REST_HOURS }) };
   }
 
   if (minRest.kind === "OK" && assignedUsers.length > 0) {

@@ -3,6 +3,9 @@ import { getServerSession } from "next-auth/next";
 import { z } from "zod";
 import { AutoScheduleStatus, Prisma, RuleMode } from "@prisma/client";
 
+import { COMPANY_PARAMETER_KEYS } from "@/lib/company-rules/catalog";
+import { loadMinRestCompanyRule } from "@/lib/company-rules/runtime";
+
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { canPublishAutoSchedule } from "@/lib/permissions";
@@ -12,8 +15,6 @@ import { buildUserAbsenceMap, findOverlappingUserAbsence, listUserAbsenceWindows
 const ParamsSchema = z.object({
   id: z.string().min(1),
 });
-
-const MIN_REST_RULE_KEY = "PLANNING_MIN_REST_HOURS";
 
 function extractRunIdFromPath(pathname: string): string | null {
   // attendu: /api/planning/autoschedule/runs/{id}/publish
@@ -230,38 +231,6 @@ async function checkConflicts(
   return { kind: "OK" };
 }
 
-/**
- * ✅ Repos minimum (CompanyRule + RuleMode)
- */
-type MinRestRule =
-  | { enabled: false }
-  | { enabled: true; hours: number; mode: RuleMode };
-
-async function loadMinRestRule(
-  tx: Prisma.TransactionClient,
-  companyId: string
-): Promise<{ kind: "OK"; rule: MinRestRule } | { kind: "CONFIG_ERROR"; message: string }> {
-  const r = await tx.companyRule.findFirst({
-    where: { companyId, key: MIN_REST_RULE_KEY },
-    select: { value: true, mode: true },
-  });
-
-  if (!r) return { kind: "OK", rule: { enabled: false } };
-  if (r.mode === RuleMode.OFF) return { kind: "OK", rule: { enabled: false } };
-
-  const raw = String(r.value ?? "").trim();
-  const hours = Number(raw);
-
-  if (!Number.isFinite(hours) || hours <= 0) {
-    return {
-      kind: "CONFIG_ERROR",
-      message: `CompanyRule ${MIN_REST_RULE_KEY} has invalid value "${r.value}" (expected positive number)`,
-    };
-  }
-
-  return { kind: "OK", rule: { enabled: true, hours, mode: r.mode } };
-}
-
 type RestWarning = {
   code: "MIN_REST_VIOLATION";
   userId: string;
@@ -464,13 +433,13 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
       }
 
       // ✅ 3) Repos minimum (CompanyRule)
-      const ruleRes = await loadMinRestRule(tx, companyId);
+      const ruleRes = await loadMinRestCompanyRule(tx, companyId);
       if (ruleRes.kind === "CONFIG_ERROR") {
         return { kind: "RULE_CONFIG_ERROR" as const, message: ruleRes.message };
       }
 
       let warnings: RestWarning[] = [];
-      if (ruleRes.rule.enabled) {
+      if (ruleRes.kind === "OK") {
         warnings = await computeMinRestWarnings(tx, companyId, drafts as DraftForPublish[], ruleRes.rule.hours);
 
         const mustBlock = ruleRes.rule.mode === RuleMode.BLOCK || ruleRes.rule.mode === RuleMode.BOTH;
@@ -557,7 +526,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
           ok: false,
           error: "MIN_REST_BLOCKED",
           details: {
-            ruleKey: MIN_REST_RULE_KEY,
+            ruleKey: COMPANY_PARAMETER_KEYS.PLANNING_MIN_REST_HOURS,
             mode: result.mode,
             requiredHours: result.requiredHours,
             warnings: result.warnings,

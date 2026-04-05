@@ -1077,6 +1077,9 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |           |   |       README_PATCH.md
 |           |   |       
 |           |   +---SESSION-20260401-05_A5_RULES-05
+|           |   |       PATCH__SESSION-20260401-05_A5_RULES-05.diff
+|           |   |       PATCH__SESSION-20260401-05_A5_RULES-05_DOCS.diff
+|           |   |       PATCH__SESSION-20260401-05_A5_RULES-05_FIX-01.diff
 |           |   |       README_PATCH.md
 |           |   |       
 |           |   +---SESSION-20260401-06_A5_RULES-06

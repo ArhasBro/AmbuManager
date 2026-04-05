@@ -4,6 +4,7 @@ import { z } from "zod";
 import { RuleMode } from "@prisma/client";
 
 import { authOptions } from "@/lib/auth";
+import { COMPANY_PARAMETER_KEYS, parsePlanningViewModeValue, serializePlanningViewModeValue } from "@/lib/company-rules/catalog";
 import { canManageCompanyRules } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 
@@ -13,10 +14,11 @@ const GetQuerySchema = z.object({
   keys: z.string().optional(), // "A,B,C"
 });
 
-// PATCH: body { key, value }
+// PATCH minimal préparatoire: body { key, value, mode? }
 const PatchBodySchema = z.object({
   key: z.string().min(1),
   value: z.string().min(1),
+  mode: z.nativeEnum(RuleMode).optional(),
 });
 
 export async function GET(req: NextRequest) {
@@ -103,17 +105,49 @@ export async function PATCH(req: NextRequest) {
     );
   }
 
-  const { key, value } = parsed.data;
+  const { key, mode } = parsed.data;
+
+  let value = parsed.data.value.trim();
+  if (!value) {
+    return NextResponse.json(
+      { ok: false, error: "VALIDATION_ERROR", details: { key, message: "Valeur vide interdite." } },
+      { status: 400 }
+    );
+  }
+  if (key === COMPANY_PARAMETER_KEYS.PLANNING_VIEW_MODE) {
+    const parsedMode = parsePlanningViewModeValue(value);
+    if (!parsedMode) {
+      return NextResponse.json(
+        {
+          ok: false,
+          error: "VALIDATION_ERROR",
+          details: { key, message: "Valeur invalide pour PLANNING_VIEW_MODE." },
+        },
+        { status: 400 }
+      );
+    }
+
+    value = serializePlanningViewModeValue(parsedMode);
+  }
 
   try {
+    const existing = await prisma.companyRule.findUnique({
+      where: { companyId_key: { companyId, key } },
+      select: { mode: true },
+    });
+
+    const nextMode = key === COMPANY_PARAMETER_KEYS.PLANNING_VIEW_MODE
+      ? RuleMode.OFF
+      : mode ?? existing?.mode ?? RuleMode.OFF;
+
     const rule = await prisma.companyRule.upsert({
       where: { companyId_key: { companyId, key } },
-      update: { value },
+      update: { value, mode: nextMode },
       create: {
         companyId,
         key,
         value,
-        mode: RuleMode.OFF, // pour un “setting UI”, mode OFF suffit
+        mode: nextMode,
       },
       select: { id: true, key: true, value: true, mode: true, createdAt: true, updatedAt: true },
     });

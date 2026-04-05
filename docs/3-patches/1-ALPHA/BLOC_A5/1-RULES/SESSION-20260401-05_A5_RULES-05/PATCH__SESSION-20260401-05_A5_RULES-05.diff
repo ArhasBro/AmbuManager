@@ -1,0 +1,608 @@
+diff --git a/app/api/company/rules/route.ts b/app/api/company/rules/route.ts
+index 2695b9a..e580642 100644
+--- a/app/api/company/rules/route.ts
++++ b/app/api/company/rules/route.ts
+@@ -4,6 +4,7 @@ import { z } from "zod";
+ import { RuleMode } from "@prisma/client";
+ 
+ import { authOptions } from "@/lib/auth";
++import { COMPANY_PARAMETER_KEYS, parsePlanningViewModeValue, serializePlanningViewModeValue } from "@/lib/company-rules/catalog";
+ import { canManageCompanyRules } from "@/lib/permissions";
+ import { prisma } from "@/lib/prisma";
+ 
+@@ -13,10 +14,11 @@ const GetQuerySchema = z.object({
+   keys: z.string().optional(), // "A,B,C"
+ });
+ 
+-// PATCH: body { key, value }
++// PATCH minimal préparatoire: body { key, value, mode? }
+ const PatchBodySchema = z.object({
+   key: z.string().min(1),
+   value: z.string().min(1),
++  mode: z.nativeEnum(RuleMode).optional(),
+ });
+ 
+ export async function GET(req: NextRequest) {
+@@ -103,17 +105,49 @@ export async function PATCH(req: NextRequest) {
+     );
+   }
+ 
+-  const { key, value } = parsed.data;
++  const { key, mode } = parsed.data;
++
++  let value = parsed.data.value.trim();
++  if (!value) {
++    return NextResponse.json(
++      { ok: false, error: "VALIDATION_ERROR", details: { key, message: "Valeur vide interdite." } },
++      { status: 400 }
++    );
++  }
++  if (key === COMPANY_PARAMETER_KEYS.PLANNING_VIEW_MODE) {
++    const parsedMode = parsePlanningViewModeValue(value);
++    if (!parsedMode) {
++      return NextResponse.json(
++        {
++          ok: false,
++          error: "VALIDATION_ERROR",
++          details: { key, message: "Valeur invalide pour PLANNING_VIEW_MODE." },
++        },
++        { status: 400 }
++      );
++    }
++
++    value = serializePlanningViewModeValue(parsedMode);
++  }
+ 
+   try {
++    const existing = await prisma.companyRule.findUnique({
++      where: { companyId_key: { companyId, key } },
++      select: { mode: true },
++    });
++
++    const nextMode = key === COMPANY_PARAMETER_KEYS.PLANNING_VIEW_MODE
++      ? RuleMode.OFF
++      : mode ?? existing?.mode ?? RuleMode.OFF;
++
+     const rule = await prisma.companyRule.upsert({
+       where: { companyId_key: { companyId, key } },
+-      update: { value },
++      update: { value, mode: nextMode },
+       create: {
+         companyId,
+         key,
+         value,
+-        mode: RuleMode.OFF, // pour un “setting UI”, mode OFF suffit
++        mode: nextMode,
+       },
+       select: { id: true, key: true, value: true, mode: true, createdAt: true, updatedAt: true },
+     });
+diff --git a/app/api/planning/autoschedule/runs/[id]/publish/route.ts b/app/api/planning/autoschedule/runs/[id]/publish/route.ts
+index 98b267d..54272a6 100644
+--- a/app/api/planning/autoschedule/runs/[id]/publish/route.ts
++++ b/app/api/planning/autoschedule/runs/[id]/publish/route.ts
+@@ -3,6 +3,8 @@ import { getServerSession } from "next-auth/next";
+ import { z } from "zod";
+ import { AutoScheduleStatus, Prisma, RuleMode } from "@prisma/client";
+ 
++import { loadMinRestCompanyRule } from "@/lib/company-rules/runtime";
++
+ import { authOptions } from "@/lib/auth";
+ import { prisma } from "@/lib/prisma";
+ import { canPublishAutoSchedule } from "@/lib/permissions";
+@@ -13,8 +15,6 @@ const ParamsSchema = z.object({
+   id: z.string().min(1),
+ });
+ 
+-const MIN_REST_RULE_KEY = "PLANNING_MIN_REST_HOURS";
+-
+ function extractRunIdFromPath(pathname: string): string | null {
+   // attendu: /api/planning/autoschedule/runs/{id}/publish
+   const parts = pathname.split("/").filter(Boolean);
+@@ -230,38 +230,6 @@ async function checkConflicts(
+   return { kind: "OK" };
+ }
+ 
+-/**
+- * ✅ Repos minimum (CompanyRule + RuleMode)
+- */
+-type MinRestRule =
+-  | { enabled: false }
+-  | { enabled: true; hours: number; mode: RuleMode };
+-
+-async function loadMinRestRule(
+-  tx: Prisma.TransactionClient,
+-  companyId: string
+-): Promise<{ kind: "OK"; rule: MinRestRule } | { kind: "CONFIG_ERROR"; message: string }> {
+-  const r = await tx.companyRule.findFirst({
+-    where: { companyId, key: MIN_REST_RULE_KEY },
+-    select: { value: true, mode: true },
+-  });
+-
+-  if (!r) return { kind: "OK", rule: { enabled: false } };
+-  if (r.mode === RuleMode.OFF) return { kind: "OK", rule: { enabled: false } };
+-
+-  const raw = String(r.value ?? "").trim();
+-  const hours = Number(raw);
+-
+-  if (!Number.isFinite(hours) || hours <= 0) {
+-    return {
+-      kind: "CONFIG_ERROR",
+-      message: `CompanyRule ${MIN_REST_RULE_KEY} has invalid value "${r.value}" (expected positive number)`,
+-    };
+-  }
+-
+-  return { kind: "OK", rule: { enabled: true, hours, mode: r.mode } };
+-}
+-
+ type RestWarning = {
+   code: "MIN_REST_VIOLATION";
+   userId: string;
+@@ -464,13 +432,13 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
+       }
+ 
+       // ✅ 3) Repos minimum (CompanyRule)
+-      const ruleRes = await loadMinRestRule(tx, companyId);
++      const ruleRes = await loadMinRestCompanyRule(tx, companyId);
+       if (ruleRes.kind === "CONFIG_ERROR") {
+         return { kind: "RULE_CONFIG_ERROR" as const, message: ruleRes.message };
+       }
+ 
+       let warnings: RestWarning[] = [];
+-      if (ruleRes.rule.enabled) {
++      if (ruleRes.kind === "OK") {
+         warnings = await computeMinRestWarnings(tx, companyId, drafts as DraftForPublish[], ruleRes.rule.hours);
+ 
+         const mustBlock = ruleRes.rule.mode === RuleMode.BLOCK || ruleRes.rule.mode === RuleMode.BOTH;
+diff --git a/app/planning/planning-client.tsx b/app/planning/planning-client.tsx
+index cf781ec..810438c 100644
+--- a/app/planning/planning-client.tsx
++++ b/app/planning/planning-client.tsx
+@@ -2,6 +2,8 @@
+ 
+ import { useCallback, useEffect, useMemo, useState } from "react";
+ 
++import { COMPANY_PARAMETER_KEYS, parsePlanningViewModeValue, serializePlanningViewModeValue, type PlanningViewModeValue } from "@/lib/company-rules/catalog";
++
+ type Shift = {
+   id: string;
+   startAt: string;
+@@ -41,7 +43,7 @@ type RunAuditLog = {
+   actorUser?: { id: string; name: string; email: string } | null;
+ };
+ 
+-type ViewMode = "SIMPLE" | "AMBULANCE";
++type ViewMode = PlanningViewModeValue;
+ 
+ type RestWarning = {
+   code: "MIN_REST_VIOLATION";
+@@ -608,7 +610,7 @@ export default function PlanningClient({
+ 
+     async function loadRule() {
+       try {
+-        const { res, json } = await fetchJson("/api/company/rules?keys=PLANNING_VIEW_MODE");
++        const { res, json } = await fetchJson(`/api/company/rules?keys=${COMPANY_PARAMETER_KEYS.PLANNING_VIEW_MODE}`);
+         if (!res.ok || !jsonOkPayload(json)) {
+           if (!cancelled) setCompanyRuleLoaded(true);
+           return;
+@@ -617,12 +619,11 @@ export default function PlanningClient({
+         const data = isRecord(json) ? json.data : null;
+         const rulesArr = Array.isArray(data) ? data : [];
+ 
+-        const rule = rulesArr.find((r) => isRecord(r) && r.key === "PLANNING_VIEW_MODE");
+-        const value = isRecord(rule) ? getString(rule.value).toUpperCase() : "";
++        const rule = rulesArr.find((r) => isRecord(r) && r.key === COMPANY_PARAMETER_KEYS.PLANNING_VIEW_MODE);
++        const value = isRecord(rule) ? parsePlanningViewModeValue(getString(rule.value)) : null;
+ 
+         if (!cancelled) {
+-          if (value === "AMBULANCE") setMode("AMBULANCE");
+-          else if (value === "SIMPLE") setMode("SIMPLE");
++          if (value) setMode(value);
+           setCompanyRuleLoaded(true);
+         }
+       } catch {
+@@ -660,11 +661,11 @@ export default function PlanningClient({
+     setSaveMsg(null);
+ 
+     try {
+-      const value = mode === "AMBULANCE" ? "AMBULANCE" : "SIMPLE";
++      const value = serializePlanningViewModeValue(mode);
+       const { res, json, text } = await fetchJson("/api/company/rules", {
+         method: "PATCH",
+         headers: { "Content-Type": "application/json" },
+-        body: JSON.stringify({ key: "PLANNING_VIEW_MODE", value }),
++        body: JSON.stringify({ key: COMPANY_PARAMETER_KEYS.PLANNING_VIEW_MODE, value }),
+       });
+ 
+       if (!res.ok || !jsonOkPayload(json)) {
+diff --git a/lib/services/planning/assign-draftshift.ts b/lib/services/planning/assign-draftshift.ts
+index 9745009..d954364 100644
+--- a/lib/services/planning/assign-draftshift.ts
++++ b/lib/services/planning/assign-draftshift.ts
+@@ -3,7 +3,8 @@ import { prisma } from "@/lib/prisma";
+ import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
+ import { findFirstUserAbsenceConflict } from "@/lib/services/planning/user-absence";
+ import type { PlanningIssue, PlanningIssueCode } from "@/lib/types/planning";
+-import { RuleMode } from "@prisma/client";
++import { COMPANY_PARAMETER_KEYS } from "@/lib/company-rules/catalog";
++import { loadMinRestCompanyRule } from "@/lib/company-rules/runtime";
+ 
+ export type AssignDraftShiftInput = {
+   companyId: string;
+@@ -30,32 +31,6 @@ function normalizePair(userId: string | null, user2Id: string | null): { userId:
+   return { userId, user2Id };
+ }
+ 
+-type MinRestRuleResult =
+-  | { kind: "DISABLED" }
+-  | { kind: "OK"; rule: { mode: RuleMode; hours: number } }
+-  | { kind: "CONFIG_ERROR"; message: string };
+-
+-async function loadMinRestRule(companyId: string): Promise<MinRestRuleResult> {
+-  const rule = await prisma.companyRule.findUnique({
+-    where: { companyId_key: { companyId, key: "PLANNING_MIN_REST_HOURS" } },
+-    select: { mode: true, value: true },
+-  });
+-
+-  if (!rule) return { kind: "DISABLED" };
+-  if (rule.mode === RuleMode.OFF) return { kind: "DISABLED" };
+-
+-  const raw = String(rule.value ?? "").trim();
+-  const hours = Number(raw);
+-  if (!Number.isFinite(hours) || hours <= 0) {
+-    return {
+-      kind: "CONFIG_ERROR",
+-      message: `CompanyRule PLANNING_MIN_REST_HOURS has invalid value "${rule.value}" (expected positive number)`,
+-    };
+-  }
+-
+-  return { kind: "OK", rule: { mode: rule.mode, hours } };
+-}
+-
+ function err(code: PlanningIssueCode, message: string, meta?: Record<string, unknown>): PlanningIssue {
+   return meta ? { code, message, meta } : { code, message };
+ }
+@@ -216,9 +191,9 @@ export async function assignDraftShift(input: AssignDraftShiftInput): Promise<As
+   }
+ 
+   // 5) Règle entreprise — repos minimum
+-  const minRest = await loadMinRestRule(companyId);
++  const minRest = await loadMinRestCompanyRule(prisma, companyId);
+   if (minRest.kind === "CONFIG_ERROR") {
+-    return { ok: false, error: err("RULE_CONFIG_ERROR", minRest.message, { key: "PLANNING_MIN_REST_HOURS" }) };
++    return { ok: false, error: err("RULE_CONFIG_ERROR", minRest.message, { key: COMPANY_PARAMETER_KEYS.PLANNING_MIN_REST_HOURS }) };
+   }
+ 
+   if (minRest.kind === "OK" && assignedUsers.length > 0) {
+diff --git a/lib/services/planning/assign-shift.ts b/lib/services/planning/assign-shift.ts
+index addcb28..92874de 100644
+--- a/lib/services/planning/assign-shift.ts
++++ b/lib/services/planning/assign-shift.ts
+@@ -3,7 +3,8 @@ import { prisma } from "@/lib/prisma";
+ import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
+ import { findFirstUserAbsenceConflict } from "@/lib/services/planning/user-absence";
+ import type { PlanningIssue, PlanningIssueCode } from "@/lib/types/planning";
+-import { RuleMode } from "@prisma/client";
++import { COMPANY_PARAMETER_KEYS } from "@/lib/company-rules/catalog";
++import { loadMinRestCompanyRule } from "@/lib/company-rules/runtime";
+ 
+ export type AssignShiftInput = {
+   companyId: string;
+@@ -31,32 +32,6 @@ function normalizePair(userId: string | null, user2Id: string | null): { userId:
+   return { userId, user2Id };
+ }
+ 
+-type MinRestRuleResult =
+-  | { kind: "DISABLED" }
+-  | { kind: "OK"; rule: { mode: RuleMode; hours: number } }
+-  | { kind: "CONFIG_ERROR"; message: string };
+-
+-async function loadMinRestRule(companyId: string): Promise<MinRestRuleResult> {
+-  const rule = await prisma.companyRule.findUnique({
+-    where: { companyId_key: { companyId, key: "PLANNING_MIN_REST_HOURS" } },
+-    select: { mode: true, value: true },
+-  });
+-
+-  if (!rule) return { kind: "DISABLED" };
+-  if (rule.mode === RuleMode.OFF) return { kind: "DISABLED" };
+-
+-  const raw = String(rule.value ?? "").trim();
+-  const hours = Number(raw);
+-  if (!Number.isFinite(hours) || hours <= 0) {
+-    return {
+-      kind: "CONFIG_ERROR",
+-      message: `CompanyRule PLANNING_MIN_REST_HOURS has invalid value "${rule.value}" (expected positive number)`,
+-    };
+-  }
+-
+-  return { kind: "OK", rule: { mode: rule.mode, hours } };
+-}
+-
+ function err(code: PlanningIssueCode, message: string, meta?: Record<string, unknown>): PlanningIssue {
+   return meta ? { code, message, meta } : { code, message };
+ }
+@@ -207,9 +182,9 @@ export async function assignShift(input: AssignShiftInput): Promise<AssignShiftR
+   }
+ 
+   // 5) Règle entreprise — repos minimum
+-  const minRest = await loadMinRestRule(companyId);
++  const minRest = await loadMinRestCompanyRule(prisma, companyId);
+   if (minRest.kind === "CONFIG_ERROR") {
+-    return { ok: false, error: err("RULE_CONFIG_ERROR", minRest.message, { key: "PLANNING_MIN_REST_HOURS" }) };
++    return { ok: false, error: err("RULE_CONFIG_ERROR", minRest.message, { key: COMPANY_PARAMETER_KEYS.PLANNING_MIN_REST_HOURS }) };
+   }
+ 
+   if (minRest.kind === "OK" && assignedUsers.length > 0) {
+diff --git a/lib/company-rules/catalog.ts b/lib/company-rules/catalog.ts
+new file mode 100644
+index 0000000..a7bc0f8
+--- /dev/null
++++ b/lib/company-rules/catalog.ts
+@@ -0,0 +1,202 @@
++export const COMPANY_PARAMETER_STORAGE_MODEL = "CompanyRule" as const;
++
++export const COMPANY_PARAMETER_KEYS = {
++  PLANNING_MIN_REST_HOURS: "PLANNING_MIN_REST_HOURS",
++  PLANNING_VIEW_MODE: "PLANNING_VIEW_MODE",
++} as const;
++
++export type ProvenCompanyParameterStorageKey =
++  (typeof COMPANY_PARAMETER_KEYS)[keyof typeof COMPANY_PARAMETER_KEYS];
++
++export const COMPANY_RULE_MODE_VALUES = ["OFF", "ALERT", "BLOCK", "BOTH"] as const;
++export type CompanyRuleModeValue = (typeof COMPANY_RULE_MODE_VALUES)[number];
++
++export const PLANNING_VIEW_MODE_VALUES = ["SIMPLE", "AMBULANCE"] as const;
++export type PlanningViewModeValue = (typeof PLANNING_VIEW_MODE_VALUES)[number];
++
++export type CompanyParameterKind = "BUSINESS_RULE" | "UI_SETTING";
++export type CompanyParameterValueType = "POSITIVE_NUMBER" | "ENUM" | "INFORMATION_NON_FOURNIE_A_CONFIRMER";
++export type CompanyParameterModeUsage = "RULE_MODE" | "FIXED_OFF";
++export type CompanyParameterEngineStatus = "BRANCHED" | "PREPARED";
++
++export type CompanyParameterDefinition = {
++  id:
++    | "MIN_REST_BETWEEN_SHIFTS"
++    | "AMBULANCE_GARDE_CREW_COMPOSITION"
++    | "VSL_CREW_COMPOSITION"
++    | "TAXI_CREW_COMPOSITION"
++    | "VEHICLE_UNAVAILABILITY"
++    | "EMPLOYEE_UNAVAILABILITY"
++    | "VEHICLE_ROLE_RESTRICTIONS"
++    | "PLANNING_VIEW_MODE";
++  label: string;
++  description: string;
++  kind: CompanyParameterKind;
++  valueType: CompanyParameterValueType;
++  modeUsage: CompanyParameterModeUsage;
++  engineStatus: CompanyParameterEngineStatus;
++  storage: {
++    model: typeof COMPANY_PARAMETER_STORAGE_MODEL;
++    key: string | null;
++  };
++  allowedValues?: readonly string[];
++  note?: string;
++};
++
++export const COMPANY_PARAMETER_DEFINITIONS: readonly CompanyParameterDefinition[] = [
++  {
++    id: "MIN_REST_BETWEEN_SHIFTS",
++    label: "Repos minimum entre shifts",
++    description:
++      "Règle métier ALPHA réellement branchée sur le planning manuel et la publication autoschedule.",
++    kind: "BUSINESS_RULE",
++    valueType: "POSITIVE_NUMBER",
++    modeUsage: "RULE_MODE",
++    engineStatus: "BRANCHED",
++    storage: {
++      model: COMPANY_PARAMETER_STORAGE_MODEL,
++      key: COMPANY_PARAMETER_KEYS.PLANNING_MIN_REST_HOURS,
++    },
++    note: "Valeur attendue : nombre positif d'heures.",
++  },
++  {
++    id: "AMBULANCE_GARDE_CREW_COMPOSITION",
++    label: "Composition équipage ambulance / garde",
++    description:
++      "Paramètre métier ALPHA cadré pour la composition d'équipe Ambulance / Garde, non encore branché comme moteur réel.",
++    kind: "BUSINESS_RULE",
++    valueType: "INFORMATION_NON_FOURNIE_A_CONFIRMER",
++    modeUsage: "RULE_MODE",
++    engineStatus: "PREPARED",
++    storage: {
++      model: COMPANY_PARAMETER_STORAGE_MODEL,
++      key: null,
++    },
++    note: "Clé de stockage et format métier exacts : INFORMATION NON FOURNIE — À CONFIRMER.",
++  },
++  {
++    id: "VSL_CREW_COMPOSITION",
++    label: "Composition équipage VSL",
++    description:
++      "Paramètre métier ALPHA cadré pour la composition d'équipe VSL, non encore branché comme moteur réel.",
++    kind: "BUSINESS_RULE",
++    valueType: "INFORMATION_NON_FOURNIE_A_CONFIRMER",
++    modeUsage: "RULE_MODE",
++    engineStatus: "PREPARED",
++    storage: {
++      model: COMPANY_PARAMETER_STORAGE_MODEL,
++      key: null,
++    },
++    note: "Clé de stockage et format métier exacts : INFORMATION NON FOURNIE — À CONFIRMER.",
++  },
++  {
++    id: "TAXI_CREW_COMPOSITION",
++    label: "Composition équipage taxi",
++    description:
++      "Paramètre métier ALPHA cadré pour la composition d'équipe taxi, non encore branché comme moteur réel.",
++    kind: "BUSINESS_RULE",
++    valueType: "INFORMATION_NON_FOURNIE_A_CONFIRMER",
++    modeUsage: "RULE_MODE",
++    engineStatus: "PREPARED",
++    storage: {
++      model: COMPANY_PARAMETER_STORAGE_MODEL,
++      key: null,
++    },
++    note: "Clé de stockage et format métier exacts : INFORMATION NON FOURNIE — À CONFIRMER.",
++  },
++  {
++    id: "VEHICLE_UNAVAILABILITY",
++    label: "Indisponibilité véhicule",
++    description:
++      "Paramètre métier ALPHA cadré pour l'indisponibilité véhicule, non encore branché comme règle moteur explicite.",
++    kind: "BUSINESS_RULE",
++    valueType: "INFORMATION_NON_FOURNIE_A_CONFIRMER",
++    modeUsage: "RULE_MODE",
++    engineStatus: "PREPARED",
++    storage: {
++      model: COMPANY_PARAMETER_STORAGE_MODEL,
++      key: null,
++    },
++    note: "Clé de stockage et format métier exacts : INFORMATION NON FOURNIE — À CONFIRMER.",
++  },
++  {
++    id: "EMPLOYEE_UNAVAILABILITY",
++    label: "Indisponibilité salarié",
++    description:
++      "Paramètre métier ALPHA cadré pour l'indisponibilité salarié, non encore branché via une clé CompanyRule dédiée.",
++    kind: "BUSINESS_RULE",
++    valueType: "INFORMATION_NON_FOURNIE_A_CONFIRMER",
++    modeUsage: "RULE_MODE",
++    engineStatus: "PREPARED",
++    storage: {
++      model: COMPANY_PARAMETER_STORAGE_MODEL,
++      key: null,
++    },
++    note: "Clé de stockage et format métier exacts : INFORMATION NON FOURNIE — À CONFIRMER.",
++  },
++  {
++    id: "VEHICLE_ROLE_RESTRICTIONS",
++    label: "Interdiction de certains rôles sur certains véhicules",
++    description:
++      "Paramètre métier ALPHA cadré pour contraindre certains rôles selon le véhicule, non encore branché comme moteur réel.",
++    kind: "BUSINESS_RULE",
++    valueType: "INFORMATION_NON_FOURNIE_A_CONFIRMER",
++    modeUsage: "RULE_MODE",
++    engineStatus: "PREPARED",
++    storage: {
++      model: COMPANY_PARAMETER_STORAGE_MODEL,
++      key: null,
++    },
++    note: "Clé de stockage et format métier exacts : INFORMATION NON FOURNIE — À CONFIRMER.",
++  },
++  {
++    id: "PLANNING_VIEW_MODE",
++    label: "Mode d'affichage du planning",
++    description:
++      "Réglage d'exploitation UI réellement branché pour la vue planning, distinct des règles moteur.",
++    kind: "UI_SETTING",
++    valueType: "ENUM",
++    modeUsage: "FIXED_OFF",
++    engineStatus: "BRANCHED",
++    storage: {
++      model: COMPANY_PARAMETER_STORAGE_MODEL,
++      key: COMPANY_PARAMETER_KEYS.PLANNING_VIEW_MODE,
++    },
++    allowedValues: PLANNING_VIEW_MODE_VALUES,
++    note: "Le champ mode reste stocké en OFF pour ce réglage UI.",
++  },
++] as const;
++
++const DEFINITIONS_BY_STORAGE_KEY = new Map(
++  COMPANY_PARAMETER_DEFINITIONS.filter((definition) => definition.storage.key).map((definition) => [definition.storage.key!, definition])
++);
++
++export function getCompanyParameterDefinitionByStorageKey(key: string): CompanyParameterDefinition | undefined {
++  return DEFINITIONS_BY_STORAGE_KEY.get(key);
++}
++
++export function parsePositiveNumberCompanyValue(raw: string | null | undefined): number | null {
++  const normalized = String(raw ?? "").trim();
++  if (!normalized) return null;
++
++  const value = Number(normalized);
++  if (!Number.isFinite(value) || value <= 0) return null;
++
++  return value;
++}
++
++export function normalizePositiveNumberCompanyValue(raw: string | null | undefined): string | null {
++  const value = parsePositiveNumberCompanyValue(raw);
++  return value === null ? null : String(value);
++}
++
++export function parsePlanningViewModeValue(raw: string | null | undefined): PlanningViewModeValue | null {
++  const normalized = String(raw ?? "").trim().toUpperCase();
++  return PLANNING_VIEW_MODE_VALUES.includes(normalized as PlanningViewModeValue)
++    ? (normalized as PlanningViewModeValue)
++    : null;
++}
++
++export function serializePlanningViewModeValue(value: PlanningViewModeValue): string {
++  return value;
++}
+diff --git a/lib/company-rules/runtime.ts b/lib/company-rules/runtime.ts
+new file mode 100644
+index 0000000..8d5b91b
+--- /dev/null
++++ b/lib/company-rules/runtime.ts
+@@ -0,0 +1,60 @@
++import { RuleMode } from "@prisma/client";
++
++import { COMPANY_PARAMETER_KEYS, parsePositiveNumberCompanyValue } from "@/lib/company-rules/catalog";
++
++export type StoredCompanyRuleReader = {
++  companyRule: {
++    findUnique(args: {
++      where: { companyId_key: { companyId: string; key: string } };
++      select: { value: true; mode: true };
++    }): Promise<{ value: string; mode: RuleMode } | null>;
++  };
++};
++
++export type LoadedMinRestRule =
++  | { kind: "DISABLED" }
++  | { kind: "OK"; rule: { mode: RuleMode; hours: number } }
++  | { kind: "CONFIG_ERROR"; message: string };
++
++export function parseMinRestRuleRecord(
++  record: { value: string; mode: RuleMode } | null | undefined
++): LoadedMinRestRule {
++  if (!record) return { kind: "DISABLED" };
++  if (record.mode === RuleMode.OFF) return { kind: "DISABLED" };
++
++  const hours = parsePositiveNumberCompanyValue(record.value);
++  if (hours === null) {
++    return {
++      kind: "CONFIG_ERROR",
++      message: `CompanyRule ${COMPANY_PARAMETER_KEYS.PLANNING_MIN_REST_HOURS} has invalid value "${record.value}" (expected positive number)`,
++    };
++  }
++
++  return {
++    kind: "OK",
++    rule: {
++      mode: record.mode,
++      hours,
++    },
++  };
++}
++
++export async function loadMinRestCompanyRule(
++  db: StoredCompanyRuleReader,
++  companyId: string
++): Promise<LoadedMinRestRule> {
++  const rule = await db.companyRule.findUnique({
++    where: {
++      companyId_key: {
++        companyId,
++        key: COMPANY_PARAMETER_KEYS.PLANNING_MIN_REST_HOURS,
++      },
++    },
++    select: {
++      value: true,
++      mode: true,
++    },
++  });
++
++  return parseMinRestRuleRecord(rule);
++}

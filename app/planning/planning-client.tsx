@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+import { COMPANY_PARAMETER_KEYS, parsePlanningViewModeValue, serializePlanningViewModeValue, type PlanningViewModeValue } from "@/lib/company-rules/catalog";
+
 type Shift = {
   id: string;
   startAt: string;
@@ -41,7 +43,7 @@ type RunAuditLog = {
   actorUser?: { id: string; name: string; email: string } | null;
 };
 
-type ViewMode = "SIMPLE" | "AMBULANCE";
+type ViewMode = PlanningViewModeValue;
 
 type RestWarning = {
   code: "MIN_REST_VIOLATION";
@@ -608,7 +610,7 @@ export default function PlanningClient({
 
     async function loadRule() {
       try {
-        const { res, json } = await fetchJson("/api/company/rules?keys=PLANNING_VIEW_MODE");
+        const { res, json } = await fetchJson(`/api/company/rules?keys=${COMPANY_PARAMETER_KEYS.PLANNING_VIEW_MODE}`);
         if (!res.ok || !jsonOkPayload(json)) {
           if (!cancelled) setCompanyRuleLoaded(true);
           return;
@@ -617,12 +619,11 @@ export default function PlanningClient({
         const data = isRecord(json) ? json.data : null;
         const rulesArr = Array.isArray(data) ? data : [];
 
-        const rule = rulesArr.find((r) => isRecord(r) && r.key === "PLANNING_VIEW_MODE");
-        const value = isRecord(rule) ? getString(rule.value).toUpperCase() : "";
+        const rule = rulesArr.find((r) => isRecord(r) && r.key === COMPANY_PARAMETER_KEYS.PLANNING_VIEW_MODE);
+        const value = isRecord(rule) ? parsePlanningViewModeValue(getString(rule.value)) : null;
 
         if (!cancelled) {
-          if (value === "AMBULANCE") setMode("AMBULANCE");
-          else if (value === "SIMPLE") setMode("SIMPLE");
+          if (value) setMode(value);
           setCompanyRuleLoaded(true);
         }
       } catch {
@@ -660,11 +661,11 @@ export default function PlanningClient({
     setSaveMsg(null);
 
     try {
-      const value = mode === "AMBULANCE" ? "AMBULANCE" : "SIMPLE";
+      const value = serializePlanningViewModeValue(mode);
       const { res, json, text } = await fetchJson("/api/company/rules", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ key: "PLANNING_VIEW_MODE", value }),
+        body: JSON.stringify({ key: COMPANY_PARAMETER_KEYS.PLANNING_VIEW_MODE, value }),
       });
 
       if (!res.ok || !jsonOkPayload(json)) {
