@@ -1,0 +1,235 @@
+import { RuleMode } from "@prisma/client";
+
+import {
+  COMPANY_PARAMETER_DEFINITIONS,
+  getCompanyParameterDefinitionByStorageKey,
+  normalizePositiveNumberCompanyValue,
+  parsePlanningViewModeValue,
+  serializePlanningViewModeValue,
+  type CompanyParameterDefinition,
+} from "@/lib/company-rules/catalog";
+
+export type StoredCompanyRuleApiRecord = {
+  id: string;
+  key: string;
+  value: string;
+  mode: RuleMode;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type CompanyParameterViewValueStatus = "NOT_STORED" | "STORED_VALID" | "STORED_INVALID";
+
+export type CompanyParameterView = {
+  id: CompanyParameterDefinition["id"];
+  key: string | null;
+  label: string;
+  description: string;
+  kind: CompanyParameterDefinition["kind"];
+  valueType: CompanyParameterDefinition["valueType"];
+  modeUsage: CompanyParameterDefinition["modeUsage"];
+  engineStatus: CompanyParameterDefinition["engineStatus"];
+  storage: CompanyParameterDefinition["storage"];
+  allowedValues?: readonly string[];
+  note?: string;
+  isWritable: boolean;
+  value: string | null;
+  normalizedValue: string | number | null;
+  valueStatus: CompanyParameterViewValueStatus;
+  mode: RuleMode | null;
+  companyRuleId: string | null;
+  createdAt: string | null;
+  updatedAt: string | null;
+};
+
+export type CompanyParameterWriteResolution =
+  | { ok: true; definition: CompanyParameterDefinition; storageKey: string; normalizedValue: string; mode: RuleMode }
+  | { ok: false; message: string };
+
+const DEFINITIONS_BY_ID = new Map(COMPANY_PARAMETER_DEFINITIONS.map((definition) => [definition.id, definition]));
+
+export function listCompanyParameterDefinitions(keys?: string[] | null): CompanyParameterDefinition[] {
+  if (!keys || keys.length === 0) return [...COMPANY_PARAMETER_DEFINITIONS];
+
+  return keys
+    .map((key) => getCompanyParameterDefinitionByStorageKey(key))
+    .filter((definition): definition is CompanyParameterDefinition => Boolean(definition));
+}
+
+export function getCompanyParameterDefinitionById(
+  id: string | null | undefined
+): CompanyParameterDefinition | undefined {
+  if (!id) return undefined;
+  return DEFINITIONS_BY_ID.get(id);
+}
+
+export function buildCompanyParameterView(
+  definition: CompanyParameterDefinition,
+  record: StoredCompanyRuleApiRecord | null | undefined
+): CompanyParameterView {
+  if (!record) {
+    return {
+      id: definition.id,
+      key: definition.storage.key,
+      label: definition.label,
+      description: definition.description,
+      kind: definition.kind,
+      valueType: definition.valueType,
+      modeUsage: definition.modeUsage,
+      engineStatus: definition.engineStatus,
+      storage: definition.storage,
+      allowedValues: definition.allowedValues,
+      note: definition.note,
+      isWritable: Boolean(definition.storage.key),
+      value: null,
+      normalizedValue: null,
+      valueStatus: "NOT_STORED",
+      mode: null,
+      companyRuleId: null,
+      createdAt: null,
+      updatedAt: null,
+    };
+  }
+
+  const normalized = normalizeStoredValue(definition, record.value);
+
+  return {
+    id: definition.id,
+    key: definition.storage.key,
+    label: definition.label,
+    description: definition.description,
+    kind: definition.kind,
+    valueType: definition.valueType,
+    modeUsage: definition.modeUsage,
+    engineStatus: definition.engineStatus,
+    storage: definition.storage,
+    allowedValues: definition.allowedValues,
+    note: definition.note,
+    isWritable: Boolean(definition.storage.key),
+    value: normalized.value,
+    normalizedValue: normalized.normalizedValue,
+    valueStatus: normalized.valueStatus,
+    mode: record.mode,
+    companyRuleId: record.id,
+    createdAt: record.createdAt.toISOString(),
+    updatedAt: record.updatedAt.toISOString(),
+  };
+}
+
+export function resolveCompanyParameterWrite(input: {
+  parameterId?: string | null;
+  key?: string | null;
+  value: string;
+  mode?: RuleMode | undefined;
+  existingMode?: RuleMode | null;
+}): CompanyParameterWriteResolution {
+  const definition = input.parameterId
+    ? getCompanyParameterDefinitionById(input.parameterId)
+    : getCompanyParameterDefinitionByStorageKey(String(input.key ?? ""));
+
+  if (!definition) {
+    return { ok: false, message: "Paramètre métier inconnu." };
+  }
+
+  if (!definition.storage.key) {
+    return {
+      ok: false,
+      message: `Le paramètre ${definition.id} est préparé mais ne dispose pas encore d'une clé de stockage prouvée.`,
+    };
+  }
+
+  const trimmedValue = String(input.value ?? "").trim();
+  if (!trimmedValue) {
+    return { ok: false, message: "Valeur vide interdite." };
+  }
+
+  const normalizedValue = normalizeWriteValue(definition, trimmedValue);
+  if (!normalizedValue) {
+    return { ok: false, message: getInvalidValueMessage(definition) };
+  }
+
+  const mode = definition.modeUsage === "FIXED_OFF"
+    ? RuleMode.OFF
+    : input.mode ?? input.existingMode ?? RuleMode.OFF;
+
+  return {
+    ok: true,
+    definition,
+    storageKey: definition.storage.key,
+    normalizedValue,
+    mode,
+  };
+}
+
+function normalizeStoredValue(
+  definition: CompanyParameterDefinition,
+  rawValue: string
+): Pick<CompanyParameterView, "value" | "normalizedValue" | "valueStatus"> {
+  switch (definition.id) {
+    case "MIN_REST_BETWEEN_SHIFTS": {
+      const normalized = normalizePositiveNumberCompanyValue(rawValue);
+      if (normalized === null) {
+        return {
+          value: rawValue,
+          normalizedValue: null,
+          valueStatus: "STORED_INVALID",
+        };
+      }
+
+      return {
+        value: normalized,
+        normalizedValue: Number(normalized),
+        valueStatus: "STORED_VALID",
+      };
+    }
+
+    case "PLANNING_VIEW_MODE": {
+      const parsed = parsePlanningViewModeValue(rawValue);
+      if (!parsed) {
+        return {
+          value: rawValue,
+          normalizedValue: null,
+          valueStatus: "STORED_INVALID",
+        };
+      }
+
+      const serialized = serializePlanningViewModeValue(parsed);
+      return {
+        value: serialized,
+        normalizedValue: serialized,
+        valueStatus: "STORED_VALID",
+      };
+    }
+
+    default:
+      return {
+        value: rawValue,
+        normalizedValue: rawValue,
+        valueStatus: "STORED_VALID",
+      };
+  }
+}
+
+function normalizeWriteValue(definition: CompanyParameterDefinition, rawValue: string): string | null {
+  switch (definition.id) {
+    case "MIN_REST_BETWEEN_SHIFTS":
+      return normalizePositiveNumberCompanyValue(rawValue);
+    case "PLANNING_VIEW_MODE": {
+      const parsed = parsePlanningViewModeValue(rawValue);
+      return parsed ? serializePlanningViewModeValue(parsed) : null;
+    }
+    default:
+      return null;
+  }
+}
+
+function getInvalidValueMessage(definition: CompanyParameterDefinition): string {
+  switch (definition.id) {
+    case "MIN_REST_BETWEEN_SHIFTS":
+      return "Valeur invalide pour le repos minimum entre shifts : nombre positif attendu.";
+    case "PLANNING_VIEW_MODE":
+      return "Valeur invalide pour PLANNING_VIEW_MODE.";
+    default:
+      return "Valeur invalide pour ce paramètre métier.";
+  }
+}

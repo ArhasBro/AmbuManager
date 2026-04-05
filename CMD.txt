@@ -34,8 +34,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260401-05_A5_RULES-05
-- RULES-05 — COMPLÉTION** — Passage vers une couche de paramètres métier compréhensible
+- SESSION-20260401-07_A5_RULES-07
+- RULES-07 — COMPLÉTION** — UI paramètres métier ALPHA
 ------------------------------------
 sortie propre + retour du terminal + aucune erreur = validé
 ------------------------------------
