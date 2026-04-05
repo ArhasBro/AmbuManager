@@ -46,7 +46,7 @@ export type CompanyParameterWriteResolution =
   | { ok: true; definition: CompanyParameterDefinition; storageKey: string; normalizedValue: string; mode: RuleMode }
   | { ok: false; message: string };
 
-const DEFINITIONS_BY_ID = new Map(COMPANY_PARAMETER_DEFINITIONS.map((definition) => [definition.id, definition]));
+const DEFINITIONS_BY_ID = new Map<string, CompanyParameterDefinition>(COMPANY_PARAMETER_DEFINITIONS.map((definition) => [definition.id, definition]));
 
 export function listCompanyParameterDefinitions(keys?: string[] | null): CompanyParameterDefinition[] {
   if (!keys || keys.length === 0) return [...COMPANY_PARAMETER_DEFINITIONS];
