@@ -2,9 +2,14 @@ import { Prisma } from "@prisma/client";
 import { getServerSession } from "next-auth/next";
 import { z } from "zod";
 
-import { badRequest, conflict, forbidden, notFound, ok, serverError, unauthorized } from "@/lib/api/response";
+import { badRequest, conflict, forbidden, json, notFound, ok, serverError, unauthorized } from "@/lib/api/response";
 import { prismaToHttp } from "@/lib/api/prisma-error";
 import { authOptions } from "@/lib/auth";
+import {
+  canGovernCompanyRulesDelegation,
+  permissionSetTouchesCompanyRulesGovernance,
+  roleChangeTouchesCompanyRulesGovernance,
+} from "@/lib/company-rules/governance";
 import { ALPHA_PERMISSION_CODES, type AlphaPermissionCode } from "@/lib/permission-catalog";
 import { canManageUsers } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
@@ -151,7 +156,32 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     const existingUser = await findEditableUser(parsedParams.data.id, companyId);
     if (!existingUser) return notFound();
 
+    const existingPermissionCodes = normalizePermissionCodes(existingUser.userPermissions.map((item) => item.permission.code));
     const nextPermissionCodes = parsedBody.data.permissionCodes;
+    const nextNormalizedPermissionCodes = nextPermissionCodes !== undefined
+      ? normalizePermissionCodes(nextPermissionCodes)
+      : existingPermissionCodes;
+    const nextRole = parsedBody.data.role ?? existingUser.role;
+    const actorCanGovernCompanyRules = canGovernCompanyRulesDelegation(role, platformRole);
+
+    if (!actorCanGovernCompanyRules) {
+      const roleChangeTouchesGovernance = roleChangeTouchesCompanyRulesGovernance(existingUser.role, nextRole);
+      const permissionChangeTouchesGovernance = nextPermissionCodes !== undefined
+        && permissionSetTouchesCompanyRulesGovernance(existingPermissionCodes, nextNormalizedPermissionCodes);
+
+      if (roleChangeTouchesGovernance || permissionChangeTouchesGovernance) {
+        return json(
+          {
+            ok: false,
+            error: "FORBIDDEN",
+            details: {
+              message: "Seuls les comptes ADMIN ou GERANT peuvent attribuer, retirer ou conférer le droit de modification des règles métier.",
+            },
+          },
+          403,
+        );
+      }
+    }
     const alphaPermissions = nextPermissionCodes !== undefined
       ? await prisma.permission.findMany({
           where: { code: { in: [...ALPHA_PERMISSION_CODES] } },

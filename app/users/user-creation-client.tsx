@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useMemo, useState, type FormEvent } from "react";
+
+import { isCompanyRulesGovernorRole } from "@/lib/company-rules/governance";
 
 import { USER_ROLE_OPTIONS } from "./users-client-shared";
 import { dispatchUsersRefresh } from "./users-refresh";
@@ -31,7 +33,11 @@ function isApiErr(value: unknown): value is ApiErr {
   return typeof value === "object" && value !== null && "ok" in value && (value as { ok?: unknown }).ok === false;
 }
 
-export default function UserCreationClient() {
+type UserCreationClientProps = {
+  canGovernCompanyRules: boolean;
+};
+
+export default function UserCreationClient({ canGovernCompanyRules }: UserCreationClientProps) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -39,6 +45,11 @@ export default function UserCreationClient() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+
+  const assignableRoleOptions = useMemo(
+    () => (canGovernCompanyRules ? USER_ROLE_OPTIONS : USER_ROLE_OPTIONS.filter((option) => !isCompanyRulesGovernorRole(option))),
+    [canGovernCompanyRules],
+  );
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -63,7 +74,7 @@ export default function UserCreationClient() {
       return;
     }
 
-    if (!USER_ROLE_OPTIONS.includes(role as (typeof USER_ROLE_OPTIONS)[number])) {
+    if (!assignableRoleOptions.includes(role as (typeof assignableRoleOptions)[number])) {
       setError("Le rôle est obligatoire.");
       return;
     }
@@ -114,6 +125,11 @@ export default function UserCreationClient() {
         <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
           Création minimale alignée sur l&apos;API USERS-04. Les rôles support globaux ne sont pas attribuables depuis cette interface.
         </p>
+        {!canGovernCompanyRules ? (
+          <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
+            Les rôles <code>ADMIN</code> et <code>GERANT</code>, qui donnent nativement accès à la gouvernance des règles métier, restent réservés aux comptes natifs de gouvernance.
+          </p>
+        ) : null}
       </div>
 
       <label style={{ display: "grid", gap: 6 }}>
@@ -144,7 +160,7 @@ export default function UserCreationClient() {
         <span>Rôle</span>
         <select value={role} onChange={(event) => setRole(event.target.value)} disabled={submitting}>
           <option value="">Sélectionner un rôle</option>
-          {USER_ROLE_OPTIONS.map((option) => (
+          {assignableRoleOptions.map((option) => (
             <option key={option} value={option}>
               {option}
             </option>

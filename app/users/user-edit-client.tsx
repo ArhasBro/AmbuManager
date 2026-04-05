@@ -2,6 +2,12 @@
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 
+import {
+  COMPANY_RULES_MANAGE_PERMISSION,
+  isCompanyRulesGovernorRole,
+  permissionSetTouchesCompanyRulesGovernance,
+  roleChangeTouchesCompanyRulesGovernance,
+} from "@/lib/company-rules/governance";
 import { ALPHA_PERMISSION_CATALOG, type AlphaPermissionCode } from "@/lib/permission-catalog";
 
 import { depotLabel, USER_ROLE_OPTIONS, type UserListRow } from "./users-client-shared";
@@ -81,7 +87,27 @@ function toEditableUser(value: unknown): EditableUser | null {
   return { id, name, email, role, depotId, depot, permissionCodes: normalizePermissionCodes(permissionCodes) };
 }
 
-export default function UserEditClient() {
+type UserEditClientProps = {
+  canGovernCompanyRules: boolean;
+};
+
+function getAssignableRoleOptions(canGovernCompanyRules: boolean, currentRole?: string) {
+  const baseOptions = canGovernCompanyRules
+    ? [...USER_ROLE_OPTIONS]
+    : USER_ROLE_OPTIONS.filter((option) => !isCompanyRulesGovernorRole(option));
+
+  if (
+    currentRole
+    && USER_ROLE_OPTIONS.includes(currentRole as (typeof USER_ROLE_OPTIONS)[number])
+    && !baseOptions.includes(currentRole as (typeof USER_ROLE_OPTIONS)[number])
+  ) {
+    return [currentRole as (typeof USER_ROLE_OPTIONS)[number], ...baseOptions];
+  }
+
+  return baseOptions;
+}
+
+export default function UserEditClient({ canGovernCompanyRules }: UserEditClientProps) {
   const [selectedUser, setSelectedUser] = useState<UserListRow | null>(null);
   const [loadedUser, setLoadedUser] = useState<EditableUser | null>(null);
   const [name, setName] = useState("");
@@ -160,6 +186,14 @@ export default function UserEditClient() {
     };
   }, [selectedUser?.id]);
 
+  const assignableRoleOptions = useMemo(
+    () => getAssignableRoleOptions(canGovernCompanyRules, role || loadedUser?.role || selectedUser?.role || undefined),
+    [canGovernCompanyRules, loadedUser?.role, role, selectedUser?.role],
+  );
+
+  const selectedUserHasNativeCompanyRulesAccess = isCompanyRulesGovernorRole(loadedUser?.role ?? selectedUser?.role ?? null);
+  const roleFieldLocked = !canGovernCompanyRules && selectedUserHasNativeCompanyRulesAccess;
+
   const hasPendingChange = useMemo(() => {
     if (!selectedUser || !loadedUser) return false;
 
@@ -170,6 +204,8 @@ export default function UserEditClient() {
   }, [email, loadedUser, name, permissionCodes, role, selectedUser]);
 
   function togglePermission(code: AlphaPermissionCode) {
+    if (!canGovernCompanyRules && code === COMPANY_RULES_MANAGE_PERMISSION) return;
+
     setPermissionCodes((current) => {
       const next = current.includes(code)
         ? current.filter((value) => value !== code)
@@ -202,7 +238,7 @@ export default function UserEditClient() {
       return;
     }
 
-    if (!USER_ROLE_OPTIONS.includes(role as (typeof USER_ROLE_OPTIONS)[number])) {
+    if (!assignableRoleOptions.includes(role as (typeof assignableRoleOptions)[number])) {
       setError("Le rôle est obligatoire.");
       return;
     }
@@ -210,6 +246,16 @@ export default function UserEditClient() {
     if (!hasPendingChange) {
       setError("Aucune modification détectée.");
       return;
+    }
+
+    if (!canGovernCompanyRules) {
+      const roleChangeTouchesGovernance = roleChangeTouchesCompanyRulesGovernance(loadedUser.role, role);
+      const permissionChangeTouchesGovernance = permissionSetTouchesCompanyRulesGovernance(loadedUser.permissionCodes, permissionCodes);
+
+      if (roleChangeTouchesGovernance || permissionChangeTouchesGovernance) {
+        setError("Seuls les comptes ADMIN ou GERANT peuvent attribuer, retirer ou conférer le droit de modification des règles métier.");
+        return;
+      }
     }
 
     setSubmitting(true);
@@ -259,6 +305,11 @@ export default function UserEditClient() {
           Sélectionnez d&apos;abord un utilisateur dans la liste ci-dessus pour modifier les champs déjà couverts par USERS-06/07,
           puis ajuster ici ses permissions applicatives ALPHA.
         </p>
+        {!canGovernCompanyRules ? (
+          <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
+            La délégation du droit de modification des règles métier reste réservée aux comptes <code>ADMIN</code> ou <code>GERANT</code>.
+          </p>
+        ) : null}
       </div>
 
       {!selectedUser ? (
@@ -315,9 +366,9 @@ export default function UserEditClient() {
 
           <label style={{ display: "grid", gap: 6 }}>
             <span>Rôle principal</span>
-            <select value={role} onChange={(event) => setRole(event.target.value)} disabled={submitting || loadingDetails || Boolean(detailsError)}>
+            <select value={role} onChange={(event) => setRole(event.target.value)} disabled={submitting || loadingDetails || Boolean(detailsError) || roleFieldLocked}>
               <option value="">Sélectionner un rôle</option>
-              {USER_ROLE_OPTIONS.map((option) => (
+              {assignableRoleOptions.map((option) => (
                 <option key={option} value={option}>
                   {option}
                 </option>
@@ -329,11 +380,14 @@ export default function UserEditClient() {
             <legend>Permissions applicatives ALPHA</legend>
             <p style={{ margin: 0, opacity: 0.8 }}>
               Le rôle principal reste unique via le champ <code>role</code>. Les cases ci-dessous ajoutent ou retirent uniquement les permissions applicatives ALPHA du compte sélectionné.
+              {!canGovernCompanyRules ? " La permission COMPANY_RULES_MANAGE reste verrouillée pour les comptes non natifs de gouvernance." : ""}
             </p>
 
             <div style={{ display: "grid", gap: 10, gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))" }}>
               {ALPHA_PERMISSION_CATALOG.map((permission) => {
                 const checked = permissionCodes.includes(permission.code);
+                const isCompanyRulesPermission = permission.code === COMPANY_RULES_MANAGE_PERMISSION;
+                const permissionLocked = isCompanyRulesPermission && !canGovernCompanyRules;
 
                 return (
                   <label key={permission.code} style={{ display: "grid", gap: 4, padding: 10, border: "1px solid #333", borderRadius: 8 }}>
@@ -342,10 +396,16 @@ export default function UserEditClient() {
                         type="checkbox"
                         checked={checked}
                         onChange={() => togglePermission(permission.code)}
+                        disabled={permissionLocked}
                       />
                       <strong>{permission.label}</strong>
                     </span>
                     <span style={{ fontSize: 13, opacity: 0.8 }}>{permission.description}</span>
+                    {permissionLocked ? (
+                      <span style={{ fontSize: 12, opacity: 0.7 }}>
+                        Délégation réservée à la gouvernance native <code>ADMIN</code> / <code>GERANT</code>.
+                      </span>
+                    ) : null}
                     <span style={{ fontSize: 12, opacity: 0.65 }}>{permission.code}</span>
                   </label>
                 );

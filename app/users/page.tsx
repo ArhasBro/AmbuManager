@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 
 import { authOptions } from "@/lib/auth";
+import { canGovernCompanyRulesDelegation } from "@/lib/company-rules/governance";
 import { canManageUsers } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 
@@ -20,6 +21,8 @@ export default async function UsersPage() {
 
   if (!user?.id || !user.companyId) redirect("/login");
   if (!(await canManageUsers(user.id, user.role, user.platformRole))) redirect("/login");
+
+  const canGovernCompanyRules = canGovernCompanyRulesDelegation(user.role, user.platformRole);
 
   const depots = await prisma.depot.findMany({
     where: { companyId: user.companyId },
@@ -44,10 +47,10 @@ export default async function UsersPage() {
         <Link href="/dashboard">Retour dashboard</Link>
       </div>
 
-      <UserCreationClient />
+      <UserCreationClient canGovernCompanyRules={canGovernCompanyRules} />
       <UsersListClient />
       <UserAbsenceClient />
-      <UserEditClient />
+      <UserEditClient canGovernCompanyRules={canGovernCompanyRules} />
       <UserArchiveClient actorUserId={user.id} />
       <UserDepotAssignmentClient availableDepots={depots} />
       <ResetPasswordClient actorUserId={user.id} />

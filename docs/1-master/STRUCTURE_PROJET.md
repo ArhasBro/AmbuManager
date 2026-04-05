@@ -1920,6 +1920,8 @@ C:.
 |   |   |   |   [root-of-the-server]__0e43a126._.js.map
 |   |   |   |   [root-of-the-server]__0fc3542f._.js
 |   |   |   |   [root-of-the-server]__0fc3542f._.js.map
+|   |   |   |   [root-of-the-server]__2a6e04e1._.js
+|   |   |   |   [root-of-the-server]__2a6e04e1._.js.map
 |   |   |   |   [root-of-the-server]__2d31c873._.js
 |   |   |   |   [root-of-the-server]__2d31c873._.js.map
 |   |   |   |   [root-of-the-server]__3562f2d8._.js
@@ -1930,8 +1932,6 @@ C:.
 |   |   |   |   [root-of-the-server]__4a56182a._.js.map
 |   |   |   |   [root-of-the-server]__4acb48f2._.js
 |   |   |   |   [root-of-the-server]__4acb48f2._.js.map
-|   |   |   |   [root-of-the-server]__4b548634._.js
-|   |   |   |   [root-of-the-server]__4b548634._.js.map
 |   |   |   |   [root-of-the-server]__5e792a0f._.js
 |   |   |   |   [root-of-the-server]__5e792a0f._.js.map
 |   |   |   |   [root-of-the-server]__6f113d6d._.js
@@ -1956,14 +1956,14 @@ C:.
 |   |   |   |   [root-of-the-server]__bcf122bf._.js.map
 |   |   |   |   [root-of-the-server]__be307af6._.js
 |   |   |   |   [root-of-the-server]__be307af6._.js.map
+|   |   |   |   [root-of-the-server]__c2149f92._.js
+|   |   |   |   [root-of-the-server]__c2149f92._.js.map
 |   |   |   |   [root-of-the-server]__c3997a41._.js
 |   |   |   |   [root-of-the-server]__c3997a41._.js.map
 |   |   |   |   [root-of-the-server]__c5606340._.js
 |   |   |   |   [root-of-the-server]__c5606340._.js.map
 |   |   |   |   [root-of-the-server]__c64b00e6._.js
 |   |   |   |   [root-of-the-server]__c64b00e6._.js.map
-|   |   |   |   [root-of-the-server]__d085b866._.js
-|   |   |   |   [root-of-the-server]__d085b866._.js.map
 |   |   |   |   [root-of-the-server]__d5f44ffd._.js
 |   |   |   |   [root-of-the-server]__d5f44ffd._.js.map
 |   |   |   |   [root-of-the-server]__d6192505._.js
@@ -2054,8 +2054,6 @@ C:.
 |   |   |           app_company_a9f5ad05._.js.map
 |   |   |           app_planning_planning-client_tsx_ec2e83fd._.js
 |   |   |           app_planning_planning-client_tsx_ec2e83fd._.js.map
-|   |   |           app_users_7d7b20db._.js
-|   |   |           app_users_7d7b20db._.js.map
 |   |   |           app_vehicles_vehicles-client_tsx_94295d31._.js
 |   |   |           app_vehicles_vehicles-client_tsx_94295d31._.js.map
 |   |   |           lib_company-rules_catalog_ts_1c531f7d._.js
@@ -2098,8 +2096,6 @@ C:.
 |   |   |           [root-of-the-server]__296a25b5._.js.map
 |   |   |           [root-of-the-server]__36ebbb9f._.js
 |   |   |           [root-of-the-server]__36ebbb9f._.js.map
-|   |   |           [root-of-the-server]__3c4b495a._.js
-|   |   |           [root-of-the-server]__3c4b495a._.js.map
 |   |   |           [root-of-the-server]__3e4277b6._.js
 |   |   |           [root-of-the-server]__3e4277b6._.js.map
 |   |   |           [root-of-the-server]__4556a15e._.js
@@ -2112,6 +2108,8 @@ C:.
 |   |   |           [root-of-the-server]__9d5e3ced._.js.map
 |   |   |           [root-of-the-server]__a457c799._.js
 |   |   |           [root-of-the-server]__a457c799._.js.map
+|   |   |           [root-of-the-server]__a6582b6d._.js
+|   |   |           [root-of-the-server]__a6582b6d._.js.map
 |   |   |           [root-of-the-server]__b9356576._.js
 |   |   |           [root-of-the-server]__b9356576._.js.map
 |   |   |           [root-of-the-server]__c4a7c7d0._.js
@@ -2142,6 +2140,8 @@ C:.
 |   |   |           _6139f1ce._.js.map
 |   |   |           _74c1132d._.js
 |   |   |           _74c1132d._.js.map
+|   |   |           _78309920._.js
+|   |   |           _78309920._.js.map
 |   |   |           _a70391a9._.js
 |   |   |           _a70391a9._.js.map
 |   |   |           _b2ebc7ca._.js
@@ -2181,7 +2181,7 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
-|   |   +---1W_hMtMX0cXGy2DFmAtA6
+|   |   +---85wzhhdCPQ0TKXlaVcgcW
 |   |   |       _buildManifest.js
 |   |   |       _clientMiddlewareManifest.json
 |   |   |       _ssgManifest.js
@@ -2189,6 +2189,7 @@ C:.
 |   |   +---chunks
 |   |   |       017153f9275da7e3.js
 |   |   |       05e6c743003c809d.js
+|   |   |       1209a0965914feba.js
 |   |   |       1687260e4d8b05d6.js
 |   |   |       5722c1b2bad35040.css
 |   |   |       642a00754c8aebb8.js
@@ -2196,7 +2197,6 @@ C:.
 |   |   |       7a69708938bdbd80.js
 |   |   |       7c92e96509cd355e.js
 |   |   |       82abf2d65f5428ae.js
-|   |   |       83a473d0a72104a5.js
 |   |   |       899b7782e7cb92a1.js
 |   |   |       96a8fcc9ec5b00e6.js
 |   |   |       a6dad97d9634a72d.js
@@ -3446,6 +3446,7 @@ C:.
 |   |           |   |       README_PATCH.md
 |   |           |   |       
 |   |           |   +---SESSION-20260401-08_A5_RULES-08
+|   |           |   |       PATCH__SESSION-20260401-08_A5_RULES-08.diff
 |   |           |   |       README_PATCH.md
 |   |           |   |       
 |   |           |   \---SESSION-20260401-09_A5_RULES-09
@@ -3479,6 +3480,7 @@ C:.
 |   +---company-rules
 |   |       api.ts
 |   |       catalog.ts
+|   |       governance.ts
 |   |       runtime.ts
 |   |       
 |   +---services

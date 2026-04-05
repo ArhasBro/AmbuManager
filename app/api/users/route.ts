@@ -1,14 +1,18 @@
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-
-import { ok, badRequest, unauthorized, forbidden, conflict, serverError } from "@/lib/api/response";
-import { canManageUsers } from "@/lib/permissions";
-import { serializeDates } from "@/lib/serializers";
-import { prismaToHttp } from "@/lib/api/prisma-error";
-import { createUserBodySchema } from "@/lib/validators/user";
 import bcrypt from "bcrypt";
 import { z } from "zod";
+
+import { json, ok, badRequest, unauthorized, forbidden, conflict, serverError } from "@/lib/api/response";
+import { prismaToHttp } from "@/lib/api/prisma-error";
+import { authOptions } from "@/lib/auth";
+import {
+  canGovernCompanyRulesDelegation,
+  isCompanyRulesGovernorRole,
+} from "@/lib/company-rules/governance";
+import { canManageUsers } from "@/lib/permissions";
+import { prisma } from "@/lib/prisma";
+import { serializeDates } from "@/lib/serializers";
+import { createUserBodySchema } from "@/lib/validators/user";
 
 const USER_ROLES = ["ADMIN", "GERANT", "BUREAU", "ADE", "AA", "TAXI", "REGULATEUR"] as const;
 
@@ -139,7 +143,6 @@ export async function GET(req: Request) {
   }
 }
 
-
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
   const actorUserId = session?.user?.id;
@@ -159,6 +162,20 @@ export async function POST(req: Request) {
 
   const parsed = createUserBodySchema.safeParse(body);
   if (!parsed.success) return badRequest("VALIDATION_ERROR", parsed.error.flatten());
+
+  const actorCanGovernCompanyRules = canGovernCompanyRulesDelegation(role, platformRole);
+  if (!actorCanGovernCompanyRules && isCompanyRulesGovernorRole(parsed.data.role)) {
+    return json(
+      {
+        ok: false,
+        error: "FORBIDDEN",
+        details: {
+          message: "Seul un compte ADMIN ou GERANT peut créer un utilisateur avec un rôle donnant nativement accès à la modification des règles métier.",
+        },
+      },
+      403,
+    );
+  }
 
   try {
     const hashedPassword = await bcrypt.hash(parsed.data.password, 10);

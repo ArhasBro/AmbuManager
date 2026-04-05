@@ -1,0 +1,398 @@
+diff --git a/app/api/users/[id]/route.ts b/app/api/users/[id]/route.ts
+index 961efc8..75f1137 100644
+--- a/app/api/users/[id]/route.ts
++++ b/app/api/users/[id]/route.ts
+@@ -2,9 +2,14 @@ import { Prisma } from "@prisma/client";
+ import { getServerSession } from "next-auth/next";
+ import { z } from "zod";
+ 
+-import { badRequest, conflict, forbidden, notFound, ok, serverError, unauthorized } from "@/lib/api/response";
++import { badRequest, conflict, forbidden, json, notFound, ok, serverError, unauthorized } from "@/lib/api/response";
+ import { prismaToHttp } from "@/lib/api/prisma-error";
+ import { authOptions } from "@/lib/auth";
++import {
++  canGovernCompanyRulesDelegation,
++  permissionSetTouchesCompanyRulesGovernance,
++  roleChangeTouchesCompanyRulesGovernance,
++} from "@/lib/company-rules/governance";
+ import { ALPHA_PERMISSION_CODES, type AlphaPermissionCode } from "@/lib/permission-catalog";
+ import { canManageUsers } from "@/lib/permissions";
+ import { prisma } from "@/lib/prisma";
+@@ -151,7 +156,32 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
+     const existingUser = await findEditableUser(parsedParams.data.id, companyId);
+     if (!existingUser) return notFound();
+ 
++    const existingPermissionCodes = normalizePermissionCodes(existingUser.userPermissions.map((item) => item.permission.code));
+     const nextPermissionCodes = parsedBody.data.permissionCodes;
++    const nextNormalizedPermissionCodes = nextPermissionCodes !== undefined
++      ? normalizePermissionCodes(nextPermissionCodes)
++      : existingPermissionCodes;
++    const nextRole = parsedBody.data.role ?? existingUser.role;
++    const actorCanGovernCompanyRules = canGovernCompanyRulesDelegation(role, platformRole);
++
++    if (!actorCanGovernCompanyRules) {
++      const roleChangeTouchesGovernance = roleChangeTouchesCompanyRulesGovernance(existingUser.role, nextRole);
++      const permissionChangeTouchesGovernance = nextPermissionCodes !== undefined
++        && permissionSetTouchesCompanyRulesGovernance(existingPermissionCodes, nextNormalizedPermissionCodes);
++
++      if (roleChangeTouchesGovernance || permissionChangeTouchesGovernance) {
++        return json(
++          {
++            ok: false,
++            error: "FORBIDDEN",
++            details: {
++              message: "Seuls les comptes ADMIN ou GERANT peuvent attribuer, retirer ou conférer le droit de modification des règles métier.",
++            },
++          },
++          403,
++        );
++      }
++    }
+     const alphaPermissions = nextPermissionCodes !== undefined
+       ? await prisma.permission.findMany({
+           where: { code: { in: [...ALPHA_PERMISSION_CODES] } },
+diff --git a/app/api/users/route.ts b/app/api/users/route.ts
+index 9540dda..53505cd 100644
+--- a/app/api/users/route.ts
++++ b/app/api/users/route.ts
+@@ -1,14 +1,18 @@
+ import { getServerSession } from "next-auth/next";
+-import { authOptions } from "@/lib/auth";
+-import { prisma } from "@/lib/prisma";
++import bcrypt from "bcrypt";
++import { z } from "zod";
+ 
+-import { ok, badRequest, unauthorized, forbidden, conflict, serverError } from "@/lib/api/response";
++import { json, ok, badRequest, unauthorized, forbidden, conflict, serverError } from "@/lib/api/response";
++import { prismaToHttp } from "@/lib/api/prisma-error";
++import { authOptions } from "@/lib/auth";
++import {
++  canGovernCompanyRulesDelegation,
++  isCompanyRulesGovernorRole,
++} from "@/lib/company-rules/governance";
+ import { canManageUsers } from "@/lib/permissions";
++import { prisma } from "@/lib/prisma";
+ import { serializeDates } from "@/lib/serializers";
+-import { prismaToHttp } from "@/lib/api/prisma-error";
+ import { createUserBodySchema } from "@/lib/validators/user";
+-import bcrypt from "bcrypt";
+-import { z } from "zod";
+ 
+ const USER_ROLES = ["ADMIN", "GERANT", "BUREAU", "ADE", "AA", "TAXI", "REGULATEUR"] as const;
+ 
+@@ -139,7 +143,6 @@ export async function GET(req: Request) {
+   }
+ }
+ 
+-
+ export async function POST(req: Request) {
+   const session = await getServerSession(authOptions);
+   const actorUserId = session?.user?.id;
+@@ -160,6 +163,20 @@ export async function POST(req: Request) {
+   const parsed = createUserBodySchema.safeParse(body);
+   if (!parsed.success) return badRequest("VALIDATION_ERROR", parsed.error.flatten());
+ 
++  const actorCanGovernCompanyRules = canGovernCompanyRulesDelegation(role, platformRole);
++  if (!actorCanGovernCompanyRules && isCompanyRulesGovernorRole(parsed.data.role)) {
++    return json(
++      {
++        ok: false,
++        error: "FORBIDDEN",
++        details: {
++          message: "Seul un compte ADMIN ou GERANT peut créer un utilisateur avec un rôle donnant nativement accès à la modification des règles métier.",
++        },
++      },
++      403,
++    );
++  }
++
+   try {
+     const hashedPassword = await bcrypt.hash(parsed.data.password, 10);
+ 
+diff --git a/app/users/page.tsx b/app/users/page.tsx
+index 864b85f..b5de30c 100644
+--- a/app/users/page.tsx
++++ b/app/users/page.tsx
+@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth/next";
+ import { redirect } from "next/navigation";
+ 
+ import { authOptions } from "@/lib/auth";
++import { canGovernCompanyRulesDelegation } from "@/lib/company-rules/governance";
+ import { canManageUsers } from "@/lib/permissions";
+ import { prisma } from "@/lib/prisma";
+ 
+@@ -21,6 +22,8 @@ export default async function UsersPage() {
+   if (!user?.id || !user.companyId) redirect("/login");
+   if (!(await canManageUsers(user.id, user.role, user.platformRole))) redirect("/login");
+ 
++  const canGovernCompanyRules = canGovernCompanyRulesDelegation(user.role, user.platformRole);
++
+   const depots = await prisma.depot.findMany({
+     where: { companyId: user.companyId },
+     orderBy: [{ isActive: "desc" }, { name: "asc" }],
+@@ -44,10 +47,10 @@ export default async function UsersPage() {
+         <Link href="/dashboard">Retour dashboard</Link>
+       </div>
+ 
+-      <UserCreationClient />
++      <UserCreationClient canGovernCompanyRules={canGovernCompanyRules} />
+       <UsersListClient />
+       <UserAbsenceClient />
+-      <UserEditClient />
++      <UserEditClient canGovernCompanyRules={canGovernCompanyRules} />
+       <UserArchiveClient actorUserId={user.id} />
+       <UserDepotAssignmentClient availableDepots={depots} />
+       <ResetPasswordClient actorUserId={user.id} />
+diff --git a/app/users/user-creation-client.tsx b/app/users/user-creation-client.tsx
+index 1b5a10b..c7d15e0 100644
+--- a/app/users/user-creation-client.tsx
++++ b/app/users/user-creation-client.tsx
+@@ -1,6 +1,8 @@
+ "use client";
+ 
+-import { useState, type FormEvent } from "react";
++import { useMemo, useState, type FormEvent } from "react";
++
++import { isCompanyRulesGovernorRole } from "@/lib/company-rules/governance";
+ 
+ import { USER_ROLE_OPTIONS } from "./users-client-shared";
+ import { dispatchUsersRefresh } from "./users-refresh";
+@@ -31,7 +33,11 @@ function isApiErr(value: unknown): value is ApiErr {
+   return typeof value === "object" && value !== null && "ok" in value && (value as { ok?: unknown }).ok === false;
+ }
+ 
+-export default function UserCreationClient() {
++type UserCreationClientProps = {
++  canGovernCompanyRules: boolean;
++};
++
++export default function UserCreationClient({ canGovernCompanyRules }: UserCreationClientProps) {
+   const [name, setName] = useState("");
+   const [email, setEmail] = useState("");
+   const [password, setPassword] = useState("");
+@@ -40,6 +46,11 @@ export default function UserCreationClient() {
+   const [error, setError] = useState<string | null>(null);
+   const [success, setSuccess] = useState<string | null>(null);
+ 
++  const assignableRoleOptions = useMemo(
++    () => (canGovernCompanyRules ? USER_ROLE_OPTIONS : USER_ROLE_OPTIONS.filter((option) => !isCompanyRulesGovernorRole(option))),
++    [canGovernCompanyRules],
++  );
++
+   async function onSubmit(event: FormEvent<HTMLFormElement>) {
+     event.preventDefault();
+     setError(null);
+@@ -63,7 +74,7 @@ export default function UserCreationClient() {
+       return;
+     }
+ 
+-    if (!USER_ROLE_OPTIONS.includes(role as (typeof USER_ROLE_OPTIONS)[number])) {
++    if (!assignableRoleOptions.includes(role as (typeof assignableRoleOptions)[number])) {
+       setError("Le rôle est obligatoire.");
+       return;
+     }
+@@ -114,6 +125,11 @@ export default function UserCreationClient() {
+         <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
+           Création minimale alignée sur l&apos;API USERS-04. Les rôles support globaux ne sont pas attribuables depuis cette interface.
+         </p>
++        {!canGovernCompanyRules ? (
++          <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
++            Les rôles <code>ADMIN</code> et <code>GERANT</code>, qui donnent nativement accès à la gouvernance des règles métier, restent réservés aux comptes natifs de gouvernance.
++          </p>
++        ) : null}
+       </div>
+ 
+       <label style={{ display: "grid", gap: 6 }}>
+@@ -144,7 +160,7 @@ export default function UserCreationClient() {
+         <span>Rôle</span>
+         <select value={role} onChange={(event) => setRole(event.target.value)} disabled={submitting}>
+           <option value="">Sélectionner un rôle</option>
+-          {USER_ROLE_OPTIONS.map((option) => (
++          {assignableRoleOptions.map((option) => (
+             <option key={option} value={option}>
+               {option}
+             </option>
+diff --git a/app/users/user-edit-client.tsx b/app/users/user-edit-client.tsx
+index febc732..03a087b 100644
+--- a/app/users/user-edit-client.tsx
++++ b/app/users/user-edit-client.tsx
+@@ -2,6 +2,12 @@
+ 
+ import { useEffect, useMemo, useState, type FormEvent } from "react";
+ 
++import {
++  COMPANY_RULES_MANAGE_PERMISSION,
++  isCompanyRulesGovernorRole,
++  permissionSetTouchesCompanyRulesGovernance,
++  roleChangeTouchesCompanyRulesGovernance,
++} from "@/lib/company-rules/governance";
+ import { ALPHA_PERMISSION_CATALOG, type AlphaPermissionCode } from "@/lib/permission-catalog";
+ 
+ import { depotLabel, USER_ROLE_OPTIONS, type UserListRow } from "./users-client-shared";
+@@ -81,7 +87,27 @@ function toEditableUser(value: unknown): EditableUser | null {
+   return { id, name, email, role, depotId, depot, permissionCodes: normalizePermissionCodes(permissionCodes) };
+ }
+ 
+-export default function UserEditClient() {
++type UserEditClientProps = {
++  canGovernCompanyRules: boolean;
++};
++
++function getAssignableRoleOptions(canGovernCompanyRules: boolean, currentRole?: string) {
++  const baseOptions = canGovernCompanyRules
++    ? [...USER_ROLE_OPTIONS]
++    : USER_ROLE_OPTIONS.filter((option) => !isCompanyRulesGovernorRole(option));
++
++  if (
++    currentRole
++    && USER_ROLE_OPTIONS.includes(currentRole as (typeof USER_ROLE_OPTIONS)[number])
++    && !baseOptions.includes(currentRole as (typeof USER_ROLE_OPTIONS)[number])
++  ) {
++    return [currentRole as (typeof USER_ROLE_OPTIONS)[number], ...baseOptions];
++  }
++
++  return baseOptions;
++}
++
++export default function UserEditClient({ canGovernCompanyRules }: UserEditClientProps) {
+   const [selectedUser, setSelectedUser] = useState<UserListRow | null>(null);
+   const [loadedUser, setLoadedUser] = useState<EditableUser | null>(null);
+   const [name, setName] = useState("");
+@@ -160,6 +186,14 @@ export default function UserEditClient() {
+     };
+   }, [selectedUser?.id]);
+ 
++  const assignableRoleOptions = useMemo(
++    () => getAssignableRoleOptions(canGovernCompanyRules, role || loadedUser?.role || selectedUser?.role || undefined),
++    [canGovernCompanyRules, loadedUser?.role, role, selectedUser?.role],
++  );
++
++  const selectedUserHasNativeCompanyRulesAccess = isCompanyRulesGovernorRole(loadedUser?.role ?? selectedUser?.role ?? null);
++  const roleFieldLocked = !canGovernCompanyRules && selectedUserHasNativeCompanyRulesAccess;
++
+   const hasPendingChange = useMemo(() => {
+     if (!selectedUser || !loadedUser) return false;
+ 
+@@ -170,6 +204,8 @@ export default function UserEditClient() {
+   }, [email, loadedUser, name, permissionCodes, role, selectedUser]);
+ 
+   function togglePermission(code: AlphaPermissionCode) {
++    if (!canGovernCompanyRules && code === COMPANY_RULES_MANAGE_PERMISSION) return;
++
+     setPermissionCodes((current) => {
+       const next = current.includes(code)
+         ? current.filter((value) => value !== code)
+@@ -202,7 +238,7 @@ export default function UserEditClient() {
+       return;
+     }
+ 
+-    if (!USER_ROLE_OPTIONS.includes(role as (typeof USER_ROLE_OPTIONS)[number])) {
++    if (!assignableRoleOptions.includes(role as (typeof assignableRoleOptions)[number])) {
+       setError("Le rôle est obligatoire.");
+       return;
+     }
+@@ -212,6 +248,16 @@ export default function UserEditClient() {
+       return;
+     }
+ 
++    if (!canGovernCompanyRules) {
++      const roleChangeTouchesGovernance = roleChangeTouchesCompanyRulesGovernance(loadedUser.role, role);
++      const permissionChangeTouchesGovernance = permissionSetTouchesCompanyRulesGovernance(loadedUser.permissionCodes, permissionCodes);
++
++      if (roleChangeTouchesGovernance || permissionChangeTouchesGovernance) {
++        setError("Seuls les comptes ADMIN ou GERANT peuvent attribuer, retirer ou conférer le droit de modification des règles métier.");
++        return;
++      }
++    }
++
+     setSubmitting(true);
+ 
+     try {
+@@ -259,6 +305,11 @@ export default function UserEditClient() {
+           Sélectionnez d&apos;abord un utilisateur dans la liste ci-dessus pour modifier les champs déjà couverts par USERS-06/07,
+           puis ajuster ici ses permissions applicatives ALPHA.
+         </p>
++        {!canGovernCompanyRules ? (
++          <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
++            La délégation du droit de modification des règles métier reste réservée aux comptes <code>ADMIN</code> ou <code>GERANT</code>.
++          </p>
++        ) : null}
+       </div>
+ 
+       {!selectedUser ? (
+@@ -315,9 +366,9 @@ export default function UserEditClient() {
+ 
+           <label style={{ display: "grid", gap: 6 }}>
+             <span>Rôle principal</span>
+-            <select value={role} onChange={(event) => setRole(event.target.value)} disabled={submitting || loadingDetails || Boolean(detailsError)}>
++            <select value={role} onChange={(event) => setRole(event.target.value)} disabled={submitting || loadingDetails || Boolean(detailsError) || roleFieldLocked}>
+               <option value="">Sélectionner un rôle</option>
+-              {USER_ROLE_OPTIONS.map((option) => (
++              {assignableRoleOptions.map((option) => (
+                 <option key={option} value={option}>
+                   {option}
+                 </option>
+@@ -329,11 +380,14 @@ export default function UserEditClient() {
+             <legend>Permissions applicatives ALPHA</legend>
+             <p style={{ margin: 0, opacity: 0.8 }}>
+               Le rôle principal reste unique via le champ <code>role</code>. Les cases ci-dessous ajoutent ou retirent uniquement les permissions applicatives ALPHA du compte sélectionné.
++              {!canGovernCompanyRules ? " La permission COMPANY_RULES_MANAGE reste verrouillée pour les comptes non natifs de gouvernance." : ""}
+             </p>
+ 
+             <div style={{ display: "grid", gap: 10, gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))" }}>
+               {ALPHA_PERMISSION_CATALOG.map((permission) => {
+                 const checked = permissionCodes.includes(permission.code);
++                const isCompanyRulesPermission = permission.code === COMPANY_RULES_MANAGE_PERMISSION;
++                const permissionLocked = isCompanyRulesPermission && !canGovernCompanyRules;
+ 
+                 return (
+                   <label key={permission.code} style={{ display: "grid", gap: 4, padding: 10, border: "1px solid #333", borderRadius: 8 }}>
+@@ -342,10 +396,16 @@ export default function UserEditClient() {
+                         type="checkbox"
+                         checked={checked}
+                         onChange={() => togglePermission(permission.code)}
++                        disabled={permissionLocked}
+                       />
+                       <strong>{permission.label}</strong>
+                     </span>
+                     <span style={{ fontSize: 13, opacity: 0.8 }}>{permission.description}</span>
++                    {permissionLocked ? (
++                      <span style={{ fontSize: 12, opacity: 0.7 }}>
++                        Délégation réservée à la gouvernance native <code>ADMIN</code> / <code>GERANT</code>.
++                      </span>
++                    ) : null}
+                     <span style={{ fontSize: 12, opacity: 0.65 }}>{permission.code}</span>
+                   </label>
+                 );
+diff --git a/lib/company-rules/governance.ts b/lib/company-rules/governance.ts
+new file mode 100644
+index 0000000..a17dbcc
+--- /dev/null
++++ b/lib/company-rules/governance.ts
+@@ -0,0 +1,26 @@
++export const COMPANY_RULES_MANAGE_PERMISSION = "COMPANY_RULES_MANAGE" as const;
++
++export function isCompanyRulesGovernorRole(role?: string | null): boolean {
++  return role === "ADMIN" || role === "GERANT";
++}
++
++export function canGovernCompanyRulesDelegation(role?: string | null, platformRole?: string | null): boolean {
++  if (platformRole === "SUPPORT") return false;
++  return isCompanyRulesGovernorRole(role);
++}
++
++export function roleChangeTouchesCompanyRulesGovernance(
++  currentRole?: string | null,
++  nextRole?: string | null,
++): boolean {
++  if (!nextRole || currentRole === nextRole) return false;
++  return isCompanyRulesGovernorRole(currentRole) || isCompanyRulesGovernorRole(nextRole);
++}
++
++export function permissionSetTouchesCompanyRulesGovernance(
++  currentCodes: readonly string[],
++  nextCodes: readonly string[],
++): boolean {
++  return currentCodes.includes(COMPANY_RULES_MANAGE_PERMISSION)
++    !== nextCodes.includes(COMPANY_RULES_MANAGE_PERMISSION);
++}
