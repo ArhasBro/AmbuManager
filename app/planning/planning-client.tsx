@@ -54,6 +54,12 @@ type RestWarning = {
   };
 };
 
+type ManualAssignIssue = {
+  code: string;
+  message: string;
+  meta?: JsonRecord;
+};
+
 type PublishConflict =
   | {
       kind: "CONFLICT_USER";
@@ -270,6 +276,20 @@ function jsonOkPayload(json: unknown): json is { ok: true; data?: unknown } {
 
 function jsonErrPayload(json: unknown): json is { ok: false; error?: unknown; details?: unknown } {
   return isRecord(json) && json.ok === false;
+}
+
+function formatManualAssignIssues(issues: ManualAssignIssue[]): string | null {
+  if (issues.length === 0) return null;
+
+  const minRestMessages = issues
+    .filter((issue) => issue.code === "MIN_REST_VIOLATION")
+    .map((issue) => `⚠️ ${issue.message}`);
+
+  if (minRestMessages.length > 0) {
+    return ["Affectation enregistrée ✅", ...minRestMessages].join(" ");
+  }
+
+  return "Affectation enregistrée ✅";
 }
 
 function countByReason(items: MatchingPlanItem[]) {
@@ -1123,6 +1143,27 @@ export default function PlanningClient({
         if (!res.ok || !jsonOkPayload(json)) {
           const err = jsonErrPayload(json) ? getString(json.error) : `HTTP_${res.status}`;
 
+          if (err === "RULE_BLOCKED") {
+            const details = jsonErrPayload(json) && isRecord(json.details) ? json.details : null;
+            const requiredHours = details ? details.requiredHours : null;
+            const suffix = isNumber(requiredHours) ? ` (${requiredHours}h requises)` : "";
+            setAssignMsgById((m) => ({
+              ...m,
+              [shiftId]: `⛔ Affectation bloquée : repos minimum non respecté${suffix}.`,
+            }));
+            return;
+          }
+
+          if (err === "RULE_CONFIG_ERROR") {
+            const details = jsonErrPayload(json) && isRecord(json.details) ? json.details : null;
+            const message = details ? getOptionalString(details.message) : undefined;
+            setAssignMsgById((m) => ({
+              ...m,
+              [shiftId]: `⛔ Configuration invalide de la règle repos minimum${message ? ` : ${message}` : ""}`,
+            }));
+            return;
+          }
+
           if (err === "USER_CONFLICT" || err === "USER_OVERLAP_CONFLICT") {
             setAssignMsgById((m) => ({
               ...m,
@@ -1151,7 +1192,15 @@ export default function PlanningClient({
           return;
         }
 
-        setAssignMsgById((m) => ({ ...m, [shiftId]: "Affectation enregistrée ✅" }));
+        const data = isRecord(json) && isRecord(json.data) ? json.data : null;
+        const issues = safeArray<ManualAssignIssue>(data?.issues).filter(
+          (issue): issue is ManualAssignIssue => isRecord(issue) && typeof issue.code === "string" && typeof issue.message === "string"
+        );
+
+        setAssignMsgById((m) => ({
+          ...m,
+          [shiftId]: formatManualAssignIssues(issues) ?? "Affectation enregistrée ✅",
+        }));
 
         await loadShiftsForWeek(weekStartStr, selectedUserId);
         if (lastRunId) await loadRunInfo(lastRunId);

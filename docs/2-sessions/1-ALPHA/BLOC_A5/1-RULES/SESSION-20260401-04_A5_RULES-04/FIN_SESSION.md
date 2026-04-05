@@ -1,14 +1,24 @@
-﻿# FIN_SESSION
+# FIN_SESSION
 
-## ClÃ´ture
+## Clôture
+La session `RULES-04` est clôturée documentairement sur la base du patch principal validé à l’intégration, sans nouveau patch code et sans rejouage du patch principal.
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+## Validation consolidée
+### Confirmé à l’intégration
+- relecture des documents maîtres et méthodologiques requise ;
+- contrôle ciblé du code réel ;
+- patch principal minimal validé ;
+- `git apply --check` : OK ;
+- `git apply` : OK ;
+- `npm run lint` : OK ;
+- `npm run build` : OK.
 
-## Validation
-
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+### À confirmer
+- `npx prisma validate` : À confirmer ;
+- `npx prisma generate` : À confirmer.
 
 ## Verdict final
+**PATCH PRINCIPAL VALIDÉ — CLÔTURE DOCUMENTAIRE FINALE EFFECTUÉE SANS RÉOUVERTURE DU CODE**
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
-
+## Livrable final
+ZIP documentaire final à plat généré conformément à la méthode projet.

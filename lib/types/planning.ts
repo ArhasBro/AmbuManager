@@ -11,6 +11,7 @@ export type PlanningIssueCode =
   | "VEHICLE_OVERLAP_CONFLICT"
   | "MIN_REST_VIOLATION"
   | "RULE_BLOCKED"
+  | "RULE_CONFIG_ERROR"
   | "VALIDATION_ERROR";
 
 export type PlanningIssue = {

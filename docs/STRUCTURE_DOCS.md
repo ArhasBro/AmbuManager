@@ -1073,6 +1073,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |           |   |       NO_PATCH.md
 |           |   |       
 |           |   +---SESSION-20260401-04_A5_RULES-04
+|           |   |       PATCH__SESSION-20260401-04_A5_RULES-04.diff
 |           |   |       README_PATCH.md
 |           |   |       
 |           |   +---SESSION-20260401-05_A5_RULES-05

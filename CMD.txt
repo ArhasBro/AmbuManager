@@ -34,11 +34,11 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260401-04_A5_RULES-04
-- RULES-04 — CORRECTION** — Correction/remise à niveau des règles déjà utilisées
+- SESSION-20260401-05_A5_RULES-05
+- RULES-05 — COMPLÉTION** — Passage vers une couche de paramètres métier compréhensible
 ------------------------------------
 sortie propre + retour du terminal + aucune erreur = validé
-
+------------------------------------
 Voici sa réponse ainsi que les documents généré : 
 Je vais intégrer le .diff et je te renvoi le retour terminal de (Si faut enlever ou rajouter des cmd fait moi un copier/coller de ce que tu veux que je fasse):
 git apply --check ".\"
@@ -52,7 +52,7 @@ Je n'ai pas intégré :
 -les fichiers documentaires de session (`SESSION.md`, `NOTES.md`, `EVIDENCES.md`, `RESULTATS.md`, `FIN_SESSION.md`)
 -le fichier documentaire de patches (`README.md`)
 Il seront à crée dans le patch docs en 1 ZIP téléchargeable sans sous dossier, quand la session sera validé pour qu'il soient complet.
-
+------------------------------------
 
 
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned

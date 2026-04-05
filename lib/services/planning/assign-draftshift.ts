@@ -30,20 +30,30 @@ function normalizePair(userId: string | null, user2Id: string | null): { userId:
   return { userId, user2Id };
 }
 
-async function loadMinRestRule(companyId: string): Promise<{ mode: RuleMode; hours: number } | null> {
-  // INFORMATION NON FOURNIE — VALIDATION NÉCESSAIRE :
-  // Clé exacte de la règle repos minimum.
+type MinRestRuleResult =
+  | { kind: "DISABLED" }
+  | { kind: "OK"; rule: { mode: RuleMode; hours: number } }
+  | { kind: "CONFIG_ERROR"; message: string };
+
+async function loadMinRestRule(companyId: string): Promise<MinRestRuleResult> {
   const rule = await prisma.companyRule.findUnique({
     where: { companyId_key: { companyId, key: "PLANNING_MIN_REST_HOURS" } },
     select: { mode: true, value: true },
   });
 
-  if (!rule) return null;
+  if (!rule) return { kind: "DISABLED" };
+  if (rule.mode === RuleMode.OFF) return { kind: "DISABLED" };
 
-  const hours = Number(rule.value);
-  if (!Number.isFinite(hours) || hours <= 0) return null;
+  const raw = String(rule.value ?? "").trim();
+  const hours = Number(raw);
+  if (!Number.isFinite(hours) || hours <= 0) {
+    return {
+      kind: "CONFIG_ERROR",
+      message: `CompanyRule PLANNING_MIN_REST_HOURS has invalid value "${rule.value}" (expected positive number)`,
+    };
+  }
 
-  return { mode: rule.mode, hours };
+  return { kind: "OK", rule: { mode: rule.mode, hours } };
 }
 
 function err(code: PlanningIssueCode, message: string, meta?: Record<string, unknown>): PlanningIssue {
@@ -207,8 +217,12 @@ export async function assignDraftShift(input: AssignDraftShiftInput): Promise<As
 
   // 5) Règle entreprise — repos minimum
   const minRest = await loadMinRestRule(companyId);
-  if (minRest && assignedUsers.length > 0) {
-    const minRestMs = minRest.hours * 60 * 60 * 1000;
+  if (minRest.kind === "CONFIG_ERROR") {
+    return { ok: false, error: err("RULE_CONFIG_ERROR", minRest.message, { key: "PLANNING_MIN_REST_HOURS" }) };
+  }
+
+  if (minRest.kind === "OK" && assignedUsers.length > 0) {
+    const minRestMs = minRest.rule.hours * 60 * 60 * 1000;
 
     for (const u of assignedUsers) {
       const prevDraft = await prisma.draftShift.findFirst({
@@ -243,14 +257,14 @@ export async function assignDraftShift(input: AssignDraftShiftInput): Promise<As
       if (prevEnd) {
         const restMs = startAt.getTime() - prevEnd.getTime();
         if (restMs < minRestMs) {
-          const issue = err("MIN_REST_VIOLATION", `Repos minimum non respecté (${minRest.hours}h).`, {
+          const issue = err("MIN_REST_VIOLATION", `Repos minimum non respecté (${minRest.rule.hours}h).`, {
             userId: u,
-            requiredHours: minRest.hours,
+            requiredHours: minRest.rule.hours,
           });
 
-          if (minRest.mode === "ALERT" || minRest.mode === "BOTH") issues.push(issue);
+          if (minRest.rule.mode === "ALERT" || minRest.rule.mode === "BOTH") issues.push(issue);
 
-          if (minRest.mode === "BLOCK" || minRest.mode === "BOTH") {
+          if (minRest.rule.mode === "BLOCK" || minRest.rule.mode === "BOTH") {
             return { ok: false, error: err("RULE_BLOCKED", issue.message, issue.meta) };
           }
         }

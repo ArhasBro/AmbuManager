@@ -1,0 +1,289 @@
+diff --git a/app/api/planning/shifts/[id]/assign/route.ts b/app/api/planning/shifts/[id]/assign/route.ts
+index 9fe3285..adb4dcc 100644
+--- a/app/api/planning/shifts/[id]/assign/route.ts
++++ b/app/api/planning/shifts/[id]/assign/route.ts
+@@ -185,6 +185,10 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+ 
+       if (result.error.code === "RUN_NOT_DRAFT") return json(409, { ok: false, error: "RUN_NOT_DRAFT" });
+ 
++      if (result.error.code === "RULE_CONFIG_ERROR") {
++        return json(400, { ok: false, error: "RULE_CONFIG_ERROR", details: { message: result.error.message, ...(result.error.meta ?? {}) } });
++      }
++
+       if (
+         result.error.code === "USER_ABSENCE_CONFLICT" ||
+         result.error.code === "USER_OVERLAP_CONFLICT" ||
+@@ -215,6 +219,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+       ok: true,
+       data: {
+         kind: "DRAFT",
++        issues: result.data.issues,
+         item: {
+           ...updated,
+           date: updated.date.toISOString(),
+@@ -262,6 +267,10 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+       return json(400, { ok: false, error: result.error.code, details: result.error.meta ?? null });
+     }
+ 
++    if (result.error.code === "RULE_CONFIG_ERROR") {
++      return json(400, { ok: false, error: "RULE_CONFIG_ERROR", details: { message: result.error.message, ...(result.error.meta ?? {}) } });
++    }
++
+     if (
+       result.error.code === "USER_ABSENCE_CONFLICT" ||
+       result.error.code === "USER_OVERLAP_CONFLICT" ||
+@@ -293,6 +302,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+     ok: true,
+     data: {
+       kind: "SHIFT",
++      issues: result.data.issues,
+       item: {
+         ...updatedShift,
+         date: updatedShift.date.toISOString(),
+diff --git a/app/planning/planning-client.tsx b/app/planning/planning-client.tsx
+index b3948de..cf781ec 100644
+--- a/app/planning/planning-client.tsx
++++ b/app/planning/planning-client.tsx
+@@ -54,6 +54,12 @@ type RestWarning = {
+   };
+ };
+ 
++type ManualAssignIssue = {
++  code: string;
++  message: string;
++  meta?: JsonRecord;
++};
++
+ type PublishConflict =
+   | {
+       kind: "CONFLICT_USER";
+@@ -272,6 +278,20 @@ function jsonErrPayload(json: unknown): json is { ok: false; error?: unknown; de
+   return isRecord(json) && json.ok === false;
+ }
+ 
++function formatManualAssignIssues(issues: ManualAssignIssue[]): string | null {
++  if (issues.length === 0) return null;
++
++  const minRestMessages = issues
++    .filter((issue) => issue.code === "MIN_REST_VIOLATION")
++    .map((issue) => `⚠️ ${issue.message}`);
++
++  if (minRestMessages.length > 0) {
++    return ["Affectation enregistrée ✅", ...minRestMessages].join(" ");
++  }
++
++  return "Affectation enregistrée ✅";
++}
++
+ function countByReason(items: MatchingPlanItem[]) {
+   const out: Record<MatchingReason, number> = {
+     MATCHED: 0,
+@@ -1123,6 +1143,27 @@ export default function PlanningClient({
+         if (!res.ok || !jsonOkPayload(json)) {
+           const err = jsonErrPayload(json) ? getString(json.error) : `HTTP_${res.status}`;
+ 
++          if (err === "RULE_BLOCKED") {
++            const details = jsonErrPayload(json) && isRecord(json.details) ? json.details : null;
++            const requiredHours = details ? details.requiredHours : null;
++            const suffix = isNumber(requiredHours) ? ` (${requiredHours}h requises)` : "";
++            setAssignMsgById((m) => ({
++              ...m,
++              [shiftId]: `⛔ Affectation bloquée : repos minimum non respecté${suffix}.`,
++            }));
++            return;
++          }
++
++          if (err === "RULE_CONFIG_ERROR") {
++            const details = jsonErrPayload(json) && isRecord(json.details) ? json.details : null;
++            const message = details ? getOptionalString(details.message) : undefined;
++            setAssignMsgById((m) => ({
++              ...m,
++              [shiftId]: `⛔ Configuration invalide de la règle repos minimum${message ? ` : ${message}` : ""}`,
++            }));
++            return;
++          }
++
+           if (err === "USER_CONFLICT" || err === "USER_OVERLAP_CONFLICT") {
+             setAssignMsgById((m) => ({
+               ...m,
+@@ -1151,7 +1192,15 @@ export default function PlanningClient({
+           return;
+         }
+ 
+-        setAssignMsgById((m) => ({ ...m, [shiftId]: "Affectation enregistrée ✅" }));
++        const data = isRecord(json) && isRecord(json.data) ? json.data : null;
++        const issues = safeArray<ManualAssignIssue>(data?.issues).filter(
++          (issue): issue is ManualAssignIssue => isRecord(issue) && typeof issue.code === "string" && typeof issue.message === "string"
++        );
++
++        setAssignMsgById((m) => ({
++          ...m,
++          [shiftId]: formatManualAssignIssues(issues) ?? "Affectation enregistrée ✅",
++        }));
+ 
+         await loadShiftsForWeek(weekStartStr, selectedUserId);
+         if (lastRunId) await loadRunInfo(lastRunId);
+diff --git a/lib/services/planning/assign-draftshift.ts b/lib/services/planning/assign-draftshift.ts
+index 7449bea..9745009 100644
+--- a/lib/services/planning/assign-draftshift.ts
++++ b/lib/services/planning/assign-draftshift.ts
+@@ -30,20 +30,30 @@ function normalizePair(userId: string | null, user2Id: string | null): { userId:
+   return { userId, user2Id };
+ }
+ 
+-async function loadMinRestRule(companyId: string): Promise<{ mode: RuleMode; hours: number } | null> {
+-  // INFORMATION NON FOURNIE — VALIDATION NÉCESSAIRE :
+-  // Clé exacte de la règle repos minimum.
++type MinRestRuleResult =
++  | { kind: "DISABLED" }
++  | { kind: "OK"; rule: { mode: RuleMode; hours: number } }
++  | { kind: "CONFIG_ERROR"; message: string };
++
++async function loadMinRestRule(companyId: string): Promise<MinRestRuleResult> {
+   const rule = await prisma.companyRule.findUnique({
+     where: { companyId_key: { companyId, key: "PLANNING_MIN_REST_HOURS" } },
+     select: { mode: true, value: true },
+   });
+ 
+-  if (!rule) return null;
++  if (!rule) return { kind: "DISABLED" };
++  if (rule.mode === RuleMode.OFF) return { kind: "DISABLED" };
+ 
+-  const hours = Number(rule.value);
+-  if (!Number.isFinite(hours) || hours <= 0) return null;
++  const raw = String(rule.value ?? "").trim();
++  const hours = Number(raw);
++  if (!Number.isFinite(hours) || hours <= 0) {
++    return {
++      kind: "CONFIG_ERROR",
++      message: `CompanyRule PLANNING_MIN_REST_HOURS has invalid value "${rule.value}" (expected positive number)`,
++    };
++  }
+ 
+-  return { mode: rule.mode, hours };
++  return { kind: "OK", rule: { mode: rule.mode, hours } };
+ }
+ 
+ function err(code: PlanningIssueCode, message: string, meta?: Record<string, unknown>): PlanningIssue {
+@@ -207,8 +217,12 @@ export async function assignDraftShift(input: AssignDraftShiftInput): Promise<As
+ 
+   // 5) Règle entreprise — repos minimum
+   const minRest = await loadMinRestRule(companyId);
+-  if (minRest && assignedUsers.length > 0) {
+-    const minRestMs = minRest.hours * 60 * 60 * 1000;
++  if (minRest.kind === "CONFIG_ERROR") {
++    return { ok: false, error: err("RULE_CONFIG_ERROR", minRest.message, { key: "PLANNING_MIN_REST_HOURS" }) };
++  }
++
++  if (minRest.kind === "OK" && assignedUsers.length > 0) {
++    const minRestMs = minRest.rule.hours * 60 * 60 * 1000;
+ 
+     for (const u of assignedUsers) {
+       const prevDraft = await prisma.draftShift.findFirst({
+@@ -243,14 +257,14 @@ export async function assignDraftShift(input: AssignDraftShiftInput): Promise<As
+       if (prevEnd) {
+         const restMs = startAt.getTime() - prevEnd.getTime();
+         if (restMs < minRestMs) {
+-          const issue = err("MIN_REST_VIOLATION", `Repos minimum non respecté (${minRest.hours}h).`, {
++          const issue = err("MIN_REST_VIOLATION", `Repos minimum non respecté (${minRest.rule.hours}h).`, {
+             userId: u,
+-            requiredHours: minRest.hours,
++            requiredHours: minRest.rule.hours,
+           });
+ 
+-          if (minRest.mode === "ALERT" || minRest.mode === "BOTH") issues.push(issue);
++          if (minRest.rule.mode === "ALERT" || minRest.rule.mode === "BOTH") issues.push(issue);
+ 
+-          if (minRest.mode === "BLOCK" || minRest.mode === "BOTH") {
++          if (minRest.rule.mode === "BLOCK" || minRest.rule.mode === "BOTH") {
+             return { ok: false, error: err("RULE_BLOCKED", issue.message, issue.meta) };
+           }
+         }
+diff --git a/lib/services/planning/assign-shift.ts b/lib/services/planning/assign-shift.ts
+index 014a529..addcb28 100644
+--- a/lib/services/planning/assign-shift.ts
++++ b/lib/services/planning/assign-shift.ts
+@@ -31,20 +31,30 @@ function normalizePair(userId: string | null, user2Id: string | null): { userId:
+   return { userId, user2Id };
+ }
+ 
+-async function loadMinRestRule(companyId: string): Promise<{ mode: RuleMode; hours: number } | null> {
+-  // INFORMATION NON FOURNIE — VALIDATION NÉCESSAIRE :
+-  // Clé exacte de la règle repos minimum.
++type MinRestRuleResult =
++  | { kind: "DISABLED" }
++  | { kind: "OK"; rule: { mode: RuleMode; hours: number } }
++  | { kind: "CONFIG_ERROR"; message: string };
++
++async function loadMinRestRule(companyId: string): Promise<MinRestRuleResult> {
+   const rule = await prisma.companyRule.findUnique({
+     where: { companyId_key: { companyId, key: "PLANNING_MIN_REST_HOURS" } },
+     select: { mode: true, value: true },
+   });
+ 
+-  if (!rule) return null;
++  if (!rule) return { kind: "DISABLED" };
++  if (rule.mode === RuleMode.OFF) return { kind: "DISABLED" };
+ 
+-  const hours = Number(rule.value);
+-  if (!Number.isFinite(hours) || hours <= 0) return null;
++  const raw = String(rule.value ?? "").trim();
++  const hours = Number(raw);
++  if (!Number.isFinite(hours) || hours <= 0) {
++    return {
++      kind: "CONFIG_ERROR",
++      message: `CompanyRule PLANNING_MIN_REST_HOURS has invalid value "${rule.value}" (expected positive number)`,
++    };
++  }
+ 
+-  return { mode: rule.mode, hours };
++  return { kind: "OK", rule: { mode: rule.mode, hours } };
+ }
+ 
+ function err(code: PlanningIssueCode, message: string, meta?: Record<string, unknown>): PlanningIssue {
+@@ -198,8 +208,12 @@ export async function assignShift(input: AssignShiftInput): Promise<AssignShiftR
+ 
+   // 5) Règle entreprise — repos minimum
+   const minRest = await loadMinRestRule(companyId);
+-  if (minRest && assignedUsers.length > 0) {
+-    const minRestMs = minRest.hours * 60 * 60 * 1000;
++  if (minRest.kind === "CONFIG_ERROR") {
++    return { ok: false, error: err("RULE_CONFIG_ERROR", minRest.message, { key: "PLANNING_MIN_REST_HOURS" }) };
++  }
++
++  if (minRest.kind === "OK" && assignedUsers.length > 0) {
++    const minRestMs = minRest.rule.hours * 60 * 60 * 1000;
+ 
+     for (const u of assignedUsers) {
+       const prevShift = await prisma.shift.findFirst({
+@@ -228,14 +242,14 @@ export async function assignShift(input: AssignShiftInput): Promise<AssignShiftR
+       if (prevEnd) {
+         const restMs = startAt.getTime() - prevEnd.getTime();
+         if (restMs < minRestMs) {
+-          const issue = err("MIN_REST_VIOLATION", `Repos minimum non respecté (${minRest.hours}h).`, {
++          const issue = err("MIN_REST_VIOLATION", `Repos minimum non respecté (${minRest.rule.hours}h).`, {
+             userId: u,
+-            requiredHours: minRest.hours,
++            requiredHours: minRest.rule.hours,
+           });
+ 
+-          if (minRest.mode === "ALERT" || minRest.mode === "BOTH") issues.push(issue);
++          if (minRest.rule.mode === "ALERT" || minRest.rule.mode === "BOTH") issues.push(issue);
+ 
+-          if (minRest.mode === "BLOCK" || minRest.mode === "BOTH") {
++          if (minRest.rule.mode === "BLOCK" || minRest.rule.mode === "BOTH") {
+             return { ok: false, error: err("RULE_BLOCKED", issue.message, issue.meta) };
+           }
+         }
+diff --git a/lib/types/planning.ts b/lib/types/planning.ts
+index d0ae435..9dc5690 100644
+--- a/lib/types/planning.ts
++++ b/lib/types/planning.ts
+@@ -11,6 +11,7 @@ export type PlanningIssueCode =
+   | "VEHICLE_OVERLAP_CONFLICT"
+   | "MIN_REST_VIOLATION"
+   | "RULE_BLOCKED"
++  | "RULE_CONFIG_ERROR"
+   | "VALIDATION_ERROR";
+ 
+ export type PlanningIssue = {
