@@ -34,8 +34,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260401-07_A5_RULES-07
-- RULES-07 — COMPLÉTION** — UI paramètres métier ALPHA
+- SESSION-20260401-08_A5_RULES-08
+- RULES-08 — COMPLÉTION** — Gestion des droits de modification des règles
 ------------------------------------
 sortie propre + retour du terminal + aucune erreur = validé
 ------------------------------------

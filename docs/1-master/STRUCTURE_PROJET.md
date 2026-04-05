@@ -2050,12 +2050,16 @@ C:.
 |   |   |           app_b9b1292a._.js.map
 |   |   |           app_cd194de2._.js
 |   |   |           app_cd194de2._.js.map
+|   |   |           app_company_a9f5ad05._.js
+|   |   |           app_company_a9f5ad05._.js.map
 |   |   |           app_planning_planning-client_tsx_ec2e83fd._.js
 |   |   |           app_planning_planning-client_tsx_ec2e83fd._.js.map
 |   |   |           app_users_7d7b20db._.js
 |   |   |           app_users_7d7b20db._.js.map
 |   |   |           app_vehicles_vehicles-client_tsx_94295d31._.js
 |   |   |           app_vehicles_vehicles-client_tsx_94295d31._.js.map
+|   |   |           lib_company-rules_catalog_ts_1c531f7d._.js
+|   |   |           lib_company-rules_catalog_ts_1c531f7d._.js.map
 |   |   |           node_modules_127bfa28._.js
 |   |   |           node_modules_127bfa28._.js.map
 |   |   |           node_modules_eee573be._.js
@@ -2082,6 +2086,8 @@ C:.
 |   |   |           node_modules_next_dist_esm_build_templates_app-page_b8e1111a.js.map
 |   |   |           node_modules_next_dist_f21d913a._.js
 |   |   |           node_modules_next_dist_f21d913a._.js.map
+|   |   |           [root-of-the-server]__0b9ea83d._.js
+|   |   |           [root-of-the-server]__0b9ea83d._.js.map
 |   |   |           [root-of-the-server]__0d5ae7ad._.js
 |   |   |           [root-of-the-server]__0d5ae7ad._.js.map
 |   |   |           [root-of-the-server]__12ffa5d0._.js
@@ -2100,8 +2106,6 @@ C:.
 |   |   |           [root-of-the-server]__4556a15e._.js.map
 |   |   |           [root-of-the-server]__84823185._.js
 |   |   |           [root-of-the-server]__84823185._.js.map
-|   |   |           [root-of-the-server]__8731afda._.js
-|   |   |           [root-of-the-server]__8731afda._.js.map
 |   |   |           [root-of-the-server]__87883845._.js
 |   |   |           [root-of-the-server]__87883845._.js.map
 |   |   |           [root-of-the-server]__9d5e3ced._.js
@@ -2128,6 +2132,8 @@ C:.
 |   |   |           _30e06fe7._.js.map
 |   |   |           _5516c59e._.js
 |   |   |           _5516c59e._.js.map
+|   |   |           _557d7f41._.js
+|   |   |           _557d7f41._.js.map
 |   |   |           _5c5d5a9d._.js
 |   |   |           _5c5d5a9d._.js.map
 |   |   |           _5f02a5a9._.js
@@ -2144,8 +2150,6 @@ C:.
 |   |   |           _c23fb881._.js.map
 |   |   |           _dbd3f975._.js
 |   |   |           _dbd3f975._.js.map
-|   |   |           _f92ad8b9._.js
-|   |   |           _f92ad8b9._.js.map
 |   |   |           _ffa8fc97._.js
 |   |   |           _ffa8fc97._.js.map
 |   |   |           _next-internal_server_app_company_page_actions_ca33e7ac.js
@@ -2177,10 +2181,15 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
+|   |   +---1W_hMtMX0cXGy2DFmAtA6
+|   |   |       _buildManifest.js
+|   |   |       _clientMiddlewareManifest.json
+|   |   |       _ssgManifest.js
+|   |   |       
 |   |   +---chunks
+|   |   |       017153f9275da7e3.js
 |   |   |       05e6c743003c809d.js
 |   |   |       1687260e4d8b05d6.js
-|   |   |       2ed6c71966b41431.js
 |   |   |       5722c1b2bad35040.css
 |   |   |       642a00754c8aebb8.js
 |   |   |       672c0168d7981883.js
@@ -2193,15 +2202,10 @@ C:.
 |   |   |       a6dad97d9634a72d.js
 |   |   |       a6dad97d9634a72d.js.map
 |   |   |       af7027598a07baa5.js
-|   |   |       b870288de7d3931e.js
 |   |   |       cdb83a758231f045.js
+|   |   |       daba6dd36b509727.js
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
-|   |   |       
-|   |   +---hCvfDP9QwJcb4S1s-hLIq
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
 |   |   |       
 |   |   \---media
 |   |           favicon.0b3bf435.ico
@@ -2313,6 +2317,7 @@ C:.
 |   |                   
 |   +---company
 |   |       company-profile-form.tsx
+|   |       company-rules-panel.tsx
 |   |       page.tsx
 |   |       
 |   +---dashboard
@@ -3437,6 +3442,7 @@ C:.
 |   |           |   |       README_PATCH.md
 |   |           |   |       
 |   |           |   +---SESSION-20260401-07_A5_RULES-07
+|   |           |   |       PATCH__SESSION-20260401-07_A5_RULES-07.diff
 |   |           |   |       README_PATCH.md
 |   |           |   |       
 |   |           |   +---SESSION-20260401-08_A5_RULES-08

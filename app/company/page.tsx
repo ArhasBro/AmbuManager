@@ -6,6 +6,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 import CompanyProfileForm from "./company-profile-form";
+import CompanyRulesPanel from "./company-rules-panel";
 
 type CompanyProfileRow = {
   name: string;
@@ -63,6 +64,8 @@ export default async function CompanyPage() {
           siret: company.siret ?? "",
         }}
       />
+
+      <CompanyRulesPanel />
     </div>
   );
 }
