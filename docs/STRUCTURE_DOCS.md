@@ -1,6 +1,7 @@
 ﻿Structure du dossier pour le volume Windows
 Le numÚro de sÚrie du volume est 123E-4DB7
 C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
+|   CMD.md
 |   PROTOCOLE_SESSION.md
 |   README.md
 |   SOURCES_AUTORISEES.md
@@ -1218,6 +1219,8 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |           |       
 |           +---SESSION-20260407-02_A6_TPL-02
 |           |       NO_PATCH.md
+|           |       PATCH__SESSION-20260407-02_A6_TPL-02_DOCS.diff
+|           |       README_PATCH.md
 |           |       
 |           +---SESSION-20260407-03_A6_TPL-03
 |           |       README_PATCH.md

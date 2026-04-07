@@ -1,0 +1,558 @@
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02/EVIDENCES.md b/docs/2-sessions/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02/EVIDENCES.md
+index ed53cf4..ce41ee2 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02/EVIDENCES.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02/EVIDENCES.md
+@@ -1,10 +1,111 @@
+-﻿# EVIDENCES
++# EVIDENCES
+ 
+-Ã‰lÃ©ments factuels utilisÃ©s pendant la session.
++## Sources utilisées
++### Documentation autorisée
++- `docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
++- `docs/1-master/DOCUMENT_MAITRE.md`
++- `docs/1-master/PLAN_DE_DEVELOPPEMENT.md`
++- `docs/1-master/ETAT_GLOBAL_PROJET.md`
++- `docs/1-master/REGISTRE_DECISIONS.md`
++- `docs/1-master/RECAP_DISCUSSIONS.md`
++- `docs/1-master/STRUCTURE_PROJET.md`
++- `docs/PROTOCOLE_SESSION.md`
++- `docs/SOURCES_AUTORISEES.md`
++- `docs/STRUCTURE_DOCS.md`
++- `docs/4-templates/TEMPLATE_DEBUT_SESSION.md`
+ 
+----
++### Code contrôlé
++- `prisma/schema.prisma`
++- `prisma/migrations/20260226173545_add_shift_templates/migration.sql`
++- `prisma/migrations/20260226181203_autoschedule_planning_v4_1_1/migration.sql`
++- `prisma/migrations/20260226193652_add_shift_model/migration.sql`
++- `prisma/migrations/20260228235126_phase2_shift_indexes/migration.sql`
++- `prisma/migrations/20260302131627_add_draftshift_conflict_indexes/migration.sql`
++- `prisma/migrations/20260302154141_add_second_employee_slots/migration.sql`
++- `prisma/migrations/20260317213000_base09_fix_attach_shift_to_depot/migration.sql`
++- `prisma/seed.ts`
++- `app/api/planning/autoschedule/day/route.ts`
++- `app/api/planning/autoschedule/week/route.ts`
++- `app/api/planning/autoschedule/runs/[id]/publish/route.ts`
++- `app/api/planning/shifts/route.ts`
++- `lib/services/planning/assign-shift.ts`
++- `lib/services/planning/assign-draftshift.ts`
++- `lib/services/planning/matching.service.ts`
++- `scripts/create-shift-template.ts`
++- `scripts/list-shift-templates.ts`
++- `scripts/disable-corrupted-template-journee.ts`
+ 
+-## Sources utilisÃ©es
++## Constats factuels
++### Schéma `ShiftTemplate`
++`prisma/schema.prisma` montre le modèle suivant :
++- identifiant `id` ;
++- rattachement multi-tenant `companyId` ;
++- identité métier `name` ;
++- champs actuellement branchés `category`, `requiredRole`, `isActive`, `startTime`, `endTime`, `crossesMidnight` ;
++- horodatage `createdAt`, `updatedAt` ;
++- relations `company`, `draftShifts`, `shifts` ;
++- contrainte `@@unique([companyId, name])` ;
++- index `@@index([companyId])` ;
++- index `@@index([companyId, category])`.
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++### Migrations
++- `20260226173545_add_shift_templates` crée la table `ShiftTemplate` avec :
++  - `companyId`
++  - `name`
++  - `startTime`
++  - `endTime`
++  - `crossesMidnight`
++  - `createdAt`
++  - `updatedAt`
++  - index `companyId`
++  - unicité `(companyId, name)`
++- `20260226181203_autoschedule_planning_v4_1_1` ajoute sur `ShiftTemplate` :
++  - `category`
++  - `isActive`
++  - `requiredRole`
++  et crée `DraftShift` avec `templateId -> ShiftTemplate.id`.
++- `20260226193652_add_shift_model` crée `Shift` avec `templateId -> ShiftTemplate.id`.
++- `20260228235126_phase2_shift_indexes` ajoute des index de conflits sur `Shift`.
++- `20260302131627_add_draftshift_conflict_indexes` ajoute des index de conflits sur `DraftShift`.
++- `20260302154141_add_second_employee_slots` ajoute `user2Id` à `DraftShift` et `Shift`.
++- `20260317213000_base09_fix_attach_shift_to_depot` ajoute `depotId` à `Shift`.
+ 
++### Seed
++`prisma/seed.ts` consomme uniquement des champs réellement présents dans `ShiftTemplate` :
++- `name`
++- `category`
++- `startTime`
++- `endTime`
++- `crossesMidnight`
++- `requiredRole`
++- `isActive`
++
++Le seed s’appuie sur l’unicité Prisma `companyId_name`.
++
++### Usages runtime contrôlés
++- `app/api/planning/autoschedule/day/route.ts`
++  - lit `companyId`, `isActive`, `category`, `startTime`, `endTime`, `crossesMidnight`
++  - crée des `DraftShift` avec `templateId`
++- `app/api/planning/autoschedule/week/route.ts`
++  - même consommation que l’autoschedule day
++  - répète la génération sur 7 jours
++- `app/api/planning/autoschedule/runs/[id]/publish/route.ts`
++  - relit `templateId` depuis `DraftShift`
++  - recopie `templateId` dans `Shift`
++- `lib/services/planning/assign-draftshift.ts`
++  - lit `draft.template.category`
++  - dérive uniquement un nombre de slots depuis la catégorie
++- `lib/services/planning/assign-shift.ts`
++  - lit `shift.template.category`
++  - même logique limitée de slots
++- `lib/services/planning/matching.service.ts`
++  - lit `template.requiredRole`
++  - ne consomme aucun autre champ template
++- `app/api/planning/shifts/route.ts`
++  - expose seulement `template.id`, `template.name`, `template.category`
++
++## Validation de preuve
++Conclusion factuelle retenue :
++- aucun usage contrôlé n’appelle un champ template absent du schéma ;
++- aucune incohérence Prisma/migration strictement bloquante n’a été prouvée sur `ShiftTemplate` ;
++- la session ne justifie pas l’ouverture immédiate d’un patch de correction modèle.
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02/FIN_SESSION.md b/docs/2-sessions/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02/FIN_SESSION.md
+index fb41981..d4c340b 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02/FIN_SESSION.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02/FIN_SESSION.md
+@@ -1,14 +1,44 @@
+-﻿# FIN_SESSION
++# FIN_SESSION
+ 
+-## ClÃ´ture
++## Clôture
++Session `SESSION-20260407-02_A6_TPL-02` clôturée en **validation factuelle stricte du schéma template**.
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++État retenu :
++- le modèle `ShiftTemplate` actuel est techniquement cohérent sur le périmètre contrôlé ;
++- les migrations expliquent correctement le modèle template actuel et ses liens vers `DraftShift` et `Shift` ;
++- le seed et les usages contrôlés consomment uniquement des champs réellement présents ;
++- aucun défaut de schéma strictement prouvé n’impose l’ouverture d’un patch correctif dans cette session.
+ 
+ ## Validation
++### Type de sortie retenu
++- **NO_PATCH** pour le code
++- **patch documentaire final** pour les livrables de session
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++### Validations réellement exécutées / constatées
++- lecture des documents autorisés : OK
++- contrôle du schéma Prisma concerné : OK
++- contrôle de la chaîne de migrations pertinente : OK
++- contrôle seed / usages réels : OK
++- contrôle de l’applicabilité du patch documentaire final : OK
++
++### Validations non exécutées
++- `npx prisma validate`
++- `npx prisma generate`
++- `npm run lint`
++- `npm run build`
++
++Motif :
++- `node_modules` absents dans le ZIP contrôlé ;
++- aucun patch code légitime n’a été produit dans `TPL-02`.
+ 
+ ## Verdict final
++### Verdict session
++**CONFORME**
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++### Verdict patch
++**NO_PATCH — SCHÉMA `ShiftTemplate` ACTUEL TECHNIQUEMENT COHÉRENT SUR LE PÉRIMÈTRE CONTRÔLÉ**
+ 
++### Suite logique hors scope de cette session
++- ne pas ouvrir `TPL-03` sans preuve supplémentaire de défaut de schéma ;
++- traiter les enrichissements métier attendus dans les sessions dédiées `TPL-09` à `TPL-13` ;
++- traiter API/UI/archivage/gouvernance templates dans les sessions `TPL-04` à `TPL-08`.
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02/NOTES.md b/docs/2-sessions/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02/NOTES.md
+index cf1efd7..aecb44b 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02/NOTES.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02/NOTES.md
+@@ -1,10 +1,76 @@
+-﻿# NOTES
++# NOTES
+ 
+-Notes de travail de la session.
++## Méthode / observations
++Travail mené en validation factuelle stricte :
++1. lecture des documents maîtres et méthodologiques requis ;
++2. contrôle du modèle `ShiftTemplate` dans `prisma/schema.prisma` ;
++3. contrôle de la chaîne de migrations imposée par la session ;
++4. contrôle des usages réels dans le seed, l’autoschedule, le publish, l’assignation, le matching et l’API planning ;
++5. distinction stricte entre :
++   - cohérence du schéma actuel ;
++   - écarts produit déjà connus mais explicitement hors scope de `TPL-02`.
+ 
+----
++## Observations structurantes
++### 1. Cohérence du modèle template
++Le modèle actuel porte exactement les champs réellement consommés :
++- `id`
++- `companyId`
++- `name`
++- `category`
++- `requiredRole`
++- `isActive`
++- `startTime`
++- `endTime`
++- `crossesMidnight`
++- `createdAt`
++- `updatedAt`
+ 
+-## MÃ©thode / observations
++### 2. Cohérence des relations
++Les relations suivantes sont réelles et cohérentes :
++- `ShiftTemplate` -> `DraftShift[]`
++- `ShiftTemplate` -> `Shift[]`
++- `DraftShift.templateId` -> `ShiftTemplate.id` en `ON DELETE SET NULL`
++- `Shift.templateId` -> `ShiftTemplate.id` en `ON DELETE SET NULL`
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++Cette modélisation est cohérente avec un historique de planning devant survivre à la désactivation future d’un template.
+ 
++### 3. Cohérence migrations / état actuel
++Pour le **modèle template lui-même**, l’état actuel est expliqué par :
++- `20260226173545_add_shift_templates`
++- `20260226181203_autoschedule_planning_v4_1_1`
++
++Pour la **chaîne template -> draft -> shift**, les relations sont expliquées par :
++- `20260226181203_autoschedule_planning_v4_1_1`
++- `20260226193652_add_shift_model`
++
++Pour la **forme complète actuelle** de `DraftShift` / `Shift`, des migrations ultérieures ajoutent :
++- index de conflits ;
++- `user2Id` ;
++- `depotId` sur `Shift`.
++
++Ces ajouts n’invalident pas le schéma template et ne justifient pas une correction de `TPL-02`.
++
++### 4. Observations non bloquantes
++Points notés mais non qualifiables ici comme défauts de schéma bloquants :
++- `startTime` / `endTime` sont stockés en `String` et validés surtout au runtime ;
++- les lectures autoschedule filtrent sur `companyId + isActive (+ category)` sans index dédié sur `isActive` ;
++- un script ponctuel vise un ancien cas de template corrompu, sans preuve qu’un défaut de schéma actuel doive être corrigé dans cette session.
++
++Aucun de ces points ne suffit, sur les preuves du dépôt contrôlé, à justifier un patch de correction immédiat en `TPL-02`.
++
++## Éléments explicitement hors scope
++Relèvent d’autres sessions du bloc A6 :
++- `TPL-03` : correction de modèle **uniquement si** un défaut de schéma réel est prouvé ;
++- `TPL-09` : composition minimale d’équipe ;
++- `TPL-10` : type de véhicule requis ;
++- `TPL-11` : nombre minimal de personnes requis ;
++- `TPL-12` : support des shifts non horodatés ;
++- `TPL-13` : couleurs libres / lisibilité visuelle.
++
++Relèvent aussi hors `TPL-02` :
++- API templates (`TPL-04` à `TPL-07`) ;
++- UI templates (`TPL-08`) ;
++- vrai archivage métier distinct de `isActive` (`TPL-07`) ;
++- branchement produit réel de `TEMPLATES_MANAGE` (sessions API/UI, pas `TPL-02`).
++
++Concernant la récurrence hebdomadaire, le besoin existe au cadrage module 09.8, mais aucune session dédiée n’est explicitement identifiée dans l’extrait A6 fourni. Ce point est donc **hors `TPL-02`** sans être rattachable avec certitude à `TPL-03`, `TPL-09`, `TPL-10`, `TPL-11`, `TPL-12` ou `TPL-13`.
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02/RESULTATS.md b/docs/2-sessions/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02/RESULTATS.md
+index bbf7c32..f8410e5 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02/RESULTATS.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02/RESULTATS.md
+@@ -1,12 +1,169 @@
+-﻿# RESULTATS
++# RESULTATS
+ 
+-## RÃ©sultats obtenus
++## Résultat principal
++**NO_PATCH — SCHÉMA `ShiftTemplate` ACTUEL TECHNIQUEMENT COHÉRENT SUR LE PÉRIMÈTRE CONTRÔLÉ**
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++## 1. Analyse rapide
++Le schéma actuel de `ShiftTemplate` est cohérent avec les usages réellement branchés dans le dépôt :
++- le seed consomme uniquement des champs présents ;
++- l’autoschedule jour/semaine consomme uniquement des champs présents ;
++- le publish propage `templateId` sans enrichissement incohérent ;
++- l’assignation et le matching ne lisent que `category` et `requiredRole`, bien présents.
+ 
+----
++Aucun défaut de schéma **strictement prouvé** ne justifie un patch minimal dès `TPL-02`.
+ 
+-## Documents modifiÃ©s
++## 2. Périmètre réellement contrôlé
++Contrôlé dans le ZIP :
++- `prisma/schema.prisma`
++- `prisma/migrations/20260226173545_add_shift_templates/migration.sql`
++- `prisma/migrations/20260226181203_autoschedule_planning_v4_1_1/migration.sql`
++- `prisma/migrations/20260226193652_add_shift_model/migration.sql`
++- `prisma/migrations/20260228235126_phase2_shift_indexes/migration.sql`
++- `prisma/migrations/20260302131627_add_draftshift_conflict_indexes/migration.sql`
++- `prisma/migrations/20260302154141_add_second_employee_slots/migration.sql`
++- `prisma/migrations/20260317213000_base09_fix_attach_shift_to_depot/migration.sql`
++- `prisma/seed.ts`
++- `lib/services/planning/assign-shift.ts`
++- `lib/services/planning/assign-draftshift.ts`
++- `lib/services/planning/matching.service.ts`
++- `app/api/planning/autoschedule/day/route.ts`
++- `app/api/planning/autoschedule/week/route.ts`
++- `app/api/planning/autoschedule/runs/[id]/publish/route.ts`
++- `app/api/planning/shifts/route.ts`
++- scripts templates utiles à la preuve
++- documents maîtres et documents méthodologiques requis
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++## 3. État réel du schéma `ShiftTemplate`
++### Champs réellement présents
++- `id`
++- `companyId`
++- `name`
++- `category`
++- `requiredRole`
++- `isActive`
++- `startTime`
++- `endTime`
++- `crossesMidnight`
++- `createdAt`
++- `updatedAt`
+ 
++### Relations réellement présentes
++- `company`
++- `draftShifts`
++- `shifts`
++
++### Contraintes / index réellement présents
++- unicité `(companyId, name)`
++- index `(companyId)`
++- index `(companyId, category)`
++
++## 4. Cohérence migrations / seed / usages
++### Cohérence migrations -> schéma
++Oui, pour le périmètre template :
++- `20260226173545_add_shift_templates` explique le socle du modèle ;
++- `20260226181203_autoschedule_planning_v4_1_1` explique `category`, `requiredRole`, `isActive` ;
++- `20260226181203_autoschedule_planning_v4_1_1` matérialise `DraftShift.templateId -> ShiftTemplate.id` ;
++- `20260226193652_add_shift_model` matérialise `Shift.templateId -> ShiftTemplate.id`.
++
++Pour la forme complète actuelle de `DraftShift` / `Shift`, des migrations ultérieures ajoutent `user2Id`, certains index de conflits et `depotId` sur `Shift`, sans remettre en cause la cohérence template.
++
++### Cohérence seed -> schéma
++Oui.
++Le seed utilise exactement les champs réellement présents dans le modèle et s’appuie correctement sur `companyId_name`.
++
++### Cohérence usages -> schéma
++Oui.
++Les usages contrôlés ne consomment que des champs réellement présents :
++- autoschedule : `isActive`, `category`, `startTime`, `endTime`, `crossesMidnight`
++- assignation : `template.category`
++- matching : `template.requiredRole`
++- publish : `templateId`
++- planning : `template.id`, `template.name`, `template.category`
++
++## 5. Écarts prouvés et ce qui est explicitement hors scope
++### Aucun écart de schéma bloquant prouvé dans `TPL-02`
++Les manques connus ne justifient pas un patch immédiat ici.
++
++### Éléments explicitement hors scope et rattachés aux autres sessions
++- `TPL-03`
++  - éventuelle correction de modèle **uniquement si** un défaut réel est prouvé
++  - ce cas n’est pas démontré dans la présente session
++- `TPL-09`
++  - composition minimale d’équipe
++- `TPL-10`
++  - type de véhicule requis
++- `TPL-11`
++  - nombre minimal de personnes requis
++- `TPL-12`
++  - support des shifts non horodatés
++- `TPL-13`
++  - couleurs libres et lisibilité visuelle
++
++### Hors scope mais non rattachés à `TPL-09..13`
++- API templates : `TPL-04` à `TPL-07`
++- UI templates : `TPL-08`
++- désactivation / archivage métier réel : `TPL-07`
++- branchement runtime réel de `TEMPLATES_MANAGE` : sessions API/UI, pas `TPL-02`
++
++### Cas particulier : récurrence hebdomadaire
++Le cadrage module 09 mentionne la récurrence hebdomadaire, mais aucune session dédiée n’est explicitement identifiée dans l’extrait A6 fourni.
++Ce manque est donc **hors `TPL-02`**, sans rattachement certain à `TPL-03`, `TPL-09`, `TPL-10`, `TPL-11`, `TPL-12` ou `TPL-13`.
++
++## 6. Patch minimal appliqué ou `NO_PATCH`
++### Décision retenue
++**NO_PATCH**
++
++### Justification
++Cette session est une validation de cohérence du schéma actuel.
++Le dépôt contrôlé ne prouve pas de défaut de modèle suffisamment établi pour justifier une correction immédiate.
++
++## 7. Fichiers modifiés
++Aucun fichier code métier du dépôt n’a été modifié.
++
++Documents de session finalisés :
++- `docs/2-sessions/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02/SESSION.md`
++- `docs/2-sessions/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02/NOTES.md`
++- `docs/2-sessions/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02/EVIDENCES.md`
++- `docs/2-sessions/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02/RESULTATS.md`
++- `docs/2-sessions/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02/FIN_SESSION.md`
++- `docs/3-patches/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02/NO_PATCH.md`
++- `docs/3-patches/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02/README_PATCH.md`
++
++## 8. Validations réellement exécutées / constatées
++### Réellement exécuté / constaté
++- lecture des sources autorisées : OK
++- contrôle statique du périmètre code demandé : OK
++- vérification de la cohérence schéma / migrations / seed / usages : OK
++- vérification de l’applicabilité du patch documentaire final : OK
++
++### Non exécuté
++- `npx prisma validate`
++- `npx prisma generate`
++- `npm run lint`
++- `npm run build`
++
++Motif :
++- `node_modules` absents dans le ZIP contrôlé ;
++- aucun patch code légitime n’a été produit dans `TPL-02`.
++
++## 9. Verdict de session
++**CONFORME**
++
++Interprétation exacte :
++- conforme sur l’objectif unique de `TPL-02` ;
++- pas de correction modèle à ouvrir sur preuve stricte dans cette session ;
++- les écarts produit déjà connus restent hors scope et seront traités ailleurs dans le bloc A6.
++
++## 10. Génération des docs de session
++Docs finalisés pour la session :
++- `SESSION.md`
++- `NOTES.md`
++- `EVIDENCES.md`
++- `RESULTATS.md`
++- `FIN_SESSION.md`
++
++## 11. `README_PATCH.md`
++`README_PATCH.md` généré pour formaliser :
++- l’absence de patch code officiel ;
++- la présence d’un patch documentaire final séparé ;
++- la portée exacte du livrable documentaire.
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02/SESSION.md b/docs/2-sessions/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02/SESSION.md
+index 7a8dcba..b6ba220 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02/SESSION.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02/SESSION.md
+@@ -1,35 +1,46 @@
+-﻿# SESSION
+-
+-## ID SESSION
+-
+-SESSION-20260407-02_A6_TPL-02
+-
+-## Date
+-
+-07/04/2026
+-
+-## Contexte
+-
+-Projet : Investissement  
+-Sous-projet : Ambulance Manager  
+-Maturite : 1-ALPHA  
+-Bloc : A6  
+-Type : VALIDATION  
+-Intitule : Vérification du schéma actuel des templates
+-
+-## Objectif de la session
+-
+-INFORMATION NON FOURNIE - A CONFIRMER
+-
+-## Perimetre exact traite
+-
+-INFORMATION NON FOURNIE - A CONFIRMER
+-
+-## Resultat synthetique de session
+-
+-INFORMATION NON FOURNIE - A CONFIRMER
+-
+-## Dossiers lies
+-
+-- Session : docs/2-sessions/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02
+-- Patchs  : docs/3-patches/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02
++# SESSION
++
++Projet : Investissement
++Sous-projet : Ambulance Manager
++Session : SESSION-20260407-02_A6_TPL-02
++Bloc : A6 — Shift templates
++Type : VALIDATION
++Version cible : 1-ALPHA
++
++## Objectif unique
++Vérifier factuellement le schéma actuel de `ShiftTemplate` et sa cohérence réelle avec les migrations, le seed et les usages déjà branchés, sans ouvrir la correction du bloc.
++
++## Périmètre exact traité
++- `prisma/schema.prisma`
++- `prisma/migrations/20260226173545_add_shift_templates/migration.sql`
++- `prisma/migrations/20260226181203_autoschedule_planning_v4_1_1/migration.sql`
++- `prisma/migrations/20260226193652_add_shift_model/migration.sql`
++- `prisma/migrations/20260228235126_phase2_shift_indexes/migration.sql`
++- `prisma/migrations/20260302131627_add_draftshift_conflict_indexes/migration.sql`
++- `prisma/migrations/20260302154141_add_second_employee_slots/migration.sql`
++- `prisma/migrations/20260317213000_base09_fix_attach_shift_to_depot/migration.sql`
++- `prisma/seed.ts`
++- `lib/services/planning/assign-shift.ts`
++- `lib/services/planning/assign-draftshift.ts`
++- `lib/services/planning/matching.service.ts`
++- `app/api/planning/autoschedule/day/route.ts`
++- `app/api/planning/autoschedule/week/route.ts`
++- `app/api/planning/autoschedule/runs/[id]/publish/route.ts`
++- `app/api/planning/shifts/route.ts`
++- `scripts/create-shift-template.ts`
++- `scripts/list-shift-templates.ts`
++- `scripts/disable-corrupted-template-journee.ts`
++- documents maîtres, protocole, sources autorisées, structure docs, template d’ouverture
++
++## Résultat synthétique de session
++Le modèle `ShiftTemplate` actuellement présent dans `prisma/schema.prisma` est **techniquement cohérent sur le périmètre contrôlé** :
++- les champs réellement consommés par le seed, l’autoschedule, le publish, l’assignation et le matching existent bien ;
++- les liens `ShiftTemplate -> DraftShift -> Shift` sont matérialisés par des clés étrangères cohérentes ;
++- l’historique des migrations explique correctement le modèle template actuel et les relations template vers `DraftShift` et `Shift`.
++
++Aucun défaut de schéma **strictement prouvé et immédiatement bloquant** n’a été trouvé dans `TPL-02`.
++La session se conclut donc en **NO_PATCH code**, avec finalisation documentaire uniquement.
++
++## Dossiers liés
++- Session : `docs/2-sessions/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02`
++- Patchs  : `docs/3-patches/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02`
+diff --git a/docs/3-patches/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02/NO_PATCH.md b/docs/3-patches/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02/NO_PATCH.md
+index c57a99a..d95010b 100644
+--- a/docs/3-patches/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02/NO_PATCH.md
++++ b/docs/3-patches/1-ALPHA/BLOC_A6/SESSION-20260407-02_A6_TPL-02/NO_PATCH.md
+@@ -1,10 +1,20 @@
+-﻿# NO_PATCH
++# NO_PATCH
+ 
+ Session : SESSION-20260407-02_A6_TPL-02
+-
+ Type : VALIDATION
+ 
+-Raison :
+-- Session documentaire de type VALIDATION.
+-- Aucun patch officiel a produire pour cette session.
+-- Le dossier patch reste present pour conserver le miroir avec docs/2-sessions.
++## Décision
++Aucun patch code officiel n’est produit dans cette session.
++
++## Justification
++La validation du dépôt montre que :
++- le modèle `ShiftTemplate` actuel est techniquement cohérent ;
++- les migrations expliquent correctement l’état actuel du modèle template et ses liens vers `DraftShift` et `Shift` ;
++- le seed et les usages contrôlés consomment uniquement des champs réellement présents ;
++- aucun défaut de schéma strictement prouvé ne justifie une correction immédiate en `TPL-02`.
++
++## État retenu
++**Conforme sur le schéma actuel contrôlé**
++
++## Verdict
++**NO_PATCH — SCHÉMA `ShiftTemplate` ACTUEL TECHNIQUEMENT COHÉRENT SUR LE PÉRIMÈTRE CONTRÔLÉ**

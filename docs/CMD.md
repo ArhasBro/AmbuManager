@@ -34,8 +34,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260407-02_A6_TPL-02
-- TPL-02 — VALIDATION** — Vérification du schéma actuel des templates
+- SESSION-20260407-03_A6_TPL-03
+- TPL-03 — CORRECTION** — Correction/remise à niveau du modèle template si nécessaire
 ------------------------------------
 sortie propre + retour du terminal + aucune erreur = validé
 ------------------------------------
