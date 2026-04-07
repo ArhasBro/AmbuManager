@@ -1,14 +1,43 @@
-﻿# FIN_SESSION
+# FIN_SESSION
 
-## ClÃ´ture
+## Clôture
+Session `SESSION-20260407-03_A6_TPL-03` clôturée en **correction minimale ciblée du verrouillage relationnel multi-tenant** autour de `ShiftTemplate`.
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+État retenu :
+- le modèle `ShiftTemplate` reste cohérent sur ses champs ;
+- les migrations historiques laissaient toutefois une faiblesse réelle sur l’intégrité inter-sociétés des liens template -> `DraftShift` / `Shift` ;
+- une migration SQL minimale a été ajoutée pour remettre la relation au niveau attendu par le projet.
 
 ## Validation
+### Type de sortie retenu
+- **patch principal code** pour la correction modèle / base
+- **patch documentaire final** pour les livrables de session
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+### Validations réellement exécutées / constatées
+- lecture des documents autorisés : OK
+- contrôle du schéma Prisma concerné : OK
+- contrôle de la chaîne de migrations pertinente : OK
+- contrôle seed / usages réels : OK
+- contrôle d’applicabilité du patch principal : OK
+- contrôle d’applicabilité du patch documentaire final : OK
+
+### Validations non exécutées
+- `npx prisma validate`
+- `npx prisma generate`
+- `npm run lint`
+- `npm run build`
+
+Motif :
+- `node_modules` absents dans le ZIP contrôlé ;
+- base locale d’exécution non fournie dans l’environnement de contrôle.
 
 ## Verdict final
+### Verdict session
+**CONFORME APRÈS CORRECTION**
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+### Verdict patch
+**PATCH MINIMAL LÉGITIME — INTÉGRITÉ MULTI-TENANT DES RELATIONS `ShiftTemplate` / `DraftShift` / `Shift` RENFORCÉE**
 
+### Suite logique hors scope de cette session
+- poursuivre sur `TPL-04` pour l’API liste templates ;
+- ne pas réouvrir `TPL-03` sans preuve d’un nouveau défaut strictement relationnel ou structurel.

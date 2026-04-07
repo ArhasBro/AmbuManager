@@ -43,6 +43,7 @@ RÈGLE DE TRAVAIL
 - 1 patch
 - 1 DoD
 - 1 validation
+- 1 ZIP documentaire
 - en fin de bloc : 1 session dédiée de clôture explicite
 
 RÈGLE IMPÉRATIVE — GOUVERNANCE DES PATCHS

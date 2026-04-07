@@ -1223,6 +1223,8 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |           |       README_PATCH.md
 |           |       
 |           +---SESSION-20260407-03_A6_TPL-03
+|           |       PATCH__SESSION-20260407-03_A6_TPL-03.diff
+|           |       PATCH__SESSION-20260407-03_A6_TPL-03_DOCS.diff
 |           |       README_PATCH.md
 |           |       
 |           +---SESSION-20260407-04_A6_TPL-04

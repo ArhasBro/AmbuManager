@@ -23,7 +23,7 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
    Etape :
    - 1 le patch
-   - 2 Validation + génération des docs de la sessions et Readme patch.
+   - 2 Validation + génération des docs de la sessions en ZIP (pas de patch pour la documentation) et Readme patch.
 
 2. **Prompt de contrôle**
    - À rédiger pour la discussion de contrôle qualité.
@@ -34,8 +34,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260407-03_A6_TPL-03
-- TPL-03 — CORRECTION** — Correction/remise à niveau du modèle template si nécessaire
+- SESSION-20260407-04_A6_TPL-04
+- TPL-04 — COMPLÉTION** — API liste templates
 ------------------------------------
 sortie propre + retour du terminal + aucune erreur = validé
 ------------------------------------
@@ -78,6 +78,7 @@ npm run build
 
 # Prisma
 npx prisma generate
+npx prisma validate
 npm run db:migrate
 npm run db:seed
 npm run db:reset
