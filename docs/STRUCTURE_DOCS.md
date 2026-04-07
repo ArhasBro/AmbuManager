@@ -630,79 +630,185 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |               RESULTATS.md
 |   |   |               SESSION.md
 |   |   |               
-|   |   \---BLOC_A5
-|   |       +---1-RULES
-|   |       |   +---SESSION-20260401-01_A5_RULES-01
-|   |       |   |       EVIDENCES.md
-|   |       |   |       FIN_SESSION.md
-|   |       |   |       NOTES.md
-|   |       |   |       RESULTATS.md
-|   |       |   |       SESSION.md
-|   |       |   |       
-|   |       |   +---SESSION-20260401-02_A5_RULES-02
-|   |       |   |       EVIDENCES.md
-|   |       |   |       FIN_SESSION.md
-|   |       |   |       NOTES.md
-|   |       |   |       RESULTATS.md
-|   |       |   |       SESSION.md
-|   |       |   |       
-|   |       |   +---SESSION-20260401-03_A5_RULES-03
-|   |       |   |       EVIDENCES.md
-|   |       |   |       FIN_SESSION.md
-|   |       |   |       NOTES.md
-|   |       |   |       RESULTATS.md
-|   |       |   |       SESSION.md
-|   |       |   |       
-|   |       |   +---SESSION-20260401-04_A5_RULES-04
-|   |       |   |       EVIDENCES.md
-|   |       |   |       FIN_SESSION.md
-|   |       |   |       NOTES.md
-|   |       |   |       RESULTATS.md
-|   |       |   |       SESSION.md
-|   |       |   |       
-|   |       |   +---SESSION-20260401-05_A5_RULES-05
-|   |       |   |       EVIDENCES.md
-|   |       |   |       FIN_SESSION.md
-|   |       |   |       NOTES.md
-|   |       |   |       RESULTATS.md
-|   |       |   |       SESSION.md
-|   |       |   |       
-|   |       |   +---SESSION-20260401-06_A5_RULES-06
-|   |       |   |       EVIDENCES.md
-|   |       |   |       FIN_SESSION.md
-|   |       |   |       NOTES.md
-|   |       |   |       RESULTATS.md
-|   |       |   |       SESSION.md
-|   |       |   |       
-|   |       |   +---SESSION-20260401-07_A5_RULES-07
-|   |       |   |       EVIDENCES.md
-|   |       |   |       FIN_SESSION.md
-|   |       |   |       NOTES.md
-|   |       |   |       RESULTATS.md
-|   |       |   |       SESSION.md
-|   |       |   |       
-|   |       |   +---SESSION-20260401-08_A5_RULES-08
-|   |       |   |       EVIDENCES.md
-|   |       |   |       FIN_SESSION.md
-|   |       |   |       NOTES.md
-|   |       |   |       RESULTATS.md
-|   |       |   |       SESSION.md
-|   |       |   |       
-|   |       |   \---SESSION-20260401-09_A5_RULES-09
-|   |       |           EVIDENCES.md
-|   |       |           FIN_SESSION.md
-|   |       |           NOTES.md
-|   |       |           RESULTATS.md
-|   |       |           SESSION.md
-|   |       |           
-|   |       \---2-CLOTURE
-|   |           \---SESSION-20260401-10_A5_CLOTURE-A5
-|   |                   EVIDENCES.md
-|   |                   FIN_SESSION.md
-|   |                   NOTES.md
-|   |                   RESULTATS.md
-|   |                   SESSION.md
-|   |                   
+|   |   +---BLOC_A5
+|   |   |   +---1-RULES
+|   |   |   |   +---SESSION-20260401-01_A5_RULES-01
+|   |   |   |   |       EVIDENCES.md
+|   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |       NOTES.md
+|   |   |   |   |       RESULTATS.md
+|   |   |   |   |       SESSION.md
+|   |   |   |   |       
+|   |   |   |   +---SESSION-20260401-02_A5_RULES-02
+|   |   |   |   |       EVIDENCES.md
+|   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |       NOTES.md
+|   |   |   |   |       RESULTATS.md
+|   |   |   |   |       SESSION.md
+|   |   |   |   |       
+|   |   |   |   +---SESSION-20260401-03_A5_RULES-03
+|   |   |   |   |       EVIDENCES.md
+|   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |       NOTES.md
+|   |   |   |   |       RESULTATS.md
+|   |   |   |   |       SESSION.md
+|   |   |   |   |       
+|   |   |   |   +---SESSION-20260401-04_A5_RULES-04
+|   |   |   |   |       EVIDENCES.md
+|   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |       NOTES.md
+|   |   |   |   |       RESULTATS.md
+|   |   |   |   |       SESSION.md
+|   |   |   |   |       
+|   |   |   |   +---SESSION-20260401-05_A5_RULES-05
+|   |   |   |   |       EVIDENCES.md
+|   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |       NOTES.md
+|   |   |   |   |       RESULTATS.md
+|   |   |   |   |       SESSION.md
+|   |   |   |   |       
+|   |   |   |   +---SESSION-20260401-06_A5_RULES-06
+|   |   |   |   |       EVIDENCES.md
+|   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |       NOTES.md
+|   |   |   |   |       RESULTATS.md
+|   |   |   |   |       SESSION.md
+|   |   |   |   |       
+|   |   |   |   +---SESSION-20260401-07_A5_RULES-07
+|   |   |   |   |       EVIDENCES.md
+|   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |       NOTES.md
+|   |   |   |   |       RESULTATS.md
+|   |   |   |   |       SESSION.md
+|   |   |   |   |       
+|   |   |   |   +---SESSION-20260401-08_A5_RULES-08
+|   |   |   |   |       EVIDENCES.md
+|   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |       NOTES.md
+|   |   |   |   |       RESULTATS.md
+|   |   |   |   |       SESSION.md
+|   |   |   |   |       
+|   |   |   |   \---SESSION-20260401-09_A5_RULES-09
+|   |   |   |           EVIDENCES.md
+|   |   |   |           FIN_SESSION.md
+|   |   |   |           NOTES.md
+|   |   |   |           RESULTATS.md
+|   |   |   |           SESSION.md
+|   |   |   |           
+|   |   |   \---2-CLOTURE
+|   |   |       \---SESSION-20260401-10_A5_CLOTURE-A5
+|   |   |               EVIDENCES.md
+|   |   |               FIN_SESSION.md
+|   |   |               NOTES.md
+|   |   |               RESULTATS.md
+|   |   |               SESSION.md
+|   |   |               
+|   |   \---BLOC_A6
+|   |       +---SESSION-20260407-01_A6_TPL-01
+|   |       |       EVIDENCES.md
+|   |       |       FIN_SESSION.md
+|   |       |       NOTES.md
+|   |       |       RESULTATS.md
+|   |       |       SESSION.md
+|   |       |       
+|   |       +---SESSION-20260407-02_A6_TPL-02
+|   |       |       EVIDENCES.md
+|   |       |       FIN_SESSION.md
+|   |       |       NOTES.md
+|   |       |       RESULTATS.md
+|   |       |       SESSION.md
+|   |       |       
+|   |       +---SESSION-20260407-03_A6_TPL-03
+|   |       |       EVIDENCES.md
+|   |       |       FIN_SESSION.md
+|   |       |       NOTES.md
+|   |       |       RESULTATS.md
+|   |       |       SESSION.md
+|   |       |       
+|   |       +---SESSION-20260407-04_A6_TPL-04
+|   |       |       EVIDENCES.md
+|   |       |       FIN_SESSION.md
+|   |       |       NOTES.md
+|   |       |       RESULTATS.md
+|   |       |       SESSION.md
+|   |       |       
+|   |       +---SESSION-20260407-05_A6_TPL-05
+|   |       |       EVIDENCES.md
+|   |       |       FIN_SESSION.md
+|   |       |       NOTES.md
+|   |       |       RESULTATS.md
+|   |       |       SESSION.md
+|   |       |       
+|   |       +---SESSION-20260407-06_A6_TPL-06
+|   |       |       EVIDENCES.md
+|   |       |       FIN_SESSION.md
+|   |       |       NOTES.md
+|   |       |       RESULTATS.md
+|   |       |       SESSION.md
+|   |       |       
+|   |       +---SESSION-20260407-07_A6_TPL-07
+|   |       |       EVIDENCES.md
+|   |       |       FIN_SESSION.md
+|   |       |       NOTES.md
+|   |       |       RESULTATS.md
+|   |       |       SESSION.md
+|   |       |       
+|   |       +---SESSION-20260407-08_A6_TPL-08
+|   |       |       EVIDENCES.md
+|   |       |       FIN_SESSION.md
+|   |       |       NOTES.md
+|   |       |       RESULTATS.md
+|   |       |       SESSION.md
+|   |       |       
+|   |       +---SESSION-20260407-09_A6_TPL-09
+|   |       |       EVIDENCES.md
+|   |       |       FIN_SESSION.md
+|   |       |       NOTES.md
+|   |       |       RESULTATS.md
+|   |       |       SESSION.md
+|   |       |       
+|   |       +---SESSION-20260407-10_A6_TPL-10
+|   |       |       EVIDENCES.md
+|   |       |       FIN_SESSION.md
+|   |       |       NOTES.md
+|   |       |       RESULTATS.md
+|   |       |       SESSION.md
+|   |       |       
+|   |       +---SESSION-20260407-11_A6_TPL-11
+|   |       |       EVIDENCES.md
+|   |       |       FIN_SESSION.md
+|   |       |       NOTES.md
+|   |       |       RESULTATS.md
+|   |       |       SESSION.md
+|   |       |       
+|   |       +---SESSION-20260407-12_A6_TPL-12
+|   |       |       EVIDENCES.md
+|   |       |       FIN_SESSION.md
+|   |       |       NOTES.md
+|   |       |       RESULTATS.md
+|   |       |       SESSION.md
+|   |       |       
+|   |       +---SESSION-20260407-13_A6_TPL-13
+|   |       |       EVIDENCES.md
+|   |       |       FIN_SESSION.md
+|   |       |       NOTES.md
+|   |       |       RESULTATS.md
+|   |       |       SESSION.md
+|   |       |       
+|   |       +---SESSION-20260407-14_A6_TPL-14
+|   |       |       EVIDENCES.md
+|   |       |       FIN_SESSION.md
+|   |       |       NOTES.md
+|   |       |       RESULTATS.md
+|   |       |       SESSION.md
+|   |       |       
+|   |       \---SESSION-20260407-15_A6_CLOTURE-A6
+|   |               EVIDENCES.md
+|   |               FIN_SESSION.md
+|   |               NOTES.md
+|   |               RESULTATS.md
+|   |               SESSION.md
+|   |               
 |   \---SESSION-YYYYMMDD-XX
 |           EVIDENCES.md
 |           FIN_SESSION.md
@@ -1061,51 +1167,97 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |       |       \---SESSION-20260322-18_A4_CLOTURE-A4
 |       |               NO_PATCH.md
 |       |               
-|       \---BLOC_A5
-|           +---1-RULES
-|           |   +---SESSION-20260401-01_A5_RULES-01
-|           |   |       NO_PATCH.md
-|           |   |       
-|           |   +---SESSION-20260401-02_A5_RULES-02
-|           |   |       NO_PATCH.md
-|           |   |       
-|           |   +---SESSION-20260401-03_A5_RULES-03
-|           |   |       NO_PATCH.md
-|           |   |       
-|           |   +---SESSION-20260401-04_A5_RULES-04
-|           |   |       PATCH__SESSION-20260401-04_A5_RULES-04.diff
-|           |   |       README_PATCH.md
-|           |   |       
-|           |   +---SESSION-20260401-05_A5_RULES-05
-|           |   |       PATCH__SESSION-20260401-05_A5_RULES-05.diff
-|           |   |       PATCH__SESSION-20260401-05_A5_RULES-05_DOCS.diff
-|           |   |       PATCH__SESSION-20260401-05_A5_RULES-05_FIX-01.diff
-|           |   |       README_PATCH.md
-|           |   |       
-|           |   +---SESSION-20260401-06_A5_RULES-06
-|           |   |       PATCH__SESSION-20260401-06_A5_RULES-06.diff
-|           |   |       PATCH__SESSION-20260401-06_A5_RULES-06_FIX-01.diff
-|           |   |       PATCH__SESSION-20260401-06_A5_RULES-06_FIX-03.diff
-|           |   |       PATCH__SESSION-20260401-06_A5_RULES-06_FIX-04.diff
-|           |   |       README_PATCH.md
-|           |   |       
-|           |   +---SESSION-20260401-07_A5_RULES-07
-|           |   |       PATCH__SESSION-20260401-07_A5_RULES-07.diff
-|           |   |       README_PATCH.md
-|           |   |       
-|           |   +---SESSION-20260401-08_A5_RULES-08
-|           |   |       PATCH__SESSION-20260401-08_A5_RULES-08.diff
-|           |   |       README_PATCH.md
-|           |   |       
-|           |   \---SESSION-20260401-09_A5_RULES-09
-|           |           NO_PATCH.md
-|           |           
-|           \---2-CLOTURE
-|               \---SESSION-20260401-10_A5_CLOTURE-A5
-|                       NO_PATCH.md
-|                       PATCH__SESSION-20260401-10_A5_CLOTURE-A5.diff
-|                       README_PATCH.md
-|                       
+|       +---BLOC_A5
+|       |   +---1-RULES
+|       |   |   +---SESSION-20260401-01_A5_RULES-01
+|       |   |   |       NO_PATCH.md
+|       |   |   |       
+|       |   |   +---SESSION-20260401-02_A5_RULES-02
+|       |   |   |       NO_PATCH.md
+|       |   |   |       
+|       |   |   +---SESSION-20260401-03_A5_RULES-03
+|       |   |   |       NO_PATCH.md
+|       |   |   |       
+|       |   |   +---SESSION-20260401-04_A5_RULES-04
+|       |   |   |       PATCH__SESSION-20260401-04_A5_RULES-04.diff
+|       |   |   |       README_PATCH.md
+|       |   |   |       
+|       |   |   +---SESSION-20260401-05_A5_RULES-05
+|       |   |   |       PATCH__SESSION-20260401-05_A5_RULES-05.diff
+|       |   |   |       PATCH__SESSION-20260401-05_A5_RULES-05_DOCS.diff
+|       |   |   |       PATCH__SESSION-20260401-05_A5_RULES-05_FIX-01.diff
+|       |   |   |       README_PATCH.md
+|       |   |   |       
+|       |   |   +---SESSION-20260401-06_A5_RULES-06
+|       |   |   |       PATCH__SESSION-20260401-06_A5_RULES-06.diff
+|       |   |   |       PATCH__SESSION-20260401-06_A5_RULES-06_FIX-01.diff
+|       |   |   |       PATCH__SESSION-20260401-06_A5_RULES-06_FIX-03.diff
+|       |   |   |       PATCH__SESSION-20260401-06_A5_RULES-06_FIX-04.diff
+|       |   |   |       README_PATCH.md
+|       |   |   |       
+|       |   |   +---SESSION-20260401-07_A5_RULES-07
+|       |   |   |       PATCH__SESSION-20260401-07_A5_RULES-07.diff
+|       |   |   |       README_PATCH.md
+|       |   |   |       
+|       |   |   +---SESSION-20260401-08_A5_RULES-08
+|       |   |   |       PATCH__SESSION-20260401-08_A5_RULES-08.diff
+|       |   |   |       README_PATCH.md
+|       |   |   |       
+|       |   |   \---SESSION-20260401-09_A5_RULES-09
+|       |   |           NO_PATCH.md
+|       |   |           
+|       |   \---2-CLOTURE
+|       |       \---SESSION-20260401-10_A5_CLOTURE-A5
+|       |               NO_PATCH.md
+|       |               PATCH__SESSION-20260401-10_A5_CLOTURE-A5.diff
+|       |               README_PATCH.md
+|       |               
+|       \---BLOC_A6
+|           +---SESSION-20260407-01_A6_TPL-01
+|           |       NO_PATCH.md
+|           |       
+|           +---SESSION-20260407-02_A6_TPL-02
+|           |       NO_PATCH.md
+|           |       
+|           +---SESSION-20260407-03_A6_TPL-03
+|           |       README_PATCH.md
+|           |       
+|           +---SESSION-20260407-04_A6_TPL-04
+|           |       README_PATCH.md
+|           |       
+|           +---SESSION-20260407-05_A6_TPL-05
+|           |       README_PATCH.md
+|           |       
+|           +---SESSION-20260407-06_A6_TPL-06
+|           |       README_PATCH.md
+|           |       
+|           +---SESSION-20260407-07_A6_TPL-07
+|           |       README_PATCH.md
+|           |       
+|           +---SESSION-20260407-08_A6_TPL-08
+|           |       README_PATCH.md
+|           |       
+|           +---SESSION-20260407-09_A6_TPL-09
+|           |       README_PATCH.md
+|           |       
+|           +---SESSION-20260407-10_A6_TPL-10
+|           |       README_PATCH.md
+|           |       
+|           +---SESSION-20260407-11_A6_TPL-11
+|           |       README_PATCH.md
+|           |       
+|           +---SESSION-20260407-12_A6_TPL-12
+|           |       README_PATCH.md
+|           |       
+|           +---SESSION-20260407-13_A6_TPL-13
+|           |       README_PATCH.md
+|           |       
+|           +---SESSION-20260407-14_A6_TPL-14
+|           |       NO_PATCH.md
+|           |       
+|           \---SESSION-20260407-15_A6_CLOTURE-A6
+|                   NO_PATCH.md
+|                   
 +---4-templates
 |       TEMPLATE_DEBUT_SESSION.md
 |       TEMPLATE_DOD_4_4.md

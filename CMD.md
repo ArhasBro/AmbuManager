@@ -34,9 +34,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260401-10_A5_CLOTURE-A5
-- CLOTURE_A5 — VALIDATION** — Clôture finale du bloc A5
-
+- SESSION-20260407-01_A6_TPL-01
+- TPL-01 — AUDIT** — Audit complet des `ShiftTemplate` existants
 ------------------------------------
 sortie propre + retour du terminal + aucune erreur = validé
 ------------------------------------
