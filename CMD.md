@@ -34,8 +34,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260407-01_A6_TPL-01
-- TPL-01 — AUDIT** — Audit complet des `ShiftTemplate` existants
+- SESSION-20260407-02_A6_TPL-02
+- TPL-02 — VALIDATION** — Vérification du schéma actuel des templates
 ------------------------------------
 sortie propre + retour du terminal + aucune erreur = validé
 ------------------------------------
