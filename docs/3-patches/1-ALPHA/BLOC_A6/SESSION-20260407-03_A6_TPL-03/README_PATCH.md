@@ -20,8 +20,9 @@ CORRECTION
 git apply --check "docs/3-patches/1-ALPHA/BLOC_A6/SESSION-20260407-03_A6_TPL-03/PATCH__SESSION-20260407-03_A6_TPL-03.diff"
 git apply         "docs/3-patches/1-ALPHA/BLOC_A6/SESSION-20260407-03_A6_TPL-03/PATCH__SESSION-20260407-03_A6_TPL-03.diff"
 
-git apply --check "docs/3-patches/1-ALPHA/BLOC_A6/SESSION-20260407-03_A6_TPL-03/PATCH__SESSION-20260407-03_A6_TPL-03_DOCS.diff"
-git apply         "docs/3-patches/1-ALPHA/BLOC_A6/SESSION-20260407-03_A6_TPL-03/PATCH__SESSION-20260407-03_A6_TPL-03_DOCS.diff"
+# Patch documentaire final fourni : commande disponible si tu veux l'appliquer côté dépôt
+# git apply --check "docs/3-patches/1-ALPHA/BLOC_A6/SESSION-20260407-03_A6_TPL-03/PATCH__SESSION-20260407-03_A6_TPL-03_DOCS.diff"
+# git apply         "docs/3-patches/1-ALPHA/BLOC_A6/SESSION-20260407-03_A6_TPL-03/PATCH__SESSION-20260407-03_A6_TPL-03_DOCS.diff"
 ```
 
 ## Portée exacte
@@ -41,9 +42,13 @@ Le patch documentaire final :
 
 ## État réel validé
 - patch principal : **présent**
-- patch documentaire final : **présent**
-- contrôle d’applicabilité patch principal : **OK**
-- contrôle d’applicabilité patch documentaire : **OK**
+- patch documentaire final : **présent / fourni**
+- `git apply --check` patch principal : **OK**
+- `git apply` patch principal : **OK**
+- `npx prisma validate` : **OK**
+- `npm run lint` : **OK**
+- `npm run build` : **OK**
+- contrôle d’applicabilité local du patch documentaire final : **INFORMATION NON FOURNIE — À CONFIRMER**
 
 ## Conclusion
 La session `TPL-03` ne crée aucun enrichissement produit.

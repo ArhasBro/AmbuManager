@@ -18,18 +18,16 @@ Session `SESSION-20260407-03_A6_TPL-03` clôturée en **correction minimale cibl
 - contrôle du schéma Prisma concerné : OK
 - contrôle de la chaîne de migrations pertinente : OK
 - contrôle seed / usages réels : OK
-- contrôle d’applicabilité du patch principal : OK
-- contrôle d’applicabilité du patch documentaire final : OK
+- `git apply --check` du patch principal : OK
+- `git apply` du patch principal : OK
+- `npx prisma validate` : OK
+- `npm run lint` : OK
+- `npm run build` : OK
+- patch documentaire final : généré / fourni
 
-### Validations non exécutées
-- `npx prisma validate`
+### Validations non exécutées / non prouvées dans le contexte validé
 - `npx prisma generate`
-- `npm run lint`
-- `npm run build`
-
-Motif :
-- `node_modules` absents dans le ZIP contrôlé ;
-- base locale d’exécution non fournie dans l’environnement de contrôle.
+- contrôle d’applicabilité local du patch documentaire final
 
 ## Verdict final
 ### Verdict session

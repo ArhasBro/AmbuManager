@@ -74,19 +74,17 @@ Cette migration :
 - lecture des sources autorisées : OK
 - contrôle statique schéma / migrations / seed / usages : OK
 - génération du patch principal : OK
-- contrôle d’applicabilité du patch principal : OK
+- `git apply --check` du patch principal : OK
+- `git apply` du patch principal : OK
+- `npx prisma validate` : OK
+- `npm run lint` : OK
+- `npm run build` : OK
 - génération du patch documentaire final : OK
-- contrôle d’applicabilité du patch documentaire final : OK
+- patch documentaire final : fourni
 
-### Non exécuté
-- `npx prisma validate`
+### Non exécuté / non prouvé dans le contexte validé
 - `npx prisma generate`
-- `npm run lint`
-- `npm run build`
-
-Motif :
-- `node_modules` absents dans le ZIP contrôlé ;
-- aucune base locale fournie pour exécuter la migration.
+- contrôle d’applicabilité local du patch documentaire final
 
 ## 7. Verdict de session
 **CONFORME APRÈS CORRECTION MINIMALE**
