@@ -1,24 +1,41 @@
-﻿# README_PATCH
+# README_PATCH.md
 
-## Session liee
-SESSION-20260407-06_A6_TPL-06
+## Patch principal officiel de la session
+- Nom : `PATCH__SESSION-20260407-06_A6_TPL-06.diff`
+- Session : `SESSION-20260407-06_A6_TPL-06`
+- Bloc : `A6 — Shift templates`
+- Type : `COMPLÉTION`
 
-## Type
-COMPLETION
+## Périmètre du patch
+Le patch principal officiel couvre uniquement l’ajout de l’API de modification template.
 
-## Dossier patch
-docs/3-patches/1-ALPHA/BLOC_A6/SESSION-20260407-06_A6_TPL-06
+Route concernée :
+- `PATCH /api/templates/[id]`
 
-## Patch officiel attendu
-PATCH__SESSION-20260407-06_A6_TPL-06.diff
+## Fichier touché
+- `app/api/templates/[id]/route.ts`
 
-## Commandes d'application
+## Objectif du patch
+Exposer une API réelle de modification template, strictement bornée à la société courante, avec :
+- authentification par session ;
+- borne multi-tenant via `session.user.companyId` ;
+- refus de tout `companyId` client ;
+- gouvernance cohérente `ADMIN` / `GERANT` ou permission `TEMPLATES_MANAGE` ;
+- validation minimale des champs réellement présents ;
+- gestion cohérente des erreurs du périmètre ;
+- respect du format de réponse projet.
 
-`ash
-git apply --check "docs/3-patches/1-ALPHA/BLOC_A6/SESSION-20260407-06_A6_TPL-06/PATCH__SESSION-20260407-06_A6_TPL-06.diff"
-git apply         "docs/3-patches/1-ALPHA/BLOC_A6/SESSION-20260407-06_A6_TPL-06/PATCH__SESSION-20260407-06_A6_TPL-06.diff"
-`
+## Commandes de validation réellement prouvées
+- `git apply --check`
+- `git apply`
+- `npm run lint`
+- `npm run build`
 
-## Statut
-- Dossier patch initialise.
-- Patch officiel a produire dans cette session si du code est modifie.
+## Résultat attendu
+Après application du patch principal officiel :
+- la route `PATCH /api/templates/[id]` existe ;
+- le périmètre TPL-06 est couvert sans élargissement ;
+- la sortie de build fait apparaître la route `/api/templates/[id]`.
+
+## Rappel méthodologique
+Ce fichier documente uniquement le patch principal officiel de la session `TPL-06`. Il ne décrit ni nouveau diff, ni correctif complémentaire, ni extension de périmètre.

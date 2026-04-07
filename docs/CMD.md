@@ -8,11 +8,13 @@ git status
 
 # GPT
 --------------------------
-Session validée, nous passons à la suivante.
+Session validée, nous passons aux suivante.
 
 Avant de préparer quoi que ce soit, relis attentivement tous les fichiers `.md` présents dans `./docs/master`. Ces documents sont les références à suivre pour garantir un travail correct, cohérent et méthodologiquement conforme.
 
-Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
+Nous allons faire plusieurs sessions en même temps donc faut que se soit rigoureux. nous allons faire 1 patch unique pour toute ces session ainsi que 1 documentation.
+
+Pour les sessions indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 1. **Prompt de production**
    - À rédiger avec le `TEMPLATE_DEBUT_SESSION.md` ainsi que sur les règles définies dans les fichiers de `./docs`.
@@ -32,10 +34,22 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
    - Faire un prompt de réponse adapté pour la discussion production.
    - Le prompt doit être cours et concis.
 
-Références de la session :
+Références des session :
 
-- SESSION-20260407-06_A6_TPL-06
-- TPL-06 — COMPLÉTION** — API modification template
+- SESSION-20260407-07_A6_TPL-07
+- SESSION-20260407-08_A6_TPL-08
+- SESSION-20260407-09_A6_TPL-09
+- SESSION-20260407-10_A6_TPL-10
+- SESSION-20260407-11_A6_TPL-11
+- SESSION-20260407-12_A6_TPL-12
+- SESSION-20260407-13_A6_TPL-13
+- **TPL-07 — COMPLÉTION** — API désactivation / archivage template
+- **TPL-08 — COMPLÉTION** — UI gestion des templates
+- **TPL-09 — COMPLÉTION** — Ajout de la composition minimale d’équipe
+- **TPL-10 — COMPLÉTION** — Ajout du type de véhicule requis
+- **TPL-11 — COMPLÉTION** — Ajout du nombre de personnes requis
+- **TPL-12 — COMPLÉTION** — Support des shifts non horodatés
+- **TPL-13 — COMPLÉTION** — Couleurs libres et lisibilité visuelle
 ------------------------------------
 sortie propre + retour du terminal + aucune erreur = validé
 ------------------------------------

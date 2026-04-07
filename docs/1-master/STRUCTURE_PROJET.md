@@ -1608,11 +1608,22 @@ C:.
 |   |   |   |   |   |   route.js.nft.json
 |   |   |   |   |   |   route_client-reference-manifest.js
 |   |   |   |   |   |   
-|   |   |   |   |   \---route
-|   |   |   |   |           app-paths-manifest.json
-|   |   |   |   |           build-manifest.json
-|   |   |   |   |           server-reference-manifest.json
-|   |   |   |   |           
+|   |   |   |   |   +---route
+|   |   |   |   |   |       app-paths-manifest.json
+|   |   |   |   |   |       build-manifest.json
+|   |   |   |   |   |       server-reference-manifest.json
+|   |   |   |   |   |       
+|   |   |   |   |   \---[id]
+|   |   |   |   |       |   route.js
+|   |   |   |   |       |   route.js.map
+|   |   |   |   |       |   route.js.nft.json
+|   |   |   |   |       |   route_client-reference-manifest.js
+|   |   |   |   |       |   
+|   |   |   |   |       \---route
+|   |   |   |   |               app-paths-manifest.json
+|   |   |   |   |               build-manifest.json
+|   |   |   |   |               server-reference-manifest.json
+|   |   |   |   |               
 |   |   |   |   +---users
 |   |   |   |   |   |   route.js
 |   |   |   |   |   |   route.js.map
@@ -1934,26 +1945,28 @@ C:.
 |   |   |   |   [root-of-the-server]__2a6e04e1._.js.map
 |   |   |   |   [root-of-the-server]__2d31c873._.js
 |   |   |   |   [root-of-the-server]__2d31c873._.js.map
+|   |   |   |   [root-of-the-server]__31dd6884._.js
+|   |   |   |   [root-of-the-server]__31dd6884._.js.map
 |   |   |   |   [root-of-the-server]__32baf009._.js
 |   |   |   |   [root-of-the-server]__32baf009._.js.map
 |   |   |   |   [root-of-the-server]__466e0aef._.js
 |   |   |   |   [root-of-the-server]__466e0aef._.js.map
 |   |   |   |   [root-of-the-server]__4acb48f2._.js
 |   |   |   |   [root-of-the-server]__4acb48f2._.js.map
+|   |   |   |   [root-of-the-server]__52980409._.js
+|   |   |   |   [root-of-the-server]__52980409._.js.map
+|   |   |   |   [root-of-the-server]__5bc73c38._.js
+|   |   |   |   [root-of-the-server]__5bc73c38._.js.map
 |   |   |   |   [root-of-the-server]__5e792a0f._.js
 |   |   |   |   [root-of-the-server]__5e792a0f._.js.map
 |   |   |   |   [root-of-the-server]__72b2f123._.js
 |   |   |   |   [root-of-the-server]__72b2f123._.js.map
-|   |   |   |   [root-of-the-server]__81f1e291._.js
-|   |   |   |   [root-of-the-server]__81f1e291._.js.map
 |   |   |   |   [root-of-the-server]__87fabf7c._.js
 |   |   |   |   [root-of-the-server]__87fabf7c._.js.map
 |   |   |   |   [root-of-the-server]__8f437561._.js
 |   |   |   |   [root-of-the-server]__8f437561._.js.map
-|   |   |   |   [root-of-the-server]__91ea99a8._.js
-|   |   |   |   [root-of-the-server]__91ea99a8._.js.map
-|   |   |   |   [root-of-the-server]__9644ec44._.js
-|   |   |   |   [root-of-the-server]__9644ec44._.js.map
+|   |   |   |   [root-of-the-server]__971ddd5e._.js
+|   |   |   |   [root-of-the-server]__971ddd5e._.js.map
 |   |   |   |   [root-of-the-server]__98c9f376._.js
 |   |   |   |   [root-of-the-server]__98c9f376._.js.map
 |   |   |   |   [root-of-the-server]__a0dcc894._.js
@@ -1966,8 +1979,6 @@ C:.
 |   |   |   |   [root-of-the-server]__bcf122bf._.js.map
 |   |   |   |   [root-of-the-server]__be307af6._.js
 |   |   |   |   [root-of-the-server]__be307af6._.js.map
-|   |   |   |   [root-of-the-server]__c1c26bba._.js
-|   |   |   |   [root-of-the-server]__c1c26bba._.js.map
 |   |   |   |   [root-of-the-server]__c2149f92._.js
 |   |   |   |   [root-of-the-server]__c2149f92._.js.map
 |   |   |   |   [root-of-the-server]__c3997a41._.js
@@ -1976,16 +1987,18 @@ C:.
 |   |   |   |   [root-of-the-server]__c5606340._.js.map
 |   |   |   |   [root-of-the-server]__c64b00e6._.js
 |   |   |   |   [root-of-the-server]__c64b00e6._.js.map
+|   |   |   |   [root-of-the-server]__c6710ef2._.js
+|   |   |   |   [root-of-the-server]__c6710ef2._.js.map
 |   |   |   |   [root-of-the-server]__d5f44ffd._.js
 |   |   |   |   [root-of-the-server]__d5f44ffd._.js.map
-|   |   |   |   [root-of-the-server]__d827d736._.js
-|   |   |   |   [root-of-the-server]__d827d736._.js.map
-|   |   |   |   [root-of-the-server]__d8b099b4._.js
-|   |   |   |   [root-of-the-server]__d8b099b4._.js.map
+|   |   |   |   [root-of-the-server]__dbf7e7d5._.js
+|   |   |   |   [root-of-the-server]__dbf7e7d5._.js.map
 |   |   |   |   [root-of-the-server]__e5879161._.js
 |   |   |   |   [root-of-the-server]__e5879161._.js.map
 |   |   |   |   [root-of-the-server]__e6c5e537._.js
 |   |   |   |   [root-of-the-server]__e6c5e537._.js.map
+|   |   |   |   [root-of-the-server]__f204e623._.js
+|   |   |   |   [root-of-the-server]__f204e623._.js.map
 |   |   |   |   [root-of-the-server]__f3458ec0._.js
 |   |   |   |   [root-of-the-server]__f3458ec0._.js.map
 |   |   |   |   [turbopack]_runtime.js
@@ -2036,6 +2049,8 @@ C:.
 |   |   |   |   _next-internal_server_app_api_planning_shifts_[id]_assign_route_actions_75edfcab.js.map
 |   |   |   |   _next-internal_server_app_api_templates_route_actions_a59f4640.js
 |   |   |   |   _next-internal_server_app_api_templates_route_actions_a59f4640.js.map
+|   |   |   |   _next-internal_server_app_api_templates_[id]_route_actions_6a91f957.js
+|   |   |   |   _next-internal_server_app_api_templates_[id]_route_actions_6a91f957.js.map
 |   |   |   |   _next-internal_server_app_api_users_route_actions_4b9121e3.js
 |   |   |   |   _next-internal_server_app_api_users_route_actions_4b9121e3.js.map
 |   |   |   |   _next-internal_server_app_api_users_[id]_absences_route_actions_719d36bc.js
@@ -2195,7 +2210,7 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
-|   |   +---83A64o73QXmGwq8CURmi1
+|   |   +---9z9N43JksLNFWTh9RH5eW
 |   |   |       _buildManifest.js
 |   |   |       _clientMiddlewareManifest.json
 |   |   |       _ssgManifest.js
@@ -2297,8 +2312,11 @@ C:.
 |   |   |                   route.ts
 |   |   |                   
 |   |   +---templates
-|   |   |       route.ts
-|   |   |       
+|   |   |   |   route.ts
+|   |   |   |   
+|   |   |   \---[id]
+|   |   |           route.ts
+|   |   |           
 |   |   +---users
 |   |   |   |   route.ts
 |   |   |   |   
@@ -3605,6 +3623,7 @@ C:.
 |   |           |       README_PATCH.md
 |   |           |       
 |   |           +---SESSION-20260407-06_A6_TPL-06
+|   |           |       PATCH__SESSION-20260407-06_A6_TPL-06.diff
 |   |           |       README_PATCH.md
 |   |           |       
 |   |           +---SESSION-20260407-07_A6_TPL-07

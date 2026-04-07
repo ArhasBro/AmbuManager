@@ -1236,6 +1236,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |           |       README_PATCH.md
 |           |       
 |           +---SESSION-20260407-06_A6_TPL-06
+|           |       PATCH__SESSION-20260407-06_A6_TPL-06.diff
 |           |       README_PATCH.md
 |           |       
 |           +---SESSION-20260407-07_A6_TPL-07
