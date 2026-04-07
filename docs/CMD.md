@@ -34,8 +34,8 @@ Pour la session indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références de la session :
 
-- SESSION-20260407-04_A6_TPL-04
-- TPL-04 — COMPLÉTION** — API liste templates
+- SESSION-20260407-05_A6_TPL-05
+- TPL-05 — COMPLÉTION** — API création template
 ------------------------------------
 sortie propre + retour du terminal + aucune erreur = validé
 ------------------------------------

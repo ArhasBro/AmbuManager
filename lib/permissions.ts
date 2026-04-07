@@ -90,6 +90,10 @@ export async function canManageVehicles(userId: string, role?: string | null, pl
   return hasPermissionAccess({ userId, role, platformRole, codes: ["VEHICLES_MANAGE"] });
 }
 
+export async function canManageTemplates(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
+  return hasPermissionAccess({ userId, role, platformRole, codes: ["TEMPLATES_MANAGE"] });
+}
+
 export async function canManageCompanyRules(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
   return hasPermissionAccess({ userId, role, platformRole, codes: ["COMPANY_RULES_MANAGE"] });
 }

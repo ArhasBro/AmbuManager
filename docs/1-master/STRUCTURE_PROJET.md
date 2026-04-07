@@ -1602,6 +1602,17 @@ C:.
 |   |   |   |   |                       build-manifest.json
 |   |   |   |   |                       server-reference-manifest.json
 |   |   |   |   |                       
+|   |   |   |   +---templates
+|   |   |   |   |   |   route.js
+|   |   |   |   |   |   route.js.map
+|   |   |   |   |   |   route.js.nft.json
+|   |   |   |   |   |   route_client-reference-manifest.js
+|   |   |   |   |   |   
+|   |   |   |   |   \---route
+|   |   |   |   |           app-paths-manifest.json
+|   |   |   |   |           build-manifest.json
+|   |   |   |   |           server-reference-manifest.json
+|   |   |   |   |           
 |   |   |   |   +---users
 |   |   |   |   |   |   route.js
 |   |   |   |   |   |   route.js.map
@@ -1923,6 +1934,8 @@ C:.
 |   |   |   |   [root-of-the-server]__2a6e04e1._.js.map
 |   |   |   |   [root-of-the-server]__2d31c873._.js
 |   |   |   |   [root-of-the-server]__2d31c873._.js.map
+|   |   |   |   [root-of-the-server]__32baf009._.js
+|   |   |   |   [root-of-the-server]__32baf009._.js.map
 |   |   |   |   [root-of-the-server]__3562f2d8._.js
 |   |   |   |   [root-of-the-server]__3562f2d8._.js.map
 |   |   |   |   [root-of-the-server]__466e0aef._.js
@@ -1931,10 +1944,10 @@ C:.
 |   |   |   |   [root-of-the-server]__4a56182a._.js.map
 |   |   |   |   [root-of-the-server]__4acb48f2._.js
 |   |   |   |   [root-of-the-server]__4acb48f2._.js.map
+|   |   |   |   [root-of-the-server]__56453e2c._.js
+|   |   |   |   [root-of-the-server]__56453e2c._.js.map
 |   |   |   |   [root-of-the-server]__5e792a0f._.js
 |   |   |   |   [root-of-the-server]__5e792a0f._.js.map
-|   |   |   |   [root-of-the-server]__6f113d6d._.js
-|   |   |   |   [root-of-the-server]__6f113d6d._.js.map
 |   |   |   |   [root-of-the-server]__72b2f123._.js
 |   |   |   |   [root-of-the-server]__72b2f123._.js.map
 |   |   |   |   [root-of-the-server]__7e85b83e._.js
@@ -2021,6 +2034,8 @@ C:.
 |   |   |   |   _next-internal_server_app_api_planning_shifts_route_actions_4dae3f6d.js.map
 |   |   |   |   _next-internal_server_app_api_planning_shifts_[id]_assign_route_actions_75edfcab.js
 |   |   |   |   _next-internal_server_app_api_planning_shifts_[id]_assign_route_actions_75edfcab.js.map
+|   |   |   |   _next-internal_server_app_api_templates_route_actions_a59f4640.js
+|   |   |   |   _next-internal_server_app_api_templates_route_actions_a59f4640.js.map
 |   |   |   |   _next-internal_server_app_api_users_route_actions_4b9121e3.js
 |   |   |   |   _next-internal_server_app_api_users_route_actions_4b9121e3.js.map
 |   |   |   |   _next-internal_server_app_api_users_[id]_absences_route_actions_719d36bc.js
@@ -2201,13 +2216,13 @@ C:.
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
 |   |   |       
-|   |   +---k7nTF0Z8-XRpiLwE03Agb
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
+|   |   +---media
+|   |   |       favicon.0b3bf435.ico
 |   |   |       
-|   |   \---media
-|   |           favicon.0b3bf435.ico
+|   |   \---z9gQFjtDMd8HyODKUp-s4
+|   |           _buildManifest.js
+|   |           _clientMiddlewareManifest.json
+|   |           _ssgManifest.js
 |   |           
 |   \---types
 |           routes.d.ts
@@ -2281,6 +2296,9 @@ C:.
 |   |   |           \---assign
 |   |   |                   route.ts
 |   |   |                   
+|   |   +---templates
+|   |   |       route.ts
+|   |   |       
 |   |   +---users
 |   |   |   |   route.ts
 |   |   |   |   
@@ -3579,6 +3597,7 @@ C:.
 |   |           |       README_PATCH.md
 |   |           |       
 |   |           +---SESSION-20260407-04_A6_TPL-04
+|   |           |       PATCH__SESSION-20260407-04_A6_TPL-04.diff
 |   |           |       README_PATCH.md
 |   |           |       
 |   |           +---SESSION-20260407-05_A6_TPL-05
