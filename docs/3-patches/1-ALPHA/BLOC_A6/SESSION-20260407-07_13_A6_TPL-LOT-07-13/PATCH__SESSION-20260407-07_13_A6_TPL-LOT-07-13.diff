@@ -1,0 +1,2158 @@
+diff --git a/app/api/planning/autoschedule/day/route.ts b/app/api/planning/autoschedule/day/route.ts
+index 4d8c546..8458849 100644
+--- a/app/api/planning/autoschedule/day/route.ts
++++ b/app/api/planning/autoschedule/day/route.ts
+@@ -127,9 +127,17 @@ export async function POST(req: NextRequest) {
+         return { ok: false, error: "DRAFT_ALREADY_EXISTS", details: { runId: existingDraft.id } } satisfies AutoscheduleSentinel;
+       }
+ 
+-      const templateWhere: { companyId: string; isActive: boolean; category?: Category } = {
++      const templateWhere: {
++        companyId: string;
++        isActive: boolean;
++        archivedAt: null;
++        isTimeDefined: boolean;
++        category?: Category;
++      } = {
+         companyId,
+         isActive: true,
++        archivedAt: null,
++        isTimeDefined: true,
+       };
+       if (category) templateWhere.category = category;
+ 
+diff --git a/app/api/planning/autoschedule/week/route.ts b/app/api/planning/autoschedule/week/route.ts
+index 6f236e9..40b5077 100644
+--- a/app/api/planning/autoschedule/week/route.ts
++++ b/app/api/planning/autoschedule/week/route.ts
+@@ -152,9 +152,17 @@ export async function POST(req: NextRequest) {
+         return { ok: false, error: "DRAFT_ALREADY_EXISTS", details: { runId: existingDraft.id } } satisfies AutoscheduleSentinel;
+       }
+ 
+-      const templateWhere: { companyId: string; isActive: boolean; category?: Category } = {
++      const templateWhere: {
++        companyId: string;
++        isActive: boolean;
++        archivedAt: null;
++        isTimeDefined: boolean;
++        category?: Category;
++      } = {
+         companyId,
+         isActive: true,
++        archivedAt: null,
++        isTimeDefined: true,
+       };
+       if (category) templateWhere.category = category;
+ 
+diff --git a/app/api/planning/shifts/[id]/assign/route.ts b/app/api/planning/shifts/[id]/assign/route.ts
+index adb4dcc..07d26f3 100644
+--- a/app/api/planning/shifts/[id]/assign/route.ts
++++ b/app/api/planning/shifts/[id]/assign/route.ts
+@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma";
+ import { canEditPlanning } from "@/lib/permissions";
+ import { assignDraftShift } from "@/lib/services/planning/assign-draftshift";
+ import { assignShift } from "@/lib/services/planning/assign-shift";
++import { resolveTemplateMinStaffCount } from "@/lib/templates/template-rules";
+ 
+ const BodySchema = z
+   .object({
+@@ -25,10 +26,6 @@ function json(status: number, payload: unknown) {
+ 
+ type Category = "VSL" | "TAXI" | "AMBULANCE" | "GARDE" | string;
+ 
+-function allowedUserSlots(category: Category | null | undefined): 1 | 2 {
+-  return category === "AMBULANCE" || category === "GARDE" ? 2 : 1;
+-}
+-
+ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
+   // 1) Session
+   const session = await getServerSession(authOptions);
+@@ -75,7 +72,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+       user2Id: true,
+       vehicleId: true,
+       run: { select: { status: true } },
+-      template: { select: { category: true } },
++      template: { select: { category: true, minStaffCount: true } },
+     },
+   });
+ 
+@@ -91,7 +88,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+           user2Id: true,
+           vehicleId: true,
+           depotId: true,
+-          template: { select: { category: true } },
++          template: { select: { category: true, minStaffCount: true } },
+         },
+       })
+     : null;
+@@ -104,7 +101,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+   }
+ 
+   const category = (current.template?.category ?? null) as Category | null;
+-  const slots = allowedUserSlots(category);
++  const slots = resolveTemplateMinStaffCount(current.template?.minStaffCount ?? null, category);
+ 
+   // user2 interdit si slots=1
+   if (slots === 1 && user2Id !== undefined && user2Id !== null) {
+@@ -178,7 +175,9 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+       if (
+         result.error.code === "INVALID_SLOT_COUNT" ||
+         result.error.code === "DUPLICATE_USER_IN_SAME_SHIFT" ||
+-        result.error.code === "VALIDATION_ERROR"
++        result.error.code === "VALIDATION_ERROR" ||
++        result.error.code === "TEMPLATE_ROLE_MISMATCH" ||
++        result.error.code === "TEMPLATE_VEHICLE_TYPE_MISMATCH"
+       ) {
+         return json(400, { ok: false, error: result.error.code, details: result.error.meta ?? null });
+       }
+@@ -208,7 +207,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+         user: { select: { id: true, name: true, email: true, role: true } },
+         user2: { select: { id: true, name: true, email: true, role: true } },
+         vehicle: { select: { id: true, immatriculation: true, type: true, status: true } },
+-        template: { select: { id: true, name: true, category: true } },
++        template: { select: { id: true, name: true, category: true, minStaffCount: true, requiredVehicleType: true, color: true } },
+         run: { select: { id: true, status: true, scope: true, day: true, weekStart: true, createdAt: true } },
+       },
+     });
+@@ -262,7 +261,9 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+     if (
+       result.error.code === "INVALID_SLOT_COUNT" ||
+       result.error.code === "DUPLICATE_USER_IN_SAME_SHIFT" ||
+-      result.error.code === "VALIDATION_ERROR"
++      result.error.code === "VALIDATION_ERROR" ||
++      result.error.code === "TEMPLATE_ROLE_MISMATCH" ||
++      result.error.code === "TEMPLATE_VEHICLE_TYPE_MISMATCH"
+     ) {
+       return json(400, { ok: false, error: result.error.code, details: result.error.meta ?? null });
+     }
+@@ -291,7 +292,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+       user2: { select: { id: true, name: true, email: true, role: true } },
+       vehicle: { select: { id: true, immatriculation: true, type: true, status: true } },
+       depot: { select: { id: true, name: true, isActive: true } },
+-      template: { select: { id: true, name: true, category: true } },
++      template: { select: { id: true, name: true, category: true, minStaffCount: true, requiredVehicleType: true, color: true } },
+       run: { select: { id: true, status: true, scope: true, day: true, weekStart: true, createdAt: true } },
+     },
+   });
+diff --git a/app/api/planning/shifts/route.ts b/app/api/planning/shifts/route.ts
+index 898dd7e..5d2660c 100644
+--- a/app/api/planning/shifts/route.ts
++++ b/app/api/planning/shifts/route.ts
+@@ -126,7 +126,7 @@ export async function GET(req: NextRequest) {
+         user2: { select: { id: true, name: true, email: true, role: true } },
+         vehicle: { select: { id: true, immatriculation: true, type: true, status: true } },
+         depot: { select: { id: true, name: true, isActive: true } },
+-        template: { select: { id: true, name: true, category: true } },
++        template: { select: { id: true, name: true, category: true, minStaffCount: true, requiredVehicleType: true, color: true } },
+         run: { select: { id: true, scope: true, status: true, day: true, weekStart: true, createdAt: true } },
+       },
+     });
+diff --git a/app/api/templates/[id]/archive/route.ts b/app/api/templates/[id]/archive/route.ts
+new file mode 100644
+index 0000000..37ffac3
+--- /dev/null
++++ b/app/api/templates/[id]/archive/route.ts
+@@ -0,0 +1,52 @@
++import { getServerSession } from "next-auth/next";
++import { z } from "zod";
++
++import { authOptions } from "@/lib/auth";
++import { badRequest, forbidden, notFound, ok, serverError, unauthorized } from "@/lib/api/response";
++import { canManageTemplates } from "@/lib/permissions";
++import { serializeDates } from "@/lib/serializers";
++import { archiveTemplate } from "@/lib/services/templates/archive-template";
++
++const paramsSchema = z
++  .object({
++    id: z.string().trim().min(1, "id required"),
++  })
++  .strict();
++
++function getErrorMessage(e: unknown): string {
++  if (e instanceof Error) return e.message;
++  if (typeof e === "string") return e;
++  try {
++    return JSON.stringify(e);
++  } catch {
++    return "Unknown error";
++  }
++}
++
++export async function POST(_req: Request, ctx: { params: Promise<{ id: string }> }) {
++  const session = await getServerSession(authOptions);
++  const actorUserId = session?.user?.id;
++  const companyId = session?.user?.companyId;
++  const role = session?.user?.role;
++  const platformRole = session?.user?.platformRole;
++
++  if (!actorUserId || !companyId) return unauthorized();
++  if (!(await canManageTemplates(actorUserId, role, platformRole))) return forbidden();
++
++  const rawParams = await ctx.params.catch(() => null);
++  const parsedParams = paramsSchema.safeParse(rawParams);
++  if (!parsedParams.success) return badRequest("VALIDATION_ERROR", parsedParams.error.flatten());
++
++  try {
++    const template = await archiveTemplate({
++      id: parsedParams.data.id,
++      companyId,
++    });
++
++    if (!template) return notFound();
++
++    return ok(serializeDates(template));
++  } catch (e: unknown) {
++    return serverError(getErrorMessage(e));
++  }
++}
+diff --git a/app/api/templates/[id]/route.ts b/app/api/templates/[id]/route.ts
+index 13e8ea4..257e00a 100644
+--- a/app/api/templates/[id]/route.ts
++++ b/app/api/templates/[id]/route.ts
+@@ -1,4 +1,3 @@
+-import { PlanningTemplateCategory, Role } from "@prisma/client";
+ import { getServerSession } from "next-auth/next";
+ import { z } from "zod";
+ 
+@@ -8,11 +7,14 @@ import { authOptions } from "@/lib/auth";
+ import { canManageTemplates } from "@/lib/permissions";
+ import { prisma } from "@/lib/prisma";
+ import { serializeDates } from "@/lib/serializers";
+-
+-const timeStringSchema = z
+-  .string()
+-  .trim()
+-  .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Invalid time format. Expected HH:MM.");
++import {
++  templateSelect,
++  updateTemplateBodySchema,
++  validateResolvedTemplateState,
++  type TemplateResolvedState,
++  type TemplateUpdateBody,
++} from "@/lib/templates/template-api";
++import { normalizeTemplateColor } from "@/lib/templates/template-rules";
+ 
+ const paramsSchema = z
+   .object({
+@@ -20,48 +22,8 @@ const paramsSchema = z
+   })
+   .strict();
+ 
+-const updateTemplateBodySchema = z
+-  .object({
+-    name: z.string().trim().min(1, "name required").max(160, "name too long").optional(),
+-    category: z.nativeEnum(PlanningTemplateCategory).optional(),
+-    requiredRole: z.nativeEnum(Role).nullable().optional(),
+-    isActive: z.boolean().optional(),
+-    startTime: timeStringSchema.optional(),
+-    endTime: timeStringSchema.optional(),
+-    crossesMidnight: z.boolean().optional(),
+-  })
+-  .strict()
+-  .refine(
+-    (value) =>
+-      value.name !== undefined ||
+-      value.category !== undefined ||
+-      value.requiredRole !== undefined ||
+-      value.isActive !== undefined ||
+-      value.startTime !== undefined ||
+-      value.endTime !== undefined ||
+-      value.crossesMidnight !== undefined,
+-    {
+-      message: "At least one editable field is required",
+-    }
+-  );
+-
+-const templateSelect = {
+-  id: true,
+-  name: true,
+-  category: true,
+-  requiredRole: true,
+-  isActive: true,
+-  startTime: true,
+-  endTime: true,
+-  crossesMidnight: true,
+-  createdAt: true,
+-  updatedAt: true,
+-} as const;
+-
+ type EditableTemplateRecord = Awaited<ReturnType<typeof findEditableTemplate>>;
+ 
+-type UpdateTemplateData = z.infer<typeof updateTemplateBodySchema>;
+-
+ function getErrorMessage(error: unknown): string {
+   if (error instanceof Error) return error.message;
+   if (typeof error === "string") return error;
+@@ -82,36 +44,56 @@ async function findEditableTemplate(id: string, companyId: string) {
+   });
+ }
+ 
+-function getChangedFields(existingTemplate: NonNullable<EditableTemplateRecord>, nextData: UpdateTemplateData) {
+-  const changedFields: string[] = [];
+-
+-  if (nextData.name !== undefined && nextData.name !== existingTemplate.name) {
+-    changedFields.push("name");
+-  }
+-
+-  if (nextData.category !== undefined && nextData.category !== existingTemplate.category) {
+-    changedFields.push("category");
+-  }
+-
+-  if (nextData.requiredRole !== undefined && nextData.requiredRole !== existingTemplate.requiredRole) {
+-    changedFields.push("requiredRole");
+-  }
+-
+-  if (nextData.isActive !== undefined && nextData.isActive !== existingTemplate.isActive) {
+-    changedFields.push("isActive");
+-  }
++function resolveMergedTemplateState(existingTemplate: NonNullable<EditableTemplateRecord>, patch: TemplateUpdateBody): TemplateResolvedState {
++  const isTimeDefined = patch.isTimeDefined ?? existingTemplate.isTimeDefined;
++  const startTime = patch.startTime !== undefined ? patch.startTime : existingTemplate.startTime;
++  const endTime = patch.endTime !== undefined ? patch.endTime : existingTemplate.endTime;
++
++  return {
++    name: patch.name ?? existingTemplate.name,
++    category: patch.category ?? existingTemplate.category,
++    requiredRole: patch.requiredRole !== undefined ? patch.requiredRole : existingTemplate.requiredRole,
++    secondaryAllowedRoles: patch.secondaryAllowedRoles ?? existingTemplate.secondaryAllowedRoles,
++    minStaffCount: patch.minStaffCount !== undefined ? patch.minStaffCount : existingTemplate.minStaffCount,
++    requiredVehicleType:
++      patch.requiredVehicleType !== undefined ? patch.requiredVehicleType : existingTemplate.requiredVehicleType,
++    isActive: patch.isActive ?? existingTemplate.isActive,
++    archivedAt: existingTemplate.archivedAt,
++    isTimeDefined,
++    startTime: isTimeDefined ? startTime : null,
++    endTime: isTimeDefined ? endTime : null,
++    crossesMidnight: isTimeDefined ? (patch.crossesMidnight ?? existingTemplate.crossesMidnight) : false,
++    color:
++      patch.color === undefined
++        ? existingTemplate.color
++        : patch.color === null
++          ? null
++          : normalizeTemplateColor(patch.color),
++  };
++}
+ 
+-  if (nextData.startTime !== undefined && nextData.startTime !== existingTemplate.startTime) {
+-    changedFields.push("startTime");
+-  }
++function sameStringArray(a: readonly string[], b: readonly string[]) {
++  if (a.length !== b.length) return false;
++  return a.every((value, index) => value === b[index]);
++}
+ 
+-  if (nextData.endTime !== undefined && nextData.endTime !== existingTemplate.endTime) {
+-    changedFields.push("endTime");
+-  }
++function getChangedFields(existingTemplate: NonNullable<EditableTemplateRecord>, nextState: TemplateResolvedState) {
++  const changedFields: string[] = [];
+ 
+-  if (nextData.crossesMidnight !== undefined && nextData.crossesMidnight !== existingTemplate.crossesMidnight) {
+-    changedFields.push("crossesMidnight");
++  if (nextState.name !== existingTemplate.name) changedFields.push("name");
++  if (nextState.category !== existingTemplate.category) changedFields.push("category");
++  if (nextState.requiredRole !== existingTemplate.requiredRole) changedFields.push("requiredRole");
++  if (!sameStringArray(nextState.secondaryAllowedRoles, existingTemplate.secondaryAllowedRoles)) {
++    changedFields.push("secondaryAllowedRoles");
+   }
++  if (nextState.minStaffCount !== existingTemplate.minStaffCount) changedFields.push("minStaffCount");
++  if (nextState.requiredVehicleType !== existingTemplate.requiredVehicleType) changedFields.push("requiredVehicleType");
++  if (nextState.isActive !== existingTemplate.isActive) changedFields.push("isActive");
++  if (nextState.isTimeDefined !== existingTemplate.isTimeDefined) changedFields.push("isTimeDefined");
++  if (nextState.startTime !== existingTemplate.startTime) changedFields.push("startTime");
++  if (nextState.endTime !== existingTemplate.endTime) changedFields.push("endTime");
++  if (nextState.crossesMidnight !== existingTemplate.crossesMidnight) changedFields.push("crossesMidnight");
++  if (nextState.color !== existingTemplate.color) changedFields.push("color");
+ 
+   return changedFields;
+ }
+@@ -144,7 +126,13 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
+     const existingTemplate = await findEditableTemplate(parsedParams.data.id, companyId);
+     if (!existingTemplate) return notFound();
+ 
+-    const changedFields = getChangedFields(existingTemplate, parsedBody.data);
++    const nextState = resolveMergedTemplateState(existingTemplate, parsedBody.data);
++    const stateIssues = validateResolvedTemplateState(nextState);
++    if (stateIssues.length > 0) {
++      return badRequest("VALIDATION_ERROR", { fieldErrors: stateIssues });
++    }
++
++    const changedFields = getChangedFields(existingTemplate, nextState);
+     if (changedFields.length === 0) {
+       return ok(serializeDates(existingTemplate));
+     }
+@@ -152,13 +140,18 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
+     const updatedTemplate = await prisma.shiftTemplate.update({
+       where: { id: existingTemplate.id },
+       data: {
+-        ...(parsedBody.data.name !== undefined ? { name: parsedBody.data.name } : {}),
+-        ...(parsedBody.data.category !== undefined ? { category: parsedBody.data.category } : {}),
+-        ...(parsedBody.data.requiredRole !== undefined ? { requiredRole: parsedBody.data.requiredRole } : {}),
+-        ...(parsedBody.data.isActive !== undefined ? { isActive: parsedBody.data.isActive } : {}),
+-        ...(parsedBody.data.startTime !== undefined ? { startTime: parsedBody.data.startTime } : {}),
+-        ...(parsedBody.data.endTime !== undefined ? { endTime: parsedBody.data.endTime } : {}),
+-        ...(parsedBody.data.crossesMidnight !== undefined ? { crossesMidnight: parsedBody.data.crossesMidnight } : {}),
++        name: nextState.name,
++        category: nextState.category,
++        requiredRole: nextState.requiredRole,
++        secondaryAllowedRoles: nextState.secondaryAllowedRoles,
++        minStaffCount: nextState.minStaffCount,
++        requiredVehicleType: nextState.requiredVehicleType,
++        isActive: nextState.isActive,
++        isTimeDefined: nextState.isTimeDefined,
++        startTime: nextState.startTime,
++        endTime: nextState.endTime,
++        crossesMidnight: nextState.crossesMidnight,
++        color: nextState.color,
+       },
+       select: templateSelect,
+     });
+diff --git a/app/api/templates/route.ts b/app/api/templates/route.ts
+index 686e2c3..66c5b0a 100644
+--- a/app/api/templates/route.ts
++++ b/app/api/templates/route.ts
+@@ -1,6 +1,4 @@
+ import { getServerSession } from "next-auth/next";
+-import { z } from "zod";
+-import { PlanningTemplateCategory, Role } from "@prisma/client";
+ 
+ import { authOptions } from "@/lib/auth";
+ import { badRequest, conflict, forbidden, ok, serverError, unauthorized } from "@/lib/api/response";
+@@ -8,45 +6,13 @@ import { prismaToHttp } from "@/lib/api/prisma-error";
+ import { canManageTemplates } from "@/lib/permissions";
+ import { prisma } from "@/lib/prisma";
+ import { serializeDates } from "@/lib/serializers";
+-
+-const timeStringSchema = z
+-  .string()
+-  .trim()
+-  .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Invalid time format. Expected HH:MM.");
+-
+-const listQuerySchema = z.object({
+-  limit: z.coerce.number().int().min(1).max(500).optional().default(200),
+-  isActive: z
+-    .enum(["true", "false"])
+-    .optional()
+-    .transform((value) => (value === undefined ? undefined : value === "true")),
+-  category: z.nativeEnum(PlanningTemplateCategory).optional(),
+-});
+-
+-const createTemplateBodySchema = z
+-  .object({
+-    name: z.string().trim().min(1, "name required").max(160, "name too long"),
+-    category: z.nativeEnum(PlanningTemplateCategory),
+-    requiredRole: z.nativeEnum(Role).nullable().optional(),
+-    isActive: z.boolean().optional(),
+-    startTime: timeStringSchema,
+-    endTime: timeStringSchema,
+-    crossesMidnight: z.boolean().optional(),
+-  })
+-  .strict();
+-
+-const templateSelect = {
+-  id: true,
+-  name: true,
+-  category: true,
+-  requiredRole: true,
+-  isActive: true,
+-  startTime: true,
+-  endTime: true,
+-  crossesMidnight: true,
+-  createdAt: true,
+-  updatedAt: true,
+-} as const;
++import {
++  createTemplateBodySchema,
++  listTemplateQuerySchema,
++  resolveTemplateCreateInput,
++  templateSelect,
++  validateResolvedTemplateState,
++} from "@/lib/templates/template-api";
+ 
+ function getErrorMessage(error: unknown): string {
+   if (error instanceof Error) return error.message;
+@@ -69,14 +35,15 @@ export async function GET(req: Request) {
+   if (!(await canManageTemplates(userId, role, platformRole))) return forbidden();
+ 
+   const url = new URL(req.url);
+-  const parsed = listQuerySchema.safeParse({
++  const parsed = listTemplateQuerySchema.safeParse({
+     limit: url.searchParams.get("limit") ?? undefined,
+     isActive: url.searchParams.get("isActive") ?? undefined,
+     category: url.searchParams.get("category") ?? undefined,
++    includeArchived: url.searchParams.get("includeArchived") ?? undefined,
+   });
+   if (!parsed.success) return badRequest("VALIDATION_ERROR", parsed.error.flatten());
+ 
+-  const { limit, isActive, category } = parsed.data;
++  const { limit, isActive, category, includeArchived } = parsed.data;
+ 
+   try {
+     const templates = await prisma.shiftTemplate.findMany({
+@@ -84,8 +51,14 @@ export async function GET(req: Request) {
+         companyId,
+         ...(typeof isActive === "boolean" ? { isActive } : {}),
+         ...(category ? { category } : {}),
++        ...(includeArchived ? {} : { archivedAt: null }),
+       },
+-      orderBy: [{ name: "asc" }, { id: "asc" }],
++      orderBy: [
++        { archivedAt: "asc" },
++        { isActive: "desc" },
++        { name: "asc" },
++        { id: "asc" },
++      ],
+       take: limit,
+       select: templateSelect,
+     });
+@@ -116,17 +89,29 @@ export async function POST(req: Request) {
+   const parsed = createTemplateBodySchema.safeParse(body);
+   if (!parsed.success) return badRequest("VALIDATION_ERROR", parsed.error.flatten());
+ 
++  const resolved = resolveTemplateCreateInput(parsed.data);
++  const stateIssues = validateResolvedTemplateState(resolved);
++  if (stateIssues.length > 0) {
++    return badRequest("VALIDATION_ERROR", { fieldErrors: stateIssues });
++  }
++
+   try {
+     const template = await prisma.shiftTemplate.create({
+       data: {
+         companyId,
+-        name: parsed.data.name,
+-        category: parsed.data.category,
+-        requiredRole: parsed.data.requiredRole ?? null,
+-        isActive: parsed.data.isActive ?? true,
+-        startTime: parsed.data.startTime,
+-        endTime: parsed.data.endTime,
+-        crossesMidnight: parsed.data.crossesMidnight ?? false,
++        name: resolved.name,
++        category: resolved.category,
++        requiredRole: resolved.requiredRole,
++        secondaryAllowedRoles: resolved.secondaryAllowedRoles,
++        minStaffCount: resolved.minStaffCount,
++        requiredVehicleType: resolved.requiredVehicleType,
++        isActive: resolved.isActive,
++        archivedAt: resolved.archivedAt,
++        isTimeDefined: resolved.isTimeDefined,
++        startTime: resolved.startTime,
++        endTime: resolved.endTime,
++        crossesMidnight: resolved.crossesMidnight,
++        color: resolved.color,
+       },
+       select: templateSelect,
+     });
+diff --git a/app/dashboard/page.tsx b/app/dashboard/page.tsx
+index e730308..198fc75 100644
+--- a/app/dashboard/page.tsx
++++ b/app/dashboard/page.tsx
+@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
+ import { authOptions } from "@/lib/auth";
+ import {
+   canAccessAdminDashboard,
++  canManageTemplates,
+   canManageUsers,
+   canManageVehicles,
+ } from "@/lib/permissions";
+@@ -17,13 +18,14 @@ export default async function DashboardPage() {
+   const user = session.user;
+   const userId = user.id;
+ 
+-  const [adminDashboardAllowed, usersAllowed, vehiclesAllowed] = userId
++  const [adminDashboardAllowed, usersAllowed, vehiclesAllowed, templatesAllowed] = userId
+     ? await Promise.all([
+         canAccessAdminDashboard(userId, user.role, user.platformRole),
+         canManageUsers(userId, user.role, user.platformRole),
+         canManageVehicles(userId, user.role, user.platformRole),
++        canManageTemplates(userId, user.role, user.platformRole),
+       ])
+-    : [false, false, false];
++    : [false, false, false, false];
+ 
+   const companyProfileAllowed = user.role === "ADMIN" || user.role === "GERANT";
+   const depotsAllowed = user.role === "ADMIN" || user.role === "GERANT";
+@@ -47,6 +49,7 @@ export default async function DashboardPage() {
+             {depotsAllowed ? <Link href="/depots">Bases / dépôts</Link> : null}
+             {usersAllowed ? <Link href="/users">Réinitialisation mot de passe</Link> : null}
+             {vehiclesAllowed ? <Link href="/vehicles">Véhicules</Link> : null}
++            {templatesAllowed ? <Link href="/templates">Templates</Link> : null}
+           </div>
+         </div>
+       ) : null}
+diff --git a/app/planning/planning-client.tsx b/app/planning/planning-client.tsx
+index 810438c..0a7d626 100644
+--- a/app/planning/planning-client.tsx
++++ b/app/planning/planning-client.tsx
+@@ -3,6 +3,7 @@
+ import { useCallback, useEffect, useMemo, useState } from "react";
+ 
+ import { COMPANY_PARAMETER_KEYS, parsePlanningViewModeValue, serializePlanningViewModeValue, type PlanningViewModeValue } from "@/lib/company-rules/catalog";
++import { normalizeTemplateColor, resolveTemplateMinStaffCount } from "@/lib/templates/template-rules";
+ 
+ type Shift = {
+   id: string;
+@@ -15,7 +16,14 @@ type Shift = {
+ 
+   vehicle?: { id: string; immatriculation: string; type: string } | null;
+   depot?: { id: string; name: string; isActive: boolean } | null;
+-  template?: { id: string; name: string; category: string } | null;
++  template?: {
++    id: string;
++    name: string;
++    category: string;
++    minStaffCount?: number | null;
++    requiredVehicleType?: string | null;
++    color?: string | null;
++  } | null;
+ };
+ 
+ type UserLite = { id: string; name: string; email?: string };
+@@ -239,9 +247,8 @@ function dateTimeFR(iso: string) {
+ }
+ 
+ 
+-function requiresTwoEmployees(category: string | null | undefined) {
+-  const c = String(category ?? "").toUpperCase();
+-  return c === "AMBULANCE" || c === "GARDE";
++function requiresTwoEmployees(category: string | null | undefined, minStaffCount?: number | null) {
++  return resolveTemplateMinStaffCount(minStaffCount, category) === 2;
+ }
+ 
+ type FetchJsonResult = { res: Response; json: unknown; text: string };
+@@ -1181,6 +1188,22 @@ export default function PlanningClient({
+             return;
+           }
+ 
++          if (err === "TEMPLATE_ROLE_MISMATCH") {
++            setAssignMsgById((m) => ({
++              ...m,
++              [shiftId]: "⛔ Composition invalide : le rôle sélectionné ne respecte pas le template.",
++            }));
++            return;
++          }
++
++          if (err === "TEMPLATE_VEHICLE_TYPE_MISMATCH") {
++            setAssignMsgById((m) => ({
++              ...m,
++              [shiftId]: "⛔ Véhicule invalide : le type choisi ne correspond pas au template.",
++            }));
++            return;
++          }
++
+           if (err === "RUN_NOT_DRAFT") {
+             setAssignMsgById((m) => ({ ...m, [shiftId]: "⛔ Impossible : le run n’est pas en DRAFT." }));
+             return;
+@@ -1687,12 +1710,14 @@ function ShiftCardSimple({
+   onAssign: (id: string, patch: { userId?: string | null; user2Id?: string | null; vehicleId?: string | null; depotId?: string | null }) => Promise<void>;
+ }) {
+   const cat = String(s.template?.category ?? "").toUpperCase();
+-  const two = requiresTwoEmployees(cat);
++  const two = requiresTwoEmployees(cat, s.template?.minStaffCount);
+ 
+   const usersSummary = two ? `${s.user?.name ?? "—"} / ${s.user2?.name ?? "—"}` : `${s.user?.name ?? "—"}`;
+ 
++  const accentColor = normalizeTemplateColor(s.template?.color) ?? "#1D4ED8";
++
+   return (
+-    <div style={{ border: "1px solid rgba(255,255,255,0.12)", borderRadius: 10, padding: 10, display: "grid", gap: 8 }}>
++    <div style={{ border: `1px solid ${accentColor}`, borderLeft: `10px solid ${accentColor}`, borderRadius: 10, padding: 10, display: "grid", gap: 8 }}>
+       <div style={{ fontWeight: 800 }}>
+         {timeHM(s.startAt)} → {timeHM(s.endAt)}
+       </div>
+@@ -1701,7 +1726,10 @@ function ShiftCardSimple({
+         {usersSummary} • {s.vehicle?.immatriculation ?? "—"} • {s.depot ? getDepotLabel(s.depot) : "Aucune base"}
+       </div>
+ 
+-      <div style={{ opacity: 0.7 }}>{s.template?.name ?? "—"}</div>
++      <div style={{ opacity: 0.7 }}>
++        {s.template?.name ?? "—"}
++        {s.template?.requiredVehicleType ? ` • véhicule ${s.template.requiredVehicleType}` : ""}
++      </div>
+ 
+       {editable && (
+         <div style={{ display: "grid", gap: 6 }}>
+@@ -1810,17 +1838,18 @@ function ShiftCardAmbulance({
+   onAssign: (id: string, patch: { userId?: string | null; user2Id?: string | null; vehicleId?: string | null; depotId?: string | null }) => Promise<void>;
+ }) {
+   const cat = String(s.template?.category ?? "—").toUpperCase();
+-  const two = requiresTwoEmployees(cat);
++  const two = requiresTwoEmployees(cat, s.template?.minStaffCount);
+ 
++  const accentColor = normalizeTemplateColor(s.template?.color) ?? "#1D4ED8";
+   const borderStyle =
+     cat === "GARDE"
+-      ? "2px dashed rgba(255,255,255,0.35)"
++      ? `2px dashed ${accentColor}`
+       : cat === "AMBULANCE"
+-        ? "2px solid rgba(255,255,255,0.35)"
+-        : "1px solid rgba(255,255,255,0.2)";
++        ? `2px solid ${accentColor}`
++        : `1px solid ${accentColor}`;
+ 
+   return (
+-    <div style={{ border: borderStyle, borderRadius: 12, padding: 10, display: "grid", gap: 8 }}>
++    <div style={{ border: borderStyle, borderLeft: `10px solid ${accentColor}`, borderRadius: 12, padding: 10, display: "grid", gap: 8 }}>
+       <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
+         <div style={{ fontWeight: 900 }}>
+           {timeHM(s.startAt)} → {timeHM(s.endAt)}
+@@ -1849,6 +1878,7 @@ function ShiftCardAmbulance({
+           <Row label="Employé" value={s.user?.name ?? "—"} />
+         )}
+         <Row label="Véhicule" value={s.vehicle?.immatriculation ?? "—"} />
++        <Row label="Type véhicule requis" value={s.template?.requiredVehicleType ?? "—"} />
+         <Row label="Base" value={s.depot ? getDepotLabel(s.depot) : "Aucune"} />
+         <Row label="Mission" value={s.template?.name ?? "—"} />
+       </div>
+diff --git a/app/templates/page.tsx b/app/templates/page.tsx
+new file mode 100644
+index 0000000..5455935
+--- /dev/null
++++ b/app/templates/page.tsx
+@@ -0,0 +1,59 @@
++import Link from "next/link";
++import { getServerSession } from "next-auth/next";
++import { redirect } from "next/navigation";
++
++import { authOptions } from "@/lib/auth";
++import { canManageTemplates } from "@/lib/permissions";
++import { prisma } from "@/lib/prisma";
++import { serializeDates } from "@/lib/serializers";
++
++import TemplatesClient from "./templates-client";
++
++export default async function TemplatesPage() {
++  const session = await getServerSession(authOptions);
++  const user = session?.user;
++
++  if (!user?.id || !user.companyId) redirect("/login");
++  if (!(await canManageTemplates(user.id, user.role, user.platformRole))) redirect("/login");
++
++  const templates = await prisma.shiftTemplate.findMany({
++    where: { companyId: user.companyId },
++    orderBy: [{ archivedAt: "asc" }, { isActive: "desc" }, { name: "asc" }],
++    select: {
++      id: true,
++      name: true,
++      category: true,
++      requiredRole: true,
++      secondaryAllowedRoles: true,
++      minStaffCount: true,
++      requiredVehicleType: true,
++      isActive: true,
++      archivedAt: true,
++      isTimeDefined: true,
++      startTime: true,
++      endTime: true,
++      crossesMidnight: true,
++      color: true,
++      createdAt: true,
++      updatedAt: true,
++    },
++  });
++
++  return (
++    <div style={{ padding: 16, display: "grid", gap: 16 }}>
++      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
++        <div>
++          <h1 style={{ margin: 0 }}>Templates de shifts</h1>
++          <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
++            Gestion minimale ALPHA des templates de la société courante : création, édition, désactivation,
++            archivage logique, couleur, composition d’équipe et templates non horodatés.
++          </p>
++        </div>
++
++        <Link href="/dashboard">Retour dashboard</Link>
++      </div>
++
++      <TemplatesClient initialTemplates={serializeDates(templates)} />
++    </div>
++  );
++}
+diff --git a/app/templates/templates-client.tsx b/app/templates/templates-client.tsx
+new file mode 100644
+index 0000000..38f32b8
+--- /dev/null
++++ b/app/templates/templates-client.tsx
+@@ -0,0 +1,721 @@
++"use client";
++
++import { useMemo, useState } from "react";
++
++import {
++  getAllowedRolesForFirstSlot,
++  getAllowedRolesForSecondSlot,
++  getCategoryTemplatePreset,
++  normalizeTemplateColor,
++  resolveTemplateMinStaffCount,
++} from "@/lib/templates/template-rules";
++
++type Template = {
++  id: string;
++  name: string;
++  category: CategoryOption;
++  requiredRole: RoleOption | null;
++  secondaryAllowedRoles: RoleOption[];
++  minStaffCount: number | null;
++  requiredVehicleType: VehicleTypeOption | null;
++  isActive: boolean;
++  archivedAt: string | null;
++  isTimeDefined: boolean;
++  startTime: string | null;
++  endTime: string | null;
++  crossesMidnight: boolean;
++  color: string | null;
++  createdAt: string;
++  updatedAt: string;
++};
++
++type ApiSuccess<T> = { ok: true; data: T };
++type ApiFailure = { ok: false; error: string; details?: unknown };
++type ApiResponse<T> = ApiSuccess<T> | ApiFailure;
++
++type CategoryOption = "AMBULANCE" | "GARDE" | "VSL" | "TAXI";
++type RoleOption = "ADMIN" | "GERANT" | "BUREAU" | "ADE" | "AA" | "TAXI" | "REGULATEUR";
++type VehicleTypeOption = "AMBULANCE" | "VSL" | "TAXI";
++
++type TemplateFormState = {
++  name: string;
++  category: CategoryOption;
++  requiredRole: RoleOption | "";
++  secondaryAllowedRoles: RoleOption[];
++  minStaffCount: 1 | 2;
++  requiredVehicleType: VehicleTypeOption | "";
++  isActive: boolean;
++  isTimeDefined: boolean;
++  startTime: string;
++  endTime: string;
++  crossesMidnight: boolean;
++  color: string;
++};
++
++const CATEGORY_OPTIONS: CategoryOption[] = ["AMBULANCE", "GARDE", "VSL", "TAXI"];
++const ROLE_OPTIONS: RoleOption[] = ["ADE", "AA", "TAXI", "BUREAU", "REGULATEUR", "GERANT", "ADMIN"];
++const VEHICLE_TYPE_OPTIONS: VehicleTypeOption[] = ["AMBULANCE", "VSL", "TAXI"];
++const DEFAULT_COLOR = "#1D4ED8";
++
++function compareTemplates(a: Template, b: Template) {
++  const aArchived = a.archivedAt ? 1 : 0;
++  const bArchived = b.archivedAt ? 1 : 0;
++  if (aArchived !== bArchived) return aArchived - bArchived;
++  if (a.isActive !== b.isActive) return a.isActive ? -1 : 1;
++  return a.name.localeCompare(b.name, "fr", { sensitivity: "base" });
++}
++
++function createDefaultForm(category: CategoryOption = "AMBULANCE"): TemplateFormState {
++  const preset = getCategoryTemplatePreset(category);
++  return {
++    name: "",
++    category,
++    requiredRole: (preset.requiredRole ?? "") as RoleOption | "",
++    secondaryAllowedRoles: [...preset.secondaryAllowedRoles] as RoleOption[],
++    minStaffCount: preset.minStaffCount,
++    requiredVehicleType: (preset.requiredVehicleType ?? "") as VehicleTypeOption | "",
++    isActive: true,
++    isTimeDefined: true,
++    startTime: "08:00",
++    endTime: "16:00",
++    crossesMidnight: false,
++    color: DEFAULT_COLOR,
++  };
++}
++
++function formFromTemplate(template: Template): TemplateFormState {
++  return {
++    name: template.name,
++    category: template.category,
++    requiredRole: template.requiredRole ?? "",
++    secondaryAllowedRoles: template.secondaryAllowedRoles,
++    minStaffCount: resolveTemplateMinStaffCount(template.minStaffCount, template.category),
++    requiredVehicleType: template.requiredVehicleType ?? "",
++    isActive: template.isActive,
++    isTimeDefined: template.isTimeDefined,
++    startTime: template.startTime ?? "08:00",
++    endTime: template.endTime ?? "16:00",
++    crossesMidnight: template.crossesMidnight,
++    color: template.color ?? DEFAULT_COLOR,
++  };
++}
++
++function toPayload(form: TemplateFormState) {
++  const normalizedColor = normalizeTemplateColor(form.color) ?? DEFAULT_COLOR;
++
++  return {
++    name: form.name.trim(),
++    category: form.category,
++    requiredRole: form.requiredRole === "" ? null : form.requiredRole,
++    secondaryAllowedRoles: form.secondaryAllowedRoles,
++    minStaffCount: form.minStaffCount,
++    requiredVehicleType: form.requiredVehicleType === "" ? null : form.requiredVehicleType,
++    isActive: form.isActive,
++    isTimeDefined: form.isTimeDefined,
++    startTime: form.isTimeDefined ? form.startTime : null,
++    endTime: form.isTimeDefined ? form.endTime : null,
++    crossesMidnight: form.isTimeDefined ? form.crossesMidnight : false,
++    color: normalizedColor,
++  };
++}
++
++function getApiError<T>(payload: ApiResponse<T> | null, fallback: string) {
++  return payload && !payload.ok ? payload.error : fallback;
++}
++
++function formatDateTime(value: string | null) {
++  if (!value) return "—";
++  const date = new Date(value);
++  if (Number.isNaN(date.getTime())) return value;
++  return date.toLocaleString("fr-FR");
++}
++
++function getTimeLabel(template: Template) {
++  if (!template.isTimeDefined) return "Non horodaté";
++  return `${template.startTime ?? "—"} → ${template.endTime ?? "—"}${template.crossesMidnight ? " (+1j)" : ""}`;
++}
++
++function getStatusLabel(template: Template) {
++  if (template.archivedAt) return "Archivé";
++  return template.isActive ? "Actif" : "Désactivé";
++}
++
++function getStatusStyle(template: Template): React.CSSProperties {
++  if (template.archivedAt) {
++    return {
++      display: "inline-flex",
++      alignItems: "center",
++      padding: "4px 10px",
++      borderRadius: 999,
++      border: "1px solid #d1d5db",
++      backgroundColor: "#f3f4f6",
++      color: "#374151",
++      fontSize: 12,
++      fontWeight: 700,
++    };
++  }
++
++  if (template.isActive) {
++    return {
++      display: "inline-flex",
++      alignItems: "center",
++      padding: "4px 10px",
++      borderRadius: 999,
++      border: "1px solid #bbf7d0",
++      backgroundColor: "#f0fdf4",
++      color: "#166534",
++      fontSize: 12,
++      fontWeight: 700,
++    };
++  }
++
++  return {
++    display: "inline-flex",
++    alignItems: "center",
++    padding: "4px 10px",
++    borderRadius: 999,
++    border: "1px solid #fde68a",
++    backgroundColor: "#fffbeb",
++    color: "#92400e",
++    fontSize: 12,
++    fontWeight: 700,
++  };
++}
++
++function updateFormForCategory(category: CategoryOption, prev: TemplateFormState): TemplateFormState {
++  const preset = getCategoryTemplatePreset(category);
++  return {
++    ...prev,
++    category,
++    requiredRole: (preset.requiredRole ?? "") as RoleOption | "",
++    secondaryAllowedRoles: [...preset.secondaryAllowedRoles] as RoleOption[],
++    minStaffCount: preset.minStaffCount,
++    requiredVehicleType: (preset.requiredVehicleType ?? "") as VehicleTypeOption | "",
++  };
++}
++
++function RoleCheckboxGroup({
++  selected,
++  disabled,
++  onChange,
++}: {
++  selected: RoleOption[];
++  disabled?: boolean;
++  onChange: (next: RoleOption[]) => void;
++}) {
++  return (
++    <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
++      {ROLE_OPTIONS.map((role) => {
++        const checked = selected.includes(role);
++        return (
++          <label
++            key={role}
++            style={{
++              display: "inline-flex",
++              alignItems: "center",
++              gap: 6,
++              padding: "6px 10px",
++              borderRadius: 999,
++              border: "1px solid rgba(0,0,0,0.12)",
++              background: checked ? "rgba(29, 78, 216, 0.08)" : "transparent",
++            }}
++          >
++            <input
++              type="checkbox"
++              checked={checked}
++              disabled={disabled}
++              onChange={() => {
++                if (checked) {
++                  onChange(selected.filter((value) => value !== role));
++                } else {
++                  onChange([...selected, role]);
++                }
++              }}
++            />
++            {role}
++          </label>
++        );
++      })}
++    </div>
++  );
++}
++
++function TemplateFormFields({
++  form,
++  disabled,
++  onChange,
++}: {
++  form: TemplateFormState;
++  disabled?: boolean;
++  onChange: (updater: (prev: TemplateFormState) => TemplateFormState) => void;
++}) {
++  const firstSlotRoles = getAllowedRolesForFirstSlot({
++    category: form.category,
++    requiredRole: form.requiredRole === "" ? null : form.requiredRole,
++    secondaryAllowedRoles: form.secondaryAllowedRoles,
++    minStaffCount: form.minStaffCount,
++  });
++  const secondSlotRoles = getAllowedRolesForSecondSlot({
++    category: form.category,
++    requiredRole: form.requiredRole === "" ? null : form.requiredRole,
++    secondaryAllowedRoles: form.secondaryAllowedRoles,
++    minStaffCount: form.minStaffCount,
++  });
++
++  return (
++    <div style={{ display: "grid", gap: 12 }}>
++      <div style={{ display: "grid", gap: 6 }}>
++        <label>Nom</label>
++        <input
++          value={form.name}
++          disabled={disabled}
++          onChange={(e) => onChange((prev) => ({ ...prev, name: e.target.value }))}
++          placeholder="Ex. Journée ambulance"
++        />
++      </div>
++
++      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12 }}>
++        <div style={{ display: "grid", gap: 6 }}>
++          <label>Catégorie</label>
++          <select
++            value={form.category}
++            disabled={disabled}
++            onChange={(e) => onChange((prev) => updateFormForCategory(e.target.value as CategoryOption, prev))}
++          >
++            {CATEGORY_OPTIONS.map((category) => (
++              <option key={category} value={category}>
++                {category}
++              </option>
++            ))}
++          </select>
++        </div>
++
++        <div style={{ display: "grid", gap: 6 }}>
++          <label>Véhicule requis</label>
++          <select
++            value={form.requiredVehicleType}
++            disabled={disabled}
++            onChange={(e) => onChange((prev) => ({ ...prev, requiredVehicleType: e.target.value as VehicleTypeOption | "" }))}
++          >
++            <option value="">Aucun</option>
++            {VEHICLE_TYPE_OPTIONS.map((type) => (
++              <option key={type} value={type}>
++                {type}
++              </option>
++            ))}
++          </select>
++        </div>
++
++        <div style={{ display: "grid", gap: 6 }}>
++          <label>Personnes requises</label>
++          <select
++            value={String(form.minStaffCount)}
++            disabled={disabled}
++            onChange={(e) => onChange((prev) => ({ ...prev, minStaffCount: Number(e.target.value) as 1 | 2 }))}
++          >
++            <option value="1">1</option>
++            <option value="2">2</option>
++          </select>
++        </div>
++
++        <div style={{ display: "grid", gap: 6 }}>
++          <label>Couleur</label>
++          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
++            <input
++              type="color"
++              value={normalizeTemplateColor(form.color) ?? DEFAULT_COLOR}
++              disabled={disabled}
++              onChange={(e) => onChange((prev) => ({ ...prev, color: e.target.value }))}
++            />
++            <input
++              value={form.color}
++              disabled={disabled}
++              onChange={(e) => onChange((prev) => ({ ...prev, color: e.target.value }))}
++              placeholder="#1D4ED8"
++            />
++          </div>
++        </div>
++      </div>
++
++      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12 }}>
++        <div style={{ display: "grid", gap: 6 }}>
++          <label>Rôle obligatoire slot 1</label>
++          <select
++            value={form.requiredRole}
++            disabled={disabled}
++            onChange={(e) => onChange((prev) => ({ ...prev, requiredRole: e.target.value as RoleOption | "" }))}
++          >
++            <option value="">Aucun</option>
++            {ROLE_OPTIONS.map((role) => (
++              <option key={role} value={role}>
++                {role}
++              </option>
++            ))}
++          </select>
++        </div>
++
++        <div style={{ display: "grid", gap: 6 }}>
++          <label>Statut</label>
++          <label style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
++            <input
++              type="checkbox"
++              checked={form.isActive}
++              disabled={disabled}
++              onChange={(e) => onChange((prev) => ({ ...prev, isActive: e.target.checked }))}
++            />
++            Actif pour les nouvelles générations
++          </label>
++        </div>
++      </div>
++
++      <div style={{ display: "grid", gap: 6 }}>
++        <label>Rôles autorisés pour les autres slots</label>
++        <RoleCheckboxGroup
++          selected={form.secondaryAllowedRoles}
++          disabled={disabled}
++          onChange={(next) => onChange((prev) => ({ ...prev, secondaryAllowedRoles: next }))}
++        />
++        <div style={{ fontSize: 12, opacity: 0.72 }}>
++          Slot 1 autorisé : {firstSlotRoles.length > 0 ? firstSlotRoles.join(", ") : "libre"}
++          {form.minStaffCount === 2
++            ? ` • Slot 2 autorisé : ${secondSlotRoles.length > 0 ? secondSlotRoles.join(", ") : "libre"}`
++            : " • Slot 2 non utilisé"}
++        </div>
++      </div>
++
++      <div style={{ display: "grid", gap: 8 }}>
++        <label style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
++          <input
++            type="checkbox"
++            checked={form.isTimeDefined}
++            disabled={disabled}
++            onChange={(e) => onChange((prev) => ({ ...prev, isTimeDefined: e.target.checked, crossesMidnight: e.target.checked ? prev.crossesMidnight : false }))}
++          />
++          Template horodaté
++        </label>
++
++        {form.isTimeDefined ? (
++          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 12 }}>
++            <div style={{ display: "grid", gap: 6 }}>
++              <label>Début</label>
++              <input
++                type="time"
++                value={form.startTime}
++                disabled={disabled}
++                onChange={(e) => onChange((prev) => ({ ...prev, startTime: e.target.value }))}
++              />
++            </div>
++
++            <div style={{ display: "grid", gap: 6 }}>
++              <label>Fin</label>
++              <input
++                type="time"
++                value={form.endTime}
++                disabled={disabled}
++                onChange={(e) => onChange((prev) => ({ ...prev, endTime: e.target.value }))}
++              />
++            </div>
++
++            <div style={{ display: "grid", gap: 6, alignContent: "end" }}>
++              <label style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
++                <input
++                  type="checkbox"
++                  checked={form.crossesMidnight}
++                  disabled={disabled}
++                  onChange={(e) => onChange((prev) => ({ ...prev, crossesMidnight: e.target.checked }))}
++                />
++                Passe minuit
++              </label>
++            </div>
++          </div>
++        ) : (
++          <div style={{ fontSize: 13, opacity: 0.72 }}>
++            Le template est conservé sans horaire. Il n’est pas utilisable par l’autoschedule dans l’état actuel du lot.
++          </div>
++        )}
++      </div>
++    </div>
++  );
++}
++
++export default function TemplatesClient({ initialTemplates }: { initialTemplates: Template[] }) {
++  const [templates, setTemplates] = useState<Template[]>(initialTemplates);
++  const [createForm, setCreateForm] = useState<TemplateFormState>(() => createDefaultForm());
++  const [editingTemplateId, setEditingTemplateId] = useState<string | null>(null);
++  const [editForm, setEditForm] = useState<TemplateFormState | null>(null);
++  const [error, setError] = useState<string | null>(null);
++  const [successMessage, setSuccessMessage] = useState<string | null>(null);
++  const [isCreating, setIsCreating] = useState(false);
++  const [savingTemplateId, setSavingTemplateId] = useState<string | null>(null);
++  const [archivingTemplateId, setArchivingTemplateId] = useState<string | null>(null);
++  const [showArchived, setShowArchived] = useState(true);
++
++  const displayTemplates = useMemo(() => {
++    const sorted = [...templates].sort(compareTemplates);
++    return showArchived ? sorted : sorted.filter((template) => !template.archivedAt);
++  }, [showArchived, templates]);
++
++  function clearFeedback() {
++    setError(null);
++    setSuccessMessage(null);
++  }
++
++  async function handleCreate() {
++    if (createForm.name.trim().length === 0) {
++      setError("Le nom du template est obligatoire.");
++      return;
++    }
++
++    setIsCreating(true);
++    clearFeedback();
++
++    try {
++      const response = await fetch("/api/templates", {
++        method: "POST",
++        headers: { "Content-Type": "application/json" },
++        body: JSON.stringify(toPayload(createForm)),
++      });
++
++      const payload = (await response.json().catch(() => null)) as ApiResponse<Template> | null;
++
++      if (!response.ok || !payload?.ok) {
++        setError(getApiError(payload, "Impossible de créer le template."));
++        return;
++      }
++
++      setTemplates((prev) => [...prev, payload.data]);
++      setCreateForm(createDefaultForm());
++      setSuccessMessage("Template créé ✅");
++    } finally {
++      setIsCreating(false);
++    }
++  }
++
++  function openEdit(template: Template) {
++    clearFeedback();
++    setEditingTemplateId(template.id);
++    setEditForm(formFromTemplate(template));
++  }
++
++  function closeEdit() {
++    setEditingTemplateId(null);
++    setEditForm(null);
++  }
++
++  async function handleSave(templateId: string) {
++    if (!editForm) return;
++    if (editForm.name.trim().length === 0) {
++      setError("Le nom du template est obligatoire.");
++      return;
++    }
++
++    setSavingTemplateId(templateId);
++    clearFeedback();
++
++    try {
++      const response = await fetch(`/api/templates/${templateId}`, {
++        method: "PATCH",
++        headers: { "Content-Type": "application/json" },
++        body: JSON.stringify(toPayload(editForm)),
++      });
++
++      const payload = (await response.json().catch(() => null)) as ApiResponse<Template> | null;
++
++      if (!response.ok || !payload?.ok) {
++        setError(getApiError(payload, "Impossible d’enregistrer le template."));
++        return;
++      }
++
++      setTemplates((prev) => prev.map((template) => (template.id === templateId ? payload.data : template)));
++      setSuccessMessage("Template mis à jour ✅");
++      closeEdit();
++    } finally {
++      setSavingTemplateId(null);
++    }
++  }
++
++  async function handleArchive(templateId: string) {
++    const confirmed = window.confirm("Archiver ce template ? Il restera visible dans l’historique mais ne sera plus actif.");
++    if (!confirmed) return;
++
++    setArchivingTemplateId(templateId);
++    clearFeedback();
++
++    try {
++      const response = await fetch(`/api/templates/${templateId}/archive`, { method: "POST" });
++      const payload = (await response.json().catch(() => null)) as ApiResponse<Template> | null;
++
++      if (!response.ok || !payload?.ok) {
++        setError(getApiError(payload, "Impossible d’archiver le template."));
++        return;
++      }
++
++      setTemplates((prev) => prev.map((template) => (template.id === templateId ? payload.data : template)));
++      setSuccessMessage("Template archivé ✅");
++      if (editingTemplateId === templateId) closeEdit();
++    } finally {
++      setArchivingTemplateId(null);
++    }
++  }
++
++  async function handleToggleActive(template: Template) {
++    clearFeedback();
++    setSavingTemplateId(template.id);
++
++    try {
++      const response = await fetch(`/api/templates/${template.id}`, {
++        method: "PATCH",
++        headers: { "Content-Type": "application/json" },
++        body: JSON.stringify({ isActive: !template.isActive }),
++      });
++
++      const payload = (await response.json().catch(() => null)) as ApiResponse<Template> | null;
++
++      if (!response.ok || !payload?.ok) {
++        setError(getApiError(payload, "Impossible de modifier le statut."));
++        return;
++      }
++
++      setTemplates((prev) => prev.map((current) => (current.id === template.id ? payload.data : current)));
++      setSuccessMessage(payload.data.isActive ? "Template activé ✅" : "Template désactivé ✅");
++    } finally {
++      setSavingTemplateId(null);
++    }
++  }
++
++  return (
++    <div style={{ display: "grid", gap: 16 }}>
++      <section style={{ border: "1px solid rgba(0,0,0,0.1)", borderRadius: 12, padding: 16, display: "grid", gap: 12 }}>
++        <div>
++          <h2 style={{ margin: 0 }}>Créer un template</h2>
++          <p style={{ margin: "8px 0 0 0", opacity: 0.72 }}>
++            Les presets de catégorie pré-remplissent la composition minimale la plus courante. Vous pouvez ensuite ajuster le détail.
++          </p>
++        </div>
++
++        <TemplateFormFields form={createForm} disabled={isCreating} onChange={(updater) => setCreateForm((prev) => updater(prev))} />
++
++        <div style={{ display: "flex", justifyContent: "flex-end" }}>
++          <button type="button" onClick={handleCreate} disabled={isCreating}>
++            {isCreating ? "Création…" : "Créer le template"}
++          </button>
++        </div>
++      </section>
++
++      {error ? (
++        <div style={{ padding: 12, borderRadius: 10, border: "1px solid #fecaca", backgroundColor: "#fef2f2", color: "#991b1b" }}>{error}</div>
++      ) : null}
++      {successMessage ? (
++        <div style={{ padding: 12, borderRadius: 10, border: "1px solid #bbf7d0", backgroundColor: "#f0fdf4", color: "#166534" }}>
++          {successMessage}
++        </div>
++      ) : null}
++
++      <section style={{ display: "grid", gap: 12 }}>
++        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
++          <h2 style={{ margin: 0 }}>Templates existants</h2>
++          <label style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
++            <input type="checkbox" checked={showArchived} onChange={(e) => setShowArchived(e.target.checked)} />
++            Afficher les archivés
++          </label>
++        </div>
++
++        {displayTemplates.length === 0 ? (
++          <div style={{ opacity: 0.7 }}>Aucun template à afficher.</div>
++        ) : null}
++
++        {displayTemplates.map((template) => {
++          const isEditing = editingTemplateId === template.id && editForm !== null;
++          const isBusy = savingTemplateId === template.id || archivingTemplateId === template.id;
++
++          return (
++            <article
++              key={template.id}
++              style={{
++                border: "1px solid rgba(0,0,0,0.12)",
++                borderLeft: `10px solid ${normalizeTemplateColor(template.color) ?? DEFAULT_COLOR}`,
++                borderRadius: 12,
++                padding: 16,
++                display: "grid",
++                gap: 12,
++                opacity: template.archivedAt ? 0.82 : 1,
++              }}
++            >
++              <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", alignItems: "flex-start" }}>
++                <div style={{ display: "grid", gap: 6 }}>
++                  <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
++                    <h3 style={{ margin: 0 }}>{template.name}</h3>
++                    <span style={getStatusStyle(template)}>{getStatusLabel(template)}</span>
++                  </div>
++                  <div style={{ fontSize: 13, opacity: 0.76 }}>
++                    {template.category} • {getTimeLabel(template)} • Couleur {template.color ?? DEFAULT_COLOR}
++                  </div>
++                </div>
++
++                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
++                  {!template.archivedAt ? (
++                    <button type="button" onClick={() => handleToggleActive(template)} disabled={isBusy}>
++                      {savingTemplateId === template.id ? "Enregistrement…" : template.isActive ? "Désactiver" : "Réactiver"}
++                    </button>
++                  ) : null}
++                  {!template.archivedAt ? (
++                    <button type="button" onClick={() => openEdit(template)} disabled={isBusy}>
++                      Modifier
++                    </button>
++                  ) : null}
++                  {!template.archivedAt ? (
++                    <button type="button" onClick={() => handleArchive(template.id)} disabled={isBusy}>
++                      {archivingTemplateId === template.id ? "Archivage…" : "Archiver"}
++                    </button>
++                  ) : null}
++                </div>
++              </div>
++
++              {!isEditing ? (
++                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12 }}>
++                  <div>
++                    <div style={{ fontSize: 12, opacity: 0.65 }}>Composition</div>
++                    <div>
++                      {resolveTemplateMinStaffCount(template.minStaffCount, template.category)} personne(s), slot 1 : {getAllowedRolesForFirstSlot(template).join(", ") || "libre"}
++                      {resolveTemplateMinStaffCount(template.minStaffCount, template.category) === 2
++                        ? `, slot 2 : ${getAllowedRolesForSecondSlot(template).join(", ") || "libre"}`
++                        : ""}
++                    </div>
++                  </div>
++                  <div>
++                    <div style={{ fontSize: 12, opacity: 0.65 }}>Véhicule requis</div>
++                    <div>{template.requiredVehicleType ?? "Aucun"}</div>
++                  </div>
++                  <div>
++                    <div style={{ fontSize: 12, opacity: 0.65 }}>Créé / mis à jour</div>
++                    <div>
++                      {formatDateTime(template.createdAt)} / {formatDateTime(template.updatedAt)}
++                    </div>
++                  </div>
++                  {template.archivedAt ? (
++                    <div>
++                      <div style={{ fontSize: 12, opacity: 0.65 }}>Archivé le</div>
++                      <div>{formatDateTime(template.archivedAt)}</div>
++                    </div>
++                  ) : null}
++                </div>
++              ) : editForm ? (
++                <div style={{ display: "grid", gap: 12 }}>
++                  <TemplateFormFields form={editForm} disabled={isBusy} onChange={(updater) => setEditForm((prev) => (prev ? updater(prev) : prev))} />
++                  <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, flexWrap: "wrap" }}>
++                    <button type="button" onClick={closeEdit} disabled={isBusy}>
++                      Annuler
++                    </button>
++                    <button type="button" onClick={() => handleSave(template.id)} disabled={isBusy}>
++                      {savingTemplateId === template.id ? "Enregistrement…" : "Enregistrer"}
++                    </button>
++                  </div>
++                </div>
++              ) : null}
++            </article>
++          );
++        })}
++      </section>
++    </div>
++  );
++}
+diff --git a/lib/services/planning/assign-draftshift.ts b/lib/services/planning/assign-draftshift.ts
+index d954364..3d14b7b 100644
+--- a/lib/services/planning/assign-draftshift.ts
++++ b/lib/services/planning/assign-draftshift.ts
+@@ -5,6 +5,7 @@ import { findFirstUserAbsenceConflict } from "@/lib/services/planning/user-absen
+ import type { PlanningIssue, PlanningIssueCode } from "@/lib/types/planning";
+ import { COMPANY_PARAMETER_KEYS } from "@/lib/company-rules/catalog";
+ import { loadMinRestCompanyRule } from "@/lib/company-rules/runtime";
++import { isRoleAllowedForSlot, resolveTemplateMinStaffCount } from "@/lib/templates/template-rules";
+ 
+ export type AssignDraftShiftInput = {
+   companyId: string;
+@@ -22,10 +23,6 @@ export type AssignDraftShiftResult =
+ 
+ type Category = "VSL" | "TAXI" | "AMBULANCE" | "GARDE" | string;
+ 
+-function requiredSlotsFromCategory(category: Category | null | undefined): 1 | 2 {
+-  return category === "AMBULANCE" || category === "GARDE" ? 2 : 1;
+-}
+-
+ function normalizePair(userId: string | null, user2Id: string | null): { userId: string | null; user2Id: string | null } {
+   if (!userId && user2Id) return { userId: user2Id, user2Id: null };
+   return { userId, user2Id };
+@@ -60,7 +57,7 @@ export async function assignDraftShift(input: AssignDraftShiftInput): Promise<As
+       vehicleId: true,
+       runId: true,
+       run: { select: { status: true } },
+-      template: { select: { category: true } },
++      template: { select: { category: true, requiredRole: true, secondaryAllowedRoles: true, minStaffCount: true, requiredVehicleType: true } },
+     },
+   });
+ 
+@@ -72,7 +69,7 @@ export async function assignDraftShift(input: AssignDraftShiftInput): Promise<As
+   }
+ 
+   const category = (draft.template?.category ?? null) as Category | null;
+-  const requiredSlots = requiredSlotsFromCategory(category);
++  const requiredSlots = resolveTemplateMinStaffCount(draft.template?.minStaffCount ?? null, category);
+ 
+   // 2) Validation slots
+   const countAssigned = (userId ? 1 : 0) + (user2Id ? 1 : 0);
+@@ -90,6 +87,64 @@ export async function assignDraftShift(input: AssignDraftShiftInput): Promise<As
+   const issues: PlanningIssue[] = [];
+   const assignedUsers = [userId, user2Id].filter((x): x is string => Boolean(x));
+ 
++  const selectedUsers = assignedUsers.length > 0
++    ? await prisma.user.findMany({
++        where: { id: { in: assignedUsers }, companyId },
++        select: { id: true, role: true },
++      })
++    : [];
++
++  if (selectedUsers.length !== assignedUsers.length) {
++    return { ok: false, error: err("VALIDATION_ERROR", "Employé invalide pour la société courante.") };
++  }
++
++  const user1Role = selectedUsers.find((user) => user.id === userId)?.role ?? null;
++  const user2Role = selectedUsers.find((user) => user.id === user2Id)?.role ?? null;
++
++  if (userId && !isRoleAllowedForSlot(draft.template ?? { category }, 1, user1Role)) {
++    return {
++      ok: false,
++      error: err("TEMPLATE_ROLE_MISMATCH", "Le rôle du slot 1 ne respecte pas la composition minimale du template.", {
++        slot: 1,
++        userId,
++        role: user1Role,
++      }),
++    };
++  }
++
++  if (user2Id && !isRoleAllowedForSlot(draft.template ?? { category }, 2, user2Role)) {
++    return {
++      ok: false,
++      error: err("TEMPLATE_ROLE_MISMATCH", "Le rôle du slot 2 ne respecte pas la composition minimale du template.", {
++        slot: 2,
++        userId: user2Id,
++        role: user2Role,
++      }),
++    };
++  }
++
++  if (vehicleId && draft.template?.requiredVehicleType) {
++    const selectedVehicle = await prisma.vehicle.findFirst({
++      where: { id: vehicleId, companyId },
++      select: { id: true, type: true },
++    });
++
++    if (!selectedVehicle) {
++      return { ok: false, error: err("VALIDATION_ERROR", "Véhicule invalide pour la société courante.") };
++    }
++
++    if (selectedVehicle.type !== draft.template.requiredVehicleType) {
++      return {
++        ok: false,
++        error: err("TEMPLATE_VEHICLE_TYPE_MISMATCH", "Le véhicule choisi ne correspond pas au type requis par le template.", {
++          requiredVehicleType: draft.template.requiredVehicleType,
++          actualVehicleType: selectedVehicle.type,
++          vehicleId,
++        }),
++      };
++    }
++  }
++
+   const absenceConflict =
+     assignedUsers.length > 0
+       ? await findFirstUserAbsenceConflict(prisma, {
+diff --git a/lib/services/planning/assign-shift.ts b/lib/services/planning/assign-shift.ts
+index 92874de..99dabae 100644
+--- a/lib/services/planning/assign-shift.ts
++++ b/lib/services/planning/assign-shift.ts
+@@ -5,6 +5,7 @@ import { findFirstUserAbsenceConflict } from "@/lib/services/planning/user-absen
+ import type { PlanningIssue, PlanningIssueCode } from "@/lib/types/planning";
+ import { COMPANY_PARAMETER_KEYS } from "@/lib/company-rules/catalog";
+ import { loadMinRestCompanyRule } from "@/lib/company-rules/runtime";
++import { isRoleAllowedForSlot, resolveTemplateMinStaffCount } from "@/lib/templates/template-rules";
+ 
+ export type AssignShiftInput = {
+   companyId: string;
+@@ -23,10 +24,6 @@ export type AssignShiftResult =
+ 
+ type Category = "VSL" | "TAXI" | "AMBULANCE" | "GARDE" | string;
+ 
+-function requiredSlotsFromCategory(category: Category | null | undefined): 1 | 2 {
+-  return category === "AMBULANCE" || category === "GARDE" ? 2 : 1;
+-}
+-
+ function normalizePair(userId: string | null, user2Id: string | null): { userId: string | null; user2Id: string | null } {
+   if (!userId && user2Id) return { userId: user2Id, user2Id: null };
+   return { userId, user2Id };
+@@ -62,7 +59,7 @@ export async function assignShift(input: AssignShiftInput): Promise<AssignShiftR
+       vehicleId: true,
+       depotId: true,
+       runId: true,
+-      template: { select: { category: true } },
++      template: { select: { category: true, requiredRole: true, secondaryAllowedRoles: true, minStaffCount: true, requiredVehicleType: true } },
+     },
+   });
+ 
+@@ -70,7 +67,7 @@ export async function assignShift(input: AssignShiftInput): Promise<AssignShiftR
+   if (shift.companyId !== companyId) return { ok: false, error: err("FORBIDDEN_COMPANY", "Accès interdit (multi-tenant).") };
+ 
+   const category = (shift.template?.category ?? null) as Category | null;
+-  const requiredSlots = requiredSlotsFromCategory(category);
++  const requiredSlots = resolveTemplateMinStaffCount(shift.template?.minStaffCount ?? null, category);
+ 
+   // 2) Validation slots
+   const countAssigned = (userId ? 1 : 0) + (user2Id ? 1 : 0);
+@@ -88,6 +85,64 @@ export async function assignShift(input: AssignShiftInput): Promise<AssignShiftR
+   const issues: PlanningIssue[] = [];
+   const assignedUsers = [userId, user2Id].filter((x): x is string => Boolean(x));
+ 
++  const selectedUsers = assignedUsers.length > 0
++    ? await prisma.user.findMany({
++        where: { id: { in: assignedUsers }, companyId },
++        select: { id: true, role: true },
++      })
++    : [];
++
++  if (selectedUsers.length !== assignedUsers.length) {
++    return { ok: false, error: err("VALIDATION_ERROR", "Employé invalide pour la société courante.") };
++  }
++
++  const user1Role = selectedUsers.find((user) => user.id === userId)?.role ?? null;
++  const user2Role = selectedUsers.find((user) => user.id === user2Id)?.role ?? null;
++
++  if (userId && !isRoleAllowedForSlot(shift.template ?? { category }, 1, user1Role)) {
++    return {
++      ok: false,
++      error: err("TEMPLATE_ROLE_MISMATCH", "Le rôle du slot 1 ne respecte pas la composition minimale du template.", {
++        slot: 1,
++        userId,
++        role: user1Role,
++      }),
++    };
++  }
++
++  if (user2Id && !isRoleAllowedForSlot(shift.template ?? { category }, 2, user2Role)) {
++    return {
++      ok: false,
++      error: err("TEMPLATE_ROLE_MISMATCH", "Le rôle du slot 2 ne respecte pas la composition minimale du template.", {
++        slot: 2,
++        userId: user2Id,
++        role: user2Role,
++      }),
++    };
++  }
++
++  if (vehicleId && shift.template?.requiredVehicleType) {
++    const selectedVehicle = await prisma.vehicle.findFirst({
++      where: { id: vehicleId, companyId },
++      select: { id: true, type: true },
++    });
++
++    if (!selectedVehicle) {
++      return { ok: false, error: err("VALIDATION_ERROR", "Véhicule invalide pour la société courante.") };
++    }
++
++    if (selectedVehicle.type !== shift.template.requiredVehicleType) {
++      return {
++        ok: false,
++        error: err("TEMPLATE_VEHICLE_TYPE_MISMATCH", "Le véhicule choisi ne correspond pas au type requis par le template.", {
++          requiredVehicleType: shift.template.requiredVehicleType,
++          actualVehicleType: selectedVehicle.type,
++          vehicleId,
++        }),
++      };
++    }
++  }
++
+   const absenceConflict =
+     assignedUsers.length > 0
+       ? await findFirstUserAbsenceConflict(prisma, {
+diff --git a/lib/services/templates/archive-template.ts b/lib/services/templates/archive-template.ts
+new file mode 100644
+index 0000000..7dc4819
+--- /dev/null
++++ b/lib/services/templates/archive-template.ts
+@@ -0,0 +1,47 @@
++import { prisma } from "@/lib/prisma";
++
++const archivedTemplateSelect = {
++  id: true,
++  name: true,
++  category: true,
++  requiredRole: true,
++  secondaryAllowedRoles: true,
++  minStaffCount: true,
++  requiredVehicleType: true,
++  isActive: true,
++  archivedAt: true,
++  isTimeDefined: true,
++  startTime: true,
++  endTime: true,
++  crossesMidnight: true,
++  color: true,
++  createdAt: true,
++  updatedAt: true,
++} as const;
++
++export type ArchiveTemplateInput = {
++  id: string;
++  companyId: string;
++};
++
++export async function archiveTemplate(input: ArchiveTemplateInput) {
++  const existing = await prisma.shiftTemplate.findFirst({
++    where: {
++      id: input.id,
++      companyId: input.companyId,
++    },
++    select: archivedTemplateSelect,
++  });
++
++  if (!existing) return null;
++  if (existing.archivedAt) return existing;
++
++  return prisma.shiftTemplate.update({
++    where: { id: existing.id },
++    data: {
++      isActive: false,
++      archivedAt: new Date(),
++    },
++    select: archivedTemplateSelect,
++  });
++}
+diff --git a/lib/templates/template-api.ts b/lib/templates/template-api.ts
+new file mode 100644
+index 0000000..30cea22
+--- /dev/null
++++ b/lib/templates/template-api.ts
+@@ -0,0 +1,171 @@
++import { PlanningTemplateCategory, Role, VehicleType } from "@prisma/client";
++import { z } from "zod";
++
++import { defaultMinStaffCountFromCategory, normalizeTemplateColor } from "@/lib/templates/template-rules";
++
++export const timeStringSchema = z
++  .string()
++  .trim()
++  .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Invalid time format. Expected HH:MM.");
++
++export const templateColorSchema = z
++  .string()
++  .trim()
++  .regex(/^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, "Invalid color. Expected #RGB or #RRGGBB.");
++
++const secondaryAllowedRolesSchema = z.array(z.nativeEnum(Role)).max(7, "too many secondary roles");
++const minStaffCountSchema = z.number().int().min(1).max(2);
++
++export const listTemplateQuerySchema = z.object({
++  limit: z.coerce.number().int().min(1).max(500).optional().default(200),
++  isActive: z
++    .enum(["true", "false"])
++    .optional()
++    .transform((value) => (value === undefined ? undefined : value === "true")),
++  category: z.nativeEnum(PlanningTemplateCategory).optional(),
++  includeArchived: z
++    .enum(["true", "false"])
++    .optional()
++    .transform((value) => value === "true"),
++});
++
++export const createTemplateBodySchema = z
++  .object({
++    name: z.string().trim().min(1, "name required").max(160, "name too long"),
++    category: z.nativeEnum(PlanningTemplateCategory),
++    requiredRole: z.nativeEnum(Role).nullable().optional(),
++    secondaryAllowedRoles: secondaryAllowedRolesSchema.optional(),
++    minStaffCount: minStaffCountSchema.optional(),
++    requiredVehicleType: z.nativeEnum(VehicleType).nullable().optional(),
++    isActive: z.boolean().optional(),
++    isTimeDefined: z.boolean().optional(),
++    startTime: timeStringSchema.nullable().optional(),
++    endTime: timeStringSchema.nullable().optional(),
++    crossesMidnight: z.boolean().optional(),
++    color: templateColorSchema.nullable().optional(),
++  })
++  .strict();
++
++export const updateTemplateBodySchema = z
++  .object({
++    name: z.string().trim().min(1, "name required").max(160, "name too long").optional(),
++    category: z.nativeEnum(PlanningTemplateCategory).optional(),
++    requiredRole: z.nativeEnum(Role).nullable().optional(),
++    secondaryAllowedRoles: secondaryAllowedRolesSchema.optional(),
++    minStaffCount: minStaffCountSchema.nullable().optional(),
++    requiredVehicleType: z.nativeEnum(VehicleType).nullable().optional(),
++    isActive: z.boolean().optional(),
++    isTimeDefined: z.boolean().optional(),
++    startTime: timeStringSchema.nullable().optional(),
++    endTime: timeStringSchema.nullable().optional(),
++    crossesMidnight: z.boolean().optional(),
++    color: templateColorSchema.nullable().optional(),
++  })
++  .strict()
++  .refine(
++    (value) =>
++      value.name !== undefined ||
++      value.category !== undefined ||
++      value.requiredRole !== undefined ||
++      value.secondaryAllowedRoles !== undefined ||
++      value.minStaffCount !== undefined ||
++      value.requiredVehicleType !== undefined ||
++      value.isActive !== undefined ||
++      value.isTimeDefined !== undefined ||
++      value.startTime !== undefined ||
++      value.endTime !== undefined ||
++      value.crossesMidnight !== undefined ||
++      value.color !== undefined,
++    {
++      message: "At least one editable field is required",
++    }
++  );
++
++export const templateSelect = {
++  id: true,
++  name: true,
++  category: true,
++  requiredRole: true,
++  secondaryAllowedRoles: true,
++  minStaffCount: true,
++  requiredVehicleType: true,
++  isActive: true,
++  archivedAt: true,
++  isTimeDefined: true,
++  startTime: true,
++  endTime: true,
++  crossesMidnight: true,
++  color: true,
++  createdAt: true,
++  updatedAt: true,
++} as const;
++
++export type TemplateCreateBody = z.infer<typeof createTemplateBodySchema>;
++export type TemplateUpdateBody = z.infer<typeof updateTemplateBodySchema>;
++
++export type TemplateResolvedState = {
++  name: string;
++  category: PlanningTemplateCategory;
++  requiredRole: Role | null;
++  secondaryAllowedRoles: Role[];
++  minStaffCount: number | null;
++  requiredVehicleType: VehicleType | null;
++  isActive: boolean;
++  archivedAt: Date | null;
++  isTimeDefined: boolean;
++  startTime: string | null;
++  endTime: string | null;
++  crossesMidnight: boolean;
++  color: string | null;
++};
++
++function dedupeRoles(values: Role[] | undefined): Role[] {
++  return Array.from(new Set(values ?? []));
++}
++
++export function resolveTemplateCreateInput(input: TemplateCreateBody): TemplateResolvedState {
++  const isTimeDefined = input.isTimeDefined ?? true;
++  const startTime = isTimeDefined ? (input.startTime ?? null) : null;
++  const endTime = isTimeDefined ? (input.endTime ?? null) : null;
++
++  return {
++    name: input.name,
++    category: input.category,
++    requiredRole: input.requiredRole ?? null,
++    secondaryAllowedRoles: dedupeRoles(input.secondaryAllowedRoles),
++    minStaffCount: input.minStaffCount ?? defaultMinStaffCountFromCategory(input.category),
++    requiredVehicleType: input.requiredVehicleType ?? null,
++    isActive: input.isActive ?? true,
++    archivedAt: null,
++    isTimeDefined,
++    startTime,
++    endTime,
++    crossesMidnight: isTimeDefined ? input.crossesMidnight ?? false : false,
++    color: input.color === undefined ? null : normalizeTemplateColor(input.color),
++  };
++}
++
++export function validateResolvedTemplateState(input: TemplateResolvedState) {
++  const issues: Array<{ path: string[]; message: string }> = [];
++
++  if (input.isTimeDefined) {
++    if (!input.startTime) issues.push({ path: ["startTime"], message: "startTime required when isTimeDefined=true" });
++    if (!input.endTime) issues.push({ path: ["endTime"], message: "endTime required when isTimeDefined=true" });
++  } else {
++    if (input.startTime !== null) issues.push({ path: ["startTime"], message: "startTime must be null when isTimeDefined=false" });
++    if (input.endTime !== null) issues.push({ path: ["endTime"], message: "endTime must be null when isTimeDefined=false" });
++    if (input.crossesMidnight) {
++      issues.push({ path: ["crossesMidnight"], message: "crossesMidnight must be false when isTimeDefined=false" });
++    }
++  }
++
++  if (input.minStaffCount !== null && input.minStaffCount !== 1 && input.minStaffCount !== 2) {
++    issues.push({ path: ["minStaffCount"], message: "minStaffCount must be 1 or 2 in current scope" });
++  }
++
++  if (input.color !== null && normalizeTemplateColor(input.color) === null) {
++    issues.push({ path: ["color"], message: "Invalid color" });
++  }
++
++  return issues;
++}
+diff --git a/lib/templates/template-rules.ts b/lib/templates/template-rules.ts
+new file mode 100644
+index 0000000..e94d30e
+--- /dev/null
++++ b/lib/templates/template-rules.ts
+@@ -0,0 +1,112 @@
++export type TemplateCategoryValue = "VSL" | "AMBULANCE" | "TAXI" | "GARDE" | string | null | undefined;
++export type TemplateRoleValue = "ADMIN" | "GERANT" | "BUREAU" | "ADE" | "AA" | "TAXI" | "REGULATEUR" | string | null | undefined;
++export type TemplateVehicleTypeValue = "AMBULANCE" | "VSL" | "TAXI" | string | null | undefined;
++
++export type TemplateStaffingRuleInput = {
++  category?: TemplateCategoryValue;
++  requiredRole?: TemplateRoleValue;
++  secondaryAllowedRoles?: readonly TemplateRoleValue[] | null;
++  minStaffCount?: number | null;
++};
++
++const KNOWN_ROLE_VALUES = ["ADMIN", "GERANT", "BUREAU", "ADE", "AA", "TAXI", "REGULATEUR"] as const;
++
++type KnownRoleValue = (typeof KNOWN_ROLE_VALUES)[number];
++
++export function defaultMinStaffCountFromCategory(category: TemplateCategoryValue): 1 | 2 {
++  return category === "AMBULANCE" || category === "GARDE" ? 2 : 1;
++}
++
++export function resolveTemplateMinStaffCount(minStaffCount: number | null | undefined, category: TemplateCategoryValue): 1 | 2 {
++  if (minStaffCount === 2) return 2;
++  if (minStaffCount === 1) return 1;
++  return defaultMinStaffCountFromCategory(category);
++}
++
++export function normalizeTemplateColor(value: string | null | undefined): string | null {
++  if (typeof value !== "string") return null;
++
++  const trimmed = value.trim();
++  if (trimmed.length === 0) return null;
++  if (!/^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(trimmed)) return null;
++
++  return trimmed.toUpperCase();
++}
++
++export function toKnownRoleValues(values: readonly TemplateRoleValue[] | null | undefined): KnownRoleValue[] {
++  if (!Array.isArray(values)) return [];
++
++  const unique = new Set<KnownRoleValue>();
++  for (const value of values) {
++    if (typeof value !== "string") continue;
++    if ((KNOWN_ROLE_VALUES as readonly string[]).includes(value)) {
++      unique.add(value as KnownRoleValue);
++    }
++  }
++
++  return Array.from(unique);
++}
++
++export function getAllowedRolesForFirstSlot(template: TemplateStaffingRuleInput): KnownRoleValue[] {
++  if (typeof template.requiredRole === "string" && (KNOWN_ROLE_VALUES as readonly string[]).includes(template.requiredRole)) {
++    return [template.requiredRole as KnownRoleValue];
++  }
++
++  if (resolveTemplateMinStaffCount(template.minStaffCount, template.category) === 1) {
++    return toKnownRoleValues(template.secondaryAllowedRoles);
++  }
++
++  return [];
++}
++
++export function getAllowedRolesForSecondSlot(template: TemplateStaffingRuleInput): KnownRoleValue[] {
++  if (resolveTemplateMinStaffCount(template.minStaffCount, template.category) < 2) return [];
++  return toKnownRoleValues(template.secondaryAllowedRoles);
++}
++
++export function isRoleAllowedForSlot(
++  template: TemplateStaffingRuleInput,
++  slot: 1 | 2,
++  role: TemplateRoleValue
++): boolean {
++  if (typeof role !== "string") return false;
++
++  const allowed = slot === 1 ? getAllowedRolesForFirstSlot(template) : getAllowedRolesForSecondSlot(template);
++  if (allowed.length === 0) return true;
++
++  return allowed.includes(role as KnownRoleValue);
++}
++
++export function getCategoryTemplatePreset(category: TemplateCategoryValue) {
++  switch (category) {
++    case "AMBULANCE":
++    case "GARDE":
++      return {
++        minStaffCount: 2 as const,
++        requiredRole: "ADE",
++        secondaryAllowedRoles: ["ADE", "AA"] as const,
++        requiredVehicleType: "AMBULANCE",
++      };
++    case "TAXI":
++      return {
++        minStaffCount: 1 as const,
++        requiredRole: "TAXI",
++        secondaryAllowedRoles: ["TAXI"] as const,
++        requiredVehicleType: "TAXI",
++      };
++    case "VSL":
++      return {
++        minStaffCount: 1 as const,
++        requiredRole: null,
++        secondaryAllowedRoles: ["AA", "ADE", "TAXI"] as const,
++        requiredVehicleType: "VSL",
++      };
++    default:
++      return {
++        minStaffCount: defaultMinStaffCountFromCategory(category),
++        requiredRole: null,
++        secondaryAllowedRoles: [] as const,
++        requiredVehicleType: null,
++      };
++  }
++}
+diff --git a/lib/types/planning.ts b/lib/types/planning.ts
+index 9dc5690..35071bd 100644
+--- a/lib/types/planning.ts
++++ b/lib/types/planning.ts
+@@ -12,6 +12,8 @@ export type PlanningIssueCode =
+   | "MIN_REST_VIOLATION"
+   | "RULE_BLOCKED"
+   | "RULE_CONFIG_ERROR"
++  | "TEMPLATE_ROLE_MISMATCH"
++  | "TEMPLATE_VEHICLE_TYPE_MISMATCH"
+   | "VALIDATION_ERROR";
+ 
+ export type PlanningIssue = {
+diff --git a/prisma/migrations/20260407120000_tpl07_13_templates_admin_module/migration.sql b/prisma/migrations/20260407120000_tpl07_13_templates_admin_module/migration.sql
+new file mode 100644
+index 0000000..b97ed18
+--- /dev/null
++++ b/prisma/migrations/20260407120000_tpl07_13_templates_admin_module/migration.sql
+@@ -0,0 +1,43 @@
++-- A6 TPL-07 -> TPL-13
++-- Module templates minimal administrable : archivage logique, composition minimale,
++-- type de véhicule requis, nombre de personnes requis, templates non horodatés, couleur libre.
++
++ALTER TABLE "ShiftTemplate"
++  ADD COLUMN "secondaryAllowedRoles" "Role"[] NOT NULL DEFAULT ARRAY[]::"Role"[],
++  ADD COLUMN "minStaffCount" INTEGER,
++  ADD COLUMN "requiredVehicleType" "VehicleType",
++  ADD COLUMN "archivedAt" TIMESTAMP(3),
++  ADD COLUMN "isTimeDefined" BOOLEAN NOT NULL DEFAULT true,
++  ADD COLUMN "color" TEXT;
++
++ALTER TABLE "ShiftTemplate"
++  ALTER COLUMN "startTime" DROP NOT NULL,
++  ALTER COLUMN "endTime" DROP NOT NULL;
++
++UPDATE "ShiftTemplate"
++SET
++  "minStaffCount" = CASE
++    WHEN "category" IN ('AMBULANCE', 'GARDE') THEN 2
++    ELSE 1
++  END,
++  "requiredRole" = CASE
++    WHEN "requiredRole" IS NOT NULL THEN "requiredRole"
++    WHEN "category" IN ('AMBULANCE', 'GARDE') THEN 'ADE'::"Role"
++    WHEN "category" = 'TAXI' THEN 'TAXI'::"Role"
++    ELSE NULL
++  END,
++  "secondaryAllowedRoles" = CASE
++    WHEN "category" IN ('AMBULANCE', 'GARDE') THEN ARRAY['ADE', 'AA']::"Role"[]
++    WHEN "category" = 'VSL' THEN ARRAY['AA', 'ADE', 'TAXI']::"Role"[]
++    WHEN "category" = 'TAXI' THEN ARRAY['TAXI']::"Role"[]
++    ELSE ARRAY[]::"Role"[]
++  END,
++  "requiredVehicleType" = CASE
++    WHEN "category" IN ('AMBULANCE', 'GARDE') THEN 'AMBULANCE'::"VehicleType"
++    WHEN "category" = 'VSL' THEN 'VSL'::"VehicleType"
++    WHEN "category" = 'TAXI' THEN 'TAXI'::"VehicleType"
++    ELSE NULL
++  END
++WHERE "minStaffCount" IS NULL;
++
++CREATE INDEX "ShiftTemplate_companyId_archivedAt_idx" ON "ShiftTemplate"("companyId", "archivedAt");
+diff --git a/prisma/schema.prisma b/prisma/schema.prisma
+index 3f0c1e2..34ad44a 100644
+--- a/prisma/schema.prisma
++++ b/prisma/schema.prisma
+@@ -261,13 +261,19 @@ model ShiftTemplate {
+   name String
+ 
+   // ✅ 4.1 — pour automatisation
+-  category     PlanningTemplateCategory @default(AMBULANCE)
+-  requiredRole Role?
+-  isActive     Boolean                  @default(true)
+-
+-  startTime       String // "08:00"
+-  endTime         String // "16:00"
+-  crossesMidnight Boolean @default(false)
++  category             PlanningTemplateCategory @default(AMBULANCE)
++  requiredRole         Role?
++  secondaryAllowedRoles Role[]
++  minStaffCount        Int?
++  requiredVehicleType  VehicleType?
++  isActive             Boolean                  @default(true)
++  archivedAt           DateTime?
++
++  isTimeDefined    Boolean @default(true)
++  startTime        String? // "08:00"
++  endTime          String? // "16:00"
++  crossesMidnight  Boolean @default(false)
++  color            String?
+ 
+   createdAt DateTime @default(now())
+   updatedAt DateTime @updatedAt
+@@ -283,6 +289,7 @@ model ShiftTemplate {
+   @@unique([companyId, name])
+   @@index([companyId])
+   @@index([companyId, category])
++  @@index([companyId, archivedAt])
+ }
+ 
+ model MaintenanceType {

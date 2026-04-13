@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma";
 import { canEditPlanning } from "@/lib/permissions";
 import { assignDraftShift } from "@/lib/services/planning/assign-draftshift";
 import { assignShift } from "@/lib/services/planning/assign-shift";
+import { resolveTemplateMinStaffCount } from "@/lib/templates/template-rules";
 
 const BodySchema = z
   .object({
@@ -24,10 +25,6 @@ function json(status: number, payload: unknown) {
 }
 
 type Category = "VSL" | "TAXI" | "AMBULANCE" | "GARDE" | string;
-
-function allowedUserSlots(category: Category | null | undefined): 1 | 2 {
-  return category === "AMBULANCE" || category === "GARDE" ? 2 : 1;
-}
 
 export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   // 1) Session
@@ -75,7 +72,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
       user2Id: true,
       vehicleId: true,
       run: { select: { status: true } },
-      template: { select: { category: true } },
+      template: { select: { category: true, minStaffCount: true } },
     },
   });
 
@@ -91,7 +88,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
           user2Id: true,
           vehicleId: true,
           depotId: true,
-          template: { select: { category: true } },
+          template: { select: { category: true, minStaffCount: true } },
         },
       })
     : null;
@@ -104,7 +101,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
   }
 
   const category = (current.template?.category ?? null) as Category | null;
-  const slots = allowedUserSlots(category);
+  const slots = resolveTemplateMinStaffCount(current.template?.minStaffCount ?? null, category);
 
   // user2 interdit si slots=1
   if (slots === 1 && user2Id !== undefined && user2Id !== null) {
@@ -178,7 +175,9 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
       if (
         result.error.code === "INVALID_SLOT_COUNT" ||
         result.error.code === "DUPLICATE_USER_IN_SAME_SHIFT" ||
-        result.error.code === "VALIDATION_ERROR"
+        result.error.code === "VALIDATION_ERROR" ||
+        result.error.code === "TEMPLATE_ROLE_MISMATCH" ||
+        result.error.code === "TEMPLATE_VEHICLE_TYPE_MISMATCH"
       ) {
         return json(400, { ok: false, error: result.error.code, details: result.error.meta ?? null });
       }
@@ -208,7 +207,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
         user: { select: { id: true, name: true, email: true, role: true } },
         user2: { select: { id: true, name: true, email: true, role: true } },
         vehicle: { select: { id: true, immatriculation: true, type: true, status: true } },
-        template: { select: { id: true, name: true, category: true } },
+        template: { select: { id: true, name: true, category: true, minStaffCount: true, requiredVehicleType: true, color: true } },
         run: { select: { id: true, status: true, scope: true, day: true, weekStart: true, createdAt: true } },
       },
     });
@@ -262,7 +261,9 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     if (
       result.error.code === "INVALID_SLOT_COUNT" ||
       result.error.code === "DUPLICATE_USER_IN_SAME_SHIFT" ||
-      result.error.code === "VALIDATION_ERROR"
+      result.error.code === "VALIDATION_ERROR" ||
+      result.error.code === "TEMPLATE_ROLE_MISMATCH" ||
+      result.error.code === "TEMPLATE_VEHICLE_TYPE_MISMATCH"
     ) {
       return json(400, { ok: false, error: result.error.code, details: result.error.meta ?? null });
     }
@@ -291,7 +292,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
       user2: { select: { id: true, name: true, email: true, role: true } },
       vehicle: { select: { id: true, immatriculation: true, type: true, status: true } },
       depot: { select: { id: true, name: true, isActive: true } },
-      template: { select: { id: true, name: true, category: true } },
+      template: { select: { id: true, name: true, category: true, minStaffCount: true, requiredVehicleType: true, color: true } },
       run: { select: { id: true, status: true, scope: true, day: true, weekStart: true, createdAt: true } },
     },
   });

@@ -1,6 +1,4 @@
 import { getServerSession } from "next-auth/next";
-import { z } from "zod";
-import { PlanningTemplateCategory, Role } from "@prisma/client";
 
 import { authOptions } from "@/lib/auth";
 import { badRequest, conflict, forbidden, ok, serverError, unauthorized } from "@/lib/api/response";
@@ -8,45 +6,13 @@ import { prismaToHttp } from "@/lib/api/prisma-error";
 import { canManageTemplates } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 import { serializeDates } from "@/lib/serializers";
-
-const timeStringSchema = z
-  .string()
-  .trim()
-  .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Invalid time format. Expected HH:MM.");
-
-const listQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(500).optional().default(200),
-  isActive: z
-    .enum(["true", "false"])
-    .optional()
-    .transform((value) => (value === undefined ? undefined : value === "true")),
-  category: z.nativeEnum(PlanningTemplateCategory).optional(),
-});
-
-const createTemplateBodySchema = z
-  .object({
-    name: z.string().trim().min(1, "name required").max(160, "name too long"),
-    category: z.nativeEnum(PlanningTemplateCategory),
-    requiredRole: z.nativeEnum(Role).nullable().optional(),
-    isActive: z.boolean().optional(),
-    startTime: timeStringSchema,
-    endTime: timeStringSchema,
-    crossesMidnight: z.boolean().optional(),
-  })
-  .strict();
-
-const templateSelect = {
-  id: true,
-  name: true,
-  category: true,
-  requiredRole: true,
-  isActive: true,
-  startTime: true,
-  endTime: true,
-  crossesMidnight: true,
-  createdAt: true,
-  updatedAt: true,
-} as const;
+import {
+  createTemplateBodySchema,
+  listTemplateQuerySchema,
+  resolveTemplateCreateInput,
+  templateSelect,
+  validateResolvedTemplateState,
+} from "@/lib/templates/template-api";
 
 function getErrorMessage(error: unknown): string {
   if (error instanceof Error) return error.message;
@@ -69,14 +35,15 @@ export async function GET(req: Request) {
   if (!(await canManageTemplates(userId, role, platformRole))) return forbidden();
 
   const url = new URL(req.url);
-  const parsed = listQuerySchema.safeParse({
+  const parsed = listTemplateQuerySchema.safeParse({
     limit: url.searchParams.get("limit") ?? undefined,
     isActive: url.searchParams.get("isActive") ?? undefined,
     category: url.searchParams.get("category") ?? undefined,
+    includeArchived: url.searchParams.get("includeArchived") ?? undefined,
   });
   if (!parsed.success) return badRequest("VALIDATION_ERROR", parsed.error.flatten());
 
-  const { limit, isActive, category } = parsed.data;
+  const { limit, isActive, category, includeArchived } = parsed.data;
 
   try {
     const templates = await prisma.shiftTemplate.findMany({
@@ -84,8 +51,14 @@ export async function GET(req: Request) {
         companyId,
         ...(typeof isActive === "boolean" ? { isActive } : {}),
         ...(category ? { category } : {}),
+        ...(includeArchived ? {} : { archivedAt: null }),
       },
-      orderBy: [{ name: "asc" }, { id: "asc" }],
+      orderBy: [
+        { archivedAt: "asc" },
+        { isActive: "desc" },
+        { name: "asc" },
+        { id: "asc" },
+      ],
       take: limit,
       select: templateSelect,
     });
@@ -116,17 +89,29 @@ export async function POST(req: Request) {
   const parsed = createTemplateBodySchema.safeParse(body);
   if (!parsed.success) return badRequest("VALIDATION_ERROR", parsed.error.flatten());
 
+  const resolved = resolveTemplateCreateInput(parsed.data);
+  const stateIssues = validateResolvedTemplateState(resolved);
+  if (stateIssues.length > 0) {
+    return badRequest("VALIDATION_ERROR", { fieldErrors: stateIssues });
+  }
+
   try {
     const template = await prisma.shiftTemplate.create({
       data: {
         companyId,
-        name: parsed.data.name,
-        category: parsed.data.category,
-        requiredRole: parsed.data.requiredRole ?? null,
-        isActive: parsed.data.isActive ?? true,
-        startTime: parsed.data.startTime,
-        endTime: parsed.data.endTime,
-        crossesMidnight: parsed.data.crossesMidnight ?? false,
+        name: resolved.name,
+        category: resolved.category,
+        requiredRole: resolved.requiredRole,
+        secondaryAllowedRoles: resolved.secondaryAllowedRoles,
+        minStaffCount: resolved.minStaffCount,
+        requiredVehicleType: resolved.requiredVehicleType,
+        isActive: resolved.isActive,
+        archivedAt: resolved.archivedAt,
+        isTimeDefined: resolved.isTimeDefined,
+        startTime: resolved.startTime,
+        endTime: resolved.endTime,
+        crossesMidnight: resolved.crossesMidnight,
+        color: resolved.color,
       },
       select: templateSelect,
     });

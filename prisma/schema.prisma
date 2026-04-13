@@ -261,13 +261,19 @@ model ShiftTemplate {
   name String
 
   // ✅ 4.1 — pour automatisation
-  category     PlanningTemplateCategory @default(AMBULANCE)
-  requiredRole Role?
-  isActive     Boolean                  @default(true)
+  category             PlanningTemplateCategory @default(AMBULANCE)
+  requiredRole         Role?
+  secondaryAllowedRoles Role[]
+  minStaffCount        Int?
+  requiredVehicleType  VehicleType?
+  isActive             Boolean                  @default(true)
+  archivedAt           DateTime?
 
-  startTime       String // "08:00"
-  endTime         String // "16:00"
-  crossesMidnight Boolean @default(false)
+  isTimeDefined    Boolean @default(true)
+  startTime        String? // "08:00"
+  endTime          String? // "16:00"
+  crossesMidnight  Boolean @default(false)
+  color            String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -283,6 +289,7 @@ model ShiftTemplate {
   @@unique([companyId, name])
   @@index([companyId])
   @@index([companyId, category])
+  @@index([companyId, archivedAt])
 }
 
 model MaintenanceType {

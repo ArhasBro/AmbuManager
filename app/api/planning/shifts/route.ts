@@ -126,7 +126,7 @@ export async function GET(req: NextRequest) {
         user2: { select: { id: true, name: true, email: true, role: true } },
         vehicle: { select: { id: true, immatriculation: true, type: true, status: true } },
         depot: { select: { id: true, name: true, isActive: true } },
-        template: { select: { id: true, name: true, category: true } },
+        template: { select: { id: true, name: true, category: true, minStaffCount: true, requiredVehicleType: true, color: true } },
         run: { select: { id: true, scope: true, status: true, day: true, weekStart: true, createdAt: true } },
       },
     });

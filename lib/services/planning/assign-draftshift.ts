@@ -5,6 +5,7 @@ import { findFirstUserAbsenceConflict } from "@/lib/services/planning/user-absen
 import type { PlanningIssue, PlanningIssueCode } from "@/lib/types/planning";
 import { COMPANY_PARAMETER_KEYS } from "@/lib/company-rules/catalog";
 import { loadMinRestCompanyRule } from "@/lib/company-rules/runtime";
+import { isRoleAllowedForSlot, resolveTemplateMinStaffCount } from "@/lib/templates/template-rules";
 
 export type AssignDraftShiftInput = {
   companyId: string;
@@ -21,10 +22,6 @@ export type AssignDraftShiftResult =
   | { ok: false; error: PlanningIssue };
 
 type Category = "VSL" | "TAXI" | "AMBULANCE" | "GARDE" | string;
-
-function requiredSlotsFromCategory(category: Category | null | undefined): 1 | 2 {
-  return category === "AMBULANCE" || category === "GARDE" ? 2 : 1;
-}
 
 function normalizePair(userId: string | null, user2Id: string | null): { userId: string | null; user2Id: string | null } {
   if (!userId && user2Id) return { userId: user2Id, user2Id: null };
@@ -60,7 +57,7 @@ export async function assignDraftShift(input: AssignDraftShiftInput): Promise<As
       vehicleId: true,
       runId: true,
       run: { select: { status: true } },
-      template: { select: { category: true } },
+      template: { select: { category: true, requiredRole: true, secondaryAllowedRoles: true, minStaffCount: true, requiredVehicleType: true } },
     },
   });
 
@@ -72,7 +69,7 @@ export async function assignDraftShift(input: AssignDraftShiftInput): Promise<As
   }
 
   const category = (draft.template?.category ?? null) as Category | null;
-  const requiredSlots = requiredSlotsFromCategory(category);
+  const requiredSlots = resolveTemplateMinStaffCount(draft.template?.minStaffCount ?? null, category);
 
   // 2) Validation slots
   const countAssigned = (userId ? 1 : 0) + (user2Id ? 1 : 0);
@@ -89,6 +86,64 @@ export async function assignDraftShift(input: AssignDraftShiftInput): Promise<As
 
   const issues: PlanningIssue[] = [];
   const assignedUsers = [userId, user2Id].filter((x): x is string => Boolean(x));
+
+  const selectedUsers = assignedUsers.length > 0
+    ? await prisma.user.findMany({
+        where: { id: { in: assignedUsers }, companyId },
+        select: { id: true, role: true },
+      })
+    : [];
+
+  if (selectedUsers.length !== assignedUsers.length) {
+    return { ok: false, error: err("VALIDATION_ERROR", "Employé invalide pour la société courante.") };
+  }
+
+  const user1Role = selectedUsers.find((user) => user.id === userId)?.role ?? null;
+  const user2Role = selectedUsers.find((user) => user.id === user2Id)?.role ?? null;
+
+  if (userId && !isRoleAllowedForSlot(draft.template ?? { category }, 1, user1Role)) {
+    return {
+      ok: false,
+      error: err("TEMPLATE_ROLE_MISMATCH", "Le rôle du slot 1 ne respecte pas la composition minimale du template.", {
+        slot: 1,
+        userId,
+        role: user1Role,
+      }),
+    };
+  }
+
+  if (user2Id && !isRoleAllowedForSlot(draft.template ?? { category }, 2, user2Role)) {
+    return {
+      ok: false,
+      error: err("TEMPLATE_ROLE_MISMATCH", "Le rôle du slot 2 ne respecte pas la composition minimale du template.", {
+        slot: 2,
+        userId: user2Id,
+        role: user2Role,
+      }),
+    };
+  }
+
+  if (vehicleId && draft.template?.requiredVehicleType) {
+    const selectedVehicle = await prisma.vehicle.findFirst({
+      where: { id: vehicleId, companyId },
+      select: { id: true, type: true },
+    });
+
+    if (!selectedVehicle) {
+      return { ok: false, error: err("VALIDATION_ERROR", "Véhicule invalide pour la société courante.") };
+    }
+
+    if (selectedVehicle.type !== draft.template.requiredVehicleType) {
+      return {
+        ok: false,
+        error: err("TEMPLATE_VEHICLE_TYPE_MISMATCH", "Le véhicule choisi ne correspond pas au type requis par le template.", {
+          requiredVehicleType: draft.template.requiredVehicleType,
+          actualVehicleType: selectedVehicle.type,
+          vehicleId,
+        }),
+      };
+    }
+  }
 
   const absenceConflict =
     assignedUsers.length > 0

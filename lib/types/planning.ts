@@ -12,6 +12,8 @@ export type PlanningIssueCode =
   | "MIN_REST_VIOLATION"
   | "RULE_BLOCKED"
   | "RULE_CONFIG_ERROR"
+  | "TEMPLATE_ROLE_MISMATCH"
+  | "TEMPLATE_VEHICLE_TYPE_MISMATCH"
   | "VALIDATION_ERROR";
 
 export type PlanningIssue = {

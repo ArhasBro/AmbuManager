@@ -152,9 +152,17 @@ export async function POST(req: NextRequest) {
         return { ok: false, error: "DRAFT_ALREADY_EXISTS", details: { runId: existingDraft.id } } satisfies AutoscheduleSentinel;
       }
 
-      const templateWhere: { companyId: string; isActive: boolean; category?: Category } = {
+      const templateWhere: {
+        companyId: string;
+        isActive: boolean;
+        archivedAt: null;
+        isTimeDefined: boolean;
+        category?: Category;
+      } = {
         companyId,
         isActive: true,
+        archivedAt: null,
+        isTimeDefined: true,
       };
       if (category) templateWhere.category = category;
 
@@ -163,8 +171,13 @@ export async function POST(req: NextRequest) {
         orderBy: { startTime: "asc" },
       });
 
+      const timedTemplates = templates.filter(
+        (t): typeof t & { startTime: string; endTime: string } =>
+          typeof t.startTime === "string" && typeof t.endTime === "string"
+      );
+
       // ✅ IMPORTANT: on évite de créer un run vide qui donnera NO_DRAFTS au publish
-      if (templates.length === 0) {
+      if (timedTemplates.length === 0) {
         return { ok: false, error: "NO_TEMPLATES" } satisfies AutoscheduleSentinel;
       }
 
@@ -193,7 +206,7 @@ export async function POST(req: NextRequest) {
         const dayDate = addDays(monday, i);
         const dayStr = formatDay(dayDate);
 
-        for (const t of templates) {
+        for (const t of timedTemplates) {
           const startAt = buildDateTimeLocal(dayStr, t.startTime);
           let endAt = buildDateTimeLocal(dayStr, t.endTime);
 

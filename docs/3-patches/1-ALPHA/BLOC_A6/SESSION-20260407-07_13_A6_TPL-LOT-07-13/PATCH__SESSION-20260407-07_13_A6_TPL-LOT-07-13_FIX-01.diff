@@ -1,0 +1,52 @@
+--- a/app/api/planning/autoschedule/day/route.ts
++++ b/app/api/planning/autoschedule/day/route.ts
+@@ -146,8 +146,13 @@
+         orderBy: { startTime: "asc" },
+       });
+ 
++      const timedTemplates = templates.filter(
++        (t): typeof t & { startTime: string; endTime: string } =>
++          typeof t.startTime === "string" && typeof t.endTime === "string"
++      );
++
+       // ✅ IMPORTANT: on évite de créer un run vide qui donnera NO_DRAFTS au publish
+-      if (templates.length === 0) {
++      if (timedTemplates.length === 0) {
+         return { ok: false, error: "NO_TEMPLATES" } satisfies AutoscheduleSentinel;
+       }
+ 
+@@ -161,7 +166,7 @@
+         },
+       });
+ 
+-      const draftsData = templates.map((t) => {
++      const draftsData = timedTemplates.map((t) => {
+         const startAt = buildDateTimeLocal(day, t.startTime);
+         let endAt = buildDateTimeLocal(day, t.endTime);
+ 
+--- a/app/api/planning/autoschedule/week/route.ts
++++ b/app/api/planning/autoschedule/week/route.ts
+@@ -171,8 +171,13 @@
+         orderBy: { startTime: "asc" },
+       });
+ 
++      const timedTemplates = templates.filter(
++        (t): typeof t & { startTime: string; endTime: string } =>
++          typeof t.startTime === "string" && typeof t.endTime === "string"
++      );
++
+       // ✅ IMPORTANT: on évite de créer un run vide qui donnera NO_DRAFTS au publish
+-      if (templates.length === 0) {
++      if (timedTemplates.length === 0) {
+         return { ok: false, error: "NO_TEMPLATES" } satisfies AutoscheduleSentinel;
+       }
+ 
+@@ -201,7 +206,7 @@
+         const dayDate = addDays(monday, i);
+         const dayStr = formatDay(dayDate);
+ 
+-        for (const t of templates) {
++        for (const t of timedTemplates) {
+           const startAt = buildDateTimeLocal(dayStr, t.startTime);
+           let endAt = buildDateTimeLocal(dayStr, t.endTime);
+ 

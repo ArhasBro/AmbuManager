@@ -1,4 +1,3 @@
-import { PlanningTemplateCategory, Role } from "@prisma/client";
 import { getServerSession } from "next-auth/next";
 import { z } from "zod";
 
@@ -8,11 +7,14 @@ import { authOptions } from "@/lib/auth";
 import { canManageTemplates } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 import { serializeDates } from "@/lib/serializers";
-
-const timeStringSchema = z
-  .string()
-  .trim()
-  .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Invalid time format. Expected HH:MM.");
+import {
+  templateSelect,
+  updateTemplateBodySchema,
+  validateResolvedTemplateState,
+  type TemplateResolvedState,
+  type TemplateUpdateBody,
+} from "@/lib/templates/template-api";
+import { normalizeTemplateColor } from "@/lib/templates/template-rules";
 
 const paramsSchema = z
   .object({
@@ -20,47 +22,7 @@ const paramsSchema = z
   })
   .strict();
 
-const updateTemplateBodySchema = z
-  .object({
-    name: z.string().trim().min(1, "name required").max(160, "name too long").optional(),
-    category: z.nativeEnum(PlanningTemplateCategory).optional(),
-    requiredRole: z.nativeEnum(Role).nullable().optional(),
-    isActive: z.boolean().optional(),
-    startTime: timeStringSchema.optional(),
-    endTime: timeStringSchema.optional(),
-    crossesMidnight: z.boolean().optional(),
-  })
-  .strict()
-  .refine(
-    (value) =>
-      value.name !== undefined ||
-      value.category !== undefined ||
-      value.requiredRole !== undefined ||
-      value.isActive !== undefined ||
-      value.startTime !== undefined ||
-      value.endTime !== undefined ||
-      value.crossesMidnight !== undefined,
-    {
-      message: "At least one editable field is required",
-    }
-  );
-
-const templateSelect = {
-  id: true,
-  name: true,
-  category: true,
-  requiredRole: true,
-  isActive: true,
-  startTime: true,
-  endTime: true,
-  crossesMidnight: true,
-  createdAt: true,
-  updatedAt: true,
-} as const;
-
 type EditableTemplateRecord = Awaited<ReturnType<typeof findEditableTemplate>>;
-
-type UpdateTemplateData = z.infer<typeof updateTemplateBodySchema>;
 
 function getErrorMessage(error: unknown): string {
   if (error instanceof Error) return error.message;
@@ -82,36 +44,56 @@ async function findEditableTemplate(id: string, companyId: string) {
   });
 }
 
-function getChangedFields(existingTemplate: NonNullable<EditableTemplateRecord>, nextData: UpdateTemplateData) {
+function resolveMergedTemplateState(existingTemplate: NonNullable<EditableTemplateRecord>, patch: TemplateUpdateBody): TemplateResolvedState {
+  const isTimeDefined = patch.isTimeDefined ?? existingTemplate.isTimeDefined;
+  const startTime = patch.startTime !== undefined ? patch.startTime : existingTemplate.startTime;
+  const endTime = patch.endTime !== undefined ? patch.endTime : existingTemplate.endTime;
+
+  return {
+    name: patch.name ?? existingTemplate.name,
+    category: patch.category ?? existingTemplate.category,
+    requiredRole: patch.requiredRole !== undefined ? patch.requiredRole : existingTemplate.requiredRole,
+    secondaryAllowedRoles: patch.secondaryAllowedRoles ?? existingTemplate.secondaryAllowedRoles,
+    minStaffCount: patch.minStaffCount !== undefined ? patch.minStaffCount : existingTemplate.minStaffCount,
+    requiredVehicleType:
+      patch.requiredVehicleType !== undefined ? patch.requiredVehicleType : existingTemplate.requiredVehicleType,
+    isActive: patch.isActive ?? existingTemplate.isActive,
+    archivedAt: existingTemplate.archivedAt,
+    isTimeDefined,
+    startTime: isTimeDefined ? startTime : null,
+    endTime: isTimeDefined ? endTime : null,
+    crossesMidnight: isTimeDefined ? (patch.crossesMidnight ?? existingTemplate.crossesMidnight) : false,
+    color:
+      patch.color === undefined
+        ? existingTemplate.color
+        : patch.color === null
+          ? null
+          : normalizeTemplateColor(patch.color),
+  };
+}
+
+function sameStringArray(a: readonly string[], b: readonly string[]) {
+  if (a.length !== b.length) return false;
+  return a.every((value, index) => value === b[index]);
+}
+
+function getChangedFields(existingTemplate: NonNullable<EditableTemplateRecord>, nextState: TemplateResolvedState) {
   const changedFields: string[] = [];
 
-  if (nextData.name !== undefined && nextData.name !== existingTemplate.name) {
-    changedFields.push("name");
+  if (nextState.name !== existingTemplate.name) changedFields.push("name");
+  if (nextState.category !== existingTemplate.category) changedFields.push("category");
+  if (nextState.requiredRole !== existingTemplate.requiredRole) changedFields.push("requiredRole");
+  if (!sameStringArray(nextState.secondaryAllowedRoles, existingTemplate.secondaryAllowedRoles)) {
+    changedFields.push("secondaryAllowedRoles");
   }
-
-  if (nextData.category !== undefined && nextData.category !== existingTemplate.category) {
-    changedFields.push("category");
-  }
-
-  if (nextData.requiredRole !== undefined && nextData.requiredRole !== existingTemplate.requiredRole) {
-    changedFields.push("requiredRole");
-  }
-
-  if (nextData.isActive !== undefined && nextData.isActive !== existingTemplate.isActive) {
-    changedFields.push("isActive");
-  }
-
-  if (nextData.startTime !== undefined && nextData.startTime !== existingTemplate.startTime) {
-    changedFields.push("startTime");
-  }
-
-  if (nextData.endTime !== undefined && nextData.endTime !== existingTemplate.endTime) {
-    changedFields.push("endTime");
-  }
-
-  if (nextData.crossesMidnight !== undefined && nextData.crossesMidnight !== existingTemplate.crossesMidnight) {
-    changedFields.push("crossesMidnight");
-  }
+  if (nextState.minStaffCount !== existingTemplate.minStaffCount) changedFields.push("minStaffCount");
+  if (nextState.requiredVehicleType !== existingTemplate.requiredVehicleType) changedFields.push("requiredVehicleType");
+  if (nextState.isActive !== existingTemplate.isActive) changedFields.push("isActive");
+  if (nextState.isTimeDefined !== existingTemplate.isTimeDefined) changedFields.push("isTimeDefined");
+  if (nextState.startTime !== existingTemplate.startTime) changedFields.push("startTime");
+  if (nextState.endTime !== existingTemplate.endTime) changedFields.push("endTime");
+  if (nextState.crossesMidnight !== existingTemplate.crossesMidnight) changedFields.push("crossesMidnight");
+  if (nextState.color !== existingTemplate.color) changedFields.push("color");
 
   return changedFields;
 }
@@ -144,7 +126,13 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     const existingTemplate = await findEditableTemplate(parsedParams.data.id, companyId);
     if (!existingTemplate) return notFound();
 
-    const changedFields = getChangedFields(existingTemplate, parsedBody.data);
+    const nextState = resolveMergedTemplateState(existingTemplate, parsedBody.data);
+    const stateIssues = validateResolvedTemplateState(nextState);
+    if (stateIssues.length > 0) {
+      return badRequest("VALIDATION_ERROR", { fieldErrors: stateIssues });
+    }
+
+    const changedFields = getChangedFields(existingTemplate, nextState);
     if (changedFields.length === 0) {
       return ok(serializeDates(existingTemplate));
     }
@@ -152,13 +140,18 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     const updatedTemplate = await prisma.shiftTemplate.update({
       where: { id: existingTemplate.id },
       data: {
-        ...(parsedBody.data.name !== undefined ? { name: parsedBody.data.name } : {}),
-        ...(parsedBody.data.category !== undefined ? { category: parsedBody.data.category } : {}),
-        ...(parsedBody.data.requiredRole !== undefined ? { requiredRole: parsedBody.data.requiredRole } : {}),
-        ...(parsedBody.data.isActive !== undefined ? { isActive: parsedBody.data.isActive } : {}),
-        ...(parsedBody.data.startTime !== undefined ? { startTime: parsedBody.data.startTime } : {}),
-        ...(parsedBody.data.endTime !== undefined ? { endTime: parsedBody.data.endTime } : {}),
-        ...(parsedBody.data.crossesMidnight !== undefined ? { crossesMidnight: parsedBody.data.crossesMidnight } : {}),
+        name: nextState.name,
+        category: nextState.category,
+        requiredRole: nextState.requiredRole,
+        secondaryAllowedRoles: nextState.secondaryAllowedRoles,
+        minStaffCount: nextState.minStaffCount,
+        requiredVehicleType: nextState.requiredVehicleType,
+        isActive: nextState.isActive,
+        isTimeDefined: nextState.isTimeDefined,
+        startTime: nextState.startTime,
+        endTime: nextState.endTime,
+        crossesMidnight: nextState.crossesMidnight,
+        color: nextState.color,
       },
       select: templateSelect,
     });

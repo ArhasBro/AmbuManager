@@ -747,55 +747,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |       |       RESULTATS.md
 |   |       |       SESSION.md
 |   |       |       
-|   |       +---SESSION-20260407-07_A6_TPL-07
-|   |       |       EVIDENCES.md
-|   |       |       FIN_SESSION.md
-|   |       |       NOTES.md
-|   |       |       RESULTATS.md
-|   |       |       SESSION.md
-|   |       |       
-|   |       +---SESSION-20260407-08_A6_TPL-08
-|   |       |       EVIDENCES.md
-|   |       |       FIN_SESSION.md
-|   |       |       NOTES.md
-|   |       |       RESULTATS.md
-|   |       |       SESSION.md
-|   |       |       
-|   |       +---SESSION-20260407-09_A6_TPL-09
-|   |       |       EVIDENCES.md
-|   |       |       FIN_SESSION.md
-|   |       |       NOTES.md
-|   |       |       RESULTATS.md
-|   |       |       SESSION.md
-|   |       |       
-|   |       +---SESSION-20260407-10_A6_TPL-10
-|   |       |       EVIDENCES.md
-|   |       |       FIN_SESSION.md
-|   |       |       NOTES.md
-|   |       |       RESULTATS.md
-|   |       |       SESSION.md
-|   |       |       
-|   |       +---SESSION-20260407-11_A6_TPL-11
-|   |       |       EVIDENCES.md
-|   |       |       FIN_SESSION.md
-|   |       |       NOTES.md
-|   |       |       RESULTATS.md
-|   |       |       SESSION.md
-|   |       |       
-|   |       +---SESSION-20260407-12_A6_TPL-12
-|   |       |       EVIDENCES.md
-|   |       |       FIN_SESSION.md
-|   |       |       NOTES.md
-|   |       |       RESULTATS.md
-|   |       |       SESSION.md
-|   |       |       
-|   |       +---SESSION-20260407-13_A6_TPL-13
-|   |       |       EVIDENCES.md
-|   |       |       FIN_SESSION.md
-|   |       |       NOTES.md
-|   |       |       RESULTATS.md
-|   |       |       SESSION.md
-|   |       |       
+|   |       +---SESSION-20260407-07_13_A6_TPL-LOT-07-13
 |   |       +---SESSION-20260407-14_A6_TPL-14
 |   |       |       EVIDENCES.md
 |   |       |       FIN_SESSION.md
@@ -1239,26 +1191,10 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |           |       PATCH__SESSION-20260407-06_A6_TPL-06.diff
 |           |       README_PATCH.md
 |           |       
-|           +---SESSION-20260407-07_A6_TPL-07
-|           |       README_PATCH.md
-|           |       
-|           +---SESSION-20260407-08_A6_TPL-08
-|           |       README_PATCH.md
-|           |       
-|           +---SESSION-20260407-09_A6_TPL-09
-|           |       README_PATCH.md
-|           |       
-|           +---SESSION-20260407-10_A6_TPL-10
-|           |       README_PATCH.md
-|           |       
-|           +---SESSION-20260407-11_A6_TPL-11
-|           |       README_PATCH.md
-|           |       
-|           +---SESSION-20260407-12_A6_TPL-12
-|           |       README_PATCH.md
-|           |       
-|           +---SESSION-20260407-13_A6_TPL-13
-|           |       README_PATCH.md
+|           +---SESSION-20260407-07_13_A6_TPL-LOT-07-13
+|           |       PATCH__SESSION-20260407-07_13_A6_TPL-LOT-07-13.diff
+|           |       PATCH__SESSION-20260407-07_13_A6_TPL-LOT-07-13_FIX-01.diff
+|           |       PATCH__SESSION-20260407-07_13_A6_TPL-LOT-07-13_FIX-02.diff
 |           |       
 |           +---SESSION-20260407-14_A6_TPL-14
 |           |       NO_PATCH.md

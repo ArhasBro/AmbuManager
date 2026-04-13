@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
 import {
   canAccessAdminDashboard,
+  canManageTemplates,
   canManageUsers,
   canManageVehicles,
 } from "@/lib/permissions";
@@ -17,13 +18,14 @@ export default async function DashboardPage() {
   const user = session.user;
   const userId = user.id;
 
-  const [adminDashboardAllowed, usersAllowed, vehiclesAllowed] = userId
+  const [adminDashboardAllowed, usersAllowed, vehiclesAllowed, templatesAllowed] = userId
     ? await Promise.all([
         canAccessAdminDashboard(userId, user.role, user.platformRole),
         canManageUsers(userId, user.role, user.platformRole),
         canManageVehicles(userId, user.role, user.platformRole),
+        canManageTemplates(userId, user.role, user.platformRole),
       ])
-    : [false, false, false];
+    : [false, false, false, false];
 
   const companyProfileAllowed = user.role === "ADMIN" || user.role === "GERANT";
   const depotsAllowed = user.role === "ADMIN" || user.role === "GERANT";
@@ -47,6 +49,7 @@ export default async function DashboardPage() {
             {depotsAllowed ? <Link href="/depots">Bases / dépôts</Link> : null}
             {usersAllowed ? <Link href="/users">Réinitialisation mot de passe</Link> : null}
             {vehiclesAllowed ? <Link href="/vehicles">Véhicules</Link> : null}
+            {templatesAllowed ? <Link href="/templates">Templates</Link> : null}
           </div>
         </div>
       ) : null}

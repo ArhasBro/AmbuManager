@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { COMPANY_PARAMETER_KEYS, parsePlanningViewModeValue, serializePlanningViewModeValue, type PlanningViewModeValue } from "@/lib/company-rules/catalog";
+import { normalizeTemplateColor, resolveTemplateMinStaffCount } from "@/lib/templates/template-rules";
 
 type Shift = {
   id: string;
@@ -15,7 +16,14 @@ type Shift = {
 
   vehicle?: { id: string; immatriculation: string; type: string } | null;
   depot?: { id: string; name: string; isActive: boolean } | null;
-  template?: { id: string; name: string; category: string } | null;
+  template?: {
+    id: string;
+    name: string;
+    category: string;
+    minStaffCount?: number | null;
+    requiredVehicleType?: string | null;
+    color?: string | null;
+  } | null;
 };
 
 type UserLite = { id: string; name: string; email?: string };
@@ -239,9 +247,8 @@ function dateTimeFR(iso: string) {
 }
 
 
-function requiresTwoEmployees(category: string | null | undefined) {
-  const c = String(category ?? "").toUpperCase();
-  return c === "AMBULANCE" || c === "GARDE";
+function requiresTwoEmployees(category: string | null | undefined, minStaffCount?: number | null) {
+  return resolveTemplateMinStaffCount(minStaffCount, category) === 2;
 }
 
 type FetchJsonResult = { res: Response; json: unknown; text: string };
@@ -1181,6 +1188,22 @@ export default function PlanningClient({
             return;
           }
 
+          if (err === "TEMPLATE_ROLE_MISMATCH") {
+            setAssignMsgById((m) => ({
+              ...m,
+              [shiftId]: "⛔ Composition invalide : le rôle sélectionné ne respecte pas le template.",
+            }));
+            return;
+          }
+
+          if (err === "TEMPLATE_VEHICLE_TYPE_MISMATCH") {
+            setAssignMsgById((m) => ({
+              ...m,
+              [shiftId]: "⛔ Véhicule invalide : le type choisi ne correspond pas au template.",
+            }));
+            return;
+          }
+
           if (err === "RUN_NOT_DRAFT") {
             setAssignMsgById((m) => ({ ...m, [shiftId]: "⛔ Impossible : le run n’est pas en DRAFT." }));
             return;
@@ -1687,12 +1710,14 @@ function ShiftCardSimple({
   onAssign: (id: string, patch: { userId?: string | null; user2Id?: string | null; vehicleId?: string | null; depotId?: string | null }) => Promise<void>;
 }) {
   const cat = String(s.template?.category ?? "").toUpperCase();
-  const two = requiresTwoEmployees(cat);
+  const two = requiresTwoEmployees(cat, s.template?.minStaffCount);
 
   const usersSummary = two ? `${s.user?.name ?? "—"} / ${s.user2?.name ?? "—"}` : `${s.user?.name ?? "—"}`;
 
+  const accentColor = normalizeTemplateColor(s.template?.color) ?? "#1D4ED8";
+
   return (
-    <div style={{ border: "1px solid rgba(255,255,255,0.12)", borderRadius: 10, padding: 10, display: "grid", gap: 8 }}>
+    <div style={{ border: `1px solid ${accentColor}`, borderLeft: `10px solid ${accentColor}`, borderRadius: 10, padding: 10, display: "grid", gap: 8 }}>
       <div style={{ fontWeight: 800 }}>
         {timeHM(s.startAt)} → {timeHM(s.endAt)}
       </div>
@@ -1701,7 +1726,10 @@ function ShiftCardSimple({
         {usersSummary} • {s.vehicle?.immatriculation ?? "—"} • {s.depot ? getDepotLabel(s.depot) : "Aucune base"}
       </div>
 
-      <div style={{ opacity: 0.7 }}>{s.template?.name ?? "—"}</div>
+      <div style={{ opacity: 0.7 }}>
+        {s.template?.name ?? "—"}
+        {s.template?.requiredVehicleType ? ` • véhicule ${s.template.requiredVehicleType}` : ""}
+      </div>
 
       {editable && (
         <div style={{ display: "grid", gap: 6 }}>
@@ -1810,17 +1838,18 @@ function ShiftCardAmbulance({
   onAssign: (id: string, patch: { userId?: string | null; user2Id?: string | null; vehicleId?: string | null; depotId?: string | null }) => Promise<void>;
 }) {
   const cat = String(s.template?.category ?? "—").toUpperCase();
-  const two = requiresTwoEmployees(cat);
+  const two = requiresTwoEmployees(cat, s.template?.minStaffCount);
 
+  const accentColor = normalizeTemplateColor(s.template?.color) ?? "#1D4ED8";
   const borderStyle =
     cat === "GARDE"
-      ? "2px dashed rgba(255,255,255,0.35)"
+      ? `2px dashed ${accentColor}`
       : cat === "AMBULANCE"
-        ? "2px solid rgba(255,255,255,0.35)"
-        : "1px solid rgba(255,255,255,0.2)";
+        ? `2px solid ${accentColor}`
+        : `1px solid ${accentColor}`;
 
   return (
-    <div style={{ border: borderStyle, borderRadius: 12, padding: 10, display: "grid", gap: 8 }}>
+    <div style={{ border: borderStyle, borderLeft: `10px solid ${accentColor}`, borderRadius: 12, padding: 10, display: "grid", gap: 8 }}>
       <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
         <div style={{ fontWeight: 900 }}>
           {timeHM(s.startAt)} → {timeHM(s.endAt)}
@@ -1849,6 +1878,7 @@ function ShiftCardAmbulance({
           <Row label="Employé" value={s.user?.name ?? "—"} />
         )}
         <Row label="Véhicule" value={s.vehicle?.immatriculation ?? "—"} />
+        <Row label="Type véhicule requis" value={s.template?.requiredVehicleType ?? "—"} />
         <Row label="Base" value={s.depot ? getDepotLabel(s.depot) : "Aucune"} />
         <Row label="Mission" value={s.template?.name ?? "—"} />
       </div>
