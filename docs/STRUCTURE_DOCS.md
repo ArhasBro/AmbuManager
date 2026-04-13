@@ -748,6 +748,12 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |       |       SESSION.md
 |   |       |       
 |   |       +---SESSION-20260407-07_13_A6_TPL-LOT-07-13
+|   |       |       EVIDENCES.md
+|   |       |       FIN_SESSION.md
+|   |       |       NOTES.md
+|   |       |       RESULTATS.md
+|   |       |       SESSION.md
+|   |       |       
 |   |       +---SESSION-20260407-14_A6_TPL-14
 |   |       |       EVIDENCES.md
 |   |       |       FIN_SESSION.md
@@ -1195,6 +1201,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |           |       PATCH__SESSION-20260407-07_13_A6_TPL-LOT-07-13.diff
 |           |       PATCH__SESSION-20260407-07_13_A6_TPL-LOT-07-13_FIX-01.diff
 |           |       PATCH__SESSION-20260407-07_13_A6_TPL-LOT-07-13_FIX-02.diff
+|           |       README_PATCH.md
 |           |       
 |           +---SESSION-20260407-14_A6_TPL-14
 |           |       NO_PATCH.md

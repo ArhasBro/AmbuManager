@@ -147,7 +147,7 @@ export async function POST(req: NextRequest) {
       });
 
       const timedTemplates = templates.filter(
-        (t): typeof t & { startTime: string; endTime: string } =>
+        (t): t is typeof t & { startTime: string; endTime: string } =>
           typeof t.startTime === "string" && typeof t.endTime === "string"
       );
 

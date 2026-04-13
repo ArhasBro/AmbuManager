@@ -16,11 +16,21 @@ C:.
 |   tsconfig.json
 |   
 +---.next
+|   |   app-path-routes-manifest.json
 |   |   build-manifest.json
+|   |   BUILD_ID
+|   |   export-marker.json
 |   |   fallback-build-manifest.json
+|   |   images-manifest.json
 |   |   next-minimal-server.js.nft.json
 |   |   next-server.js.nft.json
 |   |   package.json
+|   |   prerender-manifest.json
+|   |   required-server-files.js
+|   |   required-server-files.json
+|   |   routes-manifest.json
+|   |   trace
+|   |   trace-build
 |   |   turbopack
 |   |   
 |   +---build
@@ -1354,6 +1364,7 @@ C:.
 |   |                   
 |   +---server
 |   |   |   app-paths-manifest.json
+|   |   |   functions-config-manifest.json
 |   |   |   interception-route-rewrite-manifest.js
 |   |   |   middleware-build-manifest.js
 |   |   |   middleware-manifest.json
@@ -1367,10 +1378,24 @@ C:.
 |   |   |   server-reference-manifest.json
 |   |   |   
 |   |   +---app
+|   |   |   |   favicon.ico.body
+|   |   |   |   favicon.ico.meta
+|   |   |   |   index.html
+|   |   |   |   index.meta
+|   |   |   |   index.rsc
+|   |   |   |   login.html
+|   |   |   |   login.meta
+|   |   |   |   login.rsc
 |   |   |   |   page.js
 |   |   |   |   page.js.map
 |   |   |   |   page.js.nft.json
 |   |   |   |   page_client-reference-manifest.js
+|   |   |   |   _global-error.html
+|   |   |   |   _global-error.meta
+|   |   |   |   _global-error.rsc
+|   |   |   |   _not-found.html
+|   |   |   |   _not-found.meta
+|   |   |   |   _not-found.rsc
 |   |   |   |   
 |   |   |   +---api
 |   |   |   |   +---auth
@@ -1779,6 +1804,13 @@ C:.
 |   |   |   |           app-paths-manifest.json
 |   |   |   |           build-manifest.json
 |   |   |   |           
+|   |   |   +---index.segments
+|   |   |   |       _full.segment.rsc
+|   |   |   |       _head.segment.rsc
+|   |   |   |       _index.segment.rsc
+|   |   |   |       _tree.segment.rsc
+|   |   |   |       __PAGE__.segment.rsc
+|   |   |   |       
 |   |   |   +---login
 |   |   |   |   |   page.js
 |   |   |   |   |   page.js.map
@@ -1791,6 +1823,16 @@ C:.
 |   |   |   |           next-font-manifest.json
 |   |   |   |           react-loadable-manifest.json
 |   |   |   |           server-reference-manifest.json
+|   |   |   |           
+|   |   |   +---login.segments
+|   |   |   |   |   login.segment.rsc
+|   |   |   |   |   _full.segment.rsc
+|   |   |   |   |   _head.segment.rsc
+|   |   |   |   |   _index.segment.rsc
+|   |   |   |   |   _tree.segment.rsc
+|   |   |   |   |   
+|   |   |   |   \---login
+|   |   |   |           __PAGE__.segment.rsc
 |   |   |   |           
 |   |   |   +---page
 |   |   |   |       app-paths-manifest.json
@@ -1864,18 +1906,35 @@ C:.
 |   |   |   |           react-loadable-manifest.json
 |   |   |   |           server-reference-manifest.json
 |   |   |   |           
-|   |   |   \---_not-found
-|   |   |       |   page.js
-|   |   |       |   page.js.map
-|   |   |       |   page.js.nft.json
-|   |   |       |   page_client-reference-manifest.js
+|   |   |   +---_global-error.segments
+|   |   |   |       _full.segment.rsc
+|   |   |   |       _head.segment.rsc
+|   |   |   |       _index.segment.rsc
+|   |   |   |       _tree.segment.rsc
+|   |   |   |       __PAGE__.segment.rsc
+|   |   |   |       
+|   |   |   +---_not-found
+|   |   |   |   |   page.js
+|   |   |   |   |   page.js.map
+|   |   |   |   |   page.js.nft.json
+|   |   |   |   |   page_client-reference-manifest.js
+|   |   |   |   |   
+|   |   |   |   \---page
+|   |   |   |           app-paths-manifest.json
+|   |   |   |           build-manifest.json
+|   |   |   |           next-font-manifest.json
+|   |   |   |           react-loadable-manifest.json
+|   |   |   |           server-reference-manifest.json
+|   |   |   |           
+|   |   |   \---_not-found.segments
+|   |   |       |   _full.segment.rsc
+|   |   |       |   _head.segment.rsc
+|   |   |       |   _index.segment.rsc
+|   |   |       |   _not-found.segment.rsc
+|   |   |       |   _tree.segment.rsc
 |   |   |       |   
-|   |   |       \---page
-|   |   |               app-paths-manifest.json
-|   |   |               build-manifest.json
-|   |   |               next-font-manifest.json
-|   |   |               react-loadable-manifest.json
-|   |   |               server-reference-manifest.json
+|   |   |       \---_not-found
+|   |   |               __PAGE__.segment.rsc
 |   |   |               
 |   |   +---chunks
 |   |   |   |   bec2d_app_api_planning_autoschedule_runs_[id]_match_apply_route_actions_4ed003d4.js
@@ -2181,8 +2240,12 @@ C:.
 |   |   |           _next-internal_server_app__not-found_page_actions_554ec2bf.js
 |   |   |           _next-internal_server_app__not-found_page_actions_554ec2bf.js.map
 |   |   |           
-|   |   \---middleware
-|   |           middleware-manifest.json
+|   |   +---middleware
+|   |   |       middleware-manifest.json
+|   |   |       
+|   |   \---pages
+|   |           404.html
+|   |           500.html
 |   |           
 |   +---static
 |   |   +---chunks
@@ -2208,13 +2271,13 @@ C:.
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
 |   |   |       
-|   |   +---media
-|   |   |       favicon.0b3bf435.ico
+|   |   +---cj_UzOa2OKUqrp6TWA_66
+|   |   |       _buildManifest.js
+|   |   |       _clientMiddlewareManifest.json
+|   |   |       _ssgManifest.js
 |   |   |       
-|   |   \---OxUkqvdOUrEABpD1VKYYK
-|   |           _buildManifest.js
-|   |           _clientMiddlewareManifest.json
-|   |           _ssgManifest.js
+|   |   \---media
+|   |           favicon.0b3bf435.ico
 |   |           
 |   \---types
 |           routes.d.ts
@@ -3119,6 +3182,12 @@ C:.
 |   |   |       |       SESSION.md
 |   |   |       |       
 |   |   |       +---SESSION-20260407-07_13_A6_TPL-LOT-07-13
+|   |   |       |       EVIDENCES.md
+|   |   |       |       FIN_SESSION.md
+|   |   |       |       NOTES.md
+|   |   |       |       RESULTATS.md
+|   |   |       |       SESSION.md
+|   |   |       |       
 |   |   |       +---SESSION-20260407-14_A6_TPL-14
 |   |   |       |       EVIDENCES.md
 |   |   |       |       FIN_SESSION.md
@@ -3566,6 +3635,7 @@ C:.
 |   |           |       PATCH__SESSION-20260407-07_13_A6_TPL-LOT-07-13.diff
 |   |           |       PATCH__SESSION-20260407-07_13_A6_TPL-LOT-07-13_FIX-01.diff
 |   |           |       PATCH__SESSION-20260407-07_13_A6_TPL-LOT-07-13_FIX-02.diff
+|   |           |       README_PATCH.md
 |   |           |       
 |   |           +---SESSION-20260407-14_A6_TPL-14
 |   |           |       NO_PATCH.md
