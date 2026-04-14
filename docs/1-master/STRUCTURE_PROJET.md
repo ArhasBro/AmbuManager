@@ -3138,64 +3138,93 @@ C:.
 |   |   |   |               RESULTATS.md
 |   |   |   |               SESSION.md
 |   |   |   |               
-|   |   |   \---BLOC_A6
-|   |   |       +---SESSION-20260407-01_A6_TPL-01
+|   |   |   +---BLOC_A6
+|   |   |   |   +---SESSION-20260407-01_A6_TPL-01
+|   |   |   |   |       EVIDENCES.md
+|   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |       NOTES.md
+|   |   |   |   |       RESULTATS.md
+|   |   |   |   |       SESSION.md
+|   |   |   |   |       
+|   |   |   |   +---SESSION-20260407-02_A6_TPL-02
+|   |   |   |   |       EVIDENCES.md
+|   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |       NOTES.md
+|   |   |   |   |       RESULTATS.md
+|   |   |   |   |       SESSION.md
+|   |   |   |   |       
+|   |   |   |   +---SESSION-20260407-03_A6_TPL-03
+|   |   |   |   |       EVIDENCES.md
+|   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |       NOTES.md
+|   |   |   |   |       RESULTATS.md
+|   |   |   |   |       SESSION.md
+|   |   |   |   |       
+|   |   |   |   +---SESSION-20260407-04_A6_TPL-04
+|   |   |   |   |       EVIDENCES.md
+|   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |       NOTES.md
+|   |   |   |   |       RESULTATS.md
+|   |   |   |   |       SESSION.md
+|   |   |   |   |       
+|   |   |   |   +---SESSION-20260407-05_A6_TPL-05
+|   |   |   |   |       EVIDENCES.md
+|   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |       NOTES.md
+|   |   |   |   |       RESULTATS.md
+|   |   |   |   |       SESSION.md
+|   |   |   |   |       
+|   |   |   |   +---SESSION-20260407-06_A6_TPL-06
+|   |   |   |   |       EVIDENCES.md
+|   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |       NOTES.md
+|   |   |   |   |       RESULTATS.md
+|   |   |   |   |       SESSION.md
+|   |   |   |   |       
+|   |   |   |   +---SESSION-20260407-07_13_A6_TPL-LOT-07-13
+|   |   |   |   |       EVIDENCES.md
+|   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |       NOTES.md
+|   |   |   |   |       RESULTATS.md
+|   |   |   |   |       SESSION.md
+|   |   |   |   |       
+|   |   |   |   +---SESSION-20260407-14_A6_TPL-14
+|   |   |   |   |       EVIDENCES.md
+|   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |       NOTES.md
+|   |   |   |   |       RESULTATS.md
+|   |   |   |   |       SESSION.md
+|   |   |   |   |       
+|   |   |   |   \---SESSION-20260407-15_A6_CLOTURE-A6
+|   |   |   |           EVIDENCES.md
+|   |   |   |           FIN_SESSION.md
+|   |   |   |           NOTES.md
+|   |   |   |           RESULTATS.md
+|   |   |   |           SESSION.md
+|   |   |   |           
+|   |   |   \---BLOC_A7
+|   |   |       +---SESSION-20260414-01_A7_DASH-01
 |   |   |       |       EVIDENCES.md
 |   |   |       |       FIN_SESSION.md
 |   |   |       |       NOTES.md
 |   |   |       |       RESULTATS.md
 |   |   |       |       SESSION.md
 |   |   |       |       
-|   |   |       +---SESSION-20260407-02_A6_TPL-02
+|   |   |       +---SESSION-20260414-02_A7_DASH-LOT-02-07
 |   |   |       |       EVIDENCES.md
 |   |   |       |       FIN_SESSION.md
 |   |   |       |       NOTES.md
 |   |   |       |       RESULTATS.md
 |   |   |       |       SESSION.md
 |   |   |       |       
-|   |   |       +---SESSION-20260407-03_A6_TPL-03
+|   |   |       +---SESSION-20260414-03_A7_DASH-08
 |   |   |       |       EVIDENCES.md
 |   |   |       |       FIN_SESSION.md
 |   |   |       |       NOTES.md
 |   |   |       |       RESULTATS.md
 |   |   |       |       SESSION.md
 |   |   |       |       
-|   |   |       +---SESSION-20260407-04_A6_TPL-04
-|   |   |       |       EVIDENCES.md
-|   |   |       |       FIN_SESSION.md
-|   |   |       |       NOTES.md
-|   |   |       |       RESULTATS.md
-|   |   |       |       SESSION.md
-|   |   |       |       
-|   |   |       +---SESSION-20260407-05_A6_TPL-05
-|   |   |       |       EVIDENCES.md
-|   |   |       |       FIN_SESSION.md
-|   |   |       |       NOTES.md
-|   |   |       |       RESULTATS.md
-|   |   |       |       SESSION.md
-|   |   |       |       
-|   |   |       +---SESSION-20260407-06_A6_TPL-06
-|   |   |       |       EVIDENCES.md
-|   |   |       |       FIN_SESSION.md
-|   |   |       |       NOTES.md
-|   |   |       |       RESULTATS.md
-|   |   |       |       SESSION.md
-|   |   |       |       
-|   |   |       +---SESSION-20260407-07_13_A6_TPL-LOT-07-13
-|   |   |       |       EVIDENCES.md
-|   |   |       |       FIN_SESSION.md
-|   |   |       |       NOTES.md
-|   |   |       |       RESULTATS.md
-|   |   |       |       SESSION.md
-|   |   |       |       
-|   |   |       +---SESSION-20260407-14_A6_TPL-14
-|   |   |       |       EVIDENCES.md
-|   |   |       |       FIN_SESSION.md
-|   |   |       |       NOTES.md
-|   |   |       |       RESULTATS.md
-|   |   |       |       SESSION.md
-|   |   |       |       
-|   |   |       \---SESSION-20260407-15_A6_CLOTURE-A6
+|   |   |       \---SESSION-20260414-04_A7_CLOTURE-A7
 |   |   |               EVIDENCES.md
 |   |   |               FIN_SESSION.md
 |   |   |               NOTES.md
@@ -3210,7 +3239,7 @@ C:.
 |   |           SESSION.md
 |   |           
 |   +---3-patches
-|   |   |   README.md
+|   |   |   README(1).md
 |   |   |   
 |   |   \---1-ALPHA
 |   |       +---BLOC_A1
@@ -3605,43 +3634,57 @@ C:.
 |   |       |               PATCH__SESSION-20260401-10_A5_CLOTURE-A5.diff
 |   |       |               README_PATCH.md
 |   |       |               
-|   |       \---BLOC_A6
-|   |           +---SESSION-20260407-01_A6_TPL-01
+|   |       +---BLOC_A6
+|   |       |   +---SESSION-20260407-01_A6_TPL-01
+|   |       |   |       NO_PATCH.md
+|   |       |   |       
+|   |       |   +---SESSION-20260407-02_A6_TPL-02
+|   |       |   |       NO_PATCH.md
+|   |       |   |       PATCH__SESSION-20260407-02_A6_TPL-02_DOCS.diff
+|   |       |   |       README_PATCH.md
+|   |       |   |       
+|   |       |   +---SESSION-20260407-03_A6_TPL-03
+|   |       |   |       PATCH__SESSION-20260407-03_A6_TPL-03.diff
+|   |       |   |       PATCH__SESSION-20260407-03_A6_TPL-03_DOCS.diff
+|   |       |   |       README_PATCH.md
+|   |       |   |       
+|   |       |   +---SESSION-20260407-04_A6_TPL-04
+|   |       |   |       PATCH__SESSION-20260407-04_A6_TPL-04.diff
+|   |       |   |       README_PATCH.md
+|   |       |   |       
+|   |       |   +---SESSION-20260407-05_A6_TPL-05
+|   |       |   |       PATCH__SESSION-20260407-05_A6_TPL-05.diff
+|   |       |   |       README_PATCH.md
+|   |       |   |       
+|   |       |   +---SESSION-20260407-06_A6_TPL-06
+|   |       |   |       PATCH__SESSION-20260407-06_A6_TPL-06.diff
+|   |       |   |       README_PATCH.md
+|   |       |   |       
+|   |       |   +---SESSION-20260407-07_13_A6_TPL-LOT-07-13
+|   |       |   |       PATCH__SESSION-20260407-07_13_A6_TPL-LOT-07-13.diff
+|   |       |   |       PATCH__SESSION-20260407-07_13_A6_TPL-LOT-07-13_FIX-01.diff
+|   |       |   |       PATCH__SESSION-20260407-07_13_A6_TPL-LOT-07-13_FIX-02.diff
+|   |       |   |       README_PATCH.md
+|   |       |   |       
+|   |       |   +---SESSION-20260407-14_A6_TPL-14
+|   |       |   |       PATCH__SESSION-20260407-14_A6_TPL-14.diff
+|   |       |   |       README_PATCH.md
+|   |       |   |       
+|   |       |   \---SESSION-20260407-15_A6_CLOTURE-A6
+|   |       |           NO_PATCH.md
+|   |       |           README_PATCH.md
+|   |       |           
+|   |       \---BLOC_A7
+|   |           +---SESSION-20260414-01_A7_DASH-01
 |   |           |       NO_PATCH.md
 |   |           |       
-|   |           +---SESSION-20260407-02_A6_TPL-02
+|   |           +---SESSION-20260414-02_A7_DASH-LOT-02-07
+|   |           |       README_PATCH.md
+|   |           |       
+|   |           +---SESSION-20260414-03_A7_DASH-08
 |   |           |       NO_PATCH.md
-|   |           |       PATCH__SESSION-20260407-02_A6_TPL-02_DOCS.diff
-|   |           |       README_PATCH.md
 |   |           |       
-|   |           +---SESSION-20260407-03_A6_TPL-03
-|   |           |       PATCH__SESSION-20260407-03_A6_TPL-03.diff
-|   |           |       PATCH__SESSION-20260407-03_A6_TPL-03_DOCS.diff
-|   |           |       README_PATCH.md
-|   |           |       
-|   |           +---SESSION-20260407-04_A6_TPL-04
-|   |           |       PATCH__SESSION-20260407-04_A6_TPL-04.diff
-|   |           |       README_PATCH.md
-|   |           |       
-|   |           +---SESSION-20260407-05_A6_TPL-05
-|   |           |       PATCH__SESSION-20260407-05_A6_TPL-05.diff
-|   |           |       README_PATCH.md
-|   |           |       
-|   |           +---SESSION-20260407-06_A6_TPL-06
-|   |           |       PATCH__SESSION-20260407-06_A6_TPL-06.diff
-|   |           |       README_PATCH.md
-|   |           |       
-|   |           +---SESSION-20260407-07_13_A6_TPL-LOT-07-13
-|   |           |       PATCH__SESSION-20260407-07_13_A6_TPL-LOT-07-13.diff
-|   |           |       PATCH__SESSION-20260407-07_13_A6_TPL-LOT-07-13_FIX-01.diff
-|   |           |       PATCH__SESSION-20260407-07_13_A6_TPL-LOT-07-13_FIX-02.diff
-|   |           |       README_PATCH.md
-|   |           |       
-|   |           +---SESSION-20260407-14_A6_TPL-14
-|   |           |       PATCH__SESSION-20260407-14_A6_TPL-14.diff
-|   |           |       README_PATCH.md
-|   |           |       
-|   |           \---SESSION-20260407-15_A6_CLOTURE-A6
+|   |           \---SESSION-20260414-04_A7_CLOTURE-A7
 |   |                   NO_PATCH.md
 |   |                   
 |   +---4-templates

@@ -36,8 +36,8 @@ Pour les sessions indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références des session :
 
-- SESSION-20260407-14_A6_TPL-14
-- TPL-14 — VALIDATION** — Validation du bloc templates
+- SESSION-20260407-15_A6_CLOTURE-A6
+- CLOTURE_A6 — VALIDATION** — Clôture finale du bloc A6
 ------------------------------------
 sortie propre + retour du terminal + aucune erreur = validé
 ------------------------------------
