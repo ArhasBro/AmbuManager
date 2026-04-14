@@ -36,20 +36,8 @@ Pour les sessions indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références des session :
 
-- SESSION-20260407-07_A6_TPL-07
-- SESSION-20260407-08_A6_TPL-08
-- SESSION-20260407-09_A6_TPL-09
-- SESSION-20260407-10_A6_TPL-10
-- SESSION-20260407-11_A6_TPL-11
-- SESSION-20260407-12_A6_TPL-12
-- SESSION-20260407-13_A6_TPL-13
-- **TPL-07 — COMPLÉTION** — API désactivation / archivage template
-- **TPL-08 — COMPLÉTION** — UI gestion des templates
-- **TPL-09 — COMPLÉTION** — Ajout de la composition minimale d’équipe
-- **TPL-10 — COMPLÉTION** — Ajout du type de véhicule requis
-- **TPL-11 — COMPLÉTION** — Ajout du nombre de personnes requis
-- **TPL-12 — COMPLÉTION** — Support des shifts non horodatés
-- **TPL-13 — COMPLÉTION** — Couleurs libres et lisibilité visuelle
+- SESSION-20260407-14_A6_TPL-14
+- TPL-14 — VALIDATION** — Validation du bloc templates
 ------------------------------------
 sortie propre + retour du terminal + aucune erreur = validé
 ------------------------------------

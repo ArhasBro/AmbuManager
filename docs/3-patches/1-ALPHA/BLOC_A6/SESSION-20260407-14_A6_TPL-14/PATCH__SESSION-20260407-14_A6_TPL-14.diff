@@ -1,0 +1,464 @@
+--- a/lib/services/planning/matching.service.ts
++++ b/lib/services/planning/matching.service.ts
+@@ -1,6 +1,11 @@
+ import { PrismaClient, Role } from "@prisma/client";
+ 
+ import { buildUserAbsenceMap, isUserAbsent, listUserAbsenceWindows } from "@/lib/services/planning/user-absence";
++import {
++  getAllowedRolesForFirstSlot,
++  getAllowedRolesForSecondSlot,
++  resolveTemplateMinStaffCount,
++} from "@/lib/templates/template-rules";
+ 
+ export type MatchingReason =
+   | "MATCHED"
+@@ -80,13 +85,88 @@
+   endAt: Date;
+   userId: string | null;
+   user2Id: string | null;
+-  template: { requiredRole: Role | null } | null;
++  template: {
++    category: string | null;
++    requiredRole: Role | null;
++    secondaryAllowedRoles: Role[];
++    minStaffCount: number | null;
++  } | null;
+ };
+ 
++type RunDraftForApply = {
++  id: string;
++  startAt: Date;
++  endAt: Date;
++  userId: string | null;
++  user2Id: string | null;
++  template: {
++    category: string | null;
++    minStaffCount: number | null;
++  } | null;
++};
++
++function getTemplateRuleInput(shift: DraftShiftRow | RunDraftForApply) {
++  const template = (shift.template ?? null) as {
++    category?: string | null;
++    requiredRole?: Role | null;
++    secondaryAllowedRoles?: Role[];
++    minStaffCount?: number | null;
++  } | null;
++
++  return {
++    category: template?.category ?? null,
++    requiredRole: template?.requiredRole ?? null,
++    secondaryAllowedRoles: template?.secondaryAllowedRoles ?? [],
++    minStaffCount: template?.minStaffCount ?? null,
++  };
++}
++
++function getRequiredSlots(shift: DraftShiftRow | RunDraftForApply): 1 | 2 {
++  return resolveTemplateMinStaffCount(shift.template?.minStaffCount ?? null, shift.template?.category ?? null);
++}
++
++function getRolePoolForSlot(shift: DraftShiftRow | RunDraftForApply, slot: 1 | 2): Role[] {
++  const templateInput = getTemplateRuleInput(shift);
++  const roles = slot === 1 ? getAllowedRolesForFirstSlot(templateInput) : getAllowedRolesForSecondSlot(templateInput);
++  return roles.map((role) => role as Role);
++}
++
++function getMissingSlots(shift: DraftShiftRow | RunDraftForApply): Array<1 | 2> {
++  const slots: Array<1 | 2> = [];
++  const requiredSlots = getRequiredSlots(shift);
++
++  if (!shift.userId) slots.push(1);
++  if (requiredSlots === 2 && !shift.user2Id) slots.push(2);
++
++  return slots;
++}
++
++function getFilledSlots(shift: DraftShiftRow | RunDraftForApply): Array<1 | 2> {
++  const slots: Array<1 | 2> = [];
++  const requiredSlots = getRequiredSlots(shift);
++
++  if (shift.userId) slots.push(1);
++  if (requiredSlots === 2 && shift.user2Id) slots.push(2);
++
++  return slots;
++}
++
++function rolePoolLabel(roles: readonly Role[]): string | null {
++  if (roles.length === 0) return null;
++  return Array.from(new Set(roles)).join("|");
++}
++
++function getNextAssignableField(shift: RunDraftForApply): "userId" | "user2Id" | null {
++  if (!shift.userId) return "userId";
++  if (getRequiredSlots(shift) === 2 && !shift.user2Id) return "user2Id";
++  return null;
++}
++
+ /**
+  * 4.6 — Compute only (aucune écriture DB)
+  * Matching amélioré :
+- * - requiredRole → user(s) de la company avec ce role
++ * - remplit le prochain slot libre du DraftShift (userId puis user2Id si requis)
++ * - utilise la composition minimale d’équipe du template
+  * - évite conflits internes run (userId OU user2Id)
+  * - équité simple : choisit le user le moins assigné (userId+user2Id) dans le run
+  * - stabilité : itère par startAt asc (tie-break id) et met à jour un "busy map" local
+@@ -103,7 +183,16 @@
+ 
+   const draftShiftsRaw = await prisma.draftShift.findMany({
+     where: { runId, run: { companyId } },
+-    include: { template: { select: { requiredRole: true } } },
++    include: {
++      template: {
++        select: {
++          category: true,
++          requiredRole: true,
++          secondaryAllowedRoles: true,
++          minStaffCount: true,
++        },
++      },
++    },
+   });
+ 
+   const draftShifts: DraftShiftRow[] = draftShiftsRaw.map((s) => ({
+@@ -112,7 +201,14 @@
+     endAt: s.endAt,
+     userId: s.userId ?? null,
+     user2Id: s.user2Id ?? null,
+-    template: s.template ? { requiredRole: toRoleEnum(s.template.requiredRole) } : null,
++    template: s.template
++      ? {
++          category: s.template.category,
++          requiredRole: toRoleEnum(s.template.requiredRole),
++          secondaryAllowedRoles: s.template.secondaryAllowedRoles.map((role) => toRoleEnum(role)).filter((role): role is Role => role !== null),
++          minStaffCount: s.template.minStaffCount ?? null,
++        }
++      : null,
+   }));
+ 
+   if (draftShifts.length === 0) return [];
+@@ -127,8 +223,8 @@
+   const requiredRoles = Array.from(
+     new Set(
+       draftShifts
+-        .map((s) => s.template?.requiredRole ?? null)
+-        .filter((r): r is Role => r !== null)
++        .flatMap((shift) => getMissingSlots(shift).flatMap((slot) => getRolePoolForSlot(shift, slot)))
++        .filter((role): role is Role => role !== null)
+     )
+   );
+ 
+@@ -178,91 +274,107 @@
+   const plan: MatchingPlanItem[] = [];
+ 
+   for (const shift of draftShifts) {
+-    const requiredRoleEnum = shift.template?.requiredRole ?? null;
+-    const requiredRole = requiredRoleEnum ? String(requiredRoleEnum) : null;
+-
+-    const currentUserId = shift.userId ?? null;
++    const missingSlots = getMissingSlots(shift);
+ 
+-    if (!requiredRoleEnum) {
+-      plan.push({
+-        shiftId: shift.id,
+-        startAt: toIso(shift.startAt),
+-        endAt: toIso(shift.endAt),
+-        requiredRole: null,
+-        currentUserId,
+-        proposedUserId: null,
+-        reason: "NO_REQUIRED_ROLE",
+-      });
++    if (missingSlots.length === 0) {
++      if (includeAlreadyAssigned) {
++        for (const slot of getFilledSlots(shift)) {
++          const currentUserId = slot === 1 ? shift.userId ?? null : shift.user2Id ?? null;
++          plan.push({
++            shiftId: shift.id,
++            startAt: toIso(shift.startAt),
++            endAt: toIso(shift.endAt),
++            requiredRole: rolePoolLabel(getRolePoolForSlot(shift, slot)),
++            currentUserId,
++            proposedUserId: currentUserId,
++            reason: "ALREADY_ASSIGNED",
++          });
++        }
++      }
+       continue;
+     }
+ 
+-    if (currentUserId) {
+-      if (includeAlreadyAssigned) {
++    for (const slot of missingSlots) {
++      const requiredRolePool = getRolePoolForSlot(shift, slot);
++      const requiredRole = rolePoolLabel(requiredRolePool);
++      const currentUserId = slot === 1 ? shift.userId ?? null : shift.user2Id ?? null;
++
++      if (requiredRolePool.length === 0) {
++        plan.push({
++          shiftId: shift.id,
++          startAt: toIso(shift.startAt),
++          endAt: toIso(shift.endAt),
++          requiredRole: null,
++          currentUserId,
++          proposedUserId: null,
++          reason: "NO_REQUIRED_ROLE",
++        });
++        continue;
++      }
++
++      const seenCandidateIds = new Set<string>();
++      const candidates = requiredRolePool.flatMap((role) => usersByRole.get(role) ?? []).filter((candidate) => {
++        if (seenCandidateIds.has(candidate.id)) return false;
++        seenCandidateIds.add(candidate.id);
++        return true;
++      });
++
++      if (candidates.length === 0) {
+         plan.push({
+           shiftId: shift.id,
+           startAt: toIso(shift.startAt),
+           endAt: toIso(shift.endAt),
+           requiredRole,
+           currentUserId,
+-          proposedUserId: currentUserId,
+-          reason: "ALREADY_ASSIGNED",
++          proposedUserId: null,
++          reason: "NO_USER_WITH_REQUIRED_ROLE",
+         });
++        continue;
+       }
+-      continue;
+-    }
+ 
+-    const candidates = usersByRole.get(requiredRoleEnum) ?? [];
+-    if (candidates.length === 0) {
+-      plan.push({
+-        shiftId: shift.id,
+-        startAt: toIso(shift.startAt),
+-        endAt: toIso(shift.endAt),
+-        requiredRole,
+-        currentUserId: null,
+-        proposedUserId: null,
+-        reason: "NO_USER_WITH_REQUIRED_ROLE",
++      const occupiedUserIds = new Set([shift.userId, shift.user2Id].filter((value): value is string => Boolean(value)));
++      const free = candidates.filter(
++        (candidate) =>
++          !occupiedUserIds.has(candidate.id) &&
++          isUserFree(busy, candidate.id, shift.startAt, shift.endAt) &&
++          !isUserAbsent(absencesByUser, candidate.id, shift.startAt, shift.endAt)
++      );
++
++      if (free.length === 0) {
++        plan.push({
++          shiftId: shift.id,
++          startAt: toIso(shift.startAt),
++          endAt: toIso(shift.endAt),
++          requiredRole,
++          currentUserId,
++          proposedUserId: null,
++          reason: "USER_CONFLICT",
++        });
++        continue;
++      }
++
++      free.sort((a, b) => {
++        const ca = counts.get(a.id) ?? 0;
++        const cb = counts.get(b.id) ?? 0;
++        if (ca !== cb) return ca - cb;
++        return a.id.localeCompare(b.id);
+       });
+-      continue;
+-    }
+ 
+-    const free = candidates.filter(
+-      (c) => isUserFree(busy, c.id, shift.startAt, shift.endAt) && !isUserAbsent(absencesByUser, c.id, shift.startAt, shift.endAt)
+-    );
++      const chosen = free[0]!;
++
++      addBusyWindow(busy, chosen.id, shift.startAt, shift.endAt);
++      counts.set(chosen.id, (counts.get(chosen.id) ?? 0) + 1);
+ 
+-    if (free.length === 0) {
+       plan.push({
+         shiftId: shift.id,
+         startAt: toIso(shift.startAt),
+         endAt: toIso(shift.endAt),
+         requiredRole,
+-        currentUserId: null,
+-        proposedUserId: null,
+-        reason: "USER_CONFLICT",
++        currentUserId,
++        proposedUserId: chosen.id,
++        reason: "MATCHED",
+       });
+-      continue;
+     }
+-
+-    free.sort((a, b) => {
+-      const ca = counts.get(a.id) ?? 0;
+-      const cb = counts.get(b.id) ?? 0;
+-      if (ca !== cb) return ca - cb;
+-      return a.id.localeCompare(b.id);
+-    });
+-
+-    const chosen = free[0];
+-
+-    addBusyWindow(busy, chosen.id, shift.startAt, shift.endAt);
+-    counts.set(chosen.id, (counts.get(chosen.id) ?? 0) + 1);
+-
+-    plan.push({
+-      shiftId: shift.id,
+-      startAt: toIso(shift.startAt),
+-      endAt: toIso(shift.endAt),
+-      requiredRole,
+-      currentUserId: null,
+-      proposedUserId: chosen.id,
+-      reason: "MATCHED",
+-    });
+   }
+ 
+   return plan;
+@@ -272,7 +384,7 @@
+  * 4.6 — Apply (écritures DB) à partir d’un plan
+  * - Ne jamais assigner un user si ça chevauche déjà un autre DraftShift du run (userId OU user2Id)
+  * - Multi-tenant strict via run.companyId
+- * - Ne jamais écraser userId si déjà assigné
++ * - Remplit uniquement le prochain slot libre (userId puis user2Id si requis)
+  */
+ export async function applyDraftShiftMatchingPlan(
+   prisma: PrismaClient,
+@@ -287,10 +399,17 @@
+ 
+     const runDrafts = await tx.draftShift.findMany({
+       where: { runId, run: { companyId } },
+-      select: { id: true, startAt: true, endAt: true, userId: true, user2Id: true },
++      select: {
++        id: true,
++        startAt: true,
++        endAt: true,
++        userId: true,
++        user2Id: true,
++        template: { select: { category: true, minStaffCount: true } },
++      },
+     });
+ 
+-    const byId = new Map(runDrafts.map((d) => [d.id, d]));
++    const byId = new Map(runDrafts.map((draft) => [draft.id, draft]));
+ 
+     const proposedUserIds = Array.from(
+       new Set(
+@@ -306,14 +425,14 @@
+             await listUserAbsenceWindows(tx, {
+               companyId,
+               userIds: proposedUserIds,
+-              startAt: runDrafts.reduce((min, d) => (d.startAt < min ? d.startAt : min), runDrafts[0]!.startAt),
+-              endAt: runDrafts.reduce((max, d) => (d.endAt > max ? d.endAt : max), runDrafts[0]!.endAt),
++              startAt: runDrafts.reduce((min, draft) => (draft.startAt < min ? draft.startAt : min), runDrafts[0]!.startAt),
++              endAt: runDrafts.reduce((max, draft) => (draft.endAt > max ? draft.endAt : max), runDrafts[0]!.endAt),
+             })
+           )
+         : new Map();
+ 
+     for (const item of plan) {
+-      if (item.currentUserId !== null || item.proposedUserId === null || item.reason !== "MATCHED") {
++      if (item.proposedUserId === null || item.reason !== "MATCHED") {
+         appliedResults.push({ ...item, applied: false });
+         continue;
+       }
+@@ -326,6 +445,12 @@
+         continue;
+       }
+ 
++      const targetField = getNextAssignableField(me);
++      if (!targetField) {
++        appliedResults.push({ ...item, applied: false });
++        continue;
++      }
++
+       const absenceConflict = isUserAbsent(absencesByUser, proposedId, me.startAt, me.endAt);
+       if (absenceConflict) {
+         appliedResults.push({
+@@ -336,10 +461,10 @@
+         continue;
+       }
+ 
+-      const conflict = runDrafts.find((d) => {
+-        if (d.id === me.id) return false;
+-        if (d.userId !== proposedId && d.user2Id !== proposedId) return false;
+-        return overlaps(me.startAt, me.endAt, d.startAt, d.endAt);
++      const conflict = runDrafts.find((draft) => {
++        if (draft.id === me.id) return false;
++        if (draft.userId !== proposedId && draft.user2Id !== proposedId) return false;
++        return overlaps(me.startAt, me.endAt, draft.startAt, draft.endAt);
+       });
+ 
+       if (conflict) {
+@@ -351,15 +476,26 @@
+         continue;
+       }
+ 
+-      const res = await tx.draftShift.updateMany({
+-        where: {
+-          id: item.shiftId,
+-          userId: null,
+-          runId,
+-          run: { companyId },
+-        },
+-        data: { userId: proposedId },
+-      });
++      const res =
++        targetField === "userId"
++          ? await tx.draftShift.updateMany({
++              where: {
++                id: item.shiftId,
++                userId: null,
++                runId,
++                run: { companyId },
++              },
++              data: { userId: proposedId },
++            })
++          : await tx.draftShift.updateMany({
++              where: {
++                id: item.shiftId,
++                user2Id: null,
++                runId,
++                run: { companyId },
++              },
++              data: { user2Id: proposedId },
++            });
+ 
+       appliedResults.push({
+         ...item,
+@@ -368,7 +504,13 @@
+ 
+       if (res.count === 1) {
+         const updated = byId.get(item.shiftId);
+-        if (updated) updated.userId = proposedId;
++        if (updated) {
++          if (targetField === "userId") {
++            updated.userId = proposedId;
++          } else {
++            updated.user2Id = proposedId;
++          }
++        }
+       }
+     }
+ 
+@@ -392,4 +534,4 @@
+   if (dryRun) return plan;
+ 
+   return applyDraftShiftMatchingPlan(prisma, { companyId, runId, plan });
+-}
+\ No newline at end of file
++}
+--- a/app/planning/planning-client.tsx
++++ b/app/planning/planning-client.tsx
+@@ -923,7 +923,7 @@
+     }
+ 
+     const confirmed = window.confirm(
+-      "Appliquer l’auto-assign ?\n\nCela va modifier les DraftShifts du run (userId) selon le matching."
++      "Appliquer l’auto-assign ?\n\nCela va modifier les DraftShifts du run (userId ou user2Id selon le slot libre) selon le matching."
+     );
+     if (!confirmed) return;
+ 

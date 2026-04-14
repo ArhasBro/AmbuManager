@@ -1204,7 +1204,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |           |       README_PATCH.md
 |           |       
 |           +---SESSION-20260407-14_A6_TPL-14
-|           |       NO_PATCH.md
+|           |       PATCH__SESSION-20260407-14_A6_TPL-14.diff
 |           |       
 |           \---SESSION-20260407-15_A6_CLOTURE-A6
 |                   NO_PATCH.md

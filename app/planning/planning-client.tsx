@@ -923,7 +923,7 @@ export default function PlanningClient({
     }
 
     const confirmed = window.confirm(
-      "Appliquer l’auto-assign ?\n\nCela va modifier les DraftShifts du run (userId) selon le matching."
+      "Appliquer l’auto-assign ?\n\nCela va modifier les DraftShifts du run (userId ou user2Id selon le slot libre) selon le matching."
     );
     if (!confirmed) return;
 
