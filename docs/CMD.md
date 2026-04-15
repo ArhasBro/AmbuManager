@@ -36,8 +36,8 @@ Pour les sessions indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références des session :
 
-- SESSION-20260415-03_A8_PLAN-19
-- **PLAN-19 — VALIDATION** — Validation complète du bloc planning manuel : cohérence des vues jour / semaine / mois, exploitabilité quotidienne, gestion correcte des modifications publiées, historique minimal et traçabilité
+- SESSION-20260415-04_A8_CLOTURE_A8
+- **CLOTURE_A8 — VALIDATION+CORRECTION+COMPLÉTION** — Clôture finale du bloc A8
 ------------------------------------
 sortie propre + retour du terminal + aucune erreur = validé
 ------------------------------------

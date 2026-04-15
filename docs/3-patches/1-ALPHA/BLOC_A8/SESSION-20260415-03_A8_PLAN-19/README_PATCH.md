@@ -12,20 +12,17 @@ VALIDATION
 ## Statut patch retenu
 - `NO_PATCH`
 
-## Justification
-Le contrôle du code réel n’a pas mis en évidence de résiduel final strict imposant un correctif minimal de session. La présente session valide l’état réel du bloc A8 manuel et documente ce constat sans produire de nouveau patch code.
+## Justification corrigée
+Aucun correctif de code applicatif n’est requis.
 
-## Validation terminale de la présente session
-Aucune validation terminale applicative n’a été relancée dans cette session.
+Le correctif apporté dans cette intervention est strictement documentaire : la session ne doit plus affirmer que la surface manuelle principale A8 prouve l’édition des affectations publiées.
 
-## Fait antérieur conservé comme source
-Retour utilisateur fourni pour la session précédente `PLAN-LOT-02-18` :
-- `npx prisma validate` : OK
-- `npx prisma generate` : OK
-- `npm run lint` : OK
-- `npm run build` : OK
+Qualification retenue :
+- édition structurelle du shift publié : OUI
+- modification des affectations depuis la surface manuelle principale A8 : NON PROUVÉE
 
-Ce constat antérieur ne vaut pas exécution de la présente session.
+## Validation terminale de la présente intervention
+Aucune validation terminale applicative relancée.
 
 ## Livrable documentaire final
 Export ZIP à plat contenant :

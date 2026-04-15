@@ -13,25 +13,17 @@ SESSION-20260415-03_A8_PLAN-19
 Projet : Investissement  
 Sous-projet : Ambulance Manager  
 Maturité : 1-ALPHA  
-Bloc : A8 — Planning manuel  
+Bloc : A8  
 Type : VALIDATION  
 Intitulé : Validation complète du bloc planning manuel : cohérence des vues jour / semaine / mois, exploitabilité quotidienne, gestion correcte des modifications publiées, historique minimal et traçabilité
 
 ## Objectif de la session
 
-Valider le code réel du bloc A8 sur le périmètre manuel strict, sans dériver vers le bloc A9, et statuer explicitement sur :
-- la cohérence des vues jour / semaine / mois ;
-- la navigation mensuelle ;
-- la lisibilité métier globale ;
-- l’ajout manuel de shift publié ;
-- la modification exploitable d’un shift publié ;
-- l’annulation logique d’un shift publié ;
-- l’historique minimal ;
-- la traçabilité consultable après publication.
+Valider le bloc A8 sur le code réel, sans rejouer `PLAN-LOT-02-18`, et statuer sur les vues jour / semaine / mois, l’exploitabilité quotidienne, les modifications publiées, l’annulation logique et la traçabilité minimale.
 
 ## Périmètre exact traité
 
-### Code contrôlé en priorité
+Contrôle prioritaire du code réel suivant :
 - `app/planning/page.tsx`
 - `app/planning/planning-client.tsx`
 - `app/planning/manual-planning-panel.tsx`
@@ -45,16 +37,25 @@ Valider le code réel du bloc A8 sur le périmètre manuel strict, sans dériver
 - `lib/services/planning/planning-audit.ts`
 - `prisma/schema.prisma`
 
-### Références complémentaires contrôlées
-- patch principal de `SESSION-20260415-02_A8_PLAN-LOT-02-18`
-- correctif `PATCH__SESSION-20260415-02_A8_PLAN-LOT-02-18_FIX-01.diff`
-- documentation A8 des sessions `PLAN-01` et `PLAN-LOT-02-18`
+Compléments relus :
+- patch principal `SESSION-20260415-02_A8_PLAN-LOT-02-18`
+- `PATCH__SESSION-20260415-02_A8_PLAN-LOT-02-18_FIX-01.diff`
+- documentation A8 déjà produite
 
 ## Résultat synthétique de session
 
-Le dépôt contrôlé confirme que le bloc planning manuel A8 est désormais réellement exploitable sur le périmètre demandé. Les vues jour / semaine / mois existent dans une surface manuelle dédiée en français, la navigation mensuelle est présente, l’ajout manuel d’un shift publié existe, la modification publiée couvre la structure du shift et les affectations, l’annulation reste logique et tracée, et l’historique minimal est consultable directement par shift.
+Validation documentaire maintenue en `NO_PATCH`.
 
-Aucun résiduel final strictement prouvé n’a été identifié sur le périmètre validé. La décision retenue pour cette session est `NO_PATCH`.
+Le contrôle réel confirme :
+- vue jour / semaine / mois exploitable
+- navigation mensuelle claire
+- ajout manuel d’un shift publié : OUI
+- édition structurelle d’un shift publié : OUI
+- modification des affectations depuis la surface manuelle principale A8 : NON PROUVÉE
+- annulation logique : OUI
+- historique minimal et traçabilité par shift : OUI
+
+La zone `legacy / autoschedule` visible dans `app/planning/planning-client.tsx` est constatée comme hors surface principale A8.
 
 ## Dossiers liés
 
