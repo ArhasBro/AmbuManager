@@ -36,8 +36,8 @@ Pour les sessions indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références des session :
 
-- SESSION-20260415-05_A9_AUTO-01
-- **AUTO-01 — AUDIT** — Audit complet de l’autoschedule existant : génération JOUR, génération SEMAINE, prise en compte réelle des contraintes ALPHA, signalements métier du moteur et traduction française existante
+- SESSION-20260415-06_A9_AUTO-LOT-02-14
+- **AUTO-LOT-02-14 — CORRECTION-COMPLÉTION** — Correction et/ou complétion des générations existantes, du choix gérant entre génération de shifts seuls ou génération avec affectation automatique, de l’intégration des indisponibilités utilisateurs et véhicules, des contraintes de rôles sur véhicules, du repos minimum, des signalements métier et de la traduction française des éléments autoschedule
 ------------------------------------
 sortie propre + retour du terminal + aucune erreur = validé
 ------------------------------------
