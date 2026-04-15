@@ -48,6 +48,24 @@ function Get-SafeString {
     return $Value.Trim()
 }
 
+function Convert-ToPlainLabel {
+    param([string]$Value)
+
+    $clean = (Get-SafeString -Value $Value).ToUpperInvariant()
+    if ([string]::IsNullOrWhiteSpace($clean)) {
+        return ""
+    }
+
+    $normalizedForm = $clean.Normalize([Text.NormalizationForm]::FormD)
+    $chars = foreach ($char in $normalizedForm.ToCharArray()) {
+        if ([Globalization.CharUnicodeInfo]::GetUnicodeCategory($char) -ne [Globalization.UnicodeCategory]::NonSpacingMark) {
+            $char
+        }
+    }
+
+    return ((-join $chars) -replace '\s+', '')
+}
+
 function Get-CanonicalStage {
     param([string]$Value)
 
@@ -102,52 +120,16 @@ function Get-CanonicalBlock {
     throw "Bloc invalide. Valeurs autorisees : A1 a A13, B1 a B4 (ou BLOC_A1 a BLOC_A13, BLOC_B1 a BLOC_B4)."
 }
 
-function Get-NormalizedLabel {
-    param([string]$Value)
-
-    $clean = (Get-SafeString -Value $Value).ToUpperInvariant()
-
-    $replacements = [ordered]@{
-        "À" = "A"
-        "Â" = "A"
-        "Ä" = "A"
-        "Ç" = "C"
-        "É" = "E"
-        "È" = "E"
-        "Ê" = "E"
-        "Ë" = "E"
-        "Î" = "I"
-        "Ï" = "I"
-        "Ô" = "O"
-        "Ö" = "O"
-        "Ù" = "U"
-        "Û" = "U"
-        "Ü" = "U"
-    }
-
-    foreach ($entry in $replacements.GetEnumerator()) {
-        $clean = $clean.Replace($entry.Key, $entry.Value)
-    }
-
-    return ([regex]::Replace($clean, '\s+', ''))
-}
-
 function Get-CanonicalType {
     param([string]$Value)
 
-    $normalized = Get-NormalizedLabel -Value $Value
+    $normalized = Convert-ToPlainLabel -Value $Value
 
     if ([string]::IsNullOrWhiteSpace($normalized)) {
         throw "Type invalide. Valeurs autorisees : AUDIT, CORRECTION, COMPLETION, VALIDATION, CORRECTION-COMPLETION, VALIDATION+CORRECTION+COMPLETION."
     }
 
-    # Aliases / syntaxes acceptees :
-    # - COMPLÉTION => COMPLETION
-    # - CORRECTION-COMPLETION => CORRECTION+COMPLETION
-    # - VALIDATION+CORRECTION+COMPLETION => conserve les 3 etats
-    # - Separateurs acceptes : + / , ; |
-    $normalized = $normalized.Replace("CORRECTION-COMPLETION", "CORRECTION+COMPLETION")
-    $normalized = $normalized -replace '[\/,;|]', '+'
+    $normalized = $normalized -replace '[-/,;|]', '+'
 
     $rawTokens = @(
         $normalized -split '\+' |
@@ -158,7 +140,7 @@ function Get-CanonicalType {
         throw "Type invalide. Valeurs autorisees : AUDIT, CORRECTION, COMPLETION, VALIDATION, CORRECTION-COMPLETION, VALIDATION+CORRECTION+COMPLETION."
     }
 
-    $allowedTokens = @("AUDIT", "CORRECTION", "COMPLETION", "VALIDATION")
+    $allowedTokens = @('AUDIT', 'CORRECTION', 'COMPLETION', 'VALIDATION')
     $canonicalTokens = New-Object System.Collections.Generic.List[string]
 
     foreach ($token in $rawTokens) {
@@ -182,7 +164,7 @@ function Test-TypeRequiresPatch {
         Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
     )
 
-    return (($tokens | Where-Object { $_ -in @("CORRECTION", "COMPLETION") }).Count -gt 0)
+    return (($tokens | Where-Object { $_ -in @('CORRECTION', 'COMPLETION') }).Count -gt 0)
 }
 
 function Read-ValueIfMissing {
@@ -322,7 +304,7 @@ function Initialize-PatchFolder {
         [string]$PatchRelativePath
     )
 
-    Ensure-Directory $PatchDir
+    New-DirectoryIfMissing -Path $PatchDir
 
     $patchFileName = "PATCH__{0}.diff" -f $SessionId
     $readmePatchPath = Join-Path $PatchDir "README_PATCH.md"
@@ -415,10 +397,10 @@ $blockDirName      = "BLOC_{0}" -f $Block
 $blockSessionsRoot = Join-Path $stageSessionsRoot $blockDirName
 $blockPatchesRoot  = Join-Path $stagePatchesRoot  $blockDirName
 
-Ensure-Directory $stageSessionsRoot
-Ensure-Directory $stagePatchesRoot
-Ensure-Directory $blockSessionsRoot
-Ensure-Directory $blockPatchesRoot
+New-DirectoryIfMissing -Path $stageSessionsRoot
+New-DirectoryIfMissing -Path $stagePatchesRoot
+New-DirectoryIfMissing -Path $blockSessionsRoot
+New-DirectoryIfMissing -Path $blockPatchesRoot
 
 $dateToken   = Get-Date -Format "yyyyMMdd"
 $dateDisplay = Get-Date -Format "dd/MM/yyyy"
@@ -488,8 +470,8 @@ REGLES
 - 1 session = 1 DoD
 - 1 session = 1 validation
 - 1 session = 1 patch officiel maximum
-- Si le type ne contient que AUDIT et/ou VALIDATION : NO_PATCH.md
-- Si le type contient CORRECTION et/ou COMPLETION : README_PATCH.md puis patch officiel unique si code modifie
+- Si session AUDIT ou VALIDATION : NO_PATCH.md
+- Si session avec CORRECTION et/ou COMPLETION : README_PATCH.md puis patch officiel unique si code modifie
 "@
 
 $clipboardMsg = "Non disponible"
@@ -524,7 +506,7 @@ if ($shouldOpen) {
         code $newSessionDir $newPatchDir
     }
     else {
-        Start-Process (Join-Path $newSessionDir "SESSION.md") | Out-Null
+        Start-Process (Join-Path $newSessionDir 'SESSION.md') | Out-Null
         Write-Host "Note: commande 'code' introuvable. SESSION.md ouvert avec l'application par defaut."
     }
 }

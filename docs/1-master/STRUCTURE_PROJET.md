@@ -3220,7 +3220,28 @@ C:.
 |   |   |   |           SESSION.md
 |   |   |   |           
 |   |   |   \---BLOC_A8
-|   |   |       \---SESSION-20260415-01_A8_PLAN-01
+|   |   |       +---SESSION-20260415-01_A8_PLAN-01
+|   |   |       |       EVIDENCES.md
+|   |   |       |       FIN_SESSION.md
+|   |   |       |       NOTES.md
+|   |   |       |       RESULTATS.md
+|   |   |       |       SESSION.md
+|   |   |       |       
+|   |   |       +---SESSION-20260415-02_A8_PLAN-LOT-02-18
+|   |   |       |       EVIDENCES.md
+|   |   |       |       FIN_SESSION.md
+|   |   |       |       NOTES.md
+|   |   |       |       RESULTATS.md
+|   |   |       |       SESSION.md
+|   |   |       |       
+|   |   |       +---SESSION-20260415-03_A8_PLAN-19
+|   |   |       |       EVIDENCES.md
+|   |   |       |       FIN_SESSION.md
+|   |   |       |       NOTES.md
+|   |   |       |       RESULTATS.md
+|   |   |       |       SESSION.md
+|   |   |       |       
+|   |   |       \---SESSION-20260415-04_A8_CLOTURE_A8
 |   |   |               EVIDENCES.md
 |   |   |               FIN_SESSION.md
 |   |   |               NOTES.md
@@ -3688,8 +3709,17 @@ C:.
 |   |       |           README_PATCH.md
 |   |       |           
 |   |       \---BLOC_A8
-|   |           \---SESSION-20260415-01_A8_PLAN-01
-|   |                   NO_PATCH.md
+|   |           +---SESSION-20260415-01_A8_PLAN-01
+|   |           |       NO_PATCH.md
+|   |           |       
+|   |           +---SESSION-20260415-02_A8_PLAN-LOT-02-18
+|   |           |       README_PATCH.md
+|   |           |       
+|   |           +---SESSION-20260415-03_A8_PLAN-19
+|   |           |       NO_PATCH.md
+|   |           |       
+|   |           \---SESSION-20260415-04_A8_CLOTURE_A8
+|   |                   README_PATCH.md
 |   |                   
 |   +---4-templates
 |   |       TEMPLATE_DEBUT_SESSION.md
