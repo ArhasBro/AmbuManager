@@ -1334,6 +1334,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |       \---BLOC_A9
 |           +---SESSION-20260415-05_A9_AUTO-01
 |           |       NO_PATCH.md
+|           |       README_PATCH.md
 |           |       
 |           +---SESSION-20260415-06_A9_AUTO-LOT-02-14
 |           |       README_PATCH.md
