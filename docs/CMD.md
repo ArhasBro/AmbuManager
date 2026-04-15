@@ -36,8 +36,8 @@ Pour les sessions indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références des session :
 
-- SESSION-20260414-03_A7_DASH-08
-- DASH-08 — VALIDATION** — Validation du bloc dashboard
+- SESSION-20260414-04_A7_CLOTURE-A7
+- CLOTURE_A7 — VALIDATION** — Clôture finale du bloc A7
 ------------------------------------
 sortie propre + retour du terminal + aucune erreur = validé
 ------------------------------------
@@ -57,6 +57,15 @@ Il seront à crée dans le patch docs en 1 ZIP téléchargeable sans sous dossie
 
 ------------------------------------
 
+Fait moi la commande pour le script de création de sessions pour les sessions suivante.
+Exemple de la commande : .\create_session.ps1 -Stage "1-ALPHA" -Block "A1" -SessionCode "RBAC-02" -Type "CORRECTION" -Title "Remplacement méthodique de DEA par ADE"
+
+- **PLAN-01 — AUDIT** — Audit complet du planning manuel existant : vue semaine, vue jour, vue mois, navigation mensuelle, lisibilité métier, ajout/modification/annulation de shifts publiés, historique minimal et traçabilité après publication
+- **PLAN-LOT-02-18 — CORRECTION-COMPLÉTION** — Correction et/ou complétion de la vue semaine, de la vue jour, de la vraie vue mois exploitable, de la navigation mensuelle, de la lisibilité métier globale, de l’API/UI d’ajout manuel de shift, de l’API/UI de modification d’un shift publié, de l’API/UI de suppression métier / annulation logique d’un shift publié, de l’historique minimal planning et de la traçabilité des modifications après publication
+- **PLAN-19 — VALIDATION** — Validation complète du bloc planning manuel : cohérence des vues jour / semaine / mois, exploitabilité quotidienne, gestion correcte des modifications publiées, historique minimal et traçabilité
+- **CLOTURE_A8 — VALIDATION+CORRECTION+COMPLÉTION** — Clôture finale du bloc A8
+
+------------------------------------
 
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 Unblock-File -Path .\create_session.ps1
