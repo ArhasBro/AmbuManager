@@ -3756,6 +3756,7 @@ C:.
 |   |           |       
 |   |           +---SESSION-20260415-03_A8_PLAN-19
 |   |           |       NO_PATCH.md
+|   |           |       README_PATCH.md
 |   |           |       
 |   |           \---SESSION-20260415-04_A8_CLOTURE_A8
 |   |                   README_PATCH.md
