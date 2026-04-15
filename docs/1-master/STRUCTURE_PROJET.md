@@ -3256,29 +3256,58 @@ C:.
 |   |   |   |           RESULTATS.md
 |   |   |   |           SESSION.md
 |   |   |   |           
-|   |   |   \---BLOC_A8
-|   |   |       +---SESSION-20260415-01_A8_PLAN-01
+|   |   |   +---BLOC_A8
+|   |   |   |   +---SESSION-20260415-01_A8_PLAN-01
+|   |   |   |   |       EVIDENCES.md
+|   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |       NOTES.md
+|   |   |   |   |       RESULTATS.md
+|   |   |   |   |       SESSION.md
+|   |   |   |   |       
+|   |   |   |   +---SESSION-20260415-02_A8_PLAN-LOT-02-18
+|   |   |   |   |       EVIDENCES.md
+|   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |       NOTES.md
+|   |   |   |   |       RESULTATS.md
+|   |   |   |   |       SESSION.md
+|   |   |   |   |       
+|   |   |   |   +---SESSION-20260415-03_A8_PLAN-19
+|   |   |   |   |       EVIDENCES.md
+|   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |       NOTES.md
+|   |   |   |   |       RESULTATS.md
+|   |   |   |   |       SESSION.md
+|   |   |   |   |       
+|   |   |   |   \---SESSION-20260415-04_A8_CLOTURE_A8
+|   |   |   |           EVIDENCES.md
+|   |   |   |           FIN_SESSION.md
+|   |   |   |           NOTES.md
+|   |   |   |           RESULTATS.md
+|   |   |   |           SESSION.md
+|   |   |   |           
+|   |   |   \---BLOC_A9
+|   |   |       +---SESSION-20260415-05_A9_AUTO-01
 |   |   |       |       EVIDENCES.md
 |   |   |       |       FIN_SESSION.md
 |   |   |       |       NOTES.md
 |   |   |       |       RESULTATS.md
 |   |   |       |       SESSION.md
 |   |   |       |       
-|   |   |       +---SESSION-20260415-02_A8_PLAN-LOT-02-18
+|   |   |       +---SESSION-20260415-06_A9_AUTO-LOT-02-14
 |   |   |       |       EVIDENCES.md
 |   |   |       |       FIN_SESSION.md
 |   |   |       |       NOTES.md
 |   |   |       |       RESULTATS.md
 |   |   |       |       SESSION.md
 |   |   |       |       
-|   |   |       +---SESSION-20260415-03_A8_PLAN-19
+|   |   |       +---SESSION-20260415-07_A9_AUTO-15
 |   |   |       |       EVIDENCES.md
 |   |   |       |       FIN_SESSION.md
 |   |   |       |       NOTES.md
 |   |   |       |       RESULTATS.md
 |   |   |       |       SESSION.md
 |   |   |       |       
-|   |   |       \---SESSION-20260415-04_A8_CLOTURE_A8
+|   |   |       \---SESSION-20260415-08_A9_CLOTURE_A9
 |   |   |               EVIDENCES.md
 |   |   |               FIN_SESSION.md
 |   |   |               NOTES.md
@@ -3745,20 +3774,33 @@ C:.
 |   |       |           NO_PATCH.md
 |   |       |           README_PATCH.md
 |   |       |           
-|   |       \---BLOC_A8
-|   |           +---SESSION-20260415-01_A8_PLAN-01
+|   |       +---BLOC_A8
+|   |       |   +---SESSION-20260415-01_A8_PLAN-01
+|   |       |   |       NO_PATCH.md
+|   |       |   |       
+|   |       |   +---SESSION-20260415-02_A8_PLAN-LOT-02-18
+|   |       |   |       PATCH__SESSION-20260415-02_A8_PLAN-LOT-02-18.diff
+|   |       |   |       PATCH__SESSION-20260415-02_A8_PLAN-LOT-02-18_FIX-01.diff
+|   |       |   |       README_PATCH.md
+|   |       |   |       
+|   |       |   +---SESSION-20260415-03_A8_PLAN-19
+|   |       |   |       NO_PATCH.md
+|   |       |   |       README_PATCH.md
+|   |       |   |       
+|   |       |   \---SESSION-20260415-04_A8_CLOTURE_A8
+|   |       |           README_PATCH.md
+|   |       |           
+|   |       \---BLOC_A9
+|   |           +---SESSION-20260415-05_A9_AUTO-01
 |   |           |       NO_PATCH.md
 |   |           |       
-|   |           +---SESSION-20260415-02_A8_PLAN-LOT-02-18
-|   |           |       PATCH__SESSION-20260415-02_A8_PLAN-LOT-02-18.diff
-|   |           |       PATCH__SESSION-20260415-02_A8_PLAN-LOT-02-18_FIX-01.diff
+|   |           +---SESSION-20260415-06_A9_AUTO-LOT-02-14
 |   |           |       README_PATCH.md
 |   |           |       
-|   |           +---SESSION-20260415-03_A8_PLAN-19
+|   |           +---SESSION-20260415-07_A9_AUTO-15
 |   |           |       NO_PATCH.md
-|   |           |       README_PATCH.md
 |   |           |       
-|   |           \---SESSION-20260415-04_A8_CLOTURE_A8
+|   |           \---SESSION-20260415-08_A9_CLOTURE_A9
 |   |                   README_PATCH.md
 |   |                   
 |   +---4-templates

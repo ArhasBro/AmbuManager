@@ -36,8 +36,8 @@ Pour les sessions indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références des session :
 
-- SESSION-20260415-04_A8_CLOTURE_A8
-- **CLOTURE_A8 — VALIDATION+CORRECTION+COMPLÉTION** — Clôture finale du bloc A8
+- SESSION-20260415-05_A9_AUTO-01
+- **AUTO-01 — AUDIT** — Audit complet de l’autoschedule existant : génération JOUR, génération SEMAINE, prise en compte réelle des contraintes ALPHA, signalements métier du moteur et traduction française existante
 ------------------------------------
 sortie propre + retour du terminal + aucune erreur = validé
 ------------------------------------
