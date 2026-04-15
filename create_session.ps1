@@ -30,7 +30,7 @@ function Test-PathOrThrow {
     }
 }
 
-function Ensure-Directory {
+function New-DirectoryIfMissing {
     param([string]$Path)
 
     if (-not (Test-Path $Path)) {
@@ -102,22 +102,90 @@ function Get-CanonicalBlock {
     throw "Bloc invalide. Valeurs autorisees : A1 a A13, B1 a B4 (ou BLOC_A1 a BLOC_A13, BLOC_B1 a BLOC_B4)."
 }
 
-function Get-CanonicalType {
+function Get-NormalizedLabel {
     param([string]$Value)
 
     $clean = (Get-SafeString -Value $Value).ToUpperInvariant()
 
-    switch ($clean) {
-        "AUDIT"       { return "AUDIT" }
-        "CORRECTION"  { return "CORRECTION" }
-        "COMPLETION"  { return "COMPLETION" }
-        "COMPLÉTION"  { return "COMPLETION" }
-        "VALIDATION"  { return "VALIDATION" }
-        default       { throw "Type invalide. Valeurs autorisees : AUDIT, CORRECTION, COMPLETION, VALIDATION." }
+    $replacements = [ordered]@{
+        "À" = "A"
+        "Â" = "A"
+        "Ä" = "A"
+        "Ç" = "C"
+        "É" = "E"
+        "È" = "E"
+        "Ê" = "E"
+        "Ë" = "E"
+        "Î" = "I"
+        "Ï" = "I"
+        "Ô" = "O"
+        "Ö" = "O"
+        "Ù" = "U"
+        "Û" = "U"
+        "Ü" = "U"
     }
+
+    foreach ($entry in $replacements.GetEnumerator()) {
+        $clean = $clean.Replace($entry.Key, $entry.Value)
+    }
+
+    return ([regex]::Replace($clean, '\s+', ''))
 }
 
-function Prompt-IfMissing {
+function Get-CanonicalType {
+    param([string]$Value)
+
+    $normalized = Get-NormalizedLabel -Value $Value
+
+    if ([string]::IsNullOrWhiteSpace($normalized)) {
+        throw "Type invalide. Valeurs autorisees : AUDIT, CORRECTION, COMPLETION, VALIDATION, CORRECTION-COMPLETION, VALIDATION+CORRECTION+COMPLETION."
+    }
+
+    # Aliases / syntaxes acceptees :
+    # - COMPLÉTION => COMPLETION
+    # - CORRECTION-COMPLETION => CORRECTION+COMPLETION
+    # - VALIDATION+CORRECTION+COMPLETION => conserve les 3 etats
+    # - Separateurs acceptes : + / , ; |
+    $normalized = $normalized.Replace("CORRECTION-COMPLETION", "CORRECTION+COMPLETION")
+    $normalized = $normalized -replace '[\/,;|]', '+'
+
+    $rawTokens = @(
+        $normalized -split '\+' |
+        Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+    )
+
+    if ($rawTokens.Count -eq 0) {
+        throw "Type invalide. Valeurs autorisees : AUDIT, CORRECTION, COMPLETION, VALIDATION, CORRECTION-COMPLETION, VALIDATION+CORRECTION+COMPLETION."
+    }
+
+    $allowedTokens = @("AUDIT", "CORRECTION", "COMPLETION", "VALIDATION")
+    $canonicalTokens = New-Object System.Collections.Generic.List[string]
+
+    foreach ($token in $rawTokens) {
+        if ($token -notin $allowedTokens) {
+            throw "Type invalide. Valeurs autorisees : AUDIT, CORRECTION, COMPLETION, VALIDATION, CORRECTION-COMPLETION, VALIDATION+CORRECTION+COMPLETION."
+        }
+
+        if (-not $canonicalTokens.Contains($token)) {
+            $canonicalTokens.Add($token)
+        }
+    }
+
+    return ($canonicalTokens -join '+')
+}
+
+function Test-TypeRequiresPatch {
+    param([string]$TypeValue)
+
+    $tokens = @(
+        $TypeValue -split '\+' |
+        Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+    )
+
+    return (($tokens | Where-Object { $_ -in @("CORRECTION", "COMPLETION") }).Count -gt 0)
+}
+
+function Read-ValueIfMissing {
     param(
         [string]$CurrentValue,
         [string]$PromptText
@@ -260,7 +328,7 @@ function Initialize-PatchFolder {
     $readmePatchPath = Join-Path $PatchDir "README_PATCH.md"
     $noPatchPath = Join-Path $PatchDir "NO_PATCH.md"
 
-    if ($TypeValue -in @("AUDIT", "VALIDATION")) {
+    if (-not (Test-TypeRequiresPatch -TypeValue $TypeValue)) {
 $noPatchContent = @"
 # NO_PATCH
 
@@ -313,11 +381,11 @@ git apply         "$PatchRelativePath/$patchFileName"
 }
 
 # --- Interactive fallback ---
-$Stage = Prompt-IfMissing -CurrentValue $Stage -PromptText "Stage (1-ALPHA / 2-BETA)"
-$Block = Prompt-IfMissing -CurrentValue $Block -PromptText "Bloc (A1 a A13 / B1 a B4)"
-$SessionCode = Prompt-IfMissing -CurrentValue $SessionCode -PromptText "Code session (ex: AUTH-01)"
-$Type = Prompt-IfMissing -CurrentValue $Type -PromptText "Type (AUDIT / CORRECTION / COMPLETION / VALIDATION)"
-$Title = Prompt-IfMissing -CurrentValue $Title -PromptText "Intitule de la session"
+$Stage = Read-ValueIfMissing -CurrentValue $Stage -PromptText "Stage (1-ALPHA / 2-BETA)"
+$Block = Read-ValueIfMissing -CurrentValue $Block -PromptText "Bloc (A1 a A13 / B1 a B4)"
+$SessionCode = Read-ValueIfMissing -CurrentValue $SessionCode -PromptText "Code session (ex: AUTH-01)"
+$Type = Read-ValueIfMissing -CurrentValue $Type -PromptText "Type (AUDIT / CORRECTION / COMPLETION / VALIDATION / CORRECTION-COMPLETION / VALIDATION+CORRECTION+COMPLETION)"
+$Title = Read-ValueIfMissing -CurrentValue $Title -PromptText "Intitule de la session"
 
 $Stage = Get-CanonicalStage -Value $Stage
 $Block = Get-CanonicalBlock -Value $Block
@@ -332,8 +400,8 @@ if ([string]::IsNullOrWhiteSpace($SessionCode)) {
 if ([string]::IsNullOrWhiteSpace($Title)) {
     throw "L'intitule de session est obligatoire."
 }
-if ($SessionCode -notmatch '^[A-Z0-9-]+$') {
-    throw "Le code session ne doit contenir que des lettres majuscules, chiffres et tirets."
+if ($SessionCode -notmatch '^[A-Z0-9_-]+$') {
+    throw "Le code session ne doit contenir que des lettres majuscules, chiffres, tirets et underscores."
 }
 
 # --- Checks ---
@@ -420,8 +488,8 @@ REGLES
 - 1 session = 1 DoD
 - 1 session = 1 validation
 - 1 session = 1 patch officiel maximum
-- Si session AUDIT ou VALIDATION : NO_PATCH.md
-- Si session CORRECTION ou COMPLETION : README_PATCH.md puis patch officiel unique si code modifie
+- Si le type ne contient que AUDIT et/ou VALIDATION : NO_PATCH.md
+- Si le type contient CORRECTION et/ou COMPLETION : README_PATCH.md puis patch officiel unique si code modifie
 "@
 
 $clipboardMsg = "Non disponible"

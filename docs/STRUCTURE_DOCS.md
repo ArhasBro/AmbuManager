@@ -768,29 +768,37 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |           RESULTATS.md
 |   |   |           SESSION.md
 |   |   |           
-|   |   \---BLOC_A7
-|   |       +---SESSION-20260414-01_A7_DASH-01
-|   |       |       EVIDENCES.md
-|   |       |       FIN_SESSION.md
-|   |       |       NOTES.md
-|   |       |       RESULTATS.md
-|   |       |       SESSION.md
-|   |       |       
-|   |       +---SESSION-20260414-02_A7_DASH-LOT-02-07
-|   |       |       EVIDENCES.md
-|   |       |       FIN_SESSION.md
-|   |       |       NOTES.md
-|   |       |       RESULTATS.md
-|   |       |       SESSION.md
-|   |       |       
-|   |       +---SESSION-20260414-03_A7_DASH-08
-|   |       |       EVIDENCES.md
-|   |       |       FIN_SESSION.md
-|   |       |       NOTES.md
-|   |       |       RESULTATS.md
-|   |       |       SESSION.md
-|   |       |       
-|   |       \---SESSION-20260414-04_A7_CLOTURE-A7
+|   |   +---BLOC_A7
+|   |   |   +---SESSION-20260414-01_A7_DASH-01
+|   |   |   |       EVIDENCES.md
+|   |   |   |       FIN_SESSION.md
+|   |   |   |       NOTES.md
+|   |   |   |       RESULTATS.md
+|   |   |   |       SESSION.md
+|   |   |   |       
+|   |   |   +---SESSION-20260414-02_A7_DASH-LOT-02-07
+|   |   |   |       EVIDENCES.md
+|   |   |   |       FIN_SESSION.md
+|   |   |   |       NOTES.md
+|   |   |   |       RESULTATS.md
+|   |   |   |       SESSION.md
+|   |   |   |       
+|   |   |   +---SESSION-20260414-03_A7_DASH-08
+|   |   |   |       EVIDENCES.md
+|   |   |   |       FIN_SESSION.md
+|   |   |   |       NOTES.md
+|   |   |   |       RESULTATS.md
+|   |   |   |       SESSION.md
+|   |   |   |       
+|   |   |   \---SESSION-20260414-04_A7_CLOTURE-A7
+|   |   |           EVIDENCES.md
+|   |   |           FIN_SESSION.md
+|   |   |           NOTES.md
+|   |   |           RESULTATS.md
+|   |   |           SESSION.md
+|   |   |           
+|   |   \---BLOC_A8
+|   |       \---SESSION-20260415-01_A8_PLAN-01
 |   |               EVIDENCES.md
 |   |               FIN_SESSION.md
 |   |               NOTES.md
@@ -1240,22 +1248,26 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |       |           NO_PATCH.md
 |       |           README_PATCH.md
 |       |           
-|       \---BLOC_A7
-|           +---SESSION-20260414-01_A7_DASH-01
-|           |       NO_PATCH.md
-|           |       README_PATCH.md
-|           |       
-|           +---SESSION-20260414-02_A7_DASH-LOT-02-07
-|           |       PATCH__SESSION-20260414-02_A7_DASH-LOT-02-07.diff
-|           |       README_PATCH.md
-|           |       
-|           +---SESSION-20260414-03_A7_DASH-08
-|           |       NO_PATCH.md
-|           |       README_PATCH.md
-|           |       
-|           \---SESSION-20260414-04_A7_CLOTURE-A7
+|       +---BLOC_A7
+|       |   +---SESSION-20260414-01_A7_DASH-01
+|       |   |       NO_PATCH.md
+|       |   |       README_PATCH.md
+|       |   |       
+|       |   +---SESSION-20260414-02_A7_DASH-LOT-02-07
+|       |   |       PATCH__SESSION-20260414-02_A7_DASH-LOT-02-07.diff
+|       |   |       README_PATCH.md
+|       |   |       
+|       |   +---SESSION-20260414-03_A7_DASH-08
+|       |   |       NO_PATCH.md
+|       |   |       README_PATCH.md
+|       |   |       
+|       |   \---SESSION-20260414-04_A7_CLOTURE-A7
+|       |           NO_PATCH.md
+|       |           README_PATCH.md
+|       |           
+|       \---BLOC_A8
+|           \---SESSION-20260415-01_A8_PLAN-01
 |                   NO_PATCH.md
-|                   README_PATCH.md
 |                   
 +---4-templates
 |       TEMPLATE_DEBUT_SESSION.md
