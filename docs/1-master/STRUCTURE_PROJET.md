@@ -3677,6 +3677,7 @@ C:.
 |   |       \---BLOC_A7
 |   |           +---SESSION-20260414-01_A7_DASH-01
 |   |           |       NO_PATCH.md
+|   |           |       README_PATCH.md
 |   |           |       
 |   |           +---SESSION-20260414-02_A7_DASH-LOT-02-07
 |   |           |       README_PATCH.md

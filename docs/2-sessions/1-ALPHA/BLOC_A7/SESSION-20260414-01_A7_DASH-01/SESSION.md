@@ -1,4 +1,4 @@
-﻿# SESSION
+# SESSION
 
 ## ID SESSION
 
@@ -12,24 +12,30 @@ SESSION-20260414-01_A7_DASH-01
 
 Projet : Investissement  
 Sous-projet : Ambulance Manager  
-Maturite : 1-ALPHA  
-Bloc : A7  
+Maturité : 1-ALPHA  
+Bloc : A7 — Dashboard  
 Type : AUDIT  
-Intitule : Audit complet du dashboard existant
+Intitulé : Audit complet du dashboard existant
 
 ## Objectif de la session
 
-INFORMATION NON FOURNIE - A CONFIRMER
+Auditer complètement le dashboard existant au regard du cadrage officiel, du code réel, des permissions réelles et des données réellement stables, sans correction de code et avec décision `NO_PATCH` par défaut.
 
-## Perimetre exact traite
+## Périmètre exact traité
 
-INFORMATION NON FOURNIE - A CONFIRMER
+- page applicative racine et route d’entrée ;
+- page `/dashboard` ;
+- redirection post-connexion ;
+- middleware / garde d’accès d’entrée ;
+- helpers de permissions utilisés par le dashboard ;
+- pages/modules réellement pointés par le dashboard (`/planning`, `/company`, `/depots`, `/users`, `/vehicles`, `/templates`) ;
+- cadrage officiel et plan A7.
 
-## Resultat synthetique de session
+## Résultat synthétique de session
 
-INFORMATION NON FOURNIE - A CONFIRMER
+Le dashboard actuel est **PARTIELLEMENT** un portail d’accès : il constitue bien un point d’entrée post-connexion vers plusieurs modules, mais il ne distribue pas encore correctement tous les accès selon permissions et ne différencie pas encore réellement l’expérience selon tout le catalogue de rôles attendu par le cadrage A7.
 
-## Dossiers lies
+## Dossiers liés
 
-- Session : docs/2-sessions/1-ALPHA/BLOC_A7/SESSION-20260414-01_A7_DASH-01
-- Patchs  : docs/3-patches/1-ALPHA/BLOC_A7/SESSION-20260414-01_A7_DASH-01
+- Session : `docs/2-sessions/1-ALPHA/BLOC_A7/SESSION-20260414-01_A7_DASH-01`
+- Patchs  : `docs/3-patches/1-ALPHA/BLOC_A7/SESSION-20260414-01_A7_DASH-01`
