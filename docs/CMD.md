@@ -36,8 +36,8 @@ Pour les sessions indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références des session :
 
-- SESSION-20260414-04_A7_CLOTURE-A7
-- CLOTURE_A7 — VALIDATION** — Clôture finale du bloc A7
+- SESSION-20260415-02_A8_PLAN-LOT-02-18
+- **PLAN-LOT-02-18 — CORRECTION-COMPLÉTION** — Correction et/ou complétion de la vue semaine, de la vue jour, de la vraie vue mois exploitable, de la navigation mensuelle, de la lisibilité métier globale, de l’API/UI d’ajout manuel de shift, de l’API/UI de modification d’un shift publié, de l’API/UI de suppression métier / annulation logique d’un shift publié, de l’historique minimal planning et de la traçabilité des modifications après publication
 ------------------------------------
 sortie propre + retour du terminal + aucune erreur = validé
 ------------------------------------
