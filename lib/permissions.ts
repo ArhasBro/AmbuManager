@@ -109,3 +109,7 @@ export async function canEditPlanning(userId: string, role?: string | null, plat
 export async function canAccessAdminDashboard(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
   return hasPermissionAccess({ userId, role, platformRole, codes: ["DASHBOARD_ADMIN_ACCESS"] });
 }
+
+export async function canAccessTerrainDashboard(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
+  return hasPermissionAccess({ userId, role, platformRole, codes: ["DASHBOARD_TERRAIN_ACCESS"] });
+}

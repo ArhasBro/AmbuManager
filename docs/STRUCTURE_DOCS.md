@@ -1246,6 +1246,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |           |       README_PATCH.md
 |           |       
 |           +---SESSION-20260414-02_A7_DASH-LOT-02-07
+|           |       PATCH__SESSION-20260414-02_A7_DASH-LOT-02-07.diff
 |           |       README_PATCH.md
 |           |       
 |           +---SESSION-20260414-03_A7_DASH-08

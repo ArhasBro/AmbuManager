@@ -36,13 +36,8 @@ Pour les sessions indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références des session :
 
-- SESSION-20260414-02_A7_DASH-LOT-02-07
-- **DASH-02 — CORRECTION** — Correction du dashboard actuel si nécessaire
-- **DASH-03 — COMPLÉTION** — Dashboard portail d’accueil
-- **DASH-04 — COMPLÉTION** — Gestion d’accès aux modules selon permissions
-- **DASH-05 — COMPLÉTION** — Dashboard différencié par rôle
-- **DASH-06 — COMPLÉTION** — Ajout des indicateurs simples admin/gérant si les données sont stabilisées
-- **DASH-07 — COMPLÉTION** — Ajout de la vue dashboard terrain selon permissions
+- SESSION-20260414-03_A7_DASH-08
+- DASH-08 — VALIDATION** — Validation du bloc dashboard
 ------------------------------------
 sortie propre + retour du terminal + aucune erreur = validé
 ------------------------------------

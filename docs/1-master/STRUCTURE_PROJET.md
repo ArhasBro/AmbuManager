@@ -1380,9 +1380,6 @@ C:.
 |   |   +---app
 |   |   |   |   favicon.ico.body
 |   |   |   |   favicon.ico.meta
-|   |   |   |   index.html
-|   |   |   |   index.meta
-|   |   |   |   index.rsc
 |   |   |   |   login.html
 |   |   |   |   login.meta
 |   |   |   |   login.rsc
@@ -1804,13 +1801,6 @@ C:.
 |   |   |   |           app-paths-manifest.json
 |   |   |   |           build-manifest.json
 |   |   |   |           
-|   |   |   +---index.segments
-|   |   |   |       _full.segment.rsc
-|   |   |   |       _head.segment.rsc
-|   |   |   |       _index.segment.rsc
-|   |   |   |       _tree.segment.rsc
-|   |   |   |       __PAGE__.segment.rsc
-|   |   |   |       
 |   |   |   +---login
 |   |   |   |   |   page.js
 |   |   |   |   |   page.js.map
@@ -2127,8 +2117,6 @@ C:.
 |   |   |           node_modules_next_dist_6607e1c8._.js.map
 |   |   |           node_modules_next_dist_852965c2._.js
 |   |   |           node_modules_next_dist_852965c2._.js.map
-|   |   |           node_modules_next_dist_9764e5f5._.js
-|   |   |           node_modules_next_dist_9764e5f5._.js.map
 |   |   |           node_modules_next_dist_client_components_9774470f._.js
 |   |   |           node_modules_next_dist_client_components_9774470f._.js.map
 |   |   |           node_modules_next_dist_client_components_builtin_forbidden_45780354.js
@@ -2137,8 +2125,6 @@ C:.
 |   |   |           node_modules_next_dist_client_components_builtin_global-error_ece394eb.js.map
 |   |   |           node_modules_next_dist_client_components_builtin_unauthorized_15817684.js
 |   |   |           node_modules_next_dist_client_components_builtin_unauthorized_15817684.js.map
-|   |   |           node_modules_next_dist_dbead00f._.js
-|   |   |           node_modules_next_dist_dbead00f._.js.map
 |   |   |           node_modules_next_dist_esm_build_templates_app-page_b8e1111a.js
 |   |   |           node_modules_next_dist_esm_build_templates_app-page_b8e1111a.js.map
 |   |   |           node_modules_next_dist_f21d913a._.js
@@ -2157,20 +2143,20 @@ C:.
 |   |   |           [root-of-the-server]__37222123._.js.map
 |   |   |           [root-of-the-server]__3c39e5ac._.js
 |   |   |           [root-of-the-server]__3c39e5ac._.js.map
-|   |   |           [root-of-the-server]__3e4277b6._.js
-|   |   |           [root-of-the-server]__3e4277b6._.js.map
 |   |   |           [root-of-the-server]__45298fac._.js
 |   |   |           [root-of-the-server]__45298fac._.js.map
 |   |   |           [root-of-the-server]__7a57bd77._.js
 |   |   |           [root-of-the-server]__7a57bd77._.js.map
-|   |   |           [root-of-the-server]__84823185._.js
-|   |   |           [root-of-the-server]__84823185._.js.map
-|   |   |           [root-of-the-server]__87883845._.js
-|   |   |           [root-of-the-server]__87883845._.js.map
+|   |   |           [root-of-the-server]__99048386._.js
+|   |   |           [root-of-the-server]__99048386._.js.map
+|   |   |           [root-of-the-server]__9cb97af3._.js
+|   |   |           [root-of-the-server]__9cb97af3._.js.map
 |   |   |           [root-of-the-server]__9d5e3ced._.js
 |   |   |           [root-of-the-server]__9d5e3ced._.js.map
 |   |   |           [root-of-the-server]__a457c799._.js
 |   |   |           [root-of-the-server]__a457c799._.js.map
+|   |   |           [root-of-the-server]__b2dd6248._.js
+|   |   |           [root-of-the-server]__b2dd6248._.js.map
 |   |   |           [root-of-the-server]__b9356576._.js
 |   |   |           [root-of-the-server]__b9356576._.js.map
 |   |   |           [root-of-the-server]__c4a7c7d0._.js
@@ -2191,14 +2177,14 @@ C:.
 |   |   |           _2c715f22._.js.map
 |   |   |           _30e06fe7._.js
 |   |   |           _30e06fe7._.js.map
+|   |   |           _48280ecf._.js
+|   |   |           _48280ecf._.js.map
 |   |   |           _5516c59e._.js
 |   |   |           _5516c59e._.js.map
 |   |   |           _557d7f41._.js
 |   |   |           _557d7f41._.js.map
 |   |   |           _5c5d5a9d._.js
 |   |   |           _5c5d5a9d._.js.map
-|   |   |           _5f02a5a9._.js
-|   |   |           _5f02a5a9._.js.map
 |   |   |           _6139f1ce._.js
 |   |   |           _6139f1ce._.js.map
 |   |   |           _74c1132d._.js
@@ -2215,6 +2201,8 @@ C:.
 |   |   |           _c23fb881._.js.map
 |   |   |           _dbd3f975._.js
 |   |   |           _dbd3f975._.js.map
+|   |   |           _de746bfc._.js
+|   |   |           _de746bfc._.js.map
 |   |   |           _ffa8fc97._.js
 |   |   |           _ffa8fc97._.js.map
 |   |   |           _next-internal_server_app_company_page_actions_ca33e7ac.js
@@ -2248,11 +2236,6 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
-|   |   +---85RXeS0ekHzRzj3jlZkrk
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
-|   |   |       
 |   |   +---chunks
 |   |   |       05e6c743003c809d.js
 |   |   |       1209a0965914feba.js
@@ -2275,6 +2258,11 @@ C:.
 |   |   |       daba6dd36b509727.js
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
+|   |   |       
+|   |   +---kzTv_DdOjkGbm-XYasRsu
+|   |   |       _buildManifest.js
+|   |   |       _clientMiddlewareManifest.json
+|   |   |       _ssgManifest.js
 |   |   |       
 |   |   \---media
 |   |           favicon.0b3bf435.ico
@@ -3680,6 +3668,7 @@ C:.
 |   |           |       README_PATCH.md
 |   |           |       
 |   |           +---SESSION-20260414-02_A7_DASH-LOT-02-07
+|   |           |       PATCH__SESSION-20260414-02_A7_DASH-LOT-02-07.diff
 |   |           |       README_PATCH.md
 |   |           |       
 |   |           +---SESSION-20260414-03_A7_DASH-08
