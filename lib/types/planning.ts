@@ -14,6 +14,8 @@ export type PlanningIssueCode =
   | "RULE_CONFIG_ERROR"
   | "TEMPLATE_ROLE_MISMATCH"
   | "TEMPLATE_VEHICLE_TYPE_MISMATCH"
+  | "SHIFT_ALREADY_CANCELLED"
+  | "SHIFT_CANCELLED"
   | "VALIDATION_ERROR";
 
 export type PlanningIssue = {

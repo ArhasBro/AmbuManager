@@ -48,7 +48,7 @@ export async function assignShift(input: AssignShiftInput): Promise<AssignShiftR
 
   // 1) Charger Shift + template.category
   const shift = await prisma.shift.findFirst({
-    where: { id: shiftId, companyId },
+    where: { id: shiftId, companyId, isCancelled: false },
     select: {
       id: true,
       companyId: true,
@@ -172,6 +172,7 @@ export async function assignShift(input: AssignShiftInput): Promise<AssignShiftR
       where: {
         companyId,
         id: { not: shiftId },
+        isCancelled: false,
         startAt: { lt: endAt },
         endAt: { gt: startAt },
         OR: [{ userId: { in: assignedUsers } }, { user2Id: { in: assignedUsers } }],
@@ -210,7 +211,7 @@ export async function assignShift(input: AssignShiftInput): Promise<AssignShiftR
   // 4) Conflits véhicule — autres Shifts + DraftShifts DRAFT
   if (vehicleId) {
     const otherVehicles = await prisma.shift.findMany({
-      where: { companyId, id: { not: shiftId }, vehicleId, startAt: { lt: endAt }, endAt: { gt: startAt } },
+      where: { companyId, id: { not: shiftId }, isCancelled: false, vehicleId, startAt: { lt: endAt }, endAt: { gt: startAt } },
       select: { id: true },
     });
 
@@ -247,7 +248,7 @@ export async function assignShift(input: AssignShiftInput): Promise<AssignShiftR
 
     for (const u of assignedUsers) {
       const prevShift = await prisma.shift.findFirst({
-        where: { companyId, id: { not: shiftId }, OR: [{ userId: u }, { user2Id: u }], endAt: { lte: startAt } },
+        where: { companyId, id: { not: shiftId }, isCancelled: false, OR: [{ userId: u }, { user2Id: u }], endAt: { lte: startAt } },
         orderBy: { endAt: "desc" },
         select: { endAt: true },
       });

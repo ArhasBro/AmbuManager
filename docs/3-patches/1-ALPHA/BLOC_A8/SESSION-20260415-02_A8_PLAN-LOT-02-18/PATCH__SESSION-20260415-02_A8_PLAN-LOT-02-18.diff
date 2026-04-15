@@ -1,0 +1,1267 @@
+diff -ruN orig/app/api/planning/shifts/[id]/cancel/route.ts mod/app/api/planning/shifts/[id]/cancel/route.ts
+--- orig/app/api/planning/shifts/[id]/cancel/route.ts	1970-01-01 00:00:00.000000000 +0000
++++ mod/app/api/planning/shifts/[id]/cancel/route.ts	2026-04-15 11:43:20.558678396 +0000
+@@ -0,0 +1,77 @@
++import { NextRequest, NextResponse } from "next/server";
++import { getServerSession } from "next-auth/next";
++import { z } from "zod";
++
++import { authOptions } from "@/lib/auth";
++import { canEditPlanning } from "@/lib/permissions";
++import { prisma } from "@/lib/prisma";
++import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
++
++const CancelSchema = z.object({
++  reason: z.string().trim().max(500).optional().default("Annulation manuelle"),
++});
++
++export async function POST(req: NextRequest, context: { params: Promise<{ id: string }> }) {
++  const session = await getServerSession(authOptions);
++
++  const companyId = session?.user?.companyId;
++  const actorUserId = session?.user?.id;
++  const role = session?.user?.role;
++  const platformRole = session?.user?.platformRole;
++
++  if (!companyId || !actorUserId) {
++    return NextResponse.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
++  }
++
++  const canManagePlanning = await canEditPlanning(actorUserId, role, platformRole);
++  if (!canManagePlanning) {
++    return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });
++  }
++
++  const { id } = await context.params;
++
++  let body: unknown = {};
++  try {
++    const raw = await req.text();
++    body = raw ? JSON.parse(raw) : {};
++  } catch {
++    body = {};
++  }
++
++  const parsed = CancelSchema.safeParse(body);
++  if (!parsed.success) {
++    return NextResponse.json({ ok: false, error: "VALIDATION_ERROR", details: parsed.error.flatten() }, { status: 400 });
++  }
++
++  const shift = await prisma.shift.findFirst({ where: { id, companyId }, select: { id: true, runId: true, isCancelled: true } });
++  if (!shift) {
++    return NextResponse.json({ ok: false, error: "NOT_FOUND" }, { status: 404 });
++  }
++
++  if (shift.isCancelled) {
++    return NextResponse.json({ ok: false, error: "SHIFT_ALREADY_CANCELLED" }, { status: 409 });
++  }
++
++  const now = new Date();
++  await prisma.shift.update({
++    where: { id },
++    data: {
++      isCancelled: true,
++      cancelledAt: now,
++      cancellationReason: parsed.data.reason,
++    },
++  });
++
++  await writePlanningAudit(prisma, {
++    companyId,
++    actorUserId,
++    runId: shift.runId,
++    action: "SHIFT_CANCELLED_MANUALLY",
++    entityType: "Shift",
++    entityId: id,
++    summary: "Shift publié annulé logiquement",
++    payload: { reason: parsed.data.reason },
++  });
++
++  return NextResponse.json({ ok: true });
++}
+diff -ruN orig/app/api/planning/shifts/[id]/route.ts mod/app/api/planning/shifts/[id]/route.ts
+--- orig/app/api/planning/shifts/[id]/route.ts	1970-01-01 00:00:00.000000000 +0000
++++ mod/app/api/planning/shifts/[id]/route.ts	2026-04-15 11:47:12.240326890 +0000
+@@ -0,0 +1,259 @@
++import { NextRequest, NextResponse } from "next/server";
++import { getServerSession } from "next-auth/next";
++import { z } from "zod";
++
++import { authOptions } from "@/lib/auth";
++import { COMPANY_PARAMETER_KEYS } from "@/lib/company-rules/catalog";
++import { loadMinRestCompanyRule } from "@/lib/company-rules/runtime";
++import { canEditPlanning } from "@/lib/permissions";
++import { prisma } from "@/lib/prisma";
++import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
++import { findFirstUserAbsenceConflict } from "@/lib/services/planning/user-absence";
++import { isRoleAllowedForSlot, resolveTemplateMinStaffCount } from "@/lib/templates/template-rules";
++
++const UpdateShiftSchema = z.object({
++  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
++  startTime: z.string().regex(/^\d{2}:\d{2}$/).optional(),
++  endTime: z.string().regex(/^\d{2}:\d{2}$/).optional(),
++  templateId: z.string().cuid().nullable().optional(),
++  depotId: z.string().uuid().nullable().optional(),
++  notes: z.string().max(2000).nullable().optional(),
++});
++
++function parseTimeToHoursMinutes(time: string): { h: number; m: number } {
++  const [hStr, mStr] = time.split(":");
++  const h = Number(hStr);
++  const m = Number(mStr);
++  if (!Number.isFinite(h) || !Number.isFinite(m)) throw new Error("Invalid time");
++  if (h < 0 || h > 23 || m < 0 || m > 59) throw new Error("Invalid time");
++  return { h, m };
++}
++
++function buildDateTimeLocal(dayStr: string, timeStr: string): Date {
++  const { h, m } = parseTimeToHoursMinutes(timeStr);
++  const [Y, M, D] = dayStr.split("-").map((x) => Number(x));
++  return new Date(Y, M - 1, D, h, m, 0, 0);
++}
++
++function addDays(d: Date, days: number): Date {
++  return new Date(d.getTime() + days * 24 * 60 * 60 * 1000);
++}
++
++function toDayString(d: Date) {
++  const y = d.getFullYear();
++  const m = String(d.getMonth() + 1).padStart(2, "0");
++  const day = String(d.getDate()).padStart(2, "0");
++  return `${y}-${m}-${day}`;
++}
++
++function toTimeString(d: Date) {
++  const h = String(d.getHours()).padStart(2, "0");
++  const m = String(d.getMinutes()).padStart(2, "0");
++  return `${h}:${m}`;
++}
++
++export async function PATCH(req: NextRequest, context: { params: Promise<{ id: string }> }) {
++  const session = await getServerSession(authOptions);
++
++  const companyId = session?.user?.companyId;
++  const actorUserId = session?.user?.id;
++  const role = session?.user?.role;
++  const platformRole = session?.user?.platformRole;
++
++  if (!companyId || !actorUserId) {
++    return NextResponse.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
++  }
++
++  const canManagePlanning = await canEditPlanning(actorUserId, role, platformRole);
++  if (!canManagePlanning) {
++    return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });
++  }
++
++  const { id } = await context.params;
++
++  let body: unknown;
++  try {
++    body = await req.json();
++  } catch {
++    return NextResponse.json({ ok: false, error: "INVALID_JSON" }, { status: 400 });
++  }
++
++  const parsed = UpdateShiftSchema.safeParse(body);
++  if (!parsed.success) {
++    return NextResponse.json({ ok: false, error: "VALIDATION_ERROR", details: parsed.error.flatten() }, { status: 400 });
++  }
++
++  const current = await prisma.shift.findFirst({
++    where: { id, companyId, isCancelled: false },
++    include: {
++      template: { select: { id: true, category: true, minStaffCount: true, requiredRole: true, secondaryAllowedRoles: true, requiredVehicleType: true } },
++    },
++  });
++
++  if (!current) {
++    return NextResponse.json({ ok: false, error: "NOT_FOUND" }, { status: 404 });
++  }
++
++  try {
++    const nextDay = parsed.data.date ?? toDayString(current.startAt);
++    const nextStartTime = parsed.data.startTime ?? toTimeString(current.startAt);
++    const nextEndTime = parsed.data.endTime ?? toTimeString(current.endAt);
++
++    const startAt = buildDateTimeLocal(nextDay, nextStartTime);
++    let endAt = buildDateTimeLocal(nextDay, nextEndTime);
++    if (!(startAt < endAt)) endAt = addDays(endAt, 1);
++
++    const nextTemplateId = parsed.data.templateId === undefined ? current.templateId : parsed.data.templateId;
++    const nextDepotId = parsed.data.depotId === undefined ? current.depotId : parsed.data.depotId;
++    const nextNotes = parsed.data.notes === undefined ? current.notes : parsed.data.notes;
++
++    const nextTemplate = nextTemplateId
++      ? await prisma.shiftTemplate.findFirst({
++          where: { id: nextTemplateId, companyId },
++          select: { id: true, category: true, minStaffCount: true, requiredRole: true, secondaryAllowedRoles: true, requiredVehicleType: true },
++        })
++      : null;
++
++    if (nextTemplateId && !nextTemplate) {
++      return NextResponse.json({ ok: false, error: "TEMPLATE_NOT_FOUND" }, { status: 404 });
++    }
++
++    if (nextDepotId) {
++      const depot = await prisma.depot.findFirst({ where: { id: nextDepotId, companyId }, select: { id: true } });
++      if (!depot) return NextResponse.json({ ok: false, error: "DEPOT_NOT_FOUND" }, { status: 404 });
++    }
++
++    const assignedUsers = [current.userId, current.user2Id].filter((x): x is string => Boolean(x));
++    const requiredSlots = resolveTemplateMinStaffCount(nextTemplate?.minStaffCount ?? current.template?.minStaffCount ?? null, nextTemplate?.category ?? current.template?.category ?? null);
++    if (requiredSlots === 1 && current.user2Id) {
++      return NextResponse.json({ ok: false, error: "INVALID_SLOT_COUNT" }, { status: 409 });
++    }
++
++    if (assignedUsers.length > 0) {
++      const selectedUsers = await prisma.user.findMany({ where: { id: { in: assignedUsers }, companyId }, select: { id: true, role: true } });
++      const user1Role = selectedUsers.find((user) => user.id === current.userId)?.role ?? null;
++      const user2Role = selectedUsers.find((user) => user.id === current.user2Id)?.role ?? null;
++
++      if (current.userId && !isRoleAllowedForSlot(nextTemplate ?? { category: current.template?.category ?? null }, 1, user1Role)) {
++        return NextResponse.json({ ok: false, error: "TEMPLATE_ROLE_MISMATCH", meta: { slot: 1, userId: current.userId, role: user1Role } }, { status: 409 });
++      }
++
++      if (current.user2Id && !isRoleAllowedForSlot(nextTemplate ?? { category: current.template?.category ?? null }, 2, user2Role)) {
++        return NextResponse.json({ ok: false, error: "TEMPLATE_ROLE_MISMATCH", meta: { slot: 2, userId: current.user2Id, role: user2Role } }, { status: 409 });
++      }
++
++      const absenceConflict = await findFirstUserAbsenceConflict(prisma, { companyId, userIds: assignedUsers, startAt, endAt });
++      if (absenceConflict) {
++        return NextResponse.json({ ok: false, error: "USER_ABSENCE_CONFLICT", meta: { userId: absenceConflict.userId, absenceId: absenceConflict.id } }, { status: 409 });
++      }
++
++      const overlap = await prisma.shift.findFirst({
++        where: {
++          companyId,
++          id: { not: id },
++          isCancelled: false,
++          startAt: { lt: endAt },
++          endAt: { gt: startAt },
++          OR: [{ userId: { in: assignedUsers } }, { user2Id: { in: assignedUsers } }],
++        },
++        select: { id: true },
++      });
++      if (overlap) {
++        return NextResponse.json({ ok: false, error: "USER_OVERLAP_CONFLICT", meta: { conflictingShiftId: overlap.id } }, { status: 409 });
++      }
++
++      const minRest = await loadMinRestCompanyRule(prisma, companyId);
++      if (minRest.kind === "CONFIG_ERROR") {
++        return NextResponse.json({ ok: false, error: "RULE_CONFIG_ERROR", meta: { key: COMPANY_PARAMETER_KEYS.PLANNING_MIN_REST_HOURS } }, { status: 409 });
++      }
++
++      if (minRest.kind === "OK") {
++        const minRestMs = minRest.rule.hours * 60 * 60 * 1000;
++        for (const u of assignedUsers) {
++          const prevShift = await prisma.shift.findFirst({
++            where: { companyId, id: { not: id }, isCancelled: false, OR: [{ userId: u }, { user2Id: u }], endAt: { lte: startAt } },
++            orderBy: { endAt: "desc" },
++            select: { endAt: true },
++          });
++          if (prevShift) {
++            const restMs = startAt.getTime() - prevShift.endAt.getTime();
++            if (restMs < minRestMs && (minRest.rule.mode === "BLOCK" || minRest.rule.mode === "BOTH")) {
++              return NextResponse.json({ ok: false, error: "RULE_BLOCKED", meta: { userId: u, requiredHours: minRest.rule.hours } }, { status: 409 });
++            }
++          }
++        }
++      }
++    }
++
++    if (current.vehicleId) {
++      const nextVehicleTypeRequired = nextTemplate?.requiredVehicleType ?? current.template?.requiredVehicleType ?? null;
++      if (nextVehicleTypeRequired) {
++        const vehicle = await prisma.vehicle.findFirst({ where: { id: current.vehicleId, companyId }, select: { type: true } });
++        if (vehicle && vehicle.type !== nextVehicleTypeRequired) {
++          return NextResponse.json({ ok: false, error: "TEMPLATE_VEHICLE_TYPE_MISMATCH", meta: { requiredVehicleType: nextVehicleTypeRequired, actualVehicleType: vehicle.type } }, { status: 409 });
++        }
++      }
++
++      const vehicleOverlap = await prisma.shift.findFirst({
++        where: {
++          companyId,
++          id: { not: id },
++          isCancelled: false,
++          vehicleId: current.vehicleId,
++          startAt: { lt: endAt },
++          endAt: { gt: startAt },
++        },
++        select: { id: true },
++      });
++      if (vehicleOverlap) {
++        return NextResponse.json({ ok: false, error: "VEHICLE_OVERLAP_CONFLICT", meta: { conflictingShiftId: vehicleOverlap.id } }, { status: 409 });
++      }
++    }
++
++    const changes = {
++      previous: {
++        date: current.date.toISOString(),
++        startAt: current.startAt.toISOString(),
++        endAt: current.endAt.toISOString(),
++        templateId: current.templateId,
++        depotId: current.depotId,
++        notes: current.notes,
++      },
++      next: {
++        date: buildDateTimeLocal(nextDay, "00:00").toISOString(),
++        startAt: startAt.toISOString(),
++        endAt: endAt.toISOString(),
++        templateId: nextTemplateId,
++        depotId: nextDepotId,
++        notes: nextNotes,
++      },
++    };
++
++    await prisma.shift.update({
++      where: { id },
++      data: {
++        date: buildDateTimeLocal(nextDay, "00:00"),
++        startAt,
++        endAt,
++        templateId: nextTemplateId ?? null,
++        depotId: nextDepotId ?? null,
++        notes: nextNotes ?? null,
++      },
++    });
++
++    await writePlanningAudit(prisma, {
++      companyId,
++      actorUserId,
++      runId: current.runId,
++      action: "SHIFT_UPDATED_MANUALLY",
++      entityType: "Shift",
++      entityId: id,
++      summary: "Shift publié modifié manuellement",
++      payload: changes,
++    });
++
++    return NextResponse.json({ ok: true });
++  } catch {
++    return NextResponse.json({ ok: false, error: "SERVER_ERROR" }, { status: 500 });
++  }
++}
+diff -ruN orig/app/api/planning/shifts/route.ts mod/app/api/planning/shifts/route.ts
+--- orig/app/api/planning/shifts/route.ts	2026-04-15 11:38:23.409599370 +0000
++++ mod/app/api/planning/shifts/route.ts	2026-04-15 11:41:41.815706064 +0000
+@@ -4,14 +4,26 @@
+ import { z } from "zod";
+ 
+ import { authOptions } from "@/lib/auth";
+-import { canViewGlobalPlanning, canViewSelfPlanning } from "@/lib/permissions";
++import { canEditPlanning, canViewGlobalPlanning, canViewSelfPlanning } from "@/lib/permissions";
+ import { prisma } from "@/lib/prisma";
++import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
+ 
+ const QuerySchema = z.object({
+-  day: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "day must be YYYY-MM-DD").optional(),
+-  weekStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "weekStart must be YYYY-MM-DD").optional(),
++  day: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
++  weekStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
++  month: z.string().regex(/^\d{4}-\d{2}$/).optional(),
+   userId: z.string().uuid().optional(),
+-  limit: z.coerce.number().int().min(1).max(200).optional().default(200),
++  includeHistory: z.enum(["0", "1"]).optional().default("0"),
++  limit: z.coerce.number().int().min(1).max(500).optional().default(500),
++});
++
++const CreateShiftSchema = z.object({
++  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
++  startTime: z.string().regex(/^\d{2}:\d{2}$/),
++  endTime: z.string().regex(/^\d{2}:\d{2}$/),
++  templateId: z.string().cuid(),
++  depotId: z.string().uuid().nullable().optional(),
++  notes: z.string().max(2000).nullable().optional(),
+ });
+ 
+ function parseTimeToHoursMinutes(time: string): { h: number; m: number } {
+@@ -40,6 +52,11 @@
+   return addDays(base, -diffToMonday);
+ }
+ 
++function startOfMonthLocal(monthStr: string): Date {
++  const [Y, M] = monthStr.split("-").map((x) => Number(x));
++  return new Date(Y, M - 1, 1, 0, 0, 0, 0);
++}
++
+ export async function GET(req: NextRequest) {
+   const session = await getServerSession(authOptions);
+ 
+@@ -65,7 +82,9 @@
+   const rawQuery: Record<string, string | undefined> = {
+     day: url.searchParams.get("day") ?? undefined,
+     weekStart: url.searchParams.get("weekStart") ?? undefined,
++    month: url.searchParams.get("month") ?? undefined,
+     userId: url.searchParams.get("userId") ?? undefined,
++    includeHistory: url.searchParams.get("includeHistory") ?? undefined,
+     limit: url.searchParams.get("limit") ?? undefined,
+   };
+ 
+@@ -74,38 +93,31 @@
+     return NextResponse.json({ ok: false, error: "VALIDATION_ERROR", details: parsed.error.flatten() }, { status: 400 });
+   }
+ 
+-  const { day, weekStart, userId: requestedUserId, limit } = parsed.data;
+-
+-  if (day && weekStart) {
+-    return NextResponse.json(
+-      { ok: false, error: "VALIDATION_ERROR", details: { message: "Use day OR weekStart, not both." } },
+-      { status: 400 }
+-    );
++  const { day, weekStart, month, userId: requestedUserId, includeHistory, limit } = parsed.data;
++  const scopes = [day, weekStart, month].filter(Boolean);
++  if (scopes.length > 1) {
++    return NextResponse.json({ ok: false, error: "VALIDATION_ERROR", details: { message: "Use only one scope: day, weekStart or month." } }, { status: 400 });
+   }
+ 
+   if (!canViewGlobal && requestedUserId && requestedUserId !== userId) {
+     return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });
+   }
+ 
+-  const targetUserId = canViewGlobal ? requestedUserId ?? userId : userId;
++  const targetUserId = canViewGlobal ? requestedUserId ?? null : userId;
+ 
+   try {
+-    const targetUser = await prisma.user.findFirst({
+-      where: {
+-        id: targetUserId,
+-        companyId,
+-      },
+-      select: { id: true },
+-    });
+-
+-    if (!targetUser) {
+-      return NextResponse.json({ ok: false, error: "USER_NOT_FOUND" }, { status: 404 });
++    if (targetUserId) {
++      const targetUser = await prisma.user.findFirst({ where: { id: targetUserId, companyId }, select: { id: true } });
++      if (!targetUser) {
++        return NextResponse.json({ ok: false, error: "USER_NOT_FOUND" }, { status: 404 });
++      }
+     }
+ 
+-    let where: Prisma.ShiftWhereInput = {
+-      companyId,
+-      OR: [{ userId: targetUserId }, { user2Id: targetUserId }],
+-    };
++    let where: Prisma.ShiftWhereInput = { companyId };
++
++    if (targetUserId) {
++      where = { ...where, OR: [{ userId: targetUserId }, { user2Id: targetUserId }] };
++    }
+ 
+     if (day) {
+       const start = buildDateTimeLocal(day, "00:00");
+@@ -115,11 +127,15 @@
+       const monday = toMondayLocal(weekStart);
+       const end = addDays(monday, 7);
+       where = { ...where, startAt: { gte: monday, lt: end } };
++    } else if (month) {
++      const start = startOfMonthLocal(month);
++      const end = new Date(start.getFullYear(), start.getMonth() + 1, 1, 0, 0, 0, 0);
++      where = { ...where, startAt: { gte: start, lt: end } };
+     }
+ 
+     const shifts = await prisma.shift.findMany({
+       where,
+-      orderBy: { startAt: "asc" },
++      orderBy: [{ startAt: "asc" }, { createdAt: "asc" }],
+       take: limit,
+       include: {
+         user: { select: { id: true, name: true, email: true, role: true } },
+@@ -131,6 +147,28 @@
+       },
+     });
+ 
++    const shiftIds = shifts.map((shift) => shift.id);
++    const auditLogs = includeHistory === "1" && shiftIds.length > 0
++      ? await prisma.planningAuditLog.findMany({
++          where: { companyId, entityType: "Shift", entityId: { in: shiftIds } },
++          orderBy: [{ createdAt: "desc" }],
++          include: { actorUser: { select: { id: true, name: true, email: true } } },
++          take: 500,
++        })
++      : [];
++
++    const historyByShiftId = Object.fromEntries(shiftIds.map((id) => [id, [] as unknown[]]));
++    for (const log of auditLogs) {
++      (historyByShiftId[log.entityId] ??= []).push({
++        id: log.id,
++        createdAt: log.createdAt.toISOString(),
++        action: log.action,
++        summary: log.summary,
++        payload: log.payload,
++        actorUser: log.actorUser,
++      });
++    }
++
+     return NextResponse.json({
+       ok: true,
+       data: shifts.map((s) => ({
+@@ -138,6 +176,7 @@
+         date: s.date.toISOString(),
+         startAt: s.startAt.toISOString(),
+         endAt: s.endAt.toISOString(),
++        cancelledAt: s.cancelledAt?.toISOString() ?? null,
+         createdAt: s.createdAt.toISOString(),
+         updatedAt: s.updatedAt.toISOString(),
+         run: s.run
+@@ -149,6 +188,7 @@
+             }
+           : null,
+       })),
++      historyByShiftId,
+       access: {
+         canViewSelf,
+         canViewGlobal,
+@@ -158,4 +198,95 @@
+   } catch {
+     return NextResponse.json({ ok: false, error: "SERVER_ERROR" }, { status: 500 });
+   }
++}
++
++export async function POST(req: NextRequest) {
++  const session = await getServerSession(authOptions);
++
++  const companyId = session?.user?.companyId;
++  const actorUserId = session?.user?.id;
++  const role = session?.user?.role;
++  const platformRole = session?.user?.platformRole;
++
++  if (!companyId || !actorUserId) {
++    return NextResponse.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
++  }
++
++  const canManagePlanning = await canEditPlanning(actorUserId, role, platformRole);
++  if (!canManagePlanning) {
++    return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });
++  }
++
++  let body: unknown;
++  try {
++    body = await req.json();
++  } catch {
++    return NextResponse.json({ ok: false, error: "INVALID_JSON" }, { status: 400 });
++  }
++
++  const parsed = CreateShiftSchema.safeParse(body);
++  if (!parsed.success) {
++    return NextResponse.json({ ok: false, error: "VALIDATION_ERROR", details: parsed.error.flatten() }, { status: 400 });
++  }
++
++  const { date, startTime, endTime, templateId, depotId, notes } = parsed.data;
++
++  try {
++    const [template, depot] = await Promise.all([
++      prisma.shiftTemplate.findFirst({
++        where: { id: templateId, companyId, isActive: true },
++        select: { id: true },
++      }),
++      depotId
++        ? prisma.depot.findFirst({ where: { id: depotId, companyId }, select: { id: true } })
++        : Promise.resolve(null),
++    ]);
++
++    if (!template) {
++      return NextResponse.json({ ok: false, error: "TEMPLATE_NOT_FOUND" }, { status: 404 });
++    }
++
++    if (depotId && !depot) {
++      return NextResponse.json({ ok: false, error: "DEPOT_NOT_FOUND" }, { status: 404 });
++    }
++
++    const startAt = buildDateTimeLocal(date, startTime);
++    let endAt = buildDateTimeLocal(date, endTime);
++    if (!(startAt < endAt)) {
++      endAt = addDays(endAt, 1);
++    }
++
++    const shift = await prisma.shift.create({
++      data: {
++        companyId,
++        date: buildDateTimeLocal(date, "00:00"),
++        startAt,
++        endAt,
++        templateId,
++        depotId: depotId ?? null,
++        notes: notes ?? null,
++      },
++    });
++
++    await writePlanningAudit(prisma, {
++      companyId,
++      actorUserId,
++      runId: null,
++      action: "SHIFT_CREATED_MANUALLY",
++      entityType: "Shift",
++      entityId: shift.id,
++      summary: "Shift publié créé manuellement",
++      payload: {
++        date,
++        startTime,
++        endTime,
++        templateId,
++        depotId: depotId ?? null,
++      },
++    });
++
++    return NextResponse.json({ ok: true, data: { id: shift.id } }, { status: 201 });
++  } catch {
++    return NextResponse.json({ ok: false, error: "SERVER_ERROR" }, { status: 500 });
++  }
+ }
+diff -ruN orig/app/planning/manual-planning-panel.tsx mod/app/planning/manual-planning-panel.tsx
+--- orig/app/planning/manual-planning-panel.tsx	1970-01-01 00:00:00.000000000 +0000
++++ mod/app/planning/manual-planning-panel.tsx	2026-04-15 11:47:12.239714615 +0000
+@@ -0,0 +1,515 @@
++"use client";
++
++import { useCallback, useEffect, useMemo, useState, type Dispatch, type SetStateAction } from "react";
++
++type UserLite = { id: string; name: string; email?: string };
++type DepotLite = { id: string; name: string; isActive: boolean };
++type TemplateLite = { id: string; name: string; category: string; color?: string | null };
++
++type ShiftItem = {
++  id: string;
++  date: string;
++  startAt: string;
++  endAt: string;
++  notes?: string | null;
++  isCancelled?: boolean;
++  cancelledAt?: string | null;
++  cancellationReason?: string | null;
++  user?: { id: string; name: string; email?: string | null } | null;
++  user2?: { id: string; name: string; email?: string | null } | null;
++  vehicle?: { id: string; immatriculation: string; type: string } | null;
++  depot?: { id: string; name: string; isActive: boolean } | null;
++  template?: { id: string; name: string; category: string; color?: string | null } | null;
++};
++
++type AuditItem = {
++  id: string;
++  createdAt: string;
++  action: string;
++  summary: string;
++  actorUser?: { id: string; name: string; email?: string | null } | null;
++};
++
++type Props = {
++  availableDepots: DepotLite[];
++  availableUsers: UserLite[];
++  currentUser: UserLite;
++  canViewGlobal: boolean;
++  canEditPlanning: boolean;
++};
++
++type ViewMode = "day" | "week" | "month";
++
++type FormState = {
++  date: string;
++  startTime: string;
++  endTime: string;
++  templateId: string;
++  depotId: string;
++  notes: string;
++};
++
++function formatDate(date: Date) {
++  const y = date.getFullYear();
++  const m = String(date.getMonth() + 1).padStart(2, "0");
++  const d = String(date.getDate()).padStart(2, "0");
++  return `${y}-${m}-${d}`;
++}
++
++function formatMonth(date: Date) {
++  const y = date.getFullYear();
++  const m = String(date.getMonth() + 1).padStart(2, "0");
++  return `${y}-${m}`;
++}
++
++function addDays(date: Date, days: number) {
++  const next = new Date(date);
++  next.setDate(next.getDate() + days);
++  return next;
++}
++
++function startOfWeekMonday(date: Date) {
++  const jsDay = date.getDay();
++  const diff = (jsDay + 6) % 7;
++  return addDays(date, -diff);
++}
++
++function parseJsonSafe(text: string) {
++  try {
++    return text ? JSON.parse(text) : null;
++  } catch {
++    return null;
++  }
++}
++
++async function fetchJson(url: string, init?: RequestInit) {
++  const res = await fetch(url, init);
++  const text = await res.text();
++  return { res, json: parseJsonSafe(text) };
++}
++
++function timeHM(iso: string) {
++  return new Date(iso).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
++}
++
++function dateLabel(iso: string) {
++  return new Date(iso).toLocaleDateString("fr-FR", { weekday: "long", day: "2-digit", month: "2-digit", year: "numeric" });
++}
++
++function dateTimeLabel(iso: string) {
++  return new Date(iso).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" });
++}
++
++function initialForm(date: Date): FormState {
++  return {
++    date: formatDate(date),
++    startTime: "08:00",
++    endTime: "12:00",
++    templateId: "",
++    depotId: "",
++    notes: "",
++  };
++}
++
++export default function ManualPlanningPanel({
++  availableDepots,
++  availableUsers,
++  currentUser,
++  canViewGlobal,
++  canEditPlanning,
++}: Props) {
++  const [viewMode, setViewMode] = useState<ViewMode>("month");
++  const [cursorDate, setCursorDate] = useState<Date>(new Date());
++  const [selectedUserId, setSelectedUserId] = useState<string>(currentUser.id);
++  const [templates, setTemplates] = useState<TemplateLite[]>([]);
++  const [loading, setLoading] = useState(false);
++  const [saving, setSaving] = useState(false);
++  const [error, setError] = useState<string | null>(null);
++  const [message, setMessage] = useState<string | null>(null);
++  const [items, setItems] = useState<ShiftItem[]>([]);
++  const [historyByShiftId, setHistoryByShiftId] = useState<Record<string, AuditItem[]>>({});
++  const [createForm, setCreateForm] = useState<FormState>(() => initialForm(new Date()));
++  const [editingShiftId, setEditingShiftId] = useState<string | null>(null);
++  const [editForm, setEditForm] = useState<FormState>(() => initialForm(new Date()));
++
++  const scopeParams = useMemo(() => {
++    const params = new URLSearchParams();
++    if (viewMode === "day") {
++      params.set("day", formatDate(cursorDate));
++    } else if (viewMode === "week") {
++      params.set("weekStart", formatDate(startOfWeekMonday(cursorDate)));
++    } else {
++      params.set("month", formatMonth(cursorDate));
++    }
++    if (canViewGlobal && selectedUserId) params.set("userId", selectedUserId);
++    if (!canViewGlobal) params.set("userId", currentUser.id);
++    params.set("includeHistory", "1");
++    params.set("limit", "500");
++    return params.toString();
++  }, [canViewGlobal, currentUser.id, cursorDate, selectedUserId, viewMode]);
++
++  const loadTemplates = useCallback(async () => {
++    const { res, json } = await fetchJson("/api/templates?limit=500");
++    if (!res.ok || !json || json.ok !== true || !Array.isArray(json.data)) {
++      return;
++    }
++    const mapped = json.data
++      .map((template: Record<string, unknown>) => {
++        if (typeof template.id !== "string" || typeof template.name !== "string" || typeof template.category !== "string") return null;
++        return {
++          id: template.id,
++          name: template.name,
++          category: template.category,
++          color: typeof template.color === "string" ? template.color : null,
++        };
++      })
++      .filter(Boolean) as TemplateLite[];
++    setTemplates(mapped);
++  }, []);
++
++  const loadPlanning = useCallback(async () => {
++    setLoading(true);
++    setError(null);
++    try {
++      const { res, json } = await fetchJson(`/api/planning/shifts?${scopeParams}`);
++      if (!res.ok || !json || json.ok !== true) {
++        throw new Error(typeof json?.error === "string" ? json.error : `HTTP_${res.status}`);
++      }
++      setItems(Array.isArray(json.data) ? (json.data as ShiftItem[]) : []);
++      setHistoryByShiftId((json.historyByShiftId as Record<string, AuditItem[]>) ?? {});
++    } catch (err) {
++      setError(err instanceof Error ? err.message : "Erreur inconnue");
++    } finally {
++      setLoading(false);
++    }
++  }, [scopeParams]);
++
++  useEffect(() => {
++    void loadTemplates();
++  }, [loadTemplates]);
++
++  useEffect(() => {
++    void loadPlanning();
++  }, [loadPlanning]);
++
++  useEffect(() => {
++    setCreateForm(initialForm(cursorDate));
++  }, [cursorDate]);
++
++  const groupedByDay = useMemo(() => {
++    const map = new Map<string, ShiftItem[]>();
++    for (const item of items) {
++      const key = item.startAt.slice(0, 10);
++      const list = map.get(key) ?? [];
++      list.push(item);
++      map.set(key, list);
++    }
++    return map;
++  }, [items]);
++
++  const monthDays = useMemo(() => {
++    if (viewMode !== "month") return [] as Date[];
++    const first = new Date(cursorDate.getFullYear(), cursorDate.getMonth(), 1);
++    const start = startOfWeekMonday(first);
++    return Array.from({ length: 42 }, (_, i) => addDays(start, i));
++  }, [cursorDate, viewMode]);
++
++  async function submitCreate() {
++    if (!canEditPlanning) return;
++    setSaving(true);
++    setMessage(null);
++    setError(null);
++    try {
++      const body = {
++        ...createForm,
++        depotId: createForm.depotId || null,
++        notes: createForm.notes || null,
++      };
++      const { res, json } = await fetchJson("/api/planning/shifts", {
++        method: "POST",
++        headers: { "Content-Type": "application/json" },
++        body: JSON.stringify(body),
++      });
++      if (!res.ok || !json || json.ok !== true) {
++        throw new Error(typeof json?.error === "string" ? json.error : `HTTP_${res.status}`);
++      }
++      setMessage("Shift manuel publié créé.");
++      await loadPlanning();
++    } catch (err) {
++      setError(err instanceof Error ? err.message : "Erreur inconnue");
++    } finally {
++      setSaving(false);
++    }
++  }
++
++  function startEdit(shift: ShiftItem) {
++    setEditingShiftId(shift.id);
++    setEditForm({
++      date: shift.startAt.slice(0, 10),
++      startTime: timeHM(shift.startAt),
++      endTime: timeHM(shift.endAt),
++      templateId: shift.template?.id ?? "",
++      depotId: shift.depot?.id ?? "",
++      notes: shift.notes ?? "",
++    });
++  }
++
++  async function submitEdit() {
++    if (!editingShiftId || !canEditPlanning) return;
++    setSaving(true);
++    setMessage(null);
++    setError(null);
++    try {
++      const body = {
++        ...editForm,
++        templateId: editForm.templateId || null,
++        depotId: editForm.depotId || null,
++        notes: editForm.notes || null,
++      };
++      const { res, json } = await fetchJson(`/api/planning/shifts/${editingShiftId}`, {
++        method: "PATCH",
++        headers: { "Content-Type": "application/json" },
++        body: JSON.stringify(body),
++      });
++      if (!res.ok || !json || json.ok !== true) {
++        throw new Error(typeof json?.error === "string" ? json.error : `HTTP_${res.status}`);
++      }
++      setMessage("Shift publié mis à jour.");
++      setEditingShiftId(null);
++      await loadPlanning();
++    } catch (err) {
++      setError(err instanceof Error ? err.message : "Erreur inconnue");
++    } finally {
++      setSaving(false);
++    }
++  }
++
++  async function cancelShift(shift: ShiftItem) {
++    if (!canEditPlanning) return;
++    const reason = window.prompt("Motif d'annulation logique", shift.cancellationReason ?? "Annulation manuelle") ?? "";
++    if (!reason) return;
++    setSaving(true);
++    setMessage(null);
++    setError(null);
++    try {
++      const { res, json } = await fetchJson(`/api/planning/shifts/${shift.id}/cancel`, {
++        method: "POST",
++        headers: { "Content-Type": "application/json" },
++        body: JSON.stringify({ reason }),
++      });
++      if (!res.ok || !json || json.ok !== true) {
++        throw new Error(typeof json?.error === "string" ? json.error : `HTTP_${res.status}`);
++      }
++      setMessage("Shift annulé logiquement.");
++      await loadPlanning();
++    } catch (err) {
++      setError(err instanceof Error ? err.message : "Erreur inconnue");
++    } finally {
++      setSaving(false);
++    }
++  }
++
++  function move(offset: number) {
++    if (viewMode === "day") setCursorDate((current) => addDays(current, offset));
++    else if (viewMode === "week") setCursorDate((current) => addDays(current, offset * 7));
++    else setCursorDate((current) => new Date(current.getFullYear(), current.getMonth() + offset, 1));
++  }
++
++  const userChoices = canViewGlobal ? [{ id: "", name: "Toute la société" }, ...availableUsers] : [currentUser];
++
++  return (
++    <section style={{ border: "1px solid rgba(255,255,255,0.14)", borderRadius: 12, padding: 16, marginBottom: 18, display: "grid", gap: 14 }}>
++      <div>
++        <div style={{ fontSize: 20, fontWeight: 800 }}>Planning manuel</div>
++        <div style={{ opacity: 0.75, marginTop: 4 }}>Vue jour / semaine / mois, création manuelle, modification publiée, annulation logique et historique minimal.</div>
++      </div>
++
++      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
++        <button onClick={() => move(-1)}>← Précédent</button>
++        <button onClick={() => setCursorDate(new Date())}>Aujourd'hui</button>
++        <button onClick={() => move(1)}>Suivant →</button>
++        <select value={viewMode} onChange={(e) => setViewMode(e.target.value as ViewMode)}>
++          <option value="day">Jour</option>
++          <option value="week">Semaine</option>
++          <option value="month">Mois</option>
++        </select>
++        <select value={selectedUserId} onChange={(e) => setSelectedUserId(e.target.value)}>
++          {userChoices.map((user) => (
++            <option key={user.id || "all"} value={user.id}>
++              {user.name}
++            </option>
++          ))}
++        </select>
++        <div style={{ fontWeight: 700 }}>
++          {viewMode === "month" ? cursorDate.toLocaleDateString("fr-FR", { month: "long", year: "numeric" }) : dateLabel(cursorDate.toISOString())}
++        </div>
++      </div>
++
++      {canEditPlanning && (
++        <div style={{ border: "1px solid rgba(255,255,255,0.12)", borderRadius: 12, padding: 12, display: "grid", gap: 8 }}>
++          <div style={{ fontWeight: 700 }}>Ajouter un shift publié</div>
++          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 8 }}>
++            <input type="date" value={createForm.date} onChange={(e) => setCreateForm((v) => ({ ...v, date: e.target.value }))} />
++            <input type="time" value={createForm.startTime} onChange={(e) => setCreateForm((v) => ({ ...v, startTime: e.target.value }))} />
++            <input type="time" value={createForm.endTime} onChange={(e) => setCreateForm((v) => ({ ...v, endTime: e.target.value }))} />
++            <select value={createForm.templateId} onChange={(e) => setCreateForm((v) => ({ ...v, templateId: e.target.value }))}>
++              <option value="">Template</option>
++              {templates.map((template) => (
++                <option key={template.id} value={template.id}>{template.name} — {template.category}</option>
++              ))}
++            </select>
++            <select value={createForm.depotId} onChange={(e) => setCreateForm((v) => ({ ...v, depotId: e.target.value }))}>
++              <option value="">Aucun dépôt</option>
++              {availableDepots.map((depot) => (
++                <option key={depot.id} value={depot.id}>{depot.name}</option>
++              ))}
++            </select>
++          </div>
++          <textarea rows={2} placeholder="Notes" value={createForm.notes} onChange={(e) => setCreateForm((v) => ({ ...v, notes: e.target.value }))} />
++          <div><button disabled={saving || !createForm.templateId} onClick={submitCreate}>Créer</button></div>
++        </div>
++      )}
++
++      {message && <div style={{ color: "green" }}>{message}</div>}
++      {error && <div style={{ color: "crimson" }}>Erreur : {error}</div>}
++      {loading && <div>Chargement du planning manuel…</div>}
++
++      {!loading && viewMode !== "month" && (
++        <div style={{ display: "grid", gap: 10 }}>
++          {items.length === 0 ? <div style={{ opacity: 0.7 }}>Aucun shift sur cette période.</div> : items.map((shift) => (
++            <ShiftCard
++              key={shift.id}
++              shift={shift}
++              canEditPlanning={canEditPlanning}
++              history={historyByShiftId[shift.id] ?? []}
++              templates={templates}
++              depots={availableDepots}
++              isEditing={editingShiftId === shift.id}
++              editForm={editForm}
++              setEditForm={setEditForm}
++              onEdit={() => startEdit(shift)}
++              onSaveEdit={submitEdit}
++              onCancelEdit={() => setEditingShiftId(null)}
++              onCancelShift={() => void cancelShift(shift)}
++            />
++          ))}
++        </div>
++      )}
++
++      {!loading && viewMode === "month" && (
++        <div style={{ display: "grid", gridTemplateColumns: "repeat(7, minmax(120px, 1fr))", gap: 8 }}>
++          {monthDays.map((day) => {
++            const key = formatDate(day);
++            const dayItems = groupedByDay.get(key) ?? [];
++            const isCurrentMonth = day.getMonth() === cursorDate.getMonth();
++            return (
++              <div key={key} style={{ border: "1px solid rgba(255,255,255,0.12)", borderRadius: 10, padding: 8, minHeight: 120, opacity: isCurrentMonth ? 1 : 0.55 }}>
++                <div style={{ fontWeight: 700, marginBottom: 6 }}>{day.toLocaleDateString("fr-FR", { weekday: "short", day: "2-digit" })}</div>
++                {dayItems.length === 0 ? <div style={{ opacity: 0.6, fontSize: 12 }}>Aucun shift</div> : (
++                  <div style={{ display: "grid", gap: 6 }}>
++                    {dayItems.slice(0, 4).map((shift) => (
++                      <div key={shift.id} style={{ borderLeft: `6px solid ${shift.template?.color ?? "#2563eb"}`, paddingLeft: 8, fontSize: 12 }}>
++                        <div style={{ fontWeight: 700 }}>{timeHM(shift.startAt)}–{timeHM(shift.endAt)}</div>
++                        <div>{shift.template?.name ?? "Sans template"}</div>
++                        <div style={{ opacity: 0.8 }}>{shift.user?.name ?? "Non affecté"}</div>
++                        {shift.isCancelled && <div style={{ color: "crimson" }}>Annulé</div>}
++                      </div>
++                    ))}
++                    {dayItems.length > 4 && <div style={{ fontSize: 12, opacity: 0.7 }}>+ {dayItems.length - 4} autre(s)</div>}
++                  </div>
++                )}
++              </div>
++            );
++          })}
++        </div>
++      )}
++    </section>
++  );
++}
++
++function ShiftCard({
++  shift,
++  history,
++  templates,
++  depots,
++  canEditPlanning,
++  isEditing,
++  editForm,
++  setEditForm,
++  onEdit,
++  onSaveEdit,
++  onCancelEdit,
++  onCancelShift,
++}: {
++  shift: ShiftItem;
++  history: AuditItem[];
++  templates: TemplateLite[];
++  depots: DepotLite[];
++  canEditPlanning: boolean;
++  isEditing: boolean;
++  editForm: FormState;
++  setEditForm: Dispatch<SetStateAction<FormState>>;
++  onEdit: () => void;
++  onSaveEdit: () => void;
++  onCancelEdit: () => void;
++  onCancelShift: () => void;
++}) {
++  return (
++    <div style={{ border: "1px solid rgba(255,255,255,0.14)", borderRadius: 12, padding: 12, display: "grid", gap: 8 }}>
++      <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "flex-start" }}>
++        <div>
++          <div style={{ fontWeight: 800 }}>{shift.template?.name ?? "Sans template"} — {shift.template?.category ?? "N/A"}</div>
++          <div>{dateLabel(shift.startAt)} • {timeHM(shift.startAt)} → {timeHM(shift.endAt)}</div>
++          <div style={{ opacity: 0.8 }}>Dépôt : {shift.depot?.name ?? "Aucun"} • Véhicule : {shift.vehicle?.immatriculation ?? "Aucun"}</div>
++          <div style={{ opacity: 0.8 }}>Agents : {shift.user?.name ?? "—"}{shift.user2?.name ? ` / ${shift.user2.name}` : ""}</div>
++          {shift.notes && <div style={{ opacity: 0.85 }}>Notes : {shift.notes}</div>}
++          {shift.isCancelled && <div style={{ color: "crimson", fontWeight: 700 }}>Annulé — {shift.cancellationReason ?? "sans motif"}</div>}
++        </div>
++        {canEditPlanning && !shift.isCancelled && (
++          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
++            <button onClick={onEdit}>Modifier</button>
++            <button onClick={onCancelShift}>Annuler</button>
++          </div>
++        )}
++      </div>
++
++      {isEditing && (
++        <div style={{ border: "1px solid rgba(255,255,255,0.12)", borderRadius: 10, padding: 10, display: "grid", gap: 8 }}>
++          <div style={{ fontWeight: 700 }}>Modifier le shift publié</div>
++          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 8 }}>
++            <input type="date" value={editForm.date} onChange={(e) => setEditForm((v) => ({ ...v, date: e.target.value }))} />
++            <input type="time" value={editForm.startTime} onChange={(e) => setEditForm((v) => ({ ...v, startTime: e.target.value }))} />
++            <input type="time" value={editForm.endTime} onChange={(e) => setEditForm((v) => ({ ...v, endTime: e.target.value }))} />
++            <select value={editForm.templateId} onChange={(e) => setEditForm((v) => ({ ...v, templateId: e.target.value }))}>
++              <option value="">Sans template</option>
++              {templates.map((template) => (
++                <option key={template.id} value={template.id}>{template.name} — {template.category}</option>
++              ))}
++            </select>
++            <select value={editForm.depotId} onChange={(e) => setEditForm((v) => ({ ...v, depotId: e.target.value }))}>
++              <option value="">Aucun dépôt</option>
++              {depots.map((depot) => (
++                <option key={depot.id} value={depot.id}>{depot.name}</option>
++              ))}
++            </select>
++          </div>
++          <textarea rows={2} value={editForm.notes} onChange={(e) => setEditForm((v) => ({ ...v, notes: e.target.value }))} />
++          <div style={{ display: "flex", gap: 8 }}>
++            <button onClick={onSaveEdit}>Enregistrer</button>
++            <button onClick={onCancelEdit}>Fermer</button>
++          </div>
++        </div>
++      )}
++
++      <div style={{ display: "grid", gap: 6 }}>
++        <div style={{ fontWeight: 700 }}>Historique minimal</div>
++        {history.length === 0 ? <div style={{ opacity: 0.65 }}>Aucune trace disponible.</div> : history.slice(0, 6).map((entry) => (
++          <div key={entry.id} style={{ fontSize: 13, opacity: 0.9 }}>
++            {dateTimeLabel(entry.createdAt)} — {entry.summary}
++            {entry.actorUser?.name ? ` (${entry.actorUser.name})` : ""}
++          </div>
++        ))}
++      </div>
++    </div>
++  );
++}
+diff -ruN orig/app/planning/planning-client.tsx mod/app/planning/planning-client.tsx
+--- orig/app/planning/planning-client.tsx	2026-04-15 11:38:23.421942555 +0000
++++ mod/app/planning/planning-client.tsx	2026-04-15 11:46:27.463540901 +0000
+@@ -5,6 +5,8 @@
+ import { COMPANY_PARAMETER_KEYS, parsePlanningViewModeValue, serializePlanningViewModeValue, type PlanningViewModeValue } from "@/lib/company-rules/catalog";
+ import { normalizeTemplateColor, resolveTemplateMinStaffCount } from "@/lib/templates/template-rules";
+ 
++import ManualPlanningPanel from "./manual-planning-panel";
++
+ type Shift = {
+   id: string;
+   startAt: string;
+@@ -1604,6 +1606,14 @@
+         </div>
+       )}
+ 
++      <ManualPlanningPanel
++        availableDepots={availableDepots}
++        availableUsers={availableUsers}
++        currentUser={currentUser}
++        canViewGlobal={canViewGlobal}
++        canEditPlanning={canEditPlanning}
++      />
++
+       {loading && <div>Chargement…</div>}
+       {error && <div style={{ color: "crimson" }}>Erreur : {error}</div>}
+ 
+diff -ruN orig/lib/services/planning/assign-draftshift.ts mod/lib/services/planning/assign-draftshift.ts
+--- orig/lib/services/planning/assign-draftshift.ts	2026-04-15 11:38:23.891589200 +0000
++++ mod/lib/services/planning/assign-draftshift.ts	2026-04-15 11:40:07.229519511 +0000
+@@ -193,6 +193,7 @@
+     const otherShifts = await prisma.shift.findMany({
+       where: {
+         companyId,
++        isCancelled: false,
+         startAt: { lt: endAt },
+         endAt: { gt: startAt },
+         OR: [{ userId: { in: assignedUsers } }, { user2Id: { in: assignedUsers } }],
+@@ -232,7 +233,7 @@
+     }
+ 
+     const otherShiftsVehicle = await prisma.shift.findMany({
+-      where: { companyId, vehicleId, startAt: { lt: endAt }, endAt: { gt: startAt } },
++      where: { companyId, isCancelled: false, vehicleId, startAt: { lt: endAt }, endAt: { gt: startAt } },
+       select: { id: true },
+     });
+ 
+@@ -268,7 +269,7 @@
+       });
+ 
+       const prevShift = await prisma.shift.findFirst({
+-        where: { companyId, OR: [{ userId: u }, { user2Id: u }], endAt: { lte: startAt } },
++        where: { companyId, isCancelled: false, OR: [{ userId: u }, { user2Id: u }], endAt: { lte: startAt } },
+         orderBy: { endAt: "desc" },
+         select: { endAt: true },
+       });
+diff -ruN orig/lib/services/planning/assign-shift.ts mod/lib/services/planning/assign-shift.ts
+--- orig/lib/services/planning/assign-shift.ts	2026-04-15 11:38:23.891908472 +0000
++++ mod/lib/services/planning/assign-shift.ts	2026-04-15 11:39:50.771940236 +0000
+@@ -48,7 +48,7 @@
+ 
+   // 1) Charger Shift + template.category
+   const shift = await prisma.shift.findFirst({
+-    where: { id: shiftId, companyId },
++    where: { id: shiftId, companyId, isCancelled: false },
+     select: {
+       id: true,
+       companyId: true,
+@@ -172,6 +172,7 @@
+       where: {
+         companyId,
+         id: { not: shiftId },
++        isCancelled: false,
+         startAt: { lt: endAt },
+         endAt: { gt: startAt },
+         OR: [{ userId: { in: assignedUsers } }, { user2Id: { in: assignedUsers } }],
+@@ -210,7 +211,7 @@
+   // 4) Conflits véhicule — autres Shifts + DraftShifts DRAFT
+   if (vehicleId) {
+     const otherVehicles = await prisma.shift.findMany({
+-      where: { companyId, id: { not: shiftId }, vehicleId, startAt: { lt: endAt }, endAt: { gt: startAt } },
++      where: { companyId, id: { not: shiftId }, isCancelled: false, vehicleId, startAt: { lt: endAt }, endAt: { gt: startAt } },
+       select: { id: true },
+     });
+ 
+@@ -247,7 +248,7 @@
+ 
+     for (const u of assignedUsers) {
+       const prevShift = await prisma.shift.findFirst({
+-        where: { companyId, id: { not: shiftId }, OR: [{ userId: u }, { user2Id: u }], endAt: { lte: startAt } },
++        where: { companyId, id: { not: shiftId }, isCancelled: false, OR: [{ userId: u }, { user2Id: u }], endAt: { lte: startAt } },
+         orderBy: { endAt: "desc" },
+         select: { endAt: true },
+       });
+diff -ruN orig/lib/types/planning.ts mod/lib/types/planning.ts
+--- orig/lib/types/planning.ts	2026-04-15 11:38:23.897335138 +0000
++++ mod/lib/types/planning.ts	2026-04-15 11:39:50.770907539 +0000
+@@ -14,6 +14,8 @@
+   | "RULE_CONFIG_ERROR"
+   | "TEMPLATE_ROLE_MISMATCH"
+   | "TEMPLATE_VEHICLE_TYPE_MISMATCH"
++  | "SHIFT_ALREADY_CANCELLED"
++  | "SHIFT_CANCELLED"
+   | "VALIDATION_ERROR";
+ 
+ export type PlanningIssue = {
+diff -ruN orig/prisma/migrations/20260415120500_a8_manual_published_shift_management/migration.sql mod/prisma/migrations/20260415120500_a8_manual_published_shift_management/migration.sql
+--- orig/prisma/migrations/20260415120500_a8_manual_published_shift_management/migration.sql	1970-01-01 00:00:00.000000000 +0000
++++ mod/prisma/migrations/20260415120500_a8_manual_published_shift_management/migration.sql	2026-04-15 11:46:35.772168495 +0000
+@@ -0,0 +1,6 @@
++ALTER TABLE "Shift"
++  ADD COLUMN "isCancelled" BOOLEAN NOT NULL DEFAULT false,
++  ADD COLUMN "cancelledAt" TIMESTAMP(3),
++  ADD COLUMN "cancellationReason" TEXT;
++
++CREATE INDEX "Shift_companyId_isCancelled_startAt_idx" ON "Shift"("companyId", "isCancelled", "startAt");
+diff -ruN orig/prisma/schema.prisma mod/prisma/schema.prisma
+--- orig/prisma/schema.prisma	2026-04-15 11:38:23.920080760 +0000
++++ mod/prisma/schema.prisma	2026-04-15 11:39:50.770299432 +0000
+@@ -449,11 +449,16 @@
+ 
+   notes String?
+ 
++  isCancelled        Boolean   @default(false)
++  cancelledAt        DateTime?
++  cancellationReason String?
++
+   createdAt DateTime @default(now())
+   updatedAt DateTime @updatedAt
+ 
+   @@index([companyId, date])
+   @@index([companyId, startAt])
++  @@index([companyId, isCancelled, startAt])
+   @@index([runId])
+ 
+   // ✅ Phase 2 (DATA) — Index métier pour futures règles (conflits / dispo)

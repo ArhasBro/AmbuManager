@@ -193,6 +193,7 @@ export async function assignDraftShift(input: AssignDraftShiftInput): Promise<As
     const otherShifts = await prisma.shift.findMany({
       where: {
         companyId,
+        isCancelled: false,
         startAt: { lt: endAt },
         endAt: { gt: startAt },
         OR: [{ userId: { in: assignedUsers } }, { user2Id: { in: assignedUsers } }],
@@ -232,7 +233,7 @@ export async function assignDraftShift(input: AssignDraftShiftInput): Promise<As
     }
 
     const otherShiftsVehicle = await prisma.shift.findMany({
-      where: { companyId, vehicleId, startAt: { lt: endAt }, endAt: { gt: startAt } },
+      where: { companyId, isCancelled: false, vehicleId, startAt: { lt: endAt }, endAt: { gt: startAt } },
       select: { id: true },
     });
 
@@ -268,7 +269,7 @@ export async function assignDraftShift(input: AssignDraftShiftInput): Promise<As
       });
 
       const prevShift = await prisma.shift.findFirst({
-        where: { companyId, OR: [{ userId: u }, { user2Id: u }], endAt: { lte: startAt } },
+        where: { companyId, isCancelled: false, OR: [{ userId: u }, { user2Id: u }], endAt: { lte: startAt } },
         orderBy: { endAt: "desc" },
         select: { endAt: true },
       });

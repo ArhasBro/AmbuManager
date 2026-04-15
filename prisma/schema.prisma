@@ -449,11 +449,16 @@ model Shift {
 
   notes String?
 
+  isCancelled        Boolean   @default(false)
+  cancelledAt        DateTime?
+  cancellationReason String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([companyId, date])
   @@index([companyId, startAt])
+  @@index([companyId, isCancelled, startAt])
   @@index([runId])
 
   // ✅ Phase 2 (DATA) — Index métier pour futures règles (conflits / dispo)

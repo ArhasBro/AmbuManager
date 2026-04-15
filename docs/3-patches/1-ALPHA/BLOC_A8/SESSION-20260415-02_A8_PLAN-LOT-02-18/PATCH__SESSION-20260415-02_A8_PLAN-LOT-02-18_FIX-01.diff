@@ -1,0 +1,113 @@
+diff --git a/app/api/planning/shifts/[id]/cancel/route.ts b/app/api/planning/shifts/[id]/cancel/route.ts
+index 2de4312..f6fe817 100644
+--- a/app/api/planning/shifts/[id]/cancel/route.ts
++++ b/app/api/planning/shifts/[id]/cancel/route.ts
+@@ -43,17 +43,25 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
+     return NextResponse.json({ ok: false, error: "VALIDATION_ERROR", details: parsed.error.flatten() }, { status: 400 });
+   }
+ 
+-  const shift = await prisma.shift.findFirst({ where: { id, companyId }, select: { id: true, runId: true, isCancelled: true } });
++  const shift = (await (prisma.shift as unknown as {
++    findFirst: (args: unknown) => Promise<{ id: string; runId: string | null; isCancelled?: boolean | null } | null>;
++    update: (args: unknown) => Promise<unknown>;
++  }).findFirst({
++    where: { id, companyId },
++    select: { id: true, runId: true, isCancelled: true },
++  })) as { id: string; runId: string | null; isCancelled?: boolean | null } | null;
+   if (!shift) {
+     return NextResponse.json({ ok: false, error: "NOT_FOUND" }, { status: 404 });
+   }
+ 
+-  if (shift.isCancelled) {
++  if (shift.isCancelled === true) {
+     return NextResponse.json({ ok: false, error: "SHIFT_ALREADY_CANCELLED" }, { status: 409 });
+   }
+ 
+   const now = new Date();
+-  await prisma.shift.update({
++  await (prisma.shift as unknown as {
++    update: (args: unknown) => Promise<unknown>;
++  }).update({
+     where: { id },
+     data: {
+       isCancelled: true,
+diff --git a/app/planning/manual-planning-panel.tsx b/app/planning/manual-planning-panel.tsx
+index a8344c8..cff4d4f 100644
+--- a/app/planning/manual-planning-panel.tsx
++++ b/app/planning/manual-planning-panel.tsx
+@@ -326,7 +326,7 @@ export default function ManualPlanningPanel({
+ 
+       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+         <button onClick={() => move(-1)}>← Précédent</button>
+-        <button onClick={() => setCursorDate(new Date())}>Aujourd'hui</button>
++        <button onClick={() => setCursorDate(new Date())}>Aujourd’hui</button>
+         <button onClick={() => move(1)}>Suivant →</button>
+         <select value={viewMode} onChange={(e) => setViewMode(e.target.value as ViewMode)}>
+           <option value="day">Jour</option>
+diff --git a/app/planning/planning-client.tsx b/app/planning/planning-client.tsx
+index 4d51a03..8a3303f 100644
+--- a/app/planning/planning-client.tsx
++++ b/app/planning/planning-client.tsx
+@@ -387,6 +387,7 @@ export default function PlanningClient({
+   const [matchPreview, setMatchPreview] = useState<MatchingPlanItem[] | null>(null);
+   const [matchApplied, setMatchApplied] = useState<MatchingApplyItem[] | null>(null);
+   const [matchQuality, setMatchQuality] = useState<PlanningQuality | null>(null);
++  const [showLegacyPlanning, setShowLegacyPlanning] = useState(false);
+ 
+   // ✅ verrou : le preview est lié à un runId précis
+   const [matchPreviewRunId, setMatchPreviewRunId] = useState<string | null>(null);
+@@ -1271,6 +1272,30 @@ export default function PlanningClient({
+ 
+   return (
+     <section style={{ display: "grid", gap: 12 }}>
++      <ManualPlanningPanel
++        availableDepots={availableDepots}
++        availableUsers={availableUsers}
++        currentUser={currentUser}
++        canViewGlobal={canViewGlobal}
++        canEditPlanning={canEditPlanning}
++      />
++
++      <section style={{ border: "1px solid rgba(255,255,255,0.12)", borderRadius: 10, padding: 12, display: "grid", gap: 8 }}>
++        <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
++          <div>
++            <div style={{ fontWeight: 800 }}>Zone legacy / autoschedule</div>
++            <div style={{ opacity: 0.75, fontSize: 13 }}>
++              Hors surface principale A8. Le planning manuel exploitable est affiché ci-dessus.
++            </div>
++          </div>
++          <button onClick={() => setShowLegacyPlanning((value) => !value)}>
++            {showLegacyPlanning ? "Masquer" : "Afficher"}
++          </button>
++        </div>
++      </section>
++
++      {showLegacyPlanning && (
++        <>
+       <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+         <button onClick={() => setWeekStart(addDays(weekStart, -7))}>← Semaine -1</button>
+         <button onClick={() => setWeekStart(startOfWeekMonday(new Date()))}>Aujourd’hui</button>
+@@ -1606,14 +1631,6 @@ export default function PlanningClient({
+         </div>
+       )}
+ 
+-      <ManualPlanningPanel
+-        availableDepots={availableDepots}
+-        availableUsers={availableUsers}
+-        currentUser={currentUser}
+-        canViewGlobal={canViewGlobal}
+-        canEditPlanning={canEditPlanning}
+-      />
+-
+       {loading && <div>Chargement…</div>}
+       {error && <div style={{ color: "crimson" }}>Erreur : {error}</div>}
+ 
+@@ -1696,6 +1713,8 @@ export default function PlanningClient({
+           })}
+         </div>
+       )}
++        </>
++      )}
+     </section>
+   );
+ }

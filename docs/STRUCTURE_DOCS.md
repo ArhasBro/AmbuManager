@@ -1291,6 +1291,8 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |           |       NO_PATCH.md
 |           |       
 |           +---SESSION-20260415-02_A8_PLAN-LOT-02-18
+|           |       PATCH__SESSION-20260415-02_A8_PLAN-LOT-02-18.diff
+|           |       PATCH__SESSION-20260415-02_A8_PLAN-LOT-02-18_FIX-01.diff
 |           |       README_PATCH.md
 |           |       
 |           +---SESSION-20260415-03_A8_PLAN-19

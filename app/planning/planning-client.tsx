@@ -5,6 +5,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { COMPANY_PARAMETER_KEYS, parsePlanningViewModeValue, serializePlanningViewModeValue, type PlanningViewModeValue } from "@/lib/company-rules/catalog";
 import { normalizeTemplateColor, resolveTemplateMinStaffCount } from "@/lib/templates/template-rules";
 
+import ManualPlanningPanel from "./manual-planning-panel";
+
 type Shift = {
   id: string;
   startAt: string;
@@ -385,6 +387,7 @@ export default function PlanningClient({
   const [matchPreview, setMatchPreview] = useState<MatchingPlanItem[] | null>(null);
   const [matchApplied, setMatchApplied] = useState<MatchingApplyItem[] | null>(null);
   const [matchQuality, setMatchQuality] = useState<PlanningQuality | null>(null);
+  const [showLegacyPlanning, setShowLegacyPlanning] = useState(false);
 
   // ✅ verrou : le preview est lié à un runId précis
   const [matchPreviewRunId, setMatchPreviewRunId] = useState<string | null>(null);
@@ -1269,6 +1272,30 @@ export default function PlanningClient({
 
   return (
     <section style={{ display: "grid", gap: 12 }}>
+      <ManualPlanningPanel
+        availableDepots={availableDepots}
+        availableUsers={availableUsers}
+        currentUser={currentUser}
+        canViewGlobal={canViewGlobal}
+        canEditPlanning={canEditPlanning}
+      />
+
+      <section style={{ border: "1px solid rgba(255,255,255,0.12)", borderRadius: 10, padding: 12, display: "grid", gap: 8 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
+          <div>
+            <div style={{ fontWeight: 800 }}>Zone legacy / autoschedule</div>
+            <div style={{ opacity: 0.75, fontSize: 13 }}>
+              Hors surface principale A8. Le planning manuel exploitable est affiché ci-dessus.
+            </div>
+          </div>
+          <button onClick={() => setShowLegacyPlanning((value) => !value)}>
+            {showLegacyPlanning ? "Masquer" : "Afficher"}
+          </button>
+        </div>
+      </section>
+
+      {showLegacyPlanning && (
+        <>
       <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
         <button onClick={() => setWeekStart(addDays(weekStart, -7))}>← Semaine -1</button>
         <button onClick={() => setWeekStart(startOfWeekMonday(new Date()))}>Aujourd’hui</button>
@@ -1685,6 +1712,8 @@ export default function PlanningClient({
             );
           })}
         </div>
+      )}
+        </>
       )}
     </section>
   );
