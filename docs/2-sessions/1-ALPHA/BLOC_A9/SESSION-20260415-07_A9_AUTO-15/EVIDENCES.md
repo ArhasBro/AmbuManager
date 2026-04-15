@@ -78,6 +78,20 @@ Les routes autoschedule contrôlées restent bornées par `companyId` côté ses
 ### 8. Traduction française encore partielle
 `app/planning/planning-client.tsx` affiche encore dans l’historique les valeurs techniques brutes `log.action` et `log.entityType`. La traduction française globale reste donc `PARTIEL` malgré l’amélioration des messages métier.
 
+## Comparaison recontrôlée avec `AUTO-01` et `AUTO-LOT-02-14`
+
+### Confirmé
+- les constats positifs portés par `AUTO-01` puis confirmés par `AUTO-LOT-02-14` sur JOUR / SEMAINE, accès `/planning`, templates actifs, absences utilisateurs, rôles / véhicules et repos minimum sont de nouveau prouvés par le code réel ;
+- le choix `shifts seuls` / `génération + auto-affectation` reste bien réel après la correction précédente.
+
+### Inchangé
+- aucun nouveau défaut A9 strictement borné à l’autoschedule n’a été mis en évidence dans `AUTO-15` ;
+- le périmètre fonctionnel confirmé par `AUTO-LOT-02-14` reste conservé sans régression A9 strictement prouvée.
+
+### Encore partiel
+- l’indisponibilité véhicule déclarative reste non matérialisée ;
+- la traduction française reste partielle sur certains éléments techniques internes.
+
 ## Validations terminales réellement exécutées
 
 - `npx prisma validate` : **KO**

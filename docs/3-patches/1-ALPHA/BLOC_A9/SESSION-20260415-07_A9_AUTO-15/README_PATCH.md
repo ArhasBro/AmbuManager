@@ -28,6 +28,20 @@ Les deux résiduels encore prouvés sont déjà connus et restent :
 
 Ces résiduels maintiennent le verdict global `PARTIEL`, sans justifier à eux seuls un nouveau patch A9 dans `AUTO-15`.
 
+## Comparaison recontrôlée avec `AUTO-01` et `AUTO-LOT-02-14`
+
+### Confirmé
+- les générations JOUR / SEMAINE, l’accès depuis `/planning`, le choix `shifts seuls` / `auto-affectation`, les templates actifs, les absences utilisateurs, les contraintes rôles / véhicules et le repos minimum restent prouvés dans le code réel ;
+- les signalements métier restent exploitables.
+
+### Inchangé
+- aucun nouveau défaut A9 strictement prouvé n’impose un patch code supplémentaire dans `AUTO-15` ;
+- le périmètre positif confirmé après `AUTO-LOT-02-14` reste conservé.
+
+### Encore partiel
+- indisponibilités véhicules : **PARTIEL** ;
+- traduction française : **PARTIEL**.
+
 ## Périmètre réellement contrôlé
 
 Contrôle réalisé en priorité sur :
@@ -45,7 +59,3 @@ Contrôle réalisé en priorité sur :
 - `npx prisma generate` : **KO**
 - `npm run lint` : **OK**
 - `npm run build` : **KO**
-
-## Session suivante attendue
-
-- `CLOTURE_A9 — VALIDATION`

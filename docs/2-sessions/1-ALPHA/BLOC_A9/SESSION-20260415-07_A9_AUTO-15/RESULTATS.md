@@ -20,6 +20,22 @@
 - cohérence multi-tenant / permissions : **OUI**
 - autoschedule existant cohérent avec l’ALPHA : **PARTIEL**
 
+### Comparaison courte avec `AUTO-01` et `AUTO-LOT-02-14`
+
+#### Confirmé
+- les générations JOUR / SEMAINE et l’accès depuis `/planning` sont conservés ;
+- le choix `shifts seuls` / `auto-affectation` reste exploitable ;
+- templates actifs, absences utilisateurs, rôles / véhicules, repos minimum et signalements métier restent confirmés.
+
+#### Inchangé
+- aucun nouveau défaut A9 strictement prouvé n’impose un nouveau correctif code dans `AUTO-15` ;
+- le périmètre positif déjà confirmé après `AUTO-LOT-02-14` reste conservé.
+
+#### Encore partiel
+- indisponibilités véhicules : **PARTIEL** ;
+- traduction française : **PARTIEL** ;
+- autoschedule ALPHA global : **PARTIEL**.
+
 ### Validation terminale réellement exécutée
 - `npx prisma validate` : **KO**
 - `npx prisma generate` : **KO**
@@ -27,12 +43,14 @@
 - `npm run build` : **KO**
 
 ### Interprétation stricte
+La conclusion de `AUTO-15` porte uniquement sur le contrôle du périmètre autoschedule recontrôlé dans cette session.
+
 Le périmètre fonctionnel A9 contrôlé est validé sans nouveau correctif autoschedule à produire. Les deux résiduels A9 déjà identifiés restent strictement prouvés.
 
 Les résultats terminaux de cette session ne sont pas entièrement verts et doivent être conservés tels quels. Ils n’ont pas justifié, sur le strict périmètre `AUTO-15`, un nouveau patch A9.
 
-### Session suivante attendue
-- `CLOTURE_A9 — VALIDATION`
+### Session suivante
+- `INFORMATION NON FOURNIE — À CONFIRMER`
 
 ## Fichiers documentaires finaux
 - `SESSION.md`

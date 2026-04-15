@@ -53,10 +53,25 @@ Le repos minimum reste réellement branché via la règle société `PLANNING_MI
 #### Lisibilité métier / français
 Les messages principaux du matching et la surface autoschedule sont en français exploitable. En revanche, l’historique d’audit affiché dans `/planning` montre encore les codes techniques bruts `action` et `entityType`, ce qui maintient la traduction globale à `PARTIEL`.
 
-### 4. Pourquoi `NO_PATCH`
+### 4. Comparaison courte avec `AUTO-01` et `AUTO-LOT-02-14`
+
+#### Confirmé
+- les constats positifs déjà documentés sur JOUR, SEMAINE, accès `/planning`, templates actifs, absences utilisateurs, rôles / véhicules et repos minimum sont recontrôlés et confirmés ;
+- le choix `shifts seuls` / `auto-affectation` reste bien exploitable après `AUTO-LOT-02-14`.
+
+#### Inchangé
+- aucun nouveau défaut A9 strictement prouvé n’a été trouvé entre l’état livré par `AUTO-LOT-02-14` et le code réel contrôlé dans `AUTO-15` ;
+- le verdict `NO_PATCH` reste cohérent sur le strict périmètre de validation de cette session.
+
+#### Encore partiel
+- les indisponibilités véhicules restent **PARTIELLES** ;
+- la traduction française reste **PARTIELLE** ;
+- l’autoschedule ALPHA reste donc **PARTIEL** au sens strict déjà prouvé.
+
+### 5. Pourquoi `NO_PATCH`
 Aucun nouveau défaut A9 strictement prouvé n’a été trouvé entre l’état livré par `AUTO-LOT-02-14` et le code réel contrôlé. Les deux résiduels encore présents étaient déjà identifiés et restent réels sans imposer, dans cette session de validation, un nouveau correctif A9 minimal évident.
 
-### 5. Validations terminales
+### 6. Validations terminales
 Les validations terminales ont été rejouées dans la session et doivent être interprétées strictement comme suit :
 - les commandes Prisma ont échoué sur téléchargement externe d’engine ;
 - le lint a terminé correctement ;

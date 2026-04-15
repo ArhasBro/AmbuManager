@@ -86,6 +86,23 @@ En conséquence :
 - **autoschedule existant cohérent avec l’ALPHA : PARTIEL** ;
 - **décision patch : `NO_PATCH`**.
 
+## Comparaison recontrôlée avec `AUTO-01` et `AUTO-LOT-02-14`
+
+### Confirmé dans `AUTO-15`
+- les générations JOUR / SEMAINE sont toujours réelles et exploitables ;
+- l’accès autoschedule depuis `/planning` est bien conservé ;
+- le choix `SHIFTS_ONLY` / `AUTO_ASSIGN` est réellement branché ;
+- les templates actifs, les absences utilisateurs, les contraintes rôles / véhicules et le repos minimum restent effectivement pris en compte ;
+- les signalements métier restent compréhensibles.
+
+### Inchangé depuis `AUTO-LOT-02-14`
+- le périmètre confirmé après correction précédente est conservé sans régression fonctionnelle A9 strictement prouvée dans cette session ;
+- aucun nouveau défaut autoschedule strictement borné à `AUTO-15` n’impose un patch code supplémentaire.
+
+### Encore partiel
+- la prise en compte des indisponibilités véhicules reste **PARTIELLE** faute de modèle dédié déclaratif prouvé dans `prisma/schema.prisma` ;
+- la traduction française reste **PARTIELLE** car certains éléments techniques internes restent affichés bruts.
+
 ## Validations terminales réellement exécutées dans cette session
 
 - `npx prisma validate` : **KO**  

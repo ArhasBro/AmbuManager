@@ -16,6 +16,11 @@ Le bloc autoschedule ALPHA reste cohérent sur le périmètre `AUTO-15` pour :
 - la prise en compte des templates actifs, des absences utilisateurs, des contraintes rôles / véhicules et du repos minimum ;
 - la conservation du multi-tenant et des permissions.
 
+### Comparaison recontrôlée
+- les points positifs déjà établis par `AUTO-01` puis `AUTO-LOT-02-14` sont confirmés sur le code réel ;
+- aucun nouveau défaut A9 strictement prouvé n’impose un nouveau correctif dans `AUTO-15` ;
+- les deux résiduels déjà identifiés restent inchangés et maintiennent le verdict global à `PARTIEL`.
+
 ### Résiduels strictement prouvés conservés
 - absence de modèle dédié d’indisponibilité véhicule déclarative ;
 - traduction française encore partielle sur certains éléments techniques internes affichés.
@@ -29,6 +34,6 @@ Le bloc autoschedule ALPHA reste cohérent sur le périmètre `AUTO-15` pour :
 ## Verdict final
 
 - `SESSION AUTO-15 TERMINÉE : OUI`
-- `SESSION SUIVANTE ATTENDUE : CLOTURE_A9 — VALIDATION`
-- `AUTOSCHEDULE EXISTANT COHÉRENT AVEC L’ALPHA : PARTIEL`
 - `DÉCISION PATCH : NO_PATCH`
+- `AUTOSCHEDULE EXISTANT COHÉRENT AVEC L’ALPHA : PARTIEL`
+- `SESSION SUIVANTE : INFORMATION NON FOURNIE — À CONFIRMER`
