@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { z } from "zod";
-import { AutoScheduleStatus, Prisma, RuleMode } from "@prisma/client";
+import { AutoScheduleStatus, Prisma, Role, RuleMode, VehicleStatus, VehicleType } from "@prisma/client";
 
 import { COMPANY_PARAMETER_KEYS } from "@/lib/company-rules/catalog";
 import { loadMinRestCompanyRule } from "@/lib/company-rules/runtime";
@@ -10,6 +10,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { canPublishAutoSchedule } from "@/lib/permissions";
 import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
+import { getAllowedRolesForVehicleType, isRoleAllowedForVehicleType } from "@/lib/templates/template-rules";
 import { buildUserAbsenceMap, findOverlappingUserAbsence, listUserAbsenceWindows } from "@/lib/services/planning/user-absence";
 
 const ParamsSchema = z.object({
@@ -56,6 +57,9 @@ type DraftForPublish = {
   user2Id: string | null;
   vehicleId: string | null;
   notes: string | null;
+  template: { requiredVehicleType: VehicleType | null } | null;
+  user: { role: Role | null } | null;
+  user2: { role: Role | null } | null;
 };
 
 function overlaps(aStart: Date, aEnd: Date, bStart: Date, bEnd: Date): boolean {
@@ -225,6 +229,103 @@ async function checkConflicts(
           },
         };
       }
+    }
+  }
+
+  return { kind: "OK" };
+}
+
+async function checkVehicleConstraints(
+  tx: Prisma.TransactionClient,
+  companyId: string,
+  drafts: DraftForPublish[]
+): Promise<
+  | { kind: "OK" }
+  | {
+      kind: "VEHICLE_UNAVAILABLE";
+      conflict: {
+        vehicleId: string;
+        reason: "INACTIVE" | "STATUS";
+        vehicleStatus: string;
+      };
+    }
+  | {
+      kind: "TEMPLATE_VEHICLE_TYPE_MISMATCH";
+      conflict: {
+        vehicleId: string;
+        vehicleType: string;
+        requiredVehicleType: string;
+      };
+    }
+  | {
+      kind: "ROLE_VEHICLE_RESTRICTION";
+      conflict: {
+        vehicleId: string;
+        vehicleType: string;
+        assignedRoles: string[];
+        allowedRoles: string[];
+      };
+    }
+> {
+  const vehicleIds = Array.from(new Set(drafts.map((draft) => draft.vehicleId).filter(Boolean))) as string[];
+  if (vehicleIds.length === 0) return { kind: "OK" };
+
+  const vehicles = await tx.vehicle.findMany({
+    where: { companyId, id: { in: vehicleIds } },
+    select: { id: true, isActive: true, status: true, type: true },
+  });
+  const vehiclesById = new Map(vehicles.map((vehicle) => [vehicle.id, vehicle]));
+
+  for (const draft of drafts) {
+    if (!draft.vehicleId) continue;
+
+    const vehicle = vehiclesById.get(draft.vehicleId);
+    if (!vehicle || !vehicle.isActive) {
+      return {
+        kind: "VEHICLE_UNAVAILABLE",
+        conflict: {
+          vehicleId: draft.vehicleId,
+          reason: "INACTIVE",
+          vehicleStatus: vehicle?.status ?? "UNKNOWN",
+        },
+      };
+    }
+
+    if (vehicle.status !== VehicleStatus.ACTIVE) {
+      return {
+        kind: "VEHICLE_UNAVAILABLE",
+        conflict: {
+          vehicleId: draft.vehicleId,
+          reason: "STATUS",
+          vehicleStatus: vehicle.status,
+        },
+      };
+    }
+
+    const requiredVehicleType = draft.template?.requiredVehicleType ?? null;
+    if (requiredVehicleType && vehicle.type !== requiredVehicleType) {
+      return {
+        kind: "TEMPLATE_VEHICLE_TYPE_MISMATCH",
+        conflict: {
+          vehicleId: draft.vehicleId,
+          vehicleType: vehicle.type,
+          requiredVehicleType,
+        },
+      };
+    }
+
+    const assignedRoles = [draft.user?.role ?? null, draft.user2?.role ?? null].filter((role): role is Role => Boolean(role));
+    const violatingRole = assignedRoles.find((role) => !isRoleAllowedForVehicleType(vehicle.type, role));
+    if (violatingRole) {
+      return {
+        kind: "ROLE_VEHICLE_RESTRICTION",
+        conflict: {
+          vehicleId: draft.vehicleId,
+          vehicleType: vehicle.type,
+          assignedRoles,
+          allowedRoles: getAllowedRolesForVehicleType(vehicle.type),
+        },
+      };
     }
   }
 
@@ -411,6 +512,9 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
           user2Id: true,
           vehicleId: true,
           notes: true,
+          template: { select: { requiredVehicleType: true } },
+          user: { select: { role: true } },
+          user2: { select: { role: true } },
         },
         orderBy: { startAt: "asc" },
       });
@@ -432,7 +536,19 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
         return { kind: "CONFLICT_VEHICLE" as const, conflict: conflictCheck.conflict };
       }
 
-      // ✅ 3) Repos minimum (CompanyRule)
+      // ✅ 3) Contraintes véhicule (actif, statut, type, rôles compatibles)
+      const vehicleCheck = await checkVehicleConstraints(tx, companyId, drafts as DraftForPublish[]);
+      if (vehicleCheck.kind === "VEHICLE_UNAVAILABLE") {
+        return { kind: "VEHICLE_UNAVAILABLE" as const, conflict: vehicleCheck.conflict };
+      }
+      if (vehicleCheck.kind === "TEMPLATE_VEHICLE_TYPE_MISMATCH") {
+        return { kind: "TEMPLATE_VEHICLE_TYPE_MISMATCH" as const, conflict: vehicleCheck.conflict };
+      }
+      if (vehicleCheck.kind === "ROLE_VEHICLE_RESTRICTION") {
+        return { kind: "ROLE_VEHICLE_RESTRICTION" as const, conflict: vehicleCheck.conflict };
+      }
+
+      // ✅ 4) Repos minimum (CompanyRule)
       const ruleRes = await loadMinRestCompanyRule(tx, companyId);
       if (ruleRes.kind === "CONFIG_ERROR") {
         return { kind: "RULE_CONFIG_ERROR" as const, message: ruleRes.message };
@@ -453,7 +569,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
         }
       }
 
-      // ✅ 4) Publication
+      // ✅ 5) Publication
       await tx.shift.createMany({
         data: drafts.map((d) => ({
           companyId: d.companyId,
@@ -481,7 +597,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
         action: "AUTOSCHEDULE_RUN_PUBLISHED",
         entityType: "AutoScheduleRun",
         entityId: run.id,
-        summary: "Autoschedule run published",
+        summary: "Brouillon autoschedule publié",
         payload: {
           publishedCount: drafts.length,
         },
@@ -511,6 +627,24 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
     if (result.kind === "CONFLICT_VEHICLE") {
       return NextResponse.json(
         { ok: false, error: "CONFLICT_VEHICLE", details: result.conflict },
+        { status: 409 }
+      );
+    }
+    if (result.kind === "VEHICLE_UNAVAILABLE") {
+      return NextResponse.json(
+        { ok: false, error: "VEHICLE_UNAVAILABLE", details: result.conflict },
+        { status: 409 }
+      );
+    }
+    if (result.kind === "TEMPLATE_VEHICLE_TYPE_MISMATCH") {
+      return NextResponse.json(
+        { ok: false, error: "TEMPLATE_VEHICLE_TYPE_MISMATCH", details: result.conflict },
+        { status: 409 }
+      );
+    }
+    if (result.kind === "ROLE_VEHICLE_RESTRICTION") {
+      return NextResponse.json(
+        { ok: false, error: "ROLE_VEHICLE_RESTRICTION", details: result.conflict },
         { status: 409 }
       );
     }

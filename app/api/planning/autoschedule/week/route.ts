@@ -5,11 +5,13 @@ import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import { canAutoSchedule } from "@/lib/permissions";
 import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
+import { autoMatchRunDraftShifts } from "@/lib/services/planning/matching.service";
 
 const BodySchema = z.object({
   // "YYYY-MM-DD" (idéalement lundi; on accepte autre et on ramène au lundi)
   weekStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "weekStart must be YYYY-MM-DD"),
   category: z.enum(["VSL", "AMBULANCE", "TAXI", "GARDE"]).optional(),
+  assignmentMode: z.enum(["SHIFTS_ONLY", "AUTO_ASSIGN"]).optional().default("SHIFTS_ONLY"),
 });
 
 type Category = z.infer<typeof BodySchema>["category"];
@@ -98,6 +100,32 @@ function isAutoscheduleSentinel(v: unknown): v is AutoscheduleSentinel {
   return false;
 }
 
+function toMatchingAuditMetrics(result: unknown): {
+  planCount: number;
+  appliedCount: number;
+  vehicleAppliedCount: number;
+} {
+  if (!Array.isArray(result)) {
+    return { planCount: 0, appliedCount: 0, vehicleAppliedCount: 0 };
+  }
+
+  let appliedCount = 0;
+  let vehicleAppliedCount = 0;
+
+  for (const item of result as Array<{ applied?: boolean; target?: string }>) {
+    if (item.applied === true) {
+      appliedCount += 1;
+      if (item.target === "VEHICLE") vehicleAppliedCount += 1;
+    }
+  }
+
+  return {
+    planCount: result.length,
+    appliedCount,
+    vehicleAppliedCount,
+  };
+}
+
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
 
@@ -130,13 +158,13 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { weekStart, category } = parsed.data;
+  const { weekStart, category, assignmentMode } = parsed.data;
 
   try {
     const monday = toMondayLocal(weekStart);
     const normalizedWeekStart = formatDay(monday);
 
-    const result = await prisma.$transaction(async (tx) => {
+    const createdRun = await prisma.$transaction(async (tx) => {
       // ✅ empêche double génération DRAFT sur la même semaine
       const existingDraft = await tx.autoScheduleRun.findFirst({
         where: {
@@ -238,41 +266,66 @@ export async function POST(req: NextRequest) {
         action: "AUTOSCHEDULE_RUN_CREATED",
         entityType: "AutoScheduleRun",
         entityId: run.id,
-        summary: `Autoschedule WEEK created for ${normalizedWeekStart}${category ? ` (${category})` : ""}`,
+        summary: `Brouillon autoschedule SEMAINE créé pour ${normalizedWeekStart}${category ? ` (${category})` : ""}`,
         payload: {
           scope: "WEEK",
           weekStart: normalizedWeekStart,
           draftCount: draftsData.length,
           category: category ?? null,
+          assignmentMode,
         },
       });
 
-      // IMPORTANT: sécurité multi-tenant sur le read final
-      const full = await tx.autoScheduleRun.findFirst({
-        where: { id: run.id, companyId },
-        include: {
-          draftShifts: {
-            orderBy: { startAt: "asc" },
-            include: { template: true, user: true, vehicle: true },
-          },
-        },
-      });
-
-      return full;
+      return { id: run.id };
     });
 
     // ✅ sentinel NO_TEMPLATES / DRAFT_ALREADY_EXISTS depuis la transaction
-    if (isAutoscheduleSentinel(result)) {
-      if (result.error === "NO_TEMPLATES") {
+    if (isAutoscheduleSentinel(createdRun)) {
+      if (createdRun.error === "NO_TEMPLATES") {
         return NextResponse.json({ ok: false, error: "NO_TEMPLATES" }, { status: 409 });
       }
 
-      if (result.error === "DRAFT_ALREADY_EXISTS") {
-        return NextResponse.json({ ok: false, error: "DRAFT_ALREADY_EXISTS", details: result.details }, { status: 409 });
+      if (createdRun.error === "DRAFT_ALREADY_EXISTS") {
+        return NextResponse.json({ ok: false, error: "DRAFT_ALREADY_EXISTS", details: createdRun.details }, { status: 409 });
       }
     }
 
-    return NextResponse.json({ ok: true, data: result });
+    if (assignmentMode === "AUTO_ASSIGN") {
+      const applied = await autoMatchRunDraftShifts(prisma, {
+        companyId,
+        runId: createdRun.id,
+        dryRun: false,
+      });
+
+      const metrics = toMatchingAuditMetrics(applied);
+      await writePlanningAudit(prisma, {
+        companyId,
+        actorUserId: userId,
+        runId: createdRun.id,
+        action: "AUTOSCHEDULE_MATCH_APPLIED",
+        entityType: "AutoScheduleRun",
+        entityId: createdRun.id,
+        summary: `Auto-affectation autoschedule appliquée (${metrics.appliedCount}/${metrics.planCount})`,
+        payload: {
+          assignmentMode,
+          planCount: metrics.planCount,
+          appliedCount: metrics.appliedCount,
+          vehicleAppliedCount: metrics.vehicleAppliedCount,
+        },
+      });
+    }
+
+    const full = await prisma.autoScheduleRun.findFirst({
+      where: { id: createdRun.id, companyId },
+      include: {
+        draftShifts: {
+          orderBy: { startAt: "asc" },
+          include: { template: true, user: true, user2: true, vehicle: true },
+        },
+      },
+    });
+
+    return NextResponse.json({ ok: true, data: full });
   } catch (e) {
     const mapped = prismaToApiError(e);
     return NextResponse.json(mapped.body, { status: mapped.status });

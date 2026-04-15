@@ -4,13 +4,14 @@ export type PlanningQualityWeights = {
   coverage: number;
   stability: number;
   equity: number;
+  vehicleCoverage: number;
 };
 
 export type PlanningQuality = {
   overall: number;
   weights: PlanningQualityWeights;
-
   coverage: { score: number; covered: number; total: number; pct: number };
+  vehicleCoverage: { score: number; covered: number; total: number; pct: number };
   stability: { score: number; conflicts: number; total: number; pct: number };
   equity: {
     score: number;
@@ -22,23 +23,15 @@ export type PlanningQuality = {
     min: number;
     max: number;
   };
-
-  countsByReason: Record<MatchingReason, number>;
+  countsByReason: Partial<Record<MatchingReason, number>>;
   explanations: string[];
 };
 
 export const PLANNING_QUALITY_DEFAULT_WEIGHTS: PlanningQualityWeights = {
-  coverage: 0.5,
-  stability: 0.3,
-  equity: 0.2,
-};
-
-const EMPTY_COUNTS: Record<MatchingReason, number> = {
-  MATCHED: 0,
-  ALREADY_ASSIGNED: 0,
-  NO_REQUIRED_ROLE: 0,
-  NO_USER_WITH_REQUIRED_ROLE: 0,
-  USER_CONFLICT: 0,
+  coverage: 0.4,
+  vehicleCoverage: 0.2,
+  stability: 0.25,
+  equity: 0.15,
 };
 
 function clampScore(n: number): number {
@@ -53,39 +46,38 @@ function pct(part: number, total: number): number {
   return Math.round((part / total) * 100);
 }
 
-/**
- * Score qualité planning (PROPOSITION à consigner dans REGISTRE_DECISIONS en clôture)
- * - Couverture : % des shifts avec requiredRole assignés (MATCHED ou ALREADY_ASSIGNED)
- * - Stabilité  : pénalité sur USER_CONFLICT (sur shifts avec requiredRole)
- * - Équité     : 1/(1+CV) sur la distribution des assignations par user (MATCHED/ALREADY_ASSIGNED)
- */
 export function computePlanningQuality(
   plan: MatchingPlanItem[],
   weights: PlanningQualityWeights = PLANNING_QUALITY_DEFAULT_WEIGHTS
 ): PlanningQuality {
-  const counts: Record<MatchingReason, number> = { ...EMPTY_COUNTS };
+  const counts = plan.reduce<Partial<Record<MatchingReason, number>>>((acc, item) => {
+    acc[item.reason] = (acc[item.reason] ?? 0) + 1;
+    return acc;
+  }, {});
 
-  for (const item of plan) {
-    const r = item.reason;
-    if (r in counts) counts[r as MatchingReason] = (counts[r as MatchingReason] ?? 0) + 1;
-  }
+  const userTargets = plan.filter((item) => item.target === "USER_1" || item.target === "USER_2");
+  const vehicleTargets = plan.filter((item) => item.target === "VEHICLE");
 
-  const withRole = plan.filter((i) => i.requiredRole !== null);
-  const totalWithRole = withRole.length;
-
-  const covered = withRole.filter((i) => i.reason === "MATCHED" || i.reason === "ALREADY_ASSIGNED").length;
+  const usersWithRole = userTargets.filter((item) => item.requiredRole !== null);
+  const totalWithRole = usersWithRole.length;
+  const covered = usersWithRole.filter((item) => item.reason === "MATCHED" || item.reason === "ALREADY_ASSIGNED").length;
   const coverageScore = totalWithRole === 0 ? 100 : pct(covered, totalWithRole);
 
-  const conflicts = withRole.filter((i) => i.reason === "USER_CONFLICT").length;
-  const stabilityScore = totalWithRole === 0 ? 100 : clampScore(100 - (conflicts / totalWithRole) * 100);
-  const conflictPct = totalWithRole === 0 ? 0 : pct(conflicts, totalWithRole);
+  const totalVehicles = vehicleTargets.length;
+  const coveredVehicles = vehicleTargets.filter((item) => item.reason === "MATCHED" || item.reason === "ALREADY_ASSIGNED").length;
+  const vehicleCoverageScore = totalVehicles === 0 ? 100 : pct(coveredVehicles, totalVehicles);
 
-  // Équité (distribution des assignations par user)
+  const conflictReasons: MatchingReason[] = ["USER_UNAVAILABLE", "MIN_REST_CONFLICT", "VEHICLE_UNAVAILABLE", "ROLE_VEHICLE_RESTRICTION"];
+  const conflicts = plan.filter((item) => conflictReasons.includes(item.reason)).length;
+  const stabilityBase = userTargets.length + vehicleTargets.length;
+  const stabilityScore = stabilityBase === 0 ? 100 : clampScore(100 - (conflicts / stabilityBase) * 100);
+  const conflictPct = stabilityBase === 0 ? 0 : pct(conflicts, stabilityBase);
+
   const byUser = new Map<string, number>();
-  for (const i of plan) {
+  for (const item of userTargets) {
     const assignedUserId =
-      i.reason === "MATCHED" || i.reason === "ALREADY_ASSIGNED"
-        ? (i.proposedUserId ?? i.currentUserId)
+      item.reason === "MATCHED" || item.reason === "ALREADY_ASSIGNED"
+        ? (item.proposedUserId ?? item.currentUserId)
         : null;
 
     if (typeof assignedUserId === "string" && assignedUserId.length > 0) {
@@ -100,50 +92,63 @@ export function computePlanningQuality(
 
   let stdevRaw = 0;
   if (users > 0 && meanRaw > 0) {
-    const variance = userCounts.reduce((acc, c) => acc + (c - meanRaw) ** 2, 0) / users;
+    const variance = userCounts.reduce((acc, count) => acc + (count - meanRaw) ** 2, 0) / users;
     stdevRaw = Math.sqrt(variance);
   }
 
   const cvRaw = meanRaw > 0 ? stdevRaw / meanRaw : 0;
-
   const min = users > 0 ? Math.min(...userCounts) : 0;
   const max = users > 0 ? Math.max(...userCounts) : 0;
-
   const equityScore = users <= 1 ? 100 : clampScore(100 * (1 / (1 + cvRaw)));
 
-  const sumWeights = weights.coverage + weights.stability + weights.equity;
+  const sumWeights = weights.coverage + weights.vehicleCoverage + weights.stability + weights.equity;
   const norm = sumWeights > 0 ? sumWeights : 1;
 
-  const overallRaw =
+  const overall = clampScore(
     coverageScore * (weights.coverage / norm) +
-    stabilityScore * (weights.stability / norm) +
-    equityScore * (weights.equity / norm);
-
-  const overall = clampScore(overallRaw);
-
-  const mean = Number(meanRaw.toFixed(2));
-  const stdev = Number(stdevRaw.toFixed(2));
-  const cv = Number(cvRaw.toFixed(2));
+      vehicleCoverageScore * (weights.vehicleCoverage / norm) +
+      stabilityScore * (weights.stability / norm) +
+      equityScore * (weights.equity / norm)
+  );
 
   const explanations: string[] = [
-    `Couverture: ${covered}/${totalWithRole} shifts avec rôle assignés (MATCHED ou déjà assignés) → ${coverageScore}/100.`,
-    `Stabilité: ${conflicts} conflit(s) utilisateur sur ${totalWithRole} shifts avec rôle (${conflictPct}%) → ${stabilityScore}/100.`,
-    `Équité: ${users} utilisateur(s) assignés, min=${min}, max=${max}, moyenne=${mean}, CV=${cv} → ${equityScore}/100.`,
+    `Couverture employés : ${covered}/${totalWithRole} besoins couverts → ${coverageScore}/100.`,
+    `Couverture véhicules : ${coveredVehicles}/${totalVehicles} besoins couverts → ${vehicleCoverageScore}/100.`,
+    `Stabilité : ${conflicts} signalement(s) bloquants ou indisponibilités sur ${stabilityBase} affectations analysées (${conflictPct}%) → ${stabilityScore}/100.`,
+    `Équité employés : ${users} employé(s) affectés, min=${min}, max=${max}, moyenne=${Number(meanRaw.toFixed(2))}, CV=${Number(cvRaw.toFixed(2))} → ${equityScore}/100.`,
   ];
 
-  const noRole = counts.NO_REQUIRED_ROLE ?? 0;
-  const noUser = counts.NO_USER_WITH_REQUIRED_ROLE ?? 0;
-
-  if (noRole > 0) explanations.push(`Données: ${noRole} shift(s) sans requiredRole → NO_REQUIRED_ROLE.`);
-  if (noUser > 0) explanations.push(`Ressources: ${noUser} shift(s) sans utilisateur avec le rôle requis → NO_USER_WITH_REQUIRED_ROLE.`);
-  if ((counts.USER_CONFLICT ?? 0) > 0) explanations.push(`Conflits: ${counts.USER_CONFLICT} shift(s) non assignés pour conflit utilisateur → USER_CONFLICT.`);
+  if ((counts.NO_REQUIRED_ROLE ?? 0) > 0) {
+    explanations.push(`Templates incomplets : ${counts.NO_REQUIRED_ROLE} slot(s) sans rôle exploitable.`);
+  }
+  if ((counts.NO_USER_WITH_REQUIRED_ROLE ?? 0) > 0) {
+    explanations.push(`Ressources humaines : ${counts.NO_USER_WITH_REQUIRED_ROLE} slot(s) sans employé au rôle requis.`);
+  }
+  if ((counts.NO_VEHICLE_WITH_REQUIRED_TYPE ?? 0) > 0) {
+    explanations.push(`Flotte : ${counts.NO_VEHICLE_WITH_REQUIRED_TYPE} shift(s) sans véhicule actif du type requis.`);
+  }
 
   return {
     overall,
     weights,
     coverage: { score: coverageScore, covered, total: totalWithRole, pct: totalWithRole === 0 ? 100 : pct(covered, totalWithRole) },
-    stability: { score: stabilityScore, conflicts, total: totalWithRole, pct: conflictPct },
-    equity: { score: equityScore, users, totalAssigned, mean, stdev, cv, min, max },
+    vehicleCoverage: {
+      score: vehicleCoverageScore,
+      covered: coveredVehicles,
+      total: totalVehicles,
+      pct: totalVehicles === 0 ? 100 : pct(coveredVehicles, totalVehicles),
+    },
+    stability: { score: stabilityScore, conflicts, total: stabilityBase, pct: conflictPct },
+    equity: {
+      score: equityScore,
+      users,
+      totalAssigned,
+      mean: Number(meanRaw.toFixed(2)),
+      stdev: Number(stdevRaw.toFixed(2)),
+      cv: Number(cvRaw.toFixed(2)),
+      min,
+      max,
+    },
     countsByReason: counts,
     explanations,
   };

@@ -1962,6 +1962,8 @@ C:.
 |   |   |   |   ce889_server_app_api_planning_autoschedule_runs_[id]_route_actions_049023b4.js.map
 |   |   |   |   ce889_server_app_api_users_[id]_absences_[absenceId]_route_actions_85b61270.js
 |   |   |   |   ce889_server_app_api_users_[id]_absences_[absenceId]_route_actions_85b61270.js.map
+|   |   |   |   lib_fc87b4cb._.js
+|   |   |   |   lib_fc87b4cb._.js.map
 |   |   |   |   node_modules_next_dist_esm_build_templates_app-route_d6a474cc.js
 |   |   |   |   node_modules_next_dist_esm_build_templates_app-route_d6a474cc.js.map
 |   |   |   |   node_modules_next_f2da0d3e._.js
@@ -1974,44 +1976,42 @@ C:.
 |   |   |   |   [root-of-the-server]__00ed1d32._.js.map
 |   |   |   |   [root-of-the-server]__0e43a126._.js
 |   |   |   |   [root-of-the-server]__0e43a126._.js.map
+|   |   |   |   [root-of-the-server]__22b2893c._.js
+|   |   |   |   [root-of-the-server]__22b2893c._.js.map
 |   |   |   |   [root-of-the-server]__2a6e04e1._.js
 |   |   |   |   [root-of-the-server]__2a6e04e1._.js.map
 |   |   |   |   [root-of-the-server]__2d31c873._.js
 |   |   |   |   [root-of-the-server]__2d31c873._.js.map
-|   |   |   |   [root-of-the-server]__3a34ebcb._.js
-|   |   |   |   [root-of-the-server]__3a34ebcb._.js.map
-|   |   |   |   [root-of-the-server]__3aed39a5._.js
-|   |   |   |   [root-of-the-server]__3aed39a5._.js.map
 |   |   |   |   [root-of-the-server]__466e0aef._.js
 |   |   |   |   [root-of-the-server]__466e0aef._.js.map
 |   |   |   |   [root-of-the-server]__4acb48f2._.js
 |   |   |   |   [root-of-the-server]__4acb48f2._.js.map
-|   |   |   |   [root-of-the-server]__4ff20d28._.js
-|   |   |   |   [root-of-the-server]__4ff20d28._.js.map
 |   |   |   |   [root-of-the-server]__52980409._.js
 |   |   |   |   [root-of-the-server]__52980409._.js.map
 |   |   |   |   [root-of-the-server]__53c78745._.js
 |   |   |   |   [root-of-the-server]__53c78745._.js.map
+|   |   |   |   [root-of-the-server]__584bcf14._.js
+|   |   |   |   [root-of-the-server]__584bcf14._.js.map
 |   |   |   |   [root-of-the-server]__5bc73c38._.js
 |   |   |   |   [root-of-the-server]__5bc73c38._.js.map
 |   |   |   |   [root-of-the-server]__5e689af6._.js
 |   |   |   |   [root-of-the-server]__5e689af6._.js.map
 |   |   |   |   [root-of-the-server]__5e792a0f._.js
 |   |   |   |   [root-of-the-server]__5e792a0f._.js.map
+|   |   |   |   [root-of-the-server]__8705ac41._.js
+|   |   |   |   [root-of-the-server]__8705ac41._.js.map
 |   |   |   |   [root-of-the-server]__87fabf7c._.js
 |   |   |   |   [root-of-the-server]__87fabf7c._.js.map
 |   |   |   |   [root-of-the-server]__95453b2d._.js
 |   |   |   |   [root-of-the-server]__95453b2d._.js.map
 |   |   |   |   [root-of-the-server]__971ddd5e._.js
 |   |   |   |   [root-of-the-server]__971ddd5e._.js.map
-|   |   |   |   [root-of-the-server]__98c9f376._.js
-|   |   |   |   [root-of-the-server]__98c9f376._.js.map
-|   |   |   |   [root-of-the-server]__a80a03b0._.js
-|   |   |   |   [root-of-the-server]__a80a03b0._.js.map
+|   |   |   |   [root-of-the-server]__a102bfff._.js
+|   |   |   |   [root-of-the-server]__a102bfff._.js.map
+|   |   |   |   [root-of-the-server]__aa14abe7._.js
+|   |   |   |   [root-of-the-server]__aa14abe7._.js.map
 |   |   |   |   [root-of-the-server]__af1fd77a._.js
 |   |   |   |   [root-of-the-server]__af1fd77a._.js.map
-|   |   |   |   [root-of-the-server]__b7025cff._.js
-|   |   |   |   [root-of-the-server]__b7025cff._.js.map
 |   |   |   |   [root-of-the-server]__bcf122bf._.js
 |   |   |   |   [root-of-the-server]__bcf122bf._.js.map
 |   |   |   |   [root-of-the-server]__be307af6._.js
@@ -2046,6 +2046,8 @@ C:.
 |   |   |   |   _2a5caacb._.js.map
 |   |   |   |   _47b770e9._.js
 |   |   |   |   _47b770e9._.js.map
+|   |   |   |   _47d0c915._.js
+|   |   |   |   _47d0c915._.js.map
 |   |   |   |   _4fd12210._.js
 |   |   |   |   _4fd12210._.js.map
 |   |   |   |   _508cdc96._.js
@@ -2066,6 +2068,8 @@ C:.
 |   |   |   |   _c91273c4._.js.map
 |   |   |   |   _de8d9d95._.js
 |   |   |   |   _de8d9d95._.js.map
+|   |   |   |   _e38140df._.js
+|   |   |   |   _e38140df._.js.map
 |   |   |   |   _next-internal_server_app_api_auth_[___nextauth]_route_actions_1c865db8.js
 |   |   |   |   _next-internal_server_app_api_auth_[___nextauth]_route_actions_1c865db8.js.map
 |   |   |   |   _next-internal_server_app_api_company_profile_route_actions_9bff62e4.js
@@ -2284,7 +2288,7 @@ C:.
 |   |   |       a6dad97d9634a72d.js.map
 |   |   |       af7027598a07baa5.js
 |   |   |       b0f4050716b2251b.js
-|   |   |       c6fb41020b3f9844.js
+|   |   |       bcc4058105403686.js
 |   |   |       cdb83a758231f045.js
 |   |   |       daba6dd36b509727.js
 |   |   |       ff1a16fafef87110.js
@@ -2293,7 +2297,7 @@ C:.
 |   |   +---media
 |   |   |       favicon.0b3bf435.ico
 |   |   |       
-|   |   \---qezK91YhqlATdZiuRCQF_
+|   |   \---N9McT4Z7O8Ya3BUPhCAhX
 |   |           _buildManifest.js
 |   |           _clientMiddlewareManifest.json
 |   |           _ssgManifest.js
@@ -3796,6 +3800,8 @@ C:.
 |   |           |       README_PATCH.md
 |   |           |       
 |   |           +---SESSION-20260415-06_A9_AUTO-LOT-02-14
+|   |           |       PATCH__SESSION-20260415-06_A9_AUTO-LOT-02-14.diff
+|   |           |       PATCH__SESSION-20260415-06_A9_AUTO-LOT-02-14_FIX-01.diff
 |   |           |       README_PATCH.md
 |   |           |       
 |   |           +---SESSION-20260415-07_A9_AUTO-15

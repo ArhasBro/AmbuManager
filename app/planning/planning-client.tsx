@@ -99,24 +99,35 @@ function isNumber(v: unknown): v is number {
 }
 
 // 4.6 matching types (UI) — alignés service/API
-type MatchingReason =
-  | "MATCHED"
-  | "ALREADY_ASSIGNED"
-  | "NO_REQUIRED_ROLE"
-  | "NO_USER_WITH_REQUIRED_ROLE"
-  | "USER_CONFLICT";
+const MATCHING_REASONS = [
+  "MATCHED",
+  "ALREADY_ASSIGNED",
+  "NO_REQUIRED_ROLE",
+  "NO_USER_WITH_REQUIRED_ROLE",
+  "USER_UNAVAILABLE",
+  "MIN_REST_CONFLICT",
+  "NO_VEHICLE_WITH_REQUIRED_TYPE",
+  "VEHICLE_UNAVAILABLE",
+  "ROLE_VEHICLE_RESTRICTION",
+] as const;
+
+type MatchingReason = (typeof MATCHING_REASONS)[number];
+type MatchingTarget = "USER_1" | "USER_2" | "VEHICLE";
+type AssignmentMode = "SHIFTS_ONLY" | "AUTO_ASSIGN";
 
 type MatchingPlanItem = {
   shiftId: string;
-
-  // ✅ renvoyés par le service (ISO)
   startAt: string;
   endAt: string;
-
+  target: MatchingTarget;
   requiredRole: string | null;
+  requiredVehicleType: string | null;
   currentUserId: string | null;
   proposedUserId: string | null;
+  currentVehicleId: string | null;
+  proposedVehicleId: string | null;
   reason: MatchingReason;
+  message: string;
 };
 
 type MatchingApplyItem = MatchingPlanItem & { applied: boolean };
@@ -124,6 +135,7 @@ type MatchingApplyItem = MatchingPlanItem & { applied: boolean };
 type PlanningQuality = {
   overall: number;
   coverage: { score: number; covered: number; total: number; pct: number };
+  vehicleCoverage: { score: number; covered: number; total: number; pct: number };
   stability: { score: number; conflicts: number; total: number; pct: number };
   equity: {
     score: number;
@@ -135,20 +147,17 @@ type PlanningQuality = {
     min: number;
     max: number;
   };
-  countsByReason: Record<MatchingReason, number>;
+  countsByReason: Partial<Record<MatchingReason, number>>;
   explanations: string[];
 };
 
-function isCountsByReason(v: unknown): v is Record<MatchingReason, number> {
+function isMatchingReason(v: unknown): v is MatchingReason {
+  return typeof v === "string" && MATCHING_REASONS.includes(v as MatchingReason);
+}
+
+function isCountsByReason(v: unknown): v is Partial<Record<MatchingReason, number>> {
   if (!isRecord(v)) return false;
-  const keys: MatchingReason[] = [
-    "MATCHED",
-    "ALREADY_ASSIGNED",
-    "NO_REQUIRED_ROLE",
-    "NO_USER_WITH_REQUIRED_ROLE",
-    "USER_CONFLICT",
-  ];
-  return keys.every((k) => isNumber(v[k]));
+  return Object.entries(v).every(([key, value]) => isMatchingReason(key) && isNumber(value));
 }
 
 function isPlanningQuality(v: unknown): v is PlanningQuality {
@@ -156,6 +165,7 @@ function isPlanningQuality(v: unknown): v is PlanningQuality {
 
   if (!isNumber(v.overall)) return false;
   if (!isRecord(v.coverage) || !isNumber(v.coverage.score)) return false;
+  if (!isRecord(v.vehicleCoverage) || !isNumber(v.vehicleCoverage.score)) return false;
   if (!isRecord(v.stability) || !isNumber(v.stability.score)) return false;
   if (!isRecord(v.equity) || !isNumber(v.equity.score)) return false;
 
@@ -171,38 +181,100 @@ function isMatchingPlanItem(v: unknown): v is MatchingPlanItem {
   const shiftIdOk = typeof v.shiftId === "string";
   const startAtOk = typeof v.startAt === "string";
   const endAtOk = typeof v.endAt === "string";
-
+  const targetOk = v.target === "USER_1" || v.target === "USER_2" || v.target === "VEHICLE";
   const requiredRoleOk = v.requiredRole === null || typeof v.requiredRole === "string";
+  const requiredVehicleTypeOk = v.requiredVehicleType === null || typeof v.requiredVehicleType === "string";
   const currentUserIdOk = v.currentUserId === null || typeof v.currentUserId === "string";
   const proposedUserIdOk = v.proposedUserId === null || typeof v.proposedUserId === "string";
-
-  const reasonOk =
-    v.reason === "MATCHED" ||
-    v.reason === "ALREADY_ASSIGNED" ||
-    v.reason === "NO_REQUIRED_ROLE" ||
-    v.reason === "NO_USER_WITH_REQUIRED_ROLE" ||
-    v.reason === "USER_CONFLICT";
+  const currentVehicleIdOk = v.currentVehicleId === null || typeof v.currentVehicleId === "string";
+  const proposedVehicleIdOk = v.proposedVehicleId === null || typeof v.proposedVehicleId === "string";
+  const reasonOk = isMatchingReason(v.reason);
+  const messageOk = typeof v.message === "string";
 
   return (
     shiftIdOk &&
     startAtOk &&
     endAtOk &&
+    targetOk &&
     requiredRoleOk &&
+    requiredVehicleTypeOk &&
     currentUserIdOk &&
     proposedUserIdOk &&
-    reasonOk
+    currentVehicleIdOk &&
+    proposedVehicleIdOk &&
+    reasonOk &&
+    messageOk
   );
 }
 
 function isMatchingApplyItem(v: unknown): v is MatchingApplyItem {
   if (!isRecord(v)) return false;
   if (!isMatchingPlanItem(v)) return false;
-
-  // v est déjà un objet : on vérifie applied sans le typer en MatchingPlanItem
   return "applied" in v && typeof (v as Record<string, unknown>).applied === "boolean";
 }
 
+function formatAssignmentModeLabel(mode: AssignmentMode) {
+  return mode === "AUTO_ASSIGN" ? "shifts + auto-affectation" : "shifts seuls";
+}
+
+function formatRunStatusLabel(status: string | null) {
+  if (status === "DRAFT") return "brouillon";
+  if (status === "PUBLISHED") return "publié";
+  if (status === "CANCELLED") return "annulé";
+  return status ?? "inconnu";
+}
+
+function formatMatchingReasonLabel(reason: MatchingReason) {
+  switch (reason) {
+    case "MATCHED":
+      return "Affecté automatiquement";
+    case "ALREADY_ASSIGNED":
+      return "Déjà affecté";
+    case "NO_REQUIRED_ROLE":
+      return "Rôle non défini";
+    case "NO_USER_WITH_REQUIRED_ROLE":
+      return "Aucun employé au rôle requis";
+    case "USER_UNAVAILABLE":
+      return "Employés indisponibles";
+    case "MIN_REST_CONFLICT":
+      return "Repos minimum bloquant";
+    case "NO_VEHICLE_WITH_REQUIRED_TYPE":
+      return "Aucun véhicule du type requis";
+    case "VEHICLE_UNAVAILABLE":
+      return "Véhicules indisponibles";
+    case "ROLE_VEHICLE_RESTRICTION":
+      return "Rôle incompatible avec le véhicule";
+    default:
+      return reason;
+  }
+}
+
+function formatMatchingTargetLabel(target: MatchingTarget) {
+  switch (target) {
+    case "USER_1":
+      return "Employé 1";
+    case "USER_2":
+      return "Employé 2";
+    case "VEHICLE":
+      return "Véhicule";
+    default:
+      return target;
+  }
+}
+
+function getReasonCount(counts: Partial<Record<MatchingReason, number>>, reason: MatchingReason) {
+  return counts[reason] ?? 0;
+}
+
+function getDraftAlreadyExistsRunId(json: unknown): string | null {
+  if (!isRecord(json) || json.error !== "DRAFT_ALREADY_EXISTS") return null;
+  if (typeof json.runId === "string") return json.runId;
+  if (isRecord(json.details) && typeof json.details.runId === "string") return json.details.runId;
+  return null;
+}
+
 function formatDate(d: Date) {
+
   const Y = d.getFullYear();
   const M = String(d.getMonth() + 1).padStart(2, "0");
   const D = String(d.getDate()).padStart(2, "0");
@@ -304,14 +376,14 @@ function formatManualAssignIssues(issues: ManualAssignIssue[]): string | null {
 }
 
 function countByReason(items: MatchingPlanItem[]) {
-  const out: Record<MatchingReason, number> = {
-    MATCHED: 0,
-    ALREADY_ASSIGNED: 0,
-    NO_REQUIRED_ROLE: 0,
-    NO_USER_WITH_REQUIRED_ROLE: 0,
-    USER_CONFLICT: 0,
-  };
-  for (const it of items) out[it.reason] += 1;
+  const out: Partial<Record<MatchingReason, number>> = Object.fromEntries(
+    MATCHING_REASONS.map((reason) => [reason, 0])
+  ) as Partial<Record<MatchingReason, number>>;
+
+  for (const it of items) {
+    out[it.reason] = (out[it.reason] ?? 0) + 1;
+  }
+
   return out;
 }
 
@@ -352,6 +424,7 @@ export default function PlanningClient({
 
   const [genLoading, setGenLoading] = useState(false);
   const [genMsg, setGenMsg] = useState<string | null>(null);
+  const [assignmentMode, setAssignmentMode] = useState<AssignmentMode>("SHIFTS_ONLY");
   const [lastRunId, setLastRunId] = useState<string | null>(null);
 
   const [pubLoading, setPubLoading] = useState(false);
@@ -724,18 +797,13 @@ export default function PlanningClient({
       const { res, json, text } = await fetchJson("/api/planning/autoschedule/week", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ weekStart: weekStartStr }),
+        body: JSON.stringify({ weekStart: weekStartStr, assignmentMode }),
       });
 
-      if (
-        (!res.ok || !jsonOkPayload(json)) &&
-        isRecord(json) &&
-        json.error === "DRAFT_ALREADY_EXISTS" &&
-        "runId" in json
-      ) {
-        const existingRunId = getString(json.runId);
+      const existingRunId = getDraftAlreadyExistsRunId(json);
+      if ((!res.ok || !jsonOkPayload(json)) && existingRunId) {
         setLastRunId(existingRunId);
-        setGenMsg(`Brouillon déjà existant ↩️ (runId: ${existingRunId})`);
+        setGenMsg(`Un brouillon existe déjà pour cette semaine ↩️ (runId: ${existingRunId}).`);
         await loadRunInfo(existingRunId);
         return;
       }
@@ -751,18 +819,18 @@ export default function PlanningClient({
       setLastRunId(runId);
 
       if (runId) {
-        setGenMsg(`Brouillon généré ✅ (runId: ${runId})`);
+        setGenMsg(`Brouillon semaine généré en mode ${formatAssignmentModeLabel(assignmentMode)} ✅ (runId: ${runId})`);
         await loadRunInfo(runId);
       } else {
-        setGenMsg("Brouillon généré ✅");
+        setGenMsg(`Brouillon semaine généré en mode ${formatAssignmentModeLabel(assignmentMode)} ✅`);
       }
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Unknown error";
-      setGenMsg(`Erreur génération: ${msg}`);
+      setGenMsg(`Erreur génération semaine : ${msg}`);
     } finally {
       setGenLoading(false);
     }
-  }, [weekStartStr, loadRunInfo, clearMatchUi]);
+  }, [weekStartStr, assignmentMode, loadRunInfo, clearMatchUi]);
 
   const generateDay = useCallback(
     async (dayStr: string) => {
@@ -784,18 +852,13 @@ export default function PlanningClient({
         const { res, json, text } = await fetchJson("/api/planning/autoschedule/day", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ day: dayStr }),
+          body: JSON.stringify({ day: dayStr, assignmentMode }),
         });
 
-        if (
-          (!res.ok || !jsonOkPayload(json)) &&
-          isRecord(json) &&
-          json.error === "DRAFT_ALREADY_EXISTS" &&
-          "runId" in json
-        ) {
-          const existingRunId = getString(json.runId);
+        const existingRunId = getDraftAlreadyExistsRunId(json);
+        if ((!res.ok || !jsonOkPayload(json)) && existingRunId) {
           setLastRunId(existingRunId);
-          setDayGenMsg(`Brouillon déjà existant ↩️ (day: ${dayStr}, runId: ${existingRunId})`);
+          setDayGenMsg(`Un brouillon existe déjà pour le ${dayStr} ↩️ (runId: ${existingRunId}).`);
           await loadRunInfo(existingRunId);
           return;
         }
@@ -811,19 +874,19 @@ export default function PlanningClient({
         setLastRunId(runId);
 
         if (runId) {
-          setDayGenMsg(`Jour généré ✅ (day: ${dayStr}, runId: ${runId})`);
+          setDayGenMsg(`Jour généré en mode ${formatAssignmentModeLabel(assignmentMode)} ✅ (${dayStr}, runId: ${runId})`);
           await loadRunInfo(runId);
         } else {
-          setDayGenMsg(`Jour généré ✅ (day: ${dayStr})`);
+          setDayGenMsg(`Jour généré en mode ${formatAssignmentModeLabel(assignmentMode)} ✅ (${dayStr})`);
         }
       } catch (e: unknown) {
         const msg = e instanceof Error ? e.message : "Unknown error";
-        setDayGenMsg(`Erreur génération jour: ${msg}`);
+        setDayGenMsg(`Erreur génération jour : ${msg}`);
       } finally {
         setDayGenLoadingKey(null);
       }
     },
-    [loadRunInfo, clearMatchUi]
+    [assignmentMode, loadRunInfo, clearMatchUi]
   );
 
   const previewMatch = useCallback(async () => {
@@ -840,7 +903,7 @@ export default function PlanningClient({
       await loadRunInfo(lastRunId);
 
       if (lastRunStatus && lastRunStatus !== "DRAFT") {
-        setMatchMsg(`Impossible : run.status=${lastRunStatus}`);
+        setMatchMsg(`Impossible : le run courant est ${formatRunStatusLabel(lastRunStatus)}.`);
         setMatchPreviewRunId(null);
         setMatchPreview(null);
         setMatchQuality(null);
@@ -848,7 +911,7 @@ export default function PlanningClient({
       }
 
       if (typeof lastRunDraftCount === "number" && lastRunDraftCount <= 0) {
-        setMatchMsg("Impossible : aucun DraftShift (NO_DRAFTS).");
+        setMatchMsg("Impossible : aucun brouillon de shift n’est présent sur ce run.");
         setMatchPreviewRunId(null);
         setMatchPreview(null);
         setMatchQuality(null);
@@ -890,12 +953,12 @@ export default function PlanningClient({
 
       setMatchMsg(
         q
-          ? `Simulation OK ✅ — Score:${q.overall}/100 (Couv:${q.coverage.score}, Stab:${q.stability.score}, Eq:${q.equity.score}) — MATCHED:${c.MATCHED}, ALREADY_ASSIGNED:${c.ALREADY_ASSIGNED}, NO_REQUIRED_ROLE:${c.NO_REQUIRED_ROLE}, NO_USER_WITH_REQUIRED_ROLE:${c.NO_USER_WITH_REQUIRED_ROLE}, USER_CONFLICT:${c.USER_CONFLICT}`
-          : `Simulation OK ✅ — MATCHED:${c.MATCHED}, ALREADY_ASSIGNED:${c.ALREADY_ASSIGNED}, NO_REQUIRED_ROLE:${c.NO_REQUIRED_ROLE}, NO_USER_WITH_REQUIRED_ROLE:${c.NO_USER_WITH_REQUIRED_ROLE}, USER_CONFLICT:${c.USER_CONFLICT}`
+          ? `Simulation OK ✅ — Score ${q.overall}/100 (employés ${q.coverage.score}/100, véhicules ${q.vehicleCoverage.score}/100, stabilité ${q.stability.score}/100, équité ${q.equity.score}/100).`
+          : `Simulation OK ✅ — ${getReasonCount(c, "MATCHED")} affectation(s) proposées, ${getReasonCount(c, "ALREADY_ASSIGNED")} déjà en place, ${getReasonCount(c, "NO_USER_WITH_REQUIRED_ROLE") + getReasonCount(c, "NO_VEHICLE_WITH_REQUIRED_TYPE")} manque(s) de ressources.`
       );
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Unknown error";
-      setMatchMsg(`Erreur simulation: ${msg}`);
+      setMatchMsg(`Erreur simulation auto-affectation : ${msg}`);
       setMatchPreview(null);
       setMatchQuality(null);
       setMatchPreviewRunId(null);
@@ -909,24 +972,24 @@ export default function PlanningClient({
 
     // ✅ guard : preview obligatoire et doit correspondre au run courant
     if (matchPreview === null || matchPreviewRunId !== lastRunId) {
-      setMatchMsg("⛔ Fais d’abord une simulation (Simuler auto-assign) sur le run courant avant d’appliquer.");
+      setMatchMsg("⛔ Lance d’abord une simulation sur le run courant avant d’appliquer l’auto-affectation.");
       return;
     }
 
     await loadRunInfo(lastRunId);
 
     if (lastRunStatus && lastRunStatus !== "DRAFT") {
-      setMatchMsg(`Impossible : run.status=${lastRunStatus}`);
+      setMatchMsg(`Impossible : le run courant est ${formatRunStatusLabel(lastRunStatus)}.`);
       return;
     }
 
     if (typeof lastRunDraftCount === "number" && lastRunDraftCount <= 0) {
-      setMatchMsg("Impossible : aucun DraftShift (NO_DRAFTS).");
+      setMatchMsg("Impossible : aucun brouillon de shift n’est présent sur ce run.");
       return;
     }
 
     const confirmed = window.confirm(
-      "Appliquer l’auto-assign ?\n\nCela va modifier les DraftShifts du run (userId ou user2Id selon le slot libre) selon le matching."
+      "Appliquer l’auto-affectation ?\n\nCela va modifier les brouillons du run en affectant les employés et véhicules proposés par la simulation."
     );
     if (!confirmed) return;
 
@@ -948,13 +1011,13 @@ export default function PlanningClient({
 
         if (err === "MATCH_STALE_STATE") {
           setMatchApplied(null);
-          setMatchMsg("⛔ Le brouillon a changé depuis la simulation. Relance 'Simuler auto-assign' puis ré-applique.");
+          setMatchMsg("⛔ Le brouillon a changé depuis la simulation. Relance la simulation puis réapplique.");
           return;
         }
 
         if (err === "RUN_NOT_DRAFT") {
           setMatchApplied(null);
-          setMatchMsg("⛔ Impossible : le run n’est plus en DRAFT.");
+          setMatchMsg("⛔ Impossible : le run n’est plus en brouillon.");
           return;
         }
 
@@ -970,13 +1033,13 @@ export default function PlanningClient({
       setMatchPreviewRunId(lastRunId);
 
       const { applied: appliedCount, notApplied } = countApplied(applied);
-      setMatchMsg(`Application OK ✅ — applied:${appliedCount}, skipped:${notApplied}`);
+      setMatchMsg(`Application OK ✅ — ${appliedCount} affectation(s) appliquée(s), ${notApplied} non appliquée(s).`);
 
       await loadShiftsForWeek(weekStartStr, selectedUserId);
       await loadRunInfo(lastRunId);
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Unknown error";
-      setMatchMsg(`Erreur apply: ${msg}`);
+      setMatchMsg(`Erreur application auto-affectation : ${msg}`);
       setMatchApplied(null);
     } finally {
       setMatchApplyLoading(false);
@@ -1002,17 +1065,17 @@ export default function PlanningClient({
     await loadRunInfo(lastRunId);
 
     if (lastRunStatus && lastRunStatus !== "DRAFT") {
-      setPubMsg(`Impossible de publier : run.status=${lastRunStatus}`);
+      setPubMsg(`Impossible de publier : le run courant est ${formatRunStatusLabel(lastRunStatus)}.`);
       return;
     }
 
     if (typeof lastRunDraftCount === "number" && lastRunDraftCount <= 0) {
-      setPubMsg("Impossible de publier : aucun DraftShift (NO_DRAFTS). Vérifie tes ShiftTemplates actifs / génération.");
+      setPubMsg("Impossible de publier : aucun brouillon de shift n’est présent sur ce run.");
       return;
     }
 
     const confirmed = window.confirm(
-      "Publier ce brouillon ?\n\nCela va copier les DraftShifts vers les Shifts réels et passer le run en PUBLISHED."
+      "Publier ce brouillon ?\n\nCela va copier les brouillons vers les shifts publiés et passer le run à l’état publié."
     );
     if (!confirmed) return;
 
@@ -1074,6 +1137,26 @@ export default function PlanningClient({
           return;
         }
 
+        if (err === "VEHICLE_UNAVAILABLE" && isRecord(json) && isRecord(json.details)) {
+          const d = json.details as JsonRecord;
+          setPubMsg(`Publication bloquée ⛔ (véhicule indisponible : ${getString(d.vehicleId)} / ${getString(d.vehicleStatus)}).`);
+          return;
+        }
+
+        if (err === "TEMPLATE_VEHICLE_TYPE_MISMATCH" && isRecord(json) && isRecord(json.details)) {
+          const d = json.details as JsonRecord;
+          setPubMsg(`Publication bloquée ⛔ (type véhicule incompatible : ${getString(d.vehicleType)} au lieu de ${getString(d.requiredVehicleType)}).`);
+          return;
+        }
+
+        if (err === "ROLE_VEHICLE_RESTRICTION" && isRecord(json) && isRecord(json.details)) {
+          const d = json.details as JsonRecord;
+          const assignedRoles = Array.isArray(d.assignedRoles) ? d.assignedRoles.map(getString).join(", ") : "non définis";
+          const allowedRoles = Array.isArray(d.allowedRoles) ? d.allowedRoles.map(getString).join(", ") : "non définis";
+          setPubMsg(`Publication bloquée ⛔ (rôles ${assignedRoles} non autorisés sur ce véhicule ; autorisés : ${allowedRoles}).`);
+          return;
+        }
+
         throw new Error(`${err}${text ? ` - ${text}` : ""}`);
       }
 
@@ -1081,14 +1164,14 @@ export default function PlanningClient({
       const warnings = isRecord(data) ? safeArray<RestWarning>(data.warnings) : [];
       setPubWarnings(warnings);
 
-      if (warnings.length > 0) setPubMsg(`Brouillon publié ✅ avec ${warnings.length} avertissement(s).`);
-      else setPubMsg("Brouillon publié ✅ (run: PUBLISHED)");
+      if (warnings.length > 0) setPubMsg(`Brouillon publié ✅ avec ${warnings.length} avertissement(s) métier.`);
+      else setPubMsg("Brouillon publié ✅");
 
       await loadShiftsForWeek(weekStartStr, selectedUserId);
       await loadRunInfo(lastRunId);
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Unknown error";
-      setPubMsg(`Erreur publish: ${msg}`);
+      setPubMsg(`Erreur publication : ${msg}`);
     } finally {
       setPubLoading(false);
     }
@@ -1102,7 +1185,7 @@ export default function PlanningClient({
 
     await loadRunInfo(lastRunId);
     if (lastRunStatus && lastRunStatus !== "DRAFT") {
-      setCancelMsg(`Impossible d’annuler : run.status=${lastRunStatus}`);
+      setCancelMsg(`Impossible d’annuler : le run courant est ${formatRunStatusLabel(lastRunStatus)}.`);
       return;
     }
 
@@ -1122,11 +1205,11 @@ export default function PlanningClient({
         throw new Error(`${err}${text ? ` - ${text}` : ""}`);
       }
 
-      setCancelMsg("Run annulé ✅ (status: CANCELLED)");
+      setCancelMsg("Brouillon autoschedule annulé ✅");
       await loadRunInfo(lastRunId);
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Unknown error";
-      setCancelMsg(`Erreur cancel: ${msg}`);
+      setCancelMsg(`Erreur annulation : ${msg}`);
     } finally {
       setCancelLoading(false);
     }
@@ -1392,9 +1475,9 @@ export default function PlanningClient({
                   borderRadius: 8,
                   opacity: matchDisabled ? 0.6 : 1,
                 }}
-                title="Simule l’auto-assign (sans écriture DB) sur le dernier run DRAFT"
+                title="Simule l’auto-affectation employés + véhicules sans écrire en base sur le dernier brouillon"
               >
-                {matchPreviewLoading ? "Simulation…" : "Simuler auto-assign"}
+                {matchPreviewLoading ? "Simulation…" : "Simuler l’auto-affectation"}
               </button>
 
               <button
@@ -1406,14 +1489,24 @@ export default function PlanningClient({
                   borderRadius: 8,
                   opacity: matchDisabled || applyBlocked ? 0.6 : 1,
                 }}
-                title={applyBlocked ? "Simulation requise sur le run courant" : "Applique l’auto-assign sur le dernier run DRAFT"}
+                title={applyBlocked ? "Simulation requise sur le run courant" : "Applique l’auto-affectation sur le dernier brouillon"}
               >
-                {matchApplyLoading ? "Application…" : "Appliquer auto-assign"}
+                {matchApplyLoading ? "Application…" : "Appliquer l’auto-affectation"}
               </button>
             </>
           )}
 
-          {canEditPlanning && listsError && <span style={{ fontSize: 12, opacity: 0.8 }}>Listes: erreur ({listsError})</span>}
+          {canEditPlanning && listsError && <span style={{ fontSize: 12, opacity: 0.8 }}>Listes : erreur ({listsError})</span>}
+
+          {canAutoSchedule && (
+            <label style={{ display: "flex", gap: 6, alignItems: "center", fontSize: 12, opacity: 0.9 }}>
+              <span>Mode autoschedule :</span>
+              <select value={assignmentMode} onChange={(e) => setAssignmentMode(e.target.value as AssignmentMode)}>
+                <option value="SHIFTS_ONLY">Générer les shifts seuls</option>
+                <option value="AUTO_ASSIGN">Générer + auto-affecter employés et véhicules</option>
+              </select>
+            </label>
+          )}
 
           {canAutoSchedule && (
             <>
@@ -1426,9 +1519,9 @@ export default function PlanningClient({
                   borderRadius: 8,
                   opacity: genLoading ? 0.7 : 1,
                 }}
-                title="Génère un brouillon (DraftShifts) pour la semaine affichée"
+                title="Génère un brouillon pour la semaine affichée selon le mode choisi"
               >
-                {genLoading ? "Génération…" : "Générer cette semaine"}
+                {genLoading ? "Génération…" : "Générer la semaine"}
               </button>
 
               <button
@@ -1440,7 +1533,7 @@ export default function PlanningClient({
                   borderRadius: 8,
                   opacity: publishDisabled ? 0.6 : 1,
                 }}
-                title="Publie le dernier run DRAFT"
+                title="Publie le dernier brouillon autoschedule"
               >
                 {pubLoading ? "Publication…" : "Publier le brouillon"}
               </button>
@@ -1454,7 +1547,7 @@ export default function PlanningClient({
                   borderRadius: 8,
                   opacity: cancelLoading ? 0.7 : 1,
                 }}
-                title="Annule le dernier run DRAFT"
+                title="Annule le dernier brouillon autoschedule"
               >
                 {cancelLoading ? "Annulation…" : "Annuler le brouillon"}
               </button>
@@ -1524,8 +1617,7 @@ export default function PlanningClient({
         <div style={{ border: "1px solid rgba(255,255,255,0.18)", borderRadius: 10, padding: 10, marginTop: 8 }}>
           <div style={{ fontWeight: 900 }}>Score qualité planning : {matchQuality.overall}/100</div>
           <div style={{ fontSize: 12, opacity: 0.9, marginTop: 6 }}>
-            Couverture {matchQuality.coverage.score}/100 — Stabilité {matchQuality.stability.score}/100 — Équité{" "}
-            {matchQuality.equity.score}/100
+            Couverture employés {matchQuality.coverage.score}/100 — Couverture véhicules {matchQuality.vehicleCoverage.score}/100 — Stabilité {matchQuality.stability.score}/100 — Équité {matchQuality.equity.score}/100
           </div>
           <ul style={{ marginTop: 8, paddingLeft: 18, opacity: 0.95 }}>
             {matchQuality.explanations.map((t, i) => (
@@ -1541,7 +1633,7 @@ export default function PlanningClient({
       {(matchPreview || matchApplied) && (
         <div style={{ border: "1px solid rgba(255,255,255,0.18)", borderRadius: 10, padding: 10 }}>
           <div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: "baseline" }}>
-            <div style={{ fontWeight: 900 }}>Auto-assign (4.6)</div>
+            <div style={{ fontWeight: 900 }}>Auto-affectation autoschedule</div>
             <button
               onClick={() => {
                 setMatchMsg(null);
@@ -1564,15 +1656,13 @@ export default function PlanningClient({
 
           {previewSummary && (
             <div style={{ marginTop: 6, fontSize: 12, opacity: 0.9 }}>
-              Simulation — MATCHED:{previewSummary.MATCHED}, ALREADY_ASSIGNED:{previewSummary.ALREADY_ASSIGNED}, NO_REQUIRED_ROLE:
-              {previewSummary.NO_REQUIRED_ROLE}, NO_USER_WITH_REQUIRED_ROLE:{previewSummary.NO_USER_WITH_REQUIRED_ROLE}, USER_CONFLICT:
-              {previewSummary.USER_CONFLICT}
+              Simulation — proposés {getReasonCount(previewSummary, "MATCHED")}, déjà affectés {getReasonCount(previewSummary, "ALREADY_ASSIGNED")}, indisponibilités employés {getReasonCount(previewSummary, "USER_UNAVAILABLE")}, repos minimum {getReasonCount(previewSummary, "MIN_REST_CONFLICT")}, indisponibilités véhicules {getReasonCount(previewSummary, "VEHICLE_UNAVAILABLE")}, rôles incompatibles véhicule {getReasonCount(previewSummary, "ROLE_VEHICLE_RESTRICTION")}
             </div>
           )}
 
           {appliedSummary && (
             <div style={{ marginTop: 6, fontSize: 12, opacity: 0.9 }}>
-              Application — applied:{appliedSummary.applied}, skipped:{appliedSummary.notApplied}
+              Application — {appliedSummary.applied} affectation(s) appliquée(s), {appliedSummary.notApplied} non appliquée(s)
             </div>
           )}
 
@@ -1580,29 +1670,36 @@ export default function PlanningClient({
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
               <thead>
                 <tr style={{ textAlign: "left", opacity: 0.85 }}>
-                  <th style={{ padding: "6px 6px" }}>shiftId</th>
-                  <th style={{ padding: "6px 6px" }}>start</th>
-                  <th style={{ padding: "6px 6px" }}>end</th>
-                  <th style={{ padding: "6px 6px" }}>requiredRole</th>
-                  <th style={{ padding: "6px 6px" }}>proposedUserId</th>
-                  <th style={{ padding: "6px 6px" }}>reason</th>
-                  <th style={{ padding: "6px 6px" }}>applied</th>
+                  <th style={{ padding: "6px 6px" }}>Cible</th>
+                  <th style={{ padding: "6px 6px" }}>Shift</th>
+                  <th style={{ padding: "6px 6px" }}>Début</th>
+                  <th style={{ padding: "6px 6px" }}>Fin</th>
+                  <th style={{ padding: "6px 6px" }}>Besoin</th>
+                  <th style={{ padding: "6px 6px" }}>Proposition</th>
+                  <th style={{ padding: "6px 6px" }}>Signalement</th>
+                  <th style={{ padding: "6px 6px" }}>Appliqué</th>
                 </tr>
               </thead>
               <tbody>
-                {(matchApplied ?? matchPreview ?? []).slice(0, 200).map((it) => (
-                  <tr key={it.shiftId} style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
-                    <td style={{ padding: "6px 6px", opacity: 0.9 }}>{it.shiftId}</td>
-                    <td style={{ padding: "6px 6px", opacity: 0.9 }}>{timeHM(it.startAt)}</td>
-                    <td style={{ padding: "6px 6px", opacity: 0.9 }}>{timeHM(it.endAt)}</td>
-                    <td style={{ padding: "6px 6px", opacity: 0.9 }}>{it.requiredRole ?? "—"}</td>
-                    <td style={{ padding: "6px 6px", opacity: 0.9 }}>{it.proposedUserId ?? "—"}</td>
-                    <td style={{ padding: "6px 6px", opacity: 0.9 }}>{it.reason}</td>
-                    <td style={{ padding: "6px 6px", opacity: 0.9 }}>
-                      {isMatchingApplyItem(it) ? (it.applied ? "✅" : "—") : "—"}
-                    </td>
-                  </tr>
-                ))}
+                {(matchApplied ?? matchPreview ?? []).slice(0, 200).map((it, index) => {
+                  const needLabel = it.target === "VEHICLE" ? (it.requiredVehicleType ?? "—") : (it.requiredRole ?? "—");
+                  const proposalLabel = it.target === "VEHICLE" ? (it.proposedVehicleId ?? it.currentVehicleId ?? "—") : (it.proposedUserId ?? it.currentUserId ?? "—");
+
+                  return (
+                    <tr key={`${it.shiftId}-${it.target}-${index}`} style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+                      <td style={{ padding: "6px 6px", opacity: 0.9 }}>{formatMatchingTargetLabel(it.target)}</td>
+                      <td style={{ padding: "6px 6px", opacity: 0.9 }}>{it.shiftId}</td>
+                      <td style={{ padding: "6px 6px", opacity: 0.9 }}>{timeHM(it.startAt)}</td>
+                      <td style={{ padding: "6px 6px", opacity: 0.9 }}>{timeHM(it.endAt)}</td>
+                      <td style={{ padding: "6px 6px", opacity: 0.9 }}>{needLabel}</td>
+                      <td style={{ padding: "6px 6px", opacity: 0.9 }}>{proposalLabel}</td>
+                      <td style={{ padding: "6px 6px", opacity: 0.9 }}>{it.message || formatMatchingReasonLabel(it.reason)}</td>
+                      <td style={{ padding: "6px 6px", opacity: 0.9 }}>
+                        {isMatchingApplyItem(it) ? (it.applied ? "✅" : "—") : "—"}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -1666,9 +1763,9 @@ export default function PlanningClient({
                         fontSize: 12,
                         whiteSpace: "nowrap",
                       }}
-                      title="Génère un brouillon (DraftShifts) pour ce jour"
+                      title="Génère un brouillon pour ce jour selon le mode choisi"
                     >
-                      {isDayGenerating ? "Génération…" : "Générer ce jour"}
+                      {isDayGenerating ? "Génération…" : "Générer le jour"}
                     </button>
                   )}
                 </div>

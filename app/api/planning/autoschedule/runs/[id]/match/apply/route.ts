@@ -19,29 +19,37 @@ const BodySchema = z
 type MatchingApplyAuditItem = {
   applied?: boolean;
   reason?: string;
+  target?: string;
 };
 
 function toMatchingAuditMetrics(result: unknown): {
   planCount: number;
   appliedCount: number;
-  conflictCount: number;
+  vehicleAppliedCount: number;
+  skippedCount: number;
 } {
   if (!Array.isArray(result)) {
-    return { planCount: 0, appliedCount: 0, conflictCount: 0 };
+    return { planCount: 0, appliedCount: 0, vehicleAppliedCount: 0, skippedCount: 0 };
   }
 
   let appliedCount = 0;
-  let conflictCount = 0;
+  let vehicleAppliedCount = 0;
+  let skippedCount = 0;
 
   for (const item of result as MatchingApplyAuditItem[]) {
-    if (item.applied === true) appliedCount += 1;
-    if (item.reason === "USER_CONFLICT") conflictCount += 1;
+    if (item.applied === true) {
+      appliedCount += 1;
+      if (item.target === "VEHICLE") vehicleAppliedCount += 1;
+    } else {
+      skippedCount += 1;
+    }
   }
 
   return {
     planCount: result.length,
     appliedCount,
-    conflictCount,
+    vehicleAppliedCount,
+    skippedCount,
   };
 }
 
@@ -103,11 +111,12 @@ export async function POST(
       action: "AUTOSCHEDULE_MATCH_APPLIED",
       entityType: "AutoScheduleRun",
       entityId: runId,
-      summary: `Autoschedule matching applied (${metrics.appliedCount}/${metrics.planCount})`,
+      summary: `Auto-affectation autoschedule appliquée (${metrics.appliedCount}/${metrics.planCount})`,
       payload: {
         planCount: metrics.planCount,
         appliedCount: metrics.appliedCount,
-        conflictCount: metrics.conflictCount,
+        vehicleAppliedCount: metrics.vehicleAppliedCount,
+        skippedCount: metrics.skippedCount,
       },
     });
 

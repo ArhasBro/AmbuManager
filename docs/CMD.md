@@ -36,8 +36,8 @@ Pour les sessions indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références des session :
 
-- SESSION-20260415-06_A9_AUTO-LOT-02-14
-- **AUTO-LOT-02-14 — CORRECTION-COMPLÉTION** — Correction et/ou complétion des générations existantes, du choix gérant entre génération de shifts seuls ou génération avec affectation automatique, de l’intégration des indisponibilités utilisateurs et véhicules, des contraintes de rôles sur véhicules, du repos minimum, des signalements métier et de la traduction française des éléments autoschedule
+- SESSION-20260415-07_A9_AUTO-15
+- **AUTO-15 — VALIDATION** — Validation complète du bloc autoschedule ALPHA : cohérence des générations JOUR / SEMAINE, prise en compte effective des contraintes ALPHA, compréhension des signalements métier et cohérence des libellés français
 ------------------------------------
 sortie propre + retour du terminal + aucune erreur = validé
 ------------------------------------
@@ -71,6 +71,12 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 Unblock-File -Path .\create_session.ps1
 .\create_session.ps1 -Stage "1-ALPHA" -Block "A1" -SessionCode "RBAC-02" -Type "CORRECTION" -Title "Remplacement méthodique de DEA par ADE"
 
+git apply --check ".\"
+git apply ".\"
+npx prisma generate
+npx prisma validate
+npm run lint
+npm run build
 
 # Git
 git fetch --all --prune

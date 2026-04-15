@@ -126,7 +126,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
         action: "AUTOSCHEDULE_RUN_CANCELLED",
         entityType: "AutoScheduleRun",
         entityId: run.id,
-        summary: "Autoschedule run cancelled",
+        summary: "Brouillon autoschedule annulé",
         payload: {
           previousStatus: run.status,
         },

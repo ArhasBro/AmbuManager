@@ -64,6 +64,31 @@ export function getAllowedRolesForSecondSlot(template: TemplateStaffingRuleInput
   return toKnownRoleValues(template.secondaryAllowedRoles);
 }
 
+export function getAllowedRolesForVehicleType(vehicleType: TemplateVehicleTypeValue): KnownRoleValue[] {
+  switch (vehicleType) {
+    case "AMBULANCE":
+      return Array.from(new Set(["ADE", "AA"] as const));
+    case "VSL":
+      return Array.from(new Set(["AA", "ADE", "TAXI"] as const));
+    case "TAXI":
+      return ["TAXI"];
+    default:
+      return [];
+  }
+}
+
+export function isRoleAllowedForVehicleType(
+  vehicleType: TemplateVehicleTypeValue,
+  role: TemplateRoleValue
+): boolean {
+  if (typeof role !== "string") return false;
+
+  const allowed = getAllowedRolesForVehicleType(vehicleType);
+  if (allowed.length === 0) return true;
+
+  return allowed.includes(role as KnownRoleValue);
+}
+
 export function isRoleAllowedForSlot(
   template: TemplateStaffingRuleInput,
   slot: 1 | 2,
