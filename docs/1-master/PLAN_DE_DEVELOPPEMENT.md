@@ -1,6 +1,6 @@
 # Ambulance Manager — PLAN_DE_DEVELOPPEMENT
 
-Version : V2.1 (MASTER)  
+Version : V2.1.1 (MASTER)  
 Date : 19/03/2026
 
 ## Sommaire
@@ -571,6 +571,12 @@ Reprendre l’existant planning pour le vérifier de fond en comble et le rendre
 - **PLAN-19 — VALIDATION** — Validation complète du bloc planning
 - **CLOTURE_A8 — VALIDATION** — Clôture finale du bloc A8
 
+#### Sessions VScode
+- **PLAN-01 — AUDIT** — Audit complet du planning manuel existant : vue semaine, vue jour, vue mois, navigation mensuelle, lisibilité métier, ajout/modification/annulation de shifts publiés, historique minimal et traçabilité après publication
+- **PLAN-LOT-02-18 — CORRECTION-COMPLÉTION** — Correction et/ou complétion de la vue semaine, de la vue jour, de la vraie vue mois exploitable, de la navigation mensuelle, de la lisibilité métier globale, de l’API/UI d’ajout manuel de shift, de l’API/UI de modification d’un shift publié, de l’API/UI de suppression métier / annulation logique d’un shift publié, de l’historique minimal planning et de la traçabilité des modifications après publication
+- **PLAN-19 — VALIDATION** — Validation complète du bloc planning manuel : cohérence des vues jour / semaine / mois, exploitabilité quotidienne, gestion correcte des modifications publiées, historique minimal et traçabilité
+- **CLOTURE_A8 — VALIDATION+CORRECTION+COMPLÉTION** — Clôture finale du bloc A8
+
 
 #### Résultat attendu
 - planning manuel solide
@@ -601,6 +607,12 @@ Reprendre le moteur existant pour vérifier qu’il est réellement cohérent, c
 - **AUTO-15 — VALIDATION** — Validation du bloc autoschedule ALPHA
 - **CLOTURE_A9 — VALIDATION** — Clôture finale du bloc A9
 
+#### Sessions VScode
+- **AUTO-01 — AUDIT** — Audit complet de l’autoschedule existant : génération JOUR, génération SEMAINE, prise en compte réelle des contraintes ALPHA, signalements métier du moteur et traduction française existante
+- **AUTO-LOT-02-14 — CORRECTION-COMPLÉTION** — Correction et/ou complétion des générations existantes, du choix gérant entre génération de shifts seuls ou génération avec affectation automatique, de l’intégration des indisponibilités utilisateurs et véhicules, des contraintes de rôles sur véhicules, du repos minimum, des signalements métier et de la traduction française des éléments autoschedule
+- **AUTO-15 — VALIDATION** — Validation complète du bloc autoschedule ALPHA : cohérence des générations JOUR / SEMAINE, prise en compte effective des contraintes ALPHA, compréhension des signalements métier et cohérence des libellés français
+- **CLOTURE_A9 — VALIDATION+CORRECTION+COMPLÉTION** — Clôture finale du bloc A9
+
 
 #### Résultat attendu
 - moteur revérifié
@@ -627,6 +639,12 @@ Reprendre le matching existant pour le réaligner sur le cadrage validé.
 - **MATCH-10 — VALIDATION** — Validation du bloc matching ALPHA
 - **CLOTURE_A10 — VALIDATION** — Clôture finale du bloc A10
 
+#### Sessions VScode
+- **MATCH-01 — AUDIT** — Audit complet du matching existant : scoring qualité, logique d’équilibre de charge, prise en compte de la composition minimale d’équipe, des véhicules requis, des variantes simples et de la visibilité du score qualité
+- **MATCH-LOT-02-09 — CORRECTION-COMPLÉTION** — Correction et/ou complétion du scoring, de l’alignement du matching sur la composition minimale d’équipe, de l’alignement sur les véhicules requis, de la logique d’équilibre de charge, de la visibilité du score qualité au niveau run et shift, et des variantes 1 / 2 / 3 simples
+- **MATCH-10 — VALIDATION** — Validation complète du bloc matching ALPHA : cohérence du scoring, prise en compte correcte des contraintes équipe / véhicule / charge, lisibilité du score qualité et disponibilité de variantes simples
+- **CLOTURE_A10 — VALIDATION+CORRECTION+COMPLÉTION** — Clôture finale du bloc A10
+
 
 #### Résultat attendu
 - matching contrôlé et réaligné
@@ -651,6 +669,12 @@ Reprendre l’audit minimal existant et le transformer en vraie traçabilité ex
 - **AUDIT-09 — COMPLÉTION** — Audit renforcé des actions support
 - **AUDIT-10 — VALIDATION** — Validation complète du bloc audit
 - **CLOTURE_A11 — VALIDATION** — Clôture finale du bloc A11
+
+#### Sessions VScode
+- **AUDIT-01 — AUDIT** — Audit complet du module audit existant : lecture d’audit du run courant, couverture des opérations critiques, traçabilité des modifications après publication, page dédiée audit, modèle d’accès audit et audit renforcé des actions support
+- **AUDIT-LOT-02-09 — CORRECTION-COMPLÉTION** — Correction et/ou complétion de l’audit planning existant, de l’audit des connexions, de l’audit utilisateurs, de l’audit véhicules, de la traçabilité détaillée des modifications après publication, de la page dédiée audit, du modèle d’accès audit et de l’audit renforcé des actions support
+- **AUDIT-10 — VALIDATION** — Validation complète du bloc audit / traçabilité : couverture réelle des opérations critiques, lisibilité et exploitabilité de la page audit, cohérence du modèle d’accès et transparence support / client
+- **CLOTURE_A11 — VALIDATION+CORRECTION+COMPLÉTION** — Clôture finale du bloc A11
 
 
 #### Résultat attendu
@@ -685,6 +709,11 @@ Rendre l’installation et l’exploitation d’une société pilote réalistes,
 - **IMPORT-10 — VALIDATION** — Validation du bloc onboarding/import/export
 - **CLOTURE_A12 — VALIDATION** — Clôture finale du bloc A12
 
+#### Sessions VScode
+- **A12-01 — AUDIT** — Audit global du bloc onboarding / exports / imports : onboarding actuel réel, besoin import initial réel, existant réel côté exports et impression, et cohérence globale du bloc
+- **A12-LOT-02-15 — CORRECTION-COMPLÉTION** — Correction et/ou complétion de l’onboarding manuel complet société pilote, des exports PDF / Excel-CSV / impression simple du planning, des imports utilisateurs / véhicules / templates / bases-dépôts / indisponibilités utilisateurs, de l’aperçu avant import, de la validation manuelle d’import et du rapport d’erreurs import
+- **A12-16 — VALIDATION** — Validation complète du bloc onboarding / import / export : onboarding manuel sans import, disponibilité des exports ALPHA, cohérence de la logique d’import initial simple et exploitabilité réelle pour une société pilote
+- **CLOTURE_A12 — VALIDATION+CORRECTION+COMPLÉTION** — Clôture finale du bloc A12
 
 #### Résultat attendu
 - société pilote installable
@@ -717,6 +746,11 @@ Finaliser l’ALPHA avec une vraie logique de contrôle qualité et une document
 - **ALPHA-03 — VALIDATION** — Go / No-Go société pilote
 - **CLOTURE_A13 — VALIDATION** — Clôture finale du bloc A13
 
+#### Sessions VScode
+- **A13-01 — AUDIT** — Audit global du bloc qualité / documentation / gel ALPHA : tests existants, scénarios manuels documentés, documentation produit existante et cohérence finale ALPHA
+- **A13-LOT-02-13 — CORRECTION-COMPLÉTION** — Correction et/ou complétion des scénarios manuels non conformes ou manquants, des smoke tests API critiques, des tests ciblés sur blocs sensibles, de la documentation d’usage users / véhicules / templates / planning-autoschedule, et corrections finales ALPHA si nécessaire
+- **A13-14 — VALIDATION** — Validation complète du bloc qualité / documentation / gel ALPHA : cohérence finale ALPHA, niveau de test atteignable, documentation d’usage minimale disponible et décision Go / No-Go société pilote
+- **CLOTURE_A13 — VALIDATION+CORRECTION+COMPLÉTION** — Clôture finale du bloc A13
 
 #### Résultat attendu
 - ALPHA testable
