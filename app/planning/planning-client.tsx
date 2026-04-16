@@ -115,6 +115,27 @@ type MatchingReason = (typeof MATCHING_REASONS)[number];
 type MatchingTarget = "USER_1" | "USER_2" | "VEHICLE";
 type AssignmentMode = "SHIFTS_ONLY" | "AUTO_ASSIGN";
 
+const MATCHING_VARIANTS = [
+  {
+    key: "VARIANT_1",
+    label: "Variante 1 — équilibrée",
+    description: "Ordre chronologique et priorité à la charge la plus faible.",
+  },
+  {
+    key: "VARIANT_2",
+    label: "Variante 2 — stable",
+    description: "Ordre chronologique et priorité à l’ordre stable par identifiant des ressources compatibles.",
+  },
+  {
+    key: "VARIANT_3",
+    label: "Variante 3 — inverse",
+    description: "Ordre chronologique inversé avec maintien de l’équilibre de charge.",
+  },
+] as const;
+
+type MatchingVariantDefinition = (typeof MATCHING_VARIANTS)[number];
+type MatchingVariantKey = MatchingVariantDefinition["key"];
+
 type MatchingPlanItem = {
   shiftId: string;
   startAt: string;
@@ -132,6 +153,19 @@ type MatchingPlanItem = {
 
 type MatchingApplyItem = MatchingPlanItem & { applied: boolean };
 
+type ShiftPlanningQuality = {
+  shiftId: string;
+  startAt: string;
+  endAt: string;
+  overall: number;
+  coverage: { score: number; covered: number; total: number; pct: number };
+  vehicleCoverage: { score: number; covered: number; total: number; pct: number };
+  stability: { score: number; conflicts: number; total: number; pct: number };
+  countsByReason: Partial<Record<MatchingReason, number>>;
+  blockingReasons: MatchingReason[];
+  explanations: string[];
+};
+
 type PlanningQuality = {
   overall: number;
   coverage: { score: number; covered: number; total: number; pct: number };
@@ -148,6 +182,7 @@ type PlanningQuality = {
     max: number;
   };
   countsByReason: Partial<Record<MatchingReason, number>>;
+  shiftScores?: ShiftPlanningQuality[];
   explanations: string[];
 };
 
@@ -160,6 +195,26 @@ function isCountsByReason(v: unknown): v is Partial<Record<MatchingReason, numbe
   return Object.entries(v).every(([key, value]) => isMatchingReason(key) && isNumber(value));
 }
 
+function isShiftPlanningQuality(v: unknown): v is ShiftPlanningQuality {
+  if (!isRecord(v)) return false;
+  if (typeof v.shiftId !== "string" || typeof v.startAt !== "string" || typeof v.endAt !== "string") return false;
+  if (!isNumber(v.overall)) return false;
+  if (!isRecord(v.coverage) || !isNumber(v.coverage.score)) return false;
+  if (!isRecord(v.vehicleCoverage) || !isNumber(v.vehicleCoverage.score)) return false;
+  if (!isRecord(v.stability) || !isNumber(v.stability.score)) return false;
+  if (!isCountsByReason(v.countsByReason)) return false;
+  if (!Array.isArray(v.blockingReasons) || !v.blockingReasons.every(isMatchingReason)) return false;
+  if (!Array.isArray(v.explanations) || !v.explanations.every((x) => typeof x === "string")) return false;
+  return true;
+}
+
+function isMatchingVariantDefinition(v: unknown): v is MatchingVariantDefinition {
+  if (!isRecord(v)) return false;
+  if (typeof v.key !== "string" || !MATCHING_VARIANTS.some((item) => item.key === v.key)) return false;
+  if (typeof v.label !== "string" || typeof v.description !== "string") return false;
+  return true;
+}
+
 function isPlanningQuality(v: unknown): v is PlanningQuality {
   if (!isRecord(v)) return false;
 
@@ -170,6 +225,9 @@ function isPlanningQuality(v: unknown): v is PlanningQuality {
   if (!isRecord(v.equity) || !isNumber(v.equity.score)) return false;
 
   if (!isCountsByReason(v.countsByReason)) return false;
+  if ("shiftScores" in v && v.shiftScores !== undefined) {
+    if (!Array.isArray(v.shiftScores) || !v.shiftScores.every(isShiftPlanningQuality)) return false;
+  }
   if (!Array.isArray(v.explanations) || !v.explanations.every((x) => typeof x === "string")) return false;
 
   return true;
@@ -460,10 +518,14 @@ export default function PlanningClient({
   const [matchPreview, setMatchPreview] = useState<MatchingPlanItem[] | null>(null);
   const [matchApplied, setMatchApplied] = useState<MatchingApplyItem[] | null>(null);
   const [matchQuality, setMatchQuality] = useState<PlanningQuality | null>(null);
+  const [runMatchQuality, setRunMatchQuality] = useState<PlanningQuality | null>(null);
+  const [runMatchingVariant, setRunMatchingVariant] = useState<MatchingVariantDefinition | null>(null);
+  const [selectedMatchingVariant, setSelectedMatchingVariant] = useState<MatchingVariantKey>("VARIANT_1");
   const [showLegacyPlanning, setShowLegacyPlanning] = useState(false);
 
   // ✅ verrou : le preview est lié à un runId précis
   const [matchPreviewRunId, setMatchPreviewRunId] = useState<string | null>(null);
+  const [matchPreviewVariant, setMatchPreviewVariant] = useState<MatchingVariantKey | null>(null);
 
   const weekStartStr = useMemo(() => formatDate(weekStart), [weekStart]);
 
@@ -608,17 +670,26 @@ export default function PlanningClient({
         })
         .filter((x): x is RunAuditLog => Boolean(x));
 
+      const matchingRaw = run && "matching" in run ? run.matching : null;
+      const matching = isRecord(matchingRaw) ? matchingRaw : null;
+      const matchingQualityRaw = matching && "quality" in matching ? matching.quality : null;
+      const matchingVariantRaw = matching && "variant" in matching ? matching.variant : null;
+
       setLastRunStatus(typeof status === "string" ? status : null);
       setLastRunDraftCount(count);
       setRunAuditLogs(auditLogs);
       setRunCanViewRun(canViewRun);
       setRunCanViewAudit(canViewAudit);
+      setRunMatchQuality(isPlanningQuality(matchingQualityRaw) ? matchingQualityRaw : null);
+      setRunMatchingVariant(isMatchingVariantDefinition(matchingVariantRaw) ? matchingVariantRaw : null);
     } catch {
       setLastRunStatus(null);
       setLastRunDraftCount(null);
       setRunAuditLogs([]);
       setRunCanViewRun(null);
       setRunCanViewAudit(null);
+      setRunMatchQuality(null);
+      setRunMatchingVariant(null);
     } finally {
       setRunInfoLoading(false);
     }
@@ -771,6 +842,7 @@ export default function PlanningClient({
     setMatchApplied(null);
     setMatchQuality(null);
     setMatchPreviewRunId(null);
+    setMatchPreviewVariant(null);
   }, []);
 
   // ✅ dès qu’on change de run, on invalide toute simulation précédente
@@ -923,7 +995,7 @@ export default function PlanningClient({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         // on veut voir aussi ALREADY_ASSIGNED dans le tableau/compteurs
-        body: JSON.stringify({ includeAlreadyAssigned: true }),
+        body: JSON.stringify({ includeAlreadyAssigned: true, variant: selectedMatchingVariant }),
       });
 
       if (!res.ok || !jsonOkPayload(json)) {
@@ -946,15 +1018,17 @@ export default function PlanningClient({
 
       setMatchPreview(parsed);
       setMatchPreviewRunId(lastRunId);
+      setMatchPreviewVariant(selectedMatchingVariant);
       setMatchQuality(isPlanningQuality(qualityRaw) ? qualityRaw : null);
 
       const c = countByReason(parsed);
       const q = isPlanningQuality(qualityRaw) ? qualityRaw : null;
 
+      const variantLabel = MATCHING_VARIANTS.find((item) => item.key === selectedMatchingVariant)?.label ?? selectedMatchingVariant;
       setMatchMsg(
         q
-          ? `Simulation OK ✅ — Score ${q.overall}/100 (employés ${q.coverage.score}/100, véhicules ${q.vehicleCoverage.score}/100, stabilité ${q.stability.score}/100, équité ${q.equity.score}/100).`
-          : `Simulation OK ✅ — ${getReasonCount(c, "MATCHED")} affectation(s) proposées, ${getReasonCount(c, "ALREADY_ASSIGNED")} déjà en place, ${getReasonCount(c, "NO_USER_WITH_REQUIRED_ROLE") + getReasonCount(c, "NO_VEHICLE_WITH_REQUIRED_TYPE")} manque(s) de ressources.`
+          ? `Simulation OK ✅ — ${variantLabel} — Score ${q.overall}/100 (employés ${q.coverage.score}/100, véhicules ${q.vehicleCoverage.score}/100, stabilité ${q.stability.score}/100, équité ${q.equity.score}/100).`
+          : `Simulation OK ✅ — ${variantLabel} — ${getReasonCount(c, "MATCHED")} affectation(s) proposées, ${getReasonCount(c, "ALREADY_ASSIGNED")} déjà en place, ${getReasonCount(c, "NO_USER_WITH_REQUIRED_ROLE") + getReasonCount(c, "NO_VEHICLE_WITH_REQUIRED_TYPE")} manque(s) de ressources.`
       );
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Unknown error";
@@ -965,14 +1039,14 @@ export default function PlanningClient({
     } finally {
       setMatchPreviewLoading(false);
     }
-  }, [lastRunId, loadRunInfo, lastRunStatus, lastRunDraftCount]);
+  }, [lastRunId, loadRunInfo, lastRunStatus, lastRunDraftCount, selectedMatchingVariant]);
 
   const applyMatch = useCallback(async () => {
     if (!lastRunId) return;
 
     // ✅ guard : preview obligatoire et doit correspondre au run courant
-    if (matchPreview === null || matchPreviewRunId !== lastRunId) {
-      setMatchMsg("⛔ Lance d’abord une simulation sur le run courant avant d’appliquer l’auto-affectation.");
+    if (matchPreview === null || matchPreviewRunId !== lastRunId || matchPreviewVariant !== selectedMatchingVariant) {
+      setMatchMsg("⛔ Lance d’abord une simulation sur le run courant avec la variante sélectionnée avant d’appliquer l’auto-affectation.");
       return;
     }
 
@@ -1003,7 +1077,7 @@ export default function PlanningClient({
       const { res, json, text } = await fetchJson(`/api/planning/autoschedule/runs/${lastRunId}/match/apply`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ confirm: true }),
+        body: JSON.stringify({ confirm: true, variant: matchPreviewVariant ?? selectedMatchingVariant }),
       });
 
       if (!res.ok || !jsonOkPayload(json)) {
@@ -1031,6 +1105,7 @@ export default function PlanningClient({
       setMatchApplied(applied);
       setMatchPreview(applied);
       setMatchPreviewRunId(lastRunId);
+      setMatchPreviewVariant(matchPreviewVariant ?? selectedMatchingVariant);
 
       const { applied: appliedCount, notApplied } = countApplied(applied);
       setMatchMsg(`Application OK ✅ — ${appliedCount} affectation(s) appliquée(s), ${notApplied} non appliquée(s).`);
@@ -1048,12 +1123,14 @@ export default function PlanningClient({
     lastRunId,
     matchPreview,
     matchPreviewRunId,
+    matchPreviewVariant,
     loadRunInfo,
     lastRunStatus,
     lastRunDraftCount,
     loadShiftsForWeek,
     selectedUserId,
     weekStartStr,
+    selectedMatchingVariant,
   ]);
 
   const publishLastRun = useCallback(async () => {
@@ -1351,7 +1428,14 @@ export default function PlanningClient({
     return countApplied(matchApplied);
   }, [matchApplied]);
 
-  const applyBlocked = matchPreview === null || matchPreviewRunId !== lastRunId;
+  const applyBlocked =
+    matchPreview === null ||
+    matchPreviewRunId !== lastRunId ||
+    matchPreviewVariant !== selectedMatchingVariant;
+
+  const matchShiftScoresById = useMemo(() => {
+    return new Map((matchQuality?.shiftScores ?? []).map((item) => [item.shiftId, item]));
+  }, [matchQuality]);
 
   return (
     <section style={{ display: "grid", gap: 12 }}>
@@ -1466,6 +1550,20 @@ export default function PlanningClient({
 
           {canAutoSchedule && (
             <>
+              <label style={{ display: "flex", gap: 6, alignItems: "center", fontSize: 12, opacity: 0.92 }}>
+                <span>Matching :</span>
+                <select
+                  value={selectedMatchingVariant}
+                  onChange={(e) => setSelectedMatchingVariant(e.target.value as MatchingVariantKey)}
+                >
+                  {MATCHING_VARIANTS.map((variant) => (
+                    <option key={variant.key} value={variant.key}>
+                      {variant.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
               <button
                 onClick={previewMatch}
                 disabled={matchDisabled}
@@ -1489,7 +1587,7 @@ export default function PlanningClient({
                   borderRadius: 8,
                   opacity: matchDisabled || applyBlocked ? 0.6 : 1,
                 }}
-                title={applyBlocked ? "Simulation requise sur le run courant" : "Applique l’auto-affectation sur le dernier brouillon"}
+                title={applyBlocked ? "Simulation requise sur le run courant avec la variante sélectionnée" : "Applique l’auto-affectation sur le dernier brouillon"}
               >
                 {matchApplyLoading ? "Application…" : "Appliquer l’auto-affectation"}
               </button>
@@ -1613,12 +1711,42 @@ export default function PlanningClient({
         </div>
       )}
 
+      {runMatchQuality && (
+        <div style={{ border: "1px solid rgba(255,255,255,0.18)", borderRadius: 10, padding: 10, marginTop: 8 }}>
+          <div style={{ fontWeight: 900 }}>
+            Score matching du run : {runMatchQuality.overall}/100
+            {runMatchingVariant ? ` (${runMatchingVariant.label})` : ""}
+          </div>
+          <div style={{ fontSize: 12, opacity: 0.9, marginTop: 6 }}>
+            Couverture employés {runMatchQuality.coverage.score}/100 — Couverture véhicules {runMatchQuality.vehicleCoverage.score}/100 — Stabilité {runMatchQuality.stability.score}/100 — Équité {runMatchQuality.equity.score}/100
+          </div>
+          {runMatchingVariant && (
+            <div style={{ marginTop: 6, fontSize: 12, opacity: 0.75 }}>{runMatchingVariant.description}</div>
+          )}
+          {(runMatchQuality.shiftScores ?? []).length > 0 && (
+            <div style={{ marginTop: 8, display: "grid", gap: 6, maxHeight: 160, overflow: "auto" }}>
+              {(runMatchQuality.shiftScores ?? []).slice(0, 20).map((shiftScore) => (
+                <div key={shiftScore.shiftId} style={{ display: "flex", justifyContent: "space-between", gap: 12, fontSize: 12 }}>
+                  <span style={{ opacity: 0.9 }}>{shiftScore.shiftId}</span>
+                  <span style={{ opacity: 0.9 }}>{shiftScore.overall}/100</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
       {matchQuality && (
         <div style={{ border: "1px solid rgba(255,255,255,0.18)", borderRadius: 10, padding: 10, marginTop: 8 }}>
-          <div style={{ fontWeight: 900 }}>Score qualité planning : {matchQuality.overall}/100</div>
+          <div style={{ fontWeight: 900 }}>Score qualité planning : {matchQuality.overall}/100{matchPreviewVariant ? ` (${MATCHING_VARIANTS.find((item) => item.key === matchPreviewVariant)?.label ?? matchPreviewVariant})` : ""}</div>
           <div style={{ fontSize: 12, opacity: 0.9, marginTop: 6 }}>
             Couverture employés {matchQuality.coverage.score}/100 — Couverture véhicules {matchQuality.vehicleCoverage.score}/100 — Stabilité {matchQuality.stability.score}/100 — Équité {matchQuality.equity.score}/100
           </div>
+          {matchPreviewVariant && (
+            <div style={{ marginTop: 6, fontSize: 12, opacity: 0.75 }}>
+              {MATCHING_VARIANTS.find((item) => item.key === matchPreviewVariant)?.description ?? ""}
+            </div>
+          )}
           <ul style={{ marginTop: 8, paddingLeft: 18, opacity: 0.95 }}>
             {matchQuality.explanations.map((t, i) => (
               <li key={i}>{t}</li>
@@ -1641,6 +1769,7 @@ export default function PlanningClient({
                 setMatchApplied(null);
                 setMatchQuality(null);
                 setMatchPreviewRunId(null);
+                setMatchPreviewVariant(null);
               }}
               style={{
                 border: "1px solid rgba(255,255,255,0.25)",
@@ -1676,6 +1805,7 @@ export default function PlanningClient({
                   <th style={{ padding: "6px 6px" }}>Fin</th>
                   <th style={{ padding: "6px 6px" }}>Besoin</th>
                   <th style={{ padding: "6px 6px" }}>Proposition</th>
+                  <th style={{ padding: "6px 6px" }}>Score shift</th>
                   <th style={{ padding: "6px 6px" }}>Signalement</th>
                   <th style={{ padding: "6px 6px" }}>Appliqué</th>
                 </tr>
@@ -1684,6 +1814,7 @@ export default function PlanningClient({
                 {(matchApplied ?? matchPreview ?? []).slice(0, 200).map((it, index) => {
                   const needLabel = it.target === "VEHICLE" ? (it.requiredVehicleType ?? "—") : (it.requiredRole ?? "—");
                   const proposalLabel = it.target === "VEHICLE" ? (it.proposedVehicleId ?? it.currentVehicleId ?? "—") : (it.proposedUserId ?? it.currentUserId ?? "—");
+                  const shiftScore = matchShiftScoresById.get(it.shiftId);
 
                   return (
                     <tr key={`${it.shiftId}-${it.target}-${index}`} style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
@@ -1693,6 +1824,7 @@ export default function PlanningClient({
                       <td style={{ padding: "6px 6px", opacity: 0.9 }}>{timeHM(it.endAt)}</td>
                       <td style={{ padding: "6px 6px", opacity: 0.9 }}>{needLabel}</td>
                       <td style={{ padding: "6px 6px", opacity: 0.9 }}>{proposalLabel}</td>
+                      <td style={{ padding: "6px 6px", opacity: 0.9 }}>{shiftScore ? `${shiftScore.overall}/100` : "—"}</td>
                       <td style={{ padding: "6px 6px", opacity: 0.9 }}>{it.message || formatMatchingReasonLabel(it.reason)}</td>
                       <td style={{ padding: "6px 6px", opacity: 0.9 }}>
                         {isMatchingApplyItem(it) ? (it.applied ? "✅" : "—") : "—"}

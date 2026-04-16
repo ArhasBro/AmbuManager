@@ -6,15 +6,21 @@ import { authOptions } from "@/lib/auth";
 import { canAutoSchedule } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 import { ok, json } from "@/lib/api/response";
-import { computeDraftShiftMatchingByRole } from "@/lib/services/planning/matching.service";
+import {
+  computeDraftShiftMatchingByRole,
+  MATCHING_VARIANTS,
+  type MatchingVariantKey,
+} from "@/lib/services/planning/matching.service";
 import { computePlanningQuality } from "@/lib/services/planning/matching-quality";
+
+const MatchingVariantEnum = z.enum(["VARIANT_1", "VARIANT_2", "VARIANT_3"]);
 
 const BodySchema = z
   .object({
     includeAlreadyAssigned: z.boolean().optional(),
+    variant: MatchingVariantEnum.optional(),
   })
   .strict();
-
 
 export async function POST(
   req: NextRequest,
@@ -49,6 +55,7 @@ export async function POST(
   }
 
   let includeAlreadyAssigned = false;
+  let variant: MatchingVariantKey = "VARIANT_1";
 
   try {
     const jsonBody = (await req.json()) as unknown;
@@ -60,16 +67,20 @@ export async function POST(
       );
     }
     includeAlreadyAssigned = parsed.data.includeAlreadyAssigned ?? false;
+    variant = parsed.data.variant ?? "VARIANT_1";
   } catch {
-    // body vide accepté => includeAlreadyAssigned = false
+    // body vide accepté => includeAlreadyAssigned = false + variante 1
   }
 
-    const plan = await computeDraftShiftMatchingByRole(prisma, {
+  const plan = await computeDraftShiftMatchingByRole(prisma, {
     companyId,
     runId,
     includeAlreadyAssigned,
+    variant,
   });
 
   const quality = computePlanningQuality(plan);
-  return ok({ plan, quality }, 200);
+  const variantMeta = MATCHING_VARIANTS.find((item) => item.key === variant) ?? MATCHING_VARIANTS[0];
+
+  return ok({ plan, quality, variant: variantMeta }, 200);
 }

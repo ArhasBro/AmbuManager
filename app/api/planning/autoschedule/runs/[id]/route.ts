@@ -1,16 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
+import { z } from "zod";
+
 import { authOptions } from "@/lib/auth";
 import { canAutoSchedule, canViewAudit } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
-import { z } from "zod";
+import {
+  computeDraftShiftMatchingByRole,
+  MATCHING_VARIANTS,
+  type MatchingVariantDefinition,
+  type MatchingVariantKey,
+} from "@/lib/services/planning/matching.service";
+import { computePlanningQuality } from "@/lib/services/planning/matching-quality";
 
 const ParamsSchema = z.object({
   id: z.string().min(1),
 });
 
 function extractRunIdFromPath(pathname: string): string | null {
-  // attendu: /api/planning/autoschedule/runs/{id}
   const parts = pathname.split("/").filter(Boolean);
 
   const idx = parts.findIndex((p) => p === "runs");
@@ -19,7 +26,6 @@ function extractRunIdFromPath(pathname: string): string | null {
   const id = parts[idx + 1];
   if (!id) return null;
 
-  // si jamais on est sur /runs/{id}/publish ou /cancel, on ne veut pas tomber ici
   const next = parts[idx + 2];
   if (next) return null;
 
@@ -45,6 +51,28 @@ function prismaToApiError(e: unknown): { status: number; body: { ok: false; erro
   return { status: 500, body: { ok: false, error: "SERVER_ERROR" } };
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
+
+function resolveRunMatchingVariant(
+  auditLogs: Array<{ action: string; payload: unknown }> | undefined
+): MatchingVariantDefinition {
+  const variantLog = auditLogs?.find((log) => {
+    if (log.action !== "AUTOSCHEDULE_MATCH_APPLIED") return false;
+    if (!isRecord(log.payload)) return false;
+
+    const variant = log.payload.variant;
+    return typeof variant === "string" && MATCHING_VARIANTS.some((item) => item.key === variant);
+  });
+
+  const variantKey = isRecord(variantLog?.payload)
+    ? (variantLog.payload.variant as MatchingVariantKey | undefined)
+    : undefined;
+
+  return MATCHING_VARIANTS.find((item) => item.key === variantKey) ?? MATCHING_VARIANTS[0];
+}
+
 export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
 
@@ -59,12 +87,10 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
   const canViewRun = await canAutoSchedule(userId, role);
   const canReadAudit = await canViewAudit(userId, role);
 
-  // ✅ RBAC-06 : distinguer l’accès run et l’accès audit sur le support mixte existant
   if (!canViewRun && !canReadAudit) {
     return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });
   }
 
-  // ✅ id depuis params (Promise), sinon fallback via l’URL
   let idFromParams: string | null = null;
   try {
     const p = await ctx.params;
@@ -157,6 +183,19 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
         endAt: s.endAt.toISOString(),
         createdAt: s.createdAt.toISOString(),
       }));
+
+      const variant = resolveRunMatchingVariant(planningAuditLogs);
+      const plan = await computeDraftShiftMatchingByRole(prisma, {
+        companyId,
+        runId,
+        includeAlreadyAssigned: true,
+        variant: variant.key,
+      });
+
+      data.matching = {
+        variant,
+        quality: computePlanningQuality(plan),
+      };
     }
 
     if (canReadAudit) {

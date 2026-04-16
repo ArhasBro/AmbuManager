@@ -7,6 +7,19 @@ export type PlanningQualityWeights = {
   vehicleCoverage: number;
 };
 
+export type ShiftPlanningQuality = {
+  shiftId: string;
+  startAt: string;
+  endAt: string;
+  overall: number;
+  coverage: { score: number; covered: number; total: number; pct: number };
+  vehicleCoverage: { score: number; covered: number; total: number; pct: number };
+  stability: { score: number; conflicts: number; total: number; pct: number };
+  countsByReason: Partial<Record<MatchingReason, number>>;
+  blockingReasons: MatchingReason[];
+  explanations: string[];
+};
+
 export type PlanningQuality = {
   overall: number;
   weights: PlanningQualityWeights;
@@ -24,6 +37,7 @@ export type PlanningQuality = {
     max: number;
   };
   countsByReason: Partial<Record<MatchingReason, number>>;
+  shiftScores: ShiftPlanningQuality[];
   explanations: string[];
 };
 
@@ -44,6 +58,106 @@ function clampScore(n: number): number {
 function pct(part: number, total: number): number {
   if (total <= 0) return 100;
   return Math.round((part / total) * 100);
+}
+
+function computeShiftPlanningQuality(plan: MatchingPlanItem[]): ShiftPlanningQuality[] {
+  const byShift = new Map<string, MatchingPlanItem[]>();
+
+  for (const item of plan) {
+    const arr = byShift.get(item.shiftId) ?? [];
+    arr.push(item);
+    byShift.set(item.shiftId, arr);
+  }
+
+  const blockingReasonsSet: MatchingReason[] = [
+    "USER_UNAVAILABLE",
+    "MIN_REST_CONFLICT",
+    "VEHICLE_UNAVAILABLE",
+    "ROLE_VEHICLE_RESTRICTION",
+    "NO_USER_WITH_REQUIRED_ROLE",
+    "NO_VEHICLE_WITH_REQUIRED_TYPE",
+    "NO_REQUIRED_ROLE",
+  ];
+
+  return Array.from(byShift.entries())
+    .map(([shiftId, items]) => {
+      const counts = items.reduce<Partial<Record<MatchingReason, number>>>((acc, item) => {
+        acc[item.reason] = (acc[item.reason] ?? 0) + 1;
+        return acc;
+      }, {});
+
+      const userTargets = items.filter((item) => item.target === "USER_1" || item.target === "USER_2");
+      const vehicleTargets = items.filter((item) => item.target === "VEHICLE");
+
+      const usersWithRole = userTargets.filter((item) => item.requiredRole !== null);
+      const totalWithRole = usersWithRole.length;
+      const coveredUsers = usersWithRole.filter((item) => item.reason === "MATCHED" || item.reason === "ALREADY_ASSIGNED").length;
+      const coverageScore = totalWithRole === 0 ? 100 : pct(coveredUsers, totalWithRole);
+
+      const totalVehicles = vehicleTargets.length;
+      const coveredVehicles = vehicleTargets.filter((item) => item.reason === "MATCHED" || item.reason === "ALREADY_ASSIGNED").length;
+      const vehicleCoverageScore = totalVehicles === 0 ? 100 : pct(coveredVehicles, totalVehicles);
+
+      const conflicts = items.filter((item) => blockingReasonsSet.includes(item.reason)).length;
+      const stabilityBase = items.length;
+      const stabilityScore = stabilityBase === 0 ? 100 : clampScore(100 - (conflicts / stabilityBase) * 100);
+      const conflictPct = stabilityBase === 0 ? 0 : pct(conflicts, stabilityBase);
+
+      const overall = clampScore(coverageScore * 0.45 + vehicleCoverageScore * 0.25 + stabilityScore * 0.3);
+      const blockingReasons = Array.from(new Set(items.filter((item) => blockingReasonsSet.includes(item.reason)).map((item) => item.reason)));
+
+      const explanations: string[] = [
+        `Couverture employés : ${coveredUsers}/${totalWithRole} → ${coverageScore}/100.`,
+        `Couverture véhicules : ${coveredVehicles}/${totalVehicles} → ${vehicleCoverageScore}/100.`,
+        `Stabilité locale : ${conflicts} signalement(s) sur ${stabilityBase} cible(s) → ${stabilityScore}/100.`,
+      ];
+
+      if ((counts.NO_REQUIRED_ROLE ?? 0) > 0) {
+        explanations.push(`Template incomplet : ${counts.NO_REQUIRED_ROLE} slot(s) sans rôle exploitable.`);
+      }
+      if ((counts.NO_USER_WITH_REQUIRED_ROLE ?? 0) > 0) {
+        explanations.push(`Ressources humaines : ${counts.NO_USER_WITH_REQUIRED_ROLE} slot(s) sans employé au rôle requis.`);
+      }
+      if ((counts.NO_VEHICLE_WITH_REQUIRED_TYPE ?? 0) > 0) {
+        explanations.push(`Flotte : ${counts.NO_VEHICLE_WITH_REQUIRED_TYPE} besoin(s) sans véhicule actif du type requis.`);
+      }
+
+      const startAt = items.reduce((min, item) => (item.startAt < min ? item.startAt : min), items[0]!.startAt);
+      const endAt = items.reduce((max, item) => (item.endAt > max ? item.endAt : max), items[0]!.endAt);
+
+      return {
+        shiftId,
+        startAt,
+        endAt,
+        overall,
+        coverage: {
+          score: coverageScore,
+          covered: coveredUsers,
+          total: totalWithRole,
+          pct: totalWithRole === 0 ? 100 : pct(coveredUsers, totalWithRole),
+        },
+        vehicleCoverage: {
+          score: vehicleCoverageScore,
+          covered: coveredVehicles,
+          total: totalVehicles,
+          pct: totalVehicles === 0 ? 100 : pct(coveredVehicles, totalVehicles),
+        },
+        stability: {
+          score: stabilityScore,
+          conflicts,
+          total: stabilityBase,
+          pct: conflictPct,
+        },
+        countsByReason: counts,
+        blockingReasons,
+        explanations,
+      };
+    })
+    .sort((a, b) => {
+      const diff = a.startAt.localeCompare(b.startAt);
+      if (diff !== 0) return diff;
+      return a.shiftId.localeCompare(b.shiftId, "fr");
+    });
 }
 
 export function computePlanningQuality(
@@ -111,6 +225,8 @@ export function computePlanningQuality(
       equityScore * (weights.equity / norm)
   );
 
+  const shiftScores = computeShiftPlanningQuality(plan);
+
   const explanations: string[] = [
     `Couverture employés : ${covered}/${totalWithRole} besoins couverts → ${coverageScore}/100.`,
     `Couverture véhicules : ${coveredVehicles}/${totalVehicles} besoins couverts → ${vehicleCoverageScore}/100.`,
@@ -150,6 +266,7 @@ export function computePlanningQuality(
       max,
     },
     countsByReason: counts,
+    shiftScores,
     explanations,
   };
 }

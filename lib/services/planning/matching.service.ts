@@ -23,6 +23,46 @@ export type MatchingReason =
 
 export type MatchingTarget = "USER_1" | "USER_2" | "VEHICLE";
 
+export type MatchingVariantKey = "VARIANT_1" | "VARIANT_2" | "VARIANT_3";
+
+export type MatchingVariantDefinition = {
+  key: MatchingVariantKey;
+  label: string;
+  description: string;
+  shiftOrder: "ASC" | "DESC";
+  candidateStrategy: "LOAD_BALANCED" | "STABLE";
+};
+
+export const MATCHING_VARIANTS: readonly MatchingVariantDefinition[] = [
+  {
+    key: "VARIANT_1",
+    label: "Variante 1 — équilibrée",
+    description: "Ordre chronologique et priorité à la charge la plus faible.",
+    shiftOrder: "ASC",
+    candidateStrategy: "LOAD_BALANCED",
+  },
+  {
+    key: "VARIANT_2",
+    label: "Variante 2 — stable",
+    description: "Ordre chronologique et priorité à l’ordre stable par identifiant des ressources compatibles.",
+    shiftOrder: "ASC",
+    candidateStrategy: "STABLE",
+  },
+  {
+    key: "VARIANT_3",
+    label: "Variante 3 — inverse",
+    description: "Ordre chronologique inversé avec maintien de l’équilibre de charge.",
+    shiftOrder: "DESC",
+    candidateStrategy: "LOAD_BALANCED",
+  },
+] as const;
+
+function resolveMatchingVariant(
+  variant: MatchingVariantKey | null | undefined
+): MatchingVariantDefinition {
+  return MATCHING_VARIANTS.find((item) => item.key === variant) ?? MATCHING_VARIANTS[0];
+}
+
 export type MatchingPlanItem = {
   shiftId: string;
   startAt: string;
@@ -48,6 +88,7 @@ type ComputeOptions = {
   companyId: string;
   runId: string;
   includeAlreadyAssigned?: boolean;
+  variant?: MatchingVariantKey;
 };
 
 type ApplyOptions = {
@@ -60,6 +101,7 @@ type AutoMatchOptions = {
   companyId: string;
   runId: string;
   dryRun?: boolean;
+  variant?: MatchingVariantKey;
 };
 
 type BusyWindow = { startAt: Date; endAt: Date };
@@ -201,6 +243,39 @@ function getRoleVehicleRestrictionMessage(vehicleType: VehicleType, userRoles: A
   const allowed = getAllowedRolesForVehicleType(vehicleType);
   const current = userRoles.filter((role): role is Role => role !== null);
   return `Affectation véhicule impossible : les rôles ${current.join(", ") || "non définis"} ne sont pas autorisés sur un véhicule ${vehicleType}. Autorisés : ${allowed.join(", ") || "aucune restriction"}.`;
+}
+
+function sortUserCandidatesForVariant(
+  candidates: UserCandidate[],
+  resources: AssignmentResources,
+  variant: MatchingVariantDefinition
+) {
+  candidates.sort((a, b) => {
+    if (variant.candidateStrategy === "LOAD_BALANCED") {
+      const countDiff = (resources.userAssignmentCounts.get(a.id) ?? 0) - (resources.userAssignmentCounts.get(b.id) ?? 0);
+      if (countDiff !== 0) return countDiff;
+    }
+
+    return a.id.localeCompare(b.id, "fr");
+  });
+}
+
+function sortVehicleCandidatesForVariant(
+  candidates: VehicleCandidate[],
+  resources: AssignmentResources,
+  variant: MatchingVariantDefinition
+) {
+  candidates.sort((a, b) => {
+    if (variant.candidateStrategy === "LOAD_BALANCED") {
+      const countDiff = (resources.vehicleAssignmentCounts.get(a.id) ?? 0) - (resources.vehicleAssignmentCounts.get(b.id) ?? 0);
+      if (countDiff !== 0) return countDiff;
+    }
+
+    const immatDiff = a.immatriculation.localeCompare(b.immatriculation, "fr");
+    if (immatDiff !== 0) return immatDiff;
+
+    return a.id.localeCompare(b.id, "fr");
+  });
 }
 
 function describeMatchingReason(item: Pick<MatchingPlanItem, "target" | "reason" | "requiredRole" | "requiredVehicleType">): string {
@@ -493,7 +568,8 @@ function chooseBestUser(
   shift: DraftShiftState,
   slot: 1 | 2,
   draftState: Map<string, DraftShiftState>,
-  resources: AssignmentResources
+  resources: AssignmentResources,
+  variant: MatchingVariantDefinition
 ): MatchingPlanItem {
   const requiredRolePool = getRolePoolForSlot(shift, slot);
   const requiredRole = rolePoolLabel(requiredRolePool);
@@ -573,11 +649,7 @@ function chooseBestUser(
     });
   }
 
-  free.sort((a, b) => {
-    const countDiff = (resources.userAssignmentCounts.get(a.id) ?? 0) - (resources.userAssignmentCounts.get(b.id) ?? 0);
-    if (countDiff !== 0) return countDiff;
-    return a.id.localeCompare(b.id);
-  });
+  sortUserCandidatesForVariant(free, resources, variant);
 
   const chosen = free[0]!;
   addBusyWindow(resources.userBusy, chosen.id, shift.startAt, shift.endAt);
@@ -618,7 +690,8 @@ function chooseBestVehicle(
   shift: DraftShiftState,
   draftState: Map<string, DraftShiftState>,
   resources: AssignmentResources,
-  includeAlreadyAssigned: boolean
+  includeAlreadyAssigned: boolean,
+  variant: MatchingVariantDefinition
 ): MatchingPlanItem | null {
   const requiredVehicleType = shift.template?.requiredVehicleType ?? null;
   if (!requiredVehicleType) return null;
@@ -716,11 +789,7 @@ function chooseBestVehicle(
     });
   }
 
-  free.sort((a, b) => {
-    const countDiff = (resources.vehicleAssignmentCounts.get(a.id) ?? 0) - (resources.vehicleAssignmentCounts.get(b.id) ?? 0);
-    if (countDiff !== 0) return countDiff;
-    return a.immatriculation.localeCompare(b.immatriculation, "fr");
-  });
+  sortVehicleCandidatesForVariant(free, resources, variant);
 
   const chosen = free[0]!;
   addBusyWindow(resources.vehicleBusy, chosen.id, shift.startAt, shift.endAt);
@@ -747,17 +816,21 @@ export async function computeDraftShiftMatchingByRole(
   db: DbClient,
   options: ComputeOptions
 ): Promise<MatchingPlanItem[]> {
-  const { companyId, runId, includeAlreadyAssigned = false } = options;
+  const { companyId, runId, includeAlreadyAssigned = false, variant: variantKey } = options;
 
   const draftShifts = await loadDraftState(db, companyId, runId);
   if (draftShifts.length === 0) return [];
+
+  const variant = resolveMatchingVariant(variantKey);
+  const orderedDraftShifts =
+    variant.shiftOrder === "DESC" ? [...draftShifts].reverse() : draftShifts;
 
   const draftState = new Map(draftShifts.map((shift) => [shift.id, { ...shift }]));
   const resources = await loadResources(db, companyId, draftShifts);
 
   const plan: MatchingPlanItem[] = [];
 
-  for (const originalShift of draftShifts) {
+  for (const originalShift of orderedDraftShifts) {
     const shift = draftState.get(originalShift.id)!;
     const missingSlots = getMissingSlots(shift);
 
@@ -783,10 +856,10 @@ export async function computeDraftShiftMatchingByRole(
     }
 
     for (const slot of missingSlots) {
-      plan.push(chooseBestUser(shift, slot, draftState, resources));
+      plan.push(chooseBestUser(shift, slot, draftState, resources, variant));
     }
 
-    const vehicleItem = chooseBestVehicle(shift, draftState, resources, includeAlreadyAssigned);
+    const vehicleItem = chooseBestVehicle(shift, draftState, resources, includeAlreadyAssigned, variant);
     if (vehicleItem) plan.push(vehicleItem);
   }
 
@@ -959,9 +1032,9 @@ export async function autoMatchRunDraftShifts(
   db: PrismaClient,
   options: AutoMatchOptions
 ): Promise<MatchingPlanItem[] | MatchingApplyItem[]> {
-  const { companyId, runId, dryRun = false } = options;
+  const { companyId, runId, dryRun = false, variant } = options;
 
-  const plan = await computeDraftShiftMatchingByRole(db, { companyId, runId });
+  const plan = await computeDraftShiftMatchingByRole(db, { companyId, runId, variant });
   if (dryRun) return plan;
 
   return applyDraftShiftMatchingPlan(db, { companyId, runId, plan });

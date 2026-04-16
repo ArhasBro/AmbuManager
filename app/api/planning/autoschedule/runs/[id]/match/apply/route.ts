@@ -6,15 +6,17 @@ import { authOptions } from "@/lib/auth";
 import { canAutoSchedule } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 import { ok, json } from "@/lib/api/response";
-import { autoMatchRunDraftShifts } from "@/lib/services/planning/matching.service";
+import { autoMatchRunDraftShifts, type MatchingVariantKey } from "@/lib/services/planning/matching.service";
 import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
+
+const MatchingVariantEnum = z.enum(["VARIANT_1", "VARIANT_2", "VARIANT_3"]);
 
 const BodySchema = z
   .object({
     confirm: z.literal(true),
+    variant: MatchingVariantEnum.optional(),
   })
   .strict();
-
 
 type MatchingApplyAuditItem = {
   applied?: boolean;
@@ -85,7 +87,6 @@ export async function POST(
     );
   }
 
-  // ✅ Apply => on exige une confirmation explicite
   const jsonBody = await req.json().catch(() => null);
   const parsed = BodySchema.safeParse(jsonBody);
   if (!parsed.success) {
@@ -95,11 +96,14 @@ export async function POST(
     );
   }
 
+  const variant: MatchingVariantKey = parsed.data.variant ?? "VARIANT_1";
+
   try {
     const result = await autoMatchRunDraftShifts(prisma, {
       companyId,
       runId,
       dryRun: false,
+      variant,
     });
 
     const metrics = toMatchingAuditMetrics(result);
@@ -113,6 +117,7 @@ export async function POST(
       entityId: runId,
       summary: `Auto-affectation autoschedule appliquée (${metrics.appliedCount}/${metrics.planCount})`,
       payload: {
+        variant,
         planCount: metrics.planCount,
         appliedCount: metrics.appliedCount,
         vehicleAppliedCount: metrics.vehicleAppliedCount,

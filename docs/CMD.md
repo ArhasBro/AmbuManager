@@ -36,8 +36,8 @@ Pour les sessions indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références des session :
 
-- SESSION-20260416-01_A10_MATCH-01
-- **MATCH-01 — AUDIT** — Audit complet du matching existant : scoring qualité, logique d’équilibre de charge, prise en compte de la composition minimale d’équipe, des véhicules requis, des variantes simples et de la visibilité du score qualité
+- SESSION-20260416-02_A10_MATCH-LOT-02-09
+- **MATCH-10 — VALIDATION** — Validation complète du bloc matching ALPHA : cohérence du scoring, prise en compte correcte des contraintes équipe / véhicule / charge, lisibilité du score qualité et disponibilité de variantes simples
 ------------------------------------
 sortie propre + retour du terminal + aucune erreur = validé
 ------------------------------------
@@ -60,10 +60,20 @@ Il seront à crée dans le patch docs en 1 ZIP téléchargeable sans sous dossie
 Fait moi la commande pour le script de création de sessions pour les sessions suivante.
 Exemple de la commande : .\create_session.ps1 -Stage "1-ALPHA" -Block "A1" -SessionCode "RBAC-02" -Type "CORRECTION" -Title "Remplacement méthodique de DEA par ADE"
 
-- **MATCH-01 — AUDIT** — Audit complet du matching existant : scoring qualité, logique d’équilibre de charge, prise en compte de la composition minimale d’équipe, des véhicules requis, des variantes simples et de la visibilité du score qualité
-- **MATCH-LOT-02-09 — CORRECTION-COMPLÉTION** — Correction et/ou complétion du scoring, de l’alignement du matching sur la composition minimale d’équipe, de l’alignement sur les véhicules requis, de la logique d’équilibre de charge, de la visibilité du score qualité au niveau run et shift, et des variantes 1 / 2 / 3 simples
-- **MATCH-10 — VALIDATION** — Validation complète du bloc matching ALPHA : cohérence du scoring, prise en compte correcte des contraintes équipe / véhicule / charge, lisibilité du score qualité et disponibilité de variantes simples
-- **CLOTURE_A10 — VALIDATION+CORRECTION+COMPLÉTION** — Clôture finale du bloc A10
+- **AUDIT-01 — AUDIT** — Audit complet du module audit existant : lecture d’audit du run courant, couverture des opérations critiques, traçabilité des modifications après publication, page dédiée audit, modèle d’accès audit et audit renforcé des actions support
+- **AUDIT-LOT-02-09 — CORRECTION-COMPLÉTION** — Correction et/ou complétion de l’audit planning existant, de l’audit des connexions, de l’audit utilisateurs, de l’audit véhicules, de la traçabilité détaillée des modifications après publication, de la page dédiée audit, du modèle d’accès audit et de l’audit renforcé des actions support
+- **AUDIT-10 — VALIDATION** — Validation complète du bloc audit / traçabilité : couverture réelle des opérations critiques, lisibilité et exploitabilité de la page audit, cohérence du modèle d’accès et transparence support / client
+- **CLOTURE_A11 — VALIDATION+CORRECTION+COMPLÉTION** — Clôture finale du bloc A11
+
+- **A12-01 — AUDIT** — Audit global du bloc onboarding / exports / imports : onboarding actuel réel, besoin import initial réel, existant réel côté exports et impression, et cohérence globale du bloc
+- **A12-LOT-02-15 — CORRECTION-COMPLÉTION** — Correction et/ou complétion de l’onboarding manuel complet société pilote, des exports PDF / Excel-CSV / impression simple du planning, des imports utilisateurs / véhicules / templates / bases-dépôts / indisponibilités utilisateurs, de l’aperçu avant import, de la validation manuelle d’import et du rapport d’erreurs import
+- **A12-16 — VALIDATION** — Validation complète du bloc onboarding / import / export : onboarding manuel sans import, disponibilité des exports ALPHA, cohérence de la logique d’import initial simple et exploitabilité réelle pour une société pilote
+- **CLOTURE_A12 — VALIDATION+CORRECTION+COMPLÉTION** — Clôture finale du bloc A12
+
+- **A13-01 — AUDIT** — Audit global du bloc qualité / documentation / gel ALPHA : tests existants, scénarios manuels documentés, documentation produit existante et cohérence finale ALPHA
+- **A13-LOT-02-13 — CORRECTION-COMPLÉTION** — Correction et/ou complétion des scénarios manuels non conformes ou manquants, des smoke tests API critiques, des tests ciblés sur blocs sensibles, de la documentation d’usage users / véhicules / templates / planning-autoschedule, et corrections finales ALPHA si nécessaire
+- **A13-14 — VALIDATION** — Validation complète du bloc qualité / documentation / gel ALPHA : cohérence finale ALPHA, niveau de test atteignable, documentation d’usage minimale disponible et décision Go / No-Go société pilote
+- **CLOTURE_A13 — VALIDATION+CORRECTION+COMPLÉTION** — Clôture finale du bloc A13
 
 ------------------------------------
 
