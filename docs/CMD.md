@@ -36,7 +36,7 @@ Pour les sessions indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références des session :
 
-- SESSION-20260415-08_A9_CLOTURE_A9
+- SESSION-20260416-01_A10_MATCH-01
 - **MATCH-01 — AUDIT** — Audit complet du matching existant : scoring qualité, logique d’équilibre de charge, prise en compte de la composition minimale d’équipe, des véhicules requis, des variantes simples et de la visibilité du score qualité
 ------------------------------------
 sortie propre + retour du terminal + aucune erreur = validé
