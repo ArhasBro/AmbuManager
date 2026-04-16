@@ -36,8 +36,8 @@ Pour les sessions indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références des session :
 
-- SESSION-20260416-05_A11_AUDIT-01
-- **AUDIT-01 — AUDIT** — Audit complet du module audit existant : lecture d’audit du run courant, couverture des opérations critiques, traçabilité des modifications après publication, page dédiée audit, modèle d’accès audit et audit renforcé des actions support
+- SESSION-20260416-06_A11_AUDIT-LOT-02-09
+- **AUDIT-LOT-02-09 — CORRECTION-COMPLÉTION** — Correction et/ou complétion de l’audit planning existant, de l’audit des connexions, de l’audit utilisateurs, de l’audit véhicules, de la traçabilité détaillée des modifications après publication, de la page dédiée audit, du modèle d’accès audit et de l’audit renforcé des actions support
 ------------------------------------
 sortie propre + retour du terminal + aucune erreur = validé
 ------------------------------------

@@ -1,10 +1,11 @@
-﻿# NO_PATCH
+# NO_PATCH
 
-Session : SESSION-20260416-05_A11_AUDIT-01
+Session : `SESSION-20260416-05_A11_AUDIT-01`
 
-Type : AUDIT
+Type : `AUDIT`
 
 Raison :
-- Session documentaire de type AUDIT.
-- Aucun patch officiel a produire pour cette session.
-- Le dossier patch reste present pour conserver le miroir avec docs/2-sessions.
+- session documentaire de type `AUDIT` ;
+- aucun patch officiel à produire pour cette session ;
+- les écarts identifiés sont documentés sans correction technique ;
+- le dossier patch est conservé pour porter la décision `NO_PATCH`.
