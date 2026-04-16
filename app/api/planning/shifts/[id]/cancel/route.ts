@@ -48,8 +48,8 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
     update: (args: unknown) => Promise<unknown>;
   }).findFirst({
     where: { id, companyId },
-    select: { id: true, runId: true, isCancelled: true },
-  })) as { id: string; runId: string | null; isCancelled?: boolean | null } | null;
+    select: { id: true, runId: true, isCancelled: true, cancelledAt: true, cancellationReason: true },
+  })) as { id: string; runId: string | null; isCancelled?: boolean | null; cancelledAt?: Date | null; cancellationReason?: string | null } | null;
   if (!shift) {
     return NextResponse.json({ ok: false, error: "NOT_FOUND" }, { status: 404 });
   }
@@ -78,7 +78,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
     entityType: "Shift",
     entityId: id,
     summary: "Shift publié annulé logiquement",
-    payload: { reason: parsed.data.reason },
+    payload: { changedFields: ["isCancelled", "cancelledAt", "cancellationReason"], previous: { isCancelled: shift.isCancelled ?? false, cancelledAt: shift.cancelledAt ?? null, cancellationReason: shift.cancellationReason ?? null }, next: { isCancelled: true, cancelledAt: now, cancellationReason: parsed.data.reason } },
   });
 
   return NextResponse.json({ ok: true });

@@ -4,7 +4,7 @@ import type { Prisma } from "@prisma/client";
 import { z } from "zod";
 
 import { authOptions } from "@/lib/auth";
-import { canEditPlanning, canViewGlobalPlanning, canViewSelfPlanning } from "@/lib/permissions";
+import { canEditPlanning, canViewAudit, canViewGlobalPlanning, canViewSelfPlanning } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
 
@@ -69,9 +69,10 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
   }
 
-  const [canViewSelf, canViewGlobal] = await Promise.all([
+  const [canViewSelf, canViewGlobal, canReadAudit] = await Promise.all([
     canViewSelfPlanning(userId, role, platformRole),
     canViewGlobalPlanning(userId, role, platformRole),
+    canViewAudit(userId, role, platformRole),
   ]);
 
   if (!canViewSelf && !canViewGlobal) {
@@ -148,7 +149,7 @@ export async function GET(req: NextRequest) {
     });
 
     const shiftIds = shifts.map((shift) => shift.id);
-    const auditLogs = includeHistory === "1" && shiftIds.length > 0
+    const auditLogs = includeHistory === "1" && canReadAudit && shiftIds.length > 0
       ? await prisma.planningAuditLog.findMany({
           where: { companyId, entityType: "Shift", entityId: { in: shiftIds } },
           orderBy: [{ createdAt: "desc" }],
@@ -277,11 +278,9 @@ export async function POST(req: NextRequest) {
       entityId: shift.id,
       summary: "Shift publié créé manuellement",
       payload: {
-        date,
-        startTime,
-        endTime,
-        templateId,
-        depotId: depotId ?? null,
+        changedFields: ["date", "startAt", "endAt", "templateId", "depotId", "notes"],
+        previous: null,
+        next: { date, startTime, endTime, templateId, depotId: depotId ?? null, notes: notes ?? null },
       },
     });
 

@@ -36,6 +36,7 @@ type Props = {
   currentUser: UserLite;
   canViewGlobal: boolean;
   canEditPlanning: boolean;
+  canViewAudit: boolean;
 };
 
 type ViewMode = "day" | "week" | "month";
@@ -117,6 +118,7 @@ export default function ManualPlanningPanel({
   currentUser,
   canViewGlobal,
   canEditPlanning,
+  canViewAudit,
 }: Props) {
   const [viewMode, setViewMode] = useState<ViewMode>("month");
   const [cursorDate, setCursorDate] = useState<Date>(new Date());
@@ -143,10 +145,10 @@ export default function ManualPlanningPanel({
     }
     if (canViewGlobal && selectedUserId) params.set("userId", selectedUserId);
     if (!canViewGlobal) params.set("userId", currentUser.id);
-    params.set("includeHistory", "1");
+    if (canViewAudit) params.set("includeHistory", "1");
     params.set("limit", "500");
     return params.toString();
-  }, [canViewGlobal, currentUser.id, cursorDate, selectedUserId, viewMode]);
+  }, [canViewAudit, canViewGlobal, currentUser.id, cursorDate, selectedUserId, viewMode]);
 
   const loadTemplates = useCallback(async () => {
     const { res, json } = await fetchJson("/api/templates?limit=500");
@@ -382,6 +384,7 @@ export default function ManualPlanningPanel({
               shift={shift}
               canEditPlanning={canEditPlanning}
               history={historyByShiftId[shift.id] ?? []}
+              canViewAudit={canViewAudit}
               templates={templates}
               depots={availableDepots}
               isEditing={editingShiftId === shift.id}
@@ -440,6 +443,7 @@ function ShiftCard({
   onSaveEdit,
   onCancelEdit,
   onCancelShift,
+  canViewAudit,
 }: {
   shift: ShiftItem;
   history: AuditItem[];
@@ -453,6 +457,7 @@ function ShiftCard({
   onSaveEdit: () => void;
   onCancelEdit: () => void;
   onCancelShift: () => void;
+  canViewAudit: boolean;
 }) {
   return (
     <div style={{ border: "1px solid rgba(255,255,255,0.14)", borderRadius: 12, padding: 12, display: "grid", gap: 8 }}>
@@ -503,7 +508,7 @@ function ShiftCard({
 
       <div style={{ display: "grid", gap: 6 }}>
         <div style={{ fontWeight: 700 }}>Historique minimal</div>
-        {history.length === 0 ? <div style={{ opacity: 0.65 }}>Aucune trace disponible.</div> : history.slice(0, 6).map((entry) => (
+        {!canViewAudit ? <div style={{ opacity: 0.65 }}>Accès audit non autorisé.</div> : history.length === 0 ? <div style={{ opacity: 0.65 }}>Aucune trace disponible.</div> : history.slice(0, 6).map((entry) => (
           <div key={entry.id} style={{ fontSize: 13, opacity: 0.9 }}>
             {dateTimeLabel(entry.createdAt)} — {entry.summary}
             {entry.actorUser?.name ? ` (${entry.actorUser.name})` : ""}

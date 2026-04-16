@@ -89,6 +89,28 @@ model PlanningAuditLog {
   @@index([actorUserId])
 }
 
+model LoginAuditLog {
+  id String @id @default(cuid())
+
+  companyId String  @db.Uuid
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  actorUserId String? @db.Uuid
+  actorUser   User?   @relation("LoginAuditLogActor", fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  email   String
+  success Boolean
+  reason  String?
+  payload Json?
+
+  createdAt DateTime @default(now())
+
+  @@index([companyId, createdAt])
+  @@index([companyId, email, createdAt])
+  @@index([companyId, success, createdAt])
+  @@index([actorUserId])
+}
+
 model Company {
   id           String    @id @default(uuid()) @db.Uuid
   name         String    @unique
@@ -122,6 +144,7 @@ model Company {
 
   // ✅ 4.7 — Audit planning minimal
   planningAuditLogs PlanningAuditLog[]
+  loginAuditLogs    LoginAuditLog[]
 
   // ✅ A3 USERS-13 — indisponibilités / absences utilisateur
   userAbsences UserAbsence[]
@@ -187,6 +210,7 @@ model User {
 
   // ✅ 4.7 — Audit planning minimal
   planningAuditLogs PlanningAuditLog[] @relation("PlanningAuditLogActor")
+  loginAuditLogs    LoginAuditLog[]    @relation("LoginAuditLogActor")
 
   // ✅ A3 USERS-13 — indisponibilités / absences utilisateur
   absences UserAbsence[]

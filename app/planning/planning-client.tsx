@@ -40,6 +40,7 @@ type PlanningClientProps = {
   canEditPlanning: boolean;
   canAutoSchedule: boolean;
   canManageCompanyMode: boolean;
+  canViewAudit: boolean;
 };
 
 type RunAuditLog = {
@@ -1445,6 +1446,7 @@ export default function PlanningClient({
         currentUser={currentUser}
         canViewGlobal={canViewGlobal}
         canEditPlanning={canEditPlanning}
+        canViewAudit={canViewAudit}
       />
 
       <section style={{ border: "1px solid rgba(255,255,255,0.12)", borderRadius: 10, padding: 12, display: "grid", gap: 8 }}>

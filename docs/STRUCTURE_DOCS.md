@@ -1098,6 +1098,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |       |   |       README_PATCH.md
 |       |   |       
 |       |   +---SESSION-20260416-06_A11_AUDIT-LOT-02-09
+|       |   |       PATCH__SESSION-20260416-06_A11_AUDIT-LOT-02-09.diff
 |       |   |       README_PATCH.md
 |       |   |       
 |       |   +---SESSION-20260416-07_A11_AUDIT-10

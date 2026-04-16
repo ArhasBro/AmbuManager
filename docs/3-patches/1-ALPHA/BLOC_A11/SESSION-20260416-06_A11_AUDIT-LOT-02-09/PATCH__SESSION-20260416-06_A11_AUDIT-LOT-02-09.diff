@@ -1,0 +1,1116 @@
+diff --git a/prisma/schema.prisma b/prisma/schema.prisma
+index f368c11..f60ea70 100644
+--- a/prisma/schema.prisma
++++ b/prisma/schema.prisma
+@@ -89,6 +89,28 @@ model PlanningAuditLog {
+   @@index([actorUserId])
+ }
+ 
++model LoginAuditLog {
++  id String @id @default(cuid())
++
++  companyId String  @db.Uuid
++  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
++
++  actorUserId String? @db.Uuid
++  actorUser   User?   @relation("LoginAuditLogActor", fields: [actorUserId], references: [id], onDelete: SetNull)
++
++  email   String
++  success Boolean
++  reason  String?
++  payload Json?
++
++  createdAt DateTime @default(now())
++
++  @@index([companyId, createdAt])
++  @@index([companyId, email, createdAt])
++  @@index([companyId, success, createdAt])
++  @@index([actorUserId])
++}
++
+ model Company {
+   id           String    @id @default(uuid()) @db.Uuid
+   name         String    @unique
+@@ -122,6 +144,7 @@ model Company {
+ 
+   // ✅ 4.7 — Audit planning minimal
+   planningAuditLogs PlanningAuditLog[]
++  loginAuditLogs    LoginAuditLog[]
+ 
+   // ✅ A3 USERS-13 — indisponibilités / absences utilisateur
+   userAbsences UserAbsence[]
+@@ -187,6 +210,7 @@ model User {
+ 
+   // ✅ 4.7 — Audit planning minimal
+   planningAuditLogs PlanningAuditLog[] @relation("PlanningAuditLogActor")
++  loginAuditLogs    LoginAuditLog[]    @relation("LoginAuditLogActor")
+ 
+   // ✅ A3 USERS-13 — indisponibilités / absences utilisateur
+   absences UserAbsence[]
+
+diff --git a/mnt/data/a11_repo/AmbuManager-main/prisma/migrations/20260416143000_add_login_audit_log/migration.sql b/prisma/migrations/20260416143000_add_login_audit_log/migration.sql
+new file mode 100644
+index 0000000..ed8c470
+--- /dev/null
++++ b/prisma/migrations/20260416143000_add_login_audit_log/migration.sql
+@@ -0,0 +1,20 @@
++CREATE TABLE "LoginAuditLog" (
++    "id" TEXT NOT NULL,
++    "companyId" UUID NOT NULL,
++    "actorUserId" UUID,
++    "email" TEXT NOT NULL,
++    "success" BOOLEAN NOT NULL,
++    "reason" TEXT,
++    "payload" JSONB,
++    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
++
++    CONSTRAINT "LoginAuditLog_pkey" PRIMARY KEY ("id")
++);
++
++CREATE INDEX "LoginAuditLog_companyId_createdAt_idx" ON "LoginAuditLog"("companyId", "createdAt");
++CREATE INDEX "LoginAuditLog_companyId_email_createdAt_idx" ON "LoginAuditLog"("companyId", "email", "createdAt");
++CREATE INDEX "LoginAuditLog_companyId_success_createdAt_idx" ON "LoginAuditLog"("companyId", "success", "createdAt");
++CREATE INDEX "LoginAuditLog_actorUserId_idx" ON "LoginAuditLog"("actorUserId");
++
++ALTER TABLE "LoginAuditLog" ADD CONSTRAINT "LoginAuditLog_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("id") ON DELETE CASCADE ON UPDATE CASCADE;
++ALTER TABLE "LoginAuditLog" ADD CONSTRAINT "LoginAuditLog_actorUserId_fkey" FOREIGN KEY ("actorUserId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+diff --git a/mnt/data/a11_repo/AmbuManager-main/lib/services/audit/audit-context.ts b/lib/services/audit/audit-context.ts
+new file mode 100644
+index 0000000..d353b31
+--- /dev/null
++++ b/lib/services/audit/audit-context.ts
+@@ -0,0 +1,29 @@
++import { PlatformRole } from "@prisma/client";
++
++export function isRecord(value: unknown): value is Record<string, unknown> {
++  return typeof value === "object" && value !== null && !Array.isArray(value);
++}
++
++export function isSupportActor(platformRole?: PlatformRole | string | null): boolean {
++  return platformRole === PlatformRole.SUPPORT;
++}
++
++export function trimOptionalString(value: unknown): string | null {
++  return typeof value === "string" && value.trim().length > 0 ? value.trim() : null;
++}
++
++export function requestedCompanyIdFromUrl(req: Request | URL | string): string | null {
++  const url = typeof req === "string" ? new URL(req) : req instanceof URL ? req : new URL(req.url);
++  return trimOptionalString(url.searchParams.get("companyId"));
++}
++
++export function resolveAuditCompanyId(input: {
++  sessionCompanyId?: string | null;
++  actorPlatformRole?: PlatformRole | string | null;
++  requestedCompanyId?: string | null;
++  fallbackCompanyId?: string | null;
++}): string | null {
++  if (trimOptionalString(input.sessionCompanyId)) return trimOptionalString(input.sessionCompanyId);
++  if (!isSupportActor(input.actorPlatformRole)) return null;
++  return trimOptionalString(input.requestedCompanyId) ?? trimOptionalString(input.fallbackCompanyId);
++}
+
+diff --git a/mnt/data/a11_repo/AmbuManager-main/lib/services/audit/login-audit.ts b/lib/services/audit/login-audit.ts
+new file mode 100644
+index 0000000..ec74f36
+--- /dev/null
++++ b/lib/services/audit/login-audit.ts
+@@ -0,0 +1,22 @@
++import { Prisma } from "@prisma/client";
++import { prisma } from "@/lib/prisma";
++
++export async function writeLoginAudit(input: {
++  companyId: string;
++  actorUserId?: string | null;
++  email: string;
++  success: boolean;
++  reason?: string | null;
++  payload?: Prisma.InputJsonValue;
++}) {
++  return prisma.loginAuditLog.create({
++    data: {
++      companyId: input.companyId,
++      actorUserId: input.actorUserId ?? null,
++      email: input.email,
++      success: input.success,
++      reason: input.reason ?? null,
++      payload: input.payload,
++    },
++  });
++}
+
+diff --git a/lib/services/audit/support-action-trace.ts b/lib/services/audit/support-action-trace.ts
+index 17c8be8..a3a1b54 100644
+--- a/lib/services/audit/support-action-trace.ts
++++ b/lib/services/audit/support-action-trace.ts
+@@ -1,6 +1,6 @@
+ import { Prisma, PrismaClient, PlatformRole } from "@prisma/client";
+-
+ import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
++import { isRecord, trimOptionalString } from "@/lib/services/audit/audit-context";
+ 
+ type AuditDb = Prisma.TransactionClient | PrismaClient;
+ 
+@@ -12,13 +12,20 @@ export type SupportActionTraceInput = {
+   entityType: string;
+   entityId: string;
+   summary: string;
++  supportReason?: string | null;
+   payload?: Prisma.InputJsonValue;
+ };
+ 
++function mergeSupportReason(payload: Prisma.InputJsonValue | undefined, supportReason: string): Prisma.InputJsonValue {
++  if (isRecord(payload)) return { ...payload, supportReason };
++  return { supportReason, data: payload ?? null };
++}
++
+ export async function traceSupportAction(db: AuditDb, input: SupportActionTraceInput) {
+   if (!input.actorUserId) return null;
+   if (input.actorPlatformRole !== PlatformRole.SUPPORT) return null;
+-
++  const supportReason = trimOptionalString(input.supportReason);
++  if (!supportReason) throw new Error("SUPPORT_REASON_REQUIRED");
+   return writePlanningAudit(db, {
+     companyId: input.companyId,
+     actorUserId: input.actorUserId,
+@@ -26,6 +33,6 @@ export async function traceSupportAction(db: AuditDb, input: SupportActionTraceI
+     entityType: input.entityType,
+     entityId: input.entityId,
+     summary: input.summary,
+-    payload: input.payload,
++    payload: mergeSupportReason(input.payload, supportReason),
+   });
+ }
+
+diff --git a/lib/permissions.ts b/lib/permissions.ts
+index 848e29e..a939f69 100644
+--- a/lib/permissions.ts
++++ b/lib/permissions.ts
+@@ -9,27 +9,18 @@ function hasNativeAccess(role?: string | null): boolean {
+ 
+ export async function hasPermission(userId: string, code: AlphaPermissionCode): Promise<boolean> {
+   const permission = await prisma.userPermission.findFirst({
+-    where: {
+-      userId,
+-      permission: { code },
+-    },
++    where: { userId, permission: { code } },
+     select: { id: true },
+   });
+-
+   return Boolean(permission);
+ }
+ 
+ export async function hasAnyPermission(userId: string, codes: readonly AlphaPermissionCode[]): Promise<boolean> {
+   if (codes.length === 0) return false;
+-
+   const permission = await prisma.userPermission.findFirst({
+-    where: {
+-      userId,
+-      permission: { code: { in: [...codes] } },
+-    },
++    where: { userId, permission: { code: { in: [...codes] } } },
+     select: { id: true },
+   });
+-
+   return Boolean(permission);
+ }
+ 
+@@ -38,78 +29,49 @@ async function hasPermissionAccess(params: {
+   role?: string | null;
+   platformRole?: PlatformRole | string | null;
+   codes: readonly AlphaPermissionCode[];
++  allowSupport?: boolean;
+ }): Promise<boolean> {
+-  if (isGlobalSupport(params.platformRole)) return false;
++  if (isGlobalSupport(params.platformRole)) return Boolean(params.allowSupport);
+   if (hasNativeAccess(params.role)) return true;
+   return hasAnyPermission(params.userId, params.codes);
+ }
+ 
+-export async function canViewSelfPlanning(
+-  userId: string,
+-  role?: string | null,
+-  platformRole?: PlatformRole | string | null
+-): Promise<boolean> {
+-  return hasPermissionAccess({
+-    userId,
+-    role,
+-    platformRole,
+-    codes: ["PLANNING_VIEW_SELF", "PLANNING_VIEW_GLOBAL"],
+-  });
++export async function canViewSelfPlanning(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
++  return hasPermissionAccess({ userId, role, platformRole, codes: ["PLANNING_VIEW_SELF", "PLANNING_VIEW_GLOBAL"] });
+ }
+-
+-export async function canViewGlobalPlanning(
+-  userId: string,
+-  role?: string | null,
+-  platformRole?: PlatformRole | string | null
+-): Promise<boolean> {
++export async function canViewGlobalPlanning(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
+   return hasPermissionAccess({ userId, role, platformRole, codes: ["PLANNING_VIEW_GLOBAL"] });
+ }
+-
+ export async function canAutoSchedule(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
+   return hasPermissionAccess({ userId, role, platformRole, codes: ["PLANNING_AUTOSCHEDULE"] });
+ }
+-
+ export async function canPublishAutoSchedule(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
+   return hasPermissionAccess({ userId, role, platformRole, codes: ["PLANNING_AUTOSCHEDULE_PUBLISH"] });
+ }
+-
+ export async function canCancelAutoSchedule(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
+-  return hasPermissionAccess({
+-    userId,
+-    role,
+-    platformRole,
+-    codes: ["PLANNING_AUTOSCHEDULE_CANCEL", "PLANNING_AUTOSCHEDULE"],
+-  });
++  return hasPermissionAccess({ userId, role, platformRole, codes: ["PLANNING_AUTOSCHEDULE_CANCEL", "PLANNING_AUTOSCHEDULE"] });
+ }
+-
+ export async function canManageUsers(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
+   return hasPermissionAccess({ userId, role, platformRole, codes: ["USERS_MANAGE"] });
+ }
+-
+ export async function canManageVehicles(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
+   return hasPermissionAccess({ userId, role, platformRole, codes: ["VEHICLES_MANAGE"] });
+ }
+-
+ export async function canManageTemplates(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
+   return hasPermissionAccess({ userId, role, platformRole, codes: ["TEMPLATES_MANAGE"] });
+ }
+-
+ export async function canManageCompanyRules(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
+   return hasPermissionAccess({ userId, role, platformRole, codes: ["COMPANY_RULES_MANAGE"] });
+ }
+-
+ export async function canViewAudit(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
+-  return hasPermissionAccess({ userId, role, platformRole, codes: ["AUDIT_VIEW"] });
++  return hasPermissionAccess({ userId, role, platformRole, codes: ["AUDIT_VIEW"], allowSupport: true });
+ }
+-
+ export async function canEditPlanning(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
+   return hasPermissionAccess({ userId, role, platformRole, codes: ["PLANNING_EDIT"] });
+ }
+-
+ export async function canAccessAdminDashboard(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
+   return hasPermissionAccess({ userId, role, platformRole, codes: ["DASHBOARD_ADMIN_ACCESS"] });
+ }
+-
+ export async function canAccessTerrainDashboard(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
+   return hasPermissionAccess({ userId, role, platformRole, codes: ["DASHBOARD_TERRAIN_ACCESS"] });
+ }
+
+diff --git a/lib/auth.ts b/lib/auth.ts
+index 4732af4..4264d81 100644
+--- a/lib/auth.ts
++++ b/lib/auth.ts
+@@ -4,147 +4,77 @@ import bcrypt from "bcrypt";
+ import { z } from "zod";
+ import { prisma } from "@/lib/prisma";
+ import { PlatformRole, Role } from "@prisma/client";
++import { writeLoginAudit } from "@/lib/services/audit/login-audit";
+ 
+-type TokenExtras = {
+-  role?: Role;
+-  platformRole?: PlatformRole;
+-  companyId?: string;
+-};
+-
+-function isRole(v: unknown): v is Role {
+-  return typeof v === "string" && (Object.values(Role) as string[]).includes(v);
+-}
+-
+-function isPlatformRole(v: unknown): v is PlatformRole {
+-  return typeof v === "string" && (Object.values(PlatformRole) as string[]).includes(v);
+-}
+-
+-function isNonEmptyString(v: unknown): v is string {
+-  return typeof v === "string" && v.trim().length > 0;
+-}
++type TokenExtras = { role?: Role; platformRole?: PlatformRole; companyId?: string };
++function isRole(v: unknown): v is Role { return typeof v === "string" && (Object.values(Role) as string[]).includes(v); }
++function isPlatformRole(v: unknown): v is PlatformRole { return typeof v === "string" && (Object.values(PlatformRole) as string[]).includes(v); }
++function isNonEmptyString(v: unknown): v is string { return typeof v === "string" && v.trim().length > 0; }
++async function safeWriteLoginAudit(input: Parameters<typeof writeLoginAudit>[0]) { try { await writeLoginAudit(input); } catch {} }
+ 
+ export const authOptions: NextAuthOptions = {
+   session: { strategy: "jwt" },
+-
+-  providers: [
+-    CredentialsProvider({
+-      name: "Credentials",
+-      credentials: {
+-        email: { label: "Email", type: "email" },
+-        password: { label: "Password", type: "password" },
+-      },
+-
+-      async authorize(credentials) {
+-        const schema = z.object({
+-          email: z.string().email(),
+-          password: z.string().min(1),
+-        });
+-
+-        const parsed = schema.safeParse(credentials);
+-        if (!parsed.success) return null;
+-
+-        const { email, password } = parsed.data;
+-
+-        const user = await prisma.user.findUnique({
+-          where: { email },
+-          select: {
+-            id: true,
+-            email: true,
+-            name: true,
+-            password: true,
+-            role: true,
+-            platformRole: true,
+-            companyId: true,
+-            isActive: true,
+-          },
+-        });
+-
+-        if (!user || !user.isActive) return null;
+-
+-        const ok = await bcrypt.compare(password, user.password);
+-        if (!ok) return null;
+-
+-        return {
+-          id: user.id,
+-          email: user.email,
+-          name: user.name ?? user.email,
+-          role: user.role ?? undefined,
+-          platformRole: user.platformRole ?? undefined,
+-          companyId: user.companyId ?? undefined,
+-        };
+-      },
+-    }),
+-  ],
+-
++  providers: [CredentialsProvider({
++    name: "Credentials",
++    credentials: { email: { label: "Email", type: "email" }, password: { label: "Password", type: "password" } },
++    async authorize(credentials) {
++      const schema = z.object({ email: z.string().email(), password: z.string().min(1) });
++      const parsed = schema.safeParse(credentials);
++      if (!parsed.success) return null;
++      const { email, password } = parsed.data;
++      const user = await prisma.user.findUnique({ where: { email }, select: { id: true, email: true, name: true, password: true, role: true, platformRole: true, companyId: true, isActive: true } });
++      if (!user || !user.isActive) {
++        if (user?.companyId) await safeWriteLoginAudit({ companyId: user.companyId, actorUserId: user.id, email, success: false, reason: "USER_INACTIVE", payload: { event: "LOGIN", email } });
++        return null;
++      }
++      const ok = await bcrypt.compare(password, user.password);
++      if (!ok) {
++        if (user.companyId) await safeWriteLoginAudit({ companyId: user.companyId, actorUserId: user.id, email, success: false, reason: "INVALID_PASSWORD", payload: { event: "LOGIN", email } });
++        return null;
++      }
++      if (user.companyId) await safeWriteLoginAudit({ companyId: user.companyId, actorUserId: user.id, email, success: true, reason: null, payload: { event: "LOGIN", email } });
++      return { id: user.id, email: user.email, name: user.name ?? user.email, role: user.role ?? undefined, platformRole: user.platformRole ?? undefined, companyId: user.companyId ?? undefined };
++    },
++  })],
+   callbacks: {
+     async jwt({ token, user }) {
+-      // 1) Au login (user présent) => hydrate le token
+       if (user) {
+         const u = user as unknown as { role?: unknown; platformRole?: unknown; companyId?: unknown };
+-
+-        if (isRole(u.role)) token.role = u.role;
+-        else delete token.role;
+-
+-        if (isPlatformRole(u.platformRole)) token.platformRole = u.platformRole;
+-        else delete token.platformRole;
+-
+-        if (isNonEmptyString(u.companyId)) token.companyId = u.companyId;
+-        else delete token.companyId;
+-
++        if (isRole(u.role)) token.role = u.role; else delete token.role;
++        if (isPlatformRole(u.platformRole)) token.platformRole = u.platformRole; else delete token.platformRole;
++        if (isNonEmptyString(u.companyId)) token.companyId = u.companyId; else delete token.companyId;
+         return token;
+       }
+-
+-      // 2) Requêtes suivantes (user absent) => on recharge uniquement si le scope n'est pas déjà cohérent
+       const t = token as typeof token & TokenExtras;
+-
+       const hasPlatformRole = isPlatformRole(t.platformRole);
+       const hasCompanyId = isNonEmptyString(t.companyId);
+       const hasRole = isRole(t.role);
+-
+       const userId = typeof token.sub === "string" ? token.sub : null;
+       if (!userId) return token;
+-
+       const needsTenantHydration = !hasPlatformRole && (!hasCompanyId || !hasRole);
+       const needsPlatformHydration = !hasPlatformRole && !hasRole && !hasCompanyId;
+-
+       if (needsTenantHydration || needsPlatformHydration) {
+-        const dbUser = await prisma.user.findUnique({
+-          where: { id: userId },
+-          select: { role: true, platformRole: true, companyId: true },
+-        });
+-
++        const dbUser = await prisma.user.findUnique({ where: { id: userId }, select: { role: true, platformRole: true, companyId: true } });
+         if (dbUser) {
+-          if (isRole(dbUser.role)) t.role = dbUser.role;
+-          else delete t.role;
+-
+-          if (isPlatformRole(dbUser.platformRole)) t.platformRole = dbUser.platformRole;
+-          else delete t.platformRole;
+-
+-          if (isNonEmptyString(dbUser.companyId)) t.companyId = dbUser.companyId;
+-          else delete t.companyId;
++          if (isRole(dbUser.role)) t.role = dbUser.role; else delete t.role;
++          if (isPlatformRole(dbUser.platformRole)) t.platformRole = dbUser.platformRole; else delete t.platformRole;
++          if (isNonEmptyString(dbUser.companyId)) t.companyId = dbUser.companyId; else delete t.companyId;
+         }
+       }
+-
+       return token;
+     },
+-
+     async session({ session, token }) {
+       if (session.user) {
+         const t = token as typeof token & TokenExtras;
+         const platformRole = isPlatformRole(t.platformRole) ? t.platformRole : undefined;
+-
+         session.user.id = typeof token.sub === "string" ? token.sub : undefined;
+         session.user.role = isRole(t.role) ? t.role : undefined;
+         session.user.platformRole = platformRole;
+         session.user.companyId = isNonEmptyString(t.companyId) ? t.companyId : undefined;
+         session.user.isGlobalSupport = platformRole === PlatformRole.SUPPORT;
+       }
+-
+       return session;
+     },
+   },
+-
+-  pages: {
+-    signIn: "/login",
+-  },
++  pages: { signIn: "/login" },
+ };
+
+diff --git a/mnt/data/a11_repo/AmbuManager-main/app/api/audit/route.ts b/app/api/audit/route.ts
+new file mode 100644
+index 0000000..798050c
+--- /dev/null
++++ b/app/api/audit/route.ts
+@@ -0,0 +1,42 @@
++import { getServerSession } from "next-auth/next";
++import { z } from "zod";
++import { authOptions } from "@/lib/auth";
++import { badRequest, forbidden, ok, unauthorized } from "@/lib/api/response";
++import { canViewAudit } from "@/lib/permissions";
++import { prisma } from "@/lib/prisma";
++import { requestedCompanyIdFromUrl, resolveAuditCompanyId } from "@/lib/services/audit/audit-context";
++
++const querySchema = z.object({
++  companyId: z.string().uuid().optional(),
++  entityType: z.string().trim().min(1).max(64).optional(),
++  entityId: z.string().trim().min(1).max(191).optional(),
++  limit: z.coerce.number().int().min(1).max(500).default(100),
++});
++
++export async function GET(req: Request) {
++  const session = await getServerSession(authOptions);
++  const actorUserId = session?.user?.id;
++  const role = session?.user?.role;
++  const platformRole = session?.user?.platformRole;
++  if (!actorUserId) return unauthorized();
++  if (!(await canViewAudit(actorUserId, role, platformRole))) return forbidden();
++  const url = new URL(req.url);
++  const parsed = querySchema.safeParse({
++    companyId: requestedCompanyIdFromUrl(url) ?? undefined,
++    entityType: url.searchParams.get("entityType") ?? undefined,
++    entityId: url.searchParams.get("entityId") ?? undefined,
++    limit: url.searchParams.get("limit") ?? undefined,
++  });
++  if (!parsed.success) return badRequest("VALIDATION_ERROR", parsed.error.flatten());
++  const companyId = resolveAuditCompanyId({ sessionCompanyId: session?.user?.companyId, actorPlatformRole: platformRole, requestedCompanyId: parsed.data.companyId ?? null });
++  if (!companyId) return unauthorized();
++  const [planningLogs, loginLogs] = await Promise.all([
++    prisma.planningAuditLog.findMany({ where: { companyId, ...(parsed.data.entityType ? { entityType: parsed.data.entityType } : {}), ...(parsed.data.entityId ? { entityId: parsed.data.entityId } : {}) }, include: { actorUser: { select: { id: true, name: true, email: true } } }, orderBy: { createdAt: "desc" }, take: parsed.data.limit }),
++    prisma.loginAuditLog.findMany({ where: { companyId }, include: { actorUser: { select: { id: true, name: true, email: true } } }, orderBy: { createdAt: "desc" }, take: parsed.data.limit }),
++  ]);
++  const entries = [
++    ...planningLogs.map((log) => ({ id: log.id, source: "PLANNING_AUDIT", createdAt: log.createdAt.toISOString(), action: log.action, entityType: log.entityType, entityId: log.entityId, summary: log.summary, payload: log.payload, actorUser: log.actorUser })),
++    ...loginLogs.map((log) => ({ id: log.id, source: "LOGIN_AUDIT", createdAt: log.createdAt.toISOString(), action: log.success ? "LOGIN_SUCCESS" : "LOGIN_FAILURE", entityType: "LOGIN", entityId: log.actorUserId ?? log.email, summary: log.success ? `Connexion réussie ${log.email}` : `Échec de connexion ${log.email}`, payload: { email: log.email, success: log.success, reason: log.reason }, actorUser: log.actorUser })),
++  ].sort((a,b)=>a.createdAt < b.createdAt ? 1 : -1).slice(0, parsed.data.limit);
++  return ok({ companyId, entries });
++}
+
+diff --git a/mnt/data/a11_repo/AmbuManager-main/app/audit/page.tsx b/app/audit/page.tsx
+new file mode 100644
+index 0000000..fccf412
+--- /dev/null
++++ b/app/audit/page.tsx
+@@ -0,0 +1,24 @@
++import { getServerSession } from "next-auth/next";
++import { redirect } from "next/navigation";
++import { authOptions } from "@/lib/auth";
++import { canViewAudit } from "@/lib/permissions";
++import AuditClient from "./audit-client";
++
++export default async function AuditPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
++  const session = await getServerSession(authOptions);
++  const user = session?.user;
++  if (!user?.id) redirect("/login");
++  if (!(await canViewAudit(user.id, user.role, user.platformRole))) redirect("/login");
++  const params = await searchParams;
++  const companyIdParam = params.companyId;
++  const companyId = typeof companyIdParam === "string" ? companyIdParam : user.companyId ?? "";
++  return (
++    <main style={{ padding: 24, display: "grid", gap: 16 }}>
++      <div>
++        <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 8 }}>Audit</h1>
++        <p style={{ margin: 0, opacity: 0.8 }}>Lecture unifiée minimale des entrées d&apos;audit planning, support et connexions.</p>
++      </div>
++      <AuditClient defaultCompanyId={companyId} isGlobalSupport={Boolean(user.isGlobalSupport)} />
++    </main>
++  );
++}
+
+diff --git a/mnt/data/a11_repo/AmbuManager-main/app/audit/audit-client.tsx b/app/audit/audit-client.tsx
+new file mode 100644
+index 0000000..ee1ea42
+--- /dev/null
++++ b/app/audit/audit-client.tsx
+@@ -0,0 +1,16 @@
++"use client";
++import { useEffect, useMemo, useState } from "react";
++
++type AuditEntry = { id: string; source: string; createdAt: string; action: string; entityType: string; entityId: string; summary: string; payload?: unknown; actorUser?: { id: string; name: string; email?: string | null } | null; };
++function formatDateTime(iso: string) { return new Date(iso).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }); }
++export default function AuditClient({ defaultCompanyId, isGlobalSupport }: { defaultCompanyId: string; isGlobalSupport: boolean; }) {
++  const [companyId, setCompanyId] = useState(defaultCompanyId);
++  const [entityType, setEntityType] = useState("");
++  const [entityId, setEntityId] = useState("");
++  const [loading, setLoading] = useState(false);
++  const [error, setError] = useState<string | null>(null);
++  const [entries, setEntries] = useState<AuditEntry[]>([]);
++  const query = useMemo(() => { const p = new URLSearchParams(); if (companyId) p.set("companyId", companyId); if (entityType) p.set("entityType", entityType); if (entityId) p.set("entityId", entityId); p.set("limit", "100"); return p.toString(); }, [companyId, entityId, entityType]);
++  useEffect(() => { let cancelled=false; async function load(){ if(!companyId) return; setLoading(true); setError(null); try{ const res=await fetch(`/api/audit?${query}`); const json=await res.json().catch(()=>null); if(!res.ok||!json||json.ok!==true) throw new Error(typeof json?.error==='string'?json.error:`HTTP_${res.status}`); if(!cancelled) setEntries(Array.isArray(json.data?.entries)?json.data.entries:[]);}catch(err){ if(!cancelled){ setEntries([]); setError(err instanceof Error?err.message:'Erreur inconnue');}} finally { if(!cancelled) setLoading(false);} } void load(); return ()=>{cancelled=true}; }, [companyId, query]);
++  return (<section style={{ display: "grid", gap: 12 }}><div style={{ display: "grid", gap: 8, gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}><input value={companyId} onChange={(e)=>setCompanyId(e.target.value)} placeholder="companyId" disabled={!isGlobalSupport} /><input value={entityType} onChange={(e)=>setEntityType(e.target.value)} placeholder="entityType (optionnel)" /><input value={entityId} onChange={(e)=>setEntityId(e.target.value)} placeholder="entityId (optionnel)" /></div>{loading && <div>Chargement de l&apos;audit…</div>}{error && <div style={{ color: 'crimson' }}>Erreur : {error}</div>}{!loading && !error && entries.length===0 && <div style={{ opacity: 0.75 }}>Aucune entrée d&apos;audit.</div>}<div style={{ display: 'grid', gap: 10 }}>{entries.map((entry)=><div key={`${entry.source}-${entry.id}`} style={{ border:'1px solid rgba(255,255,255,0.14)', borderRadius:12, padding:12 }}><div style={{ display:'flex', justifyContent:'space-between', gap:12, flexWrap:'wrap' }}><div style={{ fontWeight:800 }}>{entry.summary}</div><div style={{ opacity:0.75 }}>{formatDateTime(entry.createdAt)}</div></div><div style={{ marginTop:6, opacity:0.85 }}>{entry.source} • {entry.action} • {entry.entityType} • {entry.entityId}</div><div style={{ marginTop:6, opacity:0.8 }}>Acteur : {entry.actorUser?.name ?? 'Système'}</div>{entry.payload !== undefined && <pre style={{ whiteSpace:'pre-wrap', marginTop:8, fontSize:12, opacity:0.9 }}>{JSON.stringify(entry.payload, null, 2)}</pre>}</div>)}</div></section>);
++}
+
+diff --git a/app/planning/page.tsx b/app/planning/page.tsx
+index fb601c7..4cbb4fb 100644
+--- a/app/planning/page.tsx
++++ b/app/planning/page.tsx
+@@ -1,89 +1,27 @@
++import Link from "next/link";
+ import { getServerSession } from "next-auth/next";
+ import { redirect } from "next/navigation";
+-
+ import { authOptions } from "@/lib/auth";
+-import {
+-  canAutoSchedule,
+-  canEditPlanning,
+-  canManageCompanyRules,
+-  canViewGlobalPlanning,
+-  canViewSelfPlanning,
+-} from "@/lib/permissions";
++import { canAutoSchedule, canEditPlanning, canManageCompanyRules, canViewAudit, canViewGlobalPlanning, canViewSelfPlanning } from "@/lib/permissions";
+ import { prisma } from "@/lib/prisma";
+-
+ import PlanningClient from "./planning-client";
+ 
+ export default async function PlanningPage() {
+   const session = await getServerSession(authOptions);
+   const user = session?.user;
+-
+-  if (!user?.id || !user.companyId) redirect("/login");
+-
+-  const [canViewSelf, canViewGlobal, canManageMode, canManagePlanning, canRunAutoSchedule, currentUser] = await Promise.all([
++  if (!user?.id || !user.companyId) redirect('/login');
++  const [canViewSelf, canViewGlobal, canManageMode, canManagePlanning, canRunAutoSchedule, canReadAudit, currentUser] = await Promise.all([
+     canViewSelfPlanning(user.id, user.role, user.platformRole),
+     canViewGlobalPlanning(user.id, user.role, user.platformRole),
+     canManageCompanyRules(user.id, user.role, user.platformRole),
+     canEditPlanning(user.id, user.role, user.platformRole),
+     canAutoSchedule(user.id, user.role, user.platformRole),
+-    prisma.user.findFirst({
+-      where: { id: user.id, companyId: user.companyId },
+-      select: { id: true, name: true, email: true },
+-    }),
++    canViewAudit(user.id, user.role, user.platformRole),
++    prisma.user.findFirst({ where: { id: user.id, companyId: user.companyId }, select: { id: true, name: true, email: true } }),
+   ]);
+-
+-  if (!canViewSelf && !canViewGlobal) {
+-    return (
+-      <main style={{ padding: 24 }}>
+-        <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 12 }}>Planning</h1>
+-        <p style={{ margin: 0, opacity: 0.85 }}>Accès non autorisé à la consultation du planning.</p>
+-      </main>
+-    );
+-  }
+-
+-  const depots = await prisma.depot.findMany({
+-    where: { companyId: user.companyId, isActive: true },
+-    orderBy: { name: "asc" },
+-    select: {
+-      id: true,
+-      name: true,
+-      isActive: true,
+-    },
+-  });
+-
+-  const fallbackCurrentUser = {
+-    id: user.id,
+-    name: user.name ?? user.email ?? "Utilisateur",
+-    email: user.email ?? "",
+-  };
+-
+-  const accessibleUsers = canViewGlobal || canManagePlanning
+-    ? await prisma.user.findMany({
+-        where: {
+-          companyId: user.companyId,
+-          isActive: true,
+-          platformRole: null,
+-        },
+-        orderBy: [{ name: "asc" }, { email: "asc" }],
+-        select: {
+-          id: true,
+-          name: true,
+-          email: true,
+-        },
+-      })
+-    : [currentUser ?? fallbackCurrentUser];
+-
+-  return (
+-    <main style={{ padding: 24 }}>
+-      <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 12 }}>Planning</h1>
+-      <PlanningClient
+-        availableDepots={depots}
+-        availableUsers={accessibleUsers}
+-        currentUser={currentUser ?? fallbackCurrentUser}
+-        canViewGlobal={canViewGlobal}
+-        canEditPlanning={canManagePlanning}
+-        canAutoSchedule={canRunAutoSchedule}
+-        canManageCompanyMode={canManageMode}
+-      />
+-    </main>
+-  );
++  if (!canViewSelf && !canViewGlobal) return <main style={{ padding:24 }}><h1 style={{ fontSize:24, fontWeight:700, marginBottom:12 }}>Planning</h1><p style={{ margin:0, opacity:0.85 }}>Accès non autorisé à la consultation du planning.</p></main>;
++  const depots = await prisma.depot.findMany({ where: { companyId: user.companyId, isActive: true }, orderBy: { name: 'asc' }, select: { id:true, name:true, isActive:true } });
++  const fallbackCurrentUser = { id: user.id, name: user.name ?? user.email ?? 'Utilisateur', email: user.email ?? '' };
++  const accessibleUsers = canViewGlobal || canManagePlanning ? await prisma.user.findMany({ where: { companyId: user.companyId, isActive: true, platformRole: null }, orderBy: [{ name:'asc' }, { email:'asc' }], select: { id:true, name:true, email:true } }) : [currentUser ?? fallbackCurrentUser];
++  return <main style={{ padding:24, display:'grid', gap:12 }}><div style={{ display:'flex', justifyContent:'space-between', gap:12, alignItems:'center', flexWrap:'wrap' }}><h1 style={{ fontSize:24, fontWeight:700, margin:0 }}>Planning</h1>{canReadAudit ? <Link href="/audit" style={{ textDecoration:'underline' }}>Ouvrir l’audit dédié</Link> : null}</div><PlanningClient availableDepots={depots} availableUsers={accessibleUsers} currentUser={currentUser ?? fallbackCurrentUser} canViewGlobal={canViewGlobal} canEditPlanning={canManagePlanning} canAutoSchedule={canRunAutoSchedule} canManageCompanyMode={canManageMode} canViewAudit={canReadAudit} /></main>;
+ }
+
+diff --git a/app/planning/planning-client.tsx b/app/planning/planning-client.tsx
+index 4daf2d6..9069d64 100644
+--- a/app/planning/planning-client.tsx
++++ b/app/planning/planning-client.tsx
+@@ -40,6 +40,7 @@ type PlanningClientProps = {
+   canEditPlanning: boolean;
+   canAutoSchedule: boolean;
+   canManageCompanyMode: boolean;
++  canViewAudit: boolean;
+ };
+ 
+ type RunAuditLog = {
+@@ -1445,6 +1446,7 @@ export default function PlanningClient({
+         currentUser={currentUser}
+         canViewGlobal={canViewGlobal}
+         canEditPlanning={canEditPlanning}
++        canViewAudit={canViewAudit}
+       />
+ 
+       <section style={{ border: "1px solid rgba(255,255,255,0.12)", borderRadius: 10, padding: 12, display: "grid", gap: 8 }}>
+
+diff --git a/app/planning/manual-planning-panel.tsx b/app/planning/manual-planning-panel.tsx
+index cff4d4f..1963885 100644
+--- a/app/planning/manual-planning-panel.tsx
++++ b/app/planning/manual-planning-panel.tsx
+@@ -36,6 +36,7 @@ type Props = {
+   currentUser: UserLite;
+   canViewGlobal: boolean;
+   canEditPlanning: boolean;
++  canViewAudit: boolean;
+ };
+ 
+ type ViewMode = "day" | "week" | "month";
+@@ -117,6 +118,7 @@ export default function ManualPlanningPanel({
+   currentUser,
+   canViewGlobal,
+   canEditPlanning,
++  canViewAudit,
+ }: Props) {
+   const [viewMode, setViewMode] = useState<ViewMode>("month");
+   const [cursorDate, setCursorDate] = useState<Date>(new Date());
+@@ -143,10 +145,10 @@ export default function ManualPlanningPanel({
+     }
+     if (canViewGlobal && selectedUserId) params.set("userId", selectedUserId);
+     if (!canViewGlobal) params.set("userId", currentUser.id);
+-    params.set("includeHistory", "1");
++    if (canViewAudit) params.set("includeHistory", "1");
+     params.set("limit", "500");
+     return params.toString();
+-  }, [canViewGlobal, currentUser.id, cursorDate, selectedUserId, viewMode]);
++  }, [canViewAudit, canViewGlobal, currentUser.id, cursorDate, selectedUserId, viewMode]);
+ 
+   const loadTemplates = useCallback(async () => {
+     const { res, json } = await fetchJson("/api/templates?limit=500");
+@@ -382,6 +384,7 @@ export default function ManualPlanningPanel({
+               shift={shift}
+               canEditPlanning={canEditPlanning}
+               history={historyByShiftId[shift.id] ?? []}
++              canViewAudit={canViewAudit}
+               templates={templates}
+               depots={availableDepots}
+               isEditing={editingShiftId === shift.id}
+@@ -440,6 +443,7 @@ function ShiftCard({
+   onSaveEdit,
+   onCancelEdit,
+   onCancelShift,
++  canViewAudit,
+ }: {
+   shift: ShiftItem;
+   history: AuditItem[];
+@@ -453,6 +457,7 @@ function ShiftCard({
+   onSaveEdit: () => void;
+   onCancelEdit: () => void;
+   onCancelShift: () => void;
++  canViewAudit: boolean;
+ }) {
+   return (
+     <div style={{ border: "1px solid rgba(255,255,255,0.14)", borderRadius: 12, padding: 12, display: "grid", gap: 8 }}>
+@@ -503,7 +508,7 @@ function ShiftCard({
+ 
+       <div style={{ display: "grid", gap: 6 }}>
+         <div style={{ fontWeight: 700 }}>Historique minimal</div>
+-        {history.length === 0 ? <div style={{ opacity: 0.65 }}>Aucune trace disponible.</div> : history.slice(0, 6).map((entry) => (
++        {!canViewAudit ? <div style={{ opacity: 0.65 }}>Accès audit non autorisé.</div> : history.length === 0 ? <div style={{ opacity: 0.65 }}>Aucune trace disponible.</div> : history.slice(0, 6).map((entry) => (
+           <div key={entry.id} style={{ fontSize: 13, opacity: 0.9 }}>
+             {dateTimeLabel(entry.createdAt)} — {entry.summary}
+             {entry.actorUser?.name ? ` (${entry.actorUser.name})` : ""}
+
+diff --git a/app/api/planning/shifts/route.ts b/app/api/planning/shifts/route.ts
+index 80f19e5..7603e11 100644
+--- a/app/api/planning/shifts/route.ts
++++ b/app/api/planning/shifts/route.ts
+@@ -4,7 +4,7 @@ import type { Prisma } from "@prisma/client";
+ import { z } from "zod";
+ 
+ import { authOptions } from "@/lib/auth";
+-import { canEditPlanning, canViewGlobalPlanning, canViewSelfPlanning } from "@/lib/permissions";
++import { canEditPlanning, canViewAudit, canViewGlobalPlanning, canViewSelfPlanning } from "@/lib/permissions";
+ import { prisma } from "@/lib/prisma";
+ import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
+ 
+@@ -69,9 +69,10 @@ export async function GET(req: NextRequest) {
+     return NextResponse.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
+   }
+ 
+-  const [canViewSelf, canViewGlobal] = await Promise.all([
++  const [canViewSelf, canViewGlobal, canReadAudit] = await Promise.all([
+     canViewSelfPlanning(userId, role, platformRole),
+     canViewGlobalPlanning(userId, role, platformRole),
++    canViewAudit(userId, role, platformRole),
+   ]);
+ 
+   if (!canViewSelf && !canViewGlobal) {
+@@ -148,7 +149,7 @@ export async function GET(req: NextRequest) {
+     });
+ 
+     const shiftIds = shifts.map((shift) => shift.id);
+-    const auditLogs = includeHistory === "1" && shiftIds.length > 0
++    const auditLogs = includeHistory === "1" && canReadAudit && shiftIds.length > 0
+       ? await prisma.planningAuditLog.findMany({
+           where: { companyId, entityType: "Shift", entityId: { in: shiftIds } },
+           orderBy: [{ createdAt: "desc" }],
+@@ -277,11 +278,9 @@ export async function POST(req: NextRequest) {
+       entityId: shift.id,
+       summary: "Shift publié créé manuellement",
+       payload: {
+-        date,
+-        startTime,
+-        endTime,
+-        templateId,
+-        depotId: depotId ?? null,
++        changedFields: ["date", "startAt", "endAt", "templateId", "depotId", "notes"],
++        previous: null,
++        next: { date, startTime, endTime, templateId, depotId: depotId ?? null, notes: notes ?? null },
+       },
+     });
+ 
+
+diff --git a/app/api/planning/shifts/[id]/cancel/route.ts b/app/api/planning/shifts/[id]/cancel/route.ts
+index f6fe817..78cc5b1 100644
+--- a/app/api/planning/shifts/[id]/cancel/route.ts
++++ b/app/api/planning/shifts/[id]/cancel/route.ts
+@@ -48,8 +48,8 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
+     update: (args: unknown) => Promise<unknown>;
+   }).findFirst({
+     where: { id, companyId },
+-    select: { id: true, runId: true, isCancelled: true },
+-  })) as { id: string; runId: string | null; isCancelled?: boolean | null } | null;
++    select: { id: true, runId: true, isCancelled: true, cancelledAt: true, cancellationReason: true },
++  })) as { id: string; runId: string | null; isCancelled?: boolean | null; cancelledAt?: Date | null; cancellationReason?: string | null } | null;
+   if (!shift) {
+     return NextResponse.json({ ok: false, error: "NOT_FOUND" }, { status: 404 });
+   }
+@@ -78,7 +78,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
+     entityType: "Shift",
+     entityId: id,
+     summary: "Shift publié annulé logiquement",
+-    payload: { reason: parsed.data.reason },
++    payload: { changedFields: ["isCancelled", "cancelledAt", "cancellationReason"], previous: { isCancelled: shift.isCancelled ?? false, cancelledAt: shift.cancelledAt ?? null, cancellationReason: shift.cancellationReason ?? null }, next: { isCancelled: true, cancelledAt: now, cancellationReason: parsed.data.reason } },
+   });
+ 
+   return NextResponse.json({ ok: true });
+
+diff --git a/app/api/planning/autoschedule/runs/[id]/route.ts b/app/api/planning/autoschedule/runs/[id]/route.ts
+index 3aef631..6bc0fc4 100644
+--- a/app/api/planning/autoschedule/runs/[id]/route.ts
++++ b/app/api/planning/autoschedule/runs/[id]/route.ts
+@@ -1,213 +1,47 @@
+ import { NextRequest, NextResponse } from "next/server";
+ import { getServerSession } from "next-auth/next";
+ import { z } from "zod";
+-
+ import { authOptions } from "@/lib/auth";
+ import { canAutoSchedule, canViewAudit } from "@/lib/permissions";
+ import { prisma } from "@/lib/prisma";
+-import {
+-  computeDraftShiftMatchingByRole,
+-  MATCHING_VARIANTS,
+-  type MatchingVariantDefinition,
+-  type MatchingVariantKey,
+-} from "@/lib/services/planning/matching.service";
++import { computeDraftShiftMatchingByRole, MATCHING_VARIANTS, type MatchingVariantDefinition, type MatchingVariantKey } from "@/lib/services/planning/matching.service";
+ import { computePlanningQuality } from "@/lib/services/planning/matching-quality";
++import { isSupportActor } from "@/lib/services/audit/audit-context";
+ 
+-const ParamsSchema = z.object({
+-  id: z.string().min(1),
+-});
+-
+-function extractRunIdFromPath(pathname: string): string | null {
+-  const parts = pathname.split("/").filter(Boolean);
+-
+-  const idx = parts.findIndex((p) => p === "runs");
+-  if (idx === -1) return null;
+-
+-  const id = parts[idx + 1];
+-  if (!id) return null;
+-
+-  const next = parts[idx + 2];
+-  if (next) return null;
+-
+-  return id;
+-}
+-
+-type PrismaKnownCode = "P2025";
+-
+-function getPrismaCode(e: unknown): PrismaKnownCode | null {
+-  if (typeof e !== "object" || e === null) return null;
+-  if (!("code" in e)) return null;
+-
+-  const code = (e as { code?: unknown }).code;
+-  if (code === "P2025") return code;
+-
+-  return null;
+-}
+-
+-function prismaToApiError(e: unknown): { status: number; body: { ok: false; error: string } } {
+-  const code = getPrismaCode(e);
+-  if (code === "P2025") return { status: 404, body: { ok: false, error: "NOT_FOUND" } };
+-
+-  return { status: 500, body: { ok: false, error: "SERVER_ERROR" } };
+-}
+-
+-function isRecord(value: unknown): value is Record<string, unknown> {
+-  return typeof value === "object" && value !== null;
+-}
+-
+-function resolveRunMatchingVariant(
+-  auditLogs: Array<{ action: string; payload: unknown }> | undefined
+-): MatchingVariantDefinition {
+-  const variantLog = auditLogs?.find((log) => {
+-    if (log.action !== "AUTOSCHEDULE_MATCH_APPLIED") return false;
+-    if (!isRecord(log.payload)) return false;
+-
+-    const variant = log.payload.variant;
+-    return typeof variant === "string" && MATCHING_VARIANTS.some((item) => item.key === variant);
+-  });
+-
+-  const variantKey = isRecord(variantLog?.payload)
+-    ? (variantLog.payload.variant as MatchingVariantKey | undefined)
+-    : undefined;
+-
+-  return MATCHING_VARIANTS.find((item) => item.key === variantKey) ?? MATCHING_VARIANTS[0];
+-}
++const ParamsSchema = z.object({ id: z.string().min(1) });
++function extractRunIdFromPath(pathname: string): string | null { const parts=pathname.split('/').filter(Boolean); const idx=parts.findIndex((p)=>p==='runs'); if(idx===-1) return null; const id=parts[idx+1]; if(!id) return null; const next=parts[idx+2]; if(next) return null; return id; }
++function isRecord(value: unknown): value is Record<string, unknown> { return typeof value === 'object' && value !== null; }
++function resolveRunMatchingVariant(auditLogs: Array<{ action: string; payload: unknown }> | undefined): MatchingVariantDefinition { const variantLog = auditLogs?.find((log)=>log.action==='AUTOSCHEDULE_MATCH_APPLIED' && isRecord(log.payload) && typeof log.payload.variant==='string' && MATCHING_VARIANTS.some((item)=>item.key===log.payload.variant)); const variantKey = isRecord(variantLog?.payload) ? (variantLog.payload.variant as MatchingVariantKey | undefined) : undefined; return MATCHING_VARIANTS.find((item)=>item.key===variantKey) ?? MATCHING_VARIANTS[0]; }
+ 
+ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
+   const session = await getServerSession(authOptions);
+-
+-  const companyId = session?.user?.companyId;
++  const sessionCompanyId = session?.user?.companyId;
+   const userId = session?.user?.id;
+   const role = session?.user?.role;
+-
+-  if (!companyId || !userId) {
+-    return NextResponse.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
+-  }
+-
+-  const canViewRun = await canAutoSchedule(userId, role);
+-  const canReadAudit = await canViewAudit(userId, role);
+-
+-  if (!canViewRun && !canReadAudit) {
+-    return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });
+-  }
+-
+-  let idFromParams: string | null = null;
+-  try {
+-    const p = await ctx.params;
+-    idFromParams = p?.id ? String(p.id) : null;
+-  } catch {
+-    idFromParams = null;
+-  }
+-
+-  const idFromPath = extractRunIdFromPath(req.nextUrl.pathname);
+-  const id = idFromParams ?? idFromPath;
+-
++  const platformRole = session?.user?.platformRole;
++  if (!userId) return NextResponse.json({ ok:false, error:'UNAUTHORIZED' }, { status:401 });
++  const [canViewRun, canReadAudit] = await Promise.all([canAutoSchedule(userId, role, platformRole), canViewAudit(userId, role, platformRole)]);
++  if (!canViewRun && !canReadAudit) return NextResponse.json({ ok:false, error:'FORBIDDEN' }, { status:403 });
++  let idFromParams: string | null = null; try { const p = await ctx.params; idFromParams = p?.id ? String(p.id) : null; } catch { idFromParams = null; }
++  const id = idFromParams ?? extractRunIdFromPath(req.nextUrl.pathname);
+   const parsedParams = ParamsSchema.safeParse({ id });
+-  if (!parsedParams.success) {
+-    return NextResponse.json(
+-      {
+-        ok: false,
+-        error: "VALIDATION_ERROR",
+-        details: {
+-          ...parsedParams.error.flatten(),
+-          debug: {
+-            pathname: req.nextUrl.pathname,
+-            paramsId: idFromParams ?? null,
+-            pathId: idFromPath ?? null,
+-          },
+-        },
+-      },
+-      { status: 400 }
+-    );
+-  }
+-
++  if (!parsedParams.success) return NextResponse.json({ ok:false, error:'VALIDATION_ERROR', details: parsedParams.error.flatten() }, { status:400 });
+   const runId = parsedParams.data.id;
+-
+-  try {
+-    const run = await prisma.autoScheduleRun.findFirst({
+-      where: { id: runId, companyId },
+-      select: {
+-        id: true,
+-        companyId: true,
+-        scope: true,
+-        status: true,
+-        day: true,
+-        weekStart: true,
+-        createdAt: true,
+-        createdBy: { select: { id: true, name: true, email: true } },
+-        _count: { select: { draftShifts: true } },
+-        draftShifts: {
+-          orderBy: { startAt: "asc" },
+-          include: { template: true, user: true, vehicle: true },
+-        },
+-        planningAuditLogs: {
+-          orderBy: { createdAt: "desc" },
+-          take: 20,
+-          select: {
+-            id: true,
+-            createdAt: true,
+-            action: true,
+-            entityType: true,
+-            entityId: true,
+-            summary: true,
+-            payload: true,
+-            actorUser: { select: { id: true, name: true, email: true } },
+-          },
+-        },
+-      },
+-    });
+-
+-    if (!run) {
+-      return NextResponse.json({ ok: false, error: "NOT_FOUND" }, { status: 404 });
+-    }
+-
+-    const { planningAuditLogs, draftShifts, _count, ...runData } = run;
+-
+-    const data: Record<string, unknown> = {
+-      ...runData,
+-      day: run.day ? run.day.toISOString() : null,
+-      weekStart: run.weekStart ? run.weekStart.toISOString() : null,
+-      createdAt: run.createdAt.toISOString(),
+-      access: {
+-        canViewRun,
+-        canViewAudit: canReadAudit,
+-      },
+-    };
+-
+-    if (canViewRun) {
+-      data._count = _count;
+-      data.draftShifts = draftShifts.map((s) => ({
+-        ...s,
+-        date: s.date.toISOString(),
+-        startAt: s.startAt.toISOString(),
+-        endAt: s.endAt.toISOString(),
+-        createdAt: s.createdAt.toISOString(),
+-      }));
+-
+-      const variant = resolveRunMatchingVariant(planningAuditLogs);
+-      const plan = await computeDraftShiftMatchingByRole(prisma, {
+-        companyId,
+-        runId,
+-        includeAlreadyAssigned: true,
+-        variant: variant.key,
+-      });
+-
+-      data.matching = {
+-        variant,
+-        quality: computePlanningQuality(plan),
+-      };
+-    }
+-
+-    if (canReadAudit) {
+-      data.auditLogs = planningAuditLogs.map((log) => ({
+-        ...log,
+-        createdAt: log.createdAt.toISOString(),
+-      }));
+-    }
+-
+-    return NextResponse.json({ ok: true, data });
+-  } catch (e) {
+-    const mapped = prismaToApiError(e);
+-    return NextResponse.json(mapped.body, { status: mapped.status });
++  const runHead = await prisma.autoScheduleRun.findFirst({ where: { id: runId, ...(sessionCompanyId ? { companyId: sessionCompanyId } : {}) }, select: { companyId: true } });
++  if (!runHead) return NextResponse.json({ ok:false, error:'NOT_FOUND' }, { status:404 });
++  if (!sessionCompanyId && !isSupportActor(platformRole)) return NextResponse.json({ ok:false, error:'UNAUTHORIZED' }, { status:401 });
++  const companyId = runHead.companyId;
++  const run = await prisma.autoScheduleRun.findFirst({ where: { id: runId, companyId }, select: { id:true, companyId:true, scope:true, status:true, day:true, weekStart:true, createdAt:true, createdBy:{ select:{ id:true, name:true, email:true } }, _count:{ select:{ draftShifts:true } }, draftShifts:{ orderBy:{ startAt:'asc' }, include:{ template:true, user:true, vehicle:true } }, planningAuditLogs:{ orderBy:{ createdAt:'desc' }, take:20, select:{ id:true, createdAt:true, action:true, entityType:true, entityId:true, summary:true, payload:true, actorUser:{ select:{ id:true, name:true, email:true } } } } } });
++  if (!run) return NextResponse.json({ ok:false, error:'NOT_FOUND' }, { status:404 });
++  const { planningAuditLogs, draftShifts, _count, ...runData } = run;
++  const data: Record<string, unknown> = { ...runData, day: run.day ? run.day.toISOString() : null, weekStart: run.weekStart ? run.weekStart.toISOString() : null, createdAt: run.createdAt.toISOString(), access: { canViewRun, canViewAudit: canReadAudit } };
++  if (canViewRun) {
++    data._count = _count;
++    data.draftShifts = draftShifts.map((s)=>({ ...s, date:s.date.toISOString(), startAt:s.startAt.toISOString(), endAt:s.endAt.toISOString(), createdAt:s.createdAt.toISOString() }));
++    const variant = resolveRunMatchingVariant(planningAuditLogs);
++    const plan = await computeDraftShiftMatchingByRole(prisma, { companyId, runId, includeAlreadyAssigned:true, variant: variant.key });
++    data.matching = { variant, quality: computePlanningQuality(plan) };
+   }
++  if (canReadAudit) data.auditLogs = planningAuditLogs.map((log)=>({ ...log, createdAt: log.createdAt.toISOString() }));
++  return NextResponse.json({ ok:true, data });
+ }
+
