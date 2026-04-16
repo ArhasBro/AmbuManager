@@ -36,8 +36,8 @@ Pour les sessions indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références des session :
 
-- SESSION-20260416-07_A11_AUDIT-10
-- **AUDIT-10 — VALIDATION** — Validation complète du bloc audit / traçabilité : couverture réelle des opérations critiques, lisibilité et exploitabilité de la page audit, cohérence du modèle d’accès et transparence support / client
+- SESSION-20260416-08_A11_CLOTURE_A11
+- **CLOTURE_A11 — VALIDATION+CORRECTION+COMPLÉTION** — Clôture finale du bloc A11
 ------------------------------------
 sortie propre + retour du terminal + aucune erreur = validé
 ------------------------------------
