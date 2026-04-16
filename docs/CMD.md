@@ -36,8 +36,8 @@ Pour les sessions indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références des session :
 
-- SESSION-20260416-09_A12_A12-01
-- **A12-01 — AUDIT** — Audit global du bloc onboarding / exports / imports : onboarding actuel réel, besoin import initial réel, existant réel côté exports et impression, et cohérence globale du bloc
+- SESSION-20260416-10_A12_A12-LOT-02-15
+- **A12-LOT-02-15 — CORRECTION-COMPLÉTION** — Correction et/ou complétion de l’onboarding manuel complet société pilote, des exports PDF / Excel-CSV / impression simple du planning, des imports utilisateurs / véhicules / templates / bases-dépôts / indisponibilités utilisateurs, de l’aperçu avant import, de la validation manuelle d’import et du rapport d’erreurs import
 ------------------------------------
 sortie propre + retour du terminal + aucune erreur = validé
 ------------------------------------
