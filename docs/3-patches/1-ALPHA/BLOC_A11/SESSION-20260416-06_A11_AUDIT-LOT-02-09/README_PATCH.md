@@ -1,24 +1,68 @@
-﻿# README_PATCH
+# README_PATCH
 
-## Session liee
-SESSION-20260416-06_A11_AUDIT-LOT-02-09
+## Session
+`SESSION-20260416-06_A11_AUDIT-LOT-02-09`
 
-## Type
-CORRECTION+COMPLETION
+## Patch principal retenu
+`PATCH__SESSION-20260416-06_A11_AUDIT-LOT-02-09.diff`
 
-## Dossier patch
-docs/3-patches/1-ALPHA/BLOC_A11/SESSION-20260416-06_A11_AUDIT-LOT-02-09
+## Correctifs retenus pour finalisation
+- `PATCH__SESSION-20260416-06_A11_AUDIT-LOT-02-09_FIX-03.diff`
+- `PATCH__SESSION-20260416-06_A11_AUDIT-LOT-02-09_FIX-04.diff`
 
-## Patch officiel attendu
-PATCH__SESSION-20260416-06_A11_AUDIT-LOT-02-09.diff
+## Correctifs abandonnés / non retenus
+- `PATCH__SESSION-20260416-06_A11_AUDIT-LOT-02-09_FIX-01.diff`
+- `PATCH__SESSION-20260416-06_A11_AUDIT-LOT-02-09_FIX-02.diff`
 
-## Commandes d'application
+## Objet réel retenu
+Correction-complétion A11 strictement bornée à :
+- ajout d’un audit des connexions persistant ;
+- ajout d’une lecture audit dédiée minimale ;
+- ajout d’une page dédiée audit minimale ;
+- protection cohérente de la lecture d’historique planning ;
+- ouverture minimale de l’accès audit au support global ;
+- amélioration partielle de la traçabilité après publication ;
+- correction TypeScript dans `resolveRunMatchingVariant(...)` ;
+- correction de build sur `canViewAudit` manquant dans `PlanningClient(...)`.
 
-`ash
-git apply --check "docs/3-patches/1-ALPHA/BLOC_A11/SESSION-20260416-06_A11_AUDIT-LOT-02-09/PATCH__SESSION-20260416-06_A11_AUDIT-LOT-02-09.diff"
-git apply         "docs/3-patches/1-ALPHA/BLOC_A11/SESSION-20260416-06_A11_AUDIT-LOT-02-09/PATCH__SESSION-20260416-06_A11_AUDIT-LOT-02-09.diff"
-`
+## Périmètre réellement retenu
+- `prisma/schema.prisma`
+- `prisma/migrations/20260416143000_add_login_audit_log/migration.sql`
+- `lib/services/audit/login-audit.ts`
+- `lib/auth.ts`
+- `lib/permissions.ts`
+- `app/api/audit/route.ts`
+- `app/audit/page.tsx`
+- `app/audit/audit-client.tsx`
+- `app/planning/page.tsx`
+- `app/planning/planning-client.tsx`
+- `app/api/planning/shifts/route.ts`
+- `app/api/planning/shifts/[id]/cancel/route.ts`
+- `app/api/planning/autoschedule/runs/[id]/route.ts`
 
-## Statut
-- Dossier patch initialise.
-- Patch officiel a produire dans cette session si du code est modifie.
+## Validations terminales finales retenues
+### Patch principal
+- `git apply --check` : **OK**
+- `git apply` : **OK**
+- `npx prisma generate` : **OK**
+- `npx prisma validate` : **OK**
+- `npm run lint` : **OK**
+- `npm run build` : **OK**
+
+### Correctifs retenus
+#### `FIX-03`
+- `git apply --check` : **OK**
+- `git apply` : **OK**
+- `npm run lint` : **OK**
+- `npm run build` : **KO** sur `canViewAudit` manquant dans `app/planning/planning-client.tsx`
+
+#### `FIX-04`
+- `git apply --check` : **OK**
+- `git apply` : **OK**
+- `npm run lint` : **OK**
+- `npm run build` : **OK**
+
+## Limites explicitement conservées
+- lecture audit et page dédiée audit : **minimales** ;
+- audit utilisateurs / véhicules / dépôts complet : **non suraffirmé / non prouvé comme livré complètement** ;
+- session traitée comme **CORRECTION-COMPLÉTION**, et non comme validation de bloc.

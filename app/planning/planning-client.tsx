@@ -468,6 +468,7 @@ export default function PlanningClient({
   canEditPlanning,
   canAutoSchedule,
   canManageCompanyMode,
+  canViewAudit,
 }: PlanningClientProps) {
   const [weekStart, setWeekStart] = useState<Date>(() => startOfWeekMonday(new Date()));
   const [mode, setMode] = useState<ViewMode>("SIMPLE");

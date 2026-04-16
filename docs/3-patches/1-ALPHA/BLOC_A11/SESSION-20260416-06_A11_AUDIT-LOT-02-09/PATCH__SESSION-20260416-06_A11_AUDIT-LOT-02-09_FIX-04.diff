@@ -1,0 +1,10 @@
+--- a/app/planning/planning-client.tsx
++++ b/app/planning/planning-client.tsx
+@@ -468,6 +468,7 @@
+   canEditPlanning,
+   canAutoSchedule,
+   canManageCompanyMode,
++  canViewAudit,
+ }: PlanningClientProps) {
+   const [weekStart, setWeekStart] = useState<Date>(() => startOfWeekMonday(new Date()));
+   const [mode, setMode] = useState<ViewMode>("SIMPLE");

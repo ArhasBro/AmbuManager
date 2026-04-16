@@ -1,35 +1,42 @@
-﻿# SESSION
+# SESSION
 
 ## ID SESSION
-
-SESSION-20260416-06_A11_AUDIT-LOT-02-09
+`SESSION-20260416-06_A11_AUDIT-LOT-02-09`
 
 ## Date
-
 16/04/2026
 
 ## Contexte
-
 Projet : Investissement  
 Sous-projet : Ambulance Manager  
-Maturite : 1-ALPHA  
-Bloc : A11  
-Type : CORRECTION+COMPLETION  
-Intitule : Correction et/ou complétion de l’audit planning existant, de l’audit des connexions, de l’audit utilisateurs, de l’audit véhicules, de la traçabilité détaillée des modifications après publication, de la page dédiée audit, du modèle d’accès audit et de l’audit renforcé des actions support
+Maturité : `1-ALPHA`  
+Bloc : `A11 — Audit / traçabilité`  
+Type : `CORRECTION-COMPLÉTION`
 
-## Objectif de la session
+## Objet retenu
+Correction et/ou complétion strictement bornée de l’existant A11 sur les écarts réellement traités, avec finalisation par patch principal retenu complété par `FIX-03` puis `FIX-04`.
 
-INFORMATION NON FOURNIE - A CONFIRMER
+## Patchs retenus
+- `PATCH__SESSION-20260416-06_A11_AUDIT-LOT-02-09.diff`
+- `PATCH__SESSION-20260416-06_A11_AUDIT-LOT-02-09_FIX-03.diff`
+- `PATCH__SESSION-20260416-06_A11_AUDIT-LOT-02-09_FIX-04.diff`
 
-## Perimetre exact traite
+## Patchs abandonnés
+- `PATCH__SESSION-20260416-06_A11_AUDIT-LOT-02-09_FIX-01.diff`
+- `PATCH__SESSION-20260416-06_A11_AUDIT-LOT-02-09_FIX-02.diff`
 
-INFORMATION NON FOURNIE - A CONFIRMER
+## Périmètre réellement livré
+- audit des connexions persistant ;
+- lecture audit dédiée minimale ;
+- page dédiée audit minimale ;
+- protection de `includeHistory=1` par le droit audit ;
+- ouverture minimale de l’accès audit au support global ;
+- amélioration partielle de la traçabilité après publication ;
+- correction TypeScript de `resolveRunMatchingVariant(...)` ;
+- correction de build liée à `canViewAudit` dans `PlanningClient(...)`.
 
-## Resultat synthetique de session
-
-INFORMATION NON FOURNIE - A CONFIRMER
-
-## Dossiers lies
-
-- Session : docs/2-sessions/1-ALPHA/BLOC_A11/SESSION-20260416-06_A11_AUDIT-LOT-02-09
-- Patchs  : docs/3-patches/1-ALPHA/BLOC_A11/SESSION-20260416-06_A11_AUDIT-LOT-02-09
+## Limites conservées
+- audit utilisateurs / véhicules / dépôts complet : **non prouvé comme livré complètement** ;
+- lecture audit dédiée : **minimale** ;
+- page audit : **minimale** ;
+- session bornée à une **correction-complétion**, sans validation de bloc.

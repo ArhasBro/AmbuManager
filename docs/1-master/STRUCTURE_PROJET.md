@@ -16,11 +16,21 @@ C:.
 |   tsconfig.json
 |   
 +---.next
+|   |   app-path-routes-manifest.json
 |   |   build-manifest.json
+|   |   BUILD_ID
+|   |   export-marker.json
 |   |   fallback-build-manifest.json
+|   |   images-manifest.json
 |   |   next-minimal-server.js.nft.json
 |   |   next-server.js.nft.json
 |   |   package.json
+|   |   prerender-manifest.json
+|   |   required-server-files.js
+|   |   required-server-files.json
+|   |   routes-manifest.json
+|   |   trace
+|   |   trace-build
 |   |   turbopack
 |   |   
 |   +---build
@@ -409,7 +419,6 @@ C:.
 |   |   |               00000555.sst
 |   |   |               00000556.sst
 |   |   |               00000557.meta
-|   |   |               00000558.del
 |   |   |               00000559.sst
 |   |   |               00000560.sst
 |   |   |               00000561.sst
@@ -426,6 +435,26 @@ C:.
 |   |   |               00000572.meta
 |   |   |               00000573.meta
 |   |   |               00000574.meta
+|   |   |               00000575.sst
+|   |   |               00000576.sst
+|   |   |               00000577.sst
+|   |   |               00000578.sst
+|   |   |               00000579.sst
+|   |   |               00000580.meta
+|   |   |               00000581.meta
+|   |   |               00000582.meta
+|   |   |               00000583.meta
+|   |   |               00000584.meta
+|   |   |               00000585.sst
+|   |   |               00000586.sst
+|   |   |               00000587.sst
+|   |   |               00000588.sst
+|   |   |               00000589.sst
+|   |   |               00000590.meta
+|   |   |               00000591.meta
+|   |   |               00000592.meta
+|   |   |               00000593.meta
+|   |   |               00000594.meta
 |   |   |               CURRENT
 |   |   |               LOG
 |   |   |               
@@ -994,6 +1023,8 @@ C:.
 |   |   |   |           node_modules_next_085844e9._.js.map
 |   |   |   |           node_modules_next_2f9fc03c._.js
 |   |   |   |           node_modules_next_2f9fc03c._.js.map
+|   |   |   |           node_modules_next_4e2b51e8._.js
+|   |   |   |           node_modules_next_4e2b51e8._.js.map
 |   |   |   |           node_modules_next_693d4d37._.js
 |   |   |   |           node_modules_next_693d4d37._.js.map
 |   |   |   |           node_modules_next_89900bf3._.js
@@ -1062,12 +1093,16 @@ C:.
 |   |   |   |           [root-of-the-server]__a6219db3._.js.map
 |   |   |   |           [root-of-the-server]__a8ab9a0d._.js
 |   |   |   |           [root-of-the-server]__a8ab9a0d._.js.map
+|   |   |   |           [root-of-the-server]__be75e238._.js
+|   |   |   |           [root-of-the-server]__be75e238._.js.map
 |   |   |   |           [root-of-the-server]__c00258c2._.js
 |   |   |   |           [root-of-the-server]__c00258c2._.js.map
 |   |   |   |           [root-of-the-server]__c957d49f._.js
 |   |   |   |           [root-of-the-server]__c957d49f._.js.map
 |   |   |   |           [root-of-the-server]__d346cc2e._.js
 |   |   |   |           [root-of-the-server]__d346cc2e._.js.map
+|   |   |   |           [root-of-the-server]__e07f2504._.js
+|   |   |   |           [root-of-the-server]__e07f2504._.js.map
 |   |   |   |           [turbopack]_runtime.js
 |   |   |   |           [turbopack]_runtime.js.map
 |   |   |   |           _52875ac4._.js
@@ -1354,6 +1389,7 @@ C:.
 |   |                   
 |   +---server
 |   |   |   app-paths-manifest.json
+|   |   |   functions-config-manifest.json
 |   |   |   interception-route-rewrite-manifest.js
 |   |   |   middleware-build-manifest.js
 |   |   |   middleware-manifest.json
@@ -1367,10 +1403,21 @@ C:.
 |   |   |   server-reference-manifest.json
 |   |   |   
 |   |   +---app
+|   |   |   |   favicon.ico.body
+|   |   |   |   favicon.ico.meta
+|   |   |   |   login.html
+|   |   |   |   login.meta
+|   |   |   |   login.rsc
 |   |   |   |   page.js
 |   |   |   |   page.js.map
 |   |   |   |   page.js.nft.json
 |   |   |   |   page_client-reference-manifest.js
+|   |   |   |   _global-error.html
+|   |   |   |   _global-error.meta
+|   |   |   |   _global-error.rsc
+|   |   |   |   _not-found.html
+|   |   |   |   _not-found.meta
+|   |   |   |   _not-found.rsc
 |   |   |   |   
 |   |   |   +---api
 |   |   |   |   +---audit
@@ -1837,6 +1884,16 @@ C:.
 |   |   |   |           react-loadable-manifest.json
 |   |   |   |           server-reference-manifest.json
 |   |   |   |           
+|   |   |   +---login.segments
+|   |   |   |   |   login.segment.rsc
+|   |   |   |   |   _full.segment.rsc
+|   |   |   |   |   _head.segment.rsc
+|   |   |   |   |   _index.segment.rsc
+|   |   |   |   |   _tree.segment.rsc
+|   |   |   |   |   
+|   |   |   |   \---login
+|   |   |   |           __PAGE__.segment.rsc
+|   |   |   |           
 |   |   |   +---page
 |   |   |   |       app-paths-manifest.json
 |   |   |   |       build-manifest.json
@@ -1909,18 +1966,35 @@ C:.
 |   |   |   |           react-loadable-manifest.json
 |   |   |   |           server-reference-manifest.json
 |   |   |   |           
-|   |   |   \---_not-found
-|   |   |       |   page.js
-|   |   |       |   page.js.map
-|   |   |       |   page.js.nft.json
-|   |   |       |   page_client-reference-manifest.js
+|   |   |   +---_global-error.segments
+|   |   |   |       _full.segment.rsc
+|   |   |   |       _head.segment.rsc
+|   |   |   |       _index.segment.rsc
+|   |   |   |       _tree.segment.rsc
+|   |   |   |       __PAGE__.segment.rsc
+|   |   |   |       
+|   |   |   +---_not-found
+|   |   |   |   |   page.js
+|   |   |   |   |   page.js.map
+|   |   |   |   |   page.js.nft.json
+|   |   |   |   |   page_client-reference-manifest.js
+|   |   |   |   |   
+|   |   |   |   \---page
+|   |   |   |           app-paths-manifest.json
+|   |   |   |           build-manifest.json
+|   |   |   |           next-font-manifest.json
+|   |   |   |           react-loadable-manifest.json
+|   |   |   |           server-reference-manifest.json
+|   |   |   |           
+|   |   |   \---_not-found.segments
+|   |   |       |   _full.segment.rsc
+|   |   |       |   _head.segment.rsc
+|   |   |       |   _index.segment.rsc
+|   |   |       |   _not-found.segment.rsc
+|   |   |       |   _tree.segment.rsc
 |   |   |       |   
-|   |   |       \---page
-|   |   |               app-paths-manifest.json
-|   |   |               build-manifest.json
-|   |   |               next-font-manifest.json
-|   |   |               react-loadable-manifest.json
-|   |   |               server-reference-manifest.json
+|   |   |       \---_not-found
+|   |   |               __PAGE__.segment.rsc
 |   |   |               
 |   |   +---chunks
 |   |   |   |   bec2d_app_api_planning_autoschedule_runs_[id]_match_apply_route_actions_4ed003d4.js
@@ -2250,16 +2324,25 @@ C:.
 |   |   |           _next-internal_server_app__not-found_page_actions_554ec2bf.js
 |   |   |           _next-internal_server_app__not-found_page_actions_554ec2bf.js.map
 |   |   |           
-|   |   \---middleware
-|   |           middleware-manifest.json
+|   |   +---middleware
+|   |   |       middleware-manifest.json
+|   |   |       
+|   |   \---pages
+|   |           404.html
+|   |           500.html
 |   |           
 |   +---static
+|   |   +---24QbriNwWaHiEGzh-7jq9
+|   |   |       _buildManifest.js
+|   |   |       _clientMiddlewareManifest.json
+|   |   |       _ssgManifest.js
+|   |   |       
 |   |   +---chunks
 |   |   |       05e6c743003c809d.js
-|   |   |       0e3f122eace2d4c2.js
 |   |   |       1209a0965914feba.js
 |   |   |       1687260e4d8b05d6.js
 |   |   |       16955dbbeacad110.js
+|   |   |       5b5cd1bf06936e1a.js
 |   |   |       61066a51d71ec27c.js
 |   |   |       642a00754c8aebb8.js
 |   |   |       672c0168d7981883.js
@@ -2277,11 +2360,6 @@ C:.
 |   |   |       daba6dd36b509727.js
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
-|   |   |       
-|   |   +---clbqgUbhLilqnZzAMtjXU
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
 |   |   |       
 |   |   \---media
 |   |           favicon.0b3bf435.ico
@@ -3555,6 +3633,8 @@ C:.
 |   |       |   |       PATCH__SESSION-20260416-06_A11_AUDIT-LOT-02-09.diff
 |   |       |   |       PATCH__SESSION-20260416-06_A11_AUDIT-LOT-02-09_FIX-01.diff
 |   |       |   |       PATCH__SESSION-20260416-06_A11_AUDIT-LOT-02-09_FIX-02.diff
+|   |       |   |       PATCH__SESSION-20260416-06_A11_AUDIT-LOT-02-09_FIX-03.diff
+|   |       |   |       PATCH__SESSION-20260416-06_A11_AUDIT-LOT-02-09_FIX-04.diff
 |   |       |   |       README_PATCH.md
 |   |       |   |       
 |   |       |   +---SESSION-20260416-07_A11_AUDIT-10

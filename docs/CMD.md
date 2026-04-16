@@ -41,19 +41,7 @@ Références des session :
 ------------------------------------
 sortie propre + retour du terminal + aucune erreur = validé
 ------------------------------------
-Voici sa réponse ainsi que les documents généré : 
-Je vais intégrer le .diff et je te renvoi le retour terminal de (Si faut enlever ou rajouter des cmd fait moi un copier/coller de ce que tu veux que je fasse):
-git apply --check ".\"
-git apply ".\"
-npm run lint
-npm run build
 
-Attend le retour du terminal avant de me répondre.
-Si il y a Fix a faire rédige le prompt. (Il ne doit pas le refaire en entier, juste faire un fix sur les erreurs)
-Je n'ai pas intégré : 
--les fichiers documentaires de session (`SESSION.md`, `NOTES.md`, `EVIDENCES.md`, `RESULTATS.md`, `FIN_SESSION.md`)
--le fichier documentaire de patches (`README.md`)
-Il seront à crée dans le patch docs en 1 ZIP téléchargeable sans sous dossier, quand la session sera validé pour qu'il soient complet.
 
 ------------------------------------
 
