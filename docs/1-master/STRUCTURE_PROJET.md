@@ -3552,6 +3552,7 @@ C:.
 |   |       |   |       README_PATCH.md
 |   |       |   |       
 |   |       |   \---SESSION-20260416-04_A10_CLOTURE_A10
+|   |       |           NO_PATCH.md
 |   |       |           README_PATCH.md
 |   |       |           
 |   |       +---BLOC_A11
