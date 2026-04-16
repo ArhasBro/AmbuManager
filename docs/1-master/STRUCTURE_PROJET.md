@@ -2663,6 +2663,35 @@ C:.
 |   |   |   |               RESULTATS.md
 |   |   |   |               SESSION.md
 |   |   |   |               
+|   |   |   +---BLOC_A10
+|   |   |   |   +---SESSION-20260416-01_A10_MATCH-01
+|   |   |   |   |       EVIDENCES.md
+|   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |       NOTES.md
+|   |   |   |   |       RESULTATS.md
+|   |   |   |   |       SESSION.md
+|   |   |   |   |       
+|   |   |   |   +---SESSION-20260416-02_A10_MATCH-LOT-02-09
+|   |   |   |   |       EVIDENCES.md
+|   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |       NOTES.md
+|   |   |   |   |       RESULTATS.md
+|   |   |   |   |       SESSION.md
+|   |   |   |   |       
+|   |   |   |   +---SESSION-20260416-03_A10_MATCH-10
+|   |   |   |   |       EVIDENCES.md
+|   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |       NOTES.md
+|   |   |   |   |       RESULTATS.md
+|   |   |   |   |       SESSION.md
+|   |   |   |   |       
+|   |   |   |   \---SESSION-20260416-04_A10_CLOTURE_A10
+|   |   |   |           EVIDENCES.md
+|   |   |   |           FIN_SESSION.md
+|   |   |   |           NOTES.md
+|   |   |   |           RESULTATS.md
+|   |   |   |           SESSION.md
+|   |   |   |           
 |   |   |   +---BLOC_A2
 |   |   |   |   +---1-ORG
 |   |   |   |   |   +---SESSION-20260313-17_A2_ORG-01
@@ -3421,6 +3450,19 @@ C:.
 |   |       |       \---SESSION-20260313-16_A1_API-06
 |   |       |               NO_PATCH.md
 |   |       |               
+|   |       +---BLOC_A10
+|   |       |   +---SESSION-20260416-01_A10_MATCH-01
+|   |       |   |       NO_PATCH.md
+|   |       |   |       
+|   |       |   +---SESSION-20260416-02_A10_MATCH-LOT-02-09
+|   |       |   |       README_PATCH.md
+|   |       |   |       
+|   |       |   +---SESSION-20260416-03_A10_MATCH-10
+|   |       |   |       NO_PATCH.md
+|   |       |   |       
+|   |       |   \---SESSION-20260416-04_A10_CLOTURE_A10
+|   |       |           README_PATCH.md
+|   |       |           
 |   |       +---BLOC_A2
 |   |       |   +---1-ORG
 |   |       |   |   +---SESSION-20260313-17_A2_ORG-01
@@ -3809,6 +3851,7 @@ C:.
 |   |           |       README_PATCH.md
 |   |           |       
 |   |           \---SESSION-20260415-08_A9_CLOTURE_A9
+|   |                   NO_PATCH.md
 |   |                   README_PATCH.md
 |   |                   
 |   +---4-templates
