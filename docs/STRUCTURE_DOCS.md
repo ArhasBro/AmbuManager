@@ -1116,6 +1116,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |       +---BLOC_A12
 |       |   +---SESSION-20260416-09_A12_A12-01
 |       |   |       NO_PATCH.md
+|       |   |       README_PATCH.md
 |       |   |       
 |       |   +---SESSION-20260416-10_A12_A12-LOT-02-15
 |       |   |       README_PATCH.md
