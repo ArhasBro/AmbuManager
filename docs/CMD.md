@@ -30,14 +30,14 @@ Pour les sessions indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 2. **Prompt de contrôle**
    - À rédiger pour la discussion de contrôle qualité.
    - Il doit servir à analyser et évaluer la réponse issue de la discussion de production UNIQUEMENT.
+   - Analyser la discusion de la production avec ce qui est conforme et non comforme.
    - Tu doit attendre que je t'ai transmis la réponse de la discussion de production.
-   - Faire un prompt de réponse adapté pour la discussion production.
-   - Le prompt doit être cours et concis.
+   - Faire un prompt de réponse adapté clair et précis pour la discussion production.
 
 Références des session :
 
-- SESSION-20260416-02_A10_MATCH-LOT-02-09
-- **MATCH-10 — VALIDATION** — Validation complète du bloc matching ALPHA : cohérence du scoring, prise en compte correcte des contraintes équipe / véhicule / charge, lisibilité du score qualité et disponibilité de variantes simples
+- SESSION-20260416-04_A10_CLOTURE_A10
+- **CLOTURE_A10 — VALIDATION+CORRECTION+COMPLÉTION** — Clôture finale du bloc A10
 ------------------------------------
 sortie propre + retour du terminal + aucune erreur = validé
 ------------------------------------
