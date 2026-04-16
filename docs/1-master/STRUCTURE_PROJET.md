@@ -3642,6 +3642,7 @@ C:.
 |   |       |   |       README_PATCH.md
 |   |       |   |       
 |   |       |   \---SESSION-20260416-08_A11_CLOTURE_A11
+|   |       |           NO_PATCH.md
 |   |       |           README_PATCH.md
 |   |       |           
 |   |       +---BLOC_A12
