@@ -1,10 +1,18 @@
-﻿# NO_PATCH
+# NO_PATCH
 
-Session : SESSION-20260416-11_A12_A12-16
+## Session
+`SESSION-20260416-11_A12_A12-16`
 
-Type : VALIDATION
+## Type
+`VALIDATION`
 
-Raison :
-- Session documentaire de type VALIDATION.
-- Aucun patch officiel a produire pour cette session.
-- Le dossier patch reste present pour conserver le miroir avec docs/2-sessions.
+## Décision
+Aucun patch code à produire pour cette session.
+
+## Motif
+La revérification documentaire et code du bloc A12 n’a révélé aucun écart fonctionnel strictement prouvé nécessitant un correctif minimal supplémentaire dans `A12-16`.
+
+Les documents de session ont été mis à jour pour :
+- formaliser le verdict de validation avant clôture ;
+- tracer les preuves utilisées ;
+- enregistrer les validations terminales réellement exécutées dans l’environnement fourni.

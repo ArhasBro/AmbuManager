@@ -36,8 +36,8 @@ Pour les sessions indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références des session :
 
-- SESSION-20260416-11_A12_A12-16
-- **A12-16 — VALIDATION** — Validation complète du bloc onboarding / import / export : onboarding manuel sans import, disponibilité des exports ALPHA, cohérence de la logique d’import initial simple et exploitabilité réelle pour une société pilote
+- SESSION-20260416-12_A12_CLOTURE_A12
+- **CLOTURE_A12 — VALIDATION+CORRECTION+COMPLÉTION** — Clôture finale du bloc A12
 ------------------------------------
 
 Voici sa réponse ainsi que les documents généré :
