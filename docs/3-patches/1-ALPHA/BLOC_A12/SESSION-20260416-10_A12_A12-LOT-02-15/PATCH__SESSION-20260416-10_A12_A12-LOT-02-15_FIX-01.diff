@@ -1,0 +1,45 @@
+--- a/lib/imports/import-engine.ts
++++ b/lib/imports/import-engine.ts
+@@ -83,6 +83,10 @@
+   color: string | null;
+ };
+ 
++type TemplateImportCreateInput = Omit<TemplateImportRow, "minStaffCount"> & {
++  minStaffCount?: number;
++};
++
+ type UserAbsenceImportRow = {
+   userEmail: string;
+   reason: string | null;
+@@ -250,6 +254,13 @@
+   });
+ }
+ 
++function normalizeTemplateImportRowForCreateInput(row: TemplateImportRow): TemplateImportCreateInput {
++  return {
++    ...row,
++    minStaffCount: row.minStaffCount ?? undefined,
++  };
++}
++
+ function toTemplateRow(record: Record<string, string>) {
+   try {
+     return templateSchema.safeParse({
+@@ -366,7 +377,7 @@
+     }
+ 
+     if (domain === "templates") {
+-      const resolved = resolveTemplateCreateInput(parsed.data as TemplateImportRow);
++      const resolved = resolveTemplateCreateInput(normalizeTemplateImportRowForCreateInput(parsed.data));
+       const issues = validateResolvedTemplateState(resolved);
+       if (issues.length > 0) {
+         errors.push(...issues.map((issue) => ({ rowNumber, field: issue.path.join("."), message: issue.message })));
+@@ -517,7 +528,7 @@
+         errors.push({ rowNumber: row.rowNumber, message: "Template déjà existant. Import en ajout uniquement." });
+         continue;
+       }
+-      const resolved = resolveTemplateCreateInput(parsed.data);
++      const resolved = resolveTemplateCreateInput(normalizeTemplateImportRowForCreateInput(parsed.data));
+       const issues = validateResolvedTemplateState(resolved);
+       if (issues.length > 0) {
+         errors.push(...issues.map((issue) => ({ rowNumber: row.rowNumber, field: issue.path.join("."), message: issue.message })));

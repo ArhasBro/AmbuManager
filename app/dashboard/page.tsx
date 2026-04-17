@@ -168,6 +168,14 @@ export default async function DashboardPage() {
     });
   }
 
+  if (companyScopedSession && companyProfileAllowed) {
+    adminLinks.push({
+      href: "/onboarding",
+      title: "Onboarding société pilote",
+      description: "Parcours manuel guidé et imports initiaux simples pour démarrer une société pilote.",
+    });
+  }
+
   if (companyScopedSession && depotsAllowed) {
     adminLinks.push({
       href: "/depots",

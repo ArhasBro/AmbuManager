@@ -41,6 +41,7 @@ type PlanningClientProps = {
   canAutoSchedule: boolean;
   canManageCompanyMode: boolean;
   canViewAudit: boolean;
+  canExportPlanning: boolean;
 };
 
 type RunAuditLog = {
@@ -469,6 +470,7 @@ export default function PlanningClient({
   canAutoSchedule,
   canManageCompanyMode,
   canViewAudit,
+  canExportPlanning,
 }: PlanningClientProps) {
   const [weekStart, setWeekStart] = useState<Date>(() => startOfWeekMonday(new Date()));
   const [mode, setMode] = useState<ViewMode>("SIMPLE");
@@ -1448,6 +1450,7 @@ export default function PlanningClient({
         canViewGlobal={canViewGlobal}
         canEditPlanning={canEditPlanning}
         canViewAudit={canViewAudit}
+        canExportPlanning={canExportPlanning}
       />
 
       <section style={{ border: "1px solid rgba(255,255,255,0.12)", borderRadius: 10, padding: 12, display: "grid", gap: 8 }}>

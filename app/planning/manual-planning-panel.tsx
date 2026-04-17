@@ -37,6 +37,7 @@ type Props = {
   canViewGlobal: boolean;
   canEditPlanning: boolean;
   canViewAudit: boolean;
+  canExportPlanning: boolean;
 };
 
 type ViewMode = "day" | "week" | "month";
@@ -119,6 +120,7 @@ export default function ManualPlanningPanel({
   canViewGlobal,
   canEditPlanning,
   canViewAudit,
+  canExportPlanning,
 }: Props) {
   const [viewMode, setViewMode] = useState<ViewMode>("month");
   const [cursorDate, setCursorDate] = useState<Date>(new Date());
@@ -317,6 +319,12 @@ export default function ManualPlanningPanel({
     else setCursorDate((current) => new Date(current.getFullYear(), current.getMonth() + offset, 1));
   }
 
+  function triggerExport(format: "csv" | "xlsx" | "pdf") {
+    const url = `/api/planning/exports?format=${format}&${scopeParams}`;
+    window.location.href = url;
+  }
+
+
   const userChoices = canViewGlobal ? [{ id: "", name: "Toute la société" }, ...availableUsers] : [currentUser];
 
   return (
@@ -345,6 +353,14 @@ export default function ManualPlanningPanel({
         <div style={{ fontWeight: 700 }}>
           {viewMode === "month" ? cursorDate.toLocaleDateString("fr-FR", { month: "long", year: "numeric" }) : dateLabel(cursorDate.toISOString())}
         </div>
+        {canExportPlanning ? (
+          <>
+            <button onClick={() => triggerExport("pdf")}>Export PDF</button>
+            <button onClick={() => triggerExport("xlsx")}>Export XLSX</button>
+            <button onClick={() => triggerExport("csv")}>Export CSV</button>
+          </>
+        ) : null}
+        <button onClick={() => window.print()}>Imprimer</button>
       </div>
 
       {canEditPlanning && (

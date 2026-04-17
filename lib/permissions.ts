@@ -66,6 +66,9 @@ export async function canManageCompanyRules(userId: string, role?: string | null
 export async function canViewAudit(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
   return hasPermissionAccess({ userId, role, platformRole, codes: ["AUDIT_VIEW"], allowSupport: true });
 }
+export async function canExportPlanning(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
+  return hasPermissionAccess({ userId, role, platformRole, codes: ["PLANNING_EXPORT"] });
+}
 export async function canEditPlanning(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
   return hasPermissionAccess({ userId, role, platformRole, codes: ["PLANNING_EDIT"] });
 }

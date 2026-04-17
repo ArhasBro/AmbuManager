@@ -1,0 +1,12 @@
+--- a/lib/imports/import-engine.ts
++++ b/lib/imports/import-engine.ts
+@@ -377,7 +377,8 @@ export async function previewImport(companyId: string, domain: ImportDomain, fil
+     }
+ 
+     if (domain === "templates") {
+-      const resolved = resolveTemplateCreateInput(normalizeTemplateImportRowForCreateInput(parsed.data));
++      const templateRow: TemplateImportRow = parsed.data as TemplateImportRow;
++      const resolved = resolveTemplateCreateInput(normalizeTemplateImportRowForCreateInput(templateRow));
+       const issues = validateResolvedTemplateState(resolved);
+       if (issues.length > 0) {
+         errors.push(...issues.map((issue) => ({ rowNumber, field: issue.path.join("."), message: issue.message })));
