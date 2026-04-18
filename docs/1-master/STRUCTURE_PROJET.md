@@ -3733,6 +3733,7 @@ C:.
 |   |       +---BLOC_A13
 |   |       |   +---SESSION-20260416-13_A13_A13-01
 |   |       |   |       NO_PATCH.md
+|   |       |   |       README_PATCH.md
 |   |       |   |       
 |   |       |   +---SESSION-20260416-14_A13_A13-LOT-02-13
 |   |       |   |       README_PATCH.md

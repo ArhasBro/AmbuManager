@@ -36,8 +36,8 @@ Pour les sessions indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références des session :
 
-- SESSION-20260416-13_A13_A13-01
-- **A13-01 — AUDIT** — Audit global du bloc qualité / documentation / gel ALPHA : tests existants, scénarios manuels documentés, documentation produit existante et cohérence finale ALPHA
+- SESSION-20260416-14_A13_A13-LOT-02-13
+- **A13-LOT-02-13 — CORRECTION-COMPLÉTION** — Correction et/ou complétion des scénarios manuels non conformes ou manquants, des smoke tests API critiques, des tests ciblés sur blocs sensibles, de la documentation d’usage users / véhicules / templates / planning-autoschedule, et corrections finales ALPHA si nécessaire
 ------------------------------------
 
 Voici sa réponse ainsi que les documents généré :
