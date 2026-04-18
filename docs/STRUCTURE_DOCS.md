@@ -986,7 +986,18 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |           
 |   +---2-TEST-ALPHA
 |   |   +---1-DOCUMENTATION
+|   |   |   \---SESSION-20260418_TEST-LOCAL-01
+|   |   |           EVIDENCES.md
+|   |   |           FIN_SESSION.md
+|   |   |           NOTES.md
+|   |   |           README_PATCH.md
+|   |   |           RESULTATS.md
+|   |   |           SESSION.md
+|   |   |           
 |   |   \---2-PATCHS
+|   |       \---SESSION-20260418_TEST-LOCAL-01
+|   |               PATCH__SESSION-20260418_TEST-LOCAL-01.diff
+|   |               
 |   \---SESSION-YYYYMMDD-XX
 |           EVIDENCES.md
 |           FIN_SESSION.md
