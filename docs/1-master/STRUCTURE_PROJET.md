@@ -3574,6 +3574,12 @@ C:.
 |   |   |   |           SESSION.md
 |   |   |   |           
 |   |   |   \---CLOTURE-ALPHA
+|   |   |           EVIDENCES.md
+|   |   |           FIN_SESSION.md
+|   |   |           NOTES.md
+|   |   |           RESULTATS.md
+|   |   |           SESSION.md
+|   |   |           
 |   |   \---SESSION-YYYYMMDD-XX
 |   |           EVIDENCES.md
 |   |           FIN_SESSION.md
@@ -4145,6 +4151,9 @@ C:.
 |   |       |           README_PATCH.md
 |   |       |           
 |   |       \---CLOTURE-ALPHA
+|   |               NO_PATCH.md
+|   |               README_PATCH.md
+|   |               
 |   +---4-templates
 |   |       TEMPLATE_DEBUT_SESSION.md
 |   |       TEMPLATE_DOD_4_4.md
