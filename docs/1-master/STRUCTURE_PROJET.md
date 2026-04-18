@@ -3580,6 +3580,9 @@ C:.
 |   |   |           RESULTATS.md
 |   |   |           SESSION.md
 |   |   |           
+|   |   +---2-TEST-ALPHA
+|   |   |   +---1-DOCUMENTATION
+|   |   |   \---2-PATCHS
 |   |   \---SESSION-YYYYMMDD-XX
 |   |           EVIDENCES.md
 |   |           FIN_SESSION.md
