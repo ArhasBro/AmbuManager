@@ -36,8 +36,8 @@ Pour les sessions indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références des session :
 
-- SESSION-20260416-15_A13_A13-14
-- **A13-14 — VALIDATION** — Validation complète du bloc qualité / documentation / gel ALPHA : cohérence finale ALPHA, niveau de test atteignable, documentation d’usage minimale disponible et décision Go / No-Go société pilote
+- SESSION-20260416-16_A13_CLOTURE_A13
+- **CLOTURE_A13 — VALIDATION+CORRECTION+COMPLÉTION** — Clôture finale du bloc A13
 ------------------------------------
 
 Voici sa réponse ainsi que les documents généré :
