@@ -996,7 +996,8 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |           
 |   |   \---2-PATCHS
 |   |       \---SESSION-20260418_TEST-LOCAL-01
-|   |               PATCH__SESSION-20260418_TEST-LOCAL-01.diff
+|   |               NO_PATCH.md
+|   |               README_PATCH.md
 |   |               
 |   \---SESSION-YYYYMMDD-XX
 |           EVIDENCES.md

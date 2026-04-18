@@ -58,6 +58,7 @@ C:.
 |   +---dev
 |   |   |   build-manifest.json
 |   |   |   fallback-build-manifest.json
+|   |   |   lock
 |   |   |   package.json
 |   |   |   prerender-manifest.json
 |   |   |   routes-manifest.json
@@ -413,7 +414,22 @@ C:.
 |   |   |               00000615.sst
 |   |   |               00000616.sst
 |   |   |               00000617.meta
-|   |   |               00000618.del
+|   |   |               00000619.sst
+|   |   |               00000620.sst
+|   |   |               00000621.sst
+|   |   |               00000622.meta
+|   |   |               00000623.meta
+|   |   |               00000624.meta
+|   |   |               00000625.sst
+|   |   |               00000626.sst
+|   |   |               00000627.sst
+|   |   |               00000628.sst
+|   |   |               00000629.sst
+|   |   |               00000630.meta
+|   |   |               00000631.meta
+|   |   |               00000632.meta
+|   |   |               00000633.meta
+|   |   |               00000634.meta
 |   |   |               CURRENT
 |   |   |               LOG
 |   |   |               
@@ -2369,7 +2385,7 @@ C:.
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
 |   |   |       
-|   |   +---DnlWT-A3xbc40uipLtuun
+|   |   +---JemTiI97W3SmgXRL-S29K
 |   |   |       _buildManifest.js
 |   |   |       _clientMiddlewareManifest.json
 |   |   |       _ssgManifest.js
@@ -3551,7 +3567,8 @@ C:.
 |   |   |   |           
 |   |   |   \---2-PATCHS
 |   |   |       \---SESSION-20260418_TEST-LOCAL-01
-|   |   |               PATCH__SESSION-20260418_TEST-LOCAL-01.diff
+|   |   |               NO_PATCH.md
+|   |   |               README_PATCH.md
 |   |   |               
 |   |   \---SESSION-YYYYMMDD-XX
 |   |           EVIDENCES.md

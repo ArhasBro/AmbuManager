@@ -1,31 +1,37 @@
-# RESULTATS.md
+# RESULTATS — SESSION-20260418_TEST-LOCAL-01
 
-## Résultat synthétique
-- dépôt local réellement testable partiellement dans le sandbox
-- scripts qualité disponibles : `OK`
-- `build` initial : `KO` sur une erreur TypeScript réelle dans `app/api/audit/route.ts`
-- correction minimale appliquée : `OUI`
-- Prisma Studio : démarrage observé
-- `npm run dev` : démarrage observé
-- accès `/login` : `OK`
-- garde d’accès `/dashboard` : `OK` (redirection observée)
-- accès `/` : `KO environnement Prisma` dans le fallback sans postinstall Prisma abouti
+## Décision patch
+`NO_PATCH`
+
+## Analyse rapide
+Le dépôt courant est valide sur le périmètre réellement rejoué côté terminal. Le patch initial n’est pas applicable, mais aucun besoin réel de correctif n’a été prouvé sur le code courant.
+
+## Périmètre réellement testé
+- tentative d’application du patch fourni
+- `npx prisma validate`
+- `npx prisma generate`
+- `npm run lint`
+- `npm run build`
+- `git status`
+- `git diff -- app/api/audit/route.ts`
+
+## Validation point par point
+- `git apply --check` : `KO`
+- `git apply` : `KO`
+- `npx prisma validate` : `OK`
+- `npx prisma generate` : `OK`
+- `npm run lint` : `OK`
+- `npm run build` : `OK`
+- `git status` : dépôt propre
+- `git diff -- app/api/audit/route.ts` : aucun diff
 
 ## Anomalies réellement observées
-1. **Blocage installation standard**
-   - `npm ci` échoue sur `@prisma/engines` pendant `postinstall.js` (`SIGTERM`).
-2. **Blocage build avant correction**
-   - `app/api/audit/route.ts`
-   - `Type error: Parameter 'log' implicitly has an 'any' type.`
-3. **Blocage runtime partiel après fallback install**
-   - `/` retourne `HTTP 500`
-   - cause observée : module Prisma généré manquant (`.prisma/client/default`).
+1. patch initial non applicable
+2. chemin ciblé par le patch non conforme à l’arborescence réelle
+3. aucune anomalie code résiduelle prouvée sur le dépôt courant
 
-## Correction appliquée dans cette session
-- `app/api/audit/route.ts`
-- ajout d’un typage explicite minimal sur les callbacks `map(...)`
+## Corrections appliquées
+Aucune correction code retenue dans l’état final de session.
 
-## Ce qui reste à confirmer hors du correctif code
-- installation standard complète avec postinstall Prisma opérationnel
-- revalidation `npm run build` dans un environnement Prisma complet
-- parcours authentifiés réels dépendants d’une base locale accessible
+## Interprétation finale
+Le dépôt courant compile et passe les validations rejouées. Le seul élément invalide est le patch initial, qui doit être abandonné au profit d’une clôture documentaire `NO_PATCH`.

@@ -1,85 +1,80 @@
-# EVIDENCES.md
+# EVIDENCES — SESSION-20260418_TEST-LOCAL-01
 
-## Lecture et préparation
-- Dossiers historiques présents : `docs/1-master/*`, `docs/2-sessions/*`, `docs/3-patches/*`, `docs/4-templates/*`
-- Dossiers `2-TEST-ALPHA` absents au départ dans le dépôt extrait : création effectuée pour cette session.
+## Commandes et constats réels
 
-## Installation dépendances
-### Tentative standard
-```txt
-npm ci --no-audit --no-fund
-npm error path .../node_modules/@prisma/engines
-npm error command failed
-npm error signal SIGTERM
-npm error command sh -c node scripts/postinstall.js
+### Tentative d’application du patch initial
+```text
+git apply --check ".\docs\2-sessions\2-TEST-ALPHA\2-PATCHS\SESSION-20260418_TEST-LOCAL-01\PATCH__SESSION-20260418_TEST-LOCAL-01.diff"
+git apply ".\docs\2-sessions\2-TEST-ALPHA\2-PATCHS\SESSION-20260418_TEST-LOCAL-01\PATCH__SESSION-20260418_TEST-LOCAL-01.diff"
 ```
 
-### Fallback utilisé pour poursuivre les constats
-```txt
-npm ci --ignore-scripts --no-audit --no-fund
-added 512 packages
+Résultat observé :
+```text
+error: api/audit/route.ts: No such file or directory
+error: api/audit/route.ts: No such file or directory
 ```
 
-## Scripts qualité observés
-### Smoke
-```txt
-npm run test:smoke
-# tests 6
-# pass 6
-# fail 0
+### Vérifications Prisma
+```text
+npx prisma validate
+npx prisma generate
 ```
 
-### Targeted
-```txt
-npm run test:targeted
-# tests 5
-# pass 5
-# fail 0
-```
-Avertissements observés mais non bloquants :
-- `ExperimentalWarning: Type Stripping is an experimental feature`
-- `MODULE_TYPELESS_PACKAGE_JSON`
-
-## Build avant correction
-```txt
-npm run build
-Failed to compile.
-./app/api/audit/route.ts:38:26
-Type error: Parameter 'log' implicitly has an 'any' type.
-```
-
-## Démarrage local Next.js
-Variables locales de test utilisées pour le constat runtime :
-- `PORT=3005`
-- `DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5432/ambulance_manager`
-- `NEXTAUTH_URL=http://127.0.0.1:3005`
-- `NEXTAUTH_SECRET=testsecret`
-- `SEED_ADMIN_PASSWORD=testpassword`
-
-Constats observés :
-```txt
-npm run dev -> démarrage observé
-GET /login -> HTTP 200
-GET /dashboard -> HTTP 307 -> /login?callbackUrl=%2Fdashboard
-GET / -> HTTP 500
-```
-
-Erreur terminale corrélée au `HTTP 500` sur `/` dans l’environnement de fallback :
-```txt
-Cannot find module '.prisma/client/default'
-Require stack:
-- node_modules/@prisma/client/default.js
-- lib/prisma.ts
-```
-
-## Prisma Studio
-```txt
-npm run db:studio
+Résultats observés :
+```text
 Loaded Prisma config from prisma.config.ts.
-Prisma Studio is running at: http://localhost:51212
+Prisma schema loaded from prisma\schema.prisma.
+The schema at prisma\schema.prisma is valid 🚀
 ```
-Constat HTTP supplémentaire :
-```txt
-GET http://localhost:51212 -> HTTP 200
-content-type: text/html
+
+```text
+Loaded Prisma config from prisma.config.ts.
+Prisma schema loaded from prisma\schema.prisma.
+✔ Generated Prisma Client (v7.7.0) to .
+ode_modules\@prisma\client in 345ms
 ```
+
+### Vérifications qualité
+```text
+npm run lint
+npm run build
+```
+
+Résultats observés :
+```text
+> ambulance-manager@0.1.0 lint
+> eslint .
+```
+
+```text
+> ambulance-manager@0.1.0 build
+> next build
+▲ Next.js 16.1.6 (Turbopack)
+- Environments: .env
+Creating an optimized production build ...
+✓ Compiled successfully
+✓ Finished TypeScript
+✓ Collecting page data
+✓ Generating static pages
+✓ Finalizing page optimization
+```
+
+### Vérification état Git réel
+```text
+git status
+git diff -- app/api/audit/route.ts
+```
+
+Résultat observé :
+```text
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+```
+
+## Constats antérieurs conservés dans la session
+Les éléments suivants ont été constatés précédemment dans le cadre de cette même session et restent documentés comme observés :
+- `npm run dev` : démarrage observé
+- accès utile à `/login` : observé
+- Prisma Studio : démarrage observé

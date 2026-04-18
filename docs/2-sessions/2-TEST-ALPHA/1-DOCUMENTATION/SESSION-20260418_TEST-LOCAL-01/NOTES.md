@@ -1,20 +1,30 @@
-# NOTES.md
+# NOTES — SESSION-20260418_TEST-LOCAL-01
 
-## Rappel de méthode
-- constats réels uniquement
-- pas de réouverture artificielle des anciens blocs `A1` à `A13`
-- correction minimale strictement liée au test local
-- documentation séparée dans `2-TEST-ALPHA`
+## Synthèse courte
+La session a d’abord été orientée vers un patch minimal sur la route audit. Toutefois, le contrôle terminal réel a montré que le patch fourni n’était pas applicable dans le dépôt de l’utilisateur.
 
-## Convention retenue
-L’ID utilisé pour cette campagne est : `SESSION-20260418_TEST-LOCAL-01`.
+## Point bloquant constaté
+Les commandes suivantes ont échoué :
+- `git apply --check "...PATCH__SESSION-20260418_TEST-LOCAL-01.diff"`
+- `git apply "...PATCH__SESSION-20260418_TEST-LOCAL-01.diff"`
 
-## Notes d’environnement
-1. L’archive fournie ne contenait pas de fichier `.env`.
-2. Un essai `npm ci` standard a échoué pendant le `postinstall` Prisma (`@prisma/engines`, `SIGTERM`).
-3. Un fallback `npm ci --ignore-scripts` a permis d’exécuter des contrôles partiels, mais avec un runtime Prisma incomplet pour certains parcours.
-4. Les constats `/login`, `/dashboard`, `/` et Prisma Studio ont été faits avec des variables d’environnement locales de test non productives.
+Erreur observée :
+- `error: api/audit/route.ts: No such file or directory`
 
-## Nature du correctif appliqué
-Aucune correction “au cas où”.
-Une seule anomalie code réellement prouvée a été corrigée : typage explicite des callbacks `map(...)` dans `app/api/audit/route.ts` pour lever le blocage TypeScript de `build`.
+## Analyse du constat
+Le patch vise `api/audit/route.ts`, alors que l’arborescence réelle du projet utilise `app/api/audit/route.ts`.
+
+## Vérification d’un besoin réel de patch
+Les vérifications suivantes ont ensuite été réalisées :
+- `git status`
+- `git diff -- app/api/audit/route.ts`
+
+Résultat :
+- dépôt propre
+- aucun diff local
+
+## Conséquence méthodologique
+Il serait non conforme de régénérer un patch artificiel alors qu’aucun diff réel n’existe dans le dépôt courant.
+
+## Conséquence documentaire
+L’ancienne documentation et l’ancien `.diff` doivent être remplacés par un ensemble final cohérent en `NO_PATCH`.
