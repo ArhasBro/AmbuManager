@@ -1,0 +1,1326 @@
+--- a/README.md
++++ b/README.md
+@@ -1,36 +1,73 @@
+-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
++# Ambulance Manager
+ 
+-## Getting Started
++Ambulance Manager est un SaaS ALPHA de gestion opérationnelle pour société de transport sanitaire.
++Le dépôt courant couvre surtout les modules suivants :
++- utilisateurs
++- véhicules
++- templates de shifts
++- planning manuel
++- autoschedule / matching
++- audit et exports planning
+ 
+-First, run the development server:
++## État du dépôt
++
++- **maturité ciblée** : `1-ALPHA`
++- **base produit officielle** : `docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
++- **pilotage projet** : `docs/1-master/*`
++- **historique des sessions** : `docs/2-sessions/*`
++- **patchs officiels** : `docs/3-patches/*`
++
++Le `README.md` racine sert d’entrée rapide au dépôt. La documentation d’usage produit est fournie séparément dans `docs/`.
++
++## Documentation utile
++
++### Guides d’usage ALPHA
++- `docs/USAGE_USERS.md`
++- `docs/USAGE_VEHICLES.md`
++- `docs/USAGE_TEMPLATES.md`
++- `docs/USAGE_PLANNING_AUTOSCHEDULE.md`
++- `docs/SCENARIOS_MANUELS_ALPHA.md`
++- `docs/QUALITY_TESTS.md`
++
++### Gouvernance / référence
++- `docs/README.md`
++- `docs/PROTOCOLE_SESSION.md`
++- `docs/SOURCES_AUTORISEES.md`
++- `docs/STRUCTURE_DOCS.md`
++- `docs/1-master/DOCUMENT_MAITRE.md`
++- `docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
++- `docs/1-master/PLAN_DE_DEVELOPPEMENT.md`
++- `docs/1-master/ETAT_GLOBAL_PROJET.md`
++- `docs/1-master/REGISTRE_DECISIONS.md`
++- `docs/1-master/RECAP_DISCUSSIONS.md`
++- `docs/1-master/STRUCTURE_PROJET.md`
++
++## Mise en route locale
+ 
+ ```bash
++npm install
+ npm run dev
+-# or
+-yarn dev
+-# or
+-pnpm dev
+-# or
+-bun dev
+ ```
+ 
+-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
++L’application utilise Next.js, Prisma et NextAuth.
++Selon le contexte local, une base PostgreSQL et des variables d’environnement peuvent être nécessaires pour les routes authentifiées et les flux Prisma.
+ 
+-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
++## Commandes qualité utiles
+ 
+-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
++```bash
++npm run lint
++npm run build
++npm run test:smoke
++npm run test:targeted
++npm run test:quality
++```
+ 
+-## Learn More
++Les scripts `test:smoke` et `test:targeted` sont volontairement légers :
++- smoke tests contractuels sur routes API critiques ;
++- tests automatisés ciblés sur blocs stables et sensibles.
+ 
+-To learn more about Next.js, take a look at the following resources:
++## Périmètre ALPHA important
+ 
+-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+-
+-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+-
+-## Deploy on Vercel
+-
+-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+-
+-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
++- la documentation d’usage produit ne remplace pas la documentation de gouvernance ;
++- les comptes support globaux ne doivent pas être exposés dans les flux client standards ;
++- la gestion véhicule courante repose sur **l’archivage logique**, pas sur une suppression destructrice depuis l’UI standard.
+--- a/app/api/vehicles/route.ts
++++ b/app/api/vehicles/route.ts
+@@ -2,9 +2,9 @@
+ import { authOptions } from "@/lib/auth";
+ import { prisma } from "@/lib/prisma";
+ 
+-import { ok, badRequest, unauthorized, forbidden, notFound, conflict, serverError } from "@/lib/api/response";
++import { ok, badRequest, unauthorized, forbidden, conflict, serverError } from "@/lib/api/response";
+ import { prismaToHttp } from "@/lib/api/prisma-error";
+-import { createVehicleBodySchema, deleteVehicleQuerySchema } from "@/lib/validators/vehicle";
++import { createVehicleBodySchema } from "@/lib/validators/vehicle";
+ import { serializeDates } from "@/lib/serializers";
+ import { canEditPlanning, canManageVehicles } from "@/lib/permissions";
+ import { traceSupportAction } from "@/lib/services/audit/support-action-trace";
+@@ -164,99 +164,3 @@
+   }
+ }
+ 
+-export async function DELETE(req: Request) {
+-  const session = await getServerSession(authOptions);
+-  const actorUserId = session?.user?.id;
+-  const companyId = session?.user?.companyId;
+-  const platformRole = session?.user?.platformRole;
+-
+-  if (!actorUserId || !companyId) return unauthorized();
+-  if (session.user.role !== "ADMIN") return forbidden();
+-
+-  const url = new URL(req.url);
+-  const parsed = deleteVehicleQuerySchema.safeParse({
+-    id: url.searchParams.get("id"),
+-  });
+-  if (!parsed.success) return badRequest("VALIDATION_ERROR", parsed.error.flatten());
+-
+-  const { id } = parsed.data;
+-
+-  try {
+-    const deleted = await prisma.$transaction(async (tx) => {
+-      const existingVehicle = await tx.vehicle.findFirst({
+-        where: { id, companyId },
+-        select: {
+-          id: true,
+-          immatriculation: true,
+-          type: true,
+-          status: true,
+-          depotId: true,
+-          insuranceExpiresAt: true,
+-          technicalInspectionExpiresAt: true,
+-          registrationDocumentPresent: true,
+-          sanitaryApprovalExpiresAt: true,
+-          depot: {
+-            select: {
+-              id: true,
+-              name: true,
+-              isActive: true,
+-            },
+-          },
+-        },
+-      });
+-
+-      if (!existingVehicle) {
+-        return { count: 0 as const };
+-      }
+-
+-      await tx.vehicle.delete({
+-        where: { id: existingVehicle.id },
+-      });
+-
+-      await traceSupportAction(tx, {
+-        companyId,
+-        actorUserId,
+-        actorPlatformRole: platformRole,
+-        action: "SUPPORT_DELETE_VEHICLE",
+-        entityType: "VEHICLE",
+-        entityId: existingVehicle.id,
+-        summary: `Support suppression véhicule ${existingVehicle.immatriculation}`,
+-        payload: {
+-          module: "vehicles",
+-          changedFields: ["deleted"],
+-          previous: {
+-            immatriculation: existingVehicle.immatriculation,
+-            type: existingVehicle.type,
+-            status: existingVehicle.status,
+-            depotId: existingVehicle.depotId,
+-            insuranceExpiresAt: existingVehicle.insuranceExpiresAt,
+-            technicalInspectionExpiresAt: existingVehicle.technicalInspectionExpiresAt,
+-            registrationDocumentPresent: existingVehicle.registrationDocumentPresent,
+-            sanitaryApprovalExpiresAt: existingVehicle.sanitaryApprovalExpiresAt,
+-            depot: existingVehicle.depot
+-              ? {
+-                  id: existingVehicle.depot.id,
+-                  name: existingVehicle.depot.name,
+-                  isActive: existingVehicle.depot.isActive,
+-                }
+-              : null,
+-          },
+-          next: null,
+-          details: {
+-            targetType: "vehicle",
+-          },
+-        },
+-      });
+-
+-      return { count: 1 as const };
+-    });
+-
+-    if (deleted.count === 0) return notFound();
+-
+-    return ok({ deleted: true });
+-  } catch (e: unknown) {
+-    const mapped = prismaToHttp(e);
+-    if (mapped?.status === 404) return notFound();
+-    return serverError(mapped ?? getErrorMessage(e));
+-  }
+-}
+--- a/app/vehicles/vehicles-client.tsx
++++ b/app/vehicles/vehicles-client.tsx
+@@ -191,7 +191,6 @@
+   const [error, setError] = useState<string | null>(null);
+   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+   const [isSubmitting, setIsSubmitting] = useState(false);
+-  const [deletingId, setDeletingId] = useState<string | null>(null);
+   const [archivingVehicleId, setArchivingVehicleId] = useState<string | null>(null);
+   const [savingDepotVehicleId, setSavingDepotVehicleId] = useState<string | null>(null);
+   const [editingVehicleId, setEditingVehicleId] = useState<string | null>(null);
+@@ -343,41 +342,6 @@
+       setError(e instanceof Error ? e.message : "Erreur inconnue");
+     } finally {
+       setSavingDepotVehicleId(null);
+-    }
+-  }
+-
+-  async function handleDeleteVehicle(id: string) {
+-    const ok = window.confirm("Supprimer ce véhicule ?");
+-    if (!ok) return;
+-
+-    setDeletingId(id);
+-    clearFeedback();
+-
+-    try {
+-      const res = await fetch(`/api/vehicles?id=${encodeURIComponent(id)}`, {
+-        method: "DELETE",
+-      });
+-
+-      const data = (await res.json().catch(() => null)) as ApiResponse<{ id: string }> | null;
+-
+-      if (!res.ok || !data?.ok) {
+-        throw new Error(getApiError(data, "Erreur lors de la suppression"));
+-      }
+-
+-      setVehicles((prev) => prev.filter((v) => v.id !== id));
+-      setSelectedDepotIds((prev) => {
+-        const next = { ...prev };
+-        delete next[id];
+-        return next;
+-      });
+-      if (editingVehicleId === id) {
+-        resetEditForm();
+-      }
+-      setSuccessMessage("Véhicule supprimé.");
+-    } catch (e: unknown) {
+-      setError(e instanceof Error ? e.message : "Erreur inconnue");
+-    } finally {
+-      setDeletingId(null);
+     }
+   }
+ 
+@@ -449,8 +413,7 @@
+               const isSavingEdit = savingEditVehicleId === v.id;
+               const isArchiving = archivingVehicleId === v.id;
+               const isSavingDepot = savingDepotVehicleId === v.id;
+-              const isDeleting = deletingId === v.id;
+-              const isBusy = isArchiving || isSavingDepot || isSavingEdit || isDeleting;
++              const isBusy = isArchiving || isSavingDepot || isSavingEdit;
+               const documentStatus = getVehicleDocumentStatus(
+                 v,
+                 documentStatusContext.today,
+@@ -529,20 +492,6 @@
+                       }}
+                     >
+                       {isArchiving ? "Archivage..." : "Archiver"}
+-                    </button>
+-
+-                    <button
+-                      type="button"
+-                      onClick={() => handleDeleteVehicle(v.id)}
+-                      disabled={isDeleting || isArchiving}
+-                      style={{
+-                        padding: "4px 10px",
+-                        border: "1px solid #ccc",
+-                        borderRadius: 6,
+-                        cursor: isDeleting || isArchiving ? "not-allowed" : "pointer",
+-                      }}
+-                    >
+-                      {isDeleting ? "Suppression..." : "Supprimer"}
+                     </button>
+                   </div>
+ 
+--- a/docs/QUALITY_TESTS.md
++++ b/docs/QUALITY_TESTS.md
+@@ -0,0 +1,59 @@
++# Qualité ALPHA — Smoke tests et tests ciblés
++
++## Objectif
++
++Ce document décrit les scripts qualité légers ajoutés pour le bloc A13 :
++- **smoke tests API critiques** ;
++- **tests automatisés ciblés sur blocs sensibles**.
++
++Ces scripts évitent l’introduction d’une stack de test lourde et restent compatibles avec l’état actuel du dépôt.
++
++## Commandes
++
++```bash
++npm run test:smoke
++npm run test:targeted
++npm run test:quality
++```
++
++## 1. Smoke tests API critiques
++
++Script : `scripts/quality/smoke-api-critical-contracts.test.mjs`
++
++Nature des contrôles :
++- tests contractuels sur le code source des routes critiques ;
++- vérification des garde-fous essentiels :
++  - session obligatoire ;
++  - permission obligatoire ;
++  - cloisonnement `companyId` ;
++  - absence de confiance dans un `companyId` client ;
++  - contrôle des scopes ou curseurs selon la route ;
++  - flux standard véhicule recentré sur l’archivage logique.
++
++Routes couvertes :
++- `/api/users`
++- `/api/templates`
++- `/api/planning/shifts`
++- `/api/planning/exports`
++- `/api/planning/autoschedule/runs`
++- `/api/vehicles` + UI `/vehicles`
++
++## 2. Tests ciblés sur blocs sensibles
++
++Script : `scripts/quality/targeted-sensitive-blocks.test.mjs`
++
++Nature des contrôles :
++- exécution réelle de fonctions stables et sensibles ;
++- vérification de comportements à forte valeur probante.
++
++Blocs couverts :
++- `lib/api/response.ts`
++- `lib/serializers.ts`
++- `lib/templates/template-rules.ts`
++- `lib/services/planning/matching-quality.ts`
++
++## Limites honnêtes
++
++- ce n’est pas une suite e2e complète ;
++- les smoke tests API actuels sont **contractuels** plutôt que branchés sur un serveur démarré ;
++- la couverture reste volontairement ciblée et non exhaustive.
+--- a/docs/README.md
++++ b/docs/README.md
+@@ -6,59 +6,58 @@
+ 
+ ## Sources de vérité
+ 
+-1. docs/master/ETAT_GLOBAL_PROJET.md  
+-2. docs/master/DOCUMENT_MAITRE.md  
+-3. docs/master/DOCUMENT_CADRAGE_FONCTIONNEL.md  
+-4. docs/master/PLAN_DE_DEVELOPPEMENT.md  
+-5. docs/master/REGISTRE_DECISIONS.md  
+-6. docs/master/RECAP_DISCUSSIONS.md  
+-7. docs/master/STRUCTURE_PROJET.md  
++1. `docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
++2. `docs/1-master/DOCUMENT_MAITRE.md`
++3. `docs/1-master/PLAN_DE_DEVELOPPEMENT.md`
++4. `docs/1-master/ETAT_GLOBAL_PROJET.md`
++5. `docs/1-master/REGISTRE_DECISIONS.md`
++6. `docs/1-master/RECAP_DISCUSSIONS.md`
++7. `docs/1-master/STRUCTURE_PROJET.md`
++
++Rappel :
++- `DOCUMENT_CADRAGE_FONCTIONNEL.md` = base officielle produit ;
++- `CODE > DOCUMENTATION` en cas de contradiction ;
++- aucune validation implicite sans preuve.
+ 
+ ---
+ 
+-## Base officielle produit
++## Arborescence actuelle
+ 
+-Le document suivant constitue la base officielle produit :
+-
+-docs/master/DOCUMENT_CADRAGE_FONCTIONNEL.md
+-
+-Ce document est figé et ne doit pas être modifié sans autorisation et validation explicite.
++- `docs/1-master/` : documents maîtres de référence ;
++- `docs/2-sessions/` : historique des sessions ;
++- `docs/3-patches/` : patchs officiels ;
++- `docs/4-templates/` : templates de session et de clôture ;
++- `docs/*.md` : gouvernance transversale et guides d’usage ALPHA.
+ 
+ ---
+ 
+-## Documents maîtres de pilotage
++## Guides d’usage produit ALPHA
+ 
+-Les documents suivants constituent le socle de pilotage du projet :
++- `docs/USAGE_USERS.md`
++- `docs/USAGE_VEHICLES.md`
++- `docs/USAGE_TEMPLATES.md`
++- `docs/USAGE_PLANNING_AUTOSCHEDULE.md`
++- `docs/SCENARIOS_MANUELS_ALPHA.md`
++- `docs/QUALITY_TESTS.md`
+ 
+-docs/master/DOCUMENT_MAITRE.md  
+-docs/master/PLAN_DE_DEVELOPPEMENT.md  
+-docs/master/ETAT_GLOBAL_PROJET.md  
+-docs/master/REGISTRE_DECISIONS.md  
+-docs/master/RECAP_DISCUSSIONS.md  
+-docs/master/STRUCTURE_PROJET.md
+-
+----
+-
+-## Organisation de la documentation
+-
+-docs/master/  
+-Documents principaux.
+-
+-docs/sessions/  
+-Historique des sessions.
+-
+-docs/templates/  
+-Templates utilisés pour structurer les sessions et les validations.
++Ces guides sont volontairement limités au périmètre réellement visible dans le dépôt courant.
++Ils ne remplacent ni le cadrage produit ni les documents de pilotage.
+ 
+ ---
+ 
+ ## Gouvernance documentaire
+ 
+-- Sources autorisées : docs/SOURCES_AUTORISEES.md  
+-- Structure documentaire attendue : docs/STRUCTURE_DOCS.md  
+-- Protocole de session : docs/PROTOCOLE_SESSION.md
++- Sources autorisées : `docs/SOURCES_AUTORISEES.md`
++- Structure documentaire attendue : `docs/STRUCTURE_DOCS.md`
++- Protocole de session : `docs/PROTOCOLE_SESSION.md`
++- Templates de session :
++  - `docs/4-templates/TEMPLATE_DEBUT_SESSION.md`
++  - `docs/4-templates/TEMPLATE_FIN_SESSION.md`
+ 
+-Chaque session de développement doit utiliser :
++---
+ 
+-docs/templates/TEMPLATE_DEBUT_SESSION.md  
+-docs/templates/TEMPLATE_FIN_SESSION.md+## Règle d’usage
++
++- documentation de pilotage interne : pour le projet et les sessions ;
++- documentation d’usage produit : pour la société pilote ALPHA ;
++- documentation de session clôturée : historique à protéger, sauf correction justifiée.
+--- a/docs/SCENARIOS_MANUELS_ALPHA.md
++++ b/docs/SCENARIOS_MANUELS_ALPHA.md
+@@ -0,0 +1,226 @@
++# Scénarios manuels ALPHA — Rejeu minimal
++
++## Règle de lecture
++
++Ces scénarios servent de base de rejeu manuel homogène pour l’ALPHA.
++Ils couvrent uniquement des flux réellement visibles dans le dépôt courant.
++
++Chaque scénario contient :
++- prérequis ;
++- étapes ;
++- résultat attendu ;
++- points de contrôle.
++
++---
++
++## SCÉNARIO 1 — Users : créer puis retrouver un utilisateur
++
++### Prérequis
++- être connecté avec un compte autorisé à gérer les utilisateurs ;
++- disposer d’une société active.
++
++### Étapes
++1. Ouvrir `/users`.
++2. Dans **Créer un utilisateur**, saisir nom, email, rôle et mot de passe.
++3. Valider.
++4. Utiliser la recherche du tableau avec le nom ou l’email créé.
++
++### Résultat attendu
++- message de succès de création ;
++- l’utilisateur apparaît dans la liste ;
++- le compte est rattaché à la société de la session.
++
++### Points de contrôle
++- aucun rôle support global ne doit être proposé ;
++- si l’acteur ne gouverne pas les règles métier, `ADMIN` et `GERANT` ne doivent pas être assignables.
++
++---
++
++## SCÉNARIO 2 — Users : rattacher une base puis ajouter une absence
++
++### Prérequis
++- disposer d’au moins une base ;
++- avoir un utilisateur actif dans la liste.
++
++### Étapes
++1. Dans `/users`, sélectionner l’utilisateur cible.
++2. Dans **Rattachement à une base**, choisir une base puis enregistrer.
++3. Dans **Indisponibilités / absences**, saisir début, fin et motif.
++4. Enregistrer l’absence.
++
++### Résultat attendu
++- la base affichée est mise à jour ;
++- l’absence apparaît dans la liste des absences de l’utilisateur.
++
++### Points de contrôle
++- l’utilisateur et la base doivent appartenir à la société courante ;
++- l’absence doit ensuite pouvoir être réutilisée par les contrôles planning.
++
++---
++
++## SCÉNARIO 3 — Véhicules : créer puis archiver un véhicule
++
++### Prérequis
++- être connecté avec un profil `ADMIN` pour la création ;
++- avoir accès au module `/vehicles`.
++
++### Étapes
++1. Ouvrir `/vehicles`.
++2. Créer un véhicule avec immatriculation, type et statut.
++3. Vérifier sa présence dans la liste.
++4. Cliquer sur **Archiver**.
++
++### Résultat attendu
++- le véhicule est créé puis retiré de la liste active après archivage ;
++- un message de confirmation est affiché.
++
++### Points de contrôle
++- la liste active ne doit exposer que les véhicules `isActive=true` ;
++- le flux standard doit passer par l’archivage logique.
++
++---
++
++## SCÉNARIO 4 — Véhicules : mettre à jour le statut documentaire minimal
++
++### Prérequis
++- disposer d’un véhicule actif.
++
++### Étapes
++1. Cliquer sur **Modifier** sur un véhicule.
++2. Renseigner au moins une date documentaire et l’état de la carte grise.
++3. Enregistrer.
++
++### Résultat attendu
++- la ligne véhicule est mise à jour ;
++- l’indicateur `Conformité` reflète le nouvel état calculé.
++
++### Points de contrôle
++- le changement doit persister côté liste active ;
++- la base associée ne doit pas être perdue après modification.
++
++---
++
++## SCÉNARIO 5 — Templates : créer un template horaire
++
++### Prérequis
++- être connecté avec un compte autorisé à gérer les templates.
++
++### Étapes
++1. Ouvrir `/templates`.
++2. Créer un template avec catégorie, véhicule requis éventuel, rôles, horaires et couleur.
++3. Valider.
++
++### Résultat attendu
++- le template apparaît dans la liste ;
++- la fiche affiche bien catégorie, horaire et couleur.
++
++### Points de contrôle
++- `isTimeDefined=true` doit imposer début et fin ;
++- la couleur doit respecter le format hexadécimal attendu.
++
++---
++
++## SCÉNARIO 6 — Templates : désactiver puis archiver
++
++### Prérequis
++- disposer d’un template actif.
++
++### Étapes
++1. Dans la liste `/templates`, désactiver le template.
++2. Vérifier le retour visuel.
++3. Archiver le template.
++4. Activer **Afficher les archivés**.
++
++### Résultat attendu
++- le template peut être désactivé puis archivé ;
++- il n’apparaît dans la vue standard qu’une fois l’option archivés cochée.
++
++### Points de contrôle
++- le template archivé ne doit plus polluer l’usage standard ;
++- l’archivage doit rester logique, pas destructif.
++
++---
++
++## SCÉNARIO 7 — Planning manuel : créer un shift publié
++
++### Prérequis
++- disposer du droit d’édition planning ;
++- disposer d’au moins un template actif.
++
++### Étapes
++1. Ouvrir `/planning`.
++2. Dans le panneau manuel, choisir le scope de vue.
++3. Renseigner date, heures, template, base éventuelle et notes.
++4. Cliquer sur **Créer**.
++
++### Résultat attendu
++- le shift publié apparaît dans la vue chargée ;
++- un message de succès confirme la création.
++
++### Points de contrôle
++- le template et le dépôt doivent appartenir à la société courante ;
++- la vue doit rester filtrée selon les droits de consultation réels.
++
++---
++
++## SCÉNARIO 8 — Planning manuel : modifier puis annuler un shift
++
++### Prérequis
++- disposer d’un shift publié dans le scope affiché.
++
++### Étapes
++1. Cliquer sur **Modifier** sur un shift.
++2. Changer horaire, template ou dépôt.
++3. Enregistrer.
++4. Utiliser ensuite **Annuler** sur un shift publié.
++
++### Résultat attendu
++- la modification est visible ;
++- le shift annulé n’est plus actif comme un shift standard.
++
++### Points de contrôle
++- les conflits absence / overlap / repos minimum doivent rester bloquants si applicables ;
++- l’historique doit être visible pour un profil autorisé audit.
++
++---
++
++## SCÉNARIO 9 — Autoschedule : générer un brouillon et lire la prévisualisation
++
++### Prérequis
++- disposer du droit de lancement autoschedule ;
++- avoir templates, utilisateurs et véhicules exploitables.
++
++### Étapes
++1. Dans `/planning`, lancer une génération jour ou semaine.
++2. Vérifier la création du run courant.
++3. Choisir une variante.
++4. Lancer la prévisualisation d’auto-affectation.
++
++### Résultat attendu
++- un run est chargé ;
++- la prévisualisation présente des propositions et un score qualité.
++
++### Points de contrôle
++- la variante choisie doit être reflétée dans la prévisualisation ;
++- les explications qualité doivent être présentes.
++
++---
++
++## SCÉNARIO 10 — Autoschedule : appliquer, publier puis exporter
++
++### Prérequis
++- disposer d’un run avec brouillons ;
++- disposer du droit d’export si export testé.
++
++### Étapes
++1. Appliquer l’auto-affectation sur le run courant.
++2. Publier le brouillon.
++3. Dans le panneau manuel, lancer un export `PDF`, `XLSX` ou `CSV` sur le scope courant.
++
++### Résultat attendu
++- les brouillons sont publiés ;
++- le téléchargement du fichier d’export démarre si le droit est présent.
++
++### Points de contrôle
++- un seul scope d’export doit être utilisé à la fois ;
++- sans droit export, l’API doit refuser l’opération.
+--- a/docs/USAGE_PLANNING_AUTOSCHEDULE.md
++++ b/docs/USAGE_PLANNING_AUTOSCHEDULE.md
+@@ -0,0 +1,116 @@
++# Guide d’usage ALPHA — Planning / Autoschedule
++
++## Objectif
++
++Le périmètre **Planning / Autoschedule** couvre deux usages complémentaires :
++- le **planning manuel** pour créer, modifier, annuler et exporter des shifts publiés ;
++- l’**autoschedule** pour générer un brouillon, prévisualiser les propositions, appliquer l’auto-affectation, publier ou annuler un run.
++
++## Pré-requis
++
++- être connecté ;
++- disposer des droits réels de consultation planning ;
++- pour créer ou modifier : disposer du droit d’édition planning ;
++- pour autoschedule : disposer du droit de lancement dédié ;
++- pour export : disposer du droit d’export planning.
++
++## Accéder au module
++
++1. Ouvrir `/planning`.
++2. Selon les permissions, la page affiche :
++   - le planning manuel ;
++   - le panneau autoschedule ;
++   - l’accès audit dédié ;
++   - les exports planning.
++
++## Planning manuel
++
++### Fonctions visibles
++
++- navigation **Jour / Semaine / Mois** ;
++- sélection d’un utilisateur cible selon le niveau d’accès ;
++- chargement des shifts publiés sur le scope choisi ;
++- création d’un shift manuel via un template actif ;
++- modification d’un shift publié ;
++- annulation d’un shift ;
++- affichage de l’historique si l’utilisateur peut lire l’audit ;
++- export `PDF`, `XLSX`, `CSV` et impression.
++
++### Données utilisées
++
++La création manuelle demande au minimum :
++- date ;
++- heure de début ;
++- heure de fin ;
++- template ;
++- base éventuelle ;
++- notes éventuelles.
++
++### Contrôles réellement présents
++
++Lors de la création ou modification d’un shift, le dépôt courant contrôle notamment :
++- présence du template dans la société ;
++- présence éventuelle du dépôt dans la société ;
++- cohérence horaire ;
++- conflits d’absence utilisateur ;
++- conflits de chevauchement utilisateurs ;
++- repos minimum si la règle société est active ;
++- conflits de chevauchement véhicule ;
++- incompatibilité rôle/template ou véhicule/template selon le cas.
++
++## Autoschedule
++
++### Fonctions visibles
++
++Le panneau autoschedule permet de :
++- générer un brouillon à la journée ;
++- générer un brouillon à la semaine ;
++- choisir un mode d’affectation / variante de matching ;
++- consulter le run courant ;
++- charger une prévisualisation d’auto-affectation ;
++- lire un score qualité planning ;
++- appliquer l’auto-affectation ;
++- publier le brouillon ;
++- annuler le brouillon.
++
++### Variantes visibles
++
++Le dépôt courant expose trois variantes :
++- `Variante 1 — équilibrée` ;
++- `Variante 2 — stable` ;
++- `Variante 3 — inverse`.
++
++### États à surveiller
++
++- génération réussie du run ;
++- prévisualisation disponible ;
++- brouillons présents ;
++- publication effectuée ;
++- annulation effectuée ;
++- score qualité et explications cohérents avec les propositions.
++
++## Exports planning
++
++Le flux export repose sur `/api/planning/exports` et permet :
++- `CSV` ;
++- `XLSX` ;
++- `PDF`.
++
++Un seul scope doit être utilisé à la fois :
++- `day` ;
++- `weekStart` ;
++- `month`.
++
++## Points de contrôle utiles
++
++- sans droit de consultation, la page ne doit pas exposer le planning ;
++- sans droit d’édition, les actions manuelles ne doivent pas être opérables ;
++- sans droit d’export, le téléchargement doit être refusé ;
++- un run autoschedule doit rester cloisonné à la société courante ;
++- une prévisualisation d’auto-affectation doit rester cohérente avec la variante choisie.
++
++## Limites honnêtes à connaître
++
++- le guide décrit l’outillage ALPHA visible, pas une optimisation finale ;
++- les messages d’erreur planning peuvent rester techniques ;
++- le niveau d’automatisation dépend fortement de la qualité des templates, disponibilités et ressources présentes.
+--- a/docs/USAGE_TEMPLATES.md
++++ b/docs/USAGE_TEMPLATES.md
+@@ -0,0 +1,76 @@
++# Guide d’usage ALPHA — Templates de shifts
++
++## Objectif
++
++Le module **Templates** sert à préparer des modèles de shifts réutilisables pour le planning :
++- créer un template ;
++- définir sa catégorie ;
++- préciser le véhicule requis ;
++- configurer les rôles attendus ;
++- définir ou non des horaires ;
++- activer, désactiver, modifier ou archiver le template.
++
++## Pré-requis
++
++- être connecté ;
++- disposer d’un compte autorisé à gérer les templates.
++
++## Accéder au module
++
++1. Ouvrir `/templates`.
++2. La page charge les templates de la société courante.
++
++## Ce qui est réellement disponible
++
++### 1. Créer un template
++
++Le formulaire **Créer un template** permet de définir :
++- `Nom` ;
++- `Catégorie` ;
++- `Véhicule requis` ou aucun ;
++- `Personnes requises` (1 ou 2) ;
++- `Couleur` ;
++- `Rôle obligatoire slot 1` ;
++- `Rôles autorisés pour les autres slots` ;
++- `Statut` actif / inactif ;
++- `Horaire défini` ou template non horodaté ;
++- `Début`, `Fin`, `Crosses midnight` si l’horaire est défini.
++
++Les presets de catégorie pré-remplissent une base courante, puis restent ajustables.
++
++### 2. Modifier un template
++
++La fiche d’un template existant permet :
++- modification des champs métier ;
++- activation / désactivation ;
++- archivage logique.
++
++### 3. Afficher les archivés
++
++La case **Afficher les archivés** rend visibles les templates archivés pour contrôle.
++
++## Règles métier réellement visibles
++
++- la société du template vient de la session serveur ;
++- les routes refusent une structure incohérente (`VALIDATION_ERROR`) ;
++- `minStaffCount` est borné au périmètre ALPHA actuel (1 ou 2) ;
++- si `isTimeDefined=false`, les horaires doivent rester nuls et `crossesMidnight=false` ;
++- les couleurs attendues sont au format `#RGB` ou `#RRGGBB`.
++
++## Lien avec le planning
++
++- le planning manuel utilise les templates actifs pour créer un shift publié ;
++- l’autoschedule exploite les templates disponibles pour générer des brouillons ;
++- certaines contraintes de rôle ou de véhicule proviennent directement des templates.
++
++## Points de contrôle utiles
++
++- un template archivé ne doit plus apparaître dans l’affichage standard non archivé ;
++- la création et l’édition doivent rester cloisonnées à la société courante ;
++- un template non horodaté ne doit pas conserver d’horaires parasites.
++
++## Limites honnêtes à connaître
++
++- le module reste un socle ALPHA ;
++- il n’existe pas encore de bibliothèque de templates multi-sociétés ;
++- seules les règles réellement branchées dans le dépôt courant sont décrites ici.
+--- a/docs/USAGE_USERS.md
++++ b/docs/USAGE_USERS.md
+@@ -0,0 +1,101 @@
++# Guide d’usage ALPHA — Utilisateurs
++
++## Objectif
++
++Le module **Utilisateurs** permet d’administrer les comptes actifs de la société courante :
++- créer un utilisateur ;
++- rechercher et filtrer la liste ;
++- modifier les informations principales ;
++- ajuster les permissions ALPHA ;
++- rattacher une base ;
++- réinitialiser le mot de passe ;
++- gérer les absences ;
++- archiver un compte.
++
++## Pré-requis
++
++- être connecté avec un compte disposant du droit réel d’administration des utilisateurs ;
++- avoir une société courante (`companyId`) ;
++- disposer d’au moins une base si vous voulez tester le rattachement dépôt.
++
++## Accéder au module
++
++1. Ouvrir `/users`.
++2. Si la session n’est pas autorisée, la page redirige vers `/login`.
++
++## Ce qui est réellement disponible
++
++### 1. Créer un utilisateur
++
++Depuis le bloc **Créer un utilisateur** :
++- renseigner `Nom` ;
++- renseigner `Email` ;
++- choisir un `Rôle` ;
++- saisir un `Mot de passe initial` ;
++- valider.
++
++Comportement visible :
++- les rôles support globaux ne sont pas attribuables depuis l’interface ;
++- pour un acteur qui ne gouverne pas les règles métier, les rôles `ADMIN` et `GERANT` sont retirés de la liste ;
++- l’API rattache l’utilisateur à la société de la session, pas à une société fournie par le client.
++
++### 2. Lister, rechercher et filtrer
++
++Le tableau liste les comptes actifs de la société :
++- recherche par nom ou email ;
++- filtre par rôle ;
++- pagination ;
++- exclusion des comptes support globaux côté flux client standard.
++
++### 3. Modifier un utilisateur
++
++Le bloc **Modifier un utilisateur** permet de changer :
++- nom ;
++- email ;
++- rôle ;
++- permissions ALPHA affichées dans la fiche.
++
++Le module conserve une logique de garde-fou autour des rôles donnant nativement accès à la gouvernance des règles métier.
++
++### 4. Rattacher à une base
++
++Le bloc **Rattachement à une base** permet :
++- de sélectionner un utilisateur ;
++- de choisir une base active ou archivée ;
++- d’enregistrer le rattachement.
++
++### 5. Réinitialiser le mot de passe
++
++Le bloc **Nouveau mot de passe** permet :
++- de choisir un utilisateur ;
++- de saisir un mot de passe ;
++- de confirmer le mot de passe ;
++- de lancer la réinitialisation.
++
++### 6. Gérer les absences
++
++Le bloc **Indisponibilités / absences** permet :
++- de lister les absences d’un utilisateur sélectionné ;
++- de créer une absence avec début, fin et motif ;
++- de modifier une absence existante ;
++- de supprimer une absence existante.
++
++Ces absences sont réutilisées par les contrôles planning pour éviter des affectations incohérentes.
++
++### 7. Archiver un utilisateur
++
++Le bloc **Archiver un utilisateur** effectue un archivage logique.
++Le compte disparaît des listes actives standard, sans suppression physique depuis ce flux.
++
++## Points de contrôle utiles
++
++- un utilisateur archivé ne doit plus apparaître dans la liste active `/api/users` ;
++- un utilisateur d’une autre société ne doit pas être manipulable depuis la session courante ;
++- un rôle non autorisé ne doit pas être assignable par un acteur insuffisamment habilité ;
++- une absence créée doit ensuite bloquer les affectations planning incompatibles.
++
++## Limites honnêtes à connaître
++
++- le guide décrit le flux ALPHA réellement visible, pas un back-office complet ;
++- les formulations des erreurs restent techniques sur certaines branches API ;
++- la gestion des comptes support globaux n’est pas un flux client standard de ce module.
+--- a/docs/USAGE_VEHICLES.md
++++ b/docs/USAGE_VEHICLES.md
+@@ -0,0 +1,81 @@
++# Guide d’usage ALPHA — Véhicules
++
++## Objectif
++
++Le module **Véhicules** permet de gérer la flotte active de la société courante :
++- créer un véhicule ;
++- consulter son statut documentaire minimal ;
++- modifier ses informations principales ;
++- rattacher une base ;
++- archiver un véhicule.
++
++## Pré-requis
++
++- être connecté ;
++- disposer d’un compte autorisé à voir la flotte ;
++- pour créer un véhicule, disposer du profil `ADMIN` ;
++- pour tester le rattachement, disposer d’au moins une base.
++
++## Accéder au module
++
++1. Ouvrir `/vehicles`.
++2. La page affiche la flotte active de la société courante.
++
++## Ce qui est réellement disponible
++
++### 1. Ajouter un véhicule
++
++Le bloc **Ajouter un véhicule** permet de saisir :
++- `Immatriculation` ;
++- `Type` (`AMBULANCE`, `VSL`, `TAXI`) ;
++- `Statut` (`ACTIVE`, `MAINTENANCE`, `OUT_OF_SERVICE`).
++
++La création standard est réservée au profil `ADMIN`.
++
++### 2. Lire l’état documentaire minimal
++
++Chaque ligne véhicule expose :
++- assurance ;
++- contrôle technique ;
++- carte grise présente / absente ;
++- agrément sanitaire.
++
++Un indicateur local synthétique affiche :
++- `conforme` ;
++- `bientôt expiré` ;
++- `expiré`.
++
++Ce statut est calculé à partir des champs réellement présents dans le dépôt courant.
++
++### 3. Modifier un véhicule
++
++L’action **Modifier** permet d’ajuster :
++- immatriculation ;
++- type ;
++- statut ;
++- dates documentaires ;
++- présence de la carte grise.
++
++### 4. Rattacher une base
++
++Chaque véhicule peut être rattaché à une base via la liste déroulante **Base actuelle** puis le bouton **Enregistrer base**.
++
++### 5. Archiver un véhicule
++
++L’action **Archiver** réalise l’opération standard de fin de vie ALPHA.
++Après archivage logique :
++- le véhicule sort des listes actives ;
++- le flux standard continue à préserver l’historique applicatif plutôt qu’une suppression destructrice depuis l’interface.
++
++## Points de contrôle utiles
++
++- la liste `/api/vehicles` ne doit retourner que les véhicules actifs de la société courante ;
++- la création doit utiliser le `companyId` de session côté serveur ;
++- un véhicule archivé ne doit plus apparaître dans le listing actif ;
++- un véhicule rattaché à une base archivée doit rester visible avec ce statut explicité.
++
++## Limites honnêtes à connaître
++
++- le module ALPHA ne constitue pas encore un registre documentaire réglementaire complet ;
++- les contrôles métier de conformité sont simples et locaux ;
++- la documentation présente décrit uniquement le flux standard réellement branché.
+--- a/package.json
++++ b/package.json
+@@ -10,7 +10,10 @@
+     "db:seed": "prisma db seed",
+     "db:migrate": "prisma migrate dev",
+     "db:studio": "prisma studio",
+-    "db:reset": "prisma migrate reset --force"
++    "db:reset": "prisma migrate reset --force",
++    "test:smoke": "node --test scripts/quality/smoke-api-critical-contracts.test.mjs",
++    "test:targeted": "node --experimental-strip-types --test scripts/quality/targeted-sensitive-blocks.test.mjs",
++    "test:quality": "npm run test:smoke && npm run test:targeted"
+   },
+   "prisma": {
+     "seed": "tsx prisma/seed.ts"
+--- a/scripts/quality/smoke-api-critical-contracts.test.mjs
++++ b/scripts/quality/smoke-api-critical-contracts.test.mjs
+@@ -0,0 +1,76 @@
++import test from "node:test";
++import assert from "node:assert/strict";
++import { readFileSync } from "node:fs";
++import { join } from "node:path";
++
++const ROOT = process.cwd();
++
++function read(relativePath) {
++  return readFileSync(join(ROOT, relativePath), "utf8");
++}
++
++function expectPattern(source, pattern, message) {
++  assert.match(source, pattern, message);
++}
++
++function expectNoPattern(source, pattern, message) {
++  assert.doesNotMatch(source, pattern, message);
++}
++
++test("users API keeps auth, tenant scoping and support exclusion", () => {
++  const source = read("app/api/users/route.ts");
++
++  expectPattern(source, /if \(!companyId \|\| !userId\) return unauthorized\(\);/, "users GET must reject missing session context");
++  expectPattern(source, /canManageUsers\(userId, session\.user\.role, platformRole\)/, "users GET must require users management permission");
++  expectPattern(source, /companyId,\s*isActive: true,\s*platformRole: null,\s*role: \{ not: null/s, "users list must stay scoped to active non-support company users");
++  expectPattern(source, /data:\s*\{\s*email: parsed\.data\.email,[\s\S]*companyId,/s, "users POST must inject companyId from session server-side");
++  expectNoPattern(source, /parsed\.data\.companyId|body\.companyId/, "users POST must not trust a client companyId");
++});
++
++test("templates API keeps auth, permission gate and company-scoped persistence", () => {
++  const source = read("app/api/templates/route.ts");
++
++  expectPattern(source, /if \(!companyId \|\| !userId\) return unauthorized\(\);/, "templates route must require session context");
++  expectPattern(source, /canManageTemplates\(userId, role, platformRole\)/, "templates route must require templates management permission");
++  expectPattern(source, /findMany\([\s\S]*where:\s*\{[\s\S]*companyId,[\s\S]*archivedAt: null/s, "templates GET must stay company-scoped and exclude archived by default");
++  expectPattern(source, /shiftTemplate\.create\([\s\S]*data:\s*\{[\s\S]*companyId,/s, "templates POST must persist companyId from session");
++});
++
++test("planning shifts API keeps scope validation and company-scoped dependencies", () => {
++  const source = read("app/api/planning/shifts/route.ts");
++
++  expectPattern(source, /if \(!companyId \|\| !userId\)[\s\S]*UNAUTHORIZED/s, "planning GET must reject missing session context");
++  expectPattern(source, /canViewSelfPlanning\([\s\S]*canViewGlobalPlanning\([\s\S]*canViewAudit\(/s, "planning GET must compute access from real permissions");
++  expectPattern(source, /Use only one scope: day, weekStart or month\./, "planning GET must forbid multiple concurrent scopes");
++  expectPattern(source, /if \(!canViewGlobal && requestedUserId && requestedUserId !== userId\)[\s\S]*FORBIDDEN/s, "planning GET must prevent cross-user access without global permission");
++  expectPattern(source, /shiftTemplate\.findFirst\([\s\S]*where: \{ id: templateId, companyId, isActive: true \}/, "planning POST must resolve template inside current company");
++  expectPattern(source, /depot\.findFirst\([\s\S]*where: \{ id: depotId, companyId \}/, "planning POST must resolve depot inside current company");
++});
++
++test("planning exports API keeps export permission and single-scope rule", () => {
++  const source = read("app/api/planning/exports/route.ts");
++
++  expectPattern(source, /canExportPlanning\(actorUserId, role, platformRole\)/, "planning exports must require export permission");
++  expectPattern(source, /Utiliser un seul scope : day, weekStart ou month\./, "planning exports must forbid multiple scopes");
++  expectPattern(source, /prisma\.user\.findFirst\(\{ where: \{ id: targetUserId, companyId \}/, "planning exports must resolve target user in current company");
++});
++
++test("autoschedule runs API keeps cursor validation and company scoping", () => {
++  const source = read("app/api/planning/autoschedule/runs/route.ts");
++
++  expectPattern(source, /if \(cursor && !cursorData\)[\s\S]*INVALID_CURSOR/s, "autoschedule runs must reject invalid cursors");
++  expectPattern(source, /const where:[\s\S]*companyId,/s, "autoschedule runs query must stay scoped to current company");
++  expectPattern(source, /canAutoSchedule\(userId, role\)/, "autoschedule runs must require autoschedule permission");
++});
++
++test("vehicles flow now exposes archive-only standard lifecycle", () => {
++  const apiSource = read("app/api/vehicles/route.ts");
++  const uiSource = read("app/vehicles/vehicles-client.tsx");
++
++  expectPattern(apiSource, /findMany\([\s\S]*where: \{ companyId, isActive: true \}/, "vehicles GET must stay company-scoped and list only active vehicles");
++  expectPattern(apiSource, /vehicle\.create\([\s\S]*data:\s*\{[\s\S]*companyId,/s, "vehicles POST must persist companyId from session");
++  expectNoPattern(apiSource, /export async function DELETE\(/, "standard vehicles API flow must no longer expose destructive delete");
++  expectPattern(uiSource, /fetch\(`\/api\/vehicles\/\$\{encodeURIComponent\(vehicle\.id\)\}\/archive`/, "vehicles UI must keep archive action");
++  expectNoPattern(uiSource, /\/api\/vehicles\?id=\$\{encodeURIComponent\(id\)\}/, "vehicles UI must not call destructive delete route anymore");
++  expectNoPattern(uiSource, /Suppression\.\.\.|Véhicule supprimé\.|handleDeleteVehicle|Supprimer/, "vehicles UI must not expose destructive delete action in standard flow");
++});
+--- a/scripts/quality/targeted-sensitive-blocks.test.mjs
++++ b/scripts/quality/targeted-sensitive-blocks.test.mjs
+@@ -0,0 +1,156 @@
++import test from "node:test";
++import assert from "node:assert/strict";
++
++import { badRequest, conflict, forbidden, notFound, ok, serverError, unauthorized } from "../../lib/api/response.ts";
++import { serializeDates } from "../../lib/serializers.ts";
++import {
++  defaultMinStaffCountFromCategory,
++  getAllowedRolesForVehicleType,
++  getCategoryTemplatePreset,
++  isRoleAllowedForSlot,
++  normalizeTemplateColor,
++  resolveTemplateMinStaffCount,
++} from "../../lib/templates/template-rules.ts";
++import { computePlanningQuality } from "../../lib/services/planning/matching-quality.ts";
++
++async function readJson(response) {
++  return JSON.parse(await response.text());
++}
++
++test("API response helpers return the expected status codes and shapes", async () => {
++  const responses = [
++    [ok({ created: true }, 201), 201, true],
++    [badRequest("VALIDATION_ERROR"), 400, false],
++    [unauthorized(), 401, false],
++    [forbidden(), 403, false],
++    [notFound(), 404, false],
++    [conflict("CONFLICT"), 409, false],
++    [serverError("debug"), 500, false],
++  ];
++
++  for (const [response, expectedStatus, expectedOk] of responses) {
++    assert.equal(response.status, expectedStatus);
++    const payload = await readJson(response);
++    assert.equal(payload.ok, expectedOk);
++  }
++});
++
++test("serializeDates converts nested Date values into ISO strings", () => {
++  const createdAt = new Date("2026-04-16T10:11:12.000Z");
++  const updatedAt = new Date("2026-04-17T08:09:10.000Z");
++
++  const serialized = serializeDates({
++    id: "u1",
++    createdAt,
++    nested: {
++      updatedAt,
++      items: [createdAt],
++    },
++  });
++
++  assert.equal(serialized.createdAt, createdAt.toISOString());
++  assert.equal(serialized.nested.updatedAt, updatedAt.toISOString());
++  assert.deepEqual(serialized.nested.items, [createdAt.toISOString()]);
++});
++
++test("template rules keep ALPHA defaults and normalize colors", () => {
++  assert.equal(defaultMinStaffCountFromCategory("AMBULANCE"), 2);
++  assert.equal(defaultMinStaffCountFromCategory("VSL"), 1);
++  assert.equal(resolveTemplateMinStaffCount(null, "GARDE"), 2);
++  assert.equal(resolveTemplateMinStaffCount(undefined, "TAXI"), 1);
++  assert.equal(normalizeTemplateColor(" #abc "), "#ABC");
++  assert.equal(normalizeTemplateColor("bleu"), null);
++
++  const ambulancePreset = getCategoryTemplatePreset("AMBULANCE");
++  assert.equal(ambulancePreset.minStaffCount, 2);
++  assert.equal(ambulancePreset.requiredRole, "ADE");
++  assert.equal(ambulancePreset.requiredVehicleType, "AMBULANCE");
++});
++
++test("template slot and vehicle role compatibility stays coherent", () => {
++  assert.deepEqual(getAllowedRolesForVehicleType("AMBULANCE"), ["ADE", "AA"]);
++  assert.deepEqual(getAllowedRolesForVehicleType("TAXI"), ["TAXI"]);
++
++  const template = {
++    category: "AMBULANCE",
++    requiredRole: "ADE",
++    secondaryAllowedRoles: ["ADE", "AA"],
++    minStaffCount: 2,
++  };
++
++  assert.equal(isRoleAllowedForSlot(template, 1, "ADE"), true);
++  assert.equal(isRoleAllowedForSlot(template, 1, "AA"), false);
++  assert.equal(isRoleAllowedForSlot(template, 2, "AA"), true);
++});
++
++test("planning quality calculation keeps a meaningful quality score and explanations", () => {
++  const plan = [
++    {
++      shiftId: "shift-1",
++      startAt: "2026-04-16T08:00:00.000Z",
++      endAt: "2026-04-16T12:00:00.000Z",
++      target: "USER_1",
++      requiredRole: "ADE",
++      requiredVehicleType: "AMBULANCE",
++      currentUserId: null,
++      proposedUserId: "user-1",
++      currentVehicleId: null,
++      proposedVehicleId: null,
++      reason: "MATCHED",
++      message: "ok",
++    },
++    {
++      shiftId: "shift-1",
++      startAt: "2026-04-16T08:00:00.000Z",
++      endAt: "2026-04-16T12:00:00.000Z",
++      target: "VEHICLE",
++      requiredRole: null,
++      requiredVehicleType: "AMBULANCE",
++      currentUserId: null,
++      proposedUserId: null,
++      currentVehicleId: null,
++      proposedVehicleId: "vehicle-1",
++      reason: "MATCHED",
++      message: "ok",
++    },
++    {
++      shiftId: "shift-2",
++      startAt: "2026-04-16T13:00:00.000Z",
++      endAt: "2026-04-16T18:00:00.000Z",
++      target: "USER_1",
++      requiredRole: "ADE",
++      requiredVehicleType: "VSL",
++      currentUserId: null,
++      proposedUserId: null,
++      currentVehicleId: null,
++      proposedVehicleId: null,
++      reason: "NO_USER_WITH_REQUIRED_ROLE",
++      message: "missing user",
++    },
++    {
++      shiftId: "shift-2",
++      startAt: "2026-04-16T13:00:00.000Z",
++      endAt: "2026-04-16T18:00:00.000Z",
++      target: "VEHICLE",
++      requiredRole: null,
++      requiredVehicleType: "VSL",
++      currentUserId: null,
++      proposedUserId: null,
++      currentVehicleId: null,
++      proposedVehicleId: null,
++      reason: "NO_VEHICLE_WITH_REQUIRED_TYPE",
++      message: "missing vehicle",
++    },
++  ];
++
++  const quality = computePlanningQuality(plan);
++
++  assert.equal(quality.coverage.score, 50);
++  assert.equal(quality.vehicleCoverage.score, 50);
++  assert.equal(quality.stability.score, 100);
++  assert.equal(quality.equity.score, 100);
++  assert.equal(quality.overall, 70);
++  assert.equal(quality.shiftScores.length, 2);
++  assert.ok(quality.explanations.some((line) => line.includes("Ressources humaines")));
++  assert.ok(quality.explanations.some((line) => line.includes("Flotte")));
++});

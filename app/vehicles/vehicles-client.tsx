@@ -191,7 +191,6 @@ export default function VehiclesClient({
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
   const [archivingVehicleId, setArchivingVehicleId] = useState<string | null>(null);
   const [savingDepotVehicleId, setSavingDepotVehicleId] = useState<string | null>(null);
   const [editingVehicleId, setEditingVehicleId] = useState<string | null>(null);
@@ -346,41 +345,6 @@ export default function VehiclesClient({
     }
   }
 
-  async function handleDeleteVehicle(id: string) {
-    const ok = window.confirm("Supprimer ce véhicule ?");
-    if (!ok) return;
-
-    setDeletingId(id);
-    clearFeedback();
-
-    try {
-      const res = await fetch(`/api/vehicles?id=${encodeURIComponent(id)}`, {
-        method: "DELETE",
-      });
-
-      const data = (await res.json().catch(() => null)) as ApiResponse<{ id: string }> | null;
-
-      if (!res.ok || !data?.ok) {
-        throw new Error(getApiError(data, "Erreur lors de la suppression"));
-      }
-
-      setVehicles((prev) => prev.filter((v) => v.id !== id));
-      setSelectedDepotIds((prev) => {
-        const next = { ...prev };
-        delete next[id];
-        return next;
-      });
-      if (editingVehicleId === id) {
-        resetEditForm();
-      }
-      setSuccessMessage("Véhicule supprimé.");
-    } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : "Erreur inconnue");
-    } finally {
-      setDeletingId(null);
-    }
-  }
-
   async function handleArchiveVehicle(vehicle: Vehicle) {
     const confirmed = window.confirm(`Archiver le véhicule ${vehicle.immatriculation} ?`);
     if (!confirmed) return;
@@ -449,8 +413,7 @@ export default function VehiclesClient({
               const isSavingEdit = savingEditVehicleId === v.id;
               const isArchiving = archivingVehicleId === v.id;
               const isSavingDepot = savingDepotVehicleId === v.id;
-              const isDeleting = deletingId === v.id;
-              const isBusy = isArchiving || isSavingDepot || isSavingEdit || isDeleting;
+              const isBusy = isArchiving || isSavingDepot || isSavingEdit;
               const documentStatus = getVehicleDocumentStatus(
                 v,
                 documentStatusContext.today,
@@ -529,20 +492,6 @@ export default function VehiclesClient({
                       }}
                     >
                       {isArchiving ? "Archivage..." : "Archiver"}
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteVehicle(v.id)}
-                      disabled={isDeleting || isArchiving}
-                      style={{
-                        padding: "4px 10px",
-                        border: "1px solid #ccc",
-                        borderRadius: 6,
-                        cursor: isDeleting || isArchiving ? "not-allowed" : "pointer",
-                      }}
-                    >
-                      {isDeleting ? "Suppression..." : "Supprimer"}
                     </button>
                   </div>
 

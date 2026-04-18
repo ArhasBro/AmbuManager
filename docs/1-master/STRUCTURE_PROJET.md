@@ -2078,6 +2078,8 @@ C:.
 |   |   |   |   [root-of-the-server]__4acb48f2._.js.map
 |   |   |   |   [root-of-the-server]__53c78745._.js
 |   |   |   |   [root-of-the-server]__53c78745._.js.map
+|   |   |   |   [root-of-the-server]__5590d869._.js
+|   |   |   |   [root-of-the-server]__5590d869._.js.map
 |   |   |   |   [root-of-the-server]__584bcf14._.js
 |   |   |   |   [root-of-the-server]__584bcf14._.js.map
 |   |   |   |   [root-of-the-server]__5a2adffc._.js
@@ -2124,8 +2126,6 @@ C:.
 |   |   |   |   [root-of-the-server]__e5879161._.js.map
 |   |   |   |   [root-of-the-server]__e6c5e537._.js
 |   |   |   |   [root-of-the-server]__e6c5e537._.js.map
-|   |   |   |   [root-of-the-server]__e70e822a._.js
-|   |   |   |   [root-of-the-server]__e70e822a._.js.map
 |   |   |   |   [root-of-the-server]__f3458ec0._.js
 |   |   |   |   [root-of-the-server]__f3458ec0._.js.map
 |   |   |   |   [root-of-the-server]__f50e5048._.js
@@ -2140,8 +2140,6 @@ C:.
 |   |   |   |   _47b770e9._.js.map
 |   |   |   |   _47d0c915._.js
 |   |   |   |   _47d0c915._.js.map
-|   |   |   |   _5c02a3ef._.js
-|   |   |   |   _5c02a3ef._.js.map
 |   |   |   |   _6f8813bf._.js
 |   |   |   |   _6f8813bf._.js.map
 |   |   |   |   _788dce5d._.js
@@ -2387,20 +2385,15 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
-|   |   +---4MPd1maQfHyD6H_X6rn4c
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
-|   |   |       
 |   |   +---chunks
 |   |   |       05e6c743003c809d.js
 |   |   |       1209a0965914feba.js
 |   |   |       1687260e4d8b05d6.js
 |   |   |       16955dbbeacad110.js
+|   |   |       254df65cacef9cfa.js
 |   |   |       61066a51d71ec27c.js
 |   |   |       642a00754c8aebb8.js
 |   |   |       672c0168d7981883.js
-|   |   |       7a69708938bdbd80.js
 |   |   |       7c92e96509cd355e.js
 |   |   |       80f32e0fda5ddff8.js
 |   |   |       82abf2d65f5428ae.js
@@ -2416,6 +2409,11 @@ C:.
 |   |   |       daba6dd36b509727.js
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-c4abe13a78f6dadb.js
+|   |   |       
+|   |   +---DnlWT-A3xbc40uipLtuun
+|   |   |       _buildManifest.js
+|   |   |       _clientMiddlewareManifest.json
+|   |   |       _ssgManifest.js
 |   |   |       
 |   |   \---media
 |   |           favicon.0b3bf435.ico
@@ -2601,9 +2599,15 @@ C:.
 +---docs
 |   |   CMD.md
 |   |   PROTOCOLE_SESSION.md
+|   |   QUALITY_TESTS.md
 |   |   README.md
+|   |   SCENARIOS_MANUELS_ALPHA.md
 |   |   SOURCES_AUTORISEES.md
 |   |   STRUCTURE_DOCS.md
+|   |   USAGE_PLANNING_AUTOSCHEDULE.md
+|   |   USAGE_TEMPLATES.md
+|   |   USAGE_USERS.md
+|   |   USAGE_VEHICLES.md
 |   |   
 |   +---1-master
 |   |       DOCUMENT_CADRAGE_FONCTIONNEL.md
@@ -3736,6 +3740,8 @@ C:.
 |   |       |   |       README_PATCH.md
 |   |       |   |       
 |   |       |   +---SESSION-20260416-14_A13_A13-LOT-02-13
+|   |       |   |       PATCH__SESSION-20260416-14_A13_A13-LOT-02-13.diff
+|   |       |   |       PATCH__SESSION-20260416-14_A13_A13-LOT-02-13_FIX-01.diff
 |   |       |   |       README_PATCH.md
 |   |       |   |       
 |   |       |   +---SESSION-20260416-15_A13_A13-14
@@ -40168,11 +40174,15 @@ C:.
 |       window.svg
 |       
 +---scripts
-|       cancel-week-drafts.ts
-|       create-shift-template.ts
-|       disable-corrupted-template-journee.ts
-|       list-shift-templates.ts
-|       
+|   |   cancel-week-drafts.ts
+|   |   create-shift-template.ts
+|   |   disable-corrupted-template-journee.ts
+|   |   list-shift-templates.ts
+|   |   
+|   \---quality
+|           smoke-api-critical-contracts.test.mjs
+|           targeted-sensitive-blocks.test.mjs
+|           
 \---types
         next-auth.d.ts
         

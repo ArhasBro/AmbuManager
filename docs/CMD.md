@@ -36,8 +36,8 @@ Pour les sessions indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références des session :
 
-- SESSION-20260416-14_A13_A13-LOT-02-13
-- **A13-LOT-02-13 — CORRECTION-COMPLÉTION** — Correction et/ou complétion des scénarios manuels non conformes ou manquants, des smoke tests API critiques, des tests ciblés sur blocs sensibles, de la documentation d’usage users / véhicules / templates / planning-autoschedule, et corrections finales ALPHA si nécessaire
+- SESSION-20260416-15_A13_A13-14
+- **A13-14 — VALIDATION** — Validation complète du bloc qualité / documentation / gel ALPHA : cohérence finale ALPHA, niveau de test atteignable, documentation d’usage minimale disponible et décision Go / No-Go société pilote
 ------------------------------------
 
 Voici sa réponse ainsi que les documents généré :
@@ -45,8 +45,8 @@ Voici sa réponse ainsi que les documents généré :
 Je vais intégrer le .diff et je te renvoi le retour terminal de (Si faut enlever ou rajouter des cmd fait moi un copier/coller de ce que tu veux que je fasse): 
 git apply --check ".\"
 git apply ".\"
-npm run lint npm 
-run build 
+npm run lint
+npm run build
 Attend le retour du terminal avant de me répondre. 
 Si il y a Fix a faire rédige le prompt. (Il ne doit pas le refaire en entier, juste faire un fix sur les erreurs) 
 Je n'ai pas intégré : 

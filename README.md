@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ambulance Manager
 
-## Getting Started
+Ambulance Manager est un SaaS ALPHA de gestion opérationnelle pour société de transport sanitaire.
+Le dépôt courant couvre surtout les modules suivants :
+- utilisateurs
+- véhicules
+- templates de shifts
+- planning manuel
+- autoschedule / matching
+- audit et exports planning
 
-First, run the development server:
+## État du dépôt
+
+- **maturité ciblée** : `1-ALPHA`
+- **base produit officielle** : `docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
+- **pilotage projet** : `docs/1-master/*`
+- **historique des sessions** : `docs/2-sessions/*`
+- **patchs officiels** : `docs/3-patches/*`
+
+Le `README.md` racine sert d’entrée rapide au dépôt. La documentation d’usage produit est fournie séparément dans `docs/`.
+
+## Documentation utile
+
+### Guides d’usage ALPHA
+- `docs/USAGE_USERS.md`
+- `docs/USAGE_VEHICLES.md`
+- `docs/USAGE_TEMPLATES.md`
+- `docs/USAGE_PLANNING_AUTOSCHEDULE.md`
+- `docs/SCENARIOS_MANUELS_ALPHA.md`
+- `docs/QUALITY_TESTS.md`
+
+### Gouvernance / référence
+- `docs/README.md`
+- `docs/PROTOCOLE_SESSION.md`
+- `docs/SOURCES_AUTORISEES.md`
+- `docs/STRUCTURE_DOCS.md`
+- `docs/1-master/DOCUMENT_MAITRE.md`
+- `docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
+- `docs/1-master/PLAN_DE_DEVELOPPEMENT.md`
+- `docs/1-master/ETAT_GLOBAL_PROJET.md`
+- `docs/1-master/REGISTRE_DECISIONS.md`
+- `docs/1-master/RECAP_DISCUSSIONS.md`
+- `docs/1-master/STRUCTURE_PROJET.md`
+
+## Mise en route locale
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+L’application utilise Next.js, Prisma et NextAuth.
+Selon le contexte local, une base PostgreSQL et des variables d’environnement peuvent être nécessaires pour les routes authentifiées et les flux Prisma.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Commandes qualité utiles
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint
+npm run build
+npm run test:smoke
+npm run test:targeted
+npm run test:quality
+```
 
-## Learn More
+Les scripts `test:smoke` et `test:targeted` sont volontairement légers :
+- smoke tests contractuels sur routes API critiques ;
+- tests automatisés ciblés sur blocs stables et sensibles.
 
-To learn more about Next.js, take a look at the following resources:
+## Périmètre ALPHA important
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- la documentation d’usage produit ne remplace pas la documentation de gouvernance ;
+- les comptes support globaux ne doivent pas être exposés dans les flux client standards ;
+- la gestion véhicule courante repose sur **l’archivage logique**, pas sur une suppression destructrice depuis l’UI standard.

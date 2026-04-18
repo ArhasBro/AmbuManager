@@ -2,9 +2,9 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
-import { ok, badRequest, unauthorized, forbidden, notFound, conflict, serverError } from "@/lib/api/response";
+import { ok, badRequest, unauthorized, forbidden, conflict, serverError } from "@/lib/api/response";
 import { prismaToHttp } from "@/lib/api/prisma-error";
-import { createVehicleBodySchema, deleteVehicleQuerySchema } from "@/lib/validators/vehicle";
+import { createVehicleBodySchema } from "@/lib/validators/vehicle";
 import { serializeDates } from "@/lib/serializers";
 import { canEditPlanning, canManageVehicles } from "@/lib/permissions";
 import { traceSupportAction } from "@/lib/services/audit/support-action-trace";
@@ -164,99 +164,3 @@ export async function POST(req: Request) {
   }
 }
 
-export async function DELETE(req: Request) {
-  const session = await getServerSession(authOptions);
-  const actorUserId = session?.user?.id;
-  const companyId = session?.user?.companyId;
-  const platformRole = session?.user?.platformRole;
-
-  if (!actorUserId || !companyId) return unauthorized();
-  if (session.user.role !== "ADMIN") return forbidden();
-
-  const url = new URL(req.url);
-  const parsed = deleteVehicleQuerySchema.safeParse({
-    id: url.searchParams.get("id"),
-  });
-  if (!parsed.success) return badRequest("VALIDATION_ERROR", parsed.error.flatten());
-
-  const { id } = parsed.data;
-
-  try {
-    const deleted = await prisma.$transaction(async (tx) => {
-      const existingVehicle = await tx.vehicle.findFirst({
-        where: { id, companyId },
-        select: {
-          id: true,
-          immatriculation: true,
-          type: true,
-          status: true,
-          depotId: true,
-          insuranceExpiresAt: true,
-          technicalInspectionExpiresAt: true,
-          registrationDocumentPresent: true,
-          sanitaryApprovalExpiresAt: true,
-          depot: {
-            select: {
-              id: true,
-              name: true,
-              isActive: true,
-            },
-          },
-        },
-      });
-
-      if (!existingVehicle) {
-        return { count: 0 as const };
-      }
-
-      await tx.vehicle.delete({
-        where: { id: existingVehicle.id },
-      });
-
-      await traceSupportAction(tx, {
-        companyId,
-        actorUserId,
-        actorPlatformRole: platformRole,
-        action: "SUPPORT_DELETE_VEHICLE",
-        entityType: "VEHICLE",
-        entityId: existingVehicle.id,
-        summary: `Support suppression véhicule ${existingVehicle.immatriculation}`,
-        payload: {
-          module: "vehicles",
-          changedFields: ["deleted"],
-          previous: {
-            immatriculation: existingVehicle.immatriculation,
-            type: existingVehicle.type,
-            status: existingVehicle.status,
-            depotId: existingVehicle.depotId,
-            insuranceExpiresAt: existingVehicle.insuranceExpiresAt,
-            technicalInspectionExpiresAt: existingVehicle.technicalInspectionExpiresAt,
-            registrationDocumentPresent: existingVehicle.registrationDocumentPresent,
-            sanitaryApprovalExpiresAt: existingVehicle.sanitaryApprovalExpiresAt,
-            depot: existingVehicle.depot
-              ? {
-                  id: existingVehicle.depot.id,
-                  name: existingVehicle.depot.name,
-                  isActive: existingVehicle.depot.isActive,
-                }
-              : null,
-          },
-          next: null,
-          details: {
-            targetType: "vehicle",
-          },
-        },
-      });
-
-      return { count: 1 as const };
-    });
-
-    if (deleted.count === 0) return notFound();
-
-    return ok({ deleted: true });
-  } catch (e: unknown) {
-    const mapped = prismaToHttp(e);
-    if (mapped?.status === 404) return notFound();
-    return serverError(mapped ?? getErrorMessage(e));
-  }
-}

@@ -3,9 +3,15 @@ Le numÚro de sÚrie du volume est 123E-4DB7
 C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   CMD.md
 |   PROTOCOLE_SESSION.md
+|   QUALITY_TESTS.md
 |   README.md
+|   SCENARIOS_MANUELS_ALPHA.md
 |   SOURCES_AUTORISEES.md
 |   STRUCTURE_DOCS.md
+|   USAGE_PLANNING_AUTOSCHEDULE.md
+|   USAGE_TEMPLATES.md
+|   USAGE_USERS.md
+|   USAGE_VEHICLES.md
 |   
 +---1-master
 |       DOCUMENT_CADRAGE_FONCTIONNEL.md
@@ -1138,6 +1144,8 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |       |   |       README_PATCH.md
 |       |   |       
 |       |   +---SESSION-20260416-14_A13_A13-LOT-02-13
+|       |   |       PATCH__SESSION-20260416-14_A13_A13-LOT-02-13.diff
+|       |   |       PATCH__SESSION-20260416-14_A13_A13-LOT-02-13_FIX-01.diff
 |       |   |       README_PATCH.md
 |       |   |       
 |       |   +---SESSION-20260416-15_A13_A13-14
