@@ -79,6 +79,8 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 Unblock-File -Path .\create_session.ps1
 .\create_session.ps1 -Stage "1-ALPHA" -Block "A1" -SessionCode "RBAC-02" -Type "CORRECTION" -Title "Remplacement méthodique de DEA par ADE"
 
+.\create_session.ps1 -Stage "1-ALPHA" -Block "CLOTURE-ALPHA" -SessionCode "CLOTURE-ALPHA" -Type "AUDIT+VALIDATION+CORRECTION+COMPLETION" -Title "Vérification total de la phase ALPHA"
+
 git apply --check ".\"
 git apply ".\"
 npx prisma generate

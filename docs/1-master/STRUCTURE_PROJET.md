@@ -3544,35 +3544,36 @@ C:.
 |   |   |   |           RESULTATS.md
 |   |   |   |           SESSION.md
 |   |   |   |           
-|   |   |   \---BLOC_A9
-|   |   |       +---SESSION-20260415-05_A9_AUTO-01
-|   |   |       |       EVIDENCES.md
-|   |   |       |       FIN_SESSION.md
-|   |   |       |       NOTES.md
-|   |   |       |       RESULTATS.md
-|   |   |       |       SESSION.md
-|   |   |       |       
-|   |   |       +---SESSION-20260415-06_A9_AUTO-LOT-02-14
-|   |   |       |       EVIDENCES.md
-|   |   |       |       FIN_SESSION.md
-|   |   |       |       NOTES.md
-|   |   |       |       RESULTATS.md
-|   |   |       |       SESSION.md
-|   |   |       |       
-|   |   |       +---SESSION-20260415-07_A9_AUTO-15
-|   |   |       |       EVIDENCES.md
-|   |   |       |       FIN_SESSION.md
-|   |   |       |       NOTES.md
-|   |   |       |       RESULTATS.md
-|   |   |       |       SESSION.md
-|   |   |       |       
-|   |   |       \---SESSION-20260415-08_A9_CLOTURE_A9
-|   |   |               EVIDENCES.md
-|   |   |               FIN_SESSION.md
-|   |   |               NOTES.md
-|   |   |               RESULTATS.md
-|   |   |               SESSION.md
-|   |   |               
+|   |   |   +---BLOC_A9
+|   |   |   |   +---SESSION-20260415-05_A9_AUTO-01
+|   |   |   |   |       EVIDENCES.md
+|   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |       NOTES.md
+|   |   |   |   |       RESULTATS.md
+|   |   |   |   |       SESSION.md
+|   |   |   |   |       
+|   |   |   |   +---SESSION-20260415-06_A9_AUTO-LOT-02-14
+|   |   |   |   |       EVIDENCES.md
+|   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |       NOTES.md
+|   |   |   |   |       RESULTATS.md
+|   |   |   |   |       SESSION.md
+|   |   |   |   |       
+|   |   |   |   +---SESSION-20260415-07_A9_AUTO-15
+|   |   |   |   |       EVIDENCES.md
+|   |   |   |   |       FIN_SESSION.md
+|   |   |   |   |       NOTES.md
+|   |   |   |   |       RESULTATS.md
+|   |   |   |   |       SESSION.md
+|   |   |   |   |       
+|   |   |   |   \---SESSION-20260415-08_A9_CLOTURE_A9
+|   |   |   |           EVIDENCES.md
+|   |   |   |           FIN_SESSION.md
+|   |   |   |           NOTES.md
+|   |   |   |           RESULTATS.md
+|   |   |   |           SESSION.md
+|   |   |   |           
+|   |   |   \---CLOTURE-ALPHA
 |   |   \---SESSION-YYYYMMDD-XX
 |   |           EVIDENCES.md
 |   |           FIN_SESSION.md
@@ -3749,6 +3750,7 @@ C:.
 |   |       |   |       README_PATCH.md
 |   |       |   |       
 |   |       |   \---SESSION-20260416-16_A13_CLOTURE_A13
+|   |       |           NO_PATCH.md
 |   |       |           README_PATCH.md
 |   |       |           
 |   |       +---BLOC_A2
@@ -4124,24 +4126,25 @@ C:.
 |   |       |   \---SESSION-20260415-04_A8_CLOTURE_A8
 |   |       |           README_PATCH.md
 |   |       |           
-|   |       \---BLOC_A9
-|   |           +---SESSION-20260415-05_A9_AUTO-01
-|   |           |       NO_PATCH.md
-|   |           |       README_PATCH.md
-|   |           |       
-|   |           +---SESSION-20260415-06_A9_AUTO-LOT-02-14
-|   |           |       PATCH__SESSION-20260415-06_A9_AUTO-LOT-02-14.diff
-|   |           |       PATCH__SESSION-20260415-06_A9_AUTO-LOT-02-14_FIX-01.diff
-|   |           |       README_PATCH.md
-|   |           |       
-|   |           +---SESSION-20260415-07_A9_AUTO-15
-|   |           |       NO_PATCH.md
-|   |           |       README_PATCH.md
-|   |           |       
-|   |           \---SESSION-20260415-08_A9_CLOTURE_A9
-|   |                   NO_PATCH.md
-|   |                   README_PATCH.md
-|   |                   
+|   |       +---BLOC_A9
+|   |       |   +---SESSION-20260415-05_A9_AUTO-01
+|   |       |   |       NO_PATCH.md
+|   |       |   |       README_PATCH.md
+|   |       |   |       
+|   |       |   +---SESSION-20260415-06_A9_AUTO-LOT-02-14
+|   |       |   |       PATCH__SESSION-20260415-06_A9_AUTO-LOT-02-14.diff
+|   |       |   |       PATCH__SESSION-20260415-06_A9_AUTO-LOT-02-14_FIX-01.diff
+|   |       |   |       README_PATCH.md
+|   |       |   |       
+|   |       |   +---SESSION-20260415-07_A9_AUTO-15
+|   |       |   |       NO_PATCH.md
+|   |       |   |       README_PATCH.md
+|   |       |   |       
+|   |       |   \---SESSION-20260415-08_A9_CLOTURE_A9
+|   |       |           NO_PATCH.md
+|   |       |           README_PATCH.md
+|   |       |           
+|   |       \---CLOTURE-ALPHA
 |   +---4-templates
 |   |       TEMPLATE_DEBUT_SESSION.md
 |   |       TEMPLATE_DOD_4_4.md
