@@ -1129,6 +1129,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |       |   |       README_PATCH.md
 |       |   |       
 |       |   \---SESSION-20260416-12_A12_CLOTURE_A12
+|       |           NO_PATCH.md
 |       |           README_PATCH.md
 |       |           
 |       +---BLOC_A13

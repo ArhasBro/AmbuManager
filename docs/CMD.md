@@ -36,8 +36,8 @@ Pour les sessions indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références des session :
 
-- SESSION-20260416-12_A12_CLOTURE_A12
-- **CLOTURE_A12 — VALIDATION+CORRECTION+COMPLÉTION** — Clôture finale du bloc A12
+- SESSION-20260416-13_A13_A13-01
+- **A13-01 — AUDIT** — Audit global du bloc qualité / documentation / gel ALPHA : tests existants, scénarios manuels documentés, documentation produit existante et cohérence finale ALPHA
 ------------------------------------
 
 Voici sa réponse ainsi que les documents généré :
