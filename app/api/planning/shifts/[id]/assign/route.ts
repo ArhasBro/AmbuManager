@@ -1,5 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
+import { NextRequest } from "next/server";
 import { getServerSession } from "next-auth/next";
 
 import { authOptions } from "@/lib/auth";
@@ -8,21 +7,8 @@ import { canEditPlanning } from "@/lib/permissions";
 import { assignDraftShift } from "@/lib/services/planning/assign-draftshift";
 import { assignShift } from "@/lib/services/planning/assign-shift";
 import { resolveTemplateMinStaffCount } from "@/lib/templates/template-rules";
-
-const BodySchema = z
-  .object({
-    userId: z.string().uuid().nullable().optional(),
-    user2Id: z.string().uuid().nullable().optional(),
-    vehicleId: z.string().uuid().nullable().optional(),
-    depotId: z.string().uuid().nullable().optional(),
-  })
-  .refine((v) => v.userId !== undefined || v.user2Id !== undefined || v.vehicleId !== undefined || v.depotId !== undefined, {
-    message: "At least one of userId, user2Id, vehicleId or depotId must be provided",
-  });
-
-function json(status: number, payload: unknown) {
-  return NextResponse.json(payload, { status });
-}
+import { json, unauthorized, forbidden, notFound } from "@/lib/api/response";
+import { planningAssignInputSchema } from "@/lib/validators/planning-assign";
 
 type Category = "VSL" | "TAXI" | "AMBULANCE" | "GARDE" | string;
 
@@ -32,31 +18,32 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
   const userRole = session?.user?.role;
   const companyId = session?.user?.companyId;
   const actorUserId = session?.user?.id;
+  const actorPlatformRole = session?.user?.platformRole;
 
   if (!session || !userRole || !companyId || !actorUserId) {
-    return json(401, { ok: false, error: "UNAUTHORIZED" });
+    return unauthorized();
   }
 
   // 2) RBAC
-  if (!(await canEditPlanning(actorUserId, userRole))) {
-    return json(403, { ok: false, error: "FORBIDDEN" });
+  if (!(await canEditPlanning(actorUserId, userRole, actorPlatformRole))) {
+    return forbidden();
   }
 
   // 3) Params
   const { id } = await ctx.params;
-  if (!id) return json(400, { ok: false, error: "INVALID_PARAMS" });
+  if (!id) return json({ ok: false, error: "INVALID_PARAMS" }, 400);
 
   // 4) Body
   let body: unknown;
   try {
     body = await req.json();
   } catch {
-    return json(400, { ok: false, error: "INVALID_BODY" });
+    return json({ ok: false, error: "INVALID_JSON" }, 400);
   }
 
-  const parsed = BodySchema.safeParse(body);
+  const parsed = planningAssignInputSchema.safeParse(body);
   if (!parsed.success) {
-    return json(400, { ok: false, error: "INVALID_BODY", details: parsed.error.flatten() });
+    return json({ ok: false, error: "VALIDATION_ERROR", details: parsed.error.flatten() }, 400);
   }
 
   const { userId, user2Id, vehicleId, depotId } = parsed.data;
@@ -94,10 +81,10 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     : null;
 
   const current = draft ?? shift;
-  if (!current) return json(404, { ok: false, error: "NOT_FOUND" });
+  if (!current) return notFound();
 
   if (draft && depotId !== undefined) {
-    return json(400, { ok: false, error: "DEPOT_ASSIGNMENT_NOT_SUPPORTED_ON_DRAFT" });
+    return json({ ok: false, error: "DEPOT_ASSIGNMENT_NOT_SUPPORTED_ON_DRAFT" }, 400);
   }
 
   const category = (current.template?.category ?? null) as Category | null;
@@ -105,7 +92,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
 
   // user2 interdit si slots=1
   if (slots === 1 && user2Id !== undefined && user2Id !== null) {
-    return json(400, { ok: false, error: "USER2_NOT_ALLOWED", details: { category } });
+    return json({ ok: false, error: "USER2_NOT_ALLOWED", details: { category } }, 400);
   }
 
   // Etat après patch (valeurs finales)
@@ -113,7 +100,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
   const nextUser2 = user2Id !== undefined ? user2Id : current.user2Id ?? null;
 
   if (slots === 2 && nextUser1 && nextUser2 && nextUser1 === nextUser2) {
-    return json(400, { ok: false, error: "SAME_USER_BOTH_SLOTS" });
+    return json({ ok: false, error: "SAME_USER_BOTH_SLOTS" }, 400);
   }
 
   // 7) Ownership checks (si UUID fourni)
@@ -137,22 +124,22 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
 
   if (userId !== undefined && userId !== null) {
     const ok = await assertUserInCompany(userId);
-    if (!ok) return json(400, { ok: false, error: "INVALID_USER" });
+    if (!ok) return json({ ok: false, error: "INVALID_USER" }, 400);
   }
 
   if (user2Id !== undefined && user2Id !== null) {
     const ok = await assertUserInCompany(user2Id);
-    if (!ok) return json(400, { ok: false, error: "INVALID_USER" });
+    if (!ok) return json({ ok: false, error: "INVALID_USER" }, 400);
   }
 
   if (vehicleId !== undefined && vehicleId !== null) {
     const ok = await assertVehicleInCompany(vehicleId);
-    if (!ok) return json(400, { ok: false, error: "INVALID_VEHICLE" });
+    if (!ok) return json({ ok: false, error: "INVALID_VEHICLE" }, 400);
   }
 
   if (depotId !== undefined && depotId !== null) {
     const ok = await assertActiveDepotInCompany(depotId);
-    if (!ok) return json(400, { ok: false, error: "INVALID_DEPOT" });
+    if (!ok) return json({ ok: false, error: "INVALID_DEPOT" }, 400);
   }
 
   // 8) DraftShift : logique métier via Service
@@ -169,8 +156,8 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     });
 
     if (!result.ok) {
-      if (result.error.code === "NOT_FOUND") return json(404, { ok: false, error: "NOT_FOUND" });
-      if (result.error.code === "FORBIDDEN_COMPANY") return json(403, { ok: false, error: "FORBIDDEN" });
+      if (result.error.code === "NOT_FOUND") return notFound();
+      if (result.error.code === "FORBIDDEN_COMPANY") return forbidden();
 
       if (
         result.error.code === "INVALID_SLOT_COUNT" ||
@@ -179,13 +166,13 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
         result.error.code === "TEMPLATE_ROLE_MISMATCH" ||
         result.error.code === "TEMPLATE_VEHICLE_TYPE_MISMATCH"
       ) {
-        return json(400, { ok: false, error: result.error.code, details: result.error.meta ?? null });
+        return json({ ok: false, error: result.error.code, details: result.error.meta ?? null }, 400);
       }
 
-      if (result.error.code === "RUN_NOT_DRAFT") return json(409, { ok: false, error: "RUN_NOT_DRAFT" });
+      if (result.error.code === "RUN_NOT_DRAFT") return json({ ok: false, error: "RUN_NOT_DRAFT" }, 409);
 
       if (result.error.code === "RULE_CONFIG_ERROR") {
-        return json(400, { ok: false, error: "RULE_CONFIG_ERROR", details: { message: result.error.message, ...(result.error.meta ?? {}) } });
+        return json({ ok: false, error: "RULE_CONFIG_ERROR", details: { message: result.error.message, ...(result.error.meta ?? {}) } }, 400);
       }
 
       if (
@@ -194,10 +181,10 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
         result.error.code === "VEHICLE_OVERLAP_CONFLICT" ||
         result.error.code === "RULE_BLOCKED"
       ) {
-        return json(409, { ok: false, error: result.error.code, details: result.error.meta ?? null });
+        return json({ ok: false, error: result.error.code, details: result.error.meta ?? null }, 409);
       }
 
-      return json(500, { ok: false, error: "INTERNAL_ERROR" });
+      return json({ ok: false, error: "INTERNAL_ERROR" }, 500);
     }
 
     // Re-fetch pour réponse UI identique
@@ -212,9 +199,9 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
       },
     });
 
-    if (!updated) return json(404, { ok: false, error: "NOT_FOUND" });
+    if (!updated) return notFound();
 
-    return json(200, {
+    return json({
       ok: true,
       data: {
         kind: "DRAFT",
@@ -235,11 +222,11 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
             : null,
         },
       },
-    });
+    }, 200);
   }
 
   // 9) Shift (planning publié) — logique métier via Service
-  if (!shift) return json(404, { ok: false, error: "NOT_FOUND" });
+  if (!shift) return notFound();
 
   const nextVehicle = vehicleId !== undefined ? vehicleId : current.vehicleId ?? null;
   const nextDepot = depotId !== undefined ? depotId : shift.depotId ?? null;
@@ -255,8 +242,8 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
   });
 
   if (!result.ok) {
-    if (result.error.code === "NOT_FOUND") return json(404, { ok: false, error: "NOT_FOUND" });
-    if (result.error.code === "FORBIDDEN_COMPANY") return json(403, { ok: false, error: "FORBIDDEN" });
+    if (result.error.code === "NOT_FOUND") return notFound();
+    if (result.error.code === "FORBIDDEN_COMPANY") return forbidden();
 
     if (
       result.error.code === "INVALID_SLOT_COUNT" ||
@@ -265,11 +252,11 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
       result.error.code === "TEMPLATE_ROLE_MISMATCH" ||
       result.error.code === "TEMPLATE_VEHICLE_TYPE_MISMATCH"
     ) {
-      return json(400, { ok: false, error: result.error.code, details: result.error.meta ?? null });
+      return json({ ok: false, error: result.error.code, details: result.error.meta ?? null }, 400);
     }
 
     if (result.error.code === "RULE_CONFIG_ERROR") {
-      return json(400, { ok: false, error: "RULE_CONFIG_ERROR", details: { message: result.error.message, ...(result.error.meta ?? {}) } });
+      return json({ ok: false, error: "RULE_CONFIG_ERROR", details: { message: result.error.message, ...(result.error.meta ?? {}) } }, 400);
     }
 
     if (
@@ -278,10 +265,10 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
       result.error.code === "VEHICLE_OVERLAP_CONFLICT" ||
       result.error.code === "RULE_BLOCKED"
     ) {
-      return json(409, { ok: false, error: result.error.code, details: result.error.meta ?? null });
+      return json({ ok: false, error: result.error.code, details: result.error.meta ?? null }, 409);
     }
 
-    return json(500, { ok: false, error: "INTERNAL_ERROR" });
+    return json({ ok: false, error: "INTERNAL_ERROR" }, 500);
   }
 
   // Re-fetch pour réponse UI identique
@@ -297,9 +284,9 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     },
   });
 
-  if (!updatedShift) return json(404, { ok: false, error: "NOT_FOUND" });
+  if (!updatedShift) return notFound();
 
-  return json(200, {
+  return json({
     ok: true,
     data: {
       kind: "SHIFT",

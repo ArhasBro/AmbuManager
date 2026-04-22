@@ -1,0 +1,1073 @@
+diff --git a/app/api/company/profile/route.ts b/app/api/company/profile/route.ts
+index 5f4329c..5b87681 100644
+--- a/app/api/company/profile/route.ts
++++ b/app/api/company/profile/route.ts
+@@ -1,21 +1,11 @@
+ import { getServerSession } from "next-auth/next";
+ 
+ import { authOptions } from "@/lib/auth";
+-import { prisma } from "@/lib/prisma";
+-import { badRequest, forbidden, notFound, ok, serverError, unauthorized } from "@/lib/api/response";
++import { badRequest, forbidden, json, notFound, ok, serverError, unauthorized } from "@/lib/api/response";
+ import { prismaToHttp } from "@/lib/api/prisma-error";
++import { updateCompanyProfile } from "@/lib/services/company/update-company-profile";
+ import { updateCompanyProfileBodySchema } from "@/lib/validators/company-profile";
+ 
+-type CompanyProfileRow = {
+-  id: string;
+-  name: string;
+-  managerNames: string | null;
+-  address: string | null;
+-  phone: string | null;
+-  siret: string | null;
+-  updatedAt: Date | string;
+-};
+-
+ function canManageCompanyProfile(role?: string) {
+   return role === "ADMIN" || role === "GERANT";
+ }
+@@ -30,10 +20,6 @@ function getErrorMessage(e: unknown): string {
+   }
+ }
+ 
+-function toIsoString(value: Date | string) {
+-  return value instanceof Date ? value.toISOString() : new Date(value).toISOString();
+-}
+-
+ export async function PATCH(req: Request) {
+   const session = await getServerSession(authOptions);
+   const userId = session?.user?.id;
+@@ -48,41 +34,24 @@ export async function PATCH(req: Request) {
+   if (!parsed.success) return badRequest("VALIDATION_ERROR", parsed.error.flatten());
+ 
+   try {
+-    const rows = await prisma.$queryRaw<CompanyProfileRow[]>`
+-      UPDATE "Company"
+-      SET
+-        "name" = ${parsed.data.name},
+-        "managerNames" = ${parsed.data.managerNames},
+-        "address" = ${parsed.data.address},
+-        "phone" = ${parsed.data.phone},
+-        "siret" = ${parsed.data.siret},
+-        "updatedAt" = NOW()
+-      WHERE "id" = ${companyId}
+-      RETURNING
+-        "id",
+-        "name",
+-        "managerNames",
+-        "address",
+-        "phone",
+-        "siret",
+-        "updatedAt"
+-    `;
++    const company = await updateCompanyProfile({
++      companyId,
++      name: parsed.data.name,
++      managerNames: parsed.data.managerNames,
++      address: parsed.data.address,
++      phone: parsed.data.phone,
++      siret: parsed.data.siret,
++    });
+ 
+-    const company = rows[0];
+     if (!company) return notFound();
+ 
+-    return ok({
+-      id: company.id,
+-      name: company.name,
+-      managerNames: company.managerNames ?? "",
+-      address: company.address ?? "",
+-      phone: company.phone ?? "",
+-      siret: company.siret ?? "",
+-      updatedAt: toIsoString(company.updatedAt),
+-    });
++    return ok(company);
+   } catch (e: unknown) {
+     const mapped = prismaToHttp(e);
+     if (mapped?.status === 404) return notFound();
+-    return serverError(mapped ?? getErrorMessage(e));
++    if (mapped) {
++      return json({ ok: false, error: mapped.error }, mapped.status);
++    }
++    return serverError(getErrorMessage(e));
+   }
+ }
+diff --git a/app/api/company/rules/route.ts b/app/api/company/rules/route.ts
+index 5bb21ae..eeb8f8d 100644
+--- a/app/api/company/rules/route.ts
++++ b/app/api/company/rules/route.ts
+@@ -1,9 +1,8 @@
+-import { NextRequest, NextResponse } from "next/server";
++import { NextRequest } from "next/server";
+ import { getServerSession } from "next-auth/next";
+-import { z } from "zod";
+-import { RuleMode } from "@prisma/client";
+ 
+ import { authOptions } from "@/lib/auth";
++import { badRequest, forbidden, ok, serverError, unauthorized } from "@/lib/api/response";
+ import {
+   buildCompanyParameterView,
+   listCompanyParameterDefinitions,
+@@ -12,22 +11,10 @@ import {
+ } from "@/lib/company-rules/api";
+ import { canManageCompanyRules } from "@/lib/permissions";
+ import { prisma } from "@/lib/prisma";
+-
+-const GetQuerySchema = z.object({
+-  keys: z.string().optional(),
+-});
+-
+-const PatchBodySchema = z
+-  .object({
+-    parameterId: z.string().min(1).optional(),
+-    key: z.string().min(1).optional(),
+-    value: z.string(),
+-    mode: z.nativeEnum(RuleMode).optional(),
+-  })
+-  .refine((data: { parameterId?: string; key?: string }) => Boolean(data.parameterId || data.key), {
+-    message: "parameterId ou key est obligatoire.",
+-    path: ["parameterId"],
+-  });
++import {
++  companyRulesGetQuerySchema,
++  companyRulesPatchBodySchema,
++} from "@/lib/validators/company-rules";
+ 
+ export async function GET(req: NextRequest) {
+   const session = await getServerSession(authOptions);
+@@ -35,19 +22,16 @@ export async function GET(req: NextRequest) {
+   const userId = session?.user?.id as string | undefined;
+ 
+   if (!companyId || !userId) {
+-    return NextResponse.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
++    return unauthorized();
+   }
+ 
+   const url = new URL(req.url);
+-  const parsed = GetQuerySchema.safeParse({
++  const parsed = companyRulesGetQuerySchema.safeParse({
+     keys: url.searchParams.get("keys") ?? undefined,
+   });
+ 
+   if (!parsed.success) {
+-    return NextResponse.json(
+-      { ok: false, error: "VALIDATION_ERROR", details: parsed.error.flatten() },
+-      { status: 400 }
+-    );
++    return badRequest("VALIDATION_ERROR", parsed.error.flatten());
+   }
+ 
+   const keys = parsed.data.keys
+@@ -77,19 +61,23 @@ export async function GET(req: NextRequest) {
+           },
+         });
+ 
+-    const storedRulesByKey = new Map(storedRules.map((rule: StoredCompanyRuleApiRecord) => [rule.key, rule]));
+-    const parameters = definitions.map((definition) => buildCompanyParameterView(definition, definition.storage.key ? storedRulesByKey.get(definition.storage.key) : null));
++    const storedRulesByKey = new Map(
++      storedRules.map((rule: StoredCompanyRuleApiRecord) => [rule.key, rule])
++    );
++    const parameters = definitions.map((definition) =>
++      buildCompanyParameterView(
++        definition,
++        definition.storage.key ? storedRulesByKey.get(definition.storage.key) : null
++      )
++    );
+ 
+-    return NextResponse.json({
+-      ok: true,
+-      data: parameters,
+-    });
++    return ok(parameters);
+   } catch {
+-    return NextResponse.json({ ok: false, error: "SERVER_ERROR" }, { status: 500 });
++    return serverError();
+   }
+ }
+ 
+-export async function PATCH(req: NextRequest) {
++export async function PATCH(req: Request) {
+   const session = await getServerSession(authOptions);
+   const companyId = session?.user?.companyId as string | undefined;
+   const userId = session?.user?.id as string | undefined;
+@@ -97,26 +85,23 @@ export async function PATCH(req: NextRequest) {
+   const platformRole = session?.user?.platformRole as string | undefined;
+ 
+   if (!companyId || !userId) {
+-    return NextResponse.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
++    return unauthorized();
+   }
+ 
+   if (!(await canManageCompanyRules(userId, role, platformRole))) {
+-    return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });
++    return forbidden();
+   }
+ 
+   let body: unknown;
+   try {
+     body = await req.json();
+   } catch {
+-    return NextResponse.json({ ok: false, error: "INVALID_JSON" }, { status: 400 });
++    return badRequest("INVALID_JSON");
+   }
+ 
+-  const parsed = PatchBodySchema.safeParse(body);
++  const parsed = companyRulesPatchBodySchema.safeParse(body);
+   if (!parsed.success) {
+-    return NextResponse.json(
+-      { ok: false, error: "VALIDATION_ERROR", details: parsed.error.flatten() },
+-      { status: 400 }
+-    );
++    return badRequest("VALIDATION_ERROR", parsed.error.flatten());
+   }
+ 
+   try {
+@@ -136,10 +121,7 @@ export async function PATCH(req: NextRequest) {
+     });
+ 
+     if (!resolved.ok) {
+-      return NextResponse.json(
+-        { ok: false, error: "VALIDATION_ERROR", details: { message: resolved.message } },
+-        { status: 400 }
+-      );
++      return badRequest("VALIDATION_ERROR", { message: resolved.message });
+     }
+ 
+     const rule = await prisma.companyRule.upsert({
+@@ -154,11 +136,8 @@ export async function PATCH(req: NextRequest) {
+       select: { id: true, key: true, value: true, mode: true, createdAt: true, updatedAt: true },
+     });
+ 
+-    return NextResponse.json({
+-      ok: true,
+-      data: buildCompanyParameterView(resolved.definition, rule),
+-    });
++    return ok(buildCompanyParameterView(resolved.definition, rule));
+   } catch {
+-    return NextResponse.json({ ok: false, error: "SERVER_ERROR" }, { status: 500 });
++    return serverError();
+   }
+ }
+diff --git a/app/api/planning/autoschedule/day/route.ts b/app/api/planning/autoschedule/day/route.ts
+index 38e3231..53e48ac 100644
+--- a/app/api/planning/autoschedule/day/route.ts
++++ b/app/api/planning/autoschedule/day/route.ts
+@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
+ import { getServerSession } from "next-auth/next";
+ import { authOptions } from "@/lib/auth";
+ import { prisma } from "@/lib/prisma";
++import { prismaToHttp } from "@/lib/api/prisma-error";
+ import { z } from "zod";
+ import { canAutoSchedule } from "@/lib/permissions";
+ import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
+@@ -36,24 +37,6 @@ function buildDateTimeLocal(dayStr: string, timeStr: string): Date {
+   return new Date(Y, M - 1, D, h, m, 0, 0);
+ }
+ 
+-type PrismaKnownCode = "P2002" | "P2025";
+-
+-function getPrismaCode(e: unknown): PrismaKnownCode | null {
+-  if (typeof e !== "object" || e === null) return null;
+-  if (!("code" in e)) return null;
+-  const code = (e as { code?: unknown }).code;
+-  if (code === "P2002" || code === "P2025") return code;
+-  return null;
+-}
+-
+-function prismaToApiError(e: unknown): { status: number; body: { ok: false; error: string } } {
+-  const code = getPrismaCode(e);
+-  if (code === "P2002") return { status: 409, body: { ok: false, error: "CONFLICT" } };
+-  if (code === "P2025") return { status: 404, body: { ok: false, error: "NOT_FOUND" } };
+-
+-  return { status: 500, body: { ok: false, error: "SERVER_ERROR" } };
+-}
+-
+ function isAutoscheduleSentinel(v: unknown): v is AutoscheduleSentinel {
+   if (typeof v !== "object" || v === null) return false;
+   if (!("ok" in v) || !("error" in v)) return false;
+@@ -107,13 +90,14 @@ export async function POST(req: NextRequest) {
+   const companyId = session?.user?.companyId;
+   const userId = session?.user?.id;
+   const role = session?.user?.role;
++  const platformRole = session?.user?.platformRole;
+ 
+   if (!companyId || !userId) {
+     return NextResponse.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
+   }
+ 
+   // ✅ RBAC (ADMIN/GERANT) ou permission dédiée
+-  const permAllowed = await canAutoSchedule(userId, role);
++  const permAllowed = await canAutoSchedule(userId, role, platformRole);
+ 
+   if (!permAllowed) {
+     return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });
+@@ -285,7 +269,10 @@ export async function POST(req: NextRequest) {
+ 
+     return NextResponse.json({ ok: true, data: full });
+   } catch (e) {
+-    const mapped = prismaToApiError(e);
+-    return NextResponse.json(mapped.body, { status: mapped.status });
++    const mapped = prismaToHttp(e);
++    if (mapped) {
++      return NextResponse.json({ ok: false, error: mapped.error }, { status: mapped.status });
++    }
++    return NextResponse.json({ ok: false, error: "SERVER_ERROR" }, { status: 500 });
+   }
+ }
+\ No newline at end of file
+diff --git a/app/api/planning/autoschedule/runs/[id]/cancel/route.ts b/app/api/planning/autoschedule/runs/[id]/cancel/route.ts
+index 9a06ff5..af4bbaa 100644
+--- a/app/api/planning/autoschedule/runs/[id]/cancel/route.ts
++++ b/app/api/planning/autoschedule/runs/[id]/cancel/route.ts
+@@ -4,6 +4,7 @@ import { z } from "zod";
+ 
+ import { authOptions } from "@/lib/auth";
+ import { prisma } from "@/lib/prisma";
++import { prismaToHttp } from "@/lib/api/prisma-error";
+ import { AutoScheduleStatus } from "@prisma/client";
+ import { canCancelAutoSchedule } from "@/lib/permissions";
+ import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
+@@ -28,31 +29,20 @@ function extractRunIdFromPath(pathname: string): string | null {
+   return id;
+ }
+ 
+-function prismaToApiError(e: unknown): { status: number; body: { ok: false; error: string } } {
+-  if (typeof e === "object" && e && "code" in e) {
+-    const maybe = e as { code?: unknown };
+-    const code = typeof maybe.code === "string" ? maybe.code : null;
+-
+-    if (code === "P2002") return { status: 409, body: { ok: false, error: "CONFLICT" } };
+-    if (code === "P2025") return { status: 404, body: { ok: false, error: "NOT_FOUND" } };
+-  }
+-
+-  return { status: 500, body: { ok: false, error: "SERVER_ERROR" } };
+-}
+-
+ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
+   const session = await getServerSession(authOptions);
+ 
+   const companyId = session?.user?.companyId;
+   const userId = session?.user?.id;
+   const role = session?.user?.role;
++  const platformRole = session?.user?.platformRole;
+ 
+   if (!companyId || !userId) {
+     return NextResponse.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
+   }
+ 
+   // ✅ RBAC (ADMIN/GERANT) ou permission dédiée
+-  const permAllowed = await canCancelAutoSchedule(userId, role);
++  const permAllowed = await canCancelAutoSchedule(userId, role, platformRole);
+ 
+   if (!permAllowed) {
+     return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });
+@@ -147,7 +137,10 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
+ 
+     return NextResponse.json({ ok: true, data: result.data });
+   } catch (e) {
+-    const mapped = prismaToApiError(e);
+-    return NextResponse.json(mapped.body, { status: mapped.status });
++    const mapped = prismaToHttp(e);
++    if (mapped) {
++      return NextResponse.json({ ok: false, error: mapped.error }, { status: mapped.status });
++    }
++    return NextResponse.json({ ok: false, error: "SERVER_ERROR" }, { status: 500 });
+   }
+ }
+\ No newline at end of file
+diff --git a/app/api/planning/autoschedule/runs/[id]/match/apply/route.ts b/app/api/planning/autoschedule/runs/[id]/match/apply/route.ts
+index f9a6020..6c51d8b 100644
+--- a/app/api/planning/autoschedule/runs/[id]/match/apply/route.ts
++++ b/app/api/planning/autoschedule/runs/[id]/match/apply/route.ts
+@@ -64,6 +64,7 @@ export async function POST(
+   const session = await getServerSession(authOptions);
+ 
+   const companyId = session?.user?.companyId;
++  const platformRole = session?.user?.platformRole;
+ 
+   if (!session?.user?.id || typeof companyId !== "string" || companyId.length === 0) {
+     return json(
+@@ -72,7 +73,7 @@ export async function POST(
+     );
+   }
+ 
+-  if (!(await canAutoSchedule(session.user.id, session.user.role))) {
++  if (!(await canAutoSchedule(session.user.id, session.user.role, platformRole))) {
+     return json(
+       { ok: false, error: "FORBIDDEN", details: "Accès refusé (PLANNING_AUTOSCHEDULE requis)" },
+       403
+diff --git a/app/api/planning/autoschedule/runs/[id]/match/preview/route.ts b/app/api/planning/autoschedule/runs/[id]/match/preview/route.ts
+index 0c10f05..ff7374e 100644
+--- a/app/api/planning/autoschedule/runs/[id]/match/preview/route.ts
++++ b/app/api/planning/autoschedule/runs/[id]/match/preview/route.ts
+@@ -31,6 +31,7 @@ export async function POST(
+   const session = await getServerSession(authOptions);
+ 
+   const companyId = session?.user?.companyId;
++  const platformRole = session?.user?.platformRole;
+ 
+   if (!session?.user?.id || typeof companyId !== "string" || companyId.length === 0) {
+     return json(
+@@ -39,7 +40,7 @@ export async function POST(
+     );
+   }
+ 
+-  if (!(await canAutoSchedule(session.user.id, session.user.role))) {
++  if (!(await canAutoSchedule(session.user.id, session.user.role, platformRole))) {
+     return json(
+       { ok: false, error: "FORBIDDEN", details: "Accès refusé (PLANNING_AUTOSCHEDULE requis)" },
+       403
+diff --git a/app/api/planning/autoschedule/runs/[id]/match/route.ts b/app/api/planning/autoschedule/runs/[id]/match/route.ts
+index 3a40e19..eed3985 100644
+--- a/app/api/planning/autoschedule/runs/[id]/match/route.ts
++++ b/app/api/planning/autoschedule/runs/[id]/match/route.ts
+@@ -3,35 +3,36 @@ import { getServerSession } from "next-auth/next";
+ 
+ import { authOptions } from "@/lib/auth";
+ import { canAutoSchedule } from "@/lib/permissions";
+-
++import { json } from "@/lib/api/response";
+ 
+ export async function GET() {
+   const session = await getServerSession(authOptions);
+ 
+   const companyId = session?.user?.companyId;
++  const platformRole = session?.user?.platformRole;
+ 
+   if (!session?.user?.id || typeof companyId !== "string" || companyId.length === 0) {
+-    return Response.json(
++    return json(
+       { ok: false, error: "UNAUTHORIZED", details: "Session invalide (companyId manquant)" },
+-      { status: 401 }
++      401
+     );
+   }
+ 
+-  if (!(await canAutoSchedule(session.user.id, session.user.role))) {
+-    return Response.json(
++  if (!(await canAutoSchedule(session.user.id, session.user.role, platformRole))) {
++    return json(
+       { ok: false, error: "FORBIDDEN", details: "Accès refusé (PLANNING_AUTOSCHEDULE requis)" },
+-      { status: 403 }
++      403
+     );
+   }
+ 
+   // Route dépréciée : séparation stricte preview/apply
+-  return Response.json(
++  return json(
+     {
+       ok: false,
+       error: "GONE",
+       details:
+         "Cette route est dépréciée. Utilise /match/preview (simulation) et /match/apply (application).",
+     },
+-    { status: 410 }
++    410
+   );
+ }
+\ No newline at end of file
+diff --git a/app/api/planning/autoschedule/runs/[id]/publish/route.ts b/app/api/planning/autoschedule/runs/[id]/publish/route.ts
+index ee7ef9d..dc5d842 100644
+--- a/app/api/planning/autoschedule/runs/[id]/publish/route.ts
++++ b/app/api/planning/autoschedule/runs/[id]/publish/route.ts
+@@ -8,6 +8,7 @@ import { loadMinRestCompanyRule } from "@/lib/company-rules/runtime";
+ 
+ import { authOptions } from "@/lib/auth";
+ import { prisma } from "@/lib/prisma";
++import { prismaToHttp } from "@/lib/api/prisma-error";
+ import { canPublishAutoSchedule } from "@/lib/permissions";
+ import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
+ import { getAllowedRolesForVehicleType, isRoleAllowedForVehicleType } from "@/lib/templates/template-rules";
+@@ -33,19 +34,6 @@ function extractRunIdFromPath(pathname: string): string | null {
+   return id;
+ }
+ 
+-function prismaToApiError(
+-  e: unknown
+-): { status: number; body: { ok: false; error: string } } {
+-  if (typeof e === "object" && e && "code" in e) {
+-    const maybe = e as { code?: unknown };
+-    const code = typeof maybe.code === "string" ? maybe.code : null;
+-
+-    if (code === "P2002") return { status: 409, body: { ok: false, error: "CONFLICT" } };
+-    if (code === "P2025") return { status: 404, body: { ok: false, error: "NOT_FOUND" } };
+-  }
+-  return { status: 500, body: { ok: false, error: "SERVER_ERROR" } };
+-}
+-
+ type DraftForPublish = {
+   companyId: string;
+   runId: string;
+@@ -439,12 +427,13 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
+   const companyId = session?.user?.companyId;
+   const userId = session?.user?.id;
+   const role = session?.user?.role;
++  const platformRole = session?.user?.platformRole;
+ 
+   if (!companyId || !userId) {
+     return NextResponse.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
+   }
+ 
+-  const permAllowed = await canPublishAutoSchedule(userId, role);
++  const permAllowed = await canPublishAutoSchedule(userId, role, platformRole);
+ 
+   if (!permAllowed) {
+     return NextResponse.json(
+@@ -680,7 +669,10 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
+       },
+     });
+   } catch (e) {
+-    const mapped = prismaToApiError(e);
+-    return NextResponse.json(mapped.body, { status: mapped.status });
++    const mapped = prismaToHttp(e);
++    if (mapped) {
++      return NextResponse.json({ ok: false, error: mapped.error }, { status: mapped.status });
++    }
++    return NextResponse.json({ ok: false, error: "SERVER_ERROR" }, { status: 500 });
+   }
+ }
+\ No newline at end of file
+diff --git a/app/api/planning/autoschedule/runs/route.ts b/app/api/planning/autoschedule/runs/route.ts
+index b1e157f..7479aca 100644
+--- a/app/api/planning/autoschedule/runs/route.ts
++++ b/app/api/planning/autoschedule/runs/route.ts
+@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
+ import { getServerSession } from "next-auth/next";
+ import { authOptions } from "@/lib/auth";
+ import { prisma } from "@/lib/prisma";
++import { prismaToHttp } from "@/lib/api/prisma-error";
+ import { z } from "zod";
+ import { AutoScheduleScope, AutoScheduleStatus, type Prisma } from "@prisma/client";
+ import { canAutoSchedule } from "@/lib/permissions";
+@@ -14,52 +15,12 @@ const QuerySchema = z.object({
+ });
+ 
+ 
+-type PrismaKnownCode = "P2002" | "P2025";
+-
+-function getPrismaCode(e: unknown): PrismaKnownCode | null {
+-  if (typeof e !== "object" || e === null) return null;
+-  if (!("code" in e)) return null;
+-
+-  const code = (e as { code?: unknown }).code;
+-  if (code === "P2002" || code === "P2025") return code;
+-
+-  return null;
+-}
+-
+-
+-function encodeCursor(createdAt: Date, id: string): string {
+-  return `${createdAt.toISOString()}__${id}`;
+-}
+-
+-function decodeCursor(cursor: string): { createdAt: Date; id: string } | null {
+-  const sep = cursor.lastIndexOf("__");
+-  if (sep <= 0) return null;
+-
+-  const createdAtRaw = cursor.slice(0, sep);
+-  const id = cursor.slice(sep + 2);
+-  if (!id) return null;
+-
+-  const createdAt = new Date(createdAtRaw);
+-  if (Number.isNaN(createdAt.getTime())) return null;
+-
+-  return { createdAt, id };
+-}
+-
+-function prismaToApiError(e: unknown): { status: number; body: { ok: false; error: string } } {
+-  const code = getPrismaCode(e);
+-  if (code === "P2002") return { status: 409, body: { ok: false, error: "CONFLICT" } };
+-  if (code === "P2025") return { status: 404, body: { ok: false, error: "NOT_FOUND" } };
+-
+-  return { status: 500, body: { ok: false, error: "SERVER_ERROR" } };
+-}
+-
+ export async function GET(req: NextRequest) {
+   const session = await getServerSession(authOptions);
+ 
+   const companyId = session?.user?.companyId;
+   const userId = session?.user?.id;
+   const role = session?.user?.role;
+-
+   if (!companyId || !userId) {
+     return NextResponse.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
+   }
+@@ -152,7 +113,10 @@ export async function GET(req: NextRequest) {
+       },
+     });
+   } catch (e) {
+-    const mapped = prismaToApiError(e);
+-    return NextResponse.json(mapped.body, { status: mapped.status });
++    const mapped = prismaToHttp(e);
++    if (mapped) {
++      return NextResponse.json({ ok: false, error: mapped.error }, { status: mapped.status });
++    }
++    return NextResponse.json({ ok: false, error: "SERVER_ERROR" }, { status: 500 });
+   }
+ }
+\ No newline at end of file
+diff --git a/app/api/planning/autoschedule/week/route.ts b/app/api/planning/autoschedule/week/route.ts
+index ad44026..9569c51 100644
+--- a/app/api/planning/autoschedule/week/route.ts
++++ b/app/api/planning/autoschedule/week/route.ts
+@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
+ import { getServerSession } from "next-auth/next";
+ import { authOptions } from "@/lib/auth";
+ import { prisma } from "@/lib/prisma";
++import { prismaToHttp } from "@/lib/api/prisma-error";
+ import { z } from "zod";
+ import { canAutoSchedule } from "@/lib/permissions";
+ import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
+@@ -57,28 +58,6 @@ function toMondayLocal(dayStr: string): Date {
+   return addDays(base, -diffToMonday);
+ }
+ 
+-type PrismaKnownCode = "P2002" | "P2025";
+-
+-function getPrismaCode(e: unknown): PrismaKnownCode | null {
+-  if (typeof e !== "object" || e === null) return null;
+-  if (!("code" in e)) return null;
+-
+-  const code = (e as { code?: unknown }).code;
+-  if (code === "P2002" || code === "P2025") return code;
+-
+-  return null;
+-}
+-
+-function prismaToApiError(e: unknown): { status: number; body: { ok: false; error: string } } {
+-  // mapping minimal et safe
+-  const code = getPrismaCode(e);
+-
+-  if (code === "P2002") return { status: 409, body: { ok: false, error: "CONFLICT" } };
+-  if (code === "P2025") return { status: 404, body: { ok: false, error: "NOT_FOUND" } };
+-
+-  return { status: 500, body: { ok: false, error: "SERVER_ERROR" } };
+-}
+-
+ function isAutoscheduleSentinel(v: unknown): v is AutoscheduleSentinel {
+   if (typeof v !== "object" || v === null) return false;
+   if (!("ok" in v) || !("error" in v)) return false;
+@@ -132,12 +111,13 @@ export async function POST(req: NextRequest) {
+   const companyId = session?.user?.companyId;
+   const userId = session?.user?.id;
+   const role = session?.user?.role;
++  const platformRole = session?.user?.platformRole;
+ 
+   if (!companyId || !userId) {
+     return NextResponse.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
+   }
+ 
+-  const permAllowed = await canAutoSchedule(userId, role);
++  const permAllowed = await canAutoSchedule(userId, role, platformRole);
+ 
+   if (!permAllowed) {
+     return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });
+@@ -327,7 +307,10 @@ export async function POST(req: NextRequest) {
+ 
+     return NextResponse.json({ ok: true, data: full });
+   } catch (e) {
+-    const mapped = prismaToApiError(e);
+-    return NextResponse.json(mapped.body, { status: mapped.status });
++    const mapped = prismaToHttp(e);
++    if (mapped) {
++      return NextResponse.json({ ok: false, error: mapped.error }, { status: mapped.status });
++    }
++    return NextResponse.json({ ok: false, error: "SERVER_ERROR" }, { status: 500 });
+   }
+ }
+\ No newline at end of file
+diff --git a/app/api/planning/shifts/[id]/assign/route.ts b/app/api/planning/shifts/[id]/assign/route.ts
+index 07d26f3..77e20d8 100644
+--- a/app/api/planning/shifts/[id]/assign/route.ts
++++ b/app/api/planning/shifts/[id]/assign/route.ts
+@@ -1,5 +1,4 @@
+-import { NextRequest, NextResponse } from "next/server";
+-import { z } from "zod";
++import { NextRequest } from "next/server";
+ import { getServerSession } from "next-auth/next";
+ 
+ import { authOptions } from "@/lib/auth";
+@@ -8,21 +7,8 @@ import { canEditPlanning } from "@/lib/permissions";
+ import { assignDraftShift } from "@/lib/services/planning/assign-draftshift";
+ import { assignShift } from "@/lib/services/planning/assign-shift";
+ import { resolveTemplateMinStaffCount } from "@/lib/templates/template-rules";
+-
+-const BodySchema = z
+-  .object({
+-    userId: z.string().uuid().nullable().optional(),
+-    user2Id: z.string().uuid().nullable().optional(),
+-    vehicleId: z.string().uuid().nullable().optional(),
+-    depotId: z.string().uuid().nullable().optional(),
+-  })
+-  .refine((v) => v.userId !== undefined || v.user2Id !== undefined || v.vehicleId !== undefined || v.depotId !== undefined, {
+-    message: "At least one of userId, user2Id, vehicleId or depotId must be provided",
+-  });
+-
+-function json(status: number, payload: unknown) {
+-  return NextResponse.json(payload, { status });
+-}
++import { json, unauthorized, forbidden, notFound } from "@/lib/api/response";
++import { planningAssignInputSchema } from "@/lib/validators/planning-assign";
+ 
+ type Category = "VSL" | "TAXI" | "AMBULANCE" | "GARDE" | string;
+ 
+@@ -32,31 +18,32 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+   const userRole = session?.user?.role;
+   const companyId = session?.user?.companyId;
+   const actorUserId = session?.user?.id;
++  const actorPlatformRole = session?.user?.platformRole;
+ 
+   if (!session || !userRole || !companyId || !actorUserId) {
+-    return json(401, { ok: false, error: "UNAUTHORIZED" });
++    return unauthorized();
+   }
+ 
+   // 2) RBAC
+-  if (!(await canEditPlanning(actorUserId, userRole))) {
+-    return json(403, { ok: false, error: "FORBIDDEN" });
++  if (!(await canEditPlanning(actorUserId, userRole, actorPlatformRole))) {
++    return forbidden();
+   }
+ 
+   // 3) Params
+   const { id } = await ctx.params;
+-  if (!id) return json(400, { ok: false, error: "INVALID_PARAMS" });
++  if (!id) return json({ ok: false, error: "INVALID_PARAMS" }, 400);
+ 
+   // 4) Body
+   let body: unknown;
+   try {
+     body = await req.json();
+   } catch {
+-    return json(400, { ok: false, error: "INVALID_BODY" });
++    return json({ ok: false, error: "INVALID_JSON" }, 400);
+   }
+ 
+-  const parsed = BodySchema.safeParse(body);
++  const parsed = planningAssignInputSchema.safeParse(body);
+   if (!parsed.success) {
+-    return json(400, { ok: false, error: "INVALID_BODY", details: parsed.error.flatten() });
++    return json({ ok: false, error: "VALIDATION_ERROR", details: parsed.error.flatten() }, 400);
+   }
+ 
+   const { userId, user2Id, vehicleId, depotId } = parsed.data;
+@@ -94,10 +81,10 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+     : null;
+ 
+   const current = draft ?? shift;
+-  if (!current) return json(404, { ok: false, error: "NOT_FOUND" });
++  if (!current) return notFound();
+ 
+   if (draft && depotId !== undefined) {
+-    return json(400, { ok: false, error: "DEPOT_ASSIGNMENT_NOT_SUPPORTED_ON_DRAFT" });
++    return json({ ok: false, error: "DEPOT_ASSIGNMENT_NOT_SUPPORTED_ON_DRAFT" }, 400);
+   }
+ 
+   const category = (current.template?.category ?? null) as Category | null;
+@@ -105,7 +92,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+ 
+   // user2 interdit si slots=1
+   if (slots === 1 && user2Id !== undefined && user2Id !== null) {
+-    return json(400, { ok: false, error: "USER2_NOT_ALLOWED", details: { category } });
++    return json({ ok: false, error: "USER2_NOT_ALLOWED", details: { category } }, 400);
+   }
+ 
+   // Etat après patch (valeurs finales)
+@@ -113,7 +100,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+   const nextUser2 = user2Id !== undefined ? user2Id : current.user2Id ?? null;
+ 
+   if (slots === 2 && nextUser1 && nextUser2 && nextUser1 === nextUser2) {
+-    return json(400, { ok: false, error: "SAME_USER_BOTH_SLOTS" });
++    return json({ ok: false, error: "SAME_USER_BOTH_SLOTS" }, 400);
+   }
+ 
+   // 7) Ownership checks (si UUID fourni)
+@@ -137,22 +124,22 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+ 
+   if (userId !== undefined && userId !== null) {
+     const ok = await assertUserInCompany(userId);
+-    if (!ok) return json(400, { ok: false, error: "INVALID_USER" });
++    if (!ok) return json({ ok: false, error: "INVALID_USER" }, 400);
+   }
+ 
+   if (user2Id !== undefined && user2Id !== null) {
+     const ok = await assertUserInCompany(user2Id);
+-    if (!ok) return json(400, { ok: false, error: "INVALID_USER" });
++    if (!ok) return json({ ok: false, error: "INVALID_USER" }, 400);
+   }
+ 
+   if (vehicleId !== undefined && vehicleId !== null) {
+     const ok = await assertVehicleInCompany(vehicleId);
+-    if (!ok) return json(400, { ok: false, error: "INVALID_VEHICLE" });
++    if (!ok) return json({ ok: false, error: "INVALID_VEHICLE" }, 400);
+   }
+ 
+   if (depotId !== undefined && depotId !== null) {
+     const ok = await assertActiveDepotInCompany(depotId);
+-    if (!ok) return json(400, { ok: false, error: "INVALID_DEPOT" });
++    if (!ok) return json({ ok: false, error: "INVALID_DEPOT" }, 400);
+   }
+ 
+   // 8) DraftShift : logique métier via Service
+@@ -169,8 +156,8 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+     });
+ 
+     if (!result.ok) {
+-      if (result.error.code === "NOT_FOUND") return json(404, { ok: false, error: "NOT_FOUND" });
+-      if (result.error.code === "FORBIDDEN_COMPANY") return json(403, { ok: false, error: "FORBIDDEN" });
++      if (result.error.code === "NOT_FOUND") return notFound();
++      if (result.error.code === "FORBIDDEN_COMPANY") return forbidden();
+ 
+       if (
+         result.error.code === "INVALID_SLOT_COUNT" ||
+@@ -179,13 +166,13 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+         result.error.code === "TEMPLATE_ROLE_MISMATCH" ||
+         result.error.code === "TEMPLATE_VEHICLE_TYPE_MISMATCH"
+       ) {
+-        return json(400, { ok: false, error: result.error.code, details: result.error.meta ?? null });
++        return json({ ok: false, error: result.error.code, details: result.error.meta ?? null }, 400);
+       }
+ 
+-      if (result.error.code === "RUN_NOT_DRAFT") return json(409, { ok: false, error: "RUN_NOT_DRAFT" });
++      if (result.error.code === "RUN_NOT_DRAFT") return json({ ok: false, error: "RUN_NOT_DRAFT" }, 409);
+ 
+       if (result.error.code === "RULE_CONFIG_ERROR") {
+-        return json(400, { ok: false, error: "RULE_CONFIG_ERROR", details: { message: result.error.message, ...(result.error.meta ?? {}) } });
++        return json({ ok: false, error: "RULE_CONFIG_ERROR", details: { message: result.error.message, ...(result.error.meta ?? {}) } }, 400);
+       }
+ 
+       if (
+@@ -194,10 +181,10 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+         result.error.code === "VEHICLE_OVERLAP_CONFLICT" ||
+         result.error.code === "RULE_BLOCKED"
+       ) {
+-        return json(409, { ok: false, error: result.error.code, details: result.error.meta ?? null });
++        return json({ ok: false, error: result.error.code, details: result.error.meta ?? null }, 409);
+       }
+ 
+-      return json(500, { ok: false, error: "INTERNAL_ERROR" });
++      return json({ ok: false, error: "INTERNAL_ERROR" }, 500);
+     }
+ 
+     // Re-fetch pour réponse UI identique
+@@ -212,9 +199,9 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+       },
+     });
+ 
+-    if (!updated) return json(404, { ok: false, error: "NOT_FOUND" });
++    if (!updated) return notFound();
+ 
+-    return json(200, {
++    return json({
+       ok: true,
+       data: {
+         kind: "DRAFT",
+@@ -235,11 +222,11 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+             : null,
+         },
+       },
+-    });
++    }, 200);
+   }
+ 
+   // 9) Shift (planning publié) — logique métier via Service
+-  if (!shift) return json(404, { ok: false, error: "NOT_FOUND" });
++  if (!shift) return notFound();
+ 
+   const nextVehicle = vehicleId !== undefined ? vehicleId : current.vehicleId ?? null;
+   const nextDepot = depotId !== undefined ? depotId : shift.depotId ?? null;
+@@ -255,8 +242,8 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+   });
+ 
+   if (!result.ok) {
+-    if (result.error.code === "NOT_FOUND") return json(404, { ok: false, error: "NOT_FOUND" });
+-    if (result.error.code === "FORBIDDEN_COMPANY") return json(403, { ok: false, error: "FORBIDDEN" });
++    if (result.error.code === "NOT_FOUND") return notFound();
++    if (result.error.code === "FORBIDDEN_COMPANY") return forbidden();
+ 
+     if (
+       result.error.code === "INVALID_SLOT_COUNT" ||
+@@ -265,11 +252,11 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+       result.error.code === "TEMPLATE_ROLE_MISMATCH" ||
+       result.error.code === "TEMPLATE_VEHICLE_TYPE_MISMATCH"
+     ) {
+-      return json(400, { ok: false, error: result.error.code, details: result.error.meta ?? null });
++      return json({ ok: false, error: result.error.code, details: result.error.meta ?? null }, 400);
+     }
+ 
+     if (result.error.code === "RULE_CONFIG_ERROR") {
+-      return json(400, { ok: false, error: "RULE_CONFIG_ERROR", details: { message: result.error.message, ...(result.error.meta ?? {}) } });
++      return json({ ok: false, error: "RULE_CONFIG_ERROR", details: { message: result.error.message, ...(result.error.meta ?? {}) } }, 400);
+     }
+ 
+     if (
+@@ -278,10 +265,10 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+       result.error.code === "VEHICLE_OVERLAP_CONFLICT" ||
+       result.error.code === "RULE_BLOCKED"
+     ) {
+-      return json(409, { ok: false, error: result.error.code, details: result.error.meta ?? null });
++      return json({ ok: false, error: result.error.code, details: result.error.meta ?? null }, 409);
+     }
+ 
+-    return json(500, { ok: false, error: "INTERNAL_ERROR" });
++    return json({ ok: false, error: "INTERNAL_ERROR" }, 500);
+   }
+ 
+   // Re-fetch pour réponse UI identique
+@@ -297,9 +284,9 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
+     },
+   });
+ 
+-  if (!updatedShift) return json(404, { ok: false, error: "NOT_FOUND" });
++  if (!updatedShift) return notFound();
+ 
+-  return json(200, {
++  return json({
+     ok: true,
+     data: {
+       kind: "SHIFT",
+diff --git a/lib/services/company/update-company-profile.ts b/lib/services/company/update-company-profile.ts
+new file mode 100644
+index 0000000..3ebdb8c
+--- /dev/null
++++ b/lib/services/company/update-company-profile.ts
+@@ -0,0 +1,62 @@
++import { prisma } from "@/lib/prisma";
++
++export type UpdateCompanyProfileInput = {
++  companyId: string;
++  name: string;
++  managerNames: string;
++  address: string;
++  phone: string;
++  siret: string;
++};
++
++export type UpdateCompanyProfileResult = {
++  id: string;
++  name: string;
++  managerNames: string;
++  address: string;
++  phone: string;
++  siret: string;
++  updatedAt: string;
++} | null;
++
++export async function updateCompanyProfile(
++  input: UpdateCompanyProfileInput
++): Promise<UpdateCompanyProfileResult> {
++  const company = await prisma.company.updateMany({
++    where: { id: input.companyId },
++    data: {
++      name: input.name,
++      managerNames: input.managerNames,
++      address: input.address,
++      phone: input.phone,
++      siret: input.siret,
++    },
++  });
++
++  if (company.count === 0) return null;
++
++  const updated = await prisma.company.findUnique({
++    where: { id: input.companyId },
++    select: {
++      id: true,
++      name: true,
++      managerNames: true,
++      address: true,
++      phone: true,
++      siret: true,
++      updatedAt: true,
++    },
++  });
++
++  if (!updated) return null;
++
++  return {
++    id: updated.id,
++    name: updated.name,
++    managerNames: updated.managerNames ?? "",
++    address: updated.address ?? "",
++    phone: updated.phone ?? "",
++    siret: updated.siret ?? "",
++    updatedAt: updated.updatedAt.toISOString(),
++  };
++}
+diff --git a/lib/validators/company-rules.ts b/lib/validators/company-rules.ts
+new file mode 100644
+index 0000000..15e8a95
+--- /dev/null
++++ b/lib/validators/company-rules.ts
+@@ -0,0 +1,24 @@
++import { RuleMode } from "@prisma/client";
++import { z } from "zod";
++
++export const companyRulesGetQuerySchema = z
++  .object({
++    keys: z.string().optional(),
++  })
++  .strict();
++
++export const companyRulesPatchBodySchema = z
++  .object({
++    parameterId: z.string().min(1).optional(),
++    key: z.string().min(1).optional(),
++    value: z.string(),
++    mode: z.nativeEnum(RuleMode).optional(),
++  })
++  .strict()
++  .refine((data) => Boolean(data.parameterId || data.key), {
++    message: "parameterId ou key est obligatoire.",
++    path: ["parameterId"],
++  });
++
++export type CompanyRulesGetQuery = z.infer<typeof companyRulesGetQuerySchema>;
++export type CompanyRulesPatchBody = z.infer<typeof companyRulesPatchBodySchema>;
+diff --git a/lib/validators/planning-assign.ts b/lib/validators/planning-assign.ts
+index 6fdc7d7..4e7484e 100644
+--- a/lib/validators/planning-assign.ts
++++ b/lib/validators/planning-assign.ts
+@@ -22,6 +22,7 @@ export const planningAssignInputSchema = z
+     userId: NullableIdSchema.optional(),
+     user2Id: NullableIdSchema.optional(),
+     vehicleId: NullableIdSchema.optional(),
++    depotId: NullableIdSchema.optional(),
+   })
+   .strict()
+   .superRefine((val, ctx) => {
+@@ -29,13 +30,14 @@ export const planningAssignInputSchema = z
+     const hasAnyKey =
+       Object.prototype.hasOwnProperty.call(val, "userId") ||
+       Object.prototype.hasOwnProperty.call(val, "user2Id") ||
+-      Object.prototype.hasOwnProperty.call(val, "vehicleId");
++      Object.prototype.hasOwnProperty.call(val, "vehicleId") ||
++      Object.prototype.hasOwnProperty.call(val, "depotId");
+ 
+     if (!hasAnyKey) {
+       ctx.addIssue({
+         code: z.ZodIssueCode.custom,
+         message:
+-          "Aucune donnée fournie. Fournir au moins un champ parmi: userId, user2Id, vehicleId.",
++          "Aucune donnée fournie. Fournir au moins un champ parmi: userId, user2Id, vehicleId, depotId.",
+         path: [],
+       });
+       return;
+@@ -46,13 +48,14 @@ export const planningAssignInputSchema = z
+     const allUndefined =
+       val.userId === undefined &&
+       val.user2Id === undefined &&
+-      val.vehicleId === undefined;
++      val.vehicleId === undefined &&
++      val.depotId === undefined;
+ 
+     if (allUndefined) {
+       ctx.addIssue({
+         code: z.ZodIssueCode.custom,
+         message:
+-          "Payload invalide. Fournir au moins une valeur (string ou null) pour userId/user2Id/vehicleId.",
++          "Payload invalide. Fournir au moins une valeur (string ou null) pour userId/user2Id/vehicleId/depotId.",
+         path: [],
+       });
+     }

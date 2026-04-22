@@ -1,9 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { getServerSession } from "next-auth/next";
-import { z } from "zod";
-import { RuleMode } from "@prisma/client";
 
 import { authOptions } from "@/lib/auth";
+import { badRequest, forbidden, ok, serverError, unauthorized } from "@/lib/api/response";
 import {
   buildCompanyParameterView,
   listCompanyParameterDefinitions,
@@ -12,22 +11,10 @@ import {
 } from "@/lib/company-rules/api";
 import { canManageCompanyRules } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
-
-const GetQuerySchema = z.object({
-  keys: z.string().optional(),
-});
-
-const PatchBodySchema = z
-  .object({
-    parameterId: z.string().min(1).optional(),
-    key: z.string().min(1).optional(),
-    value: z.string(),
-    mode: z.nativeEnum(RuleMode).optional(),
-  })
-  .refine((data: { parameterId?: string; key?: string }) => Boolean(data.parameterId || data.key), {
-    message: "parameterId ou key est obligatoire.",
-    path: ["parameterId"],
-  });
+import {
+  companyRulesGetQuerySchema,
+  companyRulesPatchBodySchema,
+} from "@/lib/validators/company-rules";
 
 export async function GET(req: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -35,19 +22,16 @@ export async function GET(req: NextRequest) {
   const userId = session?.user?.id as string | undefined;
 
   if (!companyId || !userId) {
-    return NextResponse.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
+    return unauthorized();
   }
 
   const url = new URL(req.url);
-  const parsed = GetQuerySchema.safeParse({
+  const parsed = companyRulesGetQuerySchema.safeParse({
     keys: url.searchParams.get("keys") ?? undefined,
   });
 
   if (!parsed.success) {
-    return NextResponse.json(
-      { ok: false, error: "VALIDATION_ERROR", details: parsed.error.flatten() },
-      { status: 400 }
-    );
+    return badRequest("VALIDATION_ERROR", parsed.error.flatten());
   }
 
   const keys = parsed.data.keys
@@ -77,19 +61,23 @@ export async function GET(req: NextRequest) {
           },
         });
 
-    const storedRulesByKey = new Map(storedRules.map((rule: StoredCompanyRuleApiRecord) => [rule.key, rule]));
-    const parameters = definitions.map((definition) => buildCompanyParameterView(definition, definition.storage.key ? storedRulesByKey.get(definition.storage.key) : null));
+    const storedRulesByKey = new Map(
+      storedRules.map((rule: StoredCompanyRuleApiRecord) => [rule.key, rule])
+    );
+    const parameters = definitions.map((definition) =>
+      buildCompanyParameterView(
+        definition,
+        definition.storage.key ? storedRulesByKey.get(definition.storage.key) : null
+      )
+    );
 
-    return NextResponse.json({
-      ok: true,
-      data: parameters,
-    });
+    return ok(parameters);
   } catch {
-    return NextResponse.json({ ok: false, error: "SERVER_ERROR" }, { status: 500 });
+    return serverError();
   }
 }
 
-export async function PATCH(req: NextRequest) {
+export async function PATCH(req: Request) {
   const session = await getServerSession(authOptions);
   const companyId = session?.user?.companyId as string | undefined;
   const userId = session?.user?.id as string | undefined;
@@ -97,26 +85,23 @@ export async function PATCH(req: NextRequest) {
   const platformRole = session?.user?.platformRole as string | undefined;
 
   if (!companyId || !userId) {
-    return NextResponse.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
+    return unauthorized();
   }
 
   if (!(await canManageCompanyRules(userId, role, platformRole))) {
-    return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });
+    return forbidden();
   }
 
   let body: unknown;
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json({ ok: false, error: "INVALID_JSON" }, { status: 400 });
+    return badRequest("INVALID_JSON");
   }
 
-  const parsed = PatchBodySchema.safeParse(body);
+  const parsed = companyRulesPatchBodySchema.safeParse(body);
   if (!parsed.success) {
-    return NextResponse.json(
-      { ok: false, error: "VALIDATION_ERROR", details: parsed.error.flatten() },
-      { status: 400 }
-    );
+    return badRequest("VALIDATION_ERROR", parsed.error.flatten());
   }
 
   try {
@@ -136,10 +121,7 @@ export async function PATCH(req: NextRequest) {
     });
 
     if (!resolved.ok) {
-      return NextResponse.json(
-        { ok: false, error: "VALIDATION_ERROR", details: { message: resolved.message } },
-        { status: 400 }
-      );
+      return badRequest("VALIDATION_ERROR", { message: resolved.message });
     }
 
     const rule = await prisma.companyRule.upsert({
@@ -154,11 +136,8 @@ export async function PATCH(req: NextRequest) {
       select: { id: true, key: true, value: true, mode: true, createdAt: true, updatedAt: true },
     });
 
-    return NextResponse.json({
-      ok: true,
-      data: buildCompanyParameterView(resolved.definition, rule),
-    });
+    return ok(buildCompanyParameterView(resolved.definition, rule));
   } catch {
-    return NextResponse.json({ ok: false, error: "SERVER_ERROR" }, { status: 500 });
+    return serverError();
   }
 }

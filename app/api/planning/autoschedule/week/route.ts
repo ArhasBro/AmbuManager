@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { prismaToHttp } from "@/lib/api/prisma-error";
 import { z } from "zod";
 import { canAutoSchedule } from "@/lib/permissions";
 import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
@@ -57,28 +58,6 @@ function toMondayLocal(dayStr: string): Date {
   return addDays(base, -diffToMonday);
 }
 
-type PrismaKnownCode = "P2002" | "P2025";
-
-function getPrismaCode(e: unknown): PrismaKnownCode | null {
-  if (typeof e !== "object" || e === null) return null;
-  if (!("code" in e)) return null;
-
-  const code = (e as { code?: unknown }).code;
-  if (code === "P2002" || code === "P2025") return code;
-
-  return null;
-}
-
-function prismaToApiError(e: unknown): { status: number; body: { ok: false; error: string } } {
-  // mapping minimal et safe
-  const code = getPrismaCode(e);
-
-  if (code === "P2002") return { status: 409, body: { ok: false, error: "CONFLICT" } };
-  if (code === "P2025") return { status: 404, body: { ok: false, error: "NOT_FOUND" } };
-
-  return { status: 500, body: { ok: false, error: "SERVER_ERROR" } };
-}
-
 function isAutoscheduleSentinel(v: unknown): v is AutoscheduleSentinel {
   if (typeof v !== "object" || v === null) return false;
   if (!("ok" in v) || !("error" in v)) return false;
@@ -132,12 +111,13 @@ export async function POST(req: NextRequest) {
   const companyId = session?.user?.companyId;
   const userId = session?.user?.id;
   const role = session?.user?.role;
+  const platformRole = session?.user?.platformRole;
 
   if (!companyId || !userId) {
     return NextResponse.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
   }
 
-  const permAllowed = await canAutoSchedule(userId, role);
+  const permAllowed = await canAutoSchedule(userId, role, platformRole);
 
   if (!permAllowed) {
     return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });
@@ -327,7 +307,10 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ ok: true, data: full });
   } catch (e) {
-    const mapped = prismaToApiError(e);
-    return NextResponse.json(mapped.body, { status: mapped.status });
+    const mapped = prismaToHttp(e);
+    if (mapped) {
+      return NextResponse.json({ ok: false, error: mapped.error }, { status: mapped.status });
+    }
+    return NextResponse.json({ ok: false, error: "SERVER_ERROR" }, { status: 500 });
   }
 }

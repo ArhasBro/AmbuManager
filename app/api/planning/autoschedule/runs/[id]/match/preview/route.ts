@@ -31,6 +31,7 @@ export async function POST(
   const session = await getServerSession(authOptions);
 
   const companyId = session?.user?.companyId;
+  const platformRole = session?.user?.platformRole;
 
   if (!session?.user?.id || typeof companyId !== "string" || companyId.length === 0) {
     return json(
@@ -39,7 +40,7 @@ export async function POST(
     );
   }
 
-  if (!(await canAutoSchedule(session.user.id, session.user.role))) {
+  if (!(await canAutoSchedule(session.user.id, session.user.role, platformRole))) {
     return json(
       { ok: false, error: "FORBIDDEN", details: "Accès refusé (PLANNING_AUTOSCHEDULE requis)" },
       403

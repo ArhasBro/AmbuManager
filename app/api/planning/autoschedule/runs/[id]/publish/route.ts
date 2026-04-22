@@ -8,6 +8,7 @@ import { loadMinRestCompanyRule } from "@/lib/company-rules/runtime";
 
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { prismaToHttp } from "@/lib/api/prisma-error";
 import { canPublishAutoSchedule } from "@/lib/permissions";
 import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
 import { getAllowedRolesForVehicleType, isRoleAllowedForVehicleType } from "@/lib/templates/template-rules";
@@ -31,19 +32,6 @@ function extractRunIdFromPath(pathname: string): string | null {
   if (maybePublish !== "publish") return null;
 
   return id;
-}
-
-function prismaToApiError(
-  e: unknown
-): { status: number; body: { ok: false; error: string } } {
-  if (typeof e === "object" && e && "code" in e) {
-    const maybe = e as { code?: unknown };
-    const code = typeof maybe.code === "string" ? maybe.code : null;
-
-    if (code === "P2002") return { status: 409, body: { ok: false, error: "CONFLICT" } };
-    if (code === "P2025") return { status: 404, body: { ok: false, error: "NOT_FOUND" } };
-  }
-  return { status: 500, body: { ok: false, error: "SERVER_ERROR" } };
 }
 
 type DraftForPublish = {
@@ -439,12 +427,13 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
   const companyId = session?.user?.companyId;
   const userId = session?.user?.id;
   const role = session?.user?.role;
+  const platformRole = session?.user?.platformRole;
 
   if (!companyId || !userId) {
     return NextResponse.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
   }
 
-  const permAllowed = await canPublishAutoSchedule(userId, role);
+  const permAllowed = await canPublishAutoSchedule(userId, role, platformRole);
 
   if (!permAllowed) {
     return NextResponse.json(
@@ -680,7 +669,10 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
       },
     });
   } catch (e) {
-    const mapped = prismaToApiError(e);
-    return NextResponse.json(mapped.body, { status: mapped.status });
+    const mapped = prismaToHttp(e);
+    if (mapped) {
+      return NextResponse.json({ ok: false, error: mapped.error }, { status: mapped.status });
+    }
+    return NextResponse.json({ ok: false, error: "SERVER_ERROR" }, { status: 500 });
   }
 }

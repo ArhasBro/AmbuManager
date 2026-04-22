@@ -1,35 +1,33 @@
-﻿# SESSION
+# SESSION — SESSION-20260422-02_A14_BACK-LOT-02
 
-## ID SESSION
+- Stage : `1-ALPHA`
+- Bloc : `A14 — Backend`
+- Type : `CORRECTION+COMPLÉTION`
+- Intitulé : `Correction et/ou complétion de la structure backend : services métier, validations serveur, gestion homogène des erreurs, centralisation des traitements sensibles et cohérence des contrôles RBAC côté serveur`
 
-SESSION-20260422-02_A14_BACK-LOT-02
+## Décision
+`PATCH`
 
-## Date
+## Patchs validés
+- Patch principal : `PATCH__SESSION-20260422-02_A14_BACK-LOT-02.diff`
+- Fix complémentaire : `PATCH__SESSION-20260422-02_A14_BACK-LOT-02_FIX-01.diff`
 
-22/04/2026
+## Synthèse
+La session a livré un patch backend principal réellement appliqué, puis un fix complémentaire minimal `FIX-01` pour lever l’erreur de build prouvée sur `decodeCursor` dans `app/api/planning/autoschedule/runs/route.ts`.
 
-## Contexte
+L’état final validé couvre :
+- extraction d’un traitement sensible hors route API ;
+- centralisation partielle de validations serveur encore locales ;
+- homogénéisation partielle des réponses et erreurs backend ;
+- suppression ciblée de mappings Prisma locaux ;
+- propagation ciblée de `platformRole` sur les routes autoschedule concernées ;
+- correction minimale du helper de cursor manquant dans `app/api/planning/autoschedule/runs/route.ts`.
 
-Projet : Investissement  
-Sous-projet : Ambulance Manager  
-Maturite : 1-ALPHA  
-Bloc : A14  
-Type : CORRECTION+COMPLETION  
-Intitule : Correction et completion de la structure backend
-
-## Objectif de la session
-
-INFORMATION NON FOURNIE - A CONFIRMER
-
-## Perimetre exact traite
-
-INFORMATION NON FOURNIE - A CONFIRMER
-
-## Resultat synthetique de session
-
-INFORMATION NON FOURNIE - A CONFIRMER
-
-## Dossiers lies
-
-- Session : docs/2-sessions/1-ALPHA/BLOC_A14/SESSION-20260422-02_A14_BACK-LOT-02
-- Patchs  : docs/3-patches/1-ALPHA/BLOC_A14/SESSION-20260422-02_A14_BACK-LOT-02
+## État final validé
+- `git apply --check PATCH__SESSION-20260422-02_A14_BACK-LOT-02.diff` : `OK`
+- `git apply PATCH__SESSION-20260422-02_A14_BACK-LOT-02.diff` : `OK`
+- `git apply --check PATCH__SESSION-20260422-02_A14_BACK-LOT-02_FIX-01.diff` : `OK`
+- `git apply PATCH__SESSION-20260422-02_A14_BACK-LOT-02_FIX-01.diff` : `OK`
+- `npm run test:quality` : `OK`
+- `npm run lint` : `OK`
+- `npm run build` : `OK`

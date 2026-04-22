@@ -14,7 +14,7 @@ Avant de préparer quoi que ce soit, relis attentivement tous les fichiers `.md`
 
 Nous allons faire plusieurs sessions en même temps donc faut que se soit rigoureux. nous allons faire 1 patch unique pour toute ces session ainsi que 1 documentation.
 
-Pour les sessions indiquée ci-dessous, prépare ensuite 2 prompts distincts :
+Pour les sessions indiquée ci-dessous, prépare ensuite 2 prompts distincts prêt a copié/collé en texte :
 
 1. **Prompt de production**
    - À rédiger avec le `TEMPLATE_DEBUT_SESSION.md` ainsi que sur les règles définies dans les fichiers de `./docs`.
@@ -36,8 +36,8 @@ Pour les sessions indiquée ci-dessous, prépare ensuite 2 prompts distincts :
 
 Références des session :
 
-- SESSION-20260422-02_A14_BACK-LOT-02
-- **BACK-LOT-02 — CORRECTION+COMPLÉTION** — Correction et/ou complétion de la structure backend : services métier, validations serveur, gestion homogène des erreurs, centralisation des traitements sensibles et cohérence des contrôles RBAC côté serveur
+- SESSION-20260422-03_A14_BACK-03
+- **BACK-03 — VALIDATION** — Validation complète du backend : cohérence API / logique métier / Prisma / permissions
 ------------------------------------
 
 Voici sa réponse ainsi que les documents généré :

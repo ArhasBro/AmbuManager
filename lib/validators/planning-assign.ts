@@ -22,6 +22,7 @@ export const planningAssignInputSchema = z
     userId: NullableIdSchema.optional(),
     user2Id: NullableIdSchema.optional(),
     vehicleId: NullableIdSchema.optional(),
+    depotId: NullableIdSchema.optional(),
   })
   .strict()
   .superRefine((val, ctx) => {
@@ -29,13 +30,14 @@ export const planningAssignInputSchema = z
     const hasAnyKey =
       Object.prototype.hasOwnProperty.call(val, "userId") ||
       Object.prototype.hasOwnProperty.call(val, "user2Id") ||
-      Object.prototype.hasOwnProperty.call(val, "vehicleId");
+      Object.prototype.hasOwnProperty.call(val, "vehicleId") ||
+      Object.prototype.hasOwnProperty.call(val, "depotId");
 
     if (!hasAnyKey) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message:
-          "Aucune donnée fournie. Fournir au moins un champ parmi: userId, user2Id, vehicleId.",
+          "Aucune donnée fournie. Fournir au moins un champ parmi: userId, user2Id, vehicleId, depotId.",
         path: [],
       });
       return;
@@ -46,13 +48,14 @@ export const planningAssignInputSchema = z
     const allUndefined =
       val.userId === undefined &&
       val.user2Id === undefined &&
-      val.vehicleId === undefined;
+      val.vehicleId === undefined &&
+      val.depotId === undefined;
 
     if (allUndefined) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message:
-          "Payload invalide. Fournir au moins une valeur (string ou null) pour userId/user2Id/vehicleId.",
+          "Payload invalide. Fournir au moins une valeur (string ou null) pour userId/user2Id/vehicleId/depotId.",
         path: [],
       });
     }

@@ -4,6 +4,7 @@ import { z } from "zod";
 
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { prismaToHttp } from "@/lib/api/prisma-error";
 import { AutoScheduleStatus } from "@prisma/client";
 import { canCancelAutoSchedule } from "@/lib/permissions";
 import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
@@ -28,31 +29,20 @@ function extractRunIdFromPath(pathname: string): string | null {
   return id;
 }
 
-function prismaToApiError(e: unknown): { status: number; body: { ok: false; error: string } } {
-  if (typeof e === "object" && e && "code" in e) {
-    const maybe = e as { code?: unknown };
-    const code = typeof maybe.code === "string" ? maybe.code : null;
-
-    if (code === "P2002") return { status: 409, body: { ok: false, error: "CONFLICT" } };
-    if (code === "P2025") return { status: 404, body: { ok: false, error: "NOT_FOUND" } };
-  }
-
-  return { status: 500, body: { ok: false, error: "SERVER_ERROR" } };
-}
-
 export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
 
   const companyId = session?.user?.companyId;
   const userId = session?.user?.id;
   const role = session?.user?.role;
+  const platformRole = session?.user?.platformRole;
 
   if (!companyId || !userId) {
     return NextResponse.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
   }
 
   // ✅ RBAC (ADMIN/GERANT) ou permission dédiée
-  const permAllowed = await canCancelAutoSchedule(userId, role);
+  const permAllowed = await canCancelAutoSchedule(userId, role, platformRole);
 
   if (!permAllowed) {
     return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });
@@ -147,7 +137,10 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
 
     return NextResponse.json({ ok: true, data: result.data });
   } catch (e) {
-    const mapped = prismaToApiError(e);
-    return NextResponse.json(mapped.body, { status: mapped.status });
+    const mapped = prismaToHttp(e);
+    if (mapped) {
+      return NextResponse.json({ ok: false, error: mapped.error }, { status: mapped.status });
+    }
+    return NextResponse.json({ ok: false, error: "SERVER_ERROR" }, { status: 500 });
   }
 }
