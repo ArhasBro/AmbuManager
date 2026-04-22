@@ -1186,18 +1186,18 @@ Rappels :
 
 ### 20.3 Fichiers docs protégés existants confirmés
 - **Description** : fichiers protégés confirmés dans le ZIP actuel :
-  - `./docs/master/DOCUMENT_MAITRE.md`
-  - `./docs/master/PLAN_DE_DEVELOPPEMENT.md`
-  - `./docs/master/ETAT_GLOBAL_PROJET.md`
-  - `./docs/master/REGISTRE_DECISIONS.md`
-  - `./docs/master/RECAP_DISCUSSIONS.md`
-  - `./docs/master/STRUCTURE_PROJET.md`
+  - `./docs/1-master/DOCUMENT_MAITRE.md`
+  - `./docs/1-master/PLAN_DE_DEVELOPPEMENT.md`
+  - `./docs/1-master/ETAT_GLOBAL_PROJET.md`
+  - `./docs/1-master/REGISTRE_DECISIONS.md`
+  - `./docs/1-master/RECAP_DISCUSSIONS.md`
+  - `./docs/1-master/STRUCTURE_PROJET.md`
   - `./docs/PROTOCOLE_SESSION.md`
   - `./docs/STRUCTURE_DOCS.md`
-  - `./docs/templates/TEMPLATE_DEBUT_SESSION.md`
-  - `./docs/templates/TEMPLATE_FIN_SESSION.md`
-  - `./docs/templates/TEMPLATE_DOD_4_4.md`
-  - `./docs/templates/TEMPLATE_RECAP_SESSION.md`
+  - `./docs/4-templates/TEMPLATE_DEBUT_SESSION.md`
+  - `./docs/4-templates/TEMPLATE_FIN_SESSION.md`
+  - `./docs/4-templates/TEMPLATE_DOD_4_4.md`
+  - `./docs/4-templates/TEMPLATE_RECAP_SESSION.md`
 - **Objectif métier** : éviter les dérives documentaires.
 - **Utilisateur cible** : pilotage projet
 - **Priorité** : IMPORTANT MAIS NON BLOQUANT
@@ -1207,8 +1207,8 @@ Rappels :
 
 ### 20.4 Fichiers docs à protéger s’ils existent ou sont créés
 - **Description** :
-  - `./docs/master/README_PROJET.md`
-  - `./docs/master/CHANGELOG.md`
+  - `./docs/1-master/README_PROJET.md`
+  - `./docs/1-master/CHANGELOG.md`
 - **Objectif métier** : appliquer la même protection au noyau documentaire étendu.
 - **Utilisateur cible** : pilotage projet
 - **Priorité** : IMPORTANT MAIS NON BLOQUANT

@@ -5,7 +5,10 @@ C:.
 |   .gitignore
 |   create_session.ps1
 |   docs.zip
+|   docs_paths_fix_valid.diff
+|   docs_structure_alignment.patch.diff
 |   eslint.config.mjs
+|   grouped_structure_script_and_docs.diff
 |   next-env.d.ts
 |   next.config.ts
 |   package-lock.json

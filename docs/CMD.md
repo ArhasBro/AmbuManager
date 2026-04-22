@@ -10,7 +10,7 @@ git status
 --------------------------
 Session validée, nous passons aux suivante.
 
-Avant de préparer quoi que ce soit, relis attentivement tous les fichiers `.md` présents dans `./docs/master`. Ces documents sont les références à suivre pour garantir un travail correct, cohérent et méthodologiquement conforme.
+Avant de préparer quoi que ce soit, relis attentivement tous les fichiers `.md` présents dans `./docs/1-master`. Ces documents sont les références à suivre pour garantir un travail correct, cohérent et méthodologiquement conforme.
 
 Nous allons faire plusieurs sessions en même temps donc faut que se soit rigoureux. nous allons faire 1 patch unique pour toute ces session ainsi que 1 documentation.
 
