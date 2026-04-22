@@ -491,6 +491,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   
 |   |   |   |   \---PATCH
 |   |   |   |           NO_PATCH.md
+|   |   |   |           README_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260422-02_A14_BACK-LOT-02
 |   |   |   |   |   EVIDENCES.md

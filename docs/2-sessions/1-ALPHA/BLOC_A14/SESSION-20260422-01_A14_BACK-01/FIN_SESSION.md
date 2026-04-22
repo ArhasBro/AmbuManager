@@ -1,14 +1,25 @@
-﻿# FIN_SESSION
+# FIN_SESSION.md
 
-## ClÃ´ture
+## Clôture documentaire
+Session : `SESSION-20260422-01_A14_BACK-01`
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+Type : `AUDIT`
 
-## Validation
+Décision patch documentée : `NO_PATCH`
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+## Statut final
+Le **compte rendu d’audit** est `VALIDABLE EN L’ÉTAT`.
 
-## Verdict final
+## Portée de cette clôture
+La présente clôture :
+- confirme la cohérence documentaire de la réponse d’audit validée
+- ne documente aucun correctif code
+- ne documente aucun patch
+- ne rouvre pas le périmètre
+- ne prépare pas un lot ultérieur
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+## Rappel de méthode
+Documentation générée à partir de la réponse validée uniquement.
 
+Tout élément qui dépasserait cette réponse doit être traité comme :
+`INFORMATION NON FOURNIE — À CONFIRMER`

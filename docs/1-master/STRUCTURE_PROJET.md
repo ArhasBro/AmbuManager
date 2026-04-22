@@ -5,10 +5,7 @@ C:.
 |   .gitignore
 |   create_session.ps1
 |   docs.zip
-|   docs_paths_fix_valid.diff
-|   docs_structure_alignment.patch.diff
 |   eslint.config.mjs
-|   grouped_structure_script_and_docs.diff
 |   next-env.d.ts
 |   next.config.ts
 |   package-lock.json
@@ -1666,6 +1663,7 @@ C:.
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
 |   |   |   |   |           NO_PATCH.md
+|   |   |   |   |           README_PATCH.md
 |   |   |   |   |           
 |   |   |   |   +---SESSION-20260422-02_A14_BACK-LOT-02
 |   |   |   |   |   |   EVIDENCES.md
