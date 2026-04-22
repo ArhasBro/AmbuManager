@@ -38,9 +38,13 @@ Structure attendue des sessions documentaires :
 
 Structure attendue des patchs de session :
 
-- `docs/3-patches/<STAGE>/<BLOC>/<LOT>/SESSION-YYYYMMDD-XX/PATCH__<ID_SESSION>.diff`
-- `docs/3-patches/<STAGE>/<BLOC>/<LOT>/SESSION-YYYYMMDD-XX/README_PATCH.md`
-- `docs/3-patches/<STAGE>/<BLOC>/<LOT>/SESSION-YYYYMMDD-XX/NO_PATCH.md`
+- `docs/2-sessions/<STAGE>/<BLOC>/<LOT>/SESSION-YYYYMMDD-XX/PATCH/PATCH__<ID_SESSION>.diff`
+- `docs/2-sessions/<STAGE>/<BLOC>/<LOT>/SESSION-YYYYMMDD-XX/PATCH/README_PATCH.md`
+- `docs/2-sessions/<STAGE>/<BLOC>/<LOT>/SESSION-YYYYMMDD-XX/PATCH/NO_PATCH.md`
+
+Structure legacy encore tolérée pour l'historique déjà existant :
+
+- `docs/3-patches/<STAGE>/<BLOC>/<LOT>/SESSION-YYYYMMDD-XX/...`
 
 ## Templates
 

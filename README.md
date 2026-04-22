@@ -15,9 +15,11 @@ Le dépôt courant couvre surtout les modules suivants :
 - **base produit officielle** : `docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
 - **pilotage projet** : `docs/1-master/*`
 - **historique des sessions** : `docs/2-sessions/*`
-- **patchs officiels** : `docs/3-patches/*`
+- **patchs officiels** : `docs/2-sessions/*/SESSION-*/PATCH/*`
 
 Le `README.md` racine sert d’entrée rapide au dépôt. La documentation d’usage produit est fournie séparément dans `docs/`.
+
+Convention actuelle : les patchs d'une session sont rangés dans le sous-dossier `PATCH/` du dossier de session correspondant. Le dossier `docs/3-patches/` peut subsister comme historique legacy tant qu'il n'a pas été migré.
 
 ## Documentation utile
 

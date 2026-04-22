@@ -59,8 +59,9 @@ Les statuts globaux s’alignent sur `docs/1-master/ETAT_GLOBAL_PROJET.md`.
 - Les documents maîtres doivent utiliser la structure réelle :
   - `docs/1-master/*`
   - `docs/2-sessions/*`
-  - `docs/3-patches/*`
+  - `docs/2-sessions/*/SESSION-*/PATCH/*`
   - `docs/4-templates/*`
+- `docs/3-patches/*` devient un emplacement legacy toléré pour l'historique déjà existant, mais n'est plus la cible canonique des nouvelles sessions.
 
 ## 6. Gouvernance des patchs et sessions
 - `NO_PATCH` reste valide lorsqu’aucun patch repo officiel n’est produit, même si la session a comporté des constats ou actions locales.

@@ -17,7 +17,7 @@ $ErrorActionPreference = "Stop"
 # --- CONFIG ---
 $DocsRoot            = ".\docs"
 $DocsSessionsRoot    = Join-Path $DocsRoot "2-sessions"
-$DocsPatchesRoot     = Join-Path $DocsRoot "3-patches"
+$PatchSubDirName     = "PATCH"
 $SessionTemplateDir  = Join-Path $DocsSessionsRoot "SESSION-YYYYMMDD-XX"
 $DefaultOpenInVSCode = $true
 
@@ -316,7 +316,7 @@ INFORMATION NON FOURNIE - A CONFIRMER
 ## Dossiers lies
 
 - Session : $SessionRelativePath
-- Patchs  : $PatchRelativePath
+- PATCH   : $PatchRelativePath
 "@
     Set-Content -Path $sessionMdPath -Value $sessionContent -Encoding utf8
 
@@ -359,7 +359,7 @@ Type : $TypeValue
 Raison :
 - Session documentaire de type $TypeValue.
 - Aucun patch officiel a produire pour cette session.
-- Le dossier patch reste present pour conserver le miroir avec docs/2-sessions.
+- Le dossier PATCH reste present dans la session pour centraliser la documentation et les patchs.
 "@
         Set-Content -Path $noPatchPath -Value $noPatchContent -Encoding utf8
         if (Test-Path $readmePatchPath) {
@@ -376,7 +376,7 @@ $SessionId
 ## Type
 $TypeValue
 
-## Dossier patch
+## Dossier PATCH
 $PatchRelativePath
 
 ## Patch officiel attendu
@@ -426,19 +426,14 @@ if ($SessionCode -notmatch '^[A-Z0-9_-]+$') {
 
 # --- Checks ---
 Test-PathOrThrow $DocsSessionsRoot
-Test-PathOrThrow $DocsPatchesRoot
 Test-PathOrThrow $SessionTemplateDir
 
 $stageSessionsRoot = Join-Path $DocsSessionsRoot $Stage
-$stagePatchesRoot  = Join-Path $DocsPatchesRoot  $Stage
 $blockDirName      = "BLOC_{0}" -f $Block
 $blockSessionsRoot = Join-Path $stageSessionsRoot $blockDirName
-$blockPatchesRoot  = Join-Path $stagePatchesRoot  $blockDirName
 
 New-DirectoryIfMissing -Path $stageSessionsRoot
-New-DirectoryIfMissing -Path $stagePatchesRoot
 New-DirectoryIfMissing -Path $blockSessionsRoot
-New-DirectoryIfMissing -Path $blockPatchesRoot
 
 $dateToken   = Get-Date -Format "yyyyMMdd"
 $dateDisplay = Get-Date -Format "dd/MM/yyyy"
@@ -446,7 +441,7 @@ $nextOrdinal = Get-NextSessionOrdinal -StageSessionsRoot $stageSessionsRoot -Dat
 $sessionId   = "SESSION-{0}-{1:D2}_{2}_{3}" -f $dateToken, $nextOrdinal, $Block, $SessionCode
 
 $newSessionDir = Join-Path $blockSessionsRoot $sessionId
-$newPatchDir   = Join-Path $blockPatchesRoot  $sessionId
+$newPatchDir   = Join-Path $newSessionDir $PatchSubDirName
 
 if (Test-Path $newSessionDir) {
     throw "Le dossier de session existe deja : $newSessionDir"
@@ -458,7 +453,7 @@ if (Test-Path $newPatchDir) {
 Copy-Item -Recurse -Force $SessionTemplateDir $newSessionDir
 
 $sessionRelativePath = (Join-Path "docs/2-sessions/$Stage/$blockDirName" $sessionId) -replace '\\','/'
-$patchRelativePath   = (Join-Path "docs/3-patches/$Stage/$blockDirName"  $sessionId) -replace '\\','/'
+$patchRelativePath   = (Join-Path $sessionRelativePath $PatchSubDirName) -replace '\\','/'
 
 Initialize-SessionFiles `
     -SessionDir $newSessionDir `
@@ -493,7 +488,7 @@ SESSION
 
 DOSSIERS
 - Session : $sessionRelativePath
-- Patchs  : $patchRelativePath
+- PATCH   : $patchRelativePath
 
 FICHIERS DE SESSION A UTILISER / METTRE A JOUR
 - $sessionRelativePath/SESSION.md
@@ -541,7 +536,7 @@ Write-Host ""
 if ($shouldOpen) {
     $codeCmd = Get-Command code -ErrorAction SilentlyContinue
     if ($null -ne $codeCmd) {
-        code $newSessionDir $newPatchDir
+        code $newSessionDir
     }
     else {
         Start-Process (Join-Path $newSessionDir 'SESSION.md') | Out-Null

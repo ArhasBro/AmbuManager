@@ -23,13 +23,15 @@ et contenir les fichiers :
 
 Les patchs associés à la session doivent être rangés dans :
 
-`docs/3-patches/<STAGE>/<BLOC>/<LOT>/SESSION-YYYYMMDD-XX/`
+`docs/2-sessions/<STAGE>/<BLOC>/<LOT>/SESSION-YYYYMMDD-XX/PATCH/`
 
 avec, selon le cas :
 
 - `PATCH__<ID_SESSION>.diff`
 - `README_PATCH.md`
 - `NO_PATCH.md`
+
+Compatibilité historique : les anciens patchs déjà présents sous `docs/3-patches/` restent consultables tant qu'ils n'ont pas été migrés.
 
 ## Rôle des fichiers
 

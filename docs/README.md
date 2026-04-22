@@ -25,7 +25,8 @@ Rappel :
 
 - `docs/1-master/` : documents maîtres de référence ;
 - `docs/2-sessions/` : historique des sessions ;
-- `docs/3-patches/` : patchs officiels ;
+- `docs/2-sessions/.../SESSION-.../PATCH/` : patchs officiels au plus près de la session ;
+- `docs/3-patches/` : legacy / historique éventuel à migrer si encore présent ;
 - `docs/4-templates/` : templates de session et de clôture ;
 - `docs/*.md` : gouvernance transversale et guides d’usage ALPHA.
 

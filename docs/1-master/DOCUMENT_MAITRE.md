@@ -66,7 +66,9 @@ Conséquence :
 ### 3.2 Convention documentaire associée
 La clôture de bloc doit disposer d’un dossier dédié en fin de bloc, par exemple :
 - `docs/2-sessions/1-ALPHA/BLOC_A2/4-CLOTURE_A2/` ;
-- `docs/3-patches/1-ALPHA/BLOC_A2/4-CLOTURE_A2/`.
+- `docs/2-sessions/1-ALPHA/BLOC_A2/4-CLOTURE_A2/SESSION-.../PATCH/` pour les patchs associés à chaque session.
+
+Compatibilité historique : les anciens chemins `docs/3-patches/...` peuvent subsister tant que l'historique n'a pas été migré.
 
 ## 4. Architecture technique cible
 Ordre cible :
