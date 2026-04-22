@@ -4,6 +4,7 @@ C:.
 |   .env
 |   .gitignore
 |   create_session.ps1
+|   create_session_grouped.ps1
 |   docs.zip
 |   eslint.config.mjs
 |   next-env.d.ts
