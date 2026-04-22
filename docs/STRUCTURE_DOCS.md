@@ -322,6 +322,35 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |           RESULTATS.md
 |   |   |           SESSION.md
 |   |   |           
+|   |   +---BLOC_A14
+|   |   |   +---SESSION-20260422-01_A14_BACK-01
+|   |   |   |       EVIDENCES.md
+|   |   |   |       FIN_SESSION.md
+|   |   |   |       NOTES.md
+|   |   |   |       RESULTATS.md
+|   |   |   |       SESSION.md
+|   |   |   |       
+|   |   |   +---SESSION-20260422-02_A14_BACK-LOT-02
+|   |   |   |       EVIDENCES.md
+|   |   |   |       FIN_SESSION.md
+|   |   |   |       NOTES.md
+|   |   |   |       RESULTATS.md
+|   |   |   |       SESSION.md
+|   |   |   |       
+|   |   |   +---SESSION-20260422-03_A14_BACK-03
+|   |   |   |       EVIDENCES.md
+|   |   |   |       FIN_SESSION.md
+|   |   |   |       NOTES.md
+|   |   |   |       RESULTATS.md
+|   |   |   |       SESSION.md
+|   |   |   |       
+|   |   |   \---SESSION-20260422-04_A14_CLOTURE_A14
+|   |   |           EVIDENCES.md
+|   |   |           FIN_SESSION.md
+|   |   |           NOTES.md
+|   |   |           RESULTATS.md
+|   |   |           SESSION.md
+|   |   |           
 |   |   +---BLOC_A2
 |   |   |   +---1-ORG
 |   |   |   |   +---SESSION-20260313-17_A2_ORG-01
@@ -1176,6 +1205,19 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |       |   |       
 |       |   \---SESSION-20260416-16_A13_CLOTURE_A13
 |       |           NO_PATCH.md
+|       |           README_PATCH.md
+|       |           
+|       +---BLOC_A14
+|       |   +---SESSION-20260422-01_A14_BACK-01
+|       |   |       NO_PATCH.md
+|       |   |       
+|       |   +---SESSION-20260422-02_A14_BACK-LOT-02
+|       |   |       README_PATCH.md
+|       |   |       
+|       |   +---SESSION-20260422-03_A14_BACK-03
+|       |   |       NO_PATCH.md
+|       |   |       
+|       |   \---SESSION-20260422-04_A14_CLOTURE_A14
 |       |           README_PATCH.md
 |       |           
 |       +---BLOC_A2

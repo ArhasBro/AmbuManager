@@ -1,7 +1,7 @@
 # Ambulance Manager — PLAN_DE_DEVELOPPEMENT
 
-Version : V2.1.1 (MASTER)  
-Date : 19/03/2026
+Version : V2.2.0 (MASTER)  
+Date : 20/04/2026
 
 ## Sommaire
 - [1. Rôle du document](#1-rôle-du-document)
@@ -18,7 +18,7 @@ Date : 19/03/2026
 - [11. ALPHA V0.x — Plan refondu complet](#11-alpha-v0x--plan-refondu-complet)
 - [12. BETA V1.x — Plan refondu](#12-beta-v1x--plan-refondu)
 - [13. VERSION OFFICIELLE V2.x — Plan refondu](#13-version-officielle-v2x--plan-refondu)
-- [14. Prochaine étape logique recommandée](#14-prochaine-étape-logique-recommandée)
+- [14. ALPHA — Suite refondue complète](#14-alpha--suite-refondue-complète)
 - [15. Règle de maintenance du plan](#15-règle-de-maintenance-du-plan)
 
 ## 1. Rôle du document
@@ -37,7 +37,7 @@ Il doit s’y conformer.
 ## 2. Référence produit officielle
 Le document suivant constitue la base officielle produit :
 
-`docs/master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
+`docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
 
 Règles associées :
 - ce document est figé
@@ -310,7 +310,7 @@ Cet ordre vise à :
 - ne pas construire un dashboard riche avant d’avoir des données fiables
 - séparer clairement le socle, l’exploitation et les finitions
 
-## 11. ALPHA V0.x — Plan refondu complet
+## 11. ALPHA V1.0 — Plan refondu complet
 
 ### BLOC A1 — Accès, Auth, Multi-tenant, Permissions, API
 **Objectif du bloc**  
@@ -834,22 +834,164 @@ Faire passer Ambulance Manager vers une logique SaaS plus complète.
 - **CLOTURE_V2-2 — VALIDATION** — Clôture finale du bloc V2-2
 
 
-## 14. Prochaine étape logique recommandée
-Le premier bloc recommandé pour démarrer cette refonte méthodique est :
+## 14. Pr## 14. ALPHA — Suite refondue complète
 
-**BLOC A1 — Accès, Auth, Multi-tenant, Permissions, API**
+L’ALPHA 1.0 est considérée comme clôturée sur son cycle de tests locaux et de validation du socle actuel.
 
-La première session recommandée est :
+En revanche, le produit ALPHA n’est pas terminé. La suite du projet se poursuit donc sous la forme de nouveaux blocs ALPHA, structurés selon la même logique méthodologique que les blocs A1 à A13 :
+- 1ère session : **AUDIT**
+- 2ème session : **CORRECTION+COMPLÉTION**
+- 3ème session : **VALIDATION**
+- 4ème session : **CLOTURE : AUDIT+CORRECTION+COMPLÉTION+VALIDATION**
 
-**AUTH-01 — AUDIT — Audit complet de l’authentification existante**
+### BLOC A14 — Backend
+**Objectif du bloc**  
+Structurer et renforcer le backend existant sans casser les routes ni les usages actuels.
 
-Pourquoi :
-- elle ouvre la méthode de reprise propre
-- elle ne mélange pas plusieurs sujets
-- elle pose le principe : audit d’abord, confiance ensuite
+#### Sessions
+- **BACK-01 — AUDIT** — Audit complet du backend existant : routes API, services métier, validations serveur, accès Prisma, cohérence des erreurs et séparation des responsabilités
+- **BACK-LOT-02 — CORRECTION+COMPLÉTION** — Correction et/ou complétion de la structure backend : services métier, validations serveur, gestion homogène des erreurs, centralisation des traitements sensibles et cohérence des contrôles RBAC côté serveur
+- **BACK-03 — VALIDATION** — Validation complète du backend : cohérence API / logique métier / Prisma / permissions
+- **CLOTURE_A14 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc Backend
 
-## 15. Règle de maintenance du plan
-- ce plan doit rester aligné sur `docs/master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
+#### Résultat attendu
+- backend plus structuré
+- logique métier plus claire
+- routes plus homogènes
+- socle serveur plus fiable
+
+---
+
+### BLOC A15 — Frontend
+**Objectif du bloc**  
+Améliorer la lisibilité, la cohérence et l’ergonomie générale des écrans existants.
+
+#### Sessions
+- **FRONT-01 — AUDIT** — Audit complet du frontend existant : cohérence visuelle, lisibilité, navigation, composants critiques, thème, dashboard, users, vehicles, templates, planning
+- **FRONT-LOT-02 — CORRECTION+COMPLÉTION** — Correction et/ou complétion du frontend : homogénéisation visuelle, amélioration des écrans critiques, lisibilité métier, gestion cohérente du thème, préparation d’une UX plus propre
+- **FRONT-03 — VALIDATION** — Validation complète du frontend : lisibilité, cohérence des parcours, stabilité des écrans critiques
+- **CLOTURE_A15 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc Frontend
+
+#### Résultat attendu
+- UI plus cohérente
+- meilleure lisibilité
+- parcours plus propres
+- base saine avant refonte graphique plus large
+
+---
+
+### BLOC A16 — Sécurité
+**Objectif du bloc**  
+Renforcer le socle sécurité minimal avant d’étendre davantage les fonctionnalités.
+
+#### Sessions
+- **SEC-01 — AUDIT** — Audit complet de la sécurité existante : auth, sessions, contrôles d’accès, routes sensibles, secrets, variables d’environnement, audit logs, protections de base
+- **SEC-LOT-02 — CORRECTION+COMPLÉTION** — Correction et/ou complétion du socle sécurité : durcissement auth/session, validation des entrées, protection des routes sensibles, règles de mots de passe, gestion des secrets, base de sauvegarde/restauration
+- **SEC-03 — VALIDATION** — Validation complète du bloc sécurité : cohérence des accès, robustesse minimale, non-régression sur les flux critiques
+- **CLOTURE_A16 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc Sécurité
+
+#### Résultat attendu
+- sécurité minimale renforcée
+- contrôles d’accès plus fiables
+- meilleure protection des parcours critiques
+- base sérieuse avant ouverture métier plus large
+
+---
+
+### BLOC A17 — RGPD
+**Objectif du bloc**  
+Mettre en place une base de conformité RGPD minimale et exploitable.
+
+#### Sessions
+- **RGPD-01 — AUDIT** — Audit complet des données personnelles manipulées : utilisateurs, absences, audit, accès, finalités, rôles d’accès, conservation, export/correction/suppression
+- **RGPD-LOT-02 — CORRECTION+COMPLÉTION** — Correction et/ou complétion de la base RGPD : cartographie des données, finalités, accès, conservation, registre de traitement, besoins d’export/correction/suppression, mentions d’information
+- **RGPD-03 — VALIDATION** — Validation complète du bloc RGPD : cohérence documentaire et base de conformité minimale
+- **CLOTURE_A17 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc RGPD
+
+#### Résultat attendu
+- base RGPD claire
+- données personnelles cartographiées
+- premières règles de conservation et d’accès définies
+- conformité minimale préparée proprement
+
+---
+
+### BLOC A18 — BDD / Prisma / migrations / environnements
+**Objectif du bloc**  
+Fiabiliser durablement la base de données et éviter les écarts entre schéma, migrations et base réelle.
+
+#### Sessions
+- **BDD-01 — AUDIT** — Audit complet de la chaîne BDD existante : Prisma schema, migrations, seed, base locale, environnements, drifts potentiels, cohérence schéma ↔ base
+- **BDD-LOT-02 — CORRECTION+COMPLÉTION** — Correction et/ou complétion de la chaîne BDD : migrations, colonnes manquantes, contraintes, relations, seeds, clarification des environnements, documentation des opérations sensibles
+- **BDD-03 — VALIDATION** — Validation complète du bloc BDD : Prisma / migrations / base / seed / environnements
+- **CLOTURE_A18 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc BDD
+
+#### Résultat attendu
+- base plus fiable
+- moins de drift
+- migrations mieux gouvernées
+- environnements plus clairs
+
+---
+
+### BLOC A19 — Planning avancé
+**Objectif du bloc**  
+Rendre le planning réellement plus exploitable au quotidien.
+
+#### Sessions
+- **PLAN-ADV-01 — AUDIT** — Audit complet des besoins planning avancé : affichages multiples, sélection multiple, affectation utilisateur, vue globale/personnelle/binôme, lisibilité opérationnelle
+- **PLAN-ADV-LOT-02 — CORRECTION+COMPLÉTION** — Correction et/ou complétion du planning avancé : affectation à un shift, sélection multiple, modes de vue, visibilité globale/personnelle/binôme
+- **PLAN-ADV-03 — VALIDATION** — Validation complète du bloc planning avancé : exploitabilité terrain, gain de temps, cohérence métier
+- **CLOTURE_A19 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc Planning avancé
+
+#### Résultat attendu
+- planning plus exploitable
+- affectations plus claires
+- vues mieux adaptées
+- usage quotidien facilité
+
+---
+
+### BLOC A20 — RH / Utilisateurs avancés
+**Objectif du bloc**  
+Compléter le module utilisateurs avec les besoins métier restants.
+
+#### Sessions
+- **RH-01 — AUDIT** — Audit complet des besoins RH restants : demandes d’absence, création utilisateur enrichie, stagiaires, horaires journaliers, contraintes métier associées
+- **RH-LOT-02 — CORRECTION+COMPLÉTION** — Correction et/ou complétion du module RH : demandes d’absence, nom/prénom/initiales, gestion des stagiaires, premiers éléments d’horaires journaliers selon cadrage validé
+- **RH-03 — VALIDATION** — Validation complète du bloc RH / utilisateurs avancés
+- **CLOTURE_A20 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc RH
+
+#### Résultat attendu
+- module users plus complet
+- absences mieux gérées
+- création utilisateur enrichie
+- base RH plus exploitable
+
+---
+
+### BLOC A21 — UI / UX / Navigation
+**Objectif du bloc**  
+Améliorer l’expérience produit et la navigation générale.
+
+#### Point de cadrage
+Une maquette Figma est en cours de réalisation.
+Le bloc A21 devra donc être repris au bon moment en s’appuyant sur cette maquette comme référence de travail, afin d’éviter une refonte UI/UX déconnectée de la vision cible.
+
+#### Sessions
+- **UX-01 — AUDIT** — Audit complet des besoins UI/UX : qualité graphique, navigation, lisibilité, dark mode, cohérence visuelle, besoin de maquette Figma
+- **UX-LOT-02 — CORRECTION+COMPLÉTION** — Correction et/ou complétion UI/UX : navigation latérale, amélioration du rendu visuel, cohérence graphique, préparation ou intégration d’une maquette de référence
+- **UX-03 — VALIDATION** — Validation complète du bloc UI/UX : lisibilité, ergonomie, cohérence des parcours
+- **CLOTURE_A21 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc UI/UX
+
+#### Résultat attendu
+- navigation plus claire
+- meilleure ergonomie
+- rendu plus professionnel
+- base plus propre avant BETA
+
+gle de maintenance du plan
+- ce plan doit rester aligné sur `docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
 - il ne doit pas recontester le cadrage validé
 - une session validée ne supprime pas la nécessité d’une validation explicite utilisateur
 - aucun bloc ne peut être considéré comme terminé sans session dédiée de clôture

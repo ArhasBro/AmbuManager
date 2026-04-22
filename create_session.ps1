@@ -21,6 +21,34 @@ $DocsPatchesRoot     = Join-Path $DocsRoot "3-patches"
 $SessionTemplateDir  = Join-Path $DocsSessionsRoot "SESSION-YYYYMMDD-XX"
 $DefaultOpenInVSCode = $true
 
+$AlphaBlockMin = 1
+$AlphaBlockMax = 21
+$BetaBlockMin  = 1
+$BetaBlockMax  = 4
+
+$AllowedTypeTokens = @('AUDIT', 'CORRECTION', 'COMPLETION', 'VALIDATION')
+
+function Get-BlockRangeLabel {
+    param(
+        [string]$Prefix,
+        [int]$Min,
+        [int]$Max
+    )
+
+    return "{0}{1} a {0}{2}" -f $Prefix, $Min, $Max
+}
+
+function Get-BlockRegexPattern {
+    param(
+        [string]$Prefix,
+        [int]$Min,
+        [int]$Max
+    )
+
+    $values = $Min..$Max | ForEach-Object { "{0}{1}" -f $Prefix, $_ }
+    return '^(?:' + (($values | ForEach-Object { [regex]::Escape($_) }) -join '|') + ')$'
+}
+
 # --- Helpers ---
 function Test-PathOrThrow {
     param([string]$Path)
@@ -90,13 +118,15 @@ function Test-BlockAllowedForStage {
 
     switch ($StageValue) {
         "1-ALPHA" {
-            if ($BlockValue -notmatch '^A([1-9]|1[0-3])$') {
-                throw "Bloc invalide pour 1-ALPHA. Valeurs autorisees : A1 a A13."
+            $pattern = Get-BlockRegexPattern -Prefix "A" -Min $AlphaBlockMin -Max $AlphaBlockMax
+            if ($BlockValue -notmatch $pattern) {
+                throw "Bloc invalide pour 1-ALPHA. Valeurs autorisees : $(Get-BlockRangeLabel -Prefix 'A' -Min $AlphaBlockMin -Max $AlphaBlockMax)."
             }
         }
         "2-BETA" {
-            if ($BlockValue -notmatch '^B([1-4])$') {
-                throw "Bloc invalide pour 2-BETA. Valeurs autorisees : B1 a B4."
+            $pattern = Get-BlockRegexPattern -Prefix "B" -Min $BetaBlockMin -Max $BetaBlockMax
+            if ($BlockValue -notmatch $pattern) {
+                throw "Bloc invalide pour 2-BETA. Valeurs autorisees : $(Get-BlockRangeLabel -Prefix 'B' -Min $BetaBlockMin -Max $BetaBlockMax)."
             }
         }
         default {
@@ -110,23 +140,32 @@ function Get-CanonicalBlock {
 
     $clean = (Get-SafeString -Value $Value).ToUpperInvariant()
 
-    if ($clean -match '^BLOC_((A([1-9]|1[0-3]))|(B([1-4])))$') {
-        return $Matches[1]
-    }
-    if ($clean -match '^((A([1-9]|1[0-3]))|(B([1-4])))$') {
-        return $Matches[1]
+    if ([string]::IsNullOrWhiteSpace($clean)) {
+        throw "Bloc invalide. Valeurs autorisees : $(Get-BlockRangeLabel -Prefix 'A' -Min $AlphaBlockMin -Max $AlphaBlockMax), $(Get-BlockRangeLabel -Prefix 'B' -Min $BetaBlockMin -Max $BetaBlockMax) (ou BLOC_A1 a BLOC_A21, BLOC_B1 a BLOC_B4)."
     }
 
-    throw "Bloc invalide. Valeurs autorisees : A1 a A13, B1 a B4 (ou BLOC_A1 a BLOC_A13, BLOC_B1 a BLOC_B4)."
+    if ($clean -match '^BLOC_(.+)$') {
+        $clean = $Matches[1]
+    }
+
+    $alphaPattern = Get-BlockRegexPattern -Prefix "A" -Min $AlphaBlockMin -Max $AlphaBlockMax
+    $betaPattern  = Get-BlockRegexPattern -Prefix "B" -Min $BetaBlockMin -Max $BetaBlockMax
+
+    if (($clean -match $alphaPattern) -or ($clean -match $betaPattern)) {
+        return $clean
+    }
+
+    throw "Bloc invalide. Valeurs autorisees : $(Get-BlockRangeLabel -Prefix 'A' -Min $AlphaBlockMin -Max $AlphaBlockMax), $(Get-BlockRangeLabel -Prefix 'B' -Min $BetaBlockMin -Max $BetaBlockMax) (ou BLOC_A1 a BLOC_A21, BLOC_B1 a BLOC_B4)."
 }
 
 function Get-CanonicalType {
     param([string]$Value)
 
     $normalized = Convert-ToPlainLabel -Value $Value
+    $allowedTypesLabel = ($AllowedTypeTokens -join ', ')
 
     if ([string]::IsNullOrWhiteSpace($normalized)) {
-        throw "Type invalide. Valeurs autorisees : AUDIT, CORRECTION, COMPLETION, VALIDATION, CORRECTION-COMPLETION, VALIDATION+CORRECTION+COMPLETION."
+        throw "Type invalide. Tokens autorises : $allowedTypesLabel. Combinaisons acceptees avec '+', par exemple AUDIT+VALIDATION ou AUDIT+CORRECTION+COMPLETION+VALIDATION."
     }
 
     $normalized = $normalized -replace '[-/,;|]', '+'
@@ -137,15 +176,14 @@ function Get-CanonicalType {
     )
 
     if ($rawTokens.Count -eq 0) {
-        throw "Type invalide. Valeurs autorisees : AUDIT, CORRECTION, COMPLETION, VALIDATION, CORRECTION-COMPLETION, VALIDATION+CORRECTION+COMPLETION."
+        throw "Type invalide. Tokens autorises : $allowedTypesLabel. Combinaisons acceptees avec '+', par exemple AUDIT+VALIDATION ou AUDIT+CORRECTION+COMPLETION+VALIDATION."
     }
 
-    $allowedTokens = @('AUDIT', 'CORRECTION', 'COMPLETION', 'VALIDATION')
     $canonicalTokens = New-Object System.Collections.Generic.List[string]
 
     foreach ($token in $rawTokens) {
-        if ($token -notin $allowedTokens) {
-            throw "Type invalide. Valeurs autorisees : AUDIT, CORRECTION, COMPLETION, VALIDATION, CORRECTION-COMPLETION, VALIDATION+CORRECTION+COMPLETION."
+        if ($token -notin $AllowedTypeTokens) {
+            throw "Type invalide. Tokens autorises : $allowedTypesLabel. Combinaisons acceptees avec '+', par exemple AUDIT+VALIDATION ou AUDIT+CORRECTION+COMPLETION+VALIDATION."
         }
 
         if (-not $canonicalTokens.Contains($token)) {
@@ -364,9 +402,9 @@ git apply         "$PatchRelativePath/$patchFileName"
 
 # --- Interactive fallback ---
 $Stage = Read-ValueIfMissing -CurrentValue $Stage -PromptText "Stage (1-ALPHA / 2-BETA)"
-$Block = Read-ValueIfMissing -CurrentValue $Block -PromptText "Bloc (A1 a A13 / B1 a B4)"
+$Block = Read-ValueIfMissing -CurrentValue $Block -PromptText "Bloc (A1 a A21 / B1 a B4)"
 $SessionCode = Read-ValueIfMissing -CurrentValue $SessionCode -PromptText "Code session (ex: AUTH-01)"
-$Type = Read-ValueIfMissing -CurrentValue $Type -PromptText "Type (AUDIT / CORRECTION / COMPLETION / VALIDATION / CORRECTION-COMPLETION / VALIDATION+CORRECTION+COMPLETION)"
+$Type = Read-ValueIfMissing -CurrentValue $Type -PromptText "Type (AUDIT / CORRECTION / COMPLETION / VALIDATION / combinaisons avec +)"
 $Title = Read-ValueIfMissing -CurrentValue $Title -PromptText "Intitule de la session"
 
 $Stage = Get-CanonicalStage -Value $Stage
