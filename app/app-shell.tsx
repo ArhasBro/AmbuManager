@@ -5,18 +5,12 @@ import { usePathname } from "next/navigation";
 import { ReactNode, useEffect, useMemo, useState } from "react";
 
 type ThemeMode = "system" | "light" | "dark";
+export type AppShellNavLink = {
+  href: string;
+  label: string;
+};
 
 const THEME_STORAGE_KEY = "ambulance-manager-theme";
-
-const NAV_LINKS = [
-  { href: "/dashboard", label: "Dashboard" },
-  { href: "/planning", label: "Planning" },
-  { href: "/users", label: "Utilisateurs" },
-  { href: "/vehicles", label: "Vehicules" },
-  { href: "/templates", label: "Templates" },
-  { href: "/company", label: "Societe" },
-  { href: "/depots", label: "Depots" },
-] as const;
 
 function applyTheme(mode: ThemeMode) {
   const root = document.documentElement;
@@ -46,7 +40,13 @@ function getThemeLabel(mode: ThemeMode): string {
   return "Auto";
 }
 
-export default function AppShell({ children }: { children: ReactNode }) {
+export default function AppShell({
+  children,
+  navLinks,
+}: {
+  children: ReactNode;
+  navLinks: readonly AppShellNavLink[];
+}) {
   const pathname = usePathname();
   const [themeMode, setThemeMode] = useState<ThemeMode>(getSavedThemeMode);
 
@@ -61,9 +61,9 @@ export default function AppShell({ children }: { children: ReactNode }) {
 
   const activePrefix = useMemo(() => {
     if (!pathname) return "";
-    const match = NAV_LINKS.find((link) => pathname === link.href || pathname.startsWith(`${link.href}/`));
+    const match = navLinks.find((link) => pathname === link.href || pathname.startsWith(`${link.href}/`));
     return match?.href ?? "";
-  }, [pathname]);
+  }, [navLinks, pathname]);
 
   if (isLoginScreen) {
     return <>{children}</>;
@@ -78,7 +78,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
         </div>
 
         <nav className="app-shell__nav" aria-label="Navigation principale">
-          {NAV_LINKS.map((link) => {
+          {navLinks.map((link) => {
             const isActive = activePrefix === link.href;
 
             return (

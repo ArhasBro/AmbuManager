@@ -1,35 +1,88 @@
-﻿# SESSION
+# SESSION — `SESSION-20260423-03_A15_FRONT-03`
 
-## ID SESSION
+## 1. Identification
 
-SESSION-20260423-03_A15_FRONT-03
+- Projet : `Investissement`
+- Sous-projet : `Ambulance Manager`
+- Stage : `1-ALPHA`
+- Bloc : `A15 — Frontend`
+- Type : `VALIDATION`
+- Intitulé : `Validation complète du frontend : lisibilité, cohérence des parcours, stabilité des écrans critiques`
 
-## Date
+## 2. Nature de la session
 
-23/04/2026
+Cette session est une session de `VALIDATION`.
 
-## Contexte
+Elle s’inscrit dans la continuité méthodologique du bloc A15 :
+- `FRONT-01` = audit ;
+- `FRONT-LOT-02` = correction + complétion ;
+- `FRONT-03` = validation.
 
-Projet : Investissement  
-Sous-projet : Ambulance Manager  
-Maturite : 1-ALPHA  
-Bloc : A15  
-Type : VALIDATION  
-Intitule : Validation complète du frontend : lisibilité, cohérence des parcours, stabilité des écrans critiques
+La session doit donc vérifier la cohérence du frontend sur le périmètre ciblé, sans dériver vers une refonte globale hors périmètre.
 
-## Objectif de la session
+## 3. Objectif de la session
 
-INFORMATION NON FOURNIE - A CONFIRMER
+Valider le frontend existant sur le périmètre défini par le bloc A15, en particulier :
+- la lisibilité générale ;
+- la cohérence des parcours ;
+- la stabilité des écrans critiques.
 
-## Perimetre exact traite
+## 4. Périmètre exact traité
 
-INFORMATION NON FOURNIE - A CONFIRMER
+Sources et base de lecture indiquées en production :
+- `DOCUMENT_MAITRE.md`
+- `PLAN_DE_DEVELOPPEMENT.md`
+- sessions utiles : `FRONT-01`, `FRONT-LOT-02`
 
-## Resultat synthetique de session
+Périmètre frontend réellement contrôlé :
+- dashboard
+- users
+- vehicles
+- templates
+- planning
 
-INFORMATION NON FOURNIE - A CONFIRMER
+Zones et composants explicitement mentionnés :
+- layout / shell / thème :
+  - `app/layout.tsx`
+  - `app/app-shell.tsx`
+  - `app/globals.css`
+- composants critiques :
+  - `UsersListClient`
+  - `VehiclesClient`
+  - `TemplatesClient`
+  - `PlanningClient`
+  - `ManualPlanningPanel`
 
-## Dossiers lies
+## 5. Décision patch
 
-- Session : docs/2-sessions/1-ALPHA/BLOC_A15/SESSION-20260423-03_A15_FRONT-03
-- PATCH   : docs/2-sessions/1-ALPHA/BLOC_A15/SESSION-20260423-03_A15_FRONT-03/PATCH
+`PATCH REQUIS`
+
+Motif démontré :
+- résiduel réel dans le périmètre `FRONT-03` ;
+- le dashboard filtrait déjà les entrées selon les droits ;
+- la navigation globale exposait encore statiquement tous les modules.
+
+## 6. Résultat synthétique de session
+
+Le traitement de production conclut que `FRONT-03` est **validée après correctif minimal**.
+
+Le correctif retenu consiste à :
+- supprimer la navigation globale statique ;
+- calculer côté layout les liens autorisés selon la session, le `companyId`, le rôle et les permissions ;
+- transmettre ensuite ces liens au shell applicatif.
+
+Aucun fix séparé supplémentaire n’a été produit.
+
+## 7. Fichiers et livrables liés
+
+Dossier session :
+- `docs/2-sessions/1-ALPHA/BLOC_A15/SESSION-20260423-03_A15_FRONT-03`
+
+Dossier patch :
+- `docs/2-sessions/1-ALPHA/BLOC_A15/SESSION-20260423-03_A15_FRONT-03/PATCH`
+
+Patch principal :
+- `PATCH__SESSION-20260423-03_A15_FRONT-03.diff`
+
+Documentation patch :
+- `README_PATCH.md`

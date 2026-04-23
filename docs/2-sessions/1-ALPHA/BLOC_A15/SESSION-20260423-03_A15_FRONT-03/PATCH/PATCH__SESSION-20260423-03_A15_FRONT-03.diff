@@ -1,0 +1,156 @@
+diff --git a/app/app-shell.tsx b/app/app-shell.tsx
+--- a/app/app-shell.tsx
++++ b/app/app-shell.tsx
+@@ -4,19 +4,13 @@ import { usePathname } from "next/navigation";
+ import { ReactNode, useEffect, useMemo, useState } from "react";
+ 
+ type ThemeMode = "system" | "light" | "dark";
+-
+-const THEME_STORAGE_KEY = "ambulance-manager-theme";
+-
+-const NAV_LINKS = [
+-  { href: "/dashboard", label: "Dashboard" },
+-  { href: "/planning", label: "Planning" },
+-  { href: "/users", label: "Utilisateurs" },
+-  { href: "/vehicles", label: "Vehicules" },
+-  { href: "/templates", label: "Templates" },
+-  { href: "/company", label: "Societe" },
+-  { href: "/depots", label: "Depots" },
+-] as const;
+-
++export type AppShellNavLink = {
++  href: string;
++  label: string;
++};
++
++const THEME_STORAGE_KEY = "ambulance-manager-theme";
++
+ function applyTheme(mode: ThemeMode) {
+   const root = document.documentElement;
+ 
+@@ -45,7 +39,13 @@ function getThemeLabel(mode: ThemeMode): string {
+   return "Auto";
+ }
+ 
+-export default function AppShell({ children }: { children: ReactNode }) {
++export default function AppShell({
++  children,
++  navLinks,
++}: {
++  children: ReactNode;
++  navLinks: readonly AppShellNavLink[];
++}) {
+   const pathname = usePathname();
+   const [themeMode, setThemeMode] = useState<ThemeMode>(getSavedThemeMode);
+ 
+@@ -62,9 +62,9 @@ export default function AppShell({ children }: { children: ReactNode }) {
+ 
+   const activePrefix = useMemo(() => {
+     if (!pathname) return "";
+-    const match = NAV_LINKS.find((link) => pathname === link.href || pathname.startsWith(`${link.href}/`));
++    const match = navLinks.find((link) => pathname === link.href || pathname.startsWith(`${link.href}/`));
+     return match?.href ?? "";
+-  }, [pathname]);
++  }, [navLinks, pathname]);
+ 
+   if (isLoginScreen) {
+     return <>{children}</>;
+@@ -78,7 +78,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
+         </div>
+ 
+         <nav className="app-shell__nav" aria-label="Navigation principale">
+-          {NAV_LINKS.map((link) => {
++          {navLinks.map((link) => {
+             const isActive = activePrefix === link.href;
+ 
+             return (
+diff --git a/app/layout.tsx b/app/layout.tsx
+--- a/app/layout.tsx
++++ b/app/layout.tsx
+@@ -1,24 +1,83 @@
+ import "./globals.css";
+-import AppShell from "./app-shell";
++import { getServerSession } from "next-auth/next";
++
++import AppShell, { type AppShellNavLink } from "./app-shell";
+ import Providers from "./providers";
++import { authOptions } from "@/lib/auth";
++import {
++  canManageCompanyRules,
++  canManageTemplates,
++  canManageUsers,
++  canManageVehicles,
++  canViewGlobalPlanning,
++  canViewSelfPlanning,
++} from "@/lib/permissions";
++
++function canManageCompanyProfile(role?: string | null): boolean {
++  return role === "ADMIN" || role === "GERANT";
++}
+ 
+ export const metadata = {
+   title: "Ambulance Manager",
+   description: "Gestion multi-entreprise",
+ };
+ 
+-export default function RootLayout({
++async function getAppShellNavLinks(): Promise<AppShellNavLink[]> {
++  const session = await getServerSession(authOptions);
++  const user = session?.user;
++
++  if (!user?.id) {
++    return [];
++  }
++
++  const links: AppShellNavLink[] = [{ href: "/dashboard", label: "Dashboard" }];
++
++  if (!user.companyId) {
++    return links;
++  }
++
++  const [
++    planningSelfAllowed,
++    planningGlobalAllowed,
++    usersAllowed,
++    vehiclesAllowed,
++    templatesAllowed,
++    companyRulesAllowed,
++  ] = await Promise.all([
++    canViewSelfPlanning(user.id, user.role, user.platformRole),
++    canViewGlobalPlanning(user.id, user.role, user.platformRole),
++    canManageUsers(user.id, user.role, user.platformRole),
++    canManageVehicles(user.id, user.role, user.platformRole),
++    canManageTemplates(user.id, user.role, user.platformRole),
++    canManageCompanyRules(user.id, user.role, user.platformRole),
++  ]);
++
++  const companyProfileAllowed = canManageCompanyProfile(user.role);
++
++  if (planningSelfAllowed || planningGlobalAllowed) links.push({ href: "/planning", label: "Planning" });
++  if (usersAllowed) links.push({ href: "/users", label: "Utilisateurs" });
++  if (vehiclesAllowed) links.push({ href: "/vehicles", label: "Vehicules" });
++  if (templatesAllowed) links.push({ href: "/templates", label: "Templates" });
++  if (companyProfileAllowed || companyRulesAllowed) links.push({ href: "/company", label: "Societe" });
++  if (companyProfileAllowed) links.push({ href: "/depots", label: "Depots" });
++
++  return links;
++}
++
++export default async function RootLayout({
+   children,
+ }: {
+   children: React.ReactNode;
+ }) {
++  const navLinks = await getAppShellNavLinks();
++
+   return (
+     <html lang="fr">
+       <body>
+         <Providers>
+-          <AppShell>{children}</AppShell>
++          <AppShell navLinks={navLinks}>{children}</AppShell>
+         </Providers>
+       </body>
+     </html>
+   );
+ }

@@ -56,6 +56,450 @@ C:.
 |   |       .rscinfo
 |   |       .tsbuildinfo
 |   |       
+|   +---dev
+|   |   |   build-manifest.json
+|   |   |   fallback-build-manifest.json
+|   |   |   package.json
+|   |   |   prerender-manifest.json
+|   |   |   routes-manifest.json
+|   |   |   trace
+|   |   |   
+|   |   +---build
+|   |   |   |   package.json
+|   |   |   |   postcss.js
+|   |   |   |   postcss.js.map
+|   |   |   |   
+|   |   |   \---chunks
+|   |   |           node_modules_fe693df6._.js
+|   |   |           node_modules_fe693df6._.js.map
+|   |   |           [root-of-the-server]__51225daf._.js
+|   |   |           [root-of-the-server]__51225daf._.js.map
+|   |   |           [root-of-the-server]__974941ed._.js
+|   |   |           [root-of-the-server]__974941ed._.js.map
+|   |   |           [turbopack-node]_transforms_postcss_ts_6920245c._.js
+|   |   |           [turbopack-node]_transforms_postcss_ts_6920245c._.js.map
+|   |   |           [turbopack]_runtime.js
+|   |   |           [turbopack]_runtime.js.map
+|   |   |           
+|   |   +---cache
+|   |   |   |   .rscinfo
+|   |   |   |   next-devtools-config.json
+|   |   |   |   
+|   |   |   \---turbopack
+|   |   |       \---23c46498
+|   |   |               00000001.sst
+|   |   |               00000002.sst
+|   |   |               00000003.sst
+|   |   |               00000004.sst
+|   |   |               00000005.sst
+|   |   |               00000006.meta
+|   |   |               00000007.meta
+|   |   |               00000008.meta
+|   |   |               00000009.meta
+|   |   |               00000010.meta
+|   |   |               00000011.sst
+|   |   |               00000012.sst
+|   |   |               00000013.sst
+|   |   |               00000014.sst
+|   |   |               00000015.sst
+|   |   |               00000016.sst
+|   |   |               00000017.sst
+|   |   |               00000018.sst
+|   |   |               00000019.meta
+|   |   |               00000020.meta
+|   |   |               00000021.meta
+|   |   |               00000022.meta
+|   |   |               00000023.meta
+|   |   |               00000024.sst
+|   |   |               00000025.sst
+|   |   |               00000026.sst
+|   |   |               00000027.meta
+|   |   |               00000028.meta
+|   |   |               00000029.meta
+|   |   |               00000030.sst
+|   |   |               00000031.sst
+|   |   |               00000032.sst
+|   |   |               00000033.meta
+|   |   |               00000034.meta
+|   |   |               00000035.meta
+|   |   |               00000036.sst
+|   |   |               00000037.sst
+|   |   |               00000038.sst
+|   |   |               00000039.meta
+|   |   |               00000040.meta
+|   |   |               00000041.meta
+|   |   |               CURRENT
+|   |   |               LOG
+|   |   |               
+|   |   +---logs
+|   |   |       next-development.log
+|   |   |       
+|   |   +---node_modules
+|   |   |   +---@prisma
+|   |   |   |   \---client-2c3a283f134fdcb6
+|   |   |   |       |   default.d.ts
+|   |   |   |       |   default.js
+|   |   |   |       |   edge.d.ts
+|   |   |   |       |   edge.js
+|   |   |   |       |   extension.d.ts
+|   |   |   |       |   extension.js
+|   |   |   |       |   index-browser.js
+|   |   |   |       |   index.d.ts
+|   |   |   |       |   index.js
+|   |   |   |       |   LICENSE
+|   |   |   |       |   package.json
+|   |   |   |       |   README.md
+|   |   |   |       |   sql.d.ts
+|   |   |   |       |   sql.js
+|   |   |   |       |   sql.mjs
+|   |   |   |       |   
+|   |   |   |       +---generator-build
+|   |   |   |       |       index.js
+|   |   |   |       |       
+|   |   |   |       +---runtime
+|   |   |   |       |       client.d.mts
+|   |   |   |       |       client.d.ts
+|   |   |   |       |       client.js
+|   |   |   |       |       client.js.map
+|   |   |   |       |       client.mjs
+|   |   |   |       |       client.mjs.map
+|   |   |   |       |       index-browser.d.mts
+|   |   |   |       |       index-browser.d.ts
+|   |   |   |       |       index-browser.js
+|   |   |   |       |       index-browser.js.map
+|   |   |   |       |       index-browser.mjs
+|   |   |   |       |       index-browser.mjs.map
+|   |   |   |       |       query_compiler_fast_bg.cockroachdb.js
+|   |   |   |       |       query_compiler_fast_bg.cockroachdb.mjs
+|   |   |   |       |       query_compiler_fast_bg.cockroachdb.wasm-base64.js
+|   |   |   |       |       query_compiler_fast_bg.cockroachdb.wasm-base64.mjs
+|   |   |   |       |       query_compiler_fast_bg.mysql.js
+|   |   |   |       |       query_compiler_fast_bg.mysql.mjs
+|   |   |   |       |       query_compiler_fast_bg.mysql.wasm-base64.js
+|   |   |   |       |       query_compiler_fast_bg.mysql.wasm-base64.mjs
+|   |   |   |       |       query_compiler_fast_bg.postgresql.js
+|   |   |   |       |       query_compiler_fast_bg.postgresql.mjs
+|   |   |   |       |       query_compiler_fast_bg.postgresql.wasm-base64.js
+|   |   |   |       |       query_compiler_fast_bg.postgresql.wasm-base64.mjs
+|   |   |   |       |       query_compiler_fast_bg.sqlite.js
+|   |   |   |       |       query_compiler_fast_bg.sqlite.mjs
+|   |   |   |       |       query_compiler_fast_bg.sqlite.wasm-base64.js
+|   |   |   |       |       query_compiler_fast_bg.sqlite.wasm-base64.mjs
+|   |   |   |       |       query_compiler_fast_bg.sqlserver.js
+|   |   |   |       |       query_compiler_fast_bg.sqlserver.mjs
+|   |   |   |       |       query_compiler_fast_bg.sqlserver.wasm-base64.js
+|   |   |   |       |       query_compiler_fast_bg.sqlserver.wasm-base64.mjs
+|   |   |   |       |       query_compiler_small_bg.cockroachdb.js
+|   |   |   |       |       query_compiler_small_bg.cockroachdb.mjs
+|   |   |   |       |       query_compiler_small_bg.cockroachdb.wasm-base64.js
+|   |   |   |       |       query_compiler_small_bg.cockroachdb.wasm-base64.mjs
+|   |   |   |       |       query_compiler_small_bg.mysql.js
+|   |   |   |       |       query_compiler_small_bg.mysql.mjs
+|   |   |   |       |       query_compiler_small_bg.mysql.wasm-base64.js
+|   |   |   |       |       query_compiler_small_bg.mysql.wasm-base64.mjs
+|   |   |   |       |       query_compiler_small_bg.postgresql.js
+|   |   |   |       |       query_compiler_small_bg.postgresql.mjs
+|   |   |   |       |       query_compiler_small_bg.postgresql.wasm-base64.js
+|   |   |   |       |       query_compiler_small_bg.postgresql.wasm-base64.mjs
+|   |   |   |       |       query_compiler_small_bg.sqlite.js
+|   |   |   |       |       query_compiler_small_bg.sqlite.mjs
+|   |   |   |       |       query_compiler_small_bg.sqlite.wasm-base64.js
+|   |   |   |       |       query_compiler_small_bg.sqlite.wasm-base64.mjs
+|   |   |   |       |       query_compiler_small_bg.sqlserver.js
+|   |   |   |       |       query_compiler_small_bg.sqlserver.mjs
+|   |   |   |       |       query_compiler_small_bg.sqlserver.wasm-base64.js
+|   |   |   |       |       query_compiler_small_bg.sqlserver.wasm-base64.mjs
+|   |   |   |       |       wasm-compiler-edge.d.ts
+|   |   |   |       |       wasm-compiler-edge.js
+|   |   |   |       |       wasm-compiler-edge.js.map
+|   |   |   |       |       wasm-compiler-edge.mjs
+|   |   |   |       |       wasm-compiler-edge.mjs.map
+|   |   |   |       |       
+|   |   |   |       \---scripts
+|   |   |   |               colors.js
+|   |   |   |               default-index.d.ts
+|   |   |   |               default-index.js
+|   |   |   |               
+|   |   |   +---bcrypt-a3fecf8c027c10c9
+|   |   |   |   |   .dockerignore
+|   |   |   |   |   .editorconfig
+|   |   |   |   |   bcrypt.js
+|   |   |   |   |   binding.gyp
+|   |   |   |   |   build-all.sh
+|   |   |   |   |   CHANGELOG.md
+|   |   |   |   |   Dockerfile
+|   |   |   |   |   Dockerfile-alpine
+|   |   |   |   |   ISSUE_TEMPLATE.md
+|   |   |   |   |   LICENSE
+|   |   |   |   |   Makefile
+|   |   |   |   |   package.json
+|   |   |   |   |   promises.js
+|   |   |   |   |   README.md
+|   |   |   |   |   SECURITY.md
+|   |   |   |   |   
+|   |   |   |   +---.github
+|   |   |   |   |   \---workflows
+|   |   |   |   |           build-pack-publish.yml
+|   |   |   |   |           ci.yaml
+|   |   |   |   |           
+|   |   |   |   +---examples
+|   |   |   |   |       async_compare.js
+|   |   |   |   |       forever_gen_salt.js
+|   |   |   |   |       
+|   |   |   |   +---prebuilds
+|   |   |   |   |   +---darwin-arm64
+|   |   |   |   |   |       bcrypt.node
+|   |   |   |   |   |       
+|   |   |   |   |   +---darwin-x64
+|   |   |   |   |   |       bcrypt.node
+|   |   |   |   |   |       
+|   |   |   |   |   +---linux-arm
+|   |   |   |   |   |       bcrypt.glibc.node
+|   |   |   |   |   |       bcrypt.musl.node
+|   |   |   |   |   |       
+|   |   |   |   |   +---linux-arm64
+|   |   |   |   |   |       bcrypt.glibc.node
+|   |   |   |   |   |       bcrypt.musl.node
+|   |   |   |   |   |       
+|   |   |   |   |   +---linux-x64
+|   |   |   |   |   |       bcrypt.glibc.node
+|   |   |   |   |   |       bcrypt.musl.node
+|   |   |   |   |   |       
+|   |   |   |   |   +---win32-arm64
+|   |   |   |   |   |       bcrypt.node
+|   |   |   |   |   |       
+|   |   |   |   |   \---win32-x64
+|   |   |   |   |           bcrypt.node
+|   |   |   |   |           
+|   |   |   |   +---src
+|   |   |   |   |       bcrypt.cc
+|   |   |   |   |       bcrypt_node.cc
+|   |   |   |   |       blowfish.cc
+|   |   |   |   |       node_blf.h
+|   |   |   |   |       
+|   |   |   |   \---test
+|   |   |   |           async.test.js
+|   |   |   |           implementation.test.js
+|   |   |   |           promise.test.js
+|   |   |   |           repetitions.test.js
+|   |   |   |           sync.test.js
+|   |   |   |           
+|   |   |   \---pg-587764f78a6c7a9c
+|   |   |       |   LICENSE
+|   |   |       |   package.json
+|   |   |       |   README.md
+|   |   |       |   
+|   |   |       +---esm
+|   |   |       |       index.mjs
+|   |   |       |       
+|   |   |       \---lib
+|   |   |           |   client.js
+|   |   |           |   connection-parameters.js
+|   |   |           |   connection.js
+|   |   |           |   defaults.js
+|   |   |           |   index.js
+|   |   |           |   query.js
+|   |   |           |   result.js
+|   |   |           |   stream.js
+|   |   |           |   type-overrides.js
+|   |   |           |   utils.js
+|   |   |           |   
+|   |   |           +---crypto
+|   |   |           |       cert-signatures.js
+|   |   |           |       sasl.js
+|   |   |           |       utils-legacy.js
+|   |   |           |       utils-webcrypto.js
+|   |   |           |       utils.js
+|   |   |           |       
+|   |   |           \---native
+|   |   |                   client.js
+|   |   |                   index.js
+|   |   |                   query.js
+|   |   |                   
+|   |   +---server
+|   |   |   |   app-paths-manifest.json
+|   |   |   |   interception-route-rewrite-manifest.js
+|   |   |   |   middleware-build-manifest.js
+|   |   |   |   middleware-manifest.json
+|   |   |   |   middleware.js
+|   |   |   |   middleware.js.map
+|   |   |   |   next-font-manifest.js
+|   |   |   |   next-font-manifest.json
+|   |   |   |   pages-manifest.json
+|   |   |   |   server-reference-manifest.js
+|   |   |   |   server-reference-manifest.json
+|   |   |   |   
+|   |   |   +---app
+|   |   |   |   |   page.js
+|   |   |   |   |   page.js.map
+|   |   |   |   |   page_client-reference-manifest.js
+|   |   |   |   |   
+|   |   |   |   +---api
+|   |   |   |   |   \---auth
+|   |   |   |   |       \---[...nextauth]
+|   |   |   |   |           |   route.js
+|   |   |   |   |           |   route.js.map
+|   |   |   |   |           |   route_client-reference-manifest.js
+|   |   |   |   |           |   
+|   |   |   |   |           \---route
+|   |   |   |   |                   app-paths-manifest.json
+|   |   |   |   |                   build-manifest.json
+|   |   |   |   |                   server-reference-manifest.json
+|   |   |   |   |                   
+|   |   |   |   +---dashboard
+|   |   |   |   |   |   page.js
+|   |   |   |   |   |   page.js.map
+|   |   |   |   |   |   page_client-reference-manifest.js
+|   |   |   |   |   |   
+|   |   |   |   |   \---page
+|   |   |   |   |           app-paths-manifest.json
+|   |   |   |   |           build-manifest.json
+|   |   |   |   |           next-font-manifest.json
+|   |   |   |   |           react-loadable-manifest.json
+|   |   |   |   |           server-reference-manifest.json
+|   |   |   |   |           
+|   |   |   |   \---page
+|   |   |   |           app-paths-manifest.json
+|   |   |   |           build-manifest.json
+|   |   |   |           next-font-manifest.json
+|   |   |   |           react-loadable-manifest.json
+|   |   |   |           server-reference-manifest.json
+|   |   |   |           
+|   |   |   +---chunks
+|   |   |   |   |   node_modules_e77fbb80._.js
+|   |   |   |   |   node_modules_e77fbb80._.js.map
+|   |   |   |   |   node_modules_jose_dist_node_cjs_bd88468e._.js
+|   |   |   |   |   node_modules_jose_dist_node_cjs_bd88468e._.js.map
+|   |   |   |   |   node_modules_next-auth_1810886e._.js
+|   |   |   |   |   node_modules_next-auth_1810886e._.js.map
+|   |   |   |   |   node_modules_next_961d13b2._.js
+|   |   |   |   |   node_modules_next_961d13b2._.js.map
+|   |   |   |   |   node_modules_openid-client_d15f72b3._.js
+|   |   |   |   |   node_modules_openid-client_d15f72b3._.js.map
+|   |   |   |   |   node_modules_zod_v4_da12b5b3._.js
+|   |   |   |   |   node_modules_zod_v4_da12b5b3._.js.map
+|   |   |   |   |   [root-of-the-server]__55612d18._.js
+|   |   |   |   |   [root-of-the-server]__55612d18._.js.map
+|   |   |   |   |   [root-of-the-server]__ab4ee520._.js
+|   |   |   |   |   [root-of-the-server]__ab4ee520._.js.map
+|   |   |   |   |   [root-of-the-server]__bf91ca14._.js
+|   |   |   |   |   [root-of-the-server]__bf91ca14._.js.map
+|   |   |   |   |   [turbopack]_runtime.js
+|   |   |   |   |   [turbopack]_runtime.js.map
+|   |   |   |   |   _next-internal_server_app_api_auth_[___nextauth]_route_actions_1c865db8.js
+|   |   |   |   |   _next-internal_server_app_api_auth_[___nextauth]_route_actions_1c865db8.js.map
+|   |   |   |   |   
+|   |   |   |   \---ssr
+|   |   |   |           app_b9b1292a._.js
+|   |   |   |           app_b9b1292a._.js.map
+|   |   |   |           app_dashboard_logout-button_tsx_efb5e489._.js
+|   |   |   |           app_dashboard_logout-button_tsx_efb5e489._.js.map
+|   |   |   |           node_modules_e2d1c5df._.js
+|   |   |   |           node_modules_e2d1c5df._.js.map
+|   |   |   |           node_modules_ee11acdc._.js
+|   |   |   |           node_modules_ee11acdc._.js.map
+|   |   |   |           node_modules_jose_dist_node_cjs_6d3869c7._.js
+|   |   |   |           node_modules_jose_dist_node_cjs_6d3869c7._.js.map
+|   |   |   |           node_modules_next-auth_0305d6f4._.js
+|   |   |   |           node_modules_next-auth_0305d6f4._.js.map
+|   |   |   |           node_modules_next_085844e9._.js
+|   |   |   |           node_modules_next_085844e9._.js.map
+|   |   |   |           node_modules_next_4e2b51e8._.js
+|   |   |   |           node_modules_next_4e2b51e8._.js.map
+|   |   |   |           node_modules_next_dist_3e1f69b5._.js
+|   |   |   |           node_modules_next_dist_3e1f69b5._.js.map
+|   |   |   |           node_modules_next_dist_client_components_9774470f._.js
+|   |   |   |           node_modules_next_dist_client_components_9774470f._.js.map
+|   |   |   |           node_modules_next_dist_client_components_builtin_forbidden_45780354.js
+|   |   |   |           node_modules_next_dist_client_components_builtin_forbidden_45780354.js.map
+|   |   |   |           node_modules_next_dist_client_components_builtin_global-error_ece394eb.js
+|   |   |   |           node_modules_next_dist_client_components_builtin_global-error_ece394eb.js.map
+|   |   |   |           node_modules_next_dist_client_components_builtin_unauthorized_15817684.js
+|   |   |   |           node_modules_next_dist_client_components_builtin_unauthorized_15817684.js.map
+|   |   |   |           node_modules_openid-client_5e2b25d2._.js
+|   |   |   |           node_modules_openid-client_5e2b25d2._.js.map
+|   |   |   |           node_modules_zod_v4_34378348._.js
+|   |   |   |           node_modules_zod_v4_34378348._.js.map
+|   |   |   |           [externals]_next_dist_c80f7c8f._.js
+|   |   |   |           [externals]_next_dist_c80f7c8f._.js.map
+|   |   |   |           [externals]__e8a2741f._.js
+|   |   |   |           [externals]__e8a2741f._.js.map
+|   |   |   |           [root-of-the-server]__60f0131a._.js
+|   |   |   |           [root-of-the-server]__60f0131a._.js.map
+|   |   |   |           [root-of-the-server]__a8ab9a0d._.js
+|   |   |   |           [root-of-the-server]__a8ab9a0d._.js.map
+|   |   |   |           [root-of-the-server]__be75e238._.js
+|   |   |   |           [root-of-the-server]__be75e238._.js.map
+|   |   |   |           [root-of-the-server]__c29fa969._.js
+|   |   |   |           [root-of-the-server]__c29fa969._.js.map
+|   |   |   |           [root-of-the-server]__e07f2504._.js
+|   |   |   |           [root-of-the-server]__e07f2504._.js.map
+|   |   |   |           [turbopack]_runtime.js
+|   |   |   |           [turbopack]_runtime.js.map
+|   |   |   |           _8fbc5317._.js
+|   |   |   |           _8fbc5317._.js.map
+|   |   |   |           _next-internal_server_app_dashboard_page_actions_7f01ccec.js
+|   |   |   |           _next-internal_server_app_dashboard_page_actions_7f01ccec.js.map
+|   |   |   |           _next-internal_server_app_page_actions_39d4fc33.js
+|   |   |   |           _next-internal_server_app_page_actions_39d4fc33.js.map
+|   |   |   |           
+|   |   |   \---middleware
+|   |   |           middleware-manifest.json
+|   |   |           
+|   |   +---static
+|   |   |   +---chunks
+|   |   |   |       app_82881073._.js
+|   |   |   |       app_82881073._.js.map
+|   |   |   |       app_dashboard_logout-button_tsx_ead64921._.js
+|   |   |   |       app_dashboard_logout-button_tsx_ead64921._.js.map
+|   |   |   |       app_dashboard_page_tsx_31d767ba._.js
+|   |   |   |       app_favicon_ico_mjs_745fddaf._.js
+|   |   |   |       app_globals_71f961d1.css
+|   |   |   |       app_globals_71f961d1.css.map
+|   |   |   |       app_layout_tsx_1cf6b850._.js
+|   |   |   |       node_modules_@swc_helpers_cjs_d80fb378._.js
+|   |   |   |       node_modules_@swc_helpers_cjs_d80fb378._.js.map
+|   |   |   |       node_modules_d33b72d3._.js
+|   |   |   |       node_modules_d33b72d3._.js.map
+|   |   |   |       node_modules_next_dist_be32b49c._.js
+|   |   |   |       node_modules_next_dist_be32b49c._.js.map
+|   |   |   |       node_modules_next_dist_build_polyfills_polyfill-nomodule.js
+|   |   |   |       node_modules_next_dist_build_polyfills_polyfill-nomodule.js.map
+|   |   |   |       node_modules_next_dist_client_17643121._.js
+|   |   |   |       node_modules_next_dist_client_17643121._.js.map
+|   |   |   |       node_modules_next_dist_client_components_builtin_global-error_1cf6b850.js
+|   |   |   |       node_modules_next_dist_compiled_a0e4c7b4._.js
+|   |   |   |       node_modules_next_dist_compiled_a0e4c7b4._.js.map
+|   |   |   |       node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js
+|   |   |   |       node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js.map
+|   |   |   |       node_modules_next_dist_compiled_react-dom_1e674e59._.js
+|   |   |   |       node_modules_next_dist_compiled_react-dom_1e674e59._.js.map
+|   |   |   |       node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js
+|   |   |   |       node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js.map
+|   |   |   |       node_modules_next_dist_f3530cac._.js
+|   |   |   |       node_modules_next_dist_f3530cac._.js.map
+|   |   |   |       turbopack-_23a915ee._.js
+|   |   |   |       [turbopack]_browser_dev_hmr-client_hmr-client_ts_956a0d3a._.js
+|   |   |   |       [turbopack]_browser_dev_hmr-client_hmr-client_ts_956a0d3a._.js.map
+|   |   |   |       [turbopack]_browser_dev_hmr-client_hmr-client_ts_c7192189._.js
+|   |   |   |       [turbopack]_browser_dev_hmr-client_hmr-client_ts_c8c997ce._.js
+|   |   |   |       [turbopack]_browser_dev_hmr-client_hmr-client_ts_c8c997ce._.js.map
+|   |   |   |       _23a915ee._.js.map
+|   |   |   |       _a0ff3932._.js
+|   |   |   |       
+|   |   |   +---development
+|   |   |   |       _buildManifest.js
+|   |   |   |       _clientMiddlewareManifest.json
+|   |   |   |       _ssgManifest.js
+|   |   |   |       
+|   |   |   \---media
+|   |   |           favicon.0b3bf435.ico
+|   |   |           
+|   |   \---types
+|   |           cache-life.d.ts
+|   |           routes.d.ts
+|   |           validator.ts
+|   |           
 |   +---diagnostics
 |   |       build-diagnostics.json
 |   |       framework.json
@@ -260,9 +704,6 @@ C:.
 |   |   +---app
 |   |   |   |   favicon.ico.body
 |   |   |   |   favicon.ico.meta
-|   |   |   |   login.html
-|   |   |   |   login.meta
-|   |   |   |   login.rsc
 |   |   |   |   page.js
 |   |   |   |   page.js.map
 |   |   |   |   page.js.nft.json
@@ -270,9 +711,6 @@ C:.
 |   |   |   |   _global-error.html
 |   |   |   |   _global-error.meta
 |   |   |   |   _global-error.rsc
-|   |   |   |   _not-found.html
-|   |   |   |   _not-found.meta
-|   |   |   |   _not-found.rsc
 |   |   |   |   
 |   |   |   +---api
 |   |   |   |   +---audit
@@ -761,16 +1199,6 @@ C:.
 |   |   |   |           react-loadable-manifest.json
 |   |   |   |           server-reference-manifest.json
 |   |   |   |           
-|   |   |   +---login.segments
-|   |   |   |   |   login.segment.rsc
-|   |   |   |   |   _full.segment.rsc
-|   |   |   |   |   _head.segment.rsc
-|   |   |   |   |   _index.segment.rsc
-|   |   |   |   |   _tree.segment.rsc
-|   |   |   |   |   
-|   |   |   |   \---login
-|   |   |   |           __PAGE__.segment.rsc
-|   |   |   |           
 |   |   |   +---onboarding
 |   |   |   |   |   page.js
 |   |   |   |   |   page.js.map
@@ -863,28 +1291,18 @@ C:.
 |   |   |   |       _tree.segment.rsc
 |   |   |   |       __PAGE__.segment.rsc
 |   |   |   |       
-|   |   |   +---_not-found
-|   |   |   |   |   page.js
-|   |   |   |   |   page.js.map
-|   |   |   |   |   page.js.nft.json
-|   |   |   |   |   page_client-reference-manifest.js
-|   |   |   |   |   
-|   |   |   |   \---page
-|   |   |   |           app-paths-manifest.json
-|   |   |   |           build-manifest.json
-|   |   |   |           next-font-manifest.json
-|   |   |   |           react-loadable-manifest.json
-|   |   |   |           server-reference-manifest.json
-|   |   |   |           
-|   |   |   \---_not-found.segments
-|   |   |       |   _full.segment.rsc
-|   |   |       |   _head.segment.rsc
-|   |   |       |   _index.segment.rsc
-|   |   |       |   _not-found.segment.rsc
-|   |   |       |   _tree.segment.rsc
+|   |   |   \---_not-found
+|   |   |       |   page.js
+|   |   |       |   page.js.map
+|   |   |       |   page.js.nft.json
+|   |   |       |   page_client-reference-manifest.js
 |   |   |       |   
-|   |   |       \---_not-found
-|   |   |               __PAGE__.segment.rsc
+|   |   |       \---page
+|   |   |               app-paths-manifest.json
+|   |   |               build-manifest.json
+|   |   |               next-font-manifest.json
+|   |   |               react-loadable-manifest.json
+|   |   |               server-reference-manifest.json
 |   |   |               
 |   |   +---chunks
 |   |   |   |   bec2d_app_api_planning_autoschedule_runs_[id]_match_apply_route_actions_4ed003d4.js
@@ -1083,8 +1501,6 @@ C:.
 |   |   |   |   _next-internal_server_app_favicon_ico_route_actions_353150a5.js.map
 |   |   |   |   
 |   |   |   \---ssr
-|   |   |           app_40bb98a0._.js
-|   |   |           app_40bb98a0._.js.map
 |   |   |           app_audit_audit-client_tsx_2d3c01ab._.js
 |   |   |           app_audit_audit-client_tsx_2d3c01ab._.js.map
 |   |   |           app_b9b1292a._.js
@@ -1119,6 +1535,8 @@ C:.
 |   |   |           node_modules_next_dist_27457240._.js.map
 |   |   |           node_modules_next_dist_6607e1c8._.js
 |   |   |           node_modules_next_dist_6607e1c8._.js.map
+|   |   |           node_modules_next_dist_673ff511._.js
+|   |   |           node_modules_next_dist_673ff511._.js.map
 |   |   |           node_modules_next_dist_852965c2._.js
 |   |   |           node_modules_next_dist_852965c2._.js.map
 |   |   |           node_modules_next_dist_client_components_9774470f._.js
@@ -1135,38 +1553,40 @@ C:.
 |   |   |           node_modules_next_dist_f21d913a._.js.map
 |   |   |           [root-of-the-server]__0d5ae7ad._.js
 |   |   |           [root-of-the-server]__0d5ae7ad._.js.map
+|   |   |           [root-of-the-server]__1b163f0c._.js
+|   |   |           [root-of-the-server]__1b163f0c._.js.map
 |   |   |           [root-of-the-server]__296a25b5._.js
 |   |   |           [root-of-the-server]__296a25b5._.js.map
 |   |   |           [root-of-the-server]__36ebbb9f._.js
 |   |   |           [root-of-the-server]__36ebbb9f._.js.map
-|   |   |           [root-of-the-server]__4556a15e._.js
-|   |   |           [root-of-the-server]__4556a15e._.js.map
-|   |   |           [root-of-the-server]__4bc528eb._.js
-|   |   |           [root-of-the-server]__4bc528eb._.js.map
-|   |   |           [root-of-the-server]__53445edc._.js
-|   |   |           [root-of-the-server]__53445edc._.js.map
-|   |   |           [root-of-the-server]__6da289e7._.js
-|   |   |           [root-of-the-server]__6da289e7._.js.map
+|   |   |           [root-of-the-server]__3ba1feaf._.js
+|   |   |           [root-of-the-server]__3ba1feaf._.js.map
+|   |   |           [root-of-the-server]__4e4f114d._.js
+|   |   |           [root-of-the-server]__4e4f114d._.js.map
+|   |   |           [root-of-the-server]__577d667d._.js
+|   |   |           [root-of-the-server]__577d667d._.js.map
+|   |   |           [root-of-the-server]__60029ce8._.js
+|   |   |           [root-of-the-server]__60029ce8._.js.map
+|   |   |           [root-of-the-server]__6497ad33._.js
+|   |   |           [root-of-the-server]__6497ad33._.js.map
+|   |   |           [root-of-the-server]__74781f0a._.js
+|   |   |           [root-of-the-server]__74781f0a._.js.map
+|   |   |           [root-of-the-server]__7f1adca8._.js
+|   |   |           [root-of-the-server]__7f1adca8._.js.map
 |   |   |           [root-of-the-server]__99048386._.js
 |   |   |           [root-of-the-server]__99048386._.js.map
-|   |   |           [root-of-the-server]__9ba90773._.js
-|   |   |           [root-of-the-server]__9ba90773._.js.map
-|   |   |           [root-of-the-server]__9cb97af3._.js
-|   |   |           [root-of-the-server]__9cb97af3._.js.map
 |   |   |           [root-of-the-server]__a457c799._.js
 |   |   |           [root-of-the-server]__a457c799._.js.map
-|   |   |           [root-of-the-server]__a5099385._.js
-|   |   |           [root-of-the-server]__a5099385._.js.map
-|   |   |           [root-of-the-server]__a6582b6d._.js
-|   |   |           [root-of-the-server]__a6582b6d._.js.map
 |   |   |           [root-of-the-server]__b2dd6248._.js
 |   |   |           [root-of-the-server]__b2dd6248._.js.map
-|   |   |           [root-of-the-server]__b63161bb._.js
-|   |   |           [root-of-the-server]__b63161bb._.js.map
 |   |   |           [root-of-the-server]__b9356576._.js
 |   |   |           [root-of-the-server]__b9356576._.js.map
-|   |   |           [root-of-the-server]__c4a7c7d0._.js
-|   |   |           [root-of-the-server]__c4a7c7d0._.js.map
+|   |   |           [root-of-the-server]__be041a95._.js
+|   |   |           [root-of-the-server]__be041a95._.js.map
+|   |   |           [root-of-the-server]__c28e3622._.js
+|   |   |           [root-of-the-server]__c28e3622._.js.map
+|   |   |           [root-of-the-server]__c83af424._.js
+|   |   |           [root-of-the-server]__c83af424._.js.map
 |   |   |           [root-of-the-server]__e0a07927._.js
 |   |   |           [root-of-the-server]__e0a07927._.js.map
 |   |   |           [root-of-the-server]__e1b2e646._.js
@@ -1175,8 +1595,8 @@ C:.
 |   |   |           [root-of-the-server]__fd8240b4._.js.map
 |   |   |           [turbopack]_runtime.js
 |   |   |           [turbopack]_runtime.js.map
-|   |   |           _118ebfb1._.js
-|   |   |           _118ebfb1._.js.map
+|   |   |           _0dac8f4c._.js
+|   |   |           _0dac8f4c._.js.map
 |   |   |           _27f38564._.js
 |   |   |           _27f38564._.js.map
 |   |   |           _2c715f22._.js
@@ -1234,14 +1654,13 @@ C:.
 |   |   |       middleware-manifest.json
 |   |   |       
 |   |   \---pages
-|   |           404.html
 |   |           500.html
 |   |           
 |   +---static
 |   |   +---chunks
-|   |   |       1dce6d15e2d1ee76.css
-|   |   |       26ca2898dd453a78.js
+|   |   |       12049629bfda53e4.js
 |   |   |       274d763fc71039fe.js
+|   |   |       291df5b6eee6f58d.css
 |   |   |       3814b133520d7a8c.js
 |   |   |       49f295fa4b42047f.js
 |   |   |       5d8c50bb7ea245b6.js
@@ -1262,7 +1681,7 @@ C:.
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-addc8b8369f7cdbf.js
 |   |   |       
-|   |   +---IwtofO87vP5wn_eD3RNFT
+|   |   +---dbRSqqS3LCrIdvWC4l76n
 |   |   |       _buildManifest.js
 |   |   |       _clientMiddlewareManifest.json
 |   |   |       _ssgManifest.js
@@ -2007,7 +2426,8 @@ C:.
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
-|   |   |   |   |           NO_PATCH.md
+|   |   |   |   |           PATCH__SESSION-20260423-03_A15_FRONT-03.diff
+|   |   |   |   |           README_PATCH.md
 |   |   |   |   |           
 |   |   |   |   \---SESSION-20260423-04_A15_CLOTURE_A15
 |   |   |   |       |   EVIDENCES.md
