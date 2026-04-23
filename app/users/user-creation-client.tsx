@@ -119,7 +119,7 @@ export default function UserCreationClient({ canGovernCompanyRules }: UserCreati
   }
 
   return (
-    <form onSubmit={onSubmit} style={{ display: "grid", gap: 12, padding: 12, border: "1px solid #333", borderRadius: 8, maxWidth: 720 }}>
+    <form onSubmit={onSubmit} style={{ display: "grid", gap: 12, padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8, maxWidth: 720 }}>
       <div>
         <h2 style={{ margin: 0 }}>Créer un utilisateur</h2>
         <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
@@ -181,13 +181,13 @@ export default function UserCreationClient({ canGovernCompanyRules }: UserCreati
       </label>
 
       {error ? (
-        <div style={{ padding: 10, border: "1px solid #663333", borderRadius: 8 }}>
+        <div style={{ padding: 10, border: "1px solid var(--ui-danger-border)", borderRadius: 8 }}>
           Erreur : {error}
         </div>
       ) : null}
 
       {success ? (
-        <div style={{ padding: 10, border: "1px solid #335533", borderRadius: 8 }}>
+        <div style={{ padding: 10, border: "1px solid var(--ui-success-border)", borderRadius: 8 }}>
           {success}
         </div>
       ) : null}

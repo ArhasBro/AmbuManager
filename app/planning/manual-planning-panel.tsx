@@ -388,8 +388,8 @@ export default function ManualPlanningPanel({
         </div>
       )}
 
-      {message && <div style={{ color: "green" }}>{message}</div>}
-      {error && <div style={{ color: "crimson" }}>Erreur : {error}</div>}
+      {message && <div style={{ color: "var(--ui-success-text)" }}>{message}</div>}
+      {error && <div style={{ color: "var(--ui-danger-text)" }}>Erreur : {error}</div>}
       {loading && <div>Chargement du planning manuel…</div>}
 
       {!loading && viewMode !== "month" && (
@@ -431,7 +431,7 @@ export default function ManualPlanningPanel({
                         <div style={{ fontWeight: 700 }}>{timeHM(shift.startAt)}–{timeHM(shift.endAt)}</div>
                         <div>{shift.template?.name ?? "Sans template"}</div>
                         <div style={{ opacity: 0.8 }}>{shift.user?.name ?? "Non affecté"}</div>
-                        {shift.isCancelled && <div style={{ color: "crimson" }}>Annulé</div>}
+                        {shift.isCancelled && <div style={{ color: "var(--ui-danger-text)" }}>Annulé</div>}
                       </div>
                     ))}
                     {dayItems.length > 4 && <div style={{ fontSize: 12, opacity: 0.7 }}>+ {dayItems.length - 4} autre(s)</div>}
@@ -484,7 +484,7 @@ function ShiftCard({
           <div style={{ opacity: 0.8 }}>Dépôt : {shift.depot?.name ?? "Aucun"} • Véhicule : {shift.vehicle?.immatriculation ?? "Aucun"}</div>
           <div style={{ opacity: 0.8 }}>Agents : {shift.user?.name ?? "—"}{shift.user2?.name ? ` / ${shift.user2.name}` : ""}</div>
           {shift.notes && <div style={{ opacity: 0.85 }}>Notes : {shift.notes}</div>}
-          {shift.isCancelled && <div style={{ color: "crimson", fontWeight: 700 }}>Annulé — {shift.cancellationReason ?? "sans motif"}</div>}
+          {shift.isCancelled && <div style={{ color: "var(--ui-danger-text)", fontWeight: 700 }}>Annulé — {shift.cancellationReason ?? "sans motif"}</div>}
         </div>
         {canEditPlanning && !shift.isCancelled && (
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>

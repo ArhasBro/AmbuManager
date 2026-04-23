@@ -569,6 +569,48 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |       |   SESSION.md
 |   |   |       |   
 |   |   |       \---PATCH
+|   |   |               PATCH__SESSION-20260423-04_A15_CLOTURE_A15.diff
+|   |   |               README_PATCH.md
+|   |   |               
+|   |   +---BLOC_A16
+|   |   |   +---SESSION-20260423-05_A16_SEC-01
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           NO_PATCH.md
+|   |   |   |           
+|   |   |   +---SESSION-20260423-06_A16_SEC-LOT-02
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           README_PATCH.md
+|   |   |   |           
+|   |   |   +---SESSION-20260423-07_A16_SEC-03
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           NO_PATCH.md
+|   |   |   |           
+|   |   |   \---SESSION-20260423-08_A16_CLOTURE_A16
+|   |   |       |   EVIDENCES.md
+|   |   |       |   FIN_SESSION.md
+|   |   |       |   NOTES.md
+|   |   |       |   RESULTATS.md
+|   |   |       |   SESSION.md
+|   |   |       |   
+|   |   |       \---PATCH
 |   |   |               README_PATCH.md
 |   |   |               
 |   |   +---BLOC_A2

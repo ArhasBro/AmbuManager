@@ -32,16 +32,17 @@ Nous allons faire plusieurs sessions en même temps, donc il faut que ce soit ri
 
 RÈGLE D’UTILISATION DES OUTILS
 - **Production = Codex** dès qu’une session implique le dépôt, le code, les fichiers, les patchs, les commandes, les tests ou des validations techniques.
+- **Production = Codex** produit également la documentation finale de session ainsi que le ZIP documentaire final.
 - **Contrôle qualité = ChatGPT** pour :
   - analyser la réponse de production ;
   - vérifier la conformité méthodologique ;
-  - identifier ce qui est conforme et non conforme ;
-  - rédiger un éventuel prompt de retour ;
-  - produire ensuite la documentation finale de session et le ZIP documentaire.
-- **Documentation finale + ZIP = discussion de contrôle avec ChatGPT**, jamais discussion de production avec Codex.
+  - identifier ce qui est conforme et ce qui est non conforme ;
+  - vérifier le patch, les validations, la documentation finale et le ZIP ;
+  - rédiger un éventuel prompt de retour si nécessaire.
+- **Documentation finale + ZIP = discussion de production avec Codex**, puis vérification dans la discussion de contrôle avec ChatGPT.
 - En cas de doute :
   - si la session demande d’inspecter ou modifier le repo réel → **Codex**
-  - si la session demande surtout d’évaluer, cadrer, reformuler, contrôler ou documenter → **ChatGPT**
+  - si la session demande surtout d’évaluer, cadrer, reformuler, contrôler ou vérifier → **ChatGPT**
 
 RÈGLE IMPÉRATIVE — PATCH-FIRST EN PRODUCTION
 - La discussion de production avec Codex doit travailler en mode **patch-first** si un patch est réellement nécessaire.
@@ -52,13 +53,13 @@ RÈGLE IMPÉRATIVE — PATCH-FIRST EN PRODUCTION
 - Si un correctif ultérieur est nécessaire, il doit être fourni sous forme de **patch correctif minimal séparé**.
 - Il est interdit de rejouer tout le patch principal dans un correctif.
 - Si la session n’exige pas réellement de modification code, il ne faut pas forcer artificiellement un patch.
-- La production ne doit jamais générer la documentation finale.
-- La discussion de contrôle s’appuie ensuite sur :
+- La production doit ensuite générer la documentation finale de session et le ZIP documentaire final.
+- La discussion de contrôle vérifie ensuite :
   - le patch principal réellement produit ;
   - les éventuels patchs correctifs minimaux ;
   - la réponse finale de production ;
   - les validations terminales réellement exécutées ;
-  pour produire la documentation finale et le ZIP.
+  - la documentation finale et le ZIP produits.
 
 Pour les sessions indiquées ci-dessous, prépare ensuite **2 prompts distincts**, prêts à copier/coller en texte :
 
@@ -84,9 +85,8 @@ Pour les sessions indiquées ci-dessous, prépare ensuite **2 prompts distincts*
    - 4. produire `README_PATCH.md` si un patch réel existe
    - 5. si un résiduel subsiste, produire un patch correctif minimal séparé
    - 6. si la session ne nécessite pas de modification code, produire une sortie cohérente avec ce cadre (`NO_PATCH` ou équivalent selon le type réel de session)
-   - 7. ne pas produire la documentation finale de session
-   - 8. ne pas produire le ZIP documentaire final
-   - 9. laisser la documentation finale et le ZIP à la discussion de contrôle avec ChatGPT
+   - 7. produire la documentation finale de session
+   - 8. produire le ZIP documentaire final
 
    Contraintes de rédaction du prompt de production :
    - rappeler en ouverture l’obligation de relire le noyau documentaire minimal :
@@ -108,7 +108,7 @@ Pour les sessions indiquées ci-dessous, prépare ensuite **2 prompts distincts*
    - si la session est une **CORRECTION** ou **COMPLÉTION**, exiger un patch réel, minimal et cohérent avec la session
    - rester compatible avec la règle :
      - **1 patch unique pour toutes les sessions concernées**
-     - **1 documentation unique pour toutes les sessions concernées, produite ensuite par ChatGPT dans la discussion de contrôle**
+     - **1 documentation unique pour toutes les sessions concernées, produite dans la discussion de production avec Codex**
 
 2. **Prompt de contrôle**
    - Ce prompt est destiné à **ChatGPT**.
@@ -117,12 +117,13 @@ Pour les sessions indiquées ci-dessous, prépare ensuite **2 prompts distincts*
    - Il doit distinguer clairement ce qui est conforme et ce qui est non conforme.
    - Il doit attendre que je t’aie transmis la réponse de la discussion de production.
    - Il doit ensuite produire, si nécessaire, un prompt de retour clair et précis à destination de la discussion de production.
-   - Une fois la production jugée conforme ou suffisamment corrigée, c’est cette discussion de contrôle avec ChatGPT qui doit produire la documentation finale de session ainsi que le ZIP documentaire final.
-   - Cette documentation finale doit être strictement cohérente avec :
-     - le patch principal `.diff` réellement produit ;
-     - les éventuels patchs correctifs minimaux ;
-     - les validations réellement exécutées ;
-     - la réponse finale validée de production.
+   - Cette discussion de contrôle doit vérifier la cohérence de l’ensemble produit par Codex :
+     - patch principal `.diff` ;
+     - éventuels patchs correctifs minimaux ;
+     - validations réellement exécutées ;
+     - documentation finale ;
+     - ZIP documentaire ;
+     - réponse finale de production.
 
    Contraintes de rédaction du prompt de contrôle :
    - rappeler que le contrôle ne doit pas rejouer la session
@@ -131,6 +132,8 @@ Pour les sessions indiquées ci-dessous, prépare ensuite **2 prompts distincts*
      - la réponse finale de production ;
      - le patch principal produit ;
      - les éventuels patchs correctifs minimaux ;
+     - la documentation finale produite ;
+     - le ZIP documentaire produit ;
      - la documentation officielle du projet réellement utile à la session
    - rappeler que si une information n’est pas démontrée, il faut écrire exactement :
      - `INFORMATION NON FOURNIE — À CONFIRMER`
@@ -143,11 +146,6 @@ Pour les sessions indiquées ci-dessous, prépare ensuite **2 prompts distincts*
      - informations non démontrées ;
      - décision de contrôle ;
      - prompt de retour prêt à copier/coller pour la discussion de production
-   - préciser qu’après validation du contrôle, cette discussion doit aussi :
-     - rédiger les documents finaux de session ;
-     - préparer le contenu du ZIP documentaire final ;
-     - rester strictement cohérente avec les preuves réelles de la production ;
-     - ne pas inventer de validations ou de résultats non démontrés
 
 IMPORTANT
 - Ne prépare que les **2 prompts** demandés :
@@ -166,17 +164,13 @@ IMPORTANT
   - générer le `.diff` ;
   - appliquer le `.diff` ;
   - lancer les validations
-- La documentation finale et le ZIP ne doivent pas être demandés à la production Codex.
-- La documentation finale et le ZIP doivent être produits dans la discussion de contrôle avec ChatGPT, à partir :
-  - du patch principal réellement produit ;
-  - des éventuels correctifs minimaux ;
-  - de la réponse de production validée ;
-  - des validations terminales réellement constatées.
+- La documentation finale et le ZIP doivent être produits dans la discussion de production avec Codex.
+- La discussion de contrôle avec ChatGPT doit vérifier l’ensemble produit, sans rejouer la session.
 
 Références des sessions :
 
-- SESSION-20260423-04_A15_CLOTURE_A15
-- **CLOTURE_A15 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc Frontend
+- SESSION-20260423-05_A16_SEC-01
+- **SEC-01 — AUDIT** — Audit complet de la sécurité existante : auth, sessions, contrôles d’accès, routes sensibles, secrets, variables d’environnement, audit logs, protections de base
 ------------------------------------
 
 Voici sa réponse ainsi que les documents généré :

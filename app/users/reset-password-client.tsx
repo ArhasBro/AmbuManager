@@ -162,7 +162,7 @@ export default function ResetPasswordClient({ actorUserId }: Props) {
 
   return (
     <div style={{ display: "grid", gap: 16, maxWidth: 720 }}>
-      <div style={{ padding: 12, border: "1px solid #333", borderRadius: 8 }}>
+      <div style={{ padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
         <h2 style={{ marginTop: 0 }}>Cible</h2>
 
         {loading ? <p style={{ marginBottom: 0 }}>Chargement des utilisateurs...</p> : null}
@@ -195,7 +195,7 @@ export default function ResetPasswordClient({ actorUserId }: Props) {
         ) : null}
       </div>
 
-      <form onSubmit={onSubmit} style={{ display: "grid", gap: 12, padding: 12, border: "1px solid #333", borderRadius: 8 }}>
+      <form onSubmit={onSubmit} style={{ display: "grid", gap: 12, padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
         <h2 style={{ margin: 0 }}>Nouveau mot de passe</h2>
 
         <label style={{ display: "grid", gap: 6 }}>
@@ -221,13 +221,13 @@ export default function ResetPasswordClient({ actorUserId }: Props) {
         </label>
 
         {error ? (
-          <div style={{ padding: 10, border: "1px solid #663333", borderRadius: 8 }}>
+          <div style={{ padding: 10, border: "1px solid var(--ui-danger-border)", borderRadius: 8 }}>
             Erreur : {error}
           </div>
         ) : null}
 
         {success ? (
-          <div style={{ padding: 10, border: "1px solid #335533", borderRadius: 8 }}>
+          <div style={{ padding: 10, border: "1px solid var(--ui-success-border)", borderRadius: 8 }}>
             {success}
           </div>
         ) : null}

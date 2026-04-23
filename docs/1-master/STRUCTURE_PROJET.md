@@ -1657,34 +1657,34 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
+|   |   +---4IkVtfq8xO72yLATVopsI
+|   |   |       _buildManifest.js
+|   |   |       _clientMiddlewareManifest.json
+|   |   |       _ssgManifest.js
+|   |   |       
 |   |   +---chunks
+|   |   |       05c065d3e137ac6c.js
 |   |   |       12049629bfda53e4.js
 |   |   |       274d763fc71039fe.js
 |   |   |       291df5b6eee6f58d.css
 |   |   |       3814b133520d7a8c.js
-|   |   |       49f295fa4b42047f.js
+|   |   |       4a8533ceb5971318.js
+|   |   |       5422d2cbe02db823.js
 |   |   |       5d8c50bb7ea245b6.js
 |   |   |       61066a51d71ec27c.js
 |   |   |       619a7c6306d0d4a0.js
 |   |   |       642a00754c8aebb8.js
+|   |   |       7d79159d100ee15e.js
 |   |   |       81cbce106758ff1d.js
 |   |   |       82abf2d65f5428ae.js
-|   |   |       849f6f176f66cfc8.js
 |   |   |       899b7782e7cb92a1.js
-|   |   |       8d35bccf51c5185f.js
 |   |   |       a6dad97d9634a72d.js
 |   |   |       a6dad97d9634a72d.js.map
 |   |   |       af7027598a07baa5.js
-|   |   |       b82ac29fa123ec88.js
 |   |   |       e49f81ec6498a1e6.js
 |   |   |       ee24e667dd0d7311.js
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-addc8b8369f7cdbf.js
-|   |   |       
-|   |   +---dbRSqqS3LCrIdvWC4l76n
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
 |   |   |       
 |   |   \---media
 |   |           favicon.0b3bf435.ico
@@ -2430,6 +2430,48 @@ C:.
 |   |   |   |   |           README_PATCH.md
 |   |   |   |   |           
 |   |   |   |   \---SESSION-20260423-04_A15_CLOTURE_A15
+|   |   |   |       |   EVIDENCES.md
+|   |   |   |       |   FIN_SESSION.md
+|   |   |   |       |   NOTES.md
+|   |   |   |       |   RESULTATS.md
+|   |   |   |       |   SESSION.md
+|   |   |   |       |   
+|   |   |   |       \---PATCH
+|   |   |   |               PATCH__SESSION-20260423-04_A15_CLOTURE_A15.diff
+|   |   |   |               README_PATCH.md
+|   |   |   |               
+|   |   |   +---BLOC_A16
+|   |   |   |   +---SESSION-20260423-05_A16_SEC-01
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           NO_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260423-06_A16_SEC-LOT-02
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           README_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260423-07_A16_SEC-03
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           NO_PATCH.md
+|   |   |   |   |           
+|   |   |   |   \---SESSION-20260423-08_A16_CLOTURE_A16
 |   |   |   |       |   EVIDENCES.md
 |   |   |   |       |   FIN_SESSION.md
 |   |   |   |       |   NOTES.md

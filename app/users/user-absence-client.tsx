@@ -340,7 +340,7 @@ export default function UserAbsenceClient() {
 
   return (
     <section style={{ display: "grid", gap: 16 }}>
-      <div style={{ padding: 12, border: "1px solid #333", borderRadius: 8, display: "grid", gap: 12 }}>
+      <div style={{ padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8, display: "grid", gap: 12 }}>
         <div>
           <h2 style={{ margin: 0 }}>Indisponibilités / absences</h2>
           <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
@@ -348,7 +348,7 @@ export default function UserAbsenceClient() {
           </p>
         </div>
 
-        <div style={{ padding: 12, border: "1px solid #333", borderRadius: 8 }}>
+        <div style={{ padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
           <strong>Utilisateur cible :</strong>{" "}
           {selectedUser
             ? `${selectedUser.name}${selectedUser.email ? ` (${selectedUser.email})` : ""} — rôle ${selectedUser.role}`
@@ -357,7 +357,7 @@ export default function UserAbsenceClient() {
 
         {selectedUser ? (
           <>
-            <form onSubmit={onSubmit} style={{ display: "grid", gap: 12, padding: 12, border: "1px solid #333", borderRadius: 8 }}>
+            <form onSubmit={onSubmit} style={{ display: "grid", gap: 12, padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
               <h3 style={{ margin: 0 }}>{editingAbsence ? "Modifier une absence" : "Créer une absence"}</h3>
 
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12 }}>
@@ -408,18 +408,18 @@ export default function UserAbsenceClient() {
             </form>
 
             {error ? (
-              <div style={{ padding: 12, border: "1px solid #a33", borderRadius: 8 }}>
+              <div style={{ padding: 12, border: "1px solid var(--ui-danger-border)", borderRadius: 8 }}>
                 Erreur : {error}
               </div>
             ) : null}
 
             {success ? (
-              <div style={{ padding: 12, border: "1px solid #335533", borderRadius: 8 }}>
+              <div style={{ padding: 12, border: "1px solid var(--ui-success-border)", borderRadius: 8 }}>
                 {success}
               </div>
             ) : null}
 
-            <div style={{ display: "grid", gap: 12, padding: 12, border: "1px solid #333", borderRadius: 8 }}>
+            <div style={{ display: "grid", gap: 12, padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
                 <h3 style={{ margin: 0 }}>Absences enregistrées</h3>
                 <span style={{ opacity: 0.8 }}>{items.length} élément{items.length > 1 ? "s" : ""}</span>
@@ -428,7 +428,7 @@ export default function UserAbsenceClient() {
               {loading ? <div>Chargement des absences...</div> : null}
 
               {!loading && items.length === 0 ? (
-                <div style={{ padding: 12, border: "1px solid #444", borderRadius: 8 }}>
+                <div style={{ padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
                   Aucune absence enregistrée pour cet utilisateur.
                 </div>
               ) : null}
@@ -440,7 +440,7 @@ export default function UserAbsenceClient() {
                     const isDeleting = deletingId === absence.id;
 
                     return (
-                      <article key={absence.id} style={{ padding: 12, border: "1px solid #333", borderRadius: 8, display: "grid", gap: 8 }}>
+                      <article key={absence.id} style={{ padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8, display: "grid", gap: 8 }}>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", gap: 12, flexWrap: "wrap" }}>
                           <div style={{ display: "grid", gap: 6 }}>
                             <strong>{formatIntervalLabel(absence.startAt, absence.endAt)}</strong>

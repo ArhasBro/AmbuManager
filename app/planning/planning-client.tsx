@@ -1860,14 +1860,14 @@ export default function PlanningClient({
       )}
 
       {pubConflict && (
-        <div style={{ border: "1px solid rgba(255,80,80,0.35)", borderRadius: 10, padding: 10 }}>
+        <div style={{ border: "1px solid var(--ui-danger-border)", borderRadius: 10, padding: 10 }}>
           <div style={{ fontWeight: 900, marginBottom: 6 }}>Conflit de publication</div>
           <pre style={{ margin: 0, fontSize: 12, whiteSpace: "pre-wrap" }}>{JSON.stringify(pubConflict, null, 2)}</pre>
         </div>
       )}
 
       {loading && <div>Chargement…</div>}
-      {error && <div style={{ color: "crimson" }}>Erreur : {error}</div>}
+      {error && <div style={{ color: "var(--ui-danger-text)" }}>Erreur : {error}</div>}
 
       {!loading && !error && (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(7, minmax(160px, 1fr))", gap: 10 }}>

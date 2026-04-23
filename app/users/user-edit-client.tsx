@@ -298,7 +298,7 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
   }
 
   return (
-    <form onSubmit={onSubmit} style={{ display: "grid", gap: 12, padding: 12, border: "1px solid #333", borderRadius: 8, maxWidth: 920 }}>
+    <form onSubmit={onSubmit} style={{ display: "grid", gap: 12, padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8, maxWidth: 920 }}>
       <div>
         <h2 style={{ margin: 0 }}>Modifier un utilisateur</h2>
         <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
@@ -313,12 +313,12 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
       </div>
 
       {!selectedUser ? (
-        <div style={{ padding: 10, border: "1px solid #555", borderRadius: 8 }}>
+        <div style={{ padding: 10, border: "1px solid var(--ui-border-strong)", borderRadius: 8 }}>
           Aucun utilisateur sélectionné dans la liste.
         </div>
       ) : (
         <>
-          <div style={{ padding: 10, border: "1px solid #333", borderRadius: 8 }}>
+          <div style={{ padding: 10, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
             <div>
               <strong>{selectedUser.name}</strong>
               {selectedUser.email ? ` (${selectedUser.email})` : ""} — rôle {selectedUser.role}
@@ -329,13 +329,13 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
           </div>
 
           {loadingDetails ? (
-            <div style={{ padding: 10, border: "1px solid #444", borderRadius: 8 }}>
+            <div style={{ padding: 10, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
               Chargement des permissions et du détail d’édition...
             </div>
           ) : null}
 
           {detailsError ? (
-            <div style={{ padding: 10, border: "1px solid #663333", borderRadius: 8 }}>
+            <div style={{ padding: 10, border: "1px solid var(--ui-danger-border)", borderRadius: 8 }}>
               Erreur de chargement du détail utilisateur : {detailsError}
             </div>
           ) : null}
@@ -376,7 +376,7 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
             </select>
           </label>
 
-          <fieldset style={{ display: "grid", gap: 10, padding: 12, border: "1px solid #333", borderRadius: 8 }} disabled={submitting || loadingDetails || Boolean(detailsError)}>
+          <fieldset style={{ display: "grid", gap: 10, padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8 }} disabled={submitting || loadingDetails || Boolean(detailsError)}>
             <legend>Permissions applicatives ALPHA</legend>
             <p style={{ margin: 0, opacity: 0.8 }}>
               Le rôle principal reste unique via le champ <code>role</code>. Les cases ci-dessous ajoutent ou retirent uniquement les permissions applicatives ALPHA du compte sélectionné.
@@ -390,7 +390,7 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
                 const permissionLocked = isCompanyRulesPermission && !canGovernCompanyRules;
 
                 return (
-                  <label key={permission.code} style={{ display: "grid", gap: 4, padding: 10, border: "1px solid #333", borderRadius: 8 }}>
+                  <label key={permission.code} style={{ display: "grid", gap: 4, padding: 10, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
                     <span style={{ display: "flex", gap: 8, alignItems: "center" }}>
                       <input
                         type="checkbox"
@@ -416,13 +416,13 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
       )}
 
       {error ? (
-        <div style={{ padding: 10, border: "1px solid #663333", borderRadius: 8 }}>
+        <div style={{ padding: 10, border: "1px solid var(--ui-danger-border)", borderRadius: 8 }}>
           Erreur : {error}
         </div>
       ) : null}
 
       {success ? (
-        <div style={{ padding: 10, border: "1px solid #335533", borderRadius: 8 }}>
+        <div style={{ padding: 10, border: "1px solid var(--ui-success-border)", borderRadius: 8 }}>
           {success}
         </div>
       ) : null}

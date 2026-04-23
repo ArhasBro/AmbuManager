@@ -56,12 +56,13 @@ Règle :
 ## 4. Utilisation des outils
 
 - **Production = Codex**
+- **Production = Codex** produit aussi la documentation finale et le ZIP documentaire
 - **Contrôle qualité = ChatGPT**
-- **Documentation finale + ZIP = ChatGPT**, dans la discussion de contrôle
+- **Contrôle = vérification**, pas rejoue de production
 
 Règle pratique :
 - si la session touche au dépôt, au code, aux fichiers, aux patchs, aux commandes, aux tests ou aux validations techniques → **Codex**
-- si la session consiste à contrôler, reformuler, documenter ou produire le ZIP final → **ChatGPT**
+- si la session consiste à contrôler, vérifier, cadrer ou demander des corrections → **ChatGPT**
 
 ---
 
@@ -90,7 +91,9 @@ Si la session implique une modification du code :
 Règles associées :
 - ne pas commencer par modifier les fichiers un par un de manière dispersée ;
 - ne pas produire de patch si la session n’en exige pas réellement ;
-- ne pas générer la documentation finale dans la discussion de production.
+- pour un **AUDIT** ou une **VALIDATION**, ne pas forcer artificiellement un patch ;
+- produire ensuite la documentation finale de session ;
+- produire ensuite le ZIP documentaire final.
 
 ### Nommage attendu
 - patch principal : `XXX.diff`
@@ -140,17 +143,16 @@ Aucun passage au bloc suivant sans ce verdict explicite.
 - validations terminales
 - correctif minimal séparé si nécessaire
 - `README_PATCH.md` si patch réel
-- **pas de documentation finale**
-- **pas de ZIP documentaire**
+- `NO_PATCH.md` si applicable
+- documentation finale de session
+- ZIP documentaire final
 
 ### Contrôle avec ChatGPT
 - analyse de la réponse de production uniquement
 - vérification méthodologique
 - identification de ce qui est conforme / non conforme
+- vérification du patch, des validations, de la documentation finale et du ZIP
 - prompt de retour si nécessaire
-- puis, une fois la production conforme :
-  - rédaction des documents finaux de session
-  - préparation du ZIP documentaire final
 
 ---
 

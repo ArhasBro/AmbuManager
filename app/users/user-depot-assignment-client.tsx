@@ -222,14 +222,14 @@ export default function UserDepotAssignmentClient({ availableDepots }: { availab
 
   return (
     <div style={{ display: "grid", gap: 16, maxWidth: 720 }}>
-      <div style={{ padding: 12, border: "1px solid #333", borderRadius: 8 }}>
+      <div style={{ padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
         <h2 style={{ marginTop: 0 }}>Rattachement à une base</h2>
         <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
           Affectation minimale d&apos;un utilisateur de société à un dépôt unique de la société courante. Les comptes support globaux sont exclus. L&apos;utilisateur peut aussi rester sans base.
         </p>
       </div>
 
-      <div style={{ display: "grid", gap: 12, padding: 12, border: "1px solid #333", borderRadius: 8 }}>
+      <div style={{ display: "grid", gap: 12, padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
         <label style={{ display: "grid", gap: 6 }}>
           <span>Utilisateur cible</span>
           <select
@@ -252,14 +252,14 @@ export default function UserDepotAssignmentClient({ availableDepots }: { availab
         {loading ? <p style={{ margin: 0 }}>Chargement des utilisateurs...</p> : null}
 
         {!loading && users.length === 0 ? (
-          <div style={{ padding: 10, border: "1px solid #555", borderRadius: 8 }}>
+          <div style={{ padding: 10, border: "1px solid var(--ui-border-strong)", borderRadius: 8 }}>
             Aucun utilisateur de société administrable disponible dans la société courante.
           </div>
         ) : null}
 
         {selectedUser ? (
           <>
-            <div style={{ padding: 10, border: "1px solid #333", borderRadius: 8 }}>
+            <div style={{ padding: 10, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
               <div>
                 <strong>{selectedUser.name}</strong>
                 {selectedUser.email ? ` (${selectedUser.email})` : ""} — rôle {selectedUser.role}
@@ -294,7 +294,7 @@ export default function UserDepotAssignmentClient({ availableDepots }: { availab
             </label>
 
             {availableDepots.filter((depot) => depot.isActive).length === 0 ? (
-              <div style={{ padding: 10, border: "1px solid #555", borderRadius: 8 }}>
+              <div style={{ padding: 10, border: "1px solid var(--ui-border-strong)", borderRadius: 8 }}>
                 Aucun dépôt actif disponible pour rattacher un utilisateur.
               </div>
             ) : null}
@@ -302,13 +302,13 @@ export default function UserDepotAssignmentClient({ availableDepots }: { availab
         ) : null}
 
         {error ? (
-          <div style={{ padding: 10, border: "1px solid #663333", borderRadius: 8 }}>
+          <div style={{ padding: 10, border: "1px solid var(--ui-danger-border)", borderRadius: 8 }}>
             Erreur : {error}
           </div>
         ) : null}
 
         {success ? (
-          <div style={{ padding: 10, border: "1px solid #335533", borderRadius: 8 }}>
+          <div style={{ padding: 10, border: "1px solid var(--ui-success-border)", borderRadius: 8 }}>
             {success}
           </div>
         ) : null}
