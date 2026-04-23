@@ -617,6 +617,49 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |       |   SESSION.md
 |   |   |       |   
 |   |   |       \---PATCH
+|   |   |               LIVRABLES__SESSION-20260423-08_A16_CLOTURE_A16_A_PLAT.zip
+|   |   |               NO_PATCH.md
+|   |   |               README_PATCH.md
+|   |   |               
+|   |   +---BLOC_A17
+|   |   |   +---SESSION-20260423-09_A17_RGPD-01
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           NO_PATCH.md
+|   |   |   |           
+|   |   |   +---SESSION-20260423-10_A17_RGPD-LOT-02
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           README_PATCH.md
+|   |   |   |           
+|   |   |   +---SESSION-20260423-11_A17_RGPD-03
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           NO_PATCH.md
+|   |   |   |           
+|   |   |   \---SESSION-20260423-12_A17_CLOTURE_A17
+|   |   |       |   EVIDENCES.md
+|   |   |       |   FIN_SESSION.md
+|   |   |       |   NOTES.md
+|   |   |       |   RESULTATS.md
+|   |   |       |   SESSION.md
+|   |   |       |   
+|   |   |       \---PATCH
 |   |   |               README_PATCH.md
 |   |   |               
 |   |   +---BLOC_A2

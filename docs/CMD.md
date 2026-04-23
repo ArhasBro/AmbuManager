@@ -169,8 +169,8 @@ IMPORTANT
 
 Références des sessions :
 
-- SESSION-20260423-08_A16_CLOTURE_A16
-- **CLOTURE_A16 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc Sécurité
+- SESSION-20260423-10_A17_RGPD-LOT-02
+- **RGPD-LOT-02 — CORRECTION+COMPLÉTION** — Correction et/ou complétion de la base RGPD : cartographie des données, finalités, accès, conservation, registre de traitement, besoins d’export/correction/suppression, mentions d’information
 ------------------------------------
 
 Voici sa réponse ainsi que les documents généré :
