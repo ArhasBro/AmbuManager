@@ -143,13 +143,13 @@ partiels ou absents.
 #### Points a confirmer
 
 - Existence d'un registre de traitement, de mentions d'information ou d'une
-  politique RGPD hors depot : INFORMATION NON FOURNIE - A CONFIRMER.
+  politique RGPD hors depot : INFORMATION NON FOURNIE — À CONFIRMER.
 - Existence de jobs d'infrastructure pour purge, retention ou suppression
-  differenciee des logs / exports / absences : INFORMATION NON FOURNIE - A CONFIRMER.
+  differenciee des logs / exports / absences : INFORMATION NON FOURNIE — À CONFIRMER.
 - Existence d'un circuit support hors repo pour interventions nominatives et
-  justification des acces cross-tenant : INFORMATION NON FOURNIE - A CONFIRMER.
+  justification des acces cross-tenant : INFORMATION NON FOURNIE — À CONFIRMER.
 - Existence d'un besoin produit valide de suppression definitive d'absences avec
-  conservation d'historique separee : INFORMATION NON FOURNIE - A CONFIRMER.
+  conservation d'historique separee : INFORMATION NON FOURNIE — À CONFIRMER.
 
 ### Verdict formel d'audit
 
