@@ -630,6 +630,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
+|   |   |   |           LIVRABLES__SESSION-20260423-09_A17_RGPD-01_A_PLAT.zip
 |   |   |   |           NO_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260423-10_A17_RGPD-LOT-02
