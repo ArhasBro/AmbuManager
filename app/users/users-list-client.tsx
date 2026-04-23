@@ -203,7 +203,7 @@ export default function UsersListClient() {
 
   return (
     <section style={{ display: "grid", gap: 16 }}>
-      <div style={{ padding: 12, border: "1px solid #333", borderRadius: 8, display: "grid", gap: 12 }}>
+      <div className="panel" style={{ display: "grid", gap: 12 }}>
         <div>
           <h2 style={{ margin: 0 }}>Liste utilisateurs</h2>
           <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
@@ -234,10 +234,10 @@ export default function UsersListClient() {
           </label>
         </div>
 
-        {loading ? <div style={{ padding: 12, border: "1px solid #444", borderRadius: 8 }}>Chargement de la liste...</div> : null}
+        {loading ? <div className="panel-soft">Chargement de la liste...</div> : null}
 
         {!loading && error ? (
-          <div style={{ padding: 12, border: "1px solid #a33", borderRadius: 8 }}>
+          <div className="panel status-danger" style={{ padding: 12 }}>
             Erreur de chargement : {error}
           </div>
         ) : null}
@@ -245,18 +245,18 @@ export default function UsersListClient() {
         {!loading && !error ? (
           <>
             {rows.length === 0 ? (
-              <div style={{ padding: 12, border: "1px solid #444", borderRadius: 8 }}>
+              <div className="panel-soft">
                 Aucun utilisateur trouvé pour ces critères.
               </div>
             ) : (
-              <div style={{ overflowX: "auto", border: "1px solid #333", borderRadius: 8 }}>
+              <div style={{ overflowX: "auto", border: "1px solid var(--ui-border)", borderRadius: 8 }}>
                 <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 720 }}>
                   <thead>
                     <tr>
-                      <th style={{ textAlign: "left", padding: 10, borderBottom: "1px solid #333" }}>Nom</th>
-                      <th style={{ textAlign: "left", padding: 10, borderBottom: "1px solid #333" }}>Email</th>
-                      <th style={{ textAlign: "left", padding: 10, borderBottom: "1px solid #333" }}>Rôle</th>
-                      <th style={{ textAlign: "left", padding: 10, borderBottom: "1px solid #333" }}>Base</th>
+                      <th style={{ textAlign: "left", padding: 10, borderBottom: "1px solid var(--ui-border)" }}>Nom</th>
+                      <th style={{ textAlign: "left", padding: 10, borderBottom: "1px solid var(--ui-border)" }}>Email</th>
+                      <th style={{ textAlign: "left", padding: 10, borderBottom: "1px solid var(--ui-border)" }}>Rôle</th>
+                      <th style={{ textAlign: "left", padding: 10, borderBottom: "1px solid var(--ui-border)" }}>Base</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -267,14 +267,14 @@ export default function UsersListClient() {
                         <tr
                           key={user.id}
                           onClick={() => setSelectedUserId(user.id)}
-                          style={{ cursor: "pointer", background: isSelected ? "rgba(255,255,255,0.06)" : "transparent" }}
+                          style={{ cursor: "pointer", background: isSelected ? "var(--ui-selected-row)" : "transparent" }}
                         >
-                          <td style={{ padding: 10, borderBottom: "1px solid #222" }}>
+                          <td style={{ padding: 10, borderBottom: "1px solid var(--ui-border)" }}>
                             <strong>{user.name}</strong>
                           </td>
-                          <td style={{ padding: 10, borderBottom: "1px solid #222" }}>{user.email || "—"}</td>
-                          <td style={{ padding: 10, borderBottom: "1px solid #222" }}>{user.role}</td>
-                          <td style={{ padding: 10, borderBottom: "1px solid #222" }}>{depotLabel(user.depot)}</td>
+                          <td style={{ padding: 10, borderBottom: "1px solid var(--ui-border)" }}>{user.email || "—"}</td>
+                          <td style={{ padding: 10, borderBottom: "1px solid var(--ui-border)" }}>{user.role}</td>
+                          <td style={{ padding: 10, borderBottom: "1px solid var(--ui-border)" }}>{depotLabel(user.depot)}</td>
                         </tr>
                       );
                     })}
@@ -298,7 +298,7 @@ export default function UsersListClient() {
               </div>
             </div>
 
-            <div style={{ padding: 12, border: "1px solid #333", borderRadius: 8 }}>
+            <div className="panel-soft">
               <strong>Sélection actuelle :</strong>{" "}
               {selectedUser ? (
                 <>

@@ -328,7 +328,7 @@ export default function ManualPlanningPanel({
   const userChoices = canViewGlobal ? [{ id: "", name: "Toute la société" }, ...availableUsers] : [currentUser];
 
   return (
-    <section style={{ border: "1px solid rgba(255,255,255,0.14)", borderRadius: 12, padding: 16, marginBottom: 18, display: "grid", gap: 14 }}>
+    <section className="panel" style={{ marginBottom: 18, display: "grid", gap: 14 }}>
       <div>
         <div style={{ fontSize: 20, fontWeight: 800 }}>Planning manuel</div>
         <div style={{ opacity: 0.75, marginTop: 4 }}>Vue jour / semaine / mois, création manuelle, modification publiée, annulation logique et historique minimal.</div>
@@ -364,7 +364,7 @@ export default function ManualPlanningPanel({
       </div>
 
       {canEditPlanning && (
-        <div style={{ border: "1px solid rgba(255,255,255,0.12)", borderRadius: 12, padding: 12, display: "grid", gap: 8 }}>
+        <div style={{ border: "1px solid var(--ui-border)", borderRadius: 12, padding: 12, display: "grid", gap: 8 }}>
           <div style={{ fontWeight: 700 }}>Ajouter un shift publié</div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 8 }}>
             <input type="date" value={createForm.date} onChange={(e) => setCreateForm((v) => ({ ...v, date: e.target.value }))} />
@@ -422,7 +422,7 @@ export default function ManualPlanningPanel({
             const dayItems = groupedByDay.get(key) ?? [];
             const isCurrentMonth = day.getMonth() === cursorDate.getMonth();
             return (
-              <div key={key} style={{ border: "1px solid rgba(255,255,255,0.12)", borderRadius: 10, padding: 8, minHeight: 120, opacity: isCurrentMonth ? 1 : 0.55 }}>
+              <div key={key} style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 8, minHeight: 120, opacity: isCurrentMonth ? 1 : 0.55 }}>
                 <div style={{ fontWeight: 700, marginBottom: 6 }}>{day.toLocaleDateString("fr-FR", { weekday: "short", day: "2-digit" })}</div>
                 {dayItems.length === 0 ? <div style={{ opacity: 0.6, fontSize: 12 }}>Aucun shift</div> : (
                   <div style={{ display: "grid", gap: 6 }}>
@@ -476,7 +476,7 @@ function ShiftCard({
   canViewAudit: boolean;
 }) {
   return (
-    <div style={{ border: "1px solid rgba(255,255,255,0.14)", borderRadius: 12, padding: 12, display: "grid", gap: 8 }}>
+    <div style={{ border: "1px solid var(--ui-border)", borderRadius: 12, padding: 12, display: "grid", gap: 8 }}>
       <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "flex-start" }}>
         <div>
           <div style={{ fontWeight: 800 }}>{shift.template?.name ?? "Sans template"} — {shift.template?.category ?? "N/A"}</div>
@@ -495,7 +495,7 @@ function ShiftCard({
       </div>
 
       {isEditing && (
-        <div style={{ border: "1px solid rgba(255,255,255,0.12)", borderRadius: 10, padding: 10, display: "grid", gap: 8 }}>
+        <div style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 10, display: "grid", gap: 8 }}>
           <div style={{ fontWeight: 700 }}>Modifier le shift publié</div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 8 }}>
             <input type="date" value={editForm.date} onChange={(e) => setEditForm((v) => ({ ...v, date: e.target.value }))} />

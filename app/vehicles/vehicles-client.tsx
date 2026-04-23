@@ -381,19 +381,19 @@ export default function VehiclesClient({
   }
 
   return (
-    <div style={{ marginTop: 20 }}>
-      <div style={{ padding: 16, border: "1px solid #ddd", borderRadius: 10 }}>
+    <div style={{ display: "grid", gap: 16 }}>
+      <div className="panel" style={{ padding: 16 }}>
         <h2 style={{ marginTop: 0 }}>Ajouter un véhicule</h2>
         {canCreateVehicle ? (
           <AddVehicleForm onSubmit={handleAddVehicle} disabled={isSubmitting} />
         ) : (
           <p style={{ margin: 0, opacity: 0.8 }}>Création réservée au profil ADMIN.</p>
         )}
-        {error && <p style={{ marginTop: 10, color: "crimson" }}>{error}</p>}
-        {successMessage && <p style={{ marginTop: 10, color: "green" }}>{successMessage}</p>}
+        {error && <p className="status-danger" style={{ marginTop: 10, padding: 10, borderRadius: 8 }}>{error}</p>}
+        {successMessage && <p className="status-success" style={{ marginTop: 10, padding: 10, borderRadius: 8 }}>{successMessage}</p>}
       </div>
 
-      <div style={{ marginTop: 20 }}>
+      <div className="panel" style={{ display: "grid", gap: 12 }}>
         <p style={{ marginTop: 0, opacity: 0.8 }}>
           État documentaire affiché sur la base des 4 champs minimaux existants. Seuil local UI pour “bientôt expiré” : {DOCUMENT_WARNING_WINDOW_DAYS} jours.
         </p>
@@ -472,7 +472,7 @@ export default function VehiclesClient({
                       disabled={isSavingEdit || isArchiving}
                       style={{
                         padding: "4px 10px",
-                        border: "1px solid #ccc",
+                        border: "1px solid var(--ui-border)",
                         borderRadius: 6,
                         cursor: isSavingEdit || isArchiving ? "not-allowed" : "pointer",
                       }}
@@ -486,7 +486,7 @@ export default function VehiclesClient({
                       disabled={isBusy}
                       style={{
                         padding: "4px 10px",
-                        border: "1px solid #ccc",
+                        border: "1px solid var(--ui-border)",
                         borderRadius: 6,
                         cursor: isBusy ? "not-allowed" : "pointer",
                       }}
@@ -508,7 +508,7 @@ export default function VehiclesClient({
                         flexWrap: "wrap",
                         alignItems: "center",
                         padding: 12,
-                        border: "1px solid #eee",
+                        border: "1px solid var(--ui-border)",
                         borderRadius: 8,
                       }}
                     >
@@ -599,7 +599,7 @@ export default function VehiclesClient({
                         disabled={isSavingEdit || isArchiving}
                         style={{
                           padding: "6px 10px",
-                          border: "1px solid #ccc",
+                          border: "1px solid var(--ui-border)",
                           borderRadius: 6,
                           cursor: isSavingEdit || isArchiving ? "not-allowed" : "pointer",
                         }}

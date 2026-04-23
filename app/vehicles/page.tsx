@@ -1,8 +1,10 @@
+import Link from "next/link";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
+
+import { authOptions } from "@/lib/auth";
 import { canManageVehicles } from "@/lib/permissions";
+import { prisma } from "@/lib/prisma";
 import { serializeDates } from "@/lib/serializers";
 
 import VehiclesClient from "./vehicles-client";
@@ -56,11 +58,20 @@ export default async function VehiclesPage() {
   ]);
 
   return (
-    <div style={{ padding: 40 }}>
-      <h1>Véhicules</h1>
-      <p style={{ marginTop: 8, opacity: 0.8 }}>
-        Gestion minimale des véhicules et rattachement optionnel à une base active de la société courante.
-      </p>
+    <div className="page-wrap">
+      <div className="page-head">
+        <div>
+          <h1 className="page-title">Vehicules</h1>
+          <p className="page-description">
+            Gestion de la flotte active et rattachement optionnel a une base de la societe courante.
+          </p>
+        </div>
+
+        <Link className="page-back" href="/dashboard">
+          Retour dashboard
+        </Link>
+      </div>
+
       <VehiclesClient
         initialVehicles={serializeDates(vehicles)}
         availableDepots={depots}

@@ -216,8 +216,8 @@ function RoleCheckboxGroup({
               gap: 6,
               padding: "6px 10px",
               borderRadius: 999,
-              border: "1px solid rgba(0,0,0,0.12)",
-              background: checked ? "rgba(29, 78, 216, 0.08)" : "transparent",
+              border: "1px solid var(--ui-border)",
+              background: checked ? "var(--ui-selected-row)" : "transparent",
             }}
           >
             <input
@@ -585,7 +585,7 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
 
   return (
     <div style={{ display: "grid", gap: 16 }}>
-      <section style={{ border: "1px solid rgba(0,0,0,0.1)", borderRadius: 12, padding: 16, display: "grid", gap: 12 }}>
+      <section className="panel" style={{ display: "grid", gap: 12 }}>
         <div>
           <h2 style={{ margin: 0 }}>Créer un template</h2>
           <p style={{ margin: "8px 0 0 0", opacity: 0.72 }}>
@@ -603,10 +603,10 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
       </section>
 
       {error ? (
-        <div style={{ padding: 12, borderRadius: 10, border: "1px solid #fecaca", backgroundColor: "#fef2f2", color: "#991b1b" }}>{error}</div>
+        <div className="status-danger" style={{ padding: 12, borderRadius: 10 }}>{error}</div>
       ) : null}
       {successMessage ? (
-        <div style={{ padding: 12, borderRadius: 10, border: "1px solid #bbf7d0", backgroundColor: "#f0fdf4", color: "#166534" }}>
+        <div className="status-success" style={{ padding: 12, borderRadius: 10 }}>
           {successMessage}
         </div>
       ) : null}
@@ -632,7 +632,7 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
             <article
               key={template.id}
               style={{
-                border: "1px solid rgba(0,0,0,0.12)",
+                border: "1px solid var(--ui-border)",
                 borderLeft: `10px solid ${normalizeTemplateColor(template.color) ?? DEFAULT_COLOR}`,
                 borderRadius: 12,
                 padding: 16,

@@ -30,17 +30,17 @@ type DashboardMetric = {
 
 const ROLE_LABELS: Record<string, string> = {
   ADMIN: "Administration",
-  GERANT: "Gérance",
+  GERANT: "Gerance",
   BUREAU: "Bureau",
-  ADE: "Ambulancier diplômé d'État",
+  ADE: "Ambulancier diplome d'Etat",
   AA: "Auxiliaire ambulancier",
   TAXI: "Taxi",
-  REGULATEUR: "Régulation",
+  REGULATEUR: "Regulation",
 };
 
 function getProfileLabel(role?: string | null, platformRole?: string | null): string {
   if (platformRole === "SUPPORT") return "Support global";
-  if (!role) return "Profil non renseigné";
+  if (!role) return "Profil non renseigne";
   return ROLE_LABELS[role] ?? role;
 }
 
@@ -52,11 +52,11 @@ function SectionCard({ title, description, href }: DashboardLink) {
         display: "grid",
         gap: 8,
         padding: 16,
-        border: "1px solid #d0d7de",
+        border: "1px solid var(--ui-border)",
         borderRadius: 12,
         color: "inherit",
         textDecoration: "none",
-        background: "#fff",
+        background: "var(--ui-surface)",
         minHeight: 112,
       }}
     >
@@ -138,8 +138,8 @@ export default async function DashboardPage() {
   const metrics: DashboardMetric[] = nativeAdminMetricsAllowed
     ? [
         { label: "Utilisateurs actifs", value: activeUsersCount },
-        { label: "Véhicules actifs", value: activeVehiclesCount },
-        { label: "Dépôts actifs", value: activeDepotsCount },
+        { label: "Vehicules actifs", value: activeVehiclesCount },
+        { label: "Depots actifs", value: activeDepotsCount },
         { label: "Templates actifs", value: activeTemplatesCount },
       ]
     : [];
@@ -150,8 +150,8 @@ export default async function DashboardPage() {
           href: "/planning",
           title: planningGlobalAllowed ? "Planning global" : "Mon planning",
           description: planningGlobalAllowed
-            ? "Consulter le planning de la société selon vos droits réels."
-            : "Accéder à votre planning sans exposer les modules d'administration.",
+            ? "Consulter le planning de la societe selon vos droits reels."
+            : "Acceder a votre planning sans exposer les modules d'administration.",
         },
       ]
     : [];
@@ -161,26 +161,26 @@ export default async function DashboardPage() {
   if (companyScopedSession && (companyProfileAllowed || companyRulesAllowed)) {
     adminLinks.push({
       href: "/company",
-      title: "Société",
+      title: "Societe",
       description: companyProfileAllowed
-        ? "Profil société et règles métier de la société courante."
-        : "Accès aux règles métier réellement déléguées sur la société courante.",
+        ? "Profil societe et regles metier de la societe courante."
+        : "Acces aux regles metier deleguees sur la societe courante.",
     });
   }
 
   if (companyScopedSession && companyProfileAllowed) {
     adminLinks.push({
       href: "/onboarding",
-      title: "Onboarding société pilote",
-      description: "Parcours manuel guidé et imports initiaux simples pour démarrer une société pilote.",
+      title: "Onboarding societe pilote",
+      description: "Parcours manuel guide et imports initiaux simples pour demarrer.",
     });
   }
 
   if (companyScopedSession && depotsAllowed) {
     adminLinks.push({
       href: "/depots",
-      title: "Bases / dépôts",
-      description: "Gérer les dépôts actifs de la société courante.",
+      title: "Bases / depots",
+      description: "Gerer les depots actifs de la societe courante.",
     });
   }
 
@@ -188,15 +188,15 @@ export default async function DashboardPage() {
     adminLinks.push({
       href: "/users",
       title: "Utilisateurs",
-      description: "Créer, modifier, archiver et administrer les comptes de la société.",
+      description: "Creer, modifier, archiver et administrer les comptes de la societe.",
     });
   }
 
   if (companyScopedSession && vehiclesAllowed) {
     adminLinks.push({
       href: "/vehicles",
-      title: "Véhicules",
-      description: "Consulter et gérer la flotte réellement autorisée.",
+      title: "Vehicules",
+      description: "Consulter et gerer la flotte reellement autorisee.",
     });
   }
 
@@ -204,7 +204,7 @@ export default async function DashboardPage() {
     adminLinks.push({
       href: "/templates",
       title: "Templates",
-      description: "Gérer les templates de shifts déjà disponibles dans le dépôt.",
+      description: "Gerer les templates de shifts disponibles dans le depot.",
     });
   }
 
@@ -212,74 +212,47 @@ export default async function DashboardPage() {
   const showAdminSection = adminDashboardAllowed;
 
   return (
-    <div style={{ padding: 16, display: "grid", gap: 16 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+    <div className="page-wrap">
+      <div className="page-head">
         <div>
-          <h1 style={{ margin: 0 }}>Portail d&apos;accueil</h1>
-          <p style={{ margin: "8px 0 0 0", opacity: 0.82 }}>
-            Dashboard ALPHA centré sur l&apos;orientation vers les modules réellement accessibles.
+          <h1 className="page-title">Portail d&apos;accueil</h1>
+          <p className="page-description">
+            Vue metier des acces modules filtres par role et permissions.
           </p>
         </div>
         <LogoutButton />
       </div>
 
-      <section
-        style={{
-          display: "grid",
-          gap: 8,
-          padding: 16,
-          border: "1px solid #d0d7de",
-          borderRadius: 12,
-          background: "#fff",
-        }}
-      >
+      <section className="panel" style={{ display: "grid", gap: 8 }}>
         <strong>Bienvenue {user.name ?? user.email ?? "Utilisateur"}</strong>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-          <span style={{ padding: "6px 10px", borderRadius: 999, background: "#f3f4f6" }}>
+          <span style={{ padding: "6px 10px", borderRadius: 999, background: "var(--ui-surface-strong)" }}>
             Profil : {getProfileLabel(user.role, user.platformRole)}
           </span>
-          <span style={{ padding: "6px 10px", borderRadius: 999, background: "#f3f4f6" }}>
-            Société : {companyScopedSession ? "rattachée" : "non rattachée"}
+          <span style={{ padding: "6px 10px", borderRadius: 999, background: "var(--ui-surface-strong)" }}>
+            Societe : {companyScopedSession ? "rattachee" : "non rattachee"}
           </span>
         </div>
         <p style={{ margin: 0, opacity: 0.82 }}>
-          Les liens ci-dessous sont filtrés pour éviter d&apos;afficher des entrées qui ne débouchent pas sur un accès réellement exploitable.
+          Les liens ci-dessous sont filtres pour eviter les entrees qui ne debouchent pas sur un acces reel.
         </p>
       </section>
 
       {!companyScopedSession ? (
-        <section
-          style={{
-            display: "grid",
-            gap: 8,
-            padding: 16,
-            border: "1px solid #f59e0b",
-            borderRadius: 12,
-            background: "#fffbeb",
-          }}
-        >
-          <strong>Compte sans société courante</strong>
+        <section className="panel status-warning" style={{ display: "grid", gap: 8 }}>
+          <strong>Compte sans societe courante</strong>
           <p style={{ margin: 0, opacity: 0.85 }}>
-            Cette session n&apos;est pas rattachée à une société cliente. Le portail ALPHA n&apos;expose donc aucun module société tant qu&apos;un contexte société n&apos;est pas disponible.
+            La session n&apos;est pas rattachee a une societe cliente. Les modules societe restent masques.
           </p>
         </section>
       ) : null}
 
       {showTerrainSection ? (
-        <section
-          style={{
-            display: "grid",
-            gap: 12,
-            padding: 16,
-            border: "1px solid #d0d7de",
-            borderRadius: 12,
-            background: "#fff",
-          }}
-        >
+        <section className="panel" style={{ display: "grid", gap: 12 }}>
           <div>
             <h2 style={{ margin: 0 }}>Vue terrain</h2>
             <p style={{ margin: "8px 0 0 0", opacity: 0.82 }}>
-              Orientation simple vers les accès opérationnels, sans exposition des modules d&apos;administration.
+              Orientation vers les acces operationnels sans exposition des modules d&apos;administration.
             </p>
           </div>
 
@@ -291,27 +264,18 @@ export default async function DashboardPage() {
             </div>
           ) : (
             <p style={{ margin: 0, opacity: 0.82 }}>
-              Aucun module terrain supplémentaire n&apos;est actuellement exploitable depuis cette session.
+              Aucun module terrain supplementaire n&apos;est actuellement exploitable.
             </p>
           )}
         </section>
       ) : null}
 
       {showAdminSection ? (
-        <section
-          style={{
-            display: "grid",
-            gap: 12,
-            padding: 16,
-            border: "1px solid #d0d7de",
-            borderRadius: 12,
-            background: "#fff",
-          }}
-        >
+        <section className="panel" style={{ display: "grid", gap: 12 }}>
           <div>
-            <h2 style={{ margin: 0 }}>Vue admin / gérance</h2>
+            <h2 style={{ margin: 0 }}>Vue admin / gerance</h2>
             <p style={{ margin: "8px 0 0 0", opacity: 0.82 }}>
-              Distribution des accès administratifs selon les permissions réellement consommées par les pages cibles.
+              Distribution des acces administratifs selon les permissions reellement consommees.
             </p>
           </div>
 
@@ -320,13 +284,10 @@ export default async function DashboardPage() {
               {metrics.map((metric) => (
                 <div
                   key={metric.label}
+                  className="panel-soft"
                   style={{
                     display: "grid",
                     gap: 6,
-                    padding: 16,
-                    border: "1px solid #d0d7de",
-                    borderRadius: 12,
-                    background: "#f8fafc",
                   }}
                 >
                   <span style={{ opacity: 0.78 }}>{metric.label}</span>
@@ -344,32 +305,23 @@ export default async function DashboardPage() {
             </div>
           ) : (
             <p style={{ margin: 0, opacity: 0.82 }}>
-              Aucun module administratif supplémentaire n&apos;est réellement accessible depuis cette session.
+              Aucun module administratif supplementaire n&apos;est reellement accessible.
             </p>
           )}
         </section>
       ) : null}
 
       {!showTerrainSection && !showAdminSection && companyScopedSession ? (
-        <section
-          style={{
-            display: "grid",
-            gap: 8,
-            padding: 16,
-            border: "1px solid #d0d7de",
-            borderRadius: 12,
-            background: "#fff",
-          }}
-        >
-          <strong>Aucun accès module exploitable</strong>
+        <section className="panel" style={{ display: "grid", gap: 8 }}>
+          <strong>Aucun acces module exploitable</strong>
           <p style={{ margin: 0, opacity: 0.82 }}>
-            Aucun module n&apos;est actuellement publié sur le dashboard pour cette session au regard des permissions et rôles réellement détectés.
+            Aucun module n&apos;est actuellement publie sur le dashboard pour cette session.
           </p>
         </section>
       ) : null}
 
       {process.env.NODE_ENV !== "production" ? (
-        <div style={{ padding: 12, border: "1px solid #333", borderRadius: 8 }}>
+        <div className="panel-soft">
           <h2 style={{ marginTop: 0 }}>Session (debug)</h2>
           <pre style={{ margin: 0, whiteSpace: "pre-wrap" }}>{JSON.stringify(session, null, 2)}</pre>
         </div>

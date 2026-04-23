@@ -40,17 +40,18 @@ export default async function TemplatesPage() {
   });
 
   return (
-    <div style={{ padding: 16, display: "grid", gap: 16 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+    <div className="page-wrap">
+      <div className="page-head">
         <div>
-          <h1 style={{ margin: 0 }}>Templates de shifts</h1>
-          <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
-            Gestion minimale ALPHA des templates de la société courante : création, édition, désactivation,
-            archivage logique, couleur, composition d’équipe et templates non horodatés.
+          <h1 className="page-title">Templates de shifts</h1>
+          <p className="page-description">
+            Base ALPHA: creation, edition, activation, archivage logique, couleur et composition d&apos;equipe.
           </p>
         </div>
 
-        <Link href="/dashboard">Retour dashboard</Link>
+        <Link className="page-back" href="/dashboard">
+          Retour dashboard
+        </Link>
       </div>
 
       <TemplatesClient initialTemplates={serializeDates(templates)} />

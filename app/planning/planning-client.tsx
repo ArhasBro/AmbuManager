@@ -1453,7 +1453,7 @@ export default function PlanningClient({
         canExportPlanning={canExportPlanning}
       />
 
-      <section style={{ border: "1px solid rgba(255,255,255,0.12)", borderRadius: 10, padding: 12, display: "grid", gap: 8 }}>
+      <section style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 12, display: "grid", gap: 8 }}>
         <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
           <div>
             <div style={{ fontWeight: 800 }}>Zone legacy / autoschedule</div>
@@ -1517,7 +1517,7 @@ export default function PlanningClient({
             onClick={() => setMode("SIMPLE")}
             style={{
               fontWeight: mode === "SIMPLE" ? 700 : 400,
-              border: "1px solid rgba(255,255,255,0.2)",
+              border: "1px solid var(--ui-border-strong)",
               padding: "6px 10px",
               borderRadius: 8,
             }}
@@ -1529,7 +1529,7 @@ export default function PlanningClient({
             onClick={() => setMode("AMBULANCE")}
             style={{
               fontWeight: mode === "AMBULANCE" ? 700 : 400,
-              border: "1px solid rgba(255,255,255,0.2)",
+              border: "1px solid var(--ui-border-strong)",
               padding: "6px 10px",
               borderRadius: 8,
             }}
@@ -1543,7 +1543,7 @@ export default function PlanningClient({
               disabled={saving || !companyRuleLoaded}
               style={{
                 marginLeft: 8,
-                border: "1px solid rgba(255,255,255,0.25)",
+                border: "1px solid var(--ui-border-strong)",
                 padding: "6px 10px",
                 borderRadius: 8,
                 opacity: saving ? 0.7 : 1,
@@ -1574,7 +1574,7 @@ export default function PlanningClient({
                 onClick={previewMatch}
                 disabled={matchDisabled}
                 style={{
-                  border: "1px solid rgba(255,255,255,0.25)",
+                  border: "1px solid var(--ui-border-strong)",
                   padding: "6px 10px",
                   borderRadius: 8,
                   opacity: matchDisabled ? 0.6 : 1,
@@ -1588,7 +1588,7 @@ export default function PlanningClient({
                 onClick={applyMatch}
                 disabled={matchDisabled || applyBlocked}
                 style={{
-                  border: "1px solid rgba(255,255,255,0.25)",
+                  border: "1px solid var(--ui-border-strong)",
                   padding: "6px 10px",
                   borderRadius: 8,
                   opacity: matchDisabled || applyBlocked ? 0.6 : 1,
@@ -1618,7 +1618,7 @@ export default function PlanningClient({
                 onClick={generateWeek}
                 disabled={genLoading}
                 style={{
-                  border: "1px solid rgba(255,255,255,0.25)",
+                  border: "1px solid var(--ui-border-strong)",
                   padding: "6px 10px",
                   borderRadius: 8,
                   opacity: genLoading ? 0.7 : 1,
@@ -1632,7 +1632,7 @@ export default function PlanningClient({
                 onClick={publishLastRun}
                 disabled={publishDisabled}
                 style={{
-                  border: "1px solid rgba(255,255,255,0.25)",
+                  border: "1px solid var(--ui-border-strong)",
                   padding: "6px 10px",
                   borderRadius: 8,
                   opacity: publishDisabled ? 0.6 : 1,
@@ -1646,7 +1646,7 @@ export default function PlanningClient({
                 onClick={cancelLastRun}
                 disabled={cancelLoading || !lastRunId || (lastRunStatus !== null && lastRunStatus !== "DRAFT")}
                 style={{
-                  border: "1px solid rgba(255,255,255,0.25)",
+                  border: "1px solid var(--ui-border-strong)",
                   padding: "6px 10px",
                   borderRadius: 8,
                   opacity: cancelLoading ? 0.7 : 1,
@@ -1660,7 +1660,7 @@ export default function PlanningClient({
         </div>
       </div>
 
-      <div style={{ border: "1px solid rgba(255,255,255,0.12)", borderRadius: 10, padding: 10, opacity: 0.92 }}>
+      <div style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 10, opacity: 0.92 }}>
         {canViewGlobal
           ? "Consultation centrée utilisateur : sélectionnez un collègue autorisé pour afficher uniquement son planning."
           : "Consultation limitée à votre planning personnel selon vos permissions."}
@@ -1672,7 +1672,7 @@ export default function PlanningClient({
       {matchMsg && <div style={{ opacity: 0.9 }}>{matchMsg}</div>}
 
       {lastRunId && (
-        <div style={{ border: "1px solid rgba(255,255,255,0.18)", borderRadius: 10, padding: 10, marginTop: 8 }}>
+        <div style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 10, marginTop: 8 }}>
           <div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: "baseline" }}>
             <div style={{ fontWeight: 900 }}>Historique du run courant</div>
             <div style={{ fontSize: 12, opacity: 0.75 }}>
@@ -1693,7 +1693,7 @@ export default function PlanningClient({
           ) : (
             <div style={{ marginTop: 8, display: "grid", gap: 8, maxHeight: 220, overflow: "auto" }}>
               {runAuditLogs.map((log) => (
-                <div key={log.id} style={{ border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, padding: 8 }}>
+                <div key={log.id} style={{ border: "1px solid var(--ui-border)", borderRadius: 8, padding: 8 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: "baseline" }}>
                     <div style={{ fontWeight: 800 }}>{log.action}</div>
                     <div style={{ fontSize: 12, opacity: 0.75 }}>{dateTimeFR(log.createdAt)}</div>
@@ -1718,7 +1718,7 @@ export default function PlanningClient({
       )}
 
       {runMatchQuality && (
-        <div style={{ border: "1px solid rgba(255,255,255,0.18)", borderRadius: 10, padding: 10, marginTop: 8 }}>
+        <div style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 10, marginTop: 8 }}>
           <div style={{ fontWeight: 900 }}>
             Score matching du run : {runMatchQuality.overall}/100
             {runMatchingVariant ? ` (${runMatchingVariant.label})` : ""}
@@ -1743,7 +1743,7 @@ export default function PlanningClient({
       )}
 
       {matchQuality && (
-        <div style={{ border: "1px solid rgba(255,255,255,0.18)", borderRadius: 10, padding: 10, marginTop: 8 }}>
+        <div style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 10, marginTop: 8 }}>
           <div style={{ fontWeight: 900 }}>Score qualité planning : {matchQuality.overall}/100{matchPreviewVariant ? ` (${MATCHING_VARIANTS.find((item) => item.key === matchPreviewVariant)?.label ?? matchPreviewVariant})` : ""}</div>
           <div style={{ fontSize: 12, opacity: 0.9, marginTop: 6 }}>
             Couverture employés {matchQuality.coverage.score}/100 — Couverture véhicules {matchQuality.vehicleCoverage.score}/100 — Stabilité {matchQuality.stability.score}/100 — Équité {matchQuality.equity.score}/100
@@ -1765,7 +1765,7 @@ export default function PlanningClient({
       {cancelMsg && <div style={{ opacity: 0.9 }}>{cancelMsg}</div>}
 
       {(matchPreview || matchApplied) && (
-        <div style={{ border: "1px solid rgba(255,255,255,0.18)", borderRadius: 10, padding: 10 }}>
+        <div style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 10 }}>
           <div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: "baseline" }}>
             <div style={{ fontWeight: 900 }}>Auto-affectation autoschedule</div>
             <button
@@ -1778,7 +1778,7 @@ export default function PlanningClient({
                 setMatchPreviewVariant(null);
               }}
               style={{
-                border: "1px solid rgba(255,255,255,0.25)",
+                border: "1px solid var(--ui-border-strong)",
                 padding: "4px 8px",
                 borderRadius: 8,
                 fontSize: 12,
@@ -1823,7 +1823,7 @@ export default function PlanningClient({
                   const shiftScore = matchShiftScoresById.get(it.shiftId);
 
                   return (
-                    <tr key={`${it.shiftId}-${it.target}-${index}`} style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+                    <tr key={`${it.shiftId}-${it.target}-${index}`} style={{ borderTop: "1px solid var(--ui-border)" }}>
                       <td style={{ padding: "6px 6px", opacity: 0.9 }}>{formatMatchingTargetLabel(it.target)}</td>
                       <td style={{ padding: "6px 6px", opacity: 0.9 }}>{it.shiftId}</td>
                       <td style={{ padding: "6px 6px", opacity: 0.9 }}>{timeHM(it.startAt)}</td>
@@ -1847,7 +1847,7 @@ export default function PlanningClient({
       )}
 
       {pubWarnings.length > 0 && (
-        <div style={{ border: "1px solid rgba(255,255,255,0.18)", borderRadius: 10, padding: 10 }}>
+        <div style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 10 }}>
           <div style={{ fontWeight: 800, marginBottom: 6 }}>Avertissements (repos minimum)</div>
           <div style={{ display: "grid", gap: 6 }}>
             {pubWarnings.map((w, i) => (
@@ -1880,7 +1880,7 @@ export default function PlanningClient({
               <div
                 key={key}
                 style={{
-                  border: "1px solid rgba(255,255,255,0.15)",
+                  border: "1px solid var(--ui-border)",
                   borderRadius: 10,
                   padding: 10,
                   minHeight: 220,
@@ -1894,7 +1894,7 @@ export default function PlanningClient({
                       onClick={() => generateDay(key)}
                       disabled={isDayGenerating || genLoading || pubLoading || cancelLoading}
                       style={{
-                        border: "1px solid rgba(255,255,255,0.25)",
+                        border: "1px solid var(--ui-border-strong)",
                         padding: "4px 8px",
                         borderRadius: 8,
                         opacity: isDayGenerating ? 0.7 : 1,
@@ -2120,7 +2120,7 @@ function ShiftCardAmbulance({
         </div>
         <span
           style={{
-            border: "1px solid rgba(255,255,255,0.25)",
+            border: "1px solid var(--ui-border-strong)",
             borderRadius: 999,
             padding: "2px 8px",
             fontSize: 12,

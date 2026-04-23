@@ -35,16 +35,18 @@ export default async function UsersPage() {
   });
 
   return (
-    <div style={{ padding: 16, display: "grid", gap: 16 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+    <div className="page-wrap">
+      <div className="page-head">
         <div>
-          <h1 style={{ margin: 0 }}>Utilisateurs</h1>
-          <p style={{ margin: "8px 0 0 0", opacity: 0.8, maxWidth: 960 }}>
-            Base ALPHA d&apos;administration des utilisateurs de société. Cette page fournit une vraie liste exploitable pour consulter les comptes clients, rechercher un utilisateur, filtrer par rôle, puis utiliser les actions minimales déjà disponibles, dont l’archivage logique, sans exposer les comptes support globaux.
+          <h1 className="page-title">Utilisateurs</h1>
+          <p className="page-description">
+            Administration des comptes de la societe avec recherche, edition, archivage, absences et reinitialisation.
           </p>
         </div>
 
-        <Link href="/dashboard">Retour dashboard</Link>
+        <Link className="page-back" href="/dashboard">
+          Retour dashboard
+        </Link>
       </div>
 
       <UserCreationClient canGovernCompanyRules={canGovernCompanyRules} />
