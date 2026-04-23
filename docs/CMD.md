@@ -169,8 +169,8 @@ IMPORTANT
 
 Références des sessions :
 
-- SESSION-20260423-07_A16_SEC-03
-- **SEC-03 — VALIDATION** — Validation complète du bloc sécurité : cohérence des accès, robustesse minimale, non-régression sur les flux critiques
+- SESSION-20260423-08_A16_CLOTURE_A16
+- **CLOTURE_A16 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc Sécurité
 ------------------------------------
 
 Voici sa réponse ainsi que les documents généré :
@@ -191,6 +191,21 @@ Je n'ai pas intégré :
 Fait moi la commande pour le script de création de sessions pour les sessions suivante.
 Exemple de la commande : .\create_session.ps1 -Stage "1-ALPHA" -Block "A1" -SessionCode "RBAC-02" -Type "CORRECTION" -Title "Remplacement méthodique de DEA par ADE"
 
+### BLOC A17 — RGPD
+**Objectif du bloc**  
+Mettre en place une base de conformité RGPD minimale et exploitable.
+
+#### Sessions
+- **RGPD-01 — AUDIT** — Audit complet des données personnelles manipulées : utilisateurs, absences, audit, accès, finalités, rôles d’accès, conservation, export/correction/suppression
+- **RGPD-LOT-02 — CORRECTION+COMPLÉTION** — Correction et/ou complétion de la base RGPD : cartographie des données, finalités, accès, conservation, registre de traitement, besoins d’export/correction/suppression, mentions d’information
+- **RGPD-03 — VALIDATION** — Validation complète du bloc RGPD : cohérence documentaire et base de conformité minimale
+- **CLOTURE_A17 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc RGPD
+
+#### Résultat attendu
+- base RGPD claire
+- données personnelles cartographiées
+- premières règles de conservation et d’accès définies
+- conformité minimale préparée proprement
 ------------------------------------
 
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
