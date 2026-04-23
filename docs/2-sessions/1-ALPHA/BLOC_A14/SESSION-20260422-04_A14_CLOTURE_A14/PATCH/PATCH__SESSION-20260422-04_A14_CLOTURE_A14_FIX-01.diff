@@ -1,0 +1,10 @@
+--- a/app/api/audit/route.ts
++++ b/app/api/audit/route.ts
+@@ -1,6 +1,6 @@
+ import { getServerSession } from "next-auth/next";
+ import { z } from "zod";
+-import type { Prisma } from "@prisma/client";
++import { Prisma } from "@prisma/client";
+ import { authOptions } from "@/lib/auth";
+ import { badRequest, forbidden, ok, unauthorized } from "@/lib/api/response";
+ import { canViewAudit } from "@/lib/permissions";

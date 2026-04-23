@@ -523,6 +523,49 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |       |   SESSION.md
 |   |   |       |   
 |   |   |       \---PATCH
+|   |   |               PATCH__SESSION-20260422-04_A14_CLOTURE_A14.diff
+|   |   |               PATCH__SESSION-20260422-04_A14_CLOTURE_A14_FIX-01.diff
+|   |   |               README_PATCH.md
+|   |   |               
+|   |   +---BLOC_A15
+|   |   |   +---SESSION-20260423-01_A15_FRONT-01
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           NO_PATCH.md
+|   |   |   |           
+|   |   |   +---SESSION-20260423-02_A15_FRONT-LOT-02
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           README_PATCH.md
+|   |   |   |           
+|   |   |   +---SESSION-20260423-03_A15_FRONT-03
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           NO_PATCH.md
+|   |   |   |           
+|   |   |   \---SESSION-20260423-04_A15_CLOTURE_A15
+|   |   |       |   EVIDENCES.md
+|   |   |       |   FIN_SESSION.md
+|   |   |       |   NOTES.md
+|   |   |       |   RESULTATS.md
+|   |   |       |   SESSION.md
+|   |   |       |   
+|   |   |       \---PATCH
 |   |   |               README_PATCH.md
 |   |   |               
 |   |   +---BLOC_A2

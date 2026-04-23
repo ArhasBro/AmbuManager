@@ -1,24 +1,42 @@
-﻿# README_PATCH
+﻿# README_PATCH.md
 
-## Session liee
-SESSION-20260422-04_A14_CLOTURE_A14
+# README PATCH — `SESSION-20260422-04_A14_CLOTURE_A14`
 
-## Type
-AUDIT+CORRECTION+COMPLETION+VALIDATION
+## 1. Objet
 
-## Dossier patch
-docs/3-patches/1-ALPHA/BLOC_A14/SESSION-20260422-04_A14_CLOTURE_A14
+Ce dossier recense les patchs réellement produits dans le cadre de la clôture du bloc `A14 — Backend`.
 
-## Patch officiel attendu
-PATCH__SESSION-20260422-04_A14_CLOTURE_A14.diff
+## 2. Patches présents
 
-## Commandes d'application
+### Patch principal
+- `PATCH__SESSION-20260422-04_A14_CLOTURE_A14.diff`
 
-`ash
-git apply --check "docs/3-patches/1-ALPHA/BLOC_A14/SESSION-20260422-04_A14_CLOTURE_A14/PATCH__SESSION-20260422-04_A14_CLOTURE_A14.diff"
-git apply         "docs/3-patches/1-ALPHA/BLOC_A14/SESSION-20260422-04_A14_CLOTURE_A14/PATCH__SESSION-20260422-04_A14_CLOTURE_A14.diff"
-`
+Rôle :
+- correction minimale initiale du résiduel de clôture détecté sur la route audit backend.
 
-## Statut
-- Dossier patch initialise.
-- Patch officiel a produire dans cette session si du code est modifie.
+### Correctif minimal
+- `PATCH__SESSION-20260422-04_A14_CLOTURE_A14_FIX-01.diff`
+
+Rôle :
+- ajustement minimal complémentaire du correctif principal.
+
+## 3. Fichier applicatif concerné
+
+- `app/api/audit/route.ts`
+
+## 4. Validation associée
+
+Après application des patchs et remise en cohérence de l’environnement local, les validations suivantes ont été constatées :
+
+- `npx prisma validate` : `OK`
+- `npm run lint` : `OK`
+- `npm run build` : `OK`
+- `npm run test:quality` : `OK`
+
+## 5. Conclusion
+
+Les patchs contenus dans ce dossier suffisent à lever le résiduel final du bloc `A14` constaté en clôture.
+
+Conclusion de clôture :
+
+- `BLOC A14 CLÔTURABLE DÉFINITIVEMENT : OUI`

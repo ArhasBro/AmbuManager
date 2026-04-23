@@ -24,7 +24,7 @@ Pour les sessions indiquée ci-dessous, prépare ensuite 2 prompts distincts pr�
    - Si besoin de ressources suplémentaire il s'aide du ZIP joint
 
    Etape :
-   - 1 le patch
+   - 1 le patchr
    - 2 Validation + génération des docs de la sessions en ZIP (pas de patch pour la documentation) et Readme patch.
 
 2. **Prompt de contrôle**
@@ -36,8 +36,8 @@ Pour les sessions indiquée ci-dessous, prépare ensuite 2 prompts distincts pr�
 
 Références des session :
 
-- SESSION-20260422-03_A14_BACK-03
-- **BACK-03 — VALIDATION** — Validation complète du backend : cohérence API / logique métier / Prisma / permissions
+- SESSION-20260422-04_A14_CLOTURE_A14
+- **CLOTURE_A14 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc Backend
 ------------------------------------
 
 Voici sa réponse ainsi que les documents généré :
