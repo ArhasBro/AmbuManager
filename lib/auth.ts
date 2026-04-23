@@ -11,9 +11,24 @@ function isRole(v: unknown): v is Role { return typeof v === "string" && (Object
 function isPlatformRole(v: unknown): v is PlatformRole { return typeof v === "string" && (Object.values(PlatformRole) as string[]).includes(v); }
 function isNonEmptyString(v: unknown): v is string { return typeof v === "string" && v.trim().length > 0; }
 async function safeWriteLoginAudit(input: Parameters<typeof writeLoginAudit>[0]) { try { await writeLoginAudit(input); } catch {} }
+const SESSION_MAX_AGE_SECONDS = 60 * 60 * 8;
+const SESSION_UPDATE_AGE_SECONDS = 60 * 60;
+const isProduction = process.env.NODE_ENV === "production";
 
 export const authOptions: NextAuthOptions = {
-  session: { strategy: "jwt" },
+  secret: process.env.NEXTAUTH_SECRET,
+  session: {
+    strategy: "jwt",
+    maxAge: SESSION_MAX_AGE_SECONDS,
+    updateAge: SESSION_UPDATE_AGE_SECONDS,
+  },
+  jwt: { maxAge: SESSION_MAX_AGE_SECONDS },
+  cookies: {
+    sessionToken: {
+      name: isProduction ? "__Secure-next-auth.session-token" : "next-auth.session-token",
+      options: { httpOnly: true, sameSite: "lax", path: "/", secure: isProduction },
+    },
+  },
   providers: [CredentialsProvider({
     name: "Credentials",
     credentials: { email: { label: "Email", type: "email" }, password: { label: "Password", type: "password" } },

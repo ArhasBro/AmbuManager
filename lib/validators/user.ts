@@ -2,6 +2,7 @@ import { Role } from "@prisma/client";
 import { z } from "zod";
 
 import { ALPHA_PERMISSION_CODES } from "@/lib/permission-catalog";
+import { passwordPolicySchema } from "@/lib/security/password-policy";
 
 const alphaPermissionCodeSet = new Set<string>(ALPHA_PERMISSION_CODES);
 
@@ -29,7 +30,7 @@ export const assignUserDepotBodySchema = z
 export const createUserBodySchema = z
   .object({
     email: z.string().trim().email("email invalid"),
-    password: z.string().min(1, "password required"),
+    password: passwordPolicySchema,
     name: z.string().trim().min(1, "name required").max(160, "name too long"),
     role: z.nativeEnum(Role),
   })

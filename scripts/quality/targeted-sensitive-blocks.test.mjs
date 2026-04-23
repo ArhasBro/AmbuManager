@@ -1,5 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 
 import { badRequest, conflict, forbidden, notFound, ok, serverError, unauthorized } from "../../lib/api/response.ts";
 import { serializeDates } from "../../lib/serializers.ts";
@@ -11,6 +13,7 @@ import {
   normalizeTemplateColor,
   resolveTemplateMinStaffCount,
 } from "../../lib/templates/template-rules.ts";
+import { passwordPolicySchema } from "../../lib/security/password-policy.ts";
 import { computePlanningQuality } from "../../lib/services/planning/matching-quality.ts";
 
 async function readJson(response) {
@@ -153,4 +156,32 @@ test("planning quality calculation keeps a meaningful quality score and explanat
   assert.equal(quality.shiftScores.length, 2);
   assert.ok(quality.explanations.some((line) => line.includes("Ressources humaines")));
   assert.ok(quality.explanations.some((line) => line.includes("Flotte")));
+});
+
+test("password policy rejects weak passwords and accepts hardened ones", () => {
+  assert.equal(passwordPolicySchema.safeParse("short").success, false);
+  assert.equal(passwordPolicySchema.safeParse("lowercase-password-2026!").success, false);
+  assert.equal(passwordPolicySchema.safeParse("UPPERCASE-PASSWORD-2026!").success, false);
+  assert.equal(passwordPolicySchema.safeParse("NoDigitsPassword!").success, false);
+  assert.equal(passwordPolicySchema.safeParse("NoSpecialPassword2026").success, false);
+  assert.equal(passwordPolicySchema.safeParse(" StrongPass2026!").success, false);
+  assert.equal(passwordPolicySchema.safeParse("StrongPass2026!").success, true);
+});
+
+test("proxy covers sensitive authenticated application pages", () => {
+  const source = readFileSync(join(process.cwd(), "proxy.ts"), "utf8");
+
+  for (const matcher of [
+    "/audit/:path*",
+    "/company/:path*",
+    "/dashboard/:path*",
+    "/depots/:path*",
+    "/onboarding/:path*",
+    "/planning/:path*",
+    "/templates/:path*",
+    "/users/:path*",
+    "/vehicles/:path*",
+  ]) {
+    assert.match(source, new RegExp(matcher.replace(/[/*]/g, "\\$&")));
+  }
 });

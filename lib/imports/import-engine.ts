@@ -5,6 +5,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { parseCsv } from "@/lib/imports/csv";
 import { parseXlsxRows } from "@/lib/imports/xlsx";
+import { passwordPolicySchema } from "@/lib/security/password-policy";
 import { resolveTemplateCreateInput, validateResolvedTemplateState } from "@/lib/templates/template-api";
 
 export const IMPORT_DOMAINS = ["users", "vehicles", "templates", "depots", "user-absences"] as const;
@@ -100,7 +101,7 @@ const userSchema = z.object({
   email: z.string().trim().email(),
   name: z.string().trim().min(1).max(160),
   role: z.nativeEnum(Role),
-  password: z.string().trim().min(1).max(160),
+  password: passwordPolicySchema,
   depotName: z.string().trim().min(1).max(160).nullable(),
 });
 

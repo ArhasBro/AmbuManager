@@ -7,13 +7,15 @@ import { prisma } from "@/lib/prisma";
 import { badRequest, forbidden, notFound, ok, serverError, unauthorized } from "@/lib/api/response";
 import { canManageUsers } from "@/lib/permissions";
 import { serializeDates } from "@/lib/serializers";
+import { passwordPolicySchema } from "@/lib/security/password-policy";
 import { traceSupportAction } from "@/lib/services/audit/support-action-trace";
 
 const resetPasswordBodySchema = z
   .object({
-    newPassword: z.string().min(1),
-    confirmPassword: z.string().min(1),
+    newPassword: passwordPolicySchema,
+    confirmPassword: passwordPolicySchema,
   })
+  .strict()
   .superRefine((val, ctx) => {
     if (val.newPassword !== val.confirmPassword) {
       ctx.addIssue({

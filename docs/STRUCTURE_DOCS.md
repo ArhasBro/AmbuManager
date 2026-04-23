@@ -592,6 +592,10 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
+|   |   |   |           LIVRABLES__SESSION-20260423-06_A16_SEC-LOT-02_A_PLAT.zip
+|   |   |   |           PATCH__SESSION-20260423-06_A16_SEC-LOT-02.diff
+|   |   |   |           PATCH__SESSION-20260423-06_A16_SEC-LOT-02_FIX-01.diff
+|   |   |   |           PATCH__SESSION-20260423-06_A16_SEC-LOT-02_FIX-02.diff
 |   |   |   |           README_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260423-07_A16_SEC-03

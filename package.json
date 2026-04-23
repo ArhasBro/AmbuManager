@@ -10,6 +10,8 @@
     "db:seed": "prisma db seed",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
+    "db:backup": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/db-backup.ps1",
+    "db:restore": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/db-restore.ps1",
     "db:reset": "prisma migrate reset --force",
     "test:smoke": "node --test scripts/quality/smoke-api-critical-contracts.test.mjs",
     "test:targeted": "node --experimental-strip-types --test scripts/quality/targeted-sensitive-blocks.test.mjs",

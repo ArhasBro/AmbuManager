@@ -1,0 +1,46 @@
+diff --git a/scripts/db-backup.ps1 b/scripts/db-backup.ps1
+index 32a1056..26b6fce 100644
+--- a/scripts/db-backup.ps1
++++ b/scripts/db-backup.ps1
+@@ -11,6 +11,7 @@ if ([string]::IsNullOrWhiteSpace($env:DATABASE_URL)) {
+ if (-not $pgDump) {
+   throw "pg_dump is required in PATH for database backup."
+ }
++$pgDumpPath = $pgDump.Source
+ 
+ if ([string]::IsNullOrWhiteSpace($OutputPath)) {
+   $stamp = Get-Date -Format "yyyyMMdd-HHmmss"
+@@ -24,7 +25,7 @@ if ([string]::IsNullOrWhiteSpace($parent)) {
+ 
+ New-Item -ItemType Directory -Force -Path $parent | Out-Null
+ 
+-& $pgDump.Source --format=custom --no-owner --no-acl --file $OutputPath $env:DATABASE_URL
++& $pgDumpPath --format=custom --no-owner --no-acl --file $OutputPath $env:DATABASE_URL
+ if ($LASTEXITCODE -ne 0) {
+   exit $LASTEXITCODE
+ }
+diff --git a/scripts/db-restore.ps1 b/scripts/db-restore.ps1
+index 1c8387b..30d621d 100644
+--- a/scripts/db-restore.ps1
++++ b/scripts/db-restore.ps1
+@@ -21,16 +21,18 @@ $pgRestore = Get-Command pg_restore -ErrorAction SilentlyContinue
+ if (-not $pgRestore) {
+   throw "pg_restore is required in PATH for database restore."
+ }
++$pgRestorePath = $pgRestore.Source
+ 
+ $resolvedInput = Resolve-Path -LiteralPath $InputPath
++$resolvedInputPath = $resolvedInput.Path
+ 
+-& $pgRestore.Source `
++& $pgRestorePath `
+   --clean `
+   --if-exists `
+   --no-owner `
+   --no-acl `
+   --dbname $env:DATABASE_URL `
+-  $resolvedInput.Path
++  $resolvedInputPath
+ if ($LASTEXITCODE -ne 0) {
+   exit $LASTEXITCODE
+ }
