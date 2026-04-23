@@ -169,8 +169,8 @@ IMPORTANT
 
 Références des sessions :
 
-- SESSION-20260423-05_A16_SEC-01
-- **SEC-01 — AUDIT** — Audit complet de la sécurité existante : auth, sessions, contrôles d’accès, routes sensibles, secrets, variables d’environnement, audit logs, protections de base
+- SESSION-20260423-06_A16_SEC-LOT-02
+- **SEC-LOT-02 — CORRECTION+COMPLÉTION** — Correction et/ou complétion du socle sécurité : durcissement auth/session, validation des entrées, protection des routes sensibles, règles de mots de passe, gestion des secrets, base de sauvegarde/restauration
 ------------------------------------
 
 Voici sa réponse ainsi que les documents généré :
