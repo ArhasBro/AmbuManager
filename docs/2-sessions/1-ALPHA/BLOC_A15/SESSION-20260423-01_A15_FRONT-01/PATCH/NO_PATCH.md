@@ -6,5 +6,9 @@ Type : AUDIT
 
 Raison :
 - Session documentaire de type AUDIT.
-- Aucun patch officiel a produire pour cette session.
-- Le dossier PATCH reste present dans la session pour centraliser la documentation et les patchs.
+- Décision patch : `NO_PATCH`.
+- Aucun patch code officiel à produire pour cette session.
+- Aucun build, lint, test ou capture navigateur produit.
+- Verdict formel de session : `non conforme`.
+- Suite logique attendue : `FRONT-LOT-02`.
+- Le dossier PATCH reste présent dans la session pour porter explicitement la décision `NO_PATCH`.

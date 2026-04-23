@@ -8,36 +8,103 @@ git status
 
 # GPT
 --------------------------
-Session validée, nous passons aux suivante.
+Session validée, nous passons aux suivantes.
 
 Avant de préparer quoi que ce soit, relis attentivement tous les fichiers `.md` présents dans `./docs/1-master`. Ces documents sont les références à suivre pour garantir un travail correct, cohérent et méthodologiquement conforme.
 
-Nous allons faire plusieurs sessions en même temps donc faut que se soit rigoureux. nous allons faire 1 patch unique pour toute ces session ainsi que 1 documentation.
+Nous allons faire plusieurs sessions en même temps, donc il faut que ce soit rigoureux. Nous allons faire 1 patch unique pour toutes ces sessions ainsi que 1 documentation.
 
-Pour les sessions indiquée ci-dessous, prépare ensuite 2 prompts distincts prêt a copié/collé en texte :
+RÈGLE D’UTILISATION DES OUTILS
+- **Production = Codex** dès qu’une session implique le dépôt, le code, les fichiers, les patchs, les commandes, les tests ou des validations techniques.
+- **Contrôle qualité = ChatGPT** pour analyser la réponse de production, vérifier la conformité méthodologique, identifier ce qui est conforme / non conforme, et rédiger le prompt de retour si nécessaire.
+- **Documentation finale = ChatGPT par défaut**, sauf si la documentation dépend d’une lecture technique directe du dépôt qui nécessite d’abord Codex.
+- En cas de doute :
+  - si la session demande d’inspecter ou modifier le repo réel → **Codex**
+  - si la session demande surtout d’évaluer, cadrer, reformuler, contrôler ou documenter → **ChatGPT**
+
+Pour les sessions indiquées ci-dessous, prépare ensuite **2 prompts distincts**, prêts à copier/coller en texte :
 
 1. **Prompt de production**
-   - À rédiger avec le `TEMPLATE_DEBUT_SESSION.md` ainsi que sur les règles définies dans les fichiers de `./docs`.
-   - Il s’agit du prompt principal.
-   - Il doit permettre d’exécuter la session dans la discussion de production.
-   - Uniquement les information concernant la session concerné.
-   - Si besoin de ressources suplémentaire il s'aide du ZIP joint
+   - Ce prompt est destiné à **Codex**.
+   - Il doit être rédigé avec le `TEMPLATE_DEBUT_SESSION.md` ainsi qu’avec les règles définies dans les fichiers de `./docs`.
+   - Il s’agit du prompt principal d’exécution de la session.
+   - Il doit permettre de traiter la session dans la discussion de production avec Codex.
+   - Il doit contenir uniquement les informations concernant la ou les sessions concernées.
+   - Si besoin de ressources supplémentaires, il s’aide du ZIP joint.
+   - Il doit respecter strictement les règles du projet :
+     - pas d’élargissement de périmètre ;
+     - pas d’invention ;
+     - pas de modification hors session ;
+     - pas de mélange avec d’autres blocs non demandés ;
+     - respect strict des sources autorisées ;
+     - respect du type de session demandé.
 
-   Etape :
-   - 1 le patchr
-   - 2 Validation + génération des docs de la sessions en ZIP (pas de patch pour la documentation) et Readme patch.
+   Étapes attendues :
+   - 1. le patch
+   - 2. validation
+   - 3. génération des documents de session en ZIP
+   - 4. aucun patch pour la documentation
+   - 5. `README_PATCH.md` si un patch réel existe
+   - 6. si la session est une session sans modification code, produire la sortie documentaire adaptée (`NO_PATCH` ou équivalent selon le cadre réel de la session)
+
+   Contraintes de rédaction du prompt de production :
+   - rappeler en ouverture l’obligation de relire `./docs/1-master`
+   - rappeler les règles de source non négociables
+   - préciser clairement :
+     - l’ID session
+     - le stage
+     - le bloc
+     - le type
+     - l’intitulé
+   - rappeler le périmètre exact à traiter
+   - interdire explicitement tout élargissement de périmètre
+   - demander une réponse de production structurée, rigoureuse, exploitable
+   - si la session est un AUDIT ou une VALIDATION, ne pas forcer artificiellement un patch
+   - si la session est une CORRECTION ou COMPLÉTION, exiger un patch réel, minimal et cohérent avec la session
+   - rester compatible avec la règle :
+     - **1 patch unique pour toutes les sessions concernées**
+     - **1 documentation unique pour toutes les sessions concernées**
 
 2. **Prompt de contrôle**
-   - À rédiger pour la discussion de contrôle qualité.
-   - Il doit servir à analyser et évaluer la réponse issue de la discussion de production UNIQUEMENT.
-   - Analyser la discusion de la production avec ce qui est conforme et non comforme.
-   - Tu doit attendre que je t'ai transmis la réponse de la discussion de production.
-   - Faire un prompt de réponse adapté clair et précis pour la discussion production.
+   - Ce prompt est destiné à **ChatGPT**.
+   - Il doit être rédigé pour la discussion de contrôle qualité.
+   - Il doit servir à analyser et évaluer la réponse issue de la discussion de production **UNIQUEMENT**.
+   - Il doit analyser la réponse de production en distinguant clairement ce qui est conforme et ce qui est non conforme.
+   - Il doit attendre que je t’aie transmis la réponse de la discussion de production.
+   - Il doit ensuite produire un prompt de retour adapté, clair et précis, à destination de la discussion de production.
 
-Références des session :
+   Contraintes de rédaction du prompt de contrôle :
+   - rappeler que le contrôle ne doit pas rejouer la session
+   - rappeler que le contrôle ne doit pas refaire l’analyse du dépôt
+   - rappeler que le contrôle doit s’appuyer uniquement sur :
+     - la réponse finale de production
+     - la documentation officielle du projet
+   - rappeler que si une information n’est pas démontrée, il faut écrire exactement :
+     - `INFORMATION NON FOURNIE — À CONFIRMER`
+   - rappeler qu’en cas de contradiction :
+     - `RÉPONSE VALIDÉE DE PRODUCTION > BROUILLON / RÉCIT`
+   - demander une sortie structurée avec :
+     - verdict de conformité
+     - points conformes
+     - points non conformes
+     - informations non démontrées
+     - décision de contrôle
+     - prompt de retour prêt à copier/coller pour la discussion de production
 
-- SESSION-20260422-04_A14_CLOTURE_A14
-- **CLOTURE_A14 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc Backend
+IMPORTANT
+- Ne prépare que les **2 prompts** demandés :
+  - **1 prompt de production pour Codex**
+  - **1 prompt de contrôle pour ChatGPT**
+- Ne fais pas de troisième prompt.
+- N’ajoute pas de décision séparée sur l’outil à utiliser : la règle ci-dessus s’applique déjà.
+- Les prompts doivent être directement copiables/collables.
+- Les prompts doivent être propres, complets, précis et strictement exploitables.
+- Les prompts doivent être rédigés uniquement à partir des sessions indiquées ci-dessous.
+
+Références des sessions :
+
+- SESSION-20260423-02_A15_FRONT-LOT-02
+- **FRONT-LOT-02 — CORRECTION+COMPLÉTION** — Correction et/ou complétion du frontend : homogénéisation visuelle, amélioration des écrans critiques, lisibilité métier, gestion cohérente du thème, préparation d’une UX plus propre
 ------------------------------------
 
 Voici sa réponse ainsi que les documents généré :
