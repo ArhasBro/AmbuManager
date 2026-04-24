@@ -1,6 +1,7 @@
 import { PlatformRole } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
+import { writePersonalDataAudit } from "@/lib/services/audit/personal-data-audit";
 import { traceSupportAction } from "@/lib/services/audit/support-action-trace";
 
 type AssignedUser = {
@@ -103,6 +104,42 @@ export async function assignUserDepot(input: AssignUserDepotInput): Promise<Assi
       where: { id: existingUser.id },
       data: { depotId: input.depotId },
       select: userDepotSelect,
+    });
+
+    await writePersonalDataAudit(tx, {
+      companyId: input.companyId,
+      actorUserId: input.actorUserId,
+      action: "USER_ASSIGN_DEPOT",
+      entityType: "USER",
+      entityId: updatedUser.id,
+      summary: `Affectation depot utilisateur ${updatedUser.email}`,
+      changedFields: ["depotId"],
+      previous: {
+        depotId: existingUser.depotId,
+        depot: existingUser.depot
+          ? {
+              id: existingUser.depot.id,
+              name: existingUser.depot.name,
+              isActive: existingUser.depot.isActive,
+            }
+          : null,
+      },
+      next: {
+        depotId: updatedUser.depotId,
+        depot: updatedUser.depot
+          ? {
+              id: updatedUser.depot.id,
+              name: updatedUser.depot.name,
+              isActive: updatedUser.depot.isActive,
+            }
+          : null,
+      },
+      details: {
+        targetType: "user",
+        requestedDepotId: input.depotId,
+        resolvedDepotId: nextDepot?.id ?? null,
+        resolvedDepotName: nextDepot?.name ?? null,
+      },
     });
 
     await traceSupportAction(tx, {

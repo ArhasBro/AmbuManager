@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma";
 import { badRequest, forbidden, notFound, ok, serverError, unauthorized } from "@/lib/api/response";
 import { canManageUsers } from "@/lib/permissions";
 import { serializeDates } from "@/lib/serializers";
+import { writePersonalDataAudit } from "@/lib/services/audit/personal-data-audit";
 import { passwordPolicySchema } from "@/lib/security/password-policy";
 import { traceSupportAction } from "@/lib/services/audit/support-action-trace";
 
@@ -110,6 +111,28 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
       });
 
       if (!user) return null;
+
+      await writePersonalDataAudit(tx, {
+        companyId,
+        actorUserId,
+        action: "USER_RESET_PASSWORD",
+        entityType: "USER",
+        entityId: targetUser.id,
+        summary: `Reset mot de passe utilisateur ${targetUser.email}`,
+        changedFields: ["password"],
+        previous: {
+          password: "REDACTED",
+        },
+        next: {
+          password: "REDACTED",
+        },
+        details: {
+          targetType: "user",
+          targetEmail: targetUser.email,
+          targetName: targetUser.name,
+          targetRole: targetUser.role,
+        },
+      });
 
       await traceSupportAction(tx, {
         companyId,

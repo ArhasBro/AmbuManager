@@ -92,6 +92,7 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
     const result = await createUserAbsence({
       companyId,
       userId: parsedParams.data.id,
+      actorUserId,
       reason: parsedBody.data.reason,
       startAt: parsedBody.data.startAt,
       endAt: parsedBody.data.endAt,

@@ -48,6 +48,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string; a
       companyId,
       userId: parsedParams.data.id,
       absenceId: parsedParams.data.absenceId,
+      actorUserId,
       reason: parsedBody.data.reason,
       startAt: parsedBody.data.startAt,
       endAt: parsedBody.data.endAt,
@@ -89,6 +90,7 @@ export async function DELETE(_req: Request, ctx: { params: Promise<{ id: string;
       companyId,
       userId: parsedParams.data.id,
       absenceId: parsedParams.data.absenceId,
+      actorUserId,
     });
 
     if (result.status === "USER_NOT_FOUND" || result.status === "ABSENCE_NOT_FOUND") return notFound();

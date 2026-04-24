@@ -14,6 +14,7 @@ import { ALPHA_PERMISSION_CODES, type AlphaPermissionCode } from "@/lib/permissi
 import { canManageUsers } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 import { serializeDates } from "@/lib/serializers";
+import { writePersonalDataAudit } from "@/lib/services/audit/personal-data-audit";
 import { updateUserBodySchema } from "@/lib/validators/user";
 
 const paramsSchema = z
@@ -72,6 +73,10 @@ function normalizePermissionCodes(codes: readonly string[]): AlphaPermissionCode
   return [...codes]
     .filter((code): code is AlphaPermissionCode => alphaPermissionOrder.has(code as AlphaPermissionCode))
     .sort((a, b) => (alphaPermissionOrder.get(a) ?? Number.MAX_SAFE_INTEGER) - (alphaPermissionOrder.get(b) ?? Number.MAX_SAFE_INTEGER));
+}
+
+function samePermissionCodes(left: readonly AlphaPermissionCode[], right: readonly AlphaPermissionCode[]) {
+  return left.length === right.length && left.every((code, index) => code === right[index]);
 }
 
 function serializeEditableUser(user: EditableUserRecord) {
@@ -175,13 +180,14 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
             ok: false,
             error: "FORBIDDEN",
             details: {
-              message: "Seuls les comptes ADMIN ou GERANT peuvent attribuer, retirer ou conférer le droit de modification des règles métier.",
+              message: "Seuls les comptes ADMIN ou GERANT peuvent attribuer, retirer ou conferer le droit de modification des regles metier.",
             },
           },
           403,
         );
       }
     }
+
     const alphaPermissions = nextPermissionCodes !== undefined
       ? await prisma.permission.findMany({
           where: { code: { in: [...ALPHA_PERMISSION_CODES] } },
@@ -198,8 +204,21 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
 
     if (nextPermissionCodes !== undefined && resolvedPermissionIds.length !== nextPermissionCodes.length) {
       return badRequest("VALIDATION_ERROR", {
-        message: "Certaines permissions demandées ne sont pas disponibles dans le catalogue ALPHA réel.",
+        message: "Certaines permissions demandees ne sont pas disponibles dans le catalogue ALPHA reel.",
       });
+    }
+
+    const changedFields = [
+      ...(parsedBody.data.name !== undefined && parsedBody.data.name !== existingUser.name ? ["name"] : []),
+      ...(parsedBody.data.email !== undefined && parsedBody.data.email !== existingUser.email ? ["email"] : []),
+      ...(parsedBody.data.role !== undefined && parsedBody.data.role !== existingUser.role ? ["role"] : []),
+      ...(nextPermissionCodes !== undefined && !samePermissionCodes(existingPermissionCodes, nextNormalizedPermissionCodes)
+        ? ["permissionCodes"]
+        : []),
+    ];
+
+    if (changedFields.length === 0) {
+      return ok(serializeEditableUser(existingUser));
     }
 
     const updatedUser = await prisma.$transaction(async (tx) => {
@@ -233,7 +252,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
         }
       }
 
-      return tx.user.findFirst({
+      const nextUser = await tx.user.findFirst({
         where: {
           id: existingUser.id,
           companyId,
@@ -243,6 +262,35 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
         },
         select: userSelect,
       });
+
+      if (!nextUser) return null;
+
+      await writePersonalDataAudit(tx, {
+        companyId,
+        actorUserId,
+        action: "USER_UPDATE",
+        entityType: "USER",
+        entityId: nextUser.id,
+        summary: `Modification utilisateur ${nextUser.email}`,
+        changedFields,
+        previous: {
+          name: existingUser.name,
+          email: existingUser.email,
+          role: existingUser.role,
+          permissionCodes: existingPermissionCodes,
+        },
+        next: {
+          name: nextUser.name,
+          email: nextUser.email,
+          role: nextUser.role,
+          permissionCodes: nextNormalizedPermissionCodes,
+        },
+        details: {
+          targetType: "user",
+        },
+      });
+
+      return nextUser;
     });
 
     if (!updatedUser) return notFound();
@@ -252,7 +300,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     const mapped = prismaToHttp(e);
     if (mapped?.status === 404) return notFound();
     if (mapped?.status === 409) {
-      return conflict(mapped.error, { message: "Un utilisateur avec cet email existe déjà." });
+      return conflict(mapped.error, { message: "Un utilisateur avec cet email existe deja." });
     }
 
     return serverError(mapped ?? getErrorMessage(e));

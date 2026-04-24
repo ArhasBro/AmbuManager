@@ -12,6 +12,7 @@ import {
 import { canManageUsers } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 import { serializeDates } from "@/lib/serializers";
+import { writePersonalDataAudit } from "@/lib/services/audit/personal-data-audit";
 import { createUserBodySchema } from "@/lib/validators/user";
 
 const USER_ROLES = ["ADMIN", "GERANT", "BUREAU", "ADE", "AA", "TAXI", "REGULATEUR"] as const;
@@ -180,15 +181,41 @@ export async function POST(req: Request) {
   try {
     const hashedPassword = await bcrypt.hash(parsed.data.password, 10);
 
-    const user = await prisma.user.create({
-      data: {
-        email: parsed.data.email,
-        password: hashedPassword,
-        name: parsed.data.name,
-        role: parsed.data.role,
+    const user = await prisma.$transaction(async (tx) => {
+      const createdUser = await tx.user.create({
+        data: {
+          email: parsed.data.email,
+          password: hashedPassword,
+          name: parsed.data.name,
+          role: parsed.data.role,
+          companyId,
+        },
+        select: userSelect,
+      });
+
+      await writePersonalDataAudit(tx, {
         companyId,
-      },
-      select: userSelect,
+        actorUserId,
+        action: "USER_CREATE",
+        entityType: "USER",
+        entityId: createdUser.id,
+        summary: `Creation utilisateur ${createdUser.email}`,
+        changedFields: ["email", "password", "name", "role", "companyId"],
+        previous: null,
+        next: {
+          email: createdUser.email,
+          password: "REDACTED",
+          name: createdUser.name,
+          role: createdUser.role,
+          companyId: createdUser.companyId,
+          depotId: createdUser.depotId,
+        },
+        details: {
+          targetType: "user",
+        },
+      });
+
+      return createdUser;
     });
 
     return ok(serializeDates(user), 201);

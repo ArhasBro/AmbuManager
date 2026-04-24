@@ -1,6 +1,7 @@
 import { Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
+import { writePersonalDataAudit } from "@/lib/services/audit/personal-data-audit";
 
 const userAbsenceSelect = Prisma.validator<Prisma.UserAbsenceSelect>()({
   id: true,
@@ -37,6 +38,7 @@ export type ListUserAbsencesResult =
 export type CreateUserAbsenceInput = {
   companyId: string;
   userId: string;
+  actorUserId?: string | null;
   reason?: string | null;
   startAt: Date;
   endAt: Date;
@@ -52,6 +54,7 @@ export type UpdateUserAbsenceInput = {
   companyId: string;
   userId: string;
   absenceId: string;
+  actorUserId?: string | null;
   reason?: string | null;
   startAt?: Date;
   endAt?: Date;
@@ -68,6 +71,7 @@ export type DeleteUserAbsenceInput = {
   companyId: string;
   userId: string;
   absenceId: string;
+  actorUserId?: string | null;
 };
 
 export type DeleteUserAbsenceResult =
@@ -86,6 +90,8 @@ async function findManagedUser(userId: string, companyId: string) {
     },
     select: {
       id: true,
+      name: true,
+      email: true,
     },
   });
 }
@@ -160,15 +166,42 @@ export async function createUserAbsence(input: CreateUserAbsenceInput): Promise<
   const overlap = await findOverlappingUserAbsence(input);
   if (overlap) return { status: "OVERLAP", conflict: overlap };
 
-  const absence = await prisma.userAbsence.create({
-    data: {
+  const absence = await prisma.$transaction(async (tx) => {
+    const createdAbsence = await tx.userAbsence.create({
+      data: {
+        companyId: input.companyId,
+        userId: input.userId,
+        reason: input.reason ?? null,
+        startAt: input.startAt,
+        endAt: input.endAt,
+      },
+      select: userAbsenceSelect,
+    });
+
+    await writePersonalDataAudit(tx, {
       companyId: input.companyId,
-      userId: input.userId,
-      reason: input.reason ?? null,
-      startAt: input.startAt,
-      endAt: input.endAt,
-    },
-    select: userAbsenceSelect,
+      actorUserId: input.actorUserId,
+      action: "USER_ABSENCE_CREATE",
+      entityType: "USER_ABSENCE",
+      entityId: createdAbsence.id,
+      summary: `Creation absence utilisateur ${user.email}`,
+      changedFields: ["reason", "startAt", "endAt"],
+      previous: null,
+      next: {
+        userId: createdAbsence.userId,
+        reason: createdAbsence.reason,
+        startAt: createdAbsence.startAt,
+        endAt: createdAbsence.endAt,
+      },
+      details: {
+        targetType: "user-absence",
+        targetUserId: user.id,
+        targetUserName: user.name,
+        targetUserEmail: user.email,
+      },
+    });
+
+    return createdAbsence;
   });
 
   return { status: "OK", absence };
@@ -195,14 +228,52 @@ export async function updateUserAbsence(input: UpdateUserAbsenceInput): Promise<
   });
   if (overlap) return { status: "OVERLAP", conflict: overlap };
 
-  const absence = await prisma.userAbsence.update({
-    where: { id: existing.id },
-    data: {
-      ...(input.reason !== undefined ? { reason: input.reason } : {}),
-      ...(input.startAt !== undefined ? { startAt: input.startAt } : {}),
-      ...(input.endAt !== undefined ? { endAt: input.endAt } : {}),
-    },
-    select: userAbsenceSelect,
+  const changedFields = [
+    ...(input.reason !== undefined && input.reason !== existing.reason ? ["reason"] : []),
+    ...(input.startAt !== undefined && input.startAt.getTime() !== existing.startAt.getTime() ? ["startAt"] : []),
+    ...(input.endAt !== undefined && input.endAt.getTime() !== existing.endAt.getTime() ? ["endAt"] : []),
+  ];
+
+  if (changedFields.length === 0) return { status: "OK", absence: existing };
+
+  const absence = await prisma.$transaction(async (tx) => {
+    const updatedAbsence = await tx.userAbsence.update({
+      where: { id: existing.id },
+      data: {
+        ...(input.reason !== undefined ? { reason: input.reason } : {}),
+        ...(input.startAt !== undefined ? { startAt: input.startAt } : {}),
+        ...(input.endAt !== undefined ? { endAt: input.endAt } : {}),
+      },
+      select: userAbsenceSelect,
+    });
+
+    await writePersonalDataAudit(tx, {
+      companyId: input.companyId,
+      actorUserId: input.actorUserId,
+      action: "USER_ABSENCE_UPDATE",
+      entityType: "USER_ABSENCE",
+      entityId: updatedAbsence.id,
+      summary: `Modification absence utilisateur ${user.email}`,
+      changedFields,
+      previous: {
+        reason: existing.reason,
+        startAt: existing.startAt,
+        endAt: existing.endAt,
+      },
+      next: {
+        reason: updatedAbsence.reason,
+        startAt: updatedAbsence.startAt,
+        endAt: updatedAbsence.endAt,
+      },
+      details: {
+        targetType: "user-absence",
+        targetUserId: user.id,
+        targetUserName: user.name,
+        targetUserEmail: user.email,
+      },
+    });
+
+    return updatedAbsence;
   });
 
   return { status: "OK", absence };
@@ -215,9 +286,35 @@ export async function deleteUserAbsence(input: DeleteUserAbsenceInput): Promise<
   const existing = await findUserAbsenceByTenant(input.absenceId, input.userId, input.companyId);
   if (!existing) return { status: "ABSENCE_NOT_FOUND" };
 
-  const absence = await prisma.userAbsence.delete({
-    where: { id: existing.id },
-    select: userAbsenceSelect,
+  const absence = await prisma.$transaction(async (tx) => {
+    const deletedAbsence = await tx.userAbsence.delete({
+      where: { id: existing.id },
+      select: userAbsenceSelect,
+    });
+
+    await writePersonalDataAudit(tx, {
+      companyId: input.companyId,
+      actorUserId: input.actorUserId,
+      action: "USER_ABSENCE_DELETE",
+      entityType: "USER_ABSENCE",
+      entityId: deletedAbsence.id,
+      summary: `Suppression absence utilisateur ${user.email}`,
+      changedFields: ["deleted"],
+      previous: {
+        reason: existing.reason,
+        startAt: existing.startAt,
+        endAt: existing.endAt,
+      },
+      next: null,
+      details: {
+        targetType: "user-absence",
+        targetUserId: user.id,
+        targetUserName: user.name,
+        targetUserEmail: user.email,
+      },
+    });
+
+    return deletedAbsence;
   });
 
   return { status: "OK", absence };

@@ -27,6 +27,32 @@ test("users API keeps auth, tenant scoping and support exclusion", () => {
   expectNoPattern(source, /parsed\.data\.companyId|body\.companyId/, "users POST must not trust a client companyId");
 });
 
+test("users personal-data mutations keep an audit trail", () => {
+  const createSource = read("app/api/users/route.ts");
+  const updateSource = read("app/api/users/[id]/route.ts");
+  const archiveSource = read("lib/services/users/archive-user.ts");
+  const depotSource = read("lib/services/users/assign-user-depot.ts");
+  const resetPasswordSource = read("app/api/users/[id]/reset-password/route.ts");
+  const absenceSource = read("lib/services/users/user-absence.ts");
+
+  expectPattern(createSource, /writePersonalDataAudit\(/, "users POST must write a personal-data audit entry");
+  expectPattern(updateSource, /writePersonalDataAudit\(/, "users PATCH must write a personal-data audit entry");
+  expectPattern(archiveSource, /writePersonalDataAudit\(/, "user archive must write a personal-data audit entry");
+  expectPattern(depotSource, /writePersonalDataAudit\(/, "user depot assignment must write a personal-data audit entry");
+  expectPattern(resetPasswordSource, /writePersonalDataAudit\(/, "user password reset must write a personal-data audit entry");
+  expectPattern(absenceSource, /USER_ABSENCE_CREATE/, "absence creation audit action must exist");
+  expectPattern(absenceSource, /USER_ABSENCE_UPDATE/, "absence update audit action must exist");
+  expectPattern(absenceSource, /USER_ABSENCE_DELETE/, "absence delete audit action must exist");
+});
+
+test("privacy mentions stay reachable from login", () => {
+  const loginSource = read("app/login/page.tsx");
+  const privacySource = read("app/privacy/page.tsx");
+
+  expectPattern(loginSource, /Link href=\"\/privacy\"/, "login page must link to privacy mentions");
+  expectPattern(privacySource, /Mentions d'information - Donnees personnelles/, "privacy page must expose RGPD information");
+});
+
 test("templates API keeps auth, permission gate and company-scoped persistence", () => {
   const source = read("app/api/templates/route.ts");
 

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { signIn, useSession } from "next-auth/react";
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -109,6 +110,12 @@ function LoginPageContent() {
           {loading ? "Connexion..." : "Se connecter"}
         </button>
       </form>
+
+      <p style={{ marginTop: 16, fontSize: 14, lineHeight: 1.5 }}>
+        En poursuivant, vous utilisez une application qui traite des donnees personnelles de gestion,
+        d&apos;authentification, d&apos;absence et d&apos;audit. Consultez les{" "}
+        <Link href="/privacy">mentions d&apos;information</Link>.
+      </p>
     </div>
   );
 }

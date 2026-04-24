@@ -1,6 +1,7 @@
 import { PlatformRole } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
+import { writePersonalDataAudit } from "@/lib/services/audit/personal-data-audit";
 import { traceSupportAction } from "@/lib/services/audit/support-action-trace";
 
 type ArchivedUser = {
@@ -53,6 +54,28 @@ export async function archiveUser(input: ArchiveUserInput): Promise<ArchivedUser
       where: { id: existing.id },
       data: { isActive: false },
       select: userSelect,
+    });
+
+    await writePersonalDataAudit(tx, {
+      companyId: input.companyId,
+      actorUserId: input.actorUserId,
+      action: "USER_ARCHIVE",
+      entityType: "USER",
+      entityId: user.id,
+      summary: `Archivage utilisateur ${user.email}`,
+      changedFields: ["isActive"],
+      previous: {
+        isActive: existing.isActive,
+      },
+      next: {
+        isActive: user.isActive,
+      },
+      details: {
+        targetType: "user",
+        targetEmail: user.email,
+        targetName: user.name,
+        targetRole: user.role,
+      },
     });
 
     await traceSupportAction(tx, {

@@ -20,6 +20,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |       PLAN_DE_DEVELOPPEMENT.md
 |       RECAP_DISCUSSIONS.md
 |       REGISTRE_DECISIONS.md
+|       RGPD_BASE_MINIMALE.md
 |       STRUCTURE_PROJET.md
 |       
 +---2-sessions
@@ -641,6 +642,8 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
+|   |   |   |           LIVRABLES__SESSION-20260423-10_A17_RGPD-LOT-02_A_PLAT.zip
+|   |   |   |           PATCH__SESSION-20260423-10_A17_RGPD-LOT-02.diff
 |   |   |   |           README_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260423-11_A17_RGPD-03

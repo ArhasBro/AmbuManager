@@ -1,0 +1,901 @@
+diff --git a/app/api/users/[id]/absences/[absenceId]/route.ts b/app/api/users/[id]/absences/[absenceId]/route.ts
+index 7ff0f0ea1f3e9f7f26a5ac0aae2c47322314d622..fd6f87caa37d8891836ce931b9e01261bd0c52b6 100644
+--- a/app/api/users/[id]/absences/[absenceId]/route.ts
++++ b/app/api/users/[id]/absences/[absenceId]/route.ts
+@@ -48,6 +48,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string; a
+       companyId,
+       userId: parsedParams.data.id,
+       absenceId: parsedParams.data.absenceId,
++      actorUserId,
+       reason: parsedBody.data.reason,
+       startAt: parsedBody.data.startAt,
+       endAt: parsedBody.data.endAt,
+@@ -89,6 +90,7 @@ export async function DELETE(_req: Request, ctx: { params: Promise<{ id: string;
+       companyId,
+       userId: parsedParams.data.id,
+       absenceId: parsedParams.data.absenceId,
++      actorUserId,
+     });
+ 
+     if (result.status === "USER_NOT_FOUND" || result.status === "ABSENCE_NOT_FOUND") return notFound();
+diff --git a/app/api/users/[id]/absences/route.ts b/app/api/users/[id]/absences/route.ts
+index 9ef07d02cda78d7cde21b3d1f3766b5090ec18b9..265afc2c0865ef84b7f0792d6e0191cc11f91129 100644
+--- a/app/api/users/[id]/absences/route.ts
++++ b/app/api/users/[id]/absences/route.ts
+@@ -92,6 +92,7 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }>
+     const result = await createUserAbsence({
+       companyId,
+       userId: parsedParams.data.id,
++      actorUserId,
+       reason: parsedBody.data.reason,
+       startAt: parsedBody.data.startAt,
+       endAt: parsedBody.data.endAt,
+diff --git a/app/api/users/[id]/reset-password/route.ts b/app/api/users/[id]/reset-password/route.ts
+index a8388ab325338d0942b748c42adf5f170dbef876..5574160ff23de6527062370de807a8f09db9d6ae 100644
+--- a/app/api/users/[id]/reset-password/route.ts
++++ b/app/api/users/[id]/reset-password/route.ts
+@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma";
+ import { badRequest, forbidden, notFound, ok, serverError, unauthorized } from "@/lib/api/response";
+ import { canManageUsers } from "@/lib/permissions";
+ import { serializeDates } from "@/lib/serializers";
++import { writePersonalDataAudit } from "@/lib/services/audit/personal-data-audit";
+ import { passwordPolicySchema } from "@/lib/security/password-policy";
+ import { traceSupportAction } from "@/lib/services/audit/support-action-trace";
+ 
+@@ -111,6 +112,28 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }>
+ 
+       if (!user) return null;
+ 
++      await writePersonalDataAudit(tx, {
++        companyId,
++        actorUserId,
++        action: "USER_RESET_PASSWORD",
++        entityType: "USER",
++        entityId: targetUser.id,
++        summary: `Reset mot de passe utilisateur ${targetUser.email}`,
++        changedFields: ["password"],
++        previous: {
++          password: "REDACTED",
++        },
++        next: {
++          password: "REDACTED",
++        },
++        details: {
++          targetType: "user",
++          targetEmail: targetUser.email,
++          targetName: targetUser.name,
++          targetRole: targetUser.role,
++        },
++      });
++
+       await traceSupportAction(tx, {
+         companyId,
+         actorUserId,
+diff --git a/app/api/users/[id]/route.ts b/app/api/users/[id]/route.ts
+index 75f11372dd2db4c66d3bf611b47e784cddf1ff33..864aa3c9c0fe9243946e4b29ffedc3bbece8b3b8 100644
+--- a/app/api/users/[id]/route.ts
++++ b/app/api/users/[id]/route.ts
+@@ -14,6 +14,7 @@ import { ALPHA_PERMISSION_CODES, type AlphaPermissionCode } from "@/lib/permissi
+ import { canManageUsers } from "@/lib/permissions";
+ import { prisma } from "@/lib/prisma";
+ import { serializeDates } from "@/lib/serializers";
++import { writePersonalDataAudit } from "@/lib/services/audit/personal-data-audit";
+ import { updateUserBodySchema } from "@/lib/validators/user";
+ 
+ const paramsSchema = z
+@@ -74,6 +75,10 @@ function normalizePermissionCodes(codes: readonly string[]): AlphaPermissionCode
+     .sort((a, b) => (alphaPermissionOrder.get(a) ?? Number.MAX_SAFE_INTEGER) - (alphaPermissionOrder.get(b) ?? Number.MAX_SAFE_INTEGER));
+ }
+ 
++function samePermissionCodes(left: readonly AlphaPermissionCode[], right: readonly AlphaPermissionCode[]) {
++  return left.length === right.length && left.every((code, index) => code === right[index]);
++}
++
+ function serializeEditableUser(user: EditableUserRecord) {
+   const permissionCodes = normalizePermissionCodes(user.userPermissions.map((item) => item.permission.code));
+ 
+@@ -175,13 +180,14 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
+             ok: false,
+             error: "FORBIDDEN",
+             details: {
+-              message: "Seuls les comptes ADMIN ou GERANT peuvent attribuer, retirer ou conférer le droit de modification des règles métier.",
++              message: "Seuls les comptes ADMIN ou GERANT peuvent attribuer, retirer ou conferer le droit de modification des regles metier.",
+             },
+           },
+           403,
+         );
+       }
+     }
++
+     const alphaPermissions = nextPermissionCodes !== undefined
+       ? await prisma.permission.findMany({
+           where: { code: { in: [...ALPHA_PERMISSION_CODES] } },
+@@ -198,10 +204,23 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
+ 
+     if (nextPermissionCodes !== undefined && resolvedPermissionIds.length !== nextPermissionCodes.length) {
+       return badRequest("VALIDATION_ERROR", {
+-        message: "Certaines permissions demandées ne sont pas disponibles dans le catalogue ALPHA réel.",
++        message: "Certaines permissions demandees ne sont pas disponibles dans le catalogue ALPHA reel.",
+       });
+     }
+ 
++    const changedFields = [
++      ...(parsedBody.data.name !== undefined && parsedBody.data.name !== existingUser.name ? ["name"] : []),
++      ...(parsedBody.data.email !== undefined && parsedBody.data.email !== existingUser.email ? ["email"] : []),
++      ...(parsedBody.data.role !== undefined && parsedBody.data.role !== existingUser.role ? ["role"] : []),
++      ...(nextPermissionCodes !== undefined && !samePermissionCodes(existingPermissionCodes, nextNormalizedPermissionCodes)
++        ? ["permissionCodes"]
++        : []),
++    ];
++
++    if (changedFields.length === 0) {
++      return ok(serializeEditableUser(existingUser));
++    }
++
+     const updatedUser = await prisma.$transaction(async (tx) => {
+       await tx.user.update({
+         where: { id: existingUser.id },
+@@ -233,7 +252,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
+         }
+       }
+ 
+-      return tx.user.findFirst({
++      const nextUser = await tx.user.findFirst({
+         where: {
+           id: existingUser.id,
+           companyId,
+@@ -243,6 +262,35 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
+         },
+         select: userSelect,
+       });
++
++      if (!nextUser) return null;
++
++      await writePersonalDataAudit(tx, {
++        companyId,
++        actorUserId,
++        action: "USER_UPDATE",
++        entityType: "USER",
++        entityId: nextUser.id,
++        summary: `Modification utilisateur ${nextUser.email}`,
++        changedFields,
++        previous: {
++          name: existingUser.name,
++          email: existingUser.email,
++          role: existingUser.role,
++          permissionCodes: existingPermissionCodes,
++        },
++        next: {
++          name: nextUser.name,
++          email: nextUser.email,
++          role: nextUser.role,
++          permissionCodes: nextNormalizedPermissionCodes,
++        },
++        details: {
++          targetType: "user",
++        },
++      });
++
++      return nextUser;
+     });
+ 
+     if (!updatedUser) return notFound();
+@@ -252,7 +300,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
+     const mapped = prismaToHttp(e);
+     if (mapped?.status === 404) return notFound();
+     if (mapped?.status === 409) {
+-      return conflict(mapped.error, { message: "Un utilisateur avec cet email existe déjà." });
++      return conflict(mapped.error, { message: "Un utilisateur avec cet email existe deja." });
+     }
+ 
+     return serverError(mapped ?? getErrorMessage(e));
+diff --git a/app/api/users/route.ts b/app/api/users/route.ts
+index 53505cd1633319949db6883761fc86dc874df23b..695a8d07b40751bea901e090c71d96bef3a72467 100644
+--- a/app/api/users/route.ts
++++ b/app/api/users/route.ts
+@@ -12,6 +12,7 @@ import {
+ import { canManageUsers } from "@/lib/permissions";
+ import { prisma } from "@/lib/prisma";
+ import { serializeDates } from "@/lib/serializers";
++import { writePersonalDataAudit } from "@/lib/services/audit/personal-data-audit";
+ import { createUserBodySchema } from "@/lib/validators/user";
+ 
+ const USER_ROLES = ["ADMIN", "GERANT", "BUREAU", "ADE", "AA", "TAXI", "REGULATEUR"] as const;
+@@ -180,15 +181,41 @@ export async function POST(req: Request) {
+   try {
+     const hashedPassword = await bcrypt.hash(parsed.data.password, 10);
+ 
+-    const user = await prisma.user.create({
+-      data: {
+-        email: parsed.data.email,
+-        password: hashedPassword,
+-        name: parsed.data.name,
+-        role: parsed.data.role,
++    const user = await prisma.$transaction(async (tx) => {
++      const createdUser = await tx.user.create({
++        data: {
++          email: parsed.data.email,
++          password: hashedPassword,
++          name: parsed.data.name,
++          role: parsed.data.role,
++          companyId,
++        },
++        select: userSelect,
++      });
++
++      await writePersonalDataAudit(tx, {
+         companyId,
+-      },
+-      select: userSelect,
++        actorUserId,
++        action: "USER_CREATE",
++        entityType: "USER",
++        entityId: createdUser.id,
++        summary: `Creation utilisateur ${createdUser.email}`,
++        changedFields: ["email", "password", "name", "role", "companyId"],
++        previous: null,
++        next: {
++          email: createdUser.email,
++          password: "REDACTED",
++          name: createdUser.name,
++          role: createdUser.role,
++          companyId: createdUser.companyId,
++          depotId: createdUser.depotId,
++        },
++        details: {
++          targetType: "user",
++        },
++      });
++
++      return createdUser;
+     });
+ 
+     return ok(serializeDates(user), 201);
+diff --git a/app/login/page.tsx b/app/login/page.tsx
+index 7f6a6fadc28c9829a26167d356425381917b8db8..93dfc0e89f7d8ca09a5fa779be76ad8942504753 100644
+--- a/app/login/page.tsx
++++ b/app/login/page.tsx
+@@ -1,5 +1,6 @@
+ "use client";
+ 
++import Link from "next/link";
+ import { signIn, useSession } from "next-auth/react";
+ import { Suspense, useEffect, useState } from "react";
+ import { useRouter, useSearchParams } from "next/navigation";
+@@ -109,6 +110,12 @@ function LoginPageContent() {
+           {loading ? "Connexion..." : "Se connecter"}
+         </button>
+       </form>
++
++      <p style={{ marginTop: 16, fontSize: 14, lineHeight: 1.5 }}>
++        En poursuivant, vous utilisez une application qui traite des donnees personnelles de gestion,
++        d&apos;authentification, d&apos;absence et d&apos;audit. Consultez les{" "}
++        <Link href="/privacy">mentions d&apos;information</Link>.
++      </p>
+     </div>
+   );
+ }
+diff --git a/lib/services/users/archive-user.ts b/lib/services/users/archive-user.ts
+index e80850f43313d6b267835f0e73e172068fb25902..d16ce8a8ec7ad99043e2ced0c2bd254ac5d9eed9 100644
+--- a/lib/services/users/archive-user.ts
++++ b/lib/services/users/archive-user.ts
+@@ -1,6 +1,7 @@
+ import { PlatformRole } from "@prisma/client";
+ 
+ import { prisma } from "@/lib/prisma";
++import { writePersonalDataAudit } from "@/lib/services/audit/personal-data-audit";
+ import { traceSupportAction } from "@/lib/services/audit/support-action-trace";
+ 
+ type ArchivedUser = {
+@@ -55,6 +56,28 @@ export async function archiveUser(input: ArchiveUserInput): Promise<ArchivedUser
+       select: userSelect,
+     });
+ 
++    await writePersonalDataAudit(tx, {
++      companyId: input.companyId,
++      actorUserId: input.actorUserId,
++      action: "USER_ARCHIVE",
++      entityType: "USER",
++      entityId: user.id,
++      summary: `Archivage utilisateur ${user.email}`,
++      changedFields: ["isActive"],
++      previous: {
++        isActive: existing.isActive,
++      },
++      next: {
++        isActive: user.isActive,
++      },
++      details: {
++        targetType: "user",
++        targetEmail: user.email,
++        targetName: user.name,
++        targetRole: user.role,
++      },
++    });
++
+     await traceSupportAction(tx, {
+       companyId: input.companyId,
+       actorUserId: input.actorUserId,
+diff --git a/lib/services/users/assign-user-depot.ts b/lib/services/users/assign-user-depot.ts
+index 01ad0271131afc1ece9e179534f24961016b96d4..002710912ce6664b11fed8c22d85d5b03fabeaa6 100644
+--- a/lib/services/users/assign-user-depot.ts
++++ b/lib/services/users/assign-user-depot.ts
+@@ -1,6 +1,7 @@
+ import { PlatformRole } from "@prisma/client";
+ 
+ import { prisma } from "@/lib/prisma";
++import { writePersonalDataAudit } from "@/lib/services/audit/personal-data-audit";
+ import { traceSupportAction } from "@/lib/services/audit/support-action-trace";
+ 
+ type AssignedUser = {
+@@ -105,6 +106,42 @@ export async function assignUserDepot(input: AssignUserDepotInput): Promise<Assi
+       select: userDepotSelect,
+     });
+ 
++    await writePersonalDataAudit(tx, {
++      companyId: input.companyId,
++      actorUserId: input.actorUserId,
++      action: "USER_ASSIGN_DEPOT",
++      entityType: "USER",
++      entityId: updatedUser.id,
++      summary: `Affectation depot utilisateur ${updatedUser.email}`,
++      changedFields: ["depotId"],
++      previous: {
++        depotId: existingUser.depotId,
++        depot: existingUser.depot
++          ? {
++              id: existingUser.depot.id,
++              name: existingUser.depot.name,
++              isActive: existingUser.depot.isActive,
++            }
++          : null,
++      },
++      next: {
++        depotId: updatedUser.depotId,
++        depot: updatedUser.depot
++          ? {
++              id: updatedUser.depot.id,
++              name: updatedUser.depot.name,
++              isActive: updatedUser.depot.isActive,
++            }
++          : null,
++      },
++      details: {
++        targetType: "user",
++        requestedDepotId: input.depotId,
++        resolvedDepotId: nextDepot?.id ?? null,
++        resolvedDepotName: nextDepot?.name ?? null,
++      },
++    });
++
+     await traceSupportAction(tx, {
+       companyId: input.companyId,
+       actorUserId: input.actorUserId,
+diff --git a/lib/services/users/user-absence.ts b/lib/services/users/user-absence.ts
+index 17ef10d3356bfde49cbcc674a61f2ad33bc7d00f..c86514a6194e6cc1bb01606783041d473dc6c10b 100644
+--- a/lib/services/users/user-absence.ts
++++ b/lib/services/users/user-absence.ts
+@@ -1,6 +1,7 @@
+ import { Prisma } from "@prisma/client";
+ 
+ import { prisma } from "@/lib/prisma";
++import { writePersonalDataAudit } from "@/lib/services/audit/personal-data-audit";
+ 
+ const userAbsenceSelect = Prisma.validator<Prisma.UserAbsenceSelect>()({
+   id: true,
+@@ -37,6 +38,7 @@ export type ListUserAbsencesResult =
+ export type CreateUserAbsenceInput = {
+   companyId: string;
+   userId: string;
++  actorUserId?: string | null;
+   reason?: string | null;
+   startAt: Date;
+   endAt: Date;
+@@ -52,6 +54,7 @@ export type UpdateUserAbsenceInput = {
+   companyId: string;
+   userId: string;
+   absenceId: string;
++  actorUserId?: string | null;
+   reason?: string | null;
+   startAt?: Date;
+   endAt?: Date;
+@@ -68,6 +71,7 @@ export type DeleteUserAbsenceInput = {
+   companyId: string;
+   userId: string;
+   absenceId: string;
++  actorUserId?: string | null;
+ };
+ 
+ export type DeleteUserAbsenceResult =
+@@ -86,6 +90,8 @@ async function findManagedUser(userId: string, companyId: string) {
+     },
+     select: {
+       id: true,
++      name: true,
++      email: true,
+     },
+   });
+ }
+@@ -160,15 +166,42 @@ export async function createUserAbsence(input: CreateUserAbsenceInput): Promise<
+   const overlap = await findOverlappingUserAbsence(input);
+   if (overlap) return { status: "OVERLAP", conflict: overlap };
+ 
+-  const absence = await prisma.userAbsence.create({
+-    data: {
++  const absence = await prisma.$transaction(async (tx) => {
++    const createdAbsence = await tx.userAbsence.create({
++      data: {
++        companyId: input.companyId,
++        userId: input.userId,
++        reason: input.reason ?? null,
++        startAt: input.startAt,
++        endAt: input.endAt,
++      },
++      select: userAbsenceSelect,
++    });
++
++    await writePersonalDataAudit(tx, {
+       companyId: input.companyId,
+-      userId: input.userId,
+-      reason: input.reason ?? null,
+-      startAt: input.startAt,
+-      endAt: input.endAt,
+-    },
+-    select: userAbsenceSelect,
++      actorUserId: input.actorUserId,
++      action: "USER_ABSENCE_CREATE",
++      entityType: "USER_ABSENCE",
++      entityId: createdAbsence.id,
++      summary: `Creation absence utilisateur ${user.email}`,
++      changedFields: ["reason", "startAt", "endAt"],
++      previous: null,
++      next: {
++        userId: createdAbsence.userId,
++        reason: createdAbsence.reason,
++        startAt: createdAbsence.startAt,
++        endAt: createdAbsence.endAt,
++      },
++      details: {
++        targetType: "user-absence",
++        targetUserId: user.id,
++        targetUserName: user.name,
++        targetUserEmail: user.email,
++      },
++    });
++
++    return createdAbsence;
+   });
+ 
+   return { status: "OK", absence };
+@@ -195,14 +228,52 @@ export async function updateUserAbsence(input: UpdateUserAbsenceInput): Promise<
+   });
+   if (overlap) return { status: "OVERLAP", conflict: overlap };
+ 
+-  const absence = await prisma.userAbsence.update({
+-    where: { id: existing.id },
+-    data: {
+-      ...(input.reason !== undefined ? { reason: input.reason } : {}),
+-      ...(input.startAt !== undefined ? { startAt: input.startAt } : {}),
+-      ...(input.endAt !== undefined ? { endAt: input.endAt } : {}),
+-    },
+-    select: userAbsenceSelect,
++  const changedFields = [
++    ...(input.reason !== undefined && input.reason !== existing.reason ? ["reason"] : []),
++    ...(input.startAt !== undefined && input.startAt.getTime() !== existing.startAt.getTime() ? ["startAt"] : []),
++    ...(input.endAt !== undefined && input.endAt.getTime() !== existing.endAt.getTime() ? ["endAt"] : []),
++  ];
++
++  if (changedFields.length === 0) return { status: "OK", absence: existing };
++
++  const absence = await prisma.$transaction(async (tx) => {
++    const updatedAbsence = await tx.userAbsence.update({
++      where: { id: existing.id },
++      data: {
++        ...(input.reason !== undefined ? { reason: input.reason } : {}),
++        ...(input.startAt !== undefined ? { startAt: input.startAt } : {}),
++        ...(input.endAt !== undefined ? { endAt: input.endAt } : {}),
++      },
++      select: userAbsenceSelect,
++    });
++
++    await writePersonalDataAudit(tx, {
++      companyId: input.companyId,
++      actorUserId: input.actorUserId,
++      action: "USER_ABSENCE_UPDATE",
++      entityType: "USER_ABSENCE",
++      entityId: updatedAbsence.id,
++      summary: `Modification absence utilisateur ${user.email}`,
++      changedFields,
++      previous: {
++        reason: existing.reason,
++        startAt: existing.startAt,
++        endAt: existing.endAt,
++      },
++      next: {
++        reason: updatedAbsence.reason,
++        startAt: updatedAbsence.startAt,
++        endAt: updatedAbsence.endAt,
++      },
++      details: {
++        targetType: "user-absence",
++        targetUserId: user.id,
++        targetUserName: user.name,
++        targetUserEmail: user.email,
++      },
++    });
++
++    return updatedAbsence;
+   });
+ 
+   return { status: "OK", absence };
+@@ -215,9 +286,35 @@ export async function deleteUserAbsence(input: DeleteUserAbsenceInput): Promise<
+   const existing = await findUserAbsenceByTenant(input.absenceId, input.userId, input.companyId);
+   if (!existing) return { status: "ABSENCE_NOT_FOUND" };
+ 
+-  const absence = await prisma.userAbsence.delete({
+-    where: { id: existing.id },
+-    select: userAbsenceSelect,
++  const absence = await prisma.$transaction(async (tx) => {
++    const deletedAbsence = await tx.userAbsence.delete({
++      where: { id: existing.id },
++      select: userAbsenceSelect,
++    });
++
++    await writePersonalDataAudit(tx, {
++      companyId: input.companyId,
++      actorUserId: input.actorUserId,
++      action: "USER_ABSENCE_DELETE",
++      entityType: "USER_ABSENCE",
++      entityId: deletedAbsence.id,
++      summary: `Suppression absence utilisateur ${user.email}`,
++      changedFields: ["deleted"],
++      previous: {
++        reason: existing.reason,
++        startAt: existing.startAt,
++        endAt: existing.endAt,
++      },
++      next: null,
++      details: {
++        targetType: "user-absence",
++        targetUserId: user.id,
++        targetUserName: user.name,
++        targetUserEmail: user.email,
++      },
++    });
++
++    return deletedAbsence;
+   });
+ 
+   return { status: "OK", absence };
+diff --git a/scripts/quality/smoke-api-critical-contracts.test.mjs b/scripts/quality/smoke-api-critical-contracts.test.mjs
+index 4b7fe8c91b00bedde78bbcabecaa356b06d317c9..4f6d7696b9fd5978d6bd4dad0304b6589f5569e6 100644
+--- a/scripts/quality/smoke-api-critical-contracts.test.mjs
++++ b/scripts/quality/smoke-api-critical-contracts.test.mjs
+@@ -27,6 +27,32 @@ test("users API keeps auth, tenant scoping and support exclusion", () => {
+   expectNoPattern(source, /parsed\.data\.companyId|body\.companyId/, "users POST must not trust a client companyId");
+ });
+ 
++test("users personal-data mutations keep an audit trail", () => {
++  const createSource = read("app/api/users/route.ts");
++  const updateSource = read("app/api/users/[id]/route.ts");
++  const archiveSource = read("lib/services/users/archive-user.ts");
++  const depotSource = read("lib/services/users/assign-user-depot.ts");
++  const resetPasswordSource = read("app/api/users/[id]/reset-password/route.ts");
++  const absenceSource = read("lib/services/users/user-absence.ts");
++
++  expectPattern(createSource, /writePersonalDataAudit\(/, "users POST must write a personal-data audit entry");
++  expectPattern(updateSource, /writePersonalDataAudit\(/, "users PATCH must write a personal-data audit entry");
++  expectPattern(archiveSource, /writePersonalDataAudit\(/, "user archive must write a personal-data audit entry");
++  expectPattern(depotSource, /writePersonalDataAudit\(/, "user depot assignment must write a personal-data audit entry");
++  expectPattern(resetPasswordSource, /writePersonalDataAudit\(/, "user password reset must write a personal-data audit entry");
++  expectPattern(absenceSource, /USER_ABSENCE_CREATE/, "absence creation audit action must exist");
++  expectPattern(absenceSource, /USER_ABSENCE_UPDATE/, "absence update audit action must exist");
++  expectPattern(absenceSource, /USER_ABSENCE_DELETE/, "absence delete audit action must exist");
++});
++
++test("privacy mentions stay reachable from login", () => {
++  const loginSource = read("app/login/page.tsx");
++  const privacySource = read("app/privacy/page.tsx");
++
++  expectPattern(loginSource, /Link href=\"\/privacy\"/, "login page must link to privacy mentions");
++  expectPattern(privacySource, /Mentions d'information - Donnees personnelles/, "privacy page must expose RGPD information");
++});
++
+ test("templates API keeps auth, permission gate and company-scoped persistence", () => {
+   const source = read("app/api/templates/route.ts");
+ 
+diff --git a/app/privacy/page.tsx b/app/privacy/page.tsx
+new file mode 100644
+index 0000000000000000000000000000000000000000..7a39a2125d5367dbf0bf6c088073539bd6646477
+--- /dev/null
++++ b/app/privacy/page.tsx
+@@ -0,0 +1,99 @@
++const dataCategories = [
++  "Comptes utilisateurs : email, nom, role, rattachement societe/depot, statut actif, permissions.",
++  "Authentification : mot de passe hache, traces de connexion reussie ou echouee.",
++  "Absences : motif, date/heure de debut et de fin, utilisateur rattache.",
++  "Audit planning/login : acteur, action, entite, resume, charge utile d'audit, horodatage.",
++  "Exports planning : nom et email des agents presents dans les exports planning.",
++  "Imports initiaux : utilisateurs et absences importes depuis CSV/XLSX via les routes admin.",
++];
++
++const purposes = [
++  "Authentifier les utilisateurs et securiser l'acces a l'application.",
++  "Administrer les comptes, roles, permissions et rattachements metier.",
++  "Gerer les indisponibilites utilisateurs pour la planification.",
++  "Produire, consulter et exporter un planning nominatif selon les permissions reelles.",
++  "Tracer les connexions et les operations critiques visibles dans l'audit applicatif.",
++  "Initialiser les donnees users/absences via les imports admin du depot.",
++];
++
++const accessRules = [
++  "Les acces observes dans le depot reposent sur la session enrichie, `companyId`, les roles et les permissions.",
++  "Les roles `ADMIN` et `GERANT` disposent des acces de gestion les plus larges dans les flux users observes.",
++  "La consultation d'audit repose sur les roles natifs admin/gerant, la permission `AUDIT_VIEW` et le support global pour la lecture.",
++  "Les exports planning sont bornes au tenant courant et, sans droit global, a l'utilisateur courant.",
++];
++
++const retentionRules = [
++  "Archivage utilisateur observe : desactivation logique via `isActive = false`.",
++  "Suppression definitive utilisateur : INFORMATION NON FOURNIE — À CONFIRMER hors cas exceptionnel cadre.",
++  "Retention automatisee des logs d'audit, exports generes et absences : INFORMATION NON FOURNIE — À CONFIRMER.",
++  "Suppression d'absence observee : suppression metier physique avec trace d'audit applicative.",
++];
++
++const rightsRules = [
++  "Droit d'acces / export RGPD dedie : INFORMATION NON FOURNIE — À CONFIRMER.",
++  "Mecanismes observes dans le depot : APIs users/absences pour lecture/correction metier, page audit pour les lecteurs autorises, export planning non equivalent a un export RGPD dedie.",
++  "Contact DPO ou canal privacy officiel : INFORMATION NON FOURNIE — À CONFIRMER.",
++];
++
++export default function PrivacyPage() {
++  return (
++    <main style={{ maxWidth: 860, margin: "0 auto", padding: "32px 16px 56px" }}>
++      <h1>Mentions d&apos;information - Donnees personnelles</h1>
++      <p>
++        Cette page expose la base RGPD minimale actuellement formalisee dans le depot pour Ambulance Manager.
++        Elle decrit exclusivement les traitements et mecanismes observes dans le code et la documentation du
++        projet au 23/04/2026.
++      </p>
++      <p>
++        Si une information organisationnelle n&apos;est pas prouvee dans le depot, elle est maintenue sous la forme
++        <strong> INFORMATION NON FOURNIE — À CONFIRMER</strong>.
++      </p>
++
++      <section style={{ marginTop: 28 }}>
++        <h2>Categories de donnees observees</h2>
++        <ul>
++          {dataCategories.map((item) => (
++            <li key={item}>{item}</li>
++          ))}
++        </ul>
++      </section>
++
++      <section style={{ marginTop: 28 }}>
++        <h2>Finalites observees</h2>
++        <ul>
++          {purposes.map((item) => (
++            <li key={item}>{item}</li>
++          ))}
++        </ul>
++      </section>
++
++      <section style={{ marginTop: 28 }}>
++        <h2>Acces observes</h2>
++        <ul>
++          {accessRules.map((item) => (
++            <li key={item}>{item}</li>
++          ))}
++        </ul>
++      </section>
++
++      <section style={{ marginTop: 28 }}>
++        <h2>Conservation et suppression</h2>
++        <ul>
++          {retentionRules.map((item) => (
++            <li key={item}>{item}</li>
++          ))}
++        </ul>
++      </section>
++
++      <section style={{ marginTop: 28 }}>
++        <h2>Droits, export, correction, suppression</h2>
++        <ul>
++          {rightsRules.map((item) => (
++            <li key={item}>{item}</li>
++          ))}
++        </ul>
++      </section>
++    </main>
++  );
++}
+diff --git a/lib/services/audit/personal-data-audit.ts b/lib/services/audit/personal-data-audit.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..7f6729b013ad0bf7cb659212708a899c1d8467fb
+--- /dev/null
++++ b/lib/services/audit/personal-data-audit.ts
+@@ -0,0 +1,37 @@
++import { Prisma, PrismaClient } from "@prisma/client";
++
++import { writePlanningAudit } from "@/lib/services/planning/planning-audit";
++
++type AuditDb = Prisma.TransactionClient | PrismaClient;
++
++export type PersonalDataAuditInput = {
++  companyId: string;
++  actorUserId?: string | null;
++  action: string;
++  entityType: "USER" | "USER_ABSENCE";
++  entityId: string;
++  summary: string;
++  changedFields: string[];
++  previous: Prisma.InputJsonValue | null;
++  next: Prisma.InputJsonValue | null;
++  details?: Prisma.InputJsonValue;
++};
++
++export async function writePersonalDataAudit(db: AuditDb, input: PersonalDataAuditInput) {
++  return writePlanningAudit(db, {
++    companyId: input.companyId,
++    actorUserId: input.actorUserId,
++    action: input.action,
++    entityType: input.entityType,
++    entityId: input.entityId,
++    summary: input.summary,
++    payload: {
++      module: "users",
++      personalData: true,
++      changedFields: input.changedFields,
++      previous: input.previous,
++      next: input.next,
++      details: input.details ?? null,
++    },
++  });
++}
+diff --git a/docs/1-master/RGPD_BASE_MINIMALE.md b/docs/1-master/RGPD_BASE_MINIMALE.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..a8a27932c212b2a98e75c36a6c07e9383b2bb47f
+--- /dev/null
++++ b/docs/1-master/RGPD_BASE_MINIMALE.md
+@@ -0,0 +1,141 @@
++# Ambulance Manager - Base RGPD minimale
++
++Version : V0.1
++Date : 23/04/2026
++
++## Role du document
++
++Ce document formalise la base RGPD minimale observee et completee dans le depot
++pour le bloc `A17 - RGPD`.
++
++Regle de source :
++- contenu derive du code reel du depot et de la documentation officielle relue ;
++- si une information n'est pas prouvee : `INFORMATION NON FOURNIE — À CONFIRMER` ;
++- en cas de contradiction : `CODE > DOCUMENTATION`.
++
++## Perimetre couvert
++
++Perimetre strictement observe dans le depot :
++- comptes utilisateurs ;
++- absences / indisponibilites utilisateurs ;
++- audit login et audit planning ;
++- exports planning ;
++- imports users et user-absences ;
++- mecanismes d'acces et de cloisonnement associes.
++
++Hors perimetre de ce document :
++- cadrage legal externe non present dans le depot ;
++- politique RH hors application ;
++- contrats sous-traitants ;
++- bases legales non documentees dans le depot ;
++- DPO / contact privacy nominatif non prouve dans le depot.
++
++## Cartographie minimale des donnees
++
++| Domaine | Donnees observees | Source code principale | Acces observe |
++| --- | --- | --- | --- |
++| Utilisateurs | `email`, `password` hache, `name`, `role`, `companyId`, `depotId`, `isActive`, permissions, horodatages | `prisma/schema.prisma`, `app/api/users/*` | gestion via roles/perms users ; cloisonnement par `companyId` |
++| Absences | `userId`, `reason`, `startAt`, `endAt`, horodatages | `prisma/schema.prisma`, `app/api/users/[id]/absences/*`, `lib/services/users/user-absence.ts` | gestion via `canManageUsers(...)` et `companyId` |
++| Audit login | email de connexion, succes/echec, raison, acteur, payload, date | `lib/auth.ts`, `prisma/schema.prisma` | lecture via audit pour lecteurs autorises |
++| Audit planning | acteur, action, entite, resume, payload, date | `app/api/audit/route.ts`, `lib/services/planning/planning-audit.ts` | lecture via audit pour lecteurs autorises |
++| Exports planning | nom/email des agents, depot, vehicule, notes, motif d'annulation | `app/api/planning/exports/route.ts`, `lib/planning/export.ts` | `PLANNING_EXPORT` + scoping tenant/utilisateur |
++| Imports initiaux | users : email, nom, role, mot de passe, depot ; absences : userEmail, reason, startAt, endAt | `app/api/imports/route.ts`, `lib/imports/import-engine.ts` | `ADMIN` / `GERANT` uniquement |
++
++## Finalites observees
++
++Finalites inferrees directement du code reel observe :
++- authentifier un utilisateur et securiser l'acces a l'application ;
++- administrer les comptes, roles, permissions et rattachements utilisateur ;
++- gerer les indisponibilites / absences utiles a la planification ;
++- afficher, exploiter et exporter un planning nominatif ;
++- tracer les connexions et les operations critiques applicatives ;
++- importer les donnees initiales users / absences.
++
++Finalites non prouvees dans le depot :
++- communication marketing ;
++- prospection commerciale ;
++- synchronisation avec un SIRH externe ;
++- reutilisation analytique hors usages explicitement codes.
++
++## Registre de traitement minimal
++
++| Traitement | Categories de donnees observees | Acteurs / acces observes | Conservation observee | Statut |
++| --- | --- | --- | --- | --- |
++| Authentification | email, mot de passe hache, logs de connexion | utilisateur authentifie, session NextAuth, audit lecture autorisee | retention automatisee des logs : `INFORMATION NON FOURNIE — À CONFIRMER` | observe |
++| Administration users | identite user, role, permissions, depot, statut actif | `ADMIN` / `GERANT` / acteurs avec droit de gestion users | archivage logique user par `isActive=false` ; suppression definitive user hors perimetre courant | observe |
++| Gestion des absences | identite user, motif, debut, fin | acteurs avec droit de gestion users | retention automatisee : `INFORMATION NON FOURNIE — À CONFIRMER` ; suppression metier physique tracee | observe |
++| Audit applicatif | acteur, action, entite, payload, horodatage | lecture audit reservee aux lecteurs autorises | purge / retention : `INFORMATION NON FOURNIE — À CONFIRMER` | observe |
++| Export planning | identite agents, depot, vehicule, notes | acteurs avec droit d'export planning | retention des fichiers exportes : `INFORMATION NON FOURNIE — À CONFIRMER` | observe |
++| Import initial | users et absences importes depuis fichier | `ADMIN` / `GERANT` | retention des fichiers sources/imports : `INFORMATION NON FOURNIE — À CONFIRMER` | observe |
++
++## Acces et cloisonnement observes
++
++- le cloisonnement principal repose sur `companyId` ;
++- les routes users/absences controlees exigent une session valide et
++  `canManageUsers(...)` ;
++- la lecture audit exige un profil autorise (`ADMIN`, `GERANT`,
++  `AUDIT_VIEW`, support global pour la lecture) ;
++- les exports planning exigent la permission d'export et restent bornes au
++  tenant courant ;
++- les imports observes sont reserves aux roles `ADMIN` / `GERANT`.
++
++## Conservation, correction, export, suppression
++
++### Conservation observee
++
++- utilisateur :
++  - archivage logique observe via `isActive = false` ;
++  - suppression definitive : `INFORMATION NON FOURNIE — À CONFIRMER`.
++- absence :
++  - aucune politique de retention automatisee observee ;
++  - suppression metier physique observee via l'API admin.
++- logs d'audit :
++  - aucune purge automatisee observee dans le depot.
++- exports planning :
++  - aucune politique de conservation des fichiers exportes observee.
++
++### Correction observee
++
++- correction utilisateur observee via `PATCH /api/users/[id]` ;
++- correction absence observee via
++  `PATCH /api/users/[id]/absences/[absenceId]` ;
++- reset mot de passe admin observe via
++  `POST /api/users/[id]/reset-password`.
++
++### Export observe
++
++- export planning observe via `GET /api/planning/exports` ;
++- export RGPD dedie des donnees personnelles users/absences/audit :
++  `INFORMATION NON FOURNIE — À CONFIRMER`.
++
++### Suppression observee
++
++- utilisateur : pas de suppression definitive standard observee ; archivage
++  logique seulement ;
++- absence : suppression metier physique observee et tracee en audit.
++
++## Mentions d'information minimales
++
++Les mentions minimales actuellement soutenues par le depot sont :
++- l'application manipule des donnees d'identification, d'acces, d'absence,
++  d'audit et d'export planning ;
++- ces donnees servent a authentifier, administrer les comptes, planifier
++  l'activite, tracer les operations critiques et realiser les imports/exports
++  observes ;
++- l'acces est borne par session, `companyId`, roles et permissions reelles ;
++- certaines informations organisationnelles restent non prouvees dans le depot :
++  contact privacy, base legale detaillee, retention automatisee,
++  export RGPD dedie.
++
++Une declinaison applicative minimale de ces mentions est exposee dans
++`/privacy`.
++
++## Points restant a confirmer
++
++- identite du responsable de traitement ;
++- contact DPO ou canal privacy officiel ;
++- bases legales detaillees par traitement ;
++- durees de conservation cibles par categorie ;
++- existence d'un export RGPD dedie ;
++- procedure formalisee de droit d'acces / rectification / suppression ;
++- retention des exports generes et des imports sources.
