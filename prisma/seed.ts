@@ -85,6 +85,10 @@ function isMissingPlatformRoleColumnError(error: unknown): boolean {
 
 type SeedCompany = {
   name: string;
+  lookup: {
+    adminEmail: string;
+    aliases: string[];
+  };
   managerNames: string;
   address: string;
   phone: string;
@@ -103,8 +107,36 @@ type SeedCompany = {
   }>;
 };
 
+async function resolveExistingCompany(params: { name: string; lookup: SeedCompany["lookup"] }) {
+  const adminUser = await prisma.user.findUnique({
+    where: { email: params.lookup.adminEmail },
+    select: { company: true },
+  });
+
+  if (adminUser?.company) {
+    return {
+      company: adminUser.company,
+      matchedBy: "admin-email" as const,
+    };
+  }
+
+  const candidateNames = [...new Set([params.name, ...params.lookup.aliases])];
+  const company = await prisma.company.findFirst({
+    where: { name: { in: candidateNames } },
+    orderBy: { createdAt: "asc" },
+  });
+
+  if (!company) return null;
+
+  return {
+    company,
+    matchedBy: company.name === params.name ? ("name" as const) : ("alias" as const),
+  };
+}
+
 async function upsertCompany(params: {
   name: string;
+  lookup: SeedCompany["lookup"];
   managerNames: string;
   address: string;
   phone: string;
@@ -119,8 +151,8 @@ async function upsertCompany(params: {
     siret: params.siret,
   };
 
-  const existing = await prisma.company.findUnique({ where: { name: params.name } });
-  if (!existing) {
+  const resolved = await resolveExistingCompany({ name: params.name, lookup: params.lookup });
+  if (!resolved) {
     const created = await prisma.company.create({
       data: { ...companyData, createdAt: now, updatedAt: now },
     });
@@ -128,11 +160,17 @@ async function upsertCompany(params: {
     return created;
   }
 
+  const existing = resolved.company;
+  if (resolved.matchedBy !== "name") {
+    console.log("✅ Company preserved:", existing.name, existing.id, `(matched by ${resolved.matchedBy})`);
+    return existing;
+  }
+
   const updated = await prisma.company.update({
     where: { id: existing.id },
     data: { ...companyData, updatedAt: now },
   });
-  console.log("✅ Company found:", params.name, updated.id);
+  console.log("✅ Company synced:", params.name, updated.id);
   return updated;
 }
 
@@ -312,6 +350,10 @@ async function main() {
   const companies: SeedCompany[] = [
     {
       name: "Ambulance Manager",
+      lookup: {
+        adminEmail: "admin@ambulance.local",
+        aliases: ["SC Ambulances", "Ambulance Manager"],
+      },
       managerNames: "Nathan Archenoul",
       address: "1 rue de l'Exemple, 22400 Lamballe-Armor",
       phone: "0296000001",
@@ -357,6 +399,10 @@ async function main() {
     },
     {
       name: "Ambulance Manager - B",
+      lookup: {
+        adminEmail: "admin-b@ambulance.local",
+        aliases: ["Ambulance Manager - B"],
+      },
       managerNames: "Admin B",
       address: "2 avenue des Tests, 35000 Rennes",
       phone: "0297000002",
@@ -389,6 +435,7 @@ async function main() {
   for (const cfg of companies) {
     const company = await upsertCompany({
       name: cfg.name,
+      lookup: cfg.lookup,
       managerNames: cfg.managerNames,
       address: cfg.address,
       phone: cfg.phone,

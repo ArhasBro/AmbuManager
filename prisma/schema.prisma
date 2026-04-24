@@ -180,7 +180,7 @@ model User {
   role         Role? // null uniquement pour les comptes plateforme globaux
   platformRole PlatformRole?
   companyId    String?       @db.Uuid
-  company      Company?      @relation(fields: [companyId], references: [id])
+  company      Company?      @relation(fields: [companyId], references: [id], onDelete: Restrict)
 
   depotId String? @db.Uuid
   depot   Depot?  @relation(fields: [depotId], references: [id], onDelete: SetNull)
@@ -287,7 +287,7 @@ model ShiftTemplate {
   // ✅ 4.1 — pour automatisation
   category             PlanningTemplateCategory @default(AMBULANCE)
   requiredRole         Role?
-  secondaryAllowedRoles Role[]
+  secondaryAllowedRoles Role[]                  @default([])
   minStaffCount        Int?
   requiredVehicleType  VehicleType?
   isActive             Boolean                  @default(true)

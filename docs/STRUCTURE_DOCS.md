@@ -1,6 +1,7 @@
 ﻿Structure du dossier pour le volume Windows
 Le numÚro de sÚrie du volume est 123E-4DB7
 C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
+|   BDD_OPERATIONS_SENSIBLES.md
 |   CMD.md
 |   PROTOCOLE_SESSION.md
 |   QUALITY_TESTS.md
@@ -687,9 +688,12 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   NOTES.md
 |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION-20260424-02_A18_BDD-LOT-02_DOCS.zip
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
+|   |   |   |           PATCH__SESSION-20260424-02_A18_BDD-LOT-02.diff
+|   |   |   |           PATCH__SESSION-20260424-02_A18_BDD-LOT-02_DOCS.diff
 |   |   |   |           README_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260424-03_A18_BDD-03

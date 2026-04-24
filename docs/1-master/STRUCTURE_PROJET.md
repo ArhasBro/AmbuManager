@@ -2217,7 +2217,7 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
-|   |   +---68CvwWykAxKbTKNrIXVSy
+|   |   +---ac_hh6NPrfAqOsBMnuDHL
 |   |   |       _buildManifest.js
 |   |   |       _clientMiddlewareManifest.json
 |   |   |       _ssgManifest.js
@@ -2242,7 +2242,7 @@ C:.
 |   |   |       af7027598a07baa5.js
 |   |   |       ee24e667dd0d7311.js
 |   |   |       fc3339c3f209e8c2.js
-|   |   |       feeee946444549da.css
+|   |   |       fdeadcb1b9c78c0c.css
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-a79a6d50b3241aaa.js
 |   |   |       
@@ -2432,6 +2432,7 @@ C:.
 |           vehicles-client.tsx
 |           
 +---docs
+|   |   BDD_OPERATIONS_SENSIBLES.md
 |   |   CMD.md
 |   |   PROTOCOLE_SESSION.md
 |   |   QUALITY_TESTS.md
@@ -3118,9 +3119,12 @@ C:.
 |   |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION-20260424-02_A18_BDD-LOT-02_DOCS.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
+|   |   |   |   |           PATCH__SESSION-20260424-02_A18_BDD-LOT-02.diff
+|   |   |   |   |           PATCH__SESSION-20260424-02_A18_BDD-LOT-02_DOCS.diff
 |   |   |   |   |           README_PATCH.md
 |   |   |   |   |           
 |   |   |   |   +---SESSION-20260424-03_A18_BDD-03
