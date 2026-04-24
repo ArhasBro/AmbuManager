@@ -169,8 +169,8 @@ IMPORTANT
 
 Références des sessions :
 
-- SESSION-20260424-04_A18_CLOTURE_A18
-- **CLOTURE_A18 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc BDD
+- SESSION-20260424-05_A19_PLAN-ADV-01
+- **PLAN-ADV-01 — AUDIT** — Audit complet des besoins planning avancé : affichages multiples, sélection multiple, affectation utilisateur, vue globale/personnelle/binôme, lisibilité opérationnelle
 ------------------------------------
 
 Voici sa réponse ainsi que les documents généré :
@@ -190,24 +190,6 @@ Je n'ai pas intégré :
 
 Fait moi la commande pour le script de création de sessions pour les sessions suivante.
 Exemple de la commande : .\create_session.ps1 -Stage "1-ALPHA" -Block "A1" -SessionCode "RBAC-02" -Type "CORRECTION" -Title "Remplacement méthodique de DEA par ADE"
-
-### BLOC A18 — BDD / Prisma / migrations / environnements
-**Objectif du bloc**  
-Fiabiliser durablement la base de données et éviter les écarts entre schéma, migrations et base réelle.
-
-#### Sessions
-- **BDD-01 — AUDIT** — Audit complet de la chaîne BDD existante : Prisma schema, migrations, seed, base locale, environnements, drifts potentiels, cohérence schéma ↔ base
-- **BDD-LOT-02 — CORRECTION+COMPLÉTION** — Correction et/ou complétion de la chaîne BDD : migrations, colonnes manquantes, contraintes, relations, seeds, clarification des environnements, documentation des opérations sensibles
-- **BDD-03 — VALIDATION** — Validation complète du bloc BDD : Prisma / migrations / base / seed / environnements
-- **CLOTURE_A18 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc BDD
-
-#### Résultat attendu
-- base plus fiable
-- moins de drift
-- migrations mieux gouvernées
-- environnements plus clairs
-
----
 
 ### BLOC A19 — Planning avancé
 **Objectif du bloc**  
