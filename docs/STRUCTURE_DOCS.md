@@ -666,6 +666,90 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |       |   SESSION.md
 |   |   |       |   
 |   |   |       \---PATCH
+|   |   |               LIVRABLES__SESSION-20260423-12_A17_CLOTURE_A17_A_PLAT.zip
+|   |   |               NO_PATCH.md
+|   |   |               README_PATCH.md
+|   |   |               
+|   |   +---BLOC_A18
+|   |   |   +---SESSION-20260424-01_A18_BDD-01
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           NO_PATCH.md
+|   |   |   |           
+|   |   |   +---SESSION-20260424-02_A18_BDD-LOT-02
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           README_PATCH.md
+|   |   |   |           
+|   |   |   +---SESSION-20260424-03_A18_BDD-03
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           NO_PATCH.md
+|   |   |   |           
+|   |   |   \---SESSION-20260424-04_A18_CLOTURE_A18
+|   |   |       |   EVIDENCES.md
+|   |   |       |   FIN_SESSION.md
+|   |   |       |   NOTES.md
+|   |   |       |   RESULTATS.md
+|   |   |       |   SESSION.md
+|   |   |       |   
+|   |   |       \---PATCH
+|   |   |               README_PATCH.md
+|   |   |               
+|   |   +---BLOC_A19
+|   |   |   +---SESSION-20260424-05_A19_PLAN-ADV-01
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           NO_PATCH.md
+|   |   |   |           
+|   |   |   +---SESSION-20260424-06_A19_PLAN-ADV-LOT-02
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           README_PATCH.md
+|   |   |   |           
+|   |   |   +---SESSION-20260424-07_A19_PLAN-ADV-03
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           NO_PATCH.md
+|   |   |   |           
+|   |   |   \---SESSION-20260424-08_A19_CLOTURE_A19
+|   |   |       |   EVIDENCES.md
+|   |   |       |   FIN_SESSION.md
+|   |   |       |   NOTES.md
+|   |   |       |   RESULTATS.md
+|   |   |       |   SESSION.md
+|   |   |       |   
+|   |   |       \---PATCH
 |   |   |               README_PATCH.md
 |   |   |               
 |   |   +---BLOC_A2
@@ -949,6 +1033,88 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |               NOTES.md
 |   |   |               RESULTATS.md
 |   |   |               SESSION.md
+|   |   |               
+|   |   +---BLOC_A20
+|   |   |   +---SESSION-20260424-09_A20_RH-01
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           NO_PATCH.md
+|   |   |   |           
+|   |   |   +---SESSION-20260424-10_A20_RH-LOT-02
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           README_PATCH.md
+|   |   |   |           
+|   |   |   +---SESSION-20260424-11_A20_RH-03
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           NO_PATCH.md
+|   |   |   |           
+|   |   |   \---SESSION-20260424-12_A20_CLOTURE_A20
+|   |   |       |   EVIDENCES.md
+|   |   |       |   FIN_SESSION.md
+|   |   |       |   NOTES.md
+|   |   |       |   RESULTATS.md
+|   |   |       |   SESSION.md
+|   |   |       |   
+|   |   |       \---PATCH
+|   |   |               README_PATCH.md
+|   |   |               
+|   |   +---BLOC_A21
+|   |   |   +---SESSION-20260424-13_A21_UX-01
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           NO_PATCH.md
+|   |   |   |           
+|   |   |   +---SESSION-20260424-14_A21_UX-LOT-02
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           README_PATCH.md
+|   |   |   |           
+|   |   |   +---SESSION-20260424-15_A21_UX-03
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           NO_PATCH.md
+|   |   |   |           
+|   |   |   \---SESSION-20260424-16_A21_CLOTURE_A21
+|   |   |       |   EVIDENCES.md
+|   |   |       |   FIN_SESSION.md
+|   |   |       |   NOTES.md
+|   |   |       |   RESULTATS.md
+|   |   |       |   SESSION.md
+|   |   |       |   
+|   |   |       \---PATCH
+|   |   |               README_PATCH.md
 |   |   |               
 |   |   +---BLOC_A3
 |   |   |   +---1-USER

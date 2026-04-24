@@ -169,8 +169,8 @@ IMPORTANT
 
 Références des sessions :
 
-- SESSION-20260423-12_A17_CLOTURE_A17
-- **BDD-01 — AUDIT** — Audit complet de la chaîne BDD existante : Prisma schema, migrations, seed, base locale, environnements, drifts potentiels, cohérence schéma ↔ base
+- SESSION-20260424-02_A18_BDD-LOT-02
+- **BDD-LOT-02 — CORRECTION+COMPLÉTION** — Correction et/ou complétion de la chaîne BDD : migrations, colonnes manquantes, contraintes, relations, seeds, clarification des environnements, documentation des opérations sensibles
 ------------------------------------
 
 Voici sa réponse ainsi que les documents généré :
