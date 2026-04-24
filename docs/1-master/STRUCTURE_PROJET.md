@@ -287,6 +287,170 @@ C:.
 |   |   |               00000300.meta
 |   |   |               00000301.meta
 |   |   |               00000302.meta
+|   |   |               00000303.sst
+|   |   |               00000304.sst
+|   |   |               00000305.sst
+|   |   |               00000306.sst
+|   |   |               00000307.sst
+|   |   |               00000308.meta
+|   |   |               00000309.meta
+|   |   |               00000310.meta
+|   |   |               00000311.meta
+|   |   |               00000312.meta
+|   |   |               00000313.sst
+|   |   |               00000314.sst
+|   |   |               00000315.sst
+|   |   |               00000316.sst
+|   |   |               00000317.sst
+|   |   |               00000318.meta
+|   |   |               00000319.meta
+|   |   |               00000320.meta
+|   |   |               00000321.meta
+|   |   |               00000322.meta
+|   |   |               00000323.sst
+|   |   |               00000324.sst
+|   |   |               00000325.sst
+|   |   |               00000326.sst
+|   |   |               00000327.sst
+|   |   |               00000328.meta
+|   |   |               00000329.meta
+|   |   |               00000330.meta
+|   |   |               00000331.meta
+|   |   |               00000332.meta
+|   |   |               00000333.sst
+|   |   |               00000334.sst
+|   |   |               00000335.sst
+|   |   |               00000336.meta
+|   |   |               00000337.meta
+|   |   |               00000338.meta
+|   |   |               00000339.sst
+|   |   |               00000340.sst
+|   |   |               00000341.sst
+|   |   |               00000342.meta
+|   |   |               00000343.meta
+|   |   |               00000344.meta
+|   |   |               00000345.sst
+|   |   |               00000346.sst
+|   |   |               00000347.sst
+|   |   |               00000348.sst
+|   |   |               00000349.sst
+|   |   |               00000350.meta
+|   |   |               00000351.meta
+|   |   |               00000352.meta
+|   |   |               00000353.meta
+|   |   |               00000354.meta
+|   |   |               00000355.sst
+|   |   |               00000356.sst
+|   |   |               00000357.sst
+|   |   |               00000358.meta
+|   |   |               00000359.meta
+|   |   |               00000360.meta
+|   |   |               00000361.sst
+|   |   |               00000362.sst
+|   |   |               00000363.sst
+|   |   |               00000364.sst
+|   |   |               00000365.sst
+|   |   |               00000366.meta
+|   |   |               00000367.meta
+|   |   |               00000368.meta
+|   |   |               00000369.meta
+|   |   |               00000370.meta
+|   |   |               00000371.sst
+|   |   |               00000372.sst
+|   |   |               00000373.sst
+|   |   |               00000374.sst
+|   |   |               00000375.sst
+|   |   |               00000376.meta
+|   |   |               00000377.meta
+|   |   |               00000378.meta
+|   |   |               00000379.meta
+|   |   |               00000380.meta
+|   |   |               00000381.sst
+|   |   |               00000382.sst
+|   |   |               00000383.sst
+|   |   |               00000384.meta
+|   |   |               00000385.meta
+|   |   |               00000386.meta
+|   |   |               00000387.sst
+|   |   |               00000388.sst
+|   |   |               00000389.sst
+|   |   |               00000390.sst
+|   |   |               00000391.sst
+|   |   |               00000392.meta
+|   |   |               00000393.meta
+|   |   |               00000394.meta
+|   |   |               00000395.meta
+|   |   |               00000396.meta
+|   |   |               00000397.sst
+|   |   |               00000398.sst
+|   |   |               00000399.sst
+|   |   |               00000400.sst
+|   |   |               00000401.sst
+|   |   |               00000402.meta
+|   |   |               00000403.meta
+|   |   |               00000404.meta
+|   |   |               00000405.meta
+|   |   |               00000406.meta
+|   |   |               00000407.sst
+|   |   |               00000408.sst
+|   |   |               00000409.sst
+|   |   |               00000410.sst
+|   |   |               00000411.sst
+|   |   |               00000412.meta
+|   |   |               00000413.meta
+|   |   |               00000414.meta
+|   |   |               00000415.meta
+|   |   |               00000416.meta
+|   |   |               00000417.sst
+|   |   |               00000418.sst
+|   |   |               00000419.sst
+|   |   |               00000420.sst
+|   |   |               00000421.sst
+|   |   |               00000422.meta
+|   |   |               00000423.meta
+|   |   |               00000424.meta
+|   |   |               00000425.meta
+|   |   |               00000426.meta
+|   |   |               00000427.sst
+|   |   |               00000428.sst
+|   |   |               00000429.sst
+|   |   |               00000430.sst
+|   |   |               00000431.sst
+|   |   |               00000432.meta
+|   |   |               00000433.meta
+|   |   |               00000434.meta
+|   |   |               00000435.meta
+|   |   |               00000436.meta
+|   |   |               00000437.sst
+|   |   |               00000438.sst
+|   |   |               00000439.sst
+|   |   |               00000440.sst
+|   |   |               00000441.sst
+|   |   |               00000442.meta
+|   |   |               00000443.meta
+|   |   |               00000444.meta
+|   |   |               00000445.meta
+|   |   |               00000446.meta
+|   |   |               00000447.sst
+|   |   |               00000448.sst
+|   |   |               00000449.sst
+|   |   |               00000450.sst
+|   |   |               00000451.sst
+|   |   |               00000452.meta
+|   |   |               00000453.meta
+|   |   |               00000454.meta
+|   |   |               00000455.meta
+|   |   |               00000456.meta
+|   |   |               00000457.sst
+|   |   |               00000458.sst
+|   |   |               00000459.sst
+|   |   |               00000460.sst
+|   |   |               00000461.sst
+|   |   |               00000462.meta
+|   |   |               00000463.meta
+|   |   |               00000464.meta
+|   |   |               00000465.meta
+|   |   |               00000466.meta
 |   |   |               CURRENT
 |   |   |               LOG
 |   |   |               
@@ -1038,6 +1202,8 @@ C:.
 |   |   |   |           _778db504._.js.map
 |   |   |   |           _8fbc5317._.js
 |   |   |   |           _8fbc5317._.js.map
+|   |   |   |           _e0be6ba6._.js
+|   |   |   |           _e0be6ba6._.js.map
 |   |   |   |           _next-internal_server_app_audit_page_actions_4244da5a.js
 |   |   |   |           _next-internal_server_app_audit_page_actions_4244da5a.js.map
 |   |   |   |           _next-internal_server_app_company_page_actions_ca33e7ac.js
@@ -1118,6 +1284,8 @@ C:.
 |   |   |   |       [turbopack]_browser_dev_hmr-client_hmr-client_ts_c8c997ce._.js.map
 |   |   |   |       _1c913e94._.js
 |   |   |   |       _1c913e94._.js.map
+|   |   |   |       _226c7a29._.js
+|   |   |   |       _226c7a29._.js.map
 |   |   |   |       _23a915ee._.js.map
 |   |   |   |       _4b091a18._.js
 |   |   |   |       _4b091a18._.js.map
@@ -2547,6 +2715,7 @@ C:.
 |   |   USAGE_VEHICLES.md
 |   |   
 |   +---1-master
+|   |       CADRAGE_UI_UX_ALPHA_MAQUETTE_V0.2.md
 |   |       DOCUMENT_CADRAGE_FONCTIONNEL.md
 |   |       DOCUMENT_MAITRE.md
 |   |       ETAT_GLOBAL_PROJET.md
@@ -3629,47 +3798,6 @@ C:.
 |   |   |   |               NO_PATCH.md
 |   |   |   |               README_PATCH.md
 |   |   |   |               
-|   |   |   +---BLOC_A21
-|   |   |   |   +---SESSION-20260424-13_A21_UX-01
-|   |   |   |   |   |   EVIDENCES.md
-|   |   |   |   |   |   FIN_SESSION.md
-|   |   |   |   |   |   NOTES.md
-|   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   SESSION.md
-|   |   |   |   |   |   
-|   |   |   |   |   \---PATCH
-|   |   |   |   |           NO_PATCH.md
-|   |   |   |   |           
-|   |   |   |   +---SESSION-20260424-14_A21_UX-LOT-02
-|   |   |   |   |   |   EVIDENCES.md
-|   |   |   |   |   |   FIN_SESSION.md
-|   |   |   |   |   |   NOTES.md
-|   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   SESSION.md
-|   |   |   |   |   |   
-|   |   |   |   |   \---PATCH
-|   |   |   |   |           README_PATCH.md
-|   |   |   |   |           
-|   |   |   |   +---SESSION-20260424-15_A21_UX-03
-|   |   |   |   |   |   EVIDENCES.md
-|   |   |   |   |   |   FIN_SESSION.md
-|   |   |   |   |   |   NOTES.md
-|   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   SESSION.md
-|   |   |   |   |   |   
-|   |   |   |   |   \---PATCH
-|   |   |   |   |           NO_PATCH.md
-|   |   |   |   |           
-|   |   |   |   \---SESSION-20260424-16_A21_CLOTURE_A21
-|   |   |   |       |   EVIDENCES.md
-|   |   |   |       |   FIN_SESSION.md
-|   |   |   |       |   NOTES.md
-|   |   |   |       |   RESULTATS.md
-|   |   |   |       |   SESSION.md
-|   |   |   |       |   
-|   |   |   |       \---PATCH
-|   |   |   |               README_PATCH.md
-|   |   |   |               
 |   |   |   +---BLOC_A3
 |   |   |   |   +---1-USER
 |   |   |   |   |   +---SESSION-20260319-09_A3_USERS-01
@@ -4437,6 +4565,13 @@ C:.
 |   |   |               NO_PATCH.md
 |   |   |               README_PATCH.md
 |   |   |               
+|   |   +---3-UI_UX-ALPHA
+|   |   |   +---A21-UX-01_CADRAGE
+|   |   |   +---A21-UX-02_DESIGN_SYSTEM
+|   |   |   +---A21-UX-03_MAQUETTES_FONDATRICES
+|   |   |   +---A21-UX-04_MAQUETTES_COMPLEMENTAIRES
+|   |   |   +---A21-UX-05_PAGES_SIMPLES_FINITIONS
+|   |   |   \---A21-UX-06_VALIDATION_CODEX
 |   |   \---SESSION-YYYYMMDD-XX
 |   |           EVIDENCES.md
 |   |           FIN_SESSION.md
