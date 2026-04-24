@@ -169,8 +169,8 @@ IMPORTANT
 
 Références des sessions :
 
-- SESSION-20260424-05_A19_PLAN-ADV-01
-- **PLAN-ADV-01 — AUDIT** — Audit complet des besoins planning avancé : affichages multiples, sélection multiple, affectation utilisateur, vue globale/personnelle/binôme, lisibilité opérationnelle
+- SESSION-20260424-06_A19_PLAN-ADV-LOT-02
+- **PLAN-ADV-LOT-02 — CORRECTION+COMPLÉTION** — Correction et/ou complétion du planning avancé : affectation à un shift, sélection multiple, modes de vue, visibilité globale/personnelle/binôme
 ------------------------------------
 
 Voici sa réponse ainsi que les documents généré :

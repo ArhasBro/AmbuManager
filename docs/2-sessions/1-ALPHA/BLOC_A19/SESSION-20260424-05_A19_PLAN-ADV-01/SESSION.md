@@ -1,35 +1,34 @@
-﻿# SESSION
+# SESSION-20260424-05_A19_PLAN-ADV-01
 
-## ID SESSION
+## Type
+AUDIT
 
-SESSION-20260424-05_A19_PLAN-ADV-01
+## Objet
+Audit complet des besoins planning avancé :
+- affichages multiples
+- sélection multiple
+- affectation utilisateur
+- vue globale / personnelle / binôme
+- lisibilité opérationnelle
 
-## Date
+## Décision patch
+`NO_PATCH`
 
-24/04/2026
+## Verdict d’audit
+`incomplet`
 
-## Contexte
+## Suite attendue
+`PLAN-ADV-LOT-02`
 
-Projet : Investissement  
-Sous-projet : Ambulance Manager  
-Maturite : 1-ALPHA  
-Bloc : A19  
-Type : AUDIT  
-Intitule : Audit complet des besoins planning avancé : affichages multiples, sélection multiple, affectation utilisateur, vue globale/personnelle/binôme, lisibilité opérationnelle
+## Synthèse
+L’existant couvre partiellement le besoin A19 :
+- vues jour / semaine / mois présentes
+- filtrage global / personnel observé
+- affectation unitaire prouvée
+- éléments avancés partiellement présents dans zone legacy
 
-## Objectif de la session
-
-INFORMATION NON FOURNIE - A CONFIRMER
-
-## Perimetre exact traite
-
-INFORMATION NON FOURNIE - A CONFIRMER
-
-## Resultat synthetique de session
-
-INFORMATION NON FOURNIE - A CONFIRMER
-
-## Dossiers lies
-
-- Session : docs/2-sessions/1-ALPHA/BLOC_A19/SESSION-20260424-05_A19_PLAN-ADV-01
-- PATCH   : docs/2-sessions/1-ALPHA/BLOC_A19/SESSION-20260424-05_A19_PLAN-ADV-01/PATCH
+Écarts confirmés :
+- pas de sélection multiple prouvée
+- pas de vue binôme dédiée prouvée
+- lisibilité opérationnelle non unifiée
+- pas d’affectation de masse démontrée

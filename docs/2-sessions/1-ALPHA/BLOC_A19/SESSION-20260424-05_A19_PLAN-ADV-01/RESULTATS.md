@@ -1,12 +1,20 @@
-﻿# RESULTATS
+# RESULTATS
 
-## RÃ©sultats obtenus
+## Verdict formel
+`incomplet`
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+## Points conformes
+- affichages multiples partiellement couverts
+- distinction global / personnel présente
+- affectation utilisateur unitaire existante
+- double affichage SIMPLE / AMBULANCE observé
 
----
+## Points incomplets
+- sélection multiple absente
+- vue binôme absente
+- cohérence globale/personnelle partielle
+- lisibilité opérationnelle inégalement répartie
 
-## Documents modifiÃ©s
-
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
-
+## Conséquence méthodologique
+Session suivante attendue :
+`PLAN-ADV-LOT-02`
