@@ -10,15 +10,14 @@ AUDIT+CORRECTION+COMPLETION+VALIDATION
 docs/2-sessions/1-ALPHA/BLOC_A20/SESSION-20260424-12_A20_CLOTURE_A20/PATCH
 
 ## Patch officiel attendu
-PATCH__SESSION-20260424-12_A20_CLOTURE_A20.diff
+NO_PATCH.md
 
 ## Commandes d'application
 
-`ash
-git apply --check "docs/2-sessions/1-ALPHA/BLOC_A20/SESSION-20260424-12_A20_CLOTURE_A20/PATCH/PATCH__SESSION-20260424-12_A20_CLOTURE_A20.diff"
-git apply         "docs/2-sessions/1-ALPHA/BLOC_A20/SESSION-20260424-12_A20_CLOTURE_A20/PATCH/PATCH__SESSION-20260424-12_A20_CLOTURE_A20.diff"
-`
+Aucune commande d'application : aucun patch applicatif n'est produit pour cette cloture.
 
 ## Statut
-- Dossier patch initialise.
-- Patch officiel a produire dans cette session si du code est modifie.
+- NO_PATCH.
+- Aucun fichier applicatif modifie.
+- Documentation de cloture finalisee.
+- ZIP documentaire final a plat produit.

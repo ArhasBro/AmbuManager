@@ -2318,6 +2318,11 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
+|   |   +---7KYLlOE1K2jhKPVcIYQ1z
+|   |   |       _buildManifest.js
+|   |   |       _clientMiddlewareManifest.json
+|   |   |       _ssgManifest.js
+|   |   |       
 |   |   +---chunks
 |   |   |       05c065d3e137ac6c.js
 |   |   |       12049629bfda53e4.js
@@ -2341,11 +2346,6 @@ C:.
 |   |   |       fdeadcb1b9c78c0c.css
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-a79a6d50b3241aaa.js
-|   |   |       
-|   |   +---DjX8zFzVWnhW6v9bukolb
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
 |   |   |       
 |   |   \---media
 |   |           favicon.0b3bf435.ico
@@ -3625,6 +3625,8 @@ C:.
 |   |   |   |       |   SESSION.md
 |   |   |   |       |   
 |   |   |   |       \---PATCH
+|   |   |   |               LIVRABLES__SESSION-20260424-12_A20_CLOTURE_A20_A_PLAT.zip
+|   |   |   |               NO_PATCH.md
 |   |   |   |               README_PATCH.md
 |   |   |   |               
 |   |   |   +---BLOC_A21

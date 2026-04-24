@@ -1093,6 +1093,8 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |       |   SESSION.md
 |   |   |       |   
 |   |   |       \---PATCH
+|   |   |               LIVRABLES__SESSION-20260424-12_A20_CLOTURE_A20_A_PLAT.zip
+|   |   |               NO_PATCH.md
 |   |   |               README_PATCH.md
 |   |   |               
 |   |   +---BLOC_A21
