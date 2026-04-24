@@ -2217,11 +2217,6 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
-|   |   +---ac_hh6NPrfAqOsBMnuDHL
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
-|   |   |       
 |   |   +---chunks
 |   |   |       05c065d3e137ac6c.js
 |   |   |       12049629bfda53e4.js
@@ -2245,6 +2240,11 @@ C:.
 |   |   |       fdeadcb1b9c78c0c.css
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-a79a6d50b3241aaa.js
+|   |   |       
+|   |   +---K_yGtz78QLcuLa7tdWLRm
+|   |   |       _buildManifest.js
+|   |   |       _clientMiddlewareManifest.json
+|   |   |       _ssgManifest.js
 |   |   |       
 |   |   \---media
 |   |           favicon.0b3bf435.ico
@@ -3132,6 +3132,7 @@ C:.
 |   |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION-20260424-03_A18_BDD-03_DOCS.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH

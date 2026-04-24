@@ -169,8 +169,8 @@ IMPORTANT
 
 Références des sessions :
 
-- SESSION-20260424-03_A18_BDD-03
-- **BDD-03 — VALIDATION** — Validation complète du bloc BDD : Prisma / migrations / base / seed / environnements
+- SESSION-20260424-04_A18_CLOTURE_A18
+- **CLOTURE_A18 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc BDD
 ------------------------------------
 
 Voici sa réponse ainsi que les documents généré :
