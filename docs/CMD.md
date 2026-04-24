@@ -169,8 +169,15 @@ IMPORTANT
 
 Références des sessions :
 
-- SESSION-20260424-08_A19_CLOTURE_A19
-- **CLOTURE_A19 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc Planning avancé
+- SESSION-20260424-10_A20_RH-LOT-02
+- **RH-LOT-02 — CORRECTION+COMPLÉTION** — Correction et/ou complétion du module RH : demandes d’absence, nom/prénom/initiales, gestion des stagiaires, premiers éléments d’horaires journaliers selon cadrage validé
+
+- SESSION-20260424-11_A20_RH-03
+- **RH-03 — VALIDATION** — Validation complète du bloc RH / utilisateurs avancés
+
+- SESSION-20260424-12_A20_CLOTURE_A20
+- **CLOTURE_A20 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc RH
+
 ------------------------------------
 
 Voici sa réponse ainsi que les documents généré :
@@ -190,24 +197,6 @@ Je n'ai pas intégré :
 
 Fait moi la commande pour le script de création de sessions pour les sessions suivante.
 Exemple de la commande : .\create_session.ps1 -Stage "1-ALPHA" -Block "A1" -SessionCode "RBAC-02" -Type "CORRECTION" -Title "Remplacement méthodique de DEA par ADE"
-
-### BLOC A19 — Planning avancé
-**Objectif du bloc**  
-Rendre le planning réellement plus exploitable au quotidien.
-
-#### Sessions
-- **PLAN-ADV-01 — AUDIT** — Audit complet des besoins planning avancé : affichages multiples, sélection multiple, affectation utilisateur, vue globale/personnelle/binôme, lisibilité opérationnelle
-- **PLAN-ADV-LOT-02 — CORRECTION+COMPLÉTION** — Correction et/ou complétion du planning avancé : affectation à un shift, sélection multiple, modes de vue, visibilité globale/personnelle/binôme
-- **PLAN-ADV-03 — VALIDATION** — Validation complète du bloc planning avancé : exploitabilité terrain, gain de temps, cohérence métier
-- **CLOTURE_A19 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc Planning avancé
-
-#### Résultat attendu
-- planning plus exploitable
-- affectations plus claires
-- vues mieux adaptées
-- usage quotidien facilité
-
----
 
 ### BLOC A20 — RH / Utilisateurs avancés
 **Objectif du bloc**  
