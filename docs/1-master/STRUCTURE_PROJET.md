@@ -1996,14 +1996,14 @@ C:.
 |   |   |   |   [root-of-the-server]__366e7ba8._.js.map
 |   |   |   |   [root-of-the-server]__3ca50d50._.js
 |   |   |   |   [root-of-the-server]__3ca50d50._.js.map
+|   |   |   |   [root-of-the-server]__407fc9d5._.js
+|   |   |   |   [root-of-the-server]__407fc9d5._.js.map
 |   |   |   |   [root-of-the-server]__441f7e40._.js
 |   |   |   |   [root-of-the-server]__441f7e40._.js.map
 |   |   |   |   [root-of-the-server]__466e0aef._.js
 |   |   |   |   [root-of-the-server]__466e0aef._.js.map
 |   |   |   |   [root-of-the-server]__53c78745._.js
 |   |   |   |   [root-of-the-server]__53c78745._.js.map
-|   |   |   |   [root-of-the-server]__5e43e516._.js
-|   |   |   |   [root-of-the-server]__5e43e516._.js.map
 |   |   |   |   [root-of-the-server]__5e792a0f._.js
 |   |   |   |   [root-of-the-server]__5e792a0f._.js.map
 |   |   |   |   [root-of-the-server]__6f0ffaf0._.js
@@ -2076,6 +2076,8 @@ C:.
 |   |   |   |   _9c56dc84._.js.map
 |   |   |   |   _a69f40f3._.js
 |   |   |   |   _a69f40f3._.js.map
+|   |   |   |   _abd600e8._.js
+|   |   |   |   _abd600e8._.js.map
 |   |   |   |   _c91273c4._.js
 |   |   |   |   _c91273c4._.js.map
 |   |   |   |   _cbe4c1fa._.js
@@ -2316,18 +2318,13 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
-|   |   +---12aSg9oXFUjVdPU83e75j
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
-|   |   |       
 |   |   +---chunks
 |   |   |       05c065d3e137ac6c.js
 |   |   |       12049629bfda53e4.js
 |   |   |       274d763fc71039fe.js
 |   |   |       321e14092c3be8b6.js
 |   |   |       3814b133520d7a8c.js
-|   |   |       4a8533ceb5971318.js
+|   |   |       3d7add200578fdd5.js
 |   |   |       5422d2cbe02db823.js
 |   |   |       5fb9210c99014ea0.js
 |   |   |       61066a51d71ec27c.js
@@ -2345,8 +2342,13 @@ C:.
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-a79a6d50b3241aaa.js
 |   |   |       
-|   |   \---media
-|   |           favicon.0b3bf435.ico
+|   |   +---media
+|   |   |       favicon.0b3bf435.ico
+|   |   |       
+|   |   \---rZh2iMVp9EnidP999NQFk
+|   |           _buildManifest.js
+|   |           _clientMiddlewareManifest.json
+|   |           _ssgManifest.js
 |   |           
 |   \---types
 |           routes.d.ts
@@ -3599,6 +3601,9 @@ C:.
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
+|   |   |   |   |           LIVRABLES__SESSION-20260424-10_A20_RH-LOT-02_A_PLAT.zip
+|   |   |   |   |           PATCH_DOCS_FIX_TRACEABILITE__SESSION-20260424-10_A20_RH-LOT-02.diff
+|   |   |   |   |           PATCH__SESSION-20260424-10_A20_RH-LOT-02.diff
 |   |   |   |   |           README_PATCH.md
 |   |   |   |   |           
 |   |   |   |   +---SESSION-20260424-11_A20_RH-03
@@ -40460,7 +40465,10 @@ C:.
 |       +---20260415120500_a8_manual_published_shift_management
 |       |       migration.sql
 |       |       
-|       \---20260416143000_add_login_audit_log
+|       +---20260416143000_add_login_audit_log
+|       |       migration.sql
+|       |       
+|       \---20260424100000_a20_rh_lot02_user_rh_fields
 |               migration.sql
 |               
 +---public

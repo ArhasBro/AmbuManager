@@ -177,6 +177,10 @@ model User {
   email        String        @unique
   password     String
   name         String
+  firstName    String?
+  lastName     String?
+  initials     String?
+  phone        String?
   role         Role? // null uniquement pour les comptes plateforme globaux
   platformRole PlatformRole?
   companyId    String?       @db.Uuid
@@ -186,6 +190,9 @@ model User {
   depot   Depot?  @relation(fields: [depotId], references: [id], onDelete: SetNull)
 
   isActive Boolean @default(true)
+  isTrainee Boolean @default(false)
+  dailyWorkStartTime String?
+  dailyWorkEndTime   String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -217,6 +224,7 @@ model User {
 
   @@index([companyId])
   @@index([companyId, isActive])
+  @@index([companyId, isTrainee])
   @@index([platformRole])
   @@index([depotId])
 }

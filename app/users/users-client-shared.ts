@@ -9,11 +9,23 @@ export type DepotLite = {
 export type UserListRow = {
   id: string;
   name: string;
+  firstName?: string | null;
+  lastName?: string | null;
+  initials?: string | null;
+  phone?: string | null;
   email: string | null;
   role: string;
   depotId: string | null;
   depot: DepotLite | null;
+  isTrainee?: boolean;
+  dailyWorkStartTime?: string | null;
+  dailyWorkEndTime?: string | null;
 };
+
+export function dailyScheduleLabel(user: Pick<UserListRow, "dailyWorkStartTime" | "dailyWorkEndTime">) {
+  if (!user.dailyWorkStartTime || !user.dailyWorkEndTime) return "Non renseignÃ©";
+  return `${user.dailyWorkStartTime} - ${user.dailyWorkEndTime}`;
+}
 
 export function depotLabel(depot: DepotLite | null) {
   if (!depot) return "Aucune";

@@ -1069,6 +1069,9 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
+|   |   |   |           LIVRABLES__SESSION-20260424-10_A20_RH-LOT-02_A_PLAT.zip
+|   |   |   |           PATCH_DOCS_FIX_TRACEABILITE__SESSION-20260424-10_A20_RH-LOT-02.diff
+|   |   |   |           PATCH__SESSION-20260424-10_A20_RH-LOT-02.diff
 |   |   |   |           README_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260424-11_A20_RH-03

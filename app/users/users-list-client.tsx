@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-import { depotLabel, USER_ROLE_OPTIONS, type UserListRow } from "./users-client-shared";
+import { dailyScheduleLabel, depotLabel, USER_ROLE_OPTIONS, type UserListRow } from "./users-client-shared";
 import { USERS_REFRESH_EVENT, dispatchUsersSelection } from "./users-refresh";
 
 type ApiOk<T> = {
@@ -15,7 +15,6 @@ type ApiErr = {
   error: string;
   details?: unknown;
 };
-
 
 type UserListResponse = {
   items: UserListRow[];
@@ -50,9 +49,16 @@ function toUserRow(value: unknown): UserListRow | null {
   const record = value as Record<string, unknown>;
   const id = typeof record.id === "string" ? record.id : null;
   const name = typeof record.name === "string" ? record.name : null;
+  const firstName = typeof record.firstName === "string" ? record.firstName : null;
+  const lastName = typeof record.lastName === "string" ? record.lastName : null;
+  const initials = typeof record.initials === "string" ? record.initials : null;
+  const phone = typeof record.phone === "string" ? record.phone : null;
   const email = typeof record.email === "string" ? record.email : null;
   const role = typeof record.role === "string" ? record.role : null;
   const depotId = typeof record.depotId === "string" ? record.depotId : null;
+  const isTrainee = record.isTrainee === true;
+  const dailyWorkStartTime = typeof record.dailyWorkStartTime === "string" ? record.dailyWorkStartTime : null;
+  const dailyWorkEndTime = typeof record.dailyWorkEndTime === "string" ? record.dailyWorkEndTime : null;
   const depotRecord = typeof record.depot === "object" && record.depot !== null ? (record.depot as Record<string, unknown>) : null;
   const depot = depotRecord
     && typeof depotRecord.id === "string"
@@ -66,9 +72,8 @@ function toUserRow(value: unknown): UserListRow | null {
     : null;
 
   if (!id || !name || !role) return null;
-  return { id, name, email, role, depotId, depot };
+  return { id, name, firstName, lastName, initials, phone, email, role, depotId, depot, isTrainee, dailyWorkStartTime, dailyWorkEndTime };
 }
-
 
 export default function UsersListClient() {
   const [searchInput, setSearchInput] = useState("");
@@ -207,7 +212,7 @@ export default function UsersListClient() {
         <div>
           <h2 style={{ margin: 0 }}>Liste utilisateurs</h2>
           <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
-            Recherche simple, filtre rôle et pagination minimale sur les comptes actifs de la société.
+            Recherche simple, filtre role et pagination minimale sur les comptes actifs de la societe.
           </p>
         </div>
 
@@ -218,16 +223,16 @@ export default function UsersListClient() {
               type="text"
               value={searchInput}
               onChange={(event) => setSearchInput(event.target.value)}
-              placeholder="Nom ou email"
+              placeholder="Nom, email, initiales ou telephone"
             />
           </label>
 
           <label style={{ display: "grid", gap: 6 }}>
-            <span>Rôle</span>
+            <span>Role</span>
             <select value={role} onChange={(event) => setRole(event.target.value)}>
               {ROLE_FILTER_OPTIONS.map((value) => (
                 <option key={value || "ALL"} value={value}>
-                  {value || "Tous les rôles"}
+                  {value || "Tous les roles"}
                 </option>
               ))}
             </select>
@@ -246,16 +251,19 @@ export default function UsersListClient() {
           <>
             {rows.length === 0 ? (
               <div className="panel-soft">
-                Aucun utilisateur trouvé pour ces critères.
+                Aucun utilisateur trouve pour ces criteres.
               </div>
             ) : (
               <div style={{ overflowX: "auto", border: "1px solid var(--ui-border)", borderRadius: 8 }}>
-                <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 720 }}>
+                <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 980 }}>
                   <thead>
                     <tr>
                       <th style={{ textAlign: "left", padding: 10, borderBottom: "1px solid var(--ui-border)" }}>Nom</th>
+                      <th style={{ textAlign: "left", padding: 10, borderBottom: "1px solid var(--ui-border)" }}>Initiales</th>
                       <th style={{ textAlign: "left", padding: 10, borderBottom: "1px solid var(--ui-border)" }}>Email</th>
-                      <th style={{ textAlign: "left", padding: 10, borderBottom: "1px solid var(--ui-border)" }}>Rôle</th>
+                      <th style={{ textAlign: "left", padding: 10, borderBottom: "1px solid var(--ui-border)" }}>Telephone</th>
+                      <th style={{ textAlign: "left", padding: 10, borderBottom: "1px solid var(--ui-border)" }}>Role</th>
+                      <th style={{ textAlign: "left", padding: 10, borderBottom: "1px solid var(--ui-border)" }}>RH</th>
                       <th style={{ textAlign: "left", padding: 10, borderBottom: "1px solid var(--ui-border)" }}>Base</th>
                     </tr>
                   </thead>
@@ -271,9 +279,20 @@ export default function UsersListClient() {
                         >
                           <td style={{ padding: 10, borderBottom: "1px solid var(--ui-border)" }}>
                             <strong>{user.name}</strong>
+                            {(user.firstName || user.lastName) ? (
+                              <div style={{ fontSize: 12, opacity: 0.75 }}>
+                                {[user.firstName, user.lastName].filter(Boolean).join(" ")}
+                              </div>
+                            ) : null}
                           </td>
-                          <td style={{ padding: 10, borderBottom: "1px solid var(--ui-border)" }}>{user.email || "—"}</td>
+                          <td style={{ padding: 10, borderBottom: "1px solid var(--ui-border)" }}>{user.initials || "-"}</td>
+                          <td style={{ padding: 10, borderBottom: "1px solid var(--ui-border)" }}>{user.email || "-"}</td>
+                          <td style={{ padding: 10, borderBottom: "1px solid var(--ui-border)" }}>{user.phone || "-"}</td>
                           <td style={{ padding: 10, borderBottom: "1px solid var(--ui-border)" }}>{user.role}</td>
+                          <td style={{ padding: 10, borderBottom: "1px solid var(--ui-border)" }}>
+                            {user.isTrainee ? "Stagiaire" : "Titulaire"}
+                            <div style={{ fontSize: 12, opacity: 0.75 }}>{dailyScheduleLabel(user)}</div>
+                          </td>
                           <td style={{ padding: 10, borderBottom: "1px solid var(--ui-border)" }}>{depotLabel(user.depot)}</td>
                         </tr>
                       );
@@ -285,12 +304,12 @@ export default function UsersListClient() {
 
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
               <div style={{ opacity: 0.8 }}>
-                {pagination.total} utilisateur{pagination.total > 1 ? "s" : ""} • page {pagination.page} / {pagination.totalPages}
+                {pagination.total} utilisateur{pagination.total > 1 ? "s" : ""} - page {pagination.page} / {pagination.totalPages}
               </div>
 
               <div style={{ display: "flex", gap: 8 }}>
                 <button type="button" onClick={() => setPage((current) => Math.max(1, current - 1))} disabled={loading || !pagination.hasPreviousPage}>
-                  Précédent
+                  Precedent
                 </button>
                 <button type="button" onClick={() => setPage((current) => current + 1)} disabled={loading || !pagination.hasNextPage}>
                   Suivant
@@ -299,14 +318,14 @@ export default function UsersListClient() {
             </div>
 
             <div className="panel-soft">
-              <strong>Sélection actuelle :</strong>{" "}
+              <strong>Selection actuelle :</strong>{" "}
               {selectedUser ? (
                 <>
                   {selectedUser.name}
-                  {selectedUser.email ? ` (${selectedUser.email})` : ""} — rôle {selectedUser.role} — base {depotLabel(selectedUser.depot)}
+                  {selectedUser.email ? ` (${selectedUser.email})` : ""} - role {selectedUser.role} - {selectedUser.isTrainee ? "stagiaire" : "titulaire"} - base {depotLabel(selectedUser.depot)}
                 </>
               ) : (
-                "Aucun utilisateur sélectionné"
+                "Aucun utilisateur selectionne"
               )}
             </div>
           </>

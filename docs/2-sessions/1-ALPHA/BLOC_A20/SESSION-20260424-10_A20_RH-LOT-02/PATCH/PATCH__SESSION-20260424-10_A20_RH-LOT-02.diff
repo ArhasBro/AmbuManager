@@ -1,0 +1,1049 @@
+diff --git a/app/api/users/[id]/route.ts b/app/api/users/[id]/route.ts
+index 864aa3c..7515812 100644
+--- a/app/api/users/[id]/route.ts
++++ b/app/api/users/[id]/route.ts
+@@ -28,6 +28,10 @@ const alphaPermissionOrder = new Map(ALPHA_PERMISSION_CODES.map((code, index) =>
+ const userSelect = Prisma.validator<Prisma.UserSelect>()({
+   id: true,
+   name: true,
++  firstName: true,
++  lastName: true,
++  initials: true,
++  phone: true,
+   email: true,
+   role: true,
+   companyId: true,
+@@ -39,6 +43,9 @@ const userSelect = Prisma.validator<Prisma.UserSelect>()({
+       isActive: true,
+     },
+   },
++  isTrainee: true,
++  dailyWorkStartTime: true,
++  dailyWorkEndTime: true,
+   createdAt: true,
+   updatedAt: true,
+   userPermissions: {
+@@ -79,17 +86,39 @@ function samePermissionCodes(left: readonly AlphaPermissionCode[], right: readon
+   return left.length === right.length && left.every((code, index) => code === right[index]);
+ }
+ 
++function buildDisplayName(input: {
++  name?: string;
++  firstName?: string | null;
++  lastName?: string | null;
++}, fallback: string) {
++  const explicitName = input.name?.trim();
++  if (explicitName) return explicitName;
++
++  const parts = [input.firstName, input.lastName]
++    .map((part) => part?.trim())
++    .filter((part): part is string => Boolean(part));
++
++  return parts.length > 0 ? parts.join(" ") : fallback;
++}
++
+ function serializeEditableUser(user: EditableUserRecord) {
+   const permissionCodes = normalizePermissionCodes(user.userPermissions.map((item) => item.permission.code));
+ 
+   return serializeDates({
+     id: user.id,
+     name: user.name,
++    firstName: user.firstName,
++    lastName: user.lastName,
++    initials: user.initials,
++    phone: user.phone,
+     email: user.email,
+     role: user.role,
+     companyId: user.companyId,
+     depotId: user.depotId,
+     depot: user.depot,
++    isTrainee: user.isTrainee,
++    dailyWorkStartTime: user.dailyWorkStartTime,
++    dailyWorkEndTime: user.dailyWorkEndTime,
+     createdAt: user.createdAt,
+     updatedAt: user.updatedAt,
+     permissionCodes,
+@@ -209,9 +238,32 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
+     }
+ 
+     const changedFields = [
+-      ...(parsedBody.data.name !== undefined && parsedBody.data.name !== existingUser.name ? ["name"] : []),
++      ...(
++        (
++          parsedBody.data.name !== undefined
++          || parsedBody.data.firstName !== undefined
++          || parsedBody.data.lastName !== undefined
++        )
++        && buildDisplayName(
++          {
++            name: parsedBody.data.name,
++            firstName: parsedBody.data.firstName === undefined ? existingUser.firstName : parsedBody.data.firstName,
++            lastName: parsedBody.data.lastName === undefined ? existingUser.lastName : parsedBody.data.lastName,
++          },
++          existingUser.name,
++        ) !== existingUser.name
++          ? ["name"]
++          : []
++      ),
++      ...(parsedBody.data.firstName !== undefined && parsedBody.data.firstName !== existingUser.firstName ? ["firstName"] : []),
++      ...(parsedBody.data.lastName !== undefined && parsedBody.data.lastName !== existingUser.lastName ? ["lastName"] : []),
++      ...(parsedBody.data.initials !== undefined && parsedBody.data.initials !== existingUser.initials ? ["initials"] : []),
++      ...(parsedBody.data.phone !== undefined && parsedBody.data.phone !== existingUser.phone ? ["phone"] : []),
+       ...(parsedBody.data.email !== undefined && parsedBody.data.email !== existingUser.email ? ["email"] : []),
+       ...(parsedBody.data.role !== undefined && parsedBody.data.role !== existingUser.role ? ["role"] : []),
++      ...(parsedBody.data.isTrainee !== undefined && parsedBody.data.isTrainee !== existingUser.isTrainee ? ["isTrainee"] : []),
++      ...(parsedBody.data.dailyWorkStartTime !== undefined && parsedBody.data.dailyWorkStartTime !== existingUser.dailyWorkStartTime ? ["dailyWorkStartTime"] : []),
++      ...(parsedBody.data.dailyWorkEndTime !== undefined && parsedBody.data.dailyWorkEndTime !== existingUser.dailyWorkEndTime ? ["dailyWorkEndTime"] : []),
+       ...(nextPermissionCodes !== undefined && !samePermissionCodes(existingPermissionCodes, nextNormalizedPermissionCodes)
+         ? ["permissionCodes"]
+         : []),
+@@ -222,12 +274,28 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
+     }
+ 
+     const updatedUser = await prisma.$transaction(async (tx) => {
++      const nextName = buildDisplayName(
++        {
++          name: parsedBody.data.name,
++          firstName: parsedBody.data.firstName === undefined ? existingUser.firstName : parsedBody.data.firstName,
++          lastName: parsedBody.data.lastName === undefined ? existingUser.lastName : parsedBody.data.lastName,
++        },
++        existingUser.name,
++      );
++
+       await tx.user.update({
+         where: { id: existingUser.id },
+         data: {
+-          ...(parsedBody.data.name !== undefined ? { name: parsedBody.data.name } : {}),
++          ...(changedFields.includes("name") ? { name: nextName } : {}),
++          ...(parsedBody.data.firstName !== undefined ? { firstName: parsedBody.data.firstName } : {}),
++          ...(parsedBody.data.lastName !== undefined ? { lastName: parsedBody.data.lastName } : {}),
++          ...(parsedBody.data.initials !== undefined ? { initials: parsedBody.data.initials } : {}),
++          ...(parsedBody.data.phone !== undefined ? { phone: parsedBody.data.phone } : {}),
+           ...(parsedBody.data.email !== undefined ? { email: parsedBody.data.email } : {}),
+           ...(parsedBody.data.role !== undefined ? { role: parsedBody.data.role } : {}),
++          ...(parsedBody.data.isTrainee !== undefined ? { isTrainee: parsedBody.data.isTrainee } : {}),
++          ...(parsedBody.data.dailyWorkStartTime !== undefined ? { dailyWorkStartTime: parsedBody.data.dailyWorkStartTime } : {}),
++          ...(parsedBody.data.dailyWorkEndTime !== undefined ? { dailyWorkEndTime: parsedBody.data.dailyWorkEndTime } : {}),
+         },
+       });
+ 
+@@ -275,14 +343,28 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
+         changedFields,
+         previous: {
+           name: existingUser.name,
++          firstName: existingUser.firstName,
++          lastName: existingUser.lastName,
++          initials: existingUser.initials,
++          phone: existingUser.phone,
+           email: existingUser.email,
+           role: existingUser.role,
++          isTrainee: existingUser.isTrainee,
++          dailyWorkStartTime: existingUser.dailyWorkStartTime,
++          dailyWorkEndTime: existingUser.dailyWorkEndTime,
+           permissionCodes: existingPermissionCodes,
+         },
+         next: {
+           name: nextUser.name,
++          firstName: nextUser.firstName,
++          lastName: nextUser.lastName,
++          initials: nextUser.initials,
++          phone: nextUser.phone,
+           email: nextUser.email,
+           role: nextUser.role,
++          isTrainee: nextUser.isTrainee,
++          dailyWorkStartTime: nextUser.dailyWorkStartTime,
++          dailyWorkEndTime: nextUser.dailyWorkEndTime,
+           permissionCodes: nextNormalizedPermissionCodes,
+         },
+         details: {
+diff --git a/app/api/users/route.ts b/app/api/users/route.ts
+index 695a8d0..e849e35 100644
+--- a/app/api/users/route.ts
++++ b/app/api/users/route.ts
+@@ -8,6 +8,7 @@ import { authOptions } from "@/lib/auth";
+ import {
+   canGovernCompanyRulesDelegation,
+   isCompanyRulesGovernorRole,
++  permissionSetTouchesCompanyRulesGovernance,
+ } from "@/lib/company-rules/governance";
+ import { canManageUsers } from "@/lib/permissions";
+ import { prisma } from "@/lib/prisma";
+@@ -20,6 +21,10 @@ const USER_ROLES = ["ADMIN", "GERANT", "BUREAU", "ADE", "AA", "TAXI", "REGULATEU
+ const userSelect = {
+   id: true,
+   name: true,
++  firstName: true,
++  lastName: true,
++  initials: true,
++  phone: true,
+   email: true,
+   role: true,
+   companyId: true,
+@@ -31,6 +36,10 @@ const userSelect = {
+       isActive: true,
+     },
+   },
++  isActive: true,
++  isTrainee: true,
++  dailyWorkStartTime: true,
++  dailyWorkEndTime: true,
+   createdAt: true,
+   updatedAt: true,
+ } as const;
+@@ -53,6 +62,17 @@ function getErrorMessage(e: unknown): string {
+   }
+ }
+ 
++function buildDisplayName(input: { name?: string | null; firstName?: string | null; lastName?: string | null }) {
++  const explicitName = input.name?.trim();
++  if (explicitName) return explicitName;
++
++  const parts = [input.firstName, input.lastName]
++    .map((part) => part?.trim())
++    .filter((part): part is string => Boolean(part));
++
++  return parts.join(" ");
++}
++
+ export async function GET(req: Request) {
+   const session = await getServerSession(authOptions);
+   const companyId = session?.user?.companyId;
+@@ -89,6 +109,10 @@ export async function GET(req: Request) {
+         ? {
+             OR: [
+               { name: { contains: q, mode: "insensitive" as const } },
++              { firstName: { contains: q, mode: "insensitive" as const } },
++              { lastName: { contains: q, mode: "insensitive" as const } },
++              { initials: { contains: q, mode: "insensitive" as const } },
++              { phone: { contains: q, mode: "insensitive" as const } },
+               { email: { contains: q, mode: "insensitive" as const } },
+             ],
+           }
+@@ -105,6 +129,10 @@ export async function GET(req: Request) {
+         select: {
+           id: true,
+           name: true,
++          firstName: true,
++          lastName: true,
++          initials: true,
++          phone: true,
+           email: true,
+           role: true,
+           companyId: true,
+@@ -116,6 +144,10 @@ export async function GET(req: Request) {
+               isActive: true,
+             },
+           },
++          isActive: true,
++          isTrainee: true,
++          dailyWorkStartTime: true,
++          dailyWorkEndTime: true,
+           createdAt: true,
+           updatedAt: true,
+         },
+@@ -178,21 +210,71 @@ export async function POST(req: Request) {
+     );
+   }
+ 
++  if (!actorCanGovernCompanyRules && permissionSetTouchesCompanyRulesGovernance([], parsed.data.permissionCodes ?? [])) {
++    return json(
++      {
++        ok: false,
++        error: "FORBIDDEN",
++        details: {
++          message: "Seul un compte ADMIN ou GERANT peut attribuer une permission donnant acces a la modification des regles metier.",
++        },
++      },
++      403,
++    );
++  }
++
+   try {
++    if (parsed.data.depotId) {
++      const depot = await prisma.depot.findFirst({
++        where: { id: parsed.data.depotId, companyId, isActive: true },
++        select: { id: true },
++      });
++      if (!depot) return badRequest("DEPOT_NOT_FOUND", { message: "Depot introuvable dans la societe courante." });
++    }
++
+     const hashedPassword = await bcrypt.hash(parsed.data.password, 10);
++    const displayName = buildDisplayName(parsed.data);
++    const permissionCodes = parsed.data.permissionCodes ?? [];
+ 
+     const user = await prisma.$transaction(async (tx) => {
+       const createdUser = await tx.user.create({
+         data: {
+           email: parsed.data.email,
+           password: hashedPassword,
+-          name: parsed.data.name,
++          name: displayName,
++          firstName: parsed.data.firstName ?? null,
++          lastName: parsed.data.lastName ?? null,
++          initials: parsed.data.initials ?? null,
++          phone: parsed.data.phone ?? null,
+           role: parsed.data.role,
+           companyId,
++          depotId: parsed.data.depotId ?? null,
++          isActive: parsed.data.isActive ?? true,
++          isTrainee: parsed.data.isTrainee ?? false,
++          dailyWorkStartTime: parsed.data.dailyWorkStartTime ?? null,
++          dailyWorkEndTime: parsed.data.dailyWorkEndTime ?? null,
+         },
+         select: userSelect,
+       });
+ 
++      if (permissionCodes.length > 0) {
++        const permissions = await tx.permission.findMany({
++          where: { code: { in: permissionCodes } },
++          select: { id: true, code: true },
++        });
++        if (permissions.length !== permissionCodes.length) {
++          throw new Error("PERMISSIONS_NOT_FOUND");
++        }
++
++        await tx.userPermission.createMany({
++          data: permissions.map((permission) => ({
++            userId: createdUser.id,
++            permissionId: permission.id,
++          })),
++          skipDuplicates: true,
++        });
++      }
++
+       await writePersonalDataAudit(tx, {
+         companyId,
+         actorUserId,
+@@ -200,15 +282,40 @@ export async function POST(req: Request) {
+         entityType: "USER",
+         entityId: createdUser.id,
+         summary: `Creation utilisateur ${createdUser.email}`,
+-        changedFields: ["email", "password", "name", "role", "companyId"],
++        changedFields: [
++          "email",
++          "password",
++          "name",
++          "firstName",
++          "lastName",
++          "initials",
++          "phone",
++          "role",
++          "companyId",
++          "depotId",
++          "isActive",
++          "isTrainee",
++          "dailyWorkStartTime",
++          "dailyWorkEndTime",
++          "permissionCodes",
++        ],
+         previous: null,
+         next: {
+           email: createdUser.email,
+           password: "REDACTED",
+           name: createdUser.name,
++          firstName: createdUser.firstName,
++          lastName: createdUser.lastName,
++          initials: createdUser.initials,
++          phone: createdUser.phone,
+           role: createdUser.role,
+           companyId: createdUser.companyId,
+           depotId: createdUser.depotId,
++          isActive: createdUser.isActive,
++          isTrainee: createdUser.isTrainee,
++          dailyWorkStartTime: createdUser.dailyWorkStartTime,
++          dailyWorkEndTime: createdUser.dailyWorkEndTime,
++          permissionCodes,
+         },
+         details: {
+           targetType: "user",
+@@ -220,6 +327,12 @@ export async function POST(req: Request) {
+ 
+     return ok(serializeDates(user), 201);
+   } catch (e: unknown) {
++    if (e instanceof Error && e.message === "PERMISSIONS_NOT_FOUND") {
++      return badRequest("VALIDATION_ERROR", {
++        message: "Certaines permissions demandees ne sont pas disponibles dans le catalogue ALPHA reel.",
++      });
++    }
++
+     const mapped = prismaToHttp(e);
+     if (mapped?.status === 409) {
+       return conflict(mapped.error, { message: "Un utilisateur avec cet email existe déjà." });
+diff --git a/app/users/page.tsx b/app/users/page.tsx
+index 5b26ee6..6b98962 100644
+--- a/app/users/page.tsx
++++ b/app/users/page.tsx
+@@ -49,7 +49,7 @@ export default async function UsersPage() {
+         </Link>
+       </div>
+ 
+-      <UserCreationClient canGovernCompanyRules={canGovernCompanyRules} />
++      <UserCreationClient canGovernCompanyRules={canGovernCompanyRules} availableDepots={depots} />
+       <UsersListClient />
+       <UserAbsenceClient />
+       <UserEditClient canGovernCompanyRules={canGovernCompanyRules} />
+diff --git a/app/users/user-creation-client.tsx b/app/users/user-creation-client.tsx
+index c87b75a..0e452c8 100644
+--- a/app/users/user-creation-client.tsx
++++ b/app/users/user-creation-client.tsx
+@@ -2,9 +2,13 @@
+ 
+ import { useMemo, useState, type FormEvent } from "react";
+ 
+-import { isCompanyRulesGovernorRole } from "@/lib/company-rules/governance";
++import {
++  COMPANY_RULES_MANAGE_PERMISSION,
++  isCompanyRulesGovernorRole,
++} from "@/lib/company-rules/governance";
++import { ALPHA_PERMISSION_CATALOG, type AlphaPermissionCode } from "@/lib/permission-catalog";
+ 
+-import { USER_ROLE_OPTIONS } from "./users-client-shared";
++import { USER_ROLE_OPTIONS, type DepotLite } from "./users-client-shared";
+ import { dispatchUsersRefresh } from "./users-refresh";
+ 
+ type ApiOk<T> = {
+@@ -33,15 +37,36 @@ function isApiErr(value: unknown): value is ApiErr {
+   return typeof value === "object" && value !== null && "ok" in value && (value as { ok?: unknown }).ok === false;
+ }
+ 
++function readApiError(value: unknown, status: number) {
++  if (!isApiErr(value)) return `HTTP_${status}`;
++
++  if (typeof value.details === "object" && value.details !== null && "message" in (value.details as Record<string, unknown>)) {
++    const message = (value.details as Record<string, unknown>).message;
++    if (typeof message === "string" && message.trim()) return message;
++  }
++
++  return value.error;
++}
++
+ type UserCreationClientProps = {
+   canGovernCompanyRules: boolean;
++  availableDepots: DepotLite[];
+ };
+ 
+-export default function UserCreationClient({ canGovernCompanyRules }: UserCreationClientProps) {
+-  const [name, setName] = useState("");
++export default function UserCreationClient({ canGovernCompanyRules, availableDepots }: UserCreationClientProps) {
++  const [firstName, setFirstName] = useState("");
++  const [lastName, setLastName] = useState("");
++  const [initials, setInitials] = useState("");
++  const [phone, setPhone] = useState("");
+   const [email, setEmail] = useState("");
+   const [password, setPassword] = useState("");
+   const [role, setRole] = useState("");
++  const [permissionCodes, setPermissionCodes] = useState<AlphaPermissionCode[]>([]);
++  const [depotId, setDepotId] = useState("");
++  const [isActive, setIsActive] = useState(true);
++  const [isTrainee, setIsTrainee] = useState(false);
++  const [dailyWorkStartTime, setDailyWorkStartTime] = useState("");
++  const [dailyWorkEndTime, setDailyWorkEndTime] = useState("");
+   const [submitting, setSubmitting] = useState(false);
+   const [error, setError] = useState<string | null>(null);
+   const [success, setSuccess] = useState<string | null>(null);
+@@ -51,16 +76,29 @@ export default function UserCreationClient({ canGovernCompanyRules }: UserCreati
+     [canGovernCompanyRules],
+   );
+ 
++  function togglePermission(code: AlphaPermissionCode) {
++    if (!canGovernCompanyRules && code === COMPANY_RULES_MANAGE_PERMISSION) return;
++
++    setPermissionCodes((current) => (
++      current.includes(code)
++        ? current.filter((value) => value !== code)
++        : [...current, code]
++    ));
++  }
++
+   async function onSubmit(event: FormEvent<HTMLFormElement>) {
+     event.preventDefault();
+     setError(null);
+     setSuccess(null);
+ 
+-    const trimmedName = name.trim();
++    const trimmedFirstName = firstName.trim();
++    const trimmedLastName = lastName.trim();
++    const trimmedInitials = initials.trim();
++    const trimmedPhone = phone.trim();
+     const trimmedEmail = email.trim();
+ 
+-    if (!trimmedName) {
+-      setError("Le nom est obligatoire.");
++    if (!trimmedFirstName && !trimmedLastName) {
++      setError("Le prenom ou le nom est obligatoire.");
+       return;
+     }
+ 
+@@ -75,7 +113,12 @@ export default function UserCreationClient({ canGovernCompanyRules }: UserCreati
+     }
+ 
+     if (!assignableRoleOptions.includes(role as (typeof assignableRoleOptions)[number])) {
+-      setError("Le rôle est obligatoire.");
++      setError("Le role est obligatoire.");
++      return;
++    }
++
++    if ((dailyWorkStartTime && !dailyWorkEndTime) || (!dailyWorkStartTime && dailyWorkEndTime)) {
++      setError("Les horaires journaliers doivent contenir un debut et une fin, ou rester vides.");
+       return;
+     }
+ 
+@@ -86,30 +129,43 @@ export default function UserCreationClient({ canGovernCompanyRules }: UserCreati
+         method: "POST",
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify({
+-          name: trimmedName,
++          firstName: trimmedFirstName || null,
++          lastName: trimmedLastName || null,
++          initials: trimmedInitials || null,
++          phone: trimmedPhone || null,
+           email: trimmedEmail,
+           password,
+           role,
++          permissionCodes,
++          depotId: depotId || null,
++          isActive,
++          isTrainee,
++          dailyWorkStartTime: dailyWorkStartTime || null,
++          dailyWorkEndTime: dailyWorkEndTime || null,
+         }),
+       });
+ 
+       const json: unknown = await res.json();
+ 
+       if (!res.ok || !isApiOk<CreatedUser>(json)) {
+-        const msg = isApiErr(json)
+-          ? typeof json.details === "object" && json.details !== null && "message" in (json.details as Record<string, unknown>) && typeof (json.details as Record<string, unknown>).message === "string"
+-            ? (json.details as Record<string, string>).message
+-            : json.error
+-          : `HTTP_${res.status}`;
+-        throw new Error(msg);
++        throw new Error(readApiError(json, res.status));
+       }
+ 
+       const createdUser = json.data;
+-      setName("");
++      setFirstName("");
++      setLastName("");
++      setInitials("");
++      setPhone("");
+       setEmail("");
+       setPassword("");
+       setRole("");
+-      setSuccess(`Utilisateur créé : ${createdUser.name}${createdUser.email ? ` (${createdUser.email})` : ""}.`);
++      setPermissionCodes([]);
++      setDepotId("");
++      setIsActive(true);
++      setIsTrainee(false);
++      setDailyWorkStartTime("");
++      setDailyWorkEndTime("");
++      setSuccess(`Utilisateur cree : ${createdUser.name}${createdUser.email ? ` (${createdUser.email})` : ""}.`);
+       dispatchUsersRefresh();
+     } catch (e: unknown) {
+       setError(e instanceof Error ? e.message : "Erreur inconnue");
+@@ -119,47 +175,47 @@ export default function UserCreationClient({ canGovernCompanyRules }: UserCreati
+   }
+ 
+   return (
+-    <form onSubmit={onSubmit} style={{ display: "grid", gap: 12, padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8, maxWidth: 720 }}>
++    <form onSubmit={onSubmit} style={{ display: "grid", gap: 12, padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8, maxWidth: 920 }}>
+       <div>
+-        <h2 style={{ margin: 0 }}>Créer un utilisateur</h2>
++        <h2 style={{ margin: 0 }}>Creer un utilisateur</h2>
+         <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
+-          Création minimale alignée sur l&apos;API USERS-04. Les rôles support globaux ne sont pas attribuables depuis cette interface.
++          Creation enrichie : nom, prenom, initiales, telephone, role, permissions, base, statut, stagiaire et horaires journaliers simples.
+         </p>
+-        {!canGovernCompanyRules ? (
+-          <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
+-            Les rôles <code>ADMIN</code> et <code>GERANT</code>, qui donnent nativement accès à la gouvernance des règles métier, restent réservés aux comptes natifs de gouvernance.
+-          </p>
+-        ) : null}
+       </div>
+ 
+-      <label style={{ display: "grid", gap: 6 }}>
+-        <span>Nom</span>
+-        <input
+-          type="text"
+-          value={name}
+-          onChange={(event) => setName(event.target.value)}
+-          placeholder="Nom complet"
+-          disabled={submitting}
+-          maxLength={160}
+-        />
+-      </label>
++      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12 }}>
++        <label style={{ display: "grid", gap: 6 }}>
++          <span>Prenom</span>
++          <input type="text" value={firstName} onChange={(event) => setFirstName(event.target.value)} disabled={submitting} maxLength={80} />
++        </label>
++
++        <label style={{ display: "grid", gap: 6 }}>
++          <span>Nom</span>
++          <input type="text" value={lastName} onChange={(event) => setLastName(event.target.value)} disabled={submitting} maxLength={80} />
++        </label>
++      </div>
++
++      <div style={{ display: "grid", gridTemplateColumns: "minmax(140px, 180px) minmax(220px, 1fr)", gap: 12 }}>
++        <label style={{ display: "grid", gap: 6 }}>
++          <span>Initiales</span>
++          <input type="text" value={initials} onChange={(event) => setInitials(event.target.value.toUpperCase())} disabled={submitting} maxLength={12} />
++        </label>
++
++        <label style={{ display: "grid", gap: 6 }}>
++          <span>Telephone</span>
++          <input type="tel" value={phone} onChange={(event) => setPhone(event.target.value)} disabled={submitting} maxLength={50} />
++        </label>
++      </div>
+ 
+       <label style={{ display: "grid", gap: 6 }}>
+         <span>Email</span>
+-        <input
+-          type="email"
+-          value={email}
+-          onChange={(event) => setEmail(event.target.value)}
+-          placeholder="prenom.nom@entreprise.fr"
+-          disabled={submitting}
+-          autoComplete="email"
+-        />
++        <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="prenom.nom@entreprise.fr" disabled={submitting} autoComplete="email" />
+       </label>
+ 
+       <label style={{ display: "grid", gap: 6 }}>
+-        <span>Rôle</span>
++        <span>Role principal</span>
+         <select value={role} onChange={(event) => setRole(event.target.value)} disabled={submitting}>
+-          <option value="">Sélectionner un rôle</option>
++          <option value="">Selectionner un role</option>
+           {assignableRoleOptions.map((option) => (
+             <option key={option} value={option}>
+               {option}
+@@ -168,16 +224,65 @@ export default function UserCreationClient({ canGovernCompanyRules }: UserCreati
+         </select>
+       </label>
+ 
++      <fieldset style={{ display: "grid", gap: 10, padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8 }} disabled={submitting}>
++        <legend>Permissions applicatives ALPHA</legend>
++        <div style={{ display: "grid", gap: 10, gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))" }}>
++          {ALPHA_PERMISSION_CATALOG.map((permission) => {
++            const checked = permissionCodes.includes(permission.code);
++            const locked = permission.code === COMPANY_RULES_MANAGE_PERMISSION && !canGovernCompanyRules;
++
++            return (
++              <label key={permission.code} style={{ display: "grid", gap: 4, padding: 10, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
++                <span style={{ display: "flex", gap: 8, alignItems: "center" }}>
++                  <input type="checkbox" checked={checked} onChange={() => togglePermission(permission.code)} disabled={locked} />
++                  <strong>{permission.label}</strong>
++                </span>
++                <span style={{ fontSize: 13, opacity: 0.8 }}>{permission.description}</span>
++              </label>
++            );
++          })}
++        </div>
++      </fieldset>
++
++      <label style={{ display: "grid", gap: 6 }}>
++        <span>Base</span>
++        <select value={depotId} onChange={(event) => setDepotId(event.target.value)} disabled={submitting}>
++          <option value="">Aucune base</option>
++          {availableDepots.filter((depot) => depot.isActive).map((depot) => (
++            <option key={depot.id} value={depot.id}>
++              {depot.name}
++            </option>
++          ))}
++        </select>
++      </label>
++
++      <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
++        <label style={{ display: "flex", gap: 8, alignItems: "center" }}>
++          <input type="checkbox" checked={isActive} onChange={(event) => setIsActive(event.target.checked)} disabled={submitting} />
++          <span>Compte actif</span>
++        </label>
++
++        <label style={{ display: "flex", gap: 8, alignItems: "center" }}>
++          <input type="checkbox" checked={isTrainee} onChange={(event) => setIsTrainee(event.target.checked)} disabled={submitting} />
++          <span>Stagiaire</span>
++        </label>
++      </div>
++
++      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12 }}>
++        <label style={{ display: "grid", gap: 6 }}>
++          <span>Debut journalier</span>
++          <input type="time" value={dailyWorkStartTime} onChange={(event) => setDailyWorkStartTime(event.target.value)} disabled={submitting} />
++        </label>
++
++        <label style={{ display: "grid", gap: 6 }}>
++          <span>Fin journaliere</span>
++          <input type="time" value={dailyWorkEndTime} onChange={(event) => setDailyWorkEndTime(event.target.value)} disabled={submitting} />
++        </label>
++      </div>
++
+       <label style={{ display: "grid", gap: 6 }}>
+         <span>Mot de passe initial</span>
+-        <input
+-          type="password"
+-          value={password}
+-          onChange={(event) => setPassword(event.target.value)}
+-          placeholder="Mot de passe initial"
+-          disabled={submitting}
+-          autoComplete="new-password"
+-        />
++        <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Mot de passe initial" disabled={submitting} autoComplete="new-password" />
+       </label>
+ 
+       {error ? (
+@@ -193,7 +298,7 @@ export default function UserCreationClient({ canGovernCompanyRules }: UserCreati
+       ) : null}
+ 
+       <button type="submit" disabled={submitting} style={{ justifySelf: "start", padding: "10px 14px" }}>
+-        {submitting ? "Création..." : "Créer l'utilisateur"}
++        {submitting ? "Creation..." : "Creer l'utilisateur"}
+       </button>
+     </form>
+   );
+diff --git a/app/users/users-client-shared.ts b/app/users/users-client-shared.ts
+index c4f26a5..c431f76 100644
+--- a/app/users/users-client-shared.ts
++++ b/app/users/users-client-shared.ts
+@@ -9,12 +9,24 @@ export type DepotLite = {
+ export type UserListRow = {
+   id: string;
+   name: string;
++  firstName?: string | null;
++  lastName?: string | null;
++  initials?: string | null;
++  phone?: string | null;
+   email: string | null;
+   role: string;
+   depotId: string | null;
+   depot: DepotLite | null;
++  isTrainee?: boolean;
++  dailyWorkStartTime?: string | null;
++  dailyWorkEndTime?: string | null;
+ };
+ 
++export function dailyScheduleLabel(user: Pick<UserListRow, "dailyWorkStartTime" | "dailyWorkEndTime">) {
++  if (!user.dailyWorkStartTime || !user.dailyWorkEndTime) return "Non renseignÃ©";
++  return `${user.dailyWorkStartTime} - ${user.dailyWorkEndTime}`;
++}
++
+ export function depotLabel(depot: DepotLite | null) {
+   if (!depot) return "Aucune";
+   return depot.isActive ? depot.name : `${depot.name} (archivé)`;
+diff --git a/app/users/users-list-client.tsx b/app/users/users-list-client.tsx
+index 2a895b7..e66657b 100644
+--- a/app/users/users-list-client.tsx
++++ b/app/users/users-list-client.tsx
+@@ -2,7 +2,7 @@
+ 
+ import { useEffect, useMemo, useState } from "react";
+ 
+-import { depotLabel, USER_ROLE_OPTIONS, type UserListRow } from "./users-client-shared";
++import { dailyScheduleLabel, depotLabel, USER_ROLE_OPTIONS, type UserListRow } from "./users-client-shared";
+ import { USERS_REFRESH_EVENT, dispatchUsersSelection } from "./users-refresh";
+ 
+ type ApiOk<T> = {
+@@ -16,7 +16,6 @@ type ApiErr = {
+   details?: unknown;
+ };
+ 
+-
+ type UserListResponse = {
+   items: UserListRow[];
+   pagination: {
+@@ -50,9 +49,16 @@ function toUserRow(value: unknown): UserListRow | null {
+   const record = value as Record<string, unknown>;
+   const id = typeof record.id === "string" ? record.id : null;
+   const name = typeof record.name === "string" ? record.name : null;
++  const firstName = typeof record.firstName === "string" ? record.firstName : null;
++  const lastName = typeof record.lastName === "string" ? record.lastName : null;
++  const initials = typeof record.initials === "string" ? record.initials : null;
++  const phone = typeof record.phone === "string" ? record.phone : null;
+   const email = typeof record.email === "string" ? record.email : null;
+   const role = typeof record.role === "string" ? record.role : null;
+   const depotId = typeof record.depotId === "string" ? record.depotId : null;
++  const isTrainee = record.isTrainee === true;
++  const dailyWorkStartTime = typeof record.dailyWorkStartTime === "string" ? record.dailyWorkStartTime : null;
++  const dailyWorkEndTime = typeof record.dailyWorkEndTime === "string" ? record.dailyWorkEndTime : null;
+   const depotRecord = typeof record.depot === "object" && record.depot !== null ? (record.depot as Record<string, unknown>) : null;
+   const depot = depotRecord
+     && typeof depotRecord.id === "string"
+@@ -66,10 +72,9 @@ function toUserRow(value: unknown): UserListRow | null {
+     : null;
+ 
+   if (!id || !name || !role) return null;
+-  return { id, name, email, role, depotId, depot };
++  return { id, name, firstName, lastName, initials, phone, email, role, depotId, depot, isTrainee, dailyWorkStartTime, dailyWorkEndTime };
+ }
+ 
+-
+ export default function UsersListClient() {
+   const [searchInput, setSearchInput] = useState("");
+   const [search, setSearch] = useState("");
+@@ -207,7 +212,7 @@ export default function UsersListClient() {
+         <div>
+           <h2 style={{ margin: 0 }}>Liste utilisateurs</h2>
+           <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
+-            Recherche simple, filtre rôle et pagination minimale sur les comptes actifs de la société.
++            Recherche simple, filtre role et pagination minimale sur les comptes actifs de la societe.
+           </p>
+         </div>
+ 
+@@ -218,16 +223,16 @@ export default function UsersListClient() {
+               type="text"
+               value={searchInput}
+               onChange={(event) => setSearchInput(event.target.value)}
+-              placeholder="Nom ou email"
++              placeholder="Nom, email, initiales ou telephone"
+             />
+           </label>
+ 
+           <label style={{ display: "grid", gap: 6 }}>
+-            <span>Rôle</span>
++            <span>Role</span>
+             <select value={role} onChange={(event) => setRole(event.target.value)}>
+               {ROLE_FILTER_OPTIONS.map((value) => (
+                 <option key={value || "ALL"} value={value}>
+-                  {value || "Tous les rôles"}
++                  {value || "Tous les roles"}
+                 </option>
+               ))}
+             </select>
+@@ -246,16 +251,19 @@ export default function UsersListClient() {
+           <>
+             {rows.length === 0 ? (
+               <div className="panel-soft">
+-                Aucun utilisateur trouvé pour ces critères.
++                Aucun utilisateur trouve pour ces criteres.
+               </div>
+             ) : (
+               <div style={{ overflowX: "auto", border: "1px solid var(--ui-border)", borderRadius: 8 }}>
+-                <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 720 }}>
++                <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 980 }}>
+                   <thead>
+                     <tr>
+                       <th style={{ textAlign: "left", padding: 10, borderBottom: "1px solid var(--ui-border)" }}>Nom</th>
++                      <th style={{ textAlign: "left", padding: 10, borderBottom: "1px solid var(--ui-border)" }}>Initiales</th>
+                       <th style={{ textAlign: "left", padding: 10, borderBottom: "1px solid var(--ui-border)" }}>Email</th>
+-                      <th style={{ textAlign: "left", padding: 10, borderBottom: "1px solid var(--ui-border)" }}>Rôle</th>
++                      <th style={{ textAlign: "left", padding: 10, borderBottom: "1px solid var(--ui-border)" }}>Telephone</th>
++                      <th style={{ textAlign: "left", padding: 10, borderBottom: "1px solid var(--ui-border)" }}>Role</th>
++                      <th style={{ textAlign: "left", padding: 10, borderBottom: "1px solid var(--ui-border)" }}>RH</th>
+                       <th style={{ textAlign: "left", padding: 10, borderBottom: "1px solid var(--ui-border)" }}>Base</th>
+                     </tr>
+                   </thead>
+@@ -271,9 +279,20 @@ export default function UsersListClient() {
+                         >
+                           <td style={{ padding: 10, borderBottom: "1px solid var(--ui-border)" }}>
+                             <strong>{user.name}</strong>
++                            {(user.firstName || user.lastName) ? (
++                              <div style={{ fontSize: 12, opacity: 0.75 }}>
++                                {[user.firstName, user.lastName].filter(Boolean).join(" ")}
++                              </div>
++                            ) : null}
+                           </td>
+-                          <td style={{ padding: 10, borderBottom: "1px solid var(--ui-border)" }}>{user.email || "—"}</td>
++                          <td style={{ padding: 10, borderBottom: "1px solid var(--ui-border)" }}>{user.initials || "-"}</td>
++                          <td style={{ padding: 10, borderBottom: "1px solid var(--ui-border)" }}>{user.email || "-"}</td>
++                          <td style={{ padding: 10, borderBottom: "1px solid var(--ui-border)" }}>{user.phone || "-"}</td>
+                           <td style={{ padding: 10, borderBottom: "1px solid var(--ui-border)" }}>{user.role}</td>
++                          <td style={{ padding: 10, borderBottom: "1px solid var(--ui-border)" }}>
++                            {user.isTrainee ? "Stagiaire" : "Titulaire"}
++                            <div style={{ fontSize: 12, opacity: 0.75 }}>{dailyScheduleLabel(user)}</div>
++                          </td>
+                           <td style={{ padding: 10, borderBottom: "1px solid var(--ui-border)" }}>{depotLabel(user.depot)}</td>
+                         </tr>
+                       );
+@@ -285,12 +304,12 @@ export default function UsersListClient() {
+ 
+             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+               <div style={{ opacity: 0.8 }}>
+-                {pagination.total} utilisateur{pagination.total > 1 ? "s" : ""} • page {pagination.page} / {pagination.totalPages}
++                {pagination.total} utilisateur{pagination.total > 1 ? "s" : ""} - page {pagination.page} / {pagination.totalPages}
+               </div>
+ 
+               <div style={{ display: "flex", gap: 8 }}>
+                 <button type="button" onClick={() => setPage((current) => Math.max(1, current - 1))} disabled={loading || !pagination.hasPreviousPage}>
+-                  Précédent
++                  Precedent
+                 </button>
+                 <button type="button" onClick={() => setPage((current) => current + 1)} disabled={loading || !pagination.hasNextPage}>
+                   Suivant
+@@ -299,14 +318,14 @@ export default function UsersListClient() {
+             </div>
+ 
+             <div className="panel-soft">
+-              <strong>Sélection actuelle :</strong>{" "}
++              <strong>Selection actuelle :</strong>{" "}
+               {selectedUser ? (
+                 <>
+                   {selectedUser.name}
+-                  {selectedUser.email ? ` (${selectedUser.email})` : ""} — rôle {selectedUser.role} — base {depotLabel(selectedUser.depot)}
++                  {selectedUser.email ? ` (${selectedUser.email})` : ""} - role {selectedUser.role} - {selectedUser.isTrainee ? "stagiaire" : "titulaire"} - base {depotLabel(selectedUser.depot)}
+                 </>
+               ) : (
+-                "Aucun utilisateur sélectionné"
++                "Aucun utilisateur selectionne"
+               )}
+             </div>
+           </>
+diff --git a/lib/validators/user.ts b/lib/validators/user.ts
+index d4ca29c..c85327a 100644
+--- a/lib/validators/user.ts
++++ b/lib/validators/user.ts
+@@ -21,6 +21,25 @@ const permissionCodesSchema = z
+     }
+   });
+ 
++const optionalTextSchema = (max: number) => z
++  .string()
++  .trim()
++  .max(max)
++  .transform((value) => value || null);
++
++const optionalDailyTimeSchema = z
++  .string()
++  .trim()
++  .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "time must use HH:mm format")
++  .nullable();
++
++function hasIdentity(value: { name?: string | null; firstName?: string | null; lastName?: string | null }) {
++  const displayName = value.name?.trim();
++  const firstName = value.firstName?.trim();
++  const lastName = value.lastName?.trim();
++  return Boolean(displayName || firstName || lastName);
++}
++
+ export const assignUserDepotBodySchema = z
+   .object({
+     depotId: z.string().uuid().nullable(),
+@@ -31,25 +50,74 @@ export const createUserBodySchema = z
+   .object({
+     email: z.string().trim().email("email invalid"),
+     password: passwordPolicySchema,
+-    name: z.string().trim().min(1, "name required").max(160, "name too long"),
++    name: z.string().trim().min(1, "name required").max(160, "name too long").optional(),
++    firstName: optionalTextSchema(80).optional(),
++    lastName: optionalTextSchema(80).optional(),
++    initials: optionalTextSchema(12).optional(),
++    phone: optionalTextSchema(50).optional(),
+     role: z.nativeEnum(Role),
++    permissionCodes: permissionCodesSchema.optional(),
++    depotId: z.string().uuid().nullable().optional(),
++    isActive: z.boolean().optional(),
++    isTrainee: z.boolean().optional(),
++    dailyWorkStartTime: optionalDailyTimeSchema.optional(),
++    dailyWorkEndTime: optionalDailyTimeSchema.optional(),
+   })
+-  .strict();
++  .strict()
++  .refine(hasIdentity, {
++    message: "At least name, firstName or lastName is required",
++  })
++  .superRefine((value, ctx) => {
++    const hasStart = value.dailyWorkStartTime !== undefined && value.dailyWorkStartTime !== null;
++    const hasEnd = value.dailyWorkEndTime !== undefined && value.dailyWorkEndTime !== null;
++    if (hasStart !== hasEnd) {
++      ctx.addIssue({
++        code: z.ZodIssueCode.custom,
++        path: hasStart ? ["dailyWorkEndTime"] : ["dailyWorkStartTime"],
++        message: "daily work start and end times must be provided together",
++      });
++    }
++  });
+ 
+ export const updateUserBodySchema = z
+   .object({
+     email: z.string().trim().email("email invalid").optional(),
+     name: z.string().trim().min(1, "name required").max(160, "name too long").optional(),
++    firstName: optionalTextSchema(80).optional(),
++    lastName: optionalTextSchema(80).optional(),
++    initials: optionalTextSchema(12).optional(),
++    phone: optionalTextSchema(50).optional(),
+     role: z.nativeEnum(Role).optional(),
+     permissionCodes: permissionCodesSchema.optional(),
++    isTrainee: z.boolean().optional(),
++    dailyWorkStartTime: optionalDailyTimeSchema.optional(),
++    dailyWorkEndTime: optionalDailyTimeSchema.optional(),
+   })
+   .strict()
+   .refine(
+     (value) => value.email !== undefined
+       || value.name !== undefined
++      || value.firstName !== undefined
++      || value.lastName !== undefined
++      || value.initials !== undefined
++      || value.phone !== undefined
+       || value.role !== undefined
+-      || value.permissionCodes !== undefined,
++      || value.permissionCodes !== undefined
++      || value.isTrainee !== undefined
++      || value.dailyWorkStartTime !== undefined
++      || value.dailyWorkEndTime !== undefined,
+     {
+       message: "At least one editable field is required",
+     },
+-  );
++  )
++  .superRefine((value, ctx) => {
++    const hasStart = value.dailyWorkStartTime !== undefined && value.dailyWorkStartTime !== null;
++    const hasEnd = value.dailyWorkEndTime !== undefined && value.dailyWorkEndTime !== null;
++    if (hasStart !== hasEnd) {
++      ctx.addIssue({
++        code: z.ZodIssueCode.custom,
++        path: hasStart ? ["dailyWorkEndTime"] : ["dailyWorkStartTime"],
++        message: "daily work start and end times must be provided together",
++      });
++    }
++  });
+diff --git a/prisma/schema.prisma b/prisma/schema.prisma
+index a604b75..9081729 100644
+--- a/prisma/schema.prisma
++++ b/prisma/schema.prisma
+@@ -177,6 +177,10 @@ model User {
+   email        String        @unique
+   password     String
+   name         String
++  firstName    String?
++  lastName     String?
++  initials     String?
++  phone        String?
+   role         Role? // null uniquement pour les comptes plateforme globaux
+   platformRole PlatformRole?
+   companyId    String?       @db.Uuid
+@@ -186,6 +190,9 @@ model User {
+   depot   Depot?  @relation(fields: [depotId], references: [id], onDelete: SetNull)
+ 
+   isActive Boolean @default(true)
++  isTrainee Boolean @default(false)
++  dailyWorkStartTime String?
++  dailyWorkEndTime   String?
+ 
+   createdAt DateTime @default(now())
+   updatedAt DateTime @updatedAt
+@@ -217,6 +224,7 @@ model User {
+ 
+   @@index([companyId])
+   @@index([companyId, isActive])
++  @@index([companyId, isTrainee])
+   @@index([platformRole])
+   @@index([depotId])
+ }
+
+diff --git a/prisma/migrations/20260424100000_a20_rh_lot02_user_rh_fields/migration.sql b/prisma/migrations/20260424100000_a20_rh_lot02_user_rh_fields/migration.sql
+new file mode 100644
+index 0000000..f12d81c
+--- /dev/null
++++ b/prisma/migrations/20260424100000_a20_rh_lot02_user_rh_fields/migration.sql
+@@ -0,0 +1,11 @@
++-- A20 RH-LOT-02 — enrichissement RH minimal utilisateur
++ALTER TABLE "User"
++ADD COLUMN "firstName" TEXT,
++ADD COLUMN "lastName" TEXT,
++ADD COLUMN "initials" TEXT,
++ADD COLUMN "phone" TEXT,
++ADD COLUMN "isTrainee" BOOLEAN NOT NULL DEFAULT false,
++ADD COLUMN "dailyWorkStartTime" TEXT,
++ADD COLUMN "dailyWorkEndTime" TEXT;
++
++CREATE INDEX "User_companyId_isTrainee_idx" ON "User"("companyId", "isTrainee");

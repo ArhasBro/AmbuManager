@@ -28,6 +28,10 @@ const alphaPermissionOrder = new Map(ALPHA_PERMISSION_CODES.map((code, index) =>
 const userSelect = Prisma.validator<Prisma.UserSelect>()({
   id: true,
   name: true,
+  firstName: true,
+  lastName: true,
+  initials: true,
+  phone: true,
   email: true,
   role: true,
   companyId: true,
@@ -39,6 +43,9 @@ const userSelect = Prisma.validator<Prisma.UserSelect>()({
       isActive: true,
     },
   },
+  isTrainee: true,
+  dailyWorkStartTime: true,
+  dailyWorkEndTime: true,
   createdAt: true,
   updatedAt: true,
   userPermissions: {
@@ -79,17 +86,39 @@ function samePermissionCodes(left: readonly AlphaPermissionCode[], right: readon
   return left.length === right.length && left.every((code, index) => code === right[index]);
 }
 
+function buildDisplayName(input: {
+  name?: string;
+  firstName?: string | null;
+  lastName?: string | null;
+}, fallback: string) {
+  const explicitName = input.name?.trim();
+  if (explicitName) return explicitName;
+
+  const parts = [input.firstName, input.lastName]
+    .map((part) => part?.trim())
+    .filter((part): part is string => Boolean(part));
+
+  return parts.length > 0 ? parts.join(" ") : fallback;
+}
+
 function serializeEditableUser(user: EditableUserRecord) {
   const permissionCodes = normalizePermissionCodes(user.userPermissions.map((item) => item.permission.code));
 
   return serializeDates({
     id: user.id,
     name: user.name,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    initials: user.initials,
+    phone: user.phone,
     email: user.email,
     role: user.role,
     companyId: user.companyId,
     depotId: user.depotId,
     depot: user.depot,
+    isTrainee: user.isTrainee,
+    dailyWorkStartTime: user.dailyWorkStartTime,
+    dailyWorkEndTime: user.dailyWorkEndTime,
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
     permissionCodes,
@@ -209,9 +238,32 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     }
 
     const changedFields = [
-      ...(parsedBody.data.name !== undefined && parsedBody.data.name !== existingUser.name ? ["name"] : []),
+      ...(
+        (
+          parsedBody.data.name !== undefined
+          || parsedBody.data.firstName !== undefined
+          || parsedBody.data.lastName !== undefined
+        )
+        && buildDisplayName(
+          {
+            name: parsedBody.data.name,
+            firstName: parsedBody.data.firstName === undefined ? existingUser.firstName : parsedBody.data.firstName,
+            lastName: parsedBody.data.lastName === undefined ? existingUser.lastName : parsedBody.data.lastName,
+          },
+          existingUser.name,
+        ) !== existingUser.name
+          ? ["name"]
+          : []
+      ),
+      ...(parsedBody.data.firstName !== undefined && parsedBody.data.firstName !== existingUser.firstName ? ["firstName"] : []),
+      ...(parsedBody.data.lastName !== undefined && parsedBody.data.lastName !== existingUser.lastName ? ["lastName"] : []),
+      ...(parsedBody.data.initials !== undefined && parsedBody.data.initials !== existingUser.initials ? ["initials"] : []),
+      ...(parsedBody.data.phone !== undefined && parsedBody.data.phone !== existingUser.phone ? ["phone"] : []),
       ...(parsedBody.data.email !== undefined && parsedBody.data.email !== existingUser.email ? ["email"] : []),
       ...(parsedBody.data.role !== undefined && parsedBody.data.role !== existingUser.role ? ["role"] : []),
+      ...(parsedBody.data.isTrainee !== undefined && parsedBody.data.isTrainee !== existingUser.isTrainee ? ["isTrainee"] : []),
+      ...(parsedBody.data.dailyWorkStartTime !== undefined && parsedBody.data.dailyWorkStartTime !== existingUser.dailyWorkStartTime ? ["dailyWorkStartTime"] : []),
+      ...(parsedBody.data.dailyWorkEndTime !== undefined && parsedBody.data.dailyWorkEndTime !== existingUser.dailyWorkEndTime ? ["dailyWorkEndTime"] : []),
       ...(nextPermissionCodes !== undefined && !samePermissionCodes(existingPermissionCodes, nextNormalizedPermissionCodes)
         ? ["permissionCodes"]
         : []),
@@ -222,12 +274,28 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     }
 
     const updatedUser = await prisma.$transaction(async (tx) => {
+      const nextName = buildDisplayName(
+        {
+          name: parsedBody.data.name,
+          firstName: parsedBody.data.firstName === undefined ? existingUser.firstName : parsedBody.data.firstName,
+          lastName: parsedBody.data.lastName === undefined ? existingUser.lastName : parsedBody.data.lastName,
+        },
+        existingUser.name,
+      );
+
       await tx.user.update({
         where: { id: existingUser.id },
         data: {
-          ...(parsedBody.data.name !== undefined ? { name: parsedBody.data.name } : {}),
+          ...(changedFields.includes("name") ? { name: nextName } : {}),
+          ...(parsedBody.data.firstName !== undefined ? { firstName: parsedBody.data.firstName } : {}),
+          ...(parsedBody.data.lastName !== undefined ? { lastName: parsedBody.data.lastName } : {}),
+          ...(parsedBody.data.initials !== undefined ? { initials: parsedBody.data.initials } : {}),
+          ...(parsedBody.data.phone !== undefined ? { phone: parsedBody.data.phone } : {}),
           ...(parsedBody.data.email !== undefined ? { email: parsedBody.data.email } : {}),
           ...(parsedBody.data.role !== undefined ? { role: parsedBody.data.role } : {}),
+          ...(parsedBody.data.isTrainee !== undefined ? { isTrainee: parsedBody.data.isTrainee } : {}),
+          ...(parsedBody.data.dailyWorkStartTime !== undefined ? { dailyWorkStartTime: parsedBody.data.dailyWorkStartTime } : {}),
+          ...(parsedBody.data.dailyWorkEndTime !== undefined ? { dailyWorkEndTime: parsedBody.data.dailyWorkEndTime } : {}),
         },
       });
 
@@ -275,14 +343,28 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
         changedFields,
         previous: {
           name: existingUser.name,
+          firstName: existingUser.firstName,
+          lastName: existingUser.lastName,
+          initials: existingUser.initials,
+          phone: existingUser.phone,
           email: existingUser.email,
           role: existingUser.role,
+          isTrainee: existingUser.isTrainee,
+          dailyWorkStartTime: existingUser.dailyWorkStartTime,
+          dailyWorkEndTime: existingUser.dailyWorkEndTime,
           permissionCodes: existingPermissionCodes,
         },
         next: {
           name: nextUser.name,
+          firstName: nextUser.firstName,
+          lastName: nextUser.lastName,
+          initials: nextUser.initials,
+          phone: nextUser.phone,
           email: nextUser.email,
           role: nextUser.role,
+          isTrainee: nextUser.isTrainee,
+          dailyWorkStartTime: nextUser.dailyWorkStartTime,
+          dailyWorkEndTime: nextUser.dailyWorkEndTime,
           permissionCodes: nextNormalizedPermissionCodes,
         },
         details: {

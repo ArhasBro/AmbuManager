@@ -1,35 +1,37 @@
-﻿# SESSION
+# SESSION-20260424-10_A20_RH-LOT-02
 
-## ID SESSION
-
-SESSION-20260424-10_A20_RH-LOT-02
-
-## Date
-
-24/04/2026
-
-## Contexte
+## Ouverture
 
 Projet : Investissement  
-Sous-projet : Ambulance Manager  
-Maturite : 1-ALPHA  
-Bloc : A20  
-Type : CORRECTION+COMPLETION  
-Intitule : Correction et/ou complétion du module RH : demandes d’absence, nom/prénom/initiales, gestion des stagiaires, premiers éléments d’horaires journaliers selon cadrage validé
+Sous-projet : Ambulance Manager
 
-## Objectif de la session
+Stage : `1-ALPHA`  
+Bloc : `A20 - RH / Utilisateurs avances`  
+Type : `CORRECTION+COMPLETION`  
+Intitule : Correction et/ou completion du module RH : demandes d'absence, nom/prenom/initiales, gestion des stagiaires, premiers elements d'horaires journaliers selon cadrage valide
 
-INFORMATION NON FOURNIE - A CONFIRMER
+## Sources obligatoires relues
 
-## Perimetre exact traite
+- `docs/1-master/DOCUMENT_MAITRE.md`
+- `docs/1-master/PLAN_DE_DEVELOPPEMENT.md`
+- `docs/4-templates/TEMPLATE_DEBUT_SESSION.md` : absent lors du controle
 
-INFORMATION NON FOURNIE - A CONFIRMER
+## Base methodologique
 
-## Resultat synthetique de session
+La session s'appuie sur l'audit valide `SESSION-20260424-09_A20_RH-01`.
 
-INFORMATION NON FOURNIE - A CONFIRMER
+Verdict RH-01 retenu : `incomplet`.
 
-## Dossiers lies
+Ecarts RH-01 repris strictement pour RH-LOT-02 :
 
-- Session : docs/2-sessions/1-ALPHA/BLOC_A20/SESSION-20260424-10_A20_RH-LOT-02
-- PATCH   : docs/2-sessions/1-ALPHA/BLOC_A20/SESSION-20260424-10_A20_RH-LOT-02/PATCH
+- creation utilisateur enrichie absente ou incomplete : nom/prenom/initiales/telephone/base/statut/permissions ;
+- aucun mecanisme dedie aux stagiaires ;
+- aucun champ RH utilisateur pour premiers horaires journaliers ;
+- absences deja presentes, mais pas de definition fournie pour un workflow complet de demande avec statut/validation/refus.
+
+## Perimetre exclu
+
+- refonte globale du module utilisateurs ;
+- workflow legal complet d'horaires journaliers ;
+- workflow complet de demandes d'absence avec statut, validation ou refus ;
+- blocs A19, A21 ou cloture A20.

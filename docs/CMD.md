@@ -169,9 +169,6 @@ IMPORTANT
 
 Références des sessions :
 
-- SESSION-20260424-11_A20_RH-03
-- **RH-03 — VALIDATION** — Validation complète du bloc RH / utilisateurs avancés
-
 - SESSION-20260424-12_A20_CLOTURE_A20
 - **CLOTURE_A20 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc RH
 

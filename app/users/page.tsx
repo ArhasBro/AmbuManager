@@ -49,7 +49,7 @@ export default async function UsersPage() {
         </Link>
       </div>
 
-      <UserCreationClient canGovernCompanyRules={canGovernCompanyRules} />
+      <UserCreationClient canGovernCompanyRules={canGovernCompanyRules} availableDepots={depots} />
       <UsersListClient />
       <UserAbsenceClient />
       <UserEditClient canGovernCompanyRules={canGovernCompanyRules} />

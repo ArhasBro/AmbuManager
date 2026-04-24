@@ -8,6 +8,7 @@ import { authOptions } from "@/lib/auth";
 import {
   canGovernCompanyRulesDelegation,
   isCompanyRulesGovernorRole,
+  permissionSetTouchesCompanyRulesGovernance,
 } from "@/lib/company-rules/governance";
 import { canManageUsers } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
@@ -20,6 +21,10 @@ const USER_ROLES = ["ADMIN", "GERANT", "BUREAU", "ADE", "AA", "TAXI", "REGULATEU
 const userSelect = {
   id: true,
   name: true,
+  firstName: true,
+  lastName: true,
+  initials: true,
+  phone: true,
   email: true,
   role: true,
   companyId: true,
@@ -31,6 +36,10 @@ const userSelect = {
       isActive: true,
     },
   },
+  isActive: true,
+  isTrainee: true,
+  dailyWorkStartTime: true,
+  dailyWorkEndTime: true,
   createdAt: true,
   updatedAt: true,
 } as const;
@@ -51,6 +60,17 @@ function getErrorMessage(e: unknown): string {
   } catch {
     return "Unknown error";
   }
+}
+
+function buildDisplayName(input: { name?: string | null; firstName?: string | null; lastName?: string | null }) {
+  const explicitName = input.name?.trim();
+  if (explicitName) return explicitName;
+
+  const parts = [input.firstName, input.lastName]
+    .map((part) => part?.trim())
+    .filter((part): part is string => Boolean(part));
+
+  return parts.join(" ");
 }
 
 export async function GET(req: Request) {
@@ -89,6 +109,10 @@ export async function GET(req: Request) {
         ? {
             OR: [
               { name: { contains: q, mode: "insensitive" as const } },
+              { firstName: { contains: q, mode: "insensitive" as const } },
+              { lastName: { contains: q, mode: "insensitive" as const } },
+              { initials: { contains: q, mode: "insensitive" as const } },
+              { phone: { contains: q, mode: "insensitive" as const } },
               { email: { contains: q, mode: "insensitive" as const } },
             ],
           }
@@ -105,6 +129,10 @@ export async function GET(req: Request) {
         select: {
           id: true,
           name: true,
+          firstName: true,
+          lastName: true,
+          initials: true,
+          phone: true,
           email: true,
           role: true,
           companyId: true,
@@ -116,6 +144,10 @@ export async function GET(req: Request) {
               isActive: true,
             },
           },
+          isActive: true,
+          isTrainee: true,
+          dailyWorkStartTime: true,
+          dailyWorkEndTime: true,
           createdAt: true,
           updatedAt: true,
         },
@@ -178,20 +210,70 @@ export async function POST(req: Request) {
     );
   }
 
+  if (!actorCanGovernCompanyRules && permissionSetTouchesCompanyRulesGovernance([], parsed.data.permissionCodes ?? [])) {
+    return json(
+      {
+        ok: false,
+        error: "FORBIDDEN",
+        details: {
+          message: "Seul un compte ADMIN ou GERANT peut attribuer une permission donnant acces a la modification des regles metier.",
+        },
+      },
+      403,
+    );
+  }
+
   try {
+    if (parsed.data.depotId) {
+      const depot = await prisma.depot.findFirst({
+        where: { id: parsed.data.depotId, companyId, isActive: true },
+        select: { id: true },
+      });
+      if (!depot) return badRequest("DEPOT_NOT_FOUND", { message: "Depot introuvable dans la societe courante." });
+    }
+
     const hashedPassword = await bcrypt.hash(parsed.data.password, 10);
+    const displayName = buildDisplayName(parsed.data);
+    const permissionCodes = parsed.data.permissionCodes ?? [];
 
     const user = await prisma.$transaction(async (tx) => {
       const createdUser = await tx.user.create({
         data: {
           email: parsed.data.email,
           password: hashedPassword,
-          name: parsed.data.name,
+          name: displayName,
+          firstName: parsed.data.firstName ?? null,
+          lastName: parsed.data.lastName ?? null,
+          initials: parsed.data.initials ?? null,
+          phone: parsed.data.phone ?? null,
           role: parsed.data.role,
           companyId,
+          depotId: parsed.data.depotId ?? null,
+          isActive: parsed.data.isActive ?? true,
+          isTrainee: parsed.data.isTrainee ?? false,
+          dailyWorkStartTime: parsed.data.dailyWorkStartTime ?? null,
+          dailyWorkEndTime: parsed.data.dailyWorkEndTime ?? null,
         },
         select: userSelect,
       });
+
+      if (permissionCodes.length > 0) {
+        const permissions = await tx.permission.findMany({
+          where: { code: { in: permissionCodes } },
+          select: { id: true, code: true },
+        });
+        if (permissions.length !== permissionCodes.length) {
+          throw new Error("PERMISSIONS_NOT_FOUND");
+        }
+
+        await tx.userPermission.createMany({
+          data: permissions.map((permission) => ({
+            userId: createdUser.id,
+            permissionId: permission.id,
+          })),
+          skipDuplicates: true,
+        });
+      }
 
       await writePersonalDataAudit(tx, {
         companyId,
@@ -200,15 +282,40 @@ export async function POST(req: Request) {
         entityType: "USER",
         entityId: createdUser.id,
         summary: `Creation utilisateur ${createdUser.email}`,
-        changedFields: ["email", "password", "name", "role", "companyId"],
+        changedFields: [
+          "email",
+          "password",
+          "name",
+          "firstName",
+          "lastName",
+          "initials",
+          "phone",
+          "role",
+          "companyId",
+          "depotId",
+          "isActive",
+          "isTrainee",
+          "dailyWorkStartTime",
+          "dailyWorkEndTime",
+          "permissionCodes",
+        ],
         previous: null,
         next: {
           email: createdUser.email,
           password: "REDACTED",
           name: createdUser.name,
+          firstName: createdUser.firstName,
+          lastName: createdUser.lastName,
+          initials: createdUser.initials,
+          phone: createdUser.phone,
           role: createdUser.role,
           companyId: createdUser.companyId,
           depotId: createdUser.depotId,
+          isActive: createdUser.isActive,
+          isTrainee: createdUser.isTrainee,
+          dailyWorkStartTime: createdUser.dailyWorkStartTime,
+          dailyWorkEndTime: createdUser.dailyWorkEndTime,
+          permissionCodes,
         },
         details: {
           targetType: "user",
@@ -220,6 +327,12 @@ export async function POST(req: Request) {
 
     return ok(serializeDates(user), 201);
   } catch (e: unknown) {
+    if (e instanceof Error && e.message === "PERMISSIONS_NOT_FOUND") {
+      return badRequest("VALIDATION_ERROR", {
+        message: "Certaines permissions demandees ne sont pas disponibles dans le catalogue ALPHA reel.",
+      });
+    }
+
     const mapped = prismaToHttp(e);
     if (mapped?.status === 409) {
       return conflict(mapped.error, { message: "Un utilisateur avec cet email existe déjà." });
