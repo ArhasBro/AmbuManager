@@ -1,0 +1,12 @@
+diff --git a/app/planning/planning-client.tsx b/app/planning/planning-client.tsx
+index 960ad85..b7d919e 100644
+--- a/app/planning/planning-client.tsx
++++ b/app/planning/planning-client.tsx
+@@ -1961,7 +1961,6 @@ export default function PlanningClient({
+               </button>
+             </>
+           )}
+-        </div>
+       </div>
+ 
+       <div style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 10, opacity: 0.92 }}>

@@ -169,8 +169,8 @@ IMPORTANT
 
 Références des sessions :
 
-- SESSION-20260424-06_A19_PLAN-ADV-LOT-02
-- **PLAN-ADV-LOT-02 — CORRECTION+COMPLÉTION** — Correction et/ou complétion du planning avancé : affectation à un shift, sélection multiple, modes de vue, visibilité globale/personnelle/binôme
+- SESSION-20260424-07_A19_PLAN-ADV-03
+- **PLAN-ADV-03 — VALIDATION** — Validation complète du bloc planning avancé : exploitabilité terrain, gain de temps, cohérence métier
 ------------------------------------
 
 Voici sa réponse ainsi que les documents généré :

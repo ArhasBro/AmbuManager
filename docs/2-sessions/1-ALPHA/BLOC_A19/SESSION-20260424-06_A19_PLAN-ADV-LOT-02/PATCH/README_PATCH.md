@@ -1,4 +1,4 @@
-﻿# README_PATCH
+# README_PATCH
 
 ## Session liee
 SESSION-20260424-06_A19_PLAN-ADV-LOT-02
@@ -9,16 +9,24 @@ CORRECTION+COMPLETION
 ## Dossier PATCH
 docs/2-sessions/1-ALPHA/BLOC_A19/SESSION-20260424-06_A19_PLAN-ADV-LOT-02/PATCH
 
-## Patch officiel attendu
-PATCH__SESSION-20260424-06_A19_PLAN-ADV-LOT-02.diff
+## Patch principal
+- `PATCH__SESSION-20260424-06_A19_PLAN-ADV-LOT-02.diff`
 
-## Commandes d'application
+## Correctifs minimaux
+- `PATCH__SESSION-20260424-06_A19_PLAN-ADV-LOT-02_FIX-01.diff`
+- `PATCH__SESSION-20260424-06_A19_PLAN-ADV-LOT-02_FIX-02.diff`
 
-`ash
-git apply --check "docs/2-sessions/1-ALPHA/BLOC_A19/SESSION-20260424-06_A19_PLAN-ADV-LOT-02/PATCH/PATCH__SESSION-20260424-06_A19_PLAN-ADV-LOT-02.diff"
-git apply         "docs/2-sessions/1-ALPHA/BLOC_A19/SESSION-20260424-06_A19_PLAN-ADV-LOT-02/PATCH/PATCH__SESSION-20260424-06_A19_PLAN-ADV-LOT-02.diff"
-`
+## Patch documentaire final
+- `PATCH__SESSION-20260424-06_A19_PLAN-ADV-LOT-02_DOCS.diff`
 
-## Statut
-- Dossier patch initialise.
-- Patch officiel a produire dans cette session si du code est modifie.
+## Validations retenues
+- `npm run lint` : OK
+- `npm run build` : OK
+
+## Statut final
+- patch principal applique : OUI
+- fix-01 applique : OUI
+- fix-02 applique : OUI
+- documentation finale produite : OUI
+- correction documentaire post-controle qualite : OUI
+- patch code supplementaire requis : NON

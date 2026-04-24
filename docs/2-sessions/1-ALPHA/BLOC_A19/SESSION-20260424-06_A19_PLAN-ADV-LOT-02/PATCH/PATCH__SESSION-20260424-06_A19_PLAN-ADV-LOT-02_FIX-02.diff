@@ -1,0 +1,22 @@
+diff --git a/app/planning/planning-client.tsx b/app/planning/planning-client.tsx
+index b7d919e..e8865bc 100644
+--- a/app/planning/planning-client.tsx
++++ b/app/planning/planning-client.tsx
+@@ -1699,7 +1699,7 @@ export default function PlanningClient({
+         <>
+       <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+         <button onClick={() => setWeekStart(addDays(weekStart, -7))}>Semaine -1</button>
+-        <button onClick={() => setWeekStart(startOfWeekMonday(new Date()))}>Aujourd'hui</button>
++        <button onClick={() => setWeekStart(startOfWeekMonday(new Date()))}>Aujourd&apos;hui</button>
+         <button onClick={() => setWeekStart(addDays(weekStart, 7))}>Semaine +1</button>
+ 
+         <div style={{ marginLeft: 8, fontWeight: 700 }}>{title}</div>
+@@ -2043,7 +2043,7 @@ export default function PlanningClient({
+           </div>
+ 
+           <div style={{ fontSize: 12, opacity: 0.72 }}>
+-            L'affectation lot applique seulement les champs selectionnes. Le slot Employe 2 est ignore sur les shifts mono-agent.
++            L&apos;affectation lot applique seulement les champs selectionnes. Le slot Employe 2 est ignore sur les shifts mono-agent.
+           </div>
+ 
+           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>

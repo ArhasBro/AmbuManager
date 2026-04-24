@@ -16,6 +16,7 @@ C:.
 |   README.md
 |   tsconfig.json
 |   
++---.codex-temp
 +---.next
 |   |   app-path-routes-manifest.json
 |   |   build-manifest.json
@@ -2217,11 +2218,6 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
-|   |   +---14A3Og8Jlj4anb-M5pw--
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
-|   |   |       
 |   |   +---chunks
 |   |   |       05c065d3e137ac6c.js
 |   |   |       12049629bfda53e4.js
@@ -2230,9 +2226,9 @@ C:.
 |   |   |       3814b133520d7a8c.js
 |   |   |       4a8533ceb5971318.js
 |   |   |       5422d2cbe02db823.js
+|   |   |       5fb9210c99014ea0.js
 |   |   |       61066a51d71ec27c.js
 |   |   |       619a7c6306d0d4a0.js
-|   |   |       7d79159d100ee15e.js
 |   |   |       81cbce106758ff1d.js
 |   |   |       82abf2d65f5428ae.js
 |   |   |       899b7782e7cb92a1.js
@@ -2245,6 +2241,11 @@ C:.
 |   |   |       fdeadcb1b9c78c0c.css
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-a79a6d50b3241aaa.js
+|   |   |       
+|   |   +---g3vYEIHfxPqFLZmE19uNc
+|   |   |       _buildManifest.js
+|   |   |       _clientMiddlewareManifest.json
+|   |   |       _ssgManifest.js
 |   |   |       
 |   |   \---media
 |   |           favicon.0b3bf435.ico
@@ -3166,9 +3167,14 @@ C:.
 |   |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION-20260424-06_A19_PLAN-ADV-LOT-02_DOCUMENTAIRE_FINAL.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
+|   |   |   |   |           PATCH__SESSION-20260424-06_A19_PLAN-ADV-LOT-02.diff
+|   |   |   |   |           PATCH__SESSION-20260424-06_A19_PLAN-ADV-LOT-02_DOCS.diff
+|   |   |   |   |           PATCH__SESSION-20260424-06_A19_PLAN-ADV-LOT-02_FIX-01.diff
+|   |   |   |   |           PATCH__SESSION-20260424-06_A19_PLAN-ADV-LOT-02_FIX-02.diff
 |   |   |   |   |           README_PATCH.md
 |   |   |   |   |           
 |   |   |   |   +---SESSION-20260424-07_A19_PLAN-ADV-03

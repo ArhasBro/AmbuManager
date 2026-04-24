@@ -56,6 +56,17 @@ type RunAuditLog = {
 };
 
 type ViewMode = PlanningViewModeValue;
+type VisibilityMode = "GLOBAL" | "PERSONAL" | "BINOME";
+
+type BulkAssignFormState = {
+  userId: string;
+  user2Id: string;
+  vehicleId: string;
+  depotId: string;
+};
+
+const BULK_ASSIGN_NO_CHANGE = "__NO_CHANGE__";
+const BULK_ASSIGN_CLEAR = "__CLEAR__";
 
 type RestWarning = {
   code: "MIN_REST_VIOLATION";
@@ -461,6 +472,75 @@ function getDepotLabel(depot: DepotLite) {
   return depot.isActive ? depot.name : `${depot.name} (inactive)`;
 }
 
+function shiftHasUser(shift: Shift, userId: string | null | undefined) {
+  if (!userId) return false;
+  return shift.user?.id === userId || shift.user2?.id === userId;
+}
+
+function shiftHasBinome(shift: Shift, primaryUserId: string | null | undefined, partnerUserId: string | null | undefined) {
+  if (!primaryUserId || !partnerUserId || primaryUserId === partnerUserId) return false;
+  return (
+    (shift.user?.id === primaryUserId && shift.user2?.id === partnerUserId) ||
+    (shift.user?.id === partnerUserId && shift.user2?.id === primaryUserId)
+  );
+}
+
+function canShiftUseSecondUser(shift: Shift) {
+  return requiresTwoEmployees(shift.template?.category, shift.template?.minStaffCount);
+}
+
+function createBulkAssignFormState(): BulkAssignFormState {
+  return {
+    userId: BULK_ASSIGN_NO_CHANGE,
+    user2Id: BULK_ASSIGN_NO_CHANGE,
+    vehicleId: BULK_ASSIGN_NO_CHANGE,
+    depotId: BULK_ASSIGN_NO_CHANGE,
+  };
+}
+
+function resolveBulkAssignValue(value: string): { include: boolean; value: string | null } {
+  if (value === BULK_ASSIGN_NO_CHANGE) return { include: false, value: null };
+  if (value === BULK_ASSIGN_CLEAR) return { include: true, value: null };
+  return { include: true, value };
+}
+
+function getAssignErrorMessage(err: string, json: unknown, text: string) {
+  if (err === "RULE_BLOCKED") {
+    const details = jsonErrPayload(json) && isRecord(json.details) ? json.details : null;
+    const requiredHours = details ? details.requiredHours : null;
+    const suffix = isNumber(requiredHours) ? ` (${requiredHours}h requises)` : "";
+    return `Affectation bloquee : repos minimum non respecte${suffix}.`;
+  }
+
+  if (err === "RULE_CONFIG_ERROR") {
+    const details = jsonErrPayload(json) && isRecord(json.details) ? json.details : null;
+    const message = details ? getOptionalString(details.message) : undefined;
+    return `Configuration invalide de la regle repos minimum${message ? ` : ${message}` : ""}`;
+  }
+
+  if (err === "USER_CONFLICT" || err === "USER_OVERLAP_CONFLICT") {
+    return "Conflit employe : deja affecte sur un autre shift (chevauchement).";
+  }
+
+  if (err === "VEHICLE_CONFLICT" || err === "VEHICLE_OVERLAP_CONFLICT") {
+    return "Conflit vehicule : deja affecte sur un autre shift (chevauchement).";
+  }
+
+  if (err === "TEMPLATE_ROLE_MISMATCH") {
+    return "Composition invalide : le role selectionne ne respecte pas le template.";
+  }
+
+  if (err === "TEMPLATE_VEHICLE_TYPE_MISMATCH") {
+    return "Vehicule invalide : le type choisi ne correspond pas au template.";
+  }
+
+  if (err === "RUN_NOT_DRAFT") {
+    return "Impossible : le run n'est pas en DRAFT.";
+  }
+
+  return `Erreur: ${err}${text ? ` - ${text}` : ""}`;
+}
+
 export default function PlanningClient({
   availableDepots,
   availableUsers,
@@ -474,11 +554,17 @@ export default function PlanningClient({
 }: PlanningClientProps) {
   const [weekStart, setWeekStart] = useState<Date>(() => startOfWeekMonday(new Date()));
   const [mode, setMode] = useState<ViewMode>("SIMPLE");
+  const [visibilityMode, setVisibilityMode] = useState<VisibilityMode>(() => (canViewGlobal ? "GLOBAL" : "PERSONAL"));
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [items, setItems] = useState<Shift[]>([]);
   const [selectedUserId, setSelectedUserId] = useState(currentUser.id);
+  const [binomeUserId, setBinomeUserId] = useState("");
+  const [selectedShiftIds, setSelectedShiftIds] = useState<string[]>([]);
+  const [bulkAssignForm, setBulkAssignForm] = useState<BulkAssignFormState>(() => createBulkAssignFormState());
+  const [bulkAssignLoading, setBulkAssignLoading] = useState(false);
+  const [bulkAssignMsg, setBulkAssignMsg] = useState<string | null>(null);
 
   const [companyRuleLoaded, setCompanyRuleLoaded] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -538,19 +624,6 @@ export default function PlanningClient({
     [weekStart]
   );
 
-  const grouped = useMemo(() => {
-    const map: Record<string, Shift[]> = {};
-    for (const d of weekDays) map[formatDate(d)] = [];
-    for (const s of items) {
-      const k = dayKeyFromISO(s.startAt);
-      (map[k] ??= []).push(s);
-    }
-    for (const k of Object.keys(map)) {
-      map[k].sort((a, b) => new Date(a.startAt).getTime() - new Date(b.startAt).getTime());
-    }
-    return map;
-  }, [items, weekDays]);
-
   const userOptionsFromItems = useMemo<UserLite[]>(() => {
     const map = new Map<string, UserLite>();
     for (const s of items) {
@@ -576,8 +649,36 @@ export default function PlanningClient({
   );
 
   const selectedUser = useMemo(
-    () => availableUsers.find((candidate) => candidate.id === selectedUserId) ?? currentUser,
-    [availableUsers, currentUser, selectedUserId]
+    () => userOptions.find((candidate) => candidate.id === selectedUserId) ?? currentUser,
+    [currentUser, selectedUserId, userOptions]
+  );
+
+  const binomeOptions = useMemo<UserLite[]>(() => {
+    const map = new Map<string, UserLite>();
+    for (const shift of items) {
+      if (shift.user?.id === selectedUser.id && shift.user2?.id) {
+        map.set(shift.user2.id, {
+          id: shift.user2.id,
+          name: shift.user2.name,
+          email: shift.user2.email,
+        });
+      }
+
+      if (shift.user2?.id === selectedUser.id && shift.user?.id) {
+        map.set(shift.user.id, {
+          id: shift.user.id,
+          name: shift.user.name,
+          email: shift.user.email,
+        });
+      }
+    }
+
+    return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name, "fr"));
+  }, [items, selectedUser.id]);
+
+  const selectedBinomeUser = useMemo(
+    () => binomeOptions.find((candidate) => candidate.id === binomeUserId) ?? null,
+    [binomeOptions, binomeUserId]
   );
 
   const vehicleOptions = useMemo<VehicleLite[]>(
@@ -594,11 +695,39 @@ export default function PlanningClient({
     return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name, "fr"));
   }, [availableDepots, items]);
 
-  const loadShiftsForWeek = useCallback(async (weekStartISO: string, targetUserId: string) => {
+  const visibleItems = useMemo(() => {
+    if (visibilityMode === "GLOBAL" && canViewGlobal) {
+      return items;
+    }
+
+    if (visibilityMode === "BINOME") {
+      return items.filter((shift) => shiftHasBinome(shift, selectedUser.id, binomeUserId));
+    }
+
+    return items.filter((shift) => shiftHasUser(shift, selectedUser.id));
+  }, [binomeUserId, canViewGlobal, items, selectedUser.id, visibilityMode]);
+
+  const grouped = useMemo(() => {
+    const map: Record<string, Shift[]> = {};
+    for (const d of weekDays) map[formatDate(d)] = [];
+    for (const s of visibleItems) {
+      const k = dayKeyFromISO(s.startAt);
+      (map[k] ??= []).push(s);
+    }
+    for (const k of Object.keys(map)) {
+      map[k].sort((a, b) => new Date(a.startAt).getTime() - new Date(b.startAt).getTime());
+    }
+    return map;
+  }, [visibleItems, weekDays]);
+
+  const selectedShiftIdSet = useMemo(() => new Set(selectedShiftIds), [selectedShiftIds]);
+
+  const loadShiftsForWeek = useCallback(async (weekStartISO: string) => {
     setLoading(true);
     setError(null);
     try {
-      const params = new URLSearchParams({ weekStart: weekStartISO, userId: targetUserId });
+      const params = new URLSearchParams({ weekStart: weekStartISO });
+      if (!canViewGlobal) params.set("userId", currentUser.id);
       const { res, json } = await fetchJson(`/api/planning/shifts?${params.toString()}`);
       if (!res.ok || !jsonOkPayload(json)) {
         const err = jsonErrPayload(json) ? getString(json.error) : `HTTP_${res.status}`;
@@ -612,7 +741,7 @@ export default function PlanningClient({
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [canViewGlobal, currentUser.id]);
 
   const loadRunInfo = useCallback(async (runId: string) => {
     setRunInfoLoading(true);
@@ -800,14 +929,29 @@ export default function PlanningClient({
 
     async function run() {
       if (cancelled) return;
-      await loadShiftsForWeek(weekStartStr, selectedUserId);
+      await loadShiftsForWeek(weekStartStr);
     }
 
     void run();
     return () => {
       cancelled = true;
     };
-  }, [weekStartStr, selectedUserId, loadShiftsForWeek]);
+  }, [weekStartStr, loadShiftsForWeek]);
+
+  useEffect(() => {
+    if (visibilityMode !== "BINOME") return;
+    if (!binomeUserId) return;
+    if (binomeOptions.some((option) => option.id === binomeUserId)) return;
+    setBinomeUserId("");
+  }, [binomeOptions, binomeUserId, visibilityMode]);
+
+  useEffect(() => {
+    const visibleIds = new Set(visibleItems.map((shift) => shift.id));
+    setSelectedShiftIds((current) => {
+      const next = current.filter((id) => visibleIds.has(id));
+      return next.length === current.length ? current : next;
+    });
+  }, [visibleItems]);
 
   const title = useMemo(() => {
     const end = addDays(weekStart, 6);
@@ -848,6 +992,49 @@ export default function PlanningClient({
     setMatchPreviewRunId(null);
     setMatchPreviewVariant(null);
   }, []);
+
+  const resetViewFeedback = useCallback(() => {
+    setPubWarnings([]);
+    setPubConflict(null);
+    setGenMsg(null);
+    setDayGenMsg(null);
+    setPubMsg(null);
+    setCancelMsg(null);
+    setBulkAssignMsg(null);
+    clearMatchUi();
+  }, [clearMatchUi]);
+
+  const requestShiftAssign = useCallback(
+    async (
+      shiftId: string,
+      patch: { userId?: string | null; user2Id?: string | null; vehicleId?: string | null; depotId?: string | null }
+    ) => {
+      const { res, json, text } = await fetchJson(`/api/planning/shifts/${shiftId}/assign`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(patch),
+      });
+
+      if (!res.ok || !jsonOkPayload(json)) {
+        const err = jsonErrPayload(json) ? getString(json.error) : `HTTP_${res.status}`;
+        return {
+          ok: false as const,
+          message: getAssignErrorMessage(err, json, text),
+        };
+      }
+
+      const data = isRecord(json) && isRecord(json.data) ? json.data : null;
+      const issues = safeArray<ManualAssignIssue>(data?.issues).filter(
+        (issue): issue is ManualAssignIssue => isRecord(issue) && typeof issue.code === "string" && typeof issue.message === "string"
+      );
+
+      return {
+        ok: true as const,
+        message: formatManualAssignIssues(issues) ?? "Affectation enregistree OK",
+      };
+    },
+    []
+  );
 
   // ✅ dès qu’on change de run, on invalide toute simulation précédente
   useEffect(() => {
@@ -1114,7 +1301,7 @@ export default function PlanningClient({
       const { applied: appliedCount, notApplied } = countApplied(applied);
       setMatchMsg(`Application OK ✅ — ${appliedCount} affectation(s) appliquée(s), ${notApplied} non appliquée(s).`);
 
-      await loadShiftsForWeek(weekStartStr, selectedUserId);
+      await loadShiftsForWeek(weekStartStr);
       await loadRunInfo(lastRunId);
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Unknown error";
@@ -1132,7 +1319,6 @@ export default function PlanningClient({
     lastRunStatus,
     lastRunDraftCount,
     loadShiftsForWeek,
-    selectedUserId,
     weekStartStr,
     selectedMatchingVariant,
   ]);
@@ -1248,7 +1434,7 @@ export default function PlanningClient({
       if (warnings.length > 0) setPubMsg(`Brouillon publié ✅ avec ${warnings.length} avertissement(s) métier.`);
       else setPubMsg("Brouillon publié ✅");
 
-      await loadShiftsForWeek(weekStartStr, selectedUserId);
+      await loadShiftsForWeek(weekStartStr);
       await loadRunInfo(lastRunId);
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Unknown error";
@@ -1256,7 +1442,7 @@ export default function PlanningClient({
     } finally {
       setPubLoading(false);
     }
-  }, [lastRunId, lastRunStatus, lastRunDraftCount, loadRunInfo, loadShiftsForWeek, selectedUserId, weekStartStr]);
+  }, [lastRunId, lastRunStatus, lastRunDraftCount, loadRunInfo, loadShiftsForWeek, weekStartStr]);
 
   const cancelLastRun = useCallback(async () => {
     if (!lastRunId) return;
@@ -1296,6 +1482,36 @@ export default function PlanningClient({
     }
   }, [lastRunId, lastRunStatus, loadRunInfo]);
 
+  const toggleShiftSelection = useCallback((shiftId: string) => {
+    setSelectedShiftIds((current) =>
+      current.includes(shiftId) ? current.filter((id) => id !== shiftId) : [...current, shiftId]
+    );
+  }, []);
+
+  const toggleVisibleSelection = useCallback(() => {
+    const visibleIds = visibleItems.map((shift) => shift.id);
+    const allVisibleSelected = visibleIds.length > 0 && visibleIds.every((id) => selectedShiftIdSet.has(id));
+
+    if (allVisibleSelected) {
+      setSelectedShiftIds((current) => current.filter((id) => !visibleIds.includes(id)));
+      return;
+    }
+
+    setSelectedShiftIds((current) => Array.from(new Set([...current, ...visibleIds])));
+  }, [selectedShiftIdSet, visibleItems]);
+
+  const toggleDaySelection = useCallback((dayShifts: Shift[]) => {
+    const dayIds = dayShifts.map((shift) => shift.id);
+    const allDaySelected = dayIds.length > 0 && dayIds.every((id) => selectedShiftIdSet.has(id));
+
+    if (allDaySelected) {
+      setSelectedShiftIds((current) => current.filter((id) => !dayIds.includes(id)));
+      return;
+    }
+
+    setSelectedShiftIds((current) => Array.from(new Set([...current, ...dayIds])));
+  }, [selectedShiftIdSet]);
+
   const assignOnDraftShift = useCallback(
     async (
       shiftId: string,
@@ -1303,104 +1519,116 @@ export default function PlanningClient({
     ) => {
       setAssignLoadingId(shiftId);
       setAssignMsgById((m) => ({ ...m, [shiftId]: null }));
-      setPubMsg(null);
-      setGenMsg(null);
-      setDayGenMsg(null);
-      setCancelMsg(null);
+      resetViewFeedback();
 
       try {
-        const { res, json, text } = await fetchJson(`/api/planning/shifts/${shiftId}/assign`, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(patch),
-        });
-
-        if (!res.ok || !jsonOkPayload(json)) {
-          const err = jsonErrPayload(json) ? getString(json.error) : `HTTP_${res.status}`;
-
-          if (err === "RULE_BLOCKED") {
-            const details = jsonErrPayload(json) && isRecord(json.details) ? json.details : null;
-            const requiredHours = details ? details.requiredHours : null;
-            const suffix = isNumber(requiredHours) ? ` (${requiredHours}h requises)` : "";
-            setAssignMsgById((m) => ({
-              ...m,
-              [shiftId]: `⛔ Affectation bloquée : repos minimum non respecté${suffix}.`,
-            }));
-            return;
-          }
-
-          if (err === "RULE_CONFIG_ERROR") {
-            const details = jsonErrPayload(json) && isRecord(json.details) ? json.details : null;
-            const message = details ? getOptionalString(details.message) : undefined;
-            setAssignMsgById((m) => ({
-              ...m,
-              [shiftId]: `⛔ Configuration invalide de la règle repos minimum${message ? ` : ${message}` : ""}`,
-            }));
-            return;
-          }
-
-          if (err === "USER_CONFLICT" || err === "USER_OVERLAP_CONFLICT") {
-            setAssignMsgById((m) => ({
-              ...m,
-              [shiftId]: "⛔ Conflit employé : déjà affecté sur un autre shift (chevauchement).",
-            }));
-            return;
-          }
-
-          if (err === "VEHICLE_CONFLICT" || err === "VEHICLE_OVERLAP_CONFLICT") {
-            setAssignMsgById((m) => ({
-              ...m,
-              [shiftId]: "⛔ Conflit véhicule : déjà affecté sur un autre shift (chevauchement).",
-            }));
-            return;
-          }
-
-          if (err === "TEMPLATE_ROLE_MISMATCH") {
-            setAssignMsgById((m) => ({
-              ...m,
-              [shiftId]: "⛔ Composition invalide : le rôle sélectionné ne respecte pas le template.",
-            }));
-            return;
-          }
-
-          if (err === "TEMPLATE_VEHICLE_TYPE_MISMATCH") {
-            setAssignMsgById((m) => ({
-              ...m,
-              [shiftId]: "⛔ Véhicule invalide : le type choisi ne correspond pas au template.",
-            }));
-            return;
-          }
-
-          if (err === "RUN_NOT_DRAFT") {
-            setAssignMsgById((m) => ({ ...m, [shiftId]: "⛔ Impossible : le run n’est pas en DRAFT." }));
-            return;
-          }
-
-          setAssignMsgById((m) => ({
-            ...m,
-            [shiftId]: `Erreur: ${err}${text ? ` - ${text}` : ""}`,
-          }));
-          return;
-        }
-
-        const data = isRecord(json) && isRecord(json.data) ? json.data : null;
-        const issues = safeArray<ManualAssignIssue>(data?.issues).filter(
-          (issue): issue is ManualAssignIssue => isRecord(issue) && typeof issue.code === "string" && typeof issue.message === "string"
-        );
+        const result = await requestShiftAssign(shiftId, patch);
 
         setAssignMsgById((m) => ({
           ...m,
-          [shiftId]: formatManualAssignIssues(issues) ?? "Affectation enregistrée ✅",
+          [shiftId]: result.message,
         }));
 
-        await loadShiftsForWeek(weekStartStr, selectedUserId);
+        if (!result.ok) return;
+
+        await loadShiftsForWeek(weekStartStr);
         if (lastRunId) await loadRunInfo(lastRunId);
       } finally {
         setAssignLoadingId(null);
       }
     },
-    [lastRunId, loadRunInfo, loadShiftsForWeek, selectedUserId, weekStartStr]
+    [lastRunId, loadRunInfo, loadShiftsForWeek, requestShiftAssign, resetViewFeedback, weekStartStr]
   );
+
+  const bulkHasChanges = useMemo(
+    () => Object.values(bulkAssignForm).some((value) => value !== BULK_ASSIGN_NO_CHANGE),
+    [bulkAssignForm]
+  );
+
+  const applyBulkAssign = useCallback(async () => {
+    const selectedShifts = visibleItems.filter((shift) => selectedShiftIdSet.has(shift.id));
+    if (selectedShifts.length === 0) {
+      setBulkAssignMsg('Aucun shift selectionne.');
+      return;
+    }
+
+    if (!bulkHasChanges) {
+      setBulkAssignMsg('Choisissez au moins un champ a appliquer.');
+      return;
+    }
+
+    setBulkAssignLoading(true);
+    setBulkAssignMsg(null);
+    resetViewFeedback();
+
+    const successes: string[] = [];
+    const failures: Array<{ shiftId: string; message: string }> = [];
+    let skipped = 0;
+
+    try {
+      for (const shift of selectedShifts) {
+        const patch: { userId?: string | null; user2Id?: string | null; vehicleId?: string | null; depotId?: string | null } = {};
+
+        const nextUserId = resolveBulkAssignValue(bulkAssignForm.userId);
+        if (nextUserId.include) patch.userId = nextUserId.value;
+
+        const nextUser2Id = resolveBulkAssignValue(bulkAssignForm.user2Id);
+        if (nextUser2Id.include && (nextUser2Id.value === null || canShiftUseSecondUser(shift))) {
+          patch.user2Id = nextUser2Id.value;
+        }
+
+        const nextVehicleId = resolveBulkAssignValue(bulkAssignForm.vehicleId);
+        if (nextVehicleId.include) patch.vehicleId = nextVehicleId.value;
+
+        const nextDepotId = resolveBulkAssignValue(bulkAssignForm.depotId);
+        if (nextDepotId.include) patch.depotId = nextDepotId.value;
+
+        if (Object.keys(patch).length === 0) {
+          skipped += 1;
+          continue;
+        }
+
+        const result = await requestShiftAssign(shift.id, patch);
+        if (result.ok) successes.push(shift.id);
+        else failures.push({ shiftId: shift.id, message: result.message });
+      }
+
+      if (successes.length > 0) {
+        await loadShiftsForWeek(weekStartStr);
+        if (lastRunId) await loadRunInfo(lastRunId);
+      }
+
+      if (failures.length === 0) {
+        setSelectedShiftIds([]);
+        setBulkAssignForm(createBulkAssignFormState());
+        setBulkAssignMsg(
+          `Affectation multiple enregistree: ${successes.length} shift(s) mis a jour${skipped > 0 ? `, ${skipped} ignore(s)` : ""}.`
+        );
+        return;
+      }
+
+      const details = failures
+        .slice(0, 3)
+        .map((failure) => `${failure.shiftId}: ${failure.message}`)
+        .join(" | ");
+      setBulkAssignMsg(
+        `Affectation multiple partielle: ${successes.length} succes, ${failures.length} echec(s)${skipped > 0 ? `, ${skipped} ignore(s)` : ""}. ${details}`
+      );
+    } finally {
+      setBulkAssignLoading(false);
+    }
+  }, [
+    bulkAssignForm,
+    bulkHasChanges,
+    lastRunId,
+    loadRunInfo,
+    loadShiftsForWeek,
+    requestShiftAssign,
+    resetViewFeedback,
+    selectedShiftIdSet,
+    visibleItems,
+    weekStartStr,
+  ]);
 
   const publishDisabled =
     pubLoading ||
@@ -1470,45 +1698,121 @@ export default function PlanningClient({
       {showLegacyPlanning && (
         <>
       <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-        <button onClick={() => setWeekStart(addDays(weekStart, -7))}>← Semaine -1</button>
-        <button onClick={() => setWeekStart(startOfWeekMonday(new Date()))}>Aujourd’hui</button>
-        <button onClick={() => setWeekStart(addDays(weekStart, 7))}>Semaine +1 →</button>
+        <button onClick={() => setWeekStart(addDays(weekStart, -7))}>Semaine -1</button>
+        <button onClick={() => setWeekStart(startOfWeekMonday(new Date()))}>Aujourd&apos;hui</button>
+        <button onClick={() => setWeekStart(addDays(weekStart, 7))}>Semaine +1</button>
 
         <div style={{ marginLeft: 8, fontWeight: 700 }}>{title}</div>
+      </div>
 
-        <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-          <span style={{ opacity: 0.8 }}>Planning affiché :</span>
-          {canViewGlobal ? (
-            <select
-              value={selectedUserId}
-              onChange={(e) => {
-                setSelectedUserId(e.target.value);
-                setLastRunId(null);
-                setLastRunStatus(null);
-                setLastRunDraftCount(null);
-                setRunAuditLogs([]);
-                setPubWarnings([]);
-                setPubConflict(null);
-                setGenMsg(null);
-                setDayGenMsg(null);
-                setPubMsg(null);
-                setCancelMsg(null);
-                clearMatchUi();
-              }}
-            >
-              {availableUsers.map((user) => (
-                <option key={user.id} value={user.id}>
-                  {user.id === currentUser.id ? `Moi — ${user.name}` : user.name}
-                </option>
-              ))}
-            </select>
-          ) : (
-            <strong>{currentUser.name}</strong>
-          )}
-          <span style={{ fontSize: 12, opacity: 0.7 }}>
-            {selectedUser.id === currentUser.id ? "Vue personnelle" : `Collègue sélectionné : ${selectedUser.name}`}
-          </span>
+      <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+        <span style={{ opacity: 0.8 }}>Visibilite :</span>
+        {canViewGlobal && (
+          <button
+            onClick={() => {
+              setVisibilityMode("GLOBAL");
+              setSelectedShiftIds([]);
+              setBulkAssignMsg(null);
+              resetViewFeedback();
+            }}
+            style={{
+              fontWeight: visibilityMode === "GLOBAL" ? 700 : 400,
+              border: "1px solid var(--ui-border-strong)",
+              padding: "6px 10px",
+              borderRadius: 8,
+            }}
+          >
+            Globale
+          </button>
+        )}
+        <button
+          onClick={() => {
+            setVisibilityMode("PERSONAL");
+            setSelectedShiftIds([]);
+            setBulkAssignMsg(null);
+            resetViewFeedback();
+          }}
+          style={{
+            fontWeight: visibilityMode === "PERSONAL" ? 700 : 400,
+            border: "1px solid var(--ui-border-strong)",
+            padding: "6px 10px",
+            borderRadius: 8,
+          }}
+        >
+          Personnelle
+        </button>
+        <button
+          onClick={() => {
+            setVisibilityMode("BINOME");
+            setSelectedShiftIds([]);
+            setBulkAssignMsg(null);
+            resetViewFeedback();
+          }}
+          style={{
+            fontWeight: visibilityMode === "BINOME" ? 700 : 400,
+            border: "1px solid var(--ui-border-strong)",
+            padding: "6px 10px",
+            borderRadius: 8,
+          }}
+        >
+          Binome
+        </button>
+
+        {visibilityMode !== "GLOBAL" && (
+          <>
+            <span style={{ opacity: 0.8 }}>{visibilityMode === "BINOME" ? "Agent :" : "Planning :"}</span>
+            {canViewGlobal ? (
+              <select
+                value={selectedUserId}
+                onChange={(e) => {
+                  setSelectedUserId(e.target.value);
+                  setBinomeUserId("");
+                  setSelectedShiftIds([]);
+                  setBulkAssignMsg(null);
+                  resetViewFeedback();
+                }}
+              >
+                {userOptions.map((user) => (
+                  <option key={user.id} value={user.id}>
+                    {user.id === currentUser.id ? `Moi - ${user.name}` : user.name}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <strong>{currentUser.name}</strong>
+            )}
+          </>
+        )}
+
+        {visibilityMode === "BINOME" && (
+          <select
+            value={binomeUserId}
+            onChange={(e) => {
+              setBinomeUserId(e.target.value);
+              setSelectedShiftIds([]);
+              setBulkAssignMsg(null);
+              resetViewFeedback();
+            }}
+          >
+            <option value="">Choisir le binome</option>
+            {binomeOptions.map((user) => (
+              <option key={user.id} value={user.id}>
+                {user.name}
+              </option>
+            ))}
+          </select>
+        )}
+
+        <div style={{ fontSize: 12, opacity: 0.72 }}>
+          {visibilityMode === "GLOBAL"
+            ? "Vue globale de la semaine"
+            : visibilityMode === "BINOME"
+              ? selectedBinomeUser
+                ? `Binome actif : ${selectedUser.name} + ${selectedBinomeUser.name}`
+                : "Selectionnez un binome pour afficher les shifts communs"
+              : `Planning cible : ${selectedUser.name}`}
         </div>
+      </div>
 
         <div style={{ marginLeft: "auto", display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>
           <span style={{ opacity: 0.85 }}>Vue :</span>
@@ -1657,14 +1961,109 @@ export default function PlanningClient({
               </button>
             </>
           )}
-        </div>
       </div>
 
       <div style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 10, opacity: 0.92 }}>
-        {canViewGlobal
-          ? "Consultation centrée utilisateur : sélectionnez un collègue autorisé pour afficher uniquement son planning."
-          : "Consultation limitée à votre planning personnel selon vos permissions."}
+        {visibilityMode === "GLOBAL"
+          ? `Visibilite globale active : ${visibleItems.length} shift(s) visible(s) sur la semaine.`
+          : visibilityMode === "BINOME"
+            ? selectedBinomeUser
+              ? `Visibilite binome active : ${selectedUser.name} + ${selectedBinomeUser.name} (${visibleItems.length} shift(s) commun(s)).`
+              : "Visibilite binome active : selectionnez un binome pour afficher les shifts communs."
+            : `Visibilite personnelle active : planning de ${selectedUser.name} (${visibleItems.length} shift(s)).`}
       </div>
+
+      {canEditPlanning && (
+        <div style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 10, display: "grid", gap: 10 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
+            <div>
+              <div style={{ fontWeight: 800 }}>Selection multiple</div>
+              <div style={{ fontSize: 12, opacity: 0.75 }}>
+                {selectedShiftIds.length} shift(s) selectionne(s) sur {visibleItems.length} visible(s)
+              </div>
+            </div>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <button onClick={toggleVisibleSelection} disabled={visibleItems.length === 0 || bulkAssignLoading}>
+                {visibleItems.length > 0 && visibleItems.every((shift) => selectedShiftIdSet.has(shift.id))
+                  ? "Tout retirer"
+                  : "Tout selectionner"}
+              </button>
+              <button
+                onClick={() => {
+                  setSelectedShiftIds([]);
+                  setBulkAssignMsg(null);
+                }}
+                disabled={selectedShiftIds.length === 0 || bulkAssignLoading}
+              >
+                Vider la selection
+              </button>
+            </div>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 8 }}>
+            <select value={bulkAssignForm.userId} onChange={(e) => setBulkAssignForm((current) => ({ ...current, userId: e.target.value }))}>
+              <option value={BULK_ASSIGN_NO_CHANGE}>Employe 1 - ne pas changer</option>
+              <option value={BULK_ASSIGN_CLEAR}>Employe 1 - desaffecter</option>
+              {userOptions.map((user) => (
+                <option key={`bulk-user1-${user.id}`} value={user.id}>
+                  {user.name}
+                </option>
+              ))}
+            </select>
+
+            <select value={bulkAssignForm.user2Id} onChange={(e) => setBulkAssignForm((current) => ({ ...current, user2Id: e.target.value }))}>
+              <option value={BULK_ASSIGN_NO_CHANGE}>Employe 2 - ne pas changer</option>
+              <option value={BULK_ASSIGN_CLEAR}>Employe 2 - desaffecter</option>
+              {userOptions.map((user) => (
+                <option key={`bulk-user2-${user.id}`} value={user.id}>
+                  {user.name}
+                </option>
+              ))}
+            </select>
+
+            <select value={bulkAssignForm.vehicleId} onChange={(e) => setBulkAssignForm((current) => ({ ...current, vehicleId: e.target.value }))}>
+              <option value={BULK_ASSIGN_NO_CHANGE}>Vehicule - ne pas changer</option>
+              <option value={BULK_ASSIGN_CLEAR}>Vehicule - desaffecter</option>
+              {vehicleOptions.map((vehicle) => (
+                <option key={`bulk-vehicle-${vehicle.id}`} value={vehicle.id}>
+                  {vehicle.immatriculation} ({vehicle.type})
+                </option>
+              ))}
+            </select>
+
+            <select value={bulkAssignForm.depotId} onChange={(e) => setBulkAssignForm((current) => ({ ...current, depotId: e.target.value }))}>
+              <option value={BULK_ASSIGN_NO_CHANGE}>Base - ne pas changer</option>
+              <option value={BULK_ASSIGN_CLEAR}>Base - retirer</option>
+              {depotOptions.map((depot) => (
+                <option key={`bulk-depot-${depot.id}`} value={depot.id}>
+                  {getDepotLabel(depot)}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div style={{ fontSize: 12, opacity: 0.72 }}>
+            L&apos;affectation lot applique seulement les champs selectionnes. Le slot Employe 2 est ignore sur les shifts mono-agent.
+          </div>
+
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            <button onClick={applyBulkAssign} disabled={bulkAssignLoading || selectedShiftIds.length === 0 || !bulkHasChanges}>
+              {bulkAssignLoading ? "Application en lot..." : "Affecter la selection"}
+            </button>
+            <button
+              onClick={() => {
+                setBulkAssignForm(createBulkAssignFormState());
+                setBulkAssignMsg(null);
+              }}
+              disabled={bulkAssignLoading}
+            >
+              Reinitialiser le lot
+            </button>
+          </div>
+
+          {bulkAssignMsg && <div style={{ fontSize: 12, opacity: 0.92 }}>{bulkAssignMsg}</div>}
+        </div>
+      )}
 
       {saveMsg && <div style={{ opacity: 0.9 }}>{saveMsg}</div>}
       {genMsg && <div style={{ opacity: 0.9 }}>{genMsg}</div>}
@@ -1910,36 +2309,64 @@ export default function PlanningClient({
 
                 <div style={{ opacity: 0.75, marginBottom: 8 }}>{key}</div>
 
+                {canEditPlanning && dayShifts.length > 0 && (
+                  <button
+                    onClick={() => toggleDaySelection(dayShifts)}
+                    disabled={bulkAssignLoading}
+                    style={{
+                      border: "1px solid var(--ui-border-strong)",
+                      padding: "4px 8px",
+                      borderRadius: 8,
+                      fontSize: 12,
+                      marginBottom: 8,
+                    }}
+                  >
+                    {dayShifts.every((shift) => selectedShiftIdSet.has(shift.id)) ? "Retirer le jour" : "Selectionner le jour"}
+                  </button>
+                )}
+
                 {dayShifts.length === 0 ? (
                   <div style={{ opacity: 0.6 }}>Aucun shift</div>
                 ) : (
                   <div style={{ display: "grid", gap: 8 }}>
                     {dayShifts.map((s) =>
-                      mode === "SIMPLE" ? (
-                        <ShiftCardSimple
-                          key={s.id}
-                          s={s}
-                          editable={canEditPlanning}
-                          users={userOptions}
-                          vehicles={vehicleOptions}
-                          depots={depotOptions}
-                          loading={assignLoadingId === s.id}
-                          msg={assignMsgById[s.id] ?? null}
-                          onAssign={assignOnDraftShift}
-                        />
-                      ) : (
-                        <ShiftCardAmbulance
-                          key={s.id}
-                          s={s}
-                          editable={canEditPlanning}
-                          users={userOptions}
-                          vehicles={vehicleOptions}
-                          depots={depotOptions}
-                          loading={assignLoadingId === s.id}
-                          msg={assignMsgById[s.id] ?? null}
-                          onAssign={assignOnDraftShift}
-                        />
-                      )
+                      <div key={s.id} style={{ display: "grid", gap: 6 }}>
+                        {canEditPlanning && (
+                          <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, opacity: 0.85 }}>
+                            <input
+                              type="checkbox"
+                              checked={selectedShiftIdSet.has(s.id)}
+                              disabled={bulkAssignLoading}
+                              onChange={() => toggleShiftSelection(s.id)}
+                            />
+                            Selection multiple
+                          </label>
+                        )}
+
+                        {mode === "SIMPLE" ? (
+                          <ShiftCardSimple
+                            s={s}
+                            editable={canEditPlanning}
+                            users={userOptions}
+                            vehicles={vehicleOptions}
+                            depots={depotOptions}
+                            loading={assignLoadingId === s.id}
+                            msg={assignMsgById[s.id] ?? null}
+                            onAssign={assignOnDraftShift}
+                          />
+                        ) : (
+                          <ShiftCardAmbulance
+                            s={s}
+                            editable={canEditPlanning}
+                            users={userOptions}
+                            vehicles={vehicleOptions}
+                            depots={depotOptions}
+                            loading={assignLoadingId === s.id}
+                            msg={assignMsgById[s.id] ?? null}
+                            onAssign={assignOnDraftShift}
+                          />
+                        )}
+                      </div>
                     )}
                   </div>
                 )}

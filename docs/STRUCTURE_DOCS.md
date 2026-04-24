@@ -735,9 +735,14 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   NOTES.md
 |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION-20260424-06_A19_PLAN-ADV-LOT-02_DOCUMENTAIRE_FINAL.zip
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
+|   |   |   |           PATCH__SESSION-20260424-06_A19_PLAN-ADV-LOT-02.diff
+|   |   |   |           PATCH__SESSION-20260424-06_A19_PLAN-ADV-LOT-02_DOCS.diff
+|   |   |   |           PATCH__SESSION-20260424-06_A19_PLAN-ADV-LOT-02_FIX-01.diff
+|   |   |   |           PATCH__SESSION-20260424-06_A19_PLAN-ADV-LOT-02_FIX-02.diff
 |   |   |   |           README_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260424-07_A19_PLAN-ADV-03
