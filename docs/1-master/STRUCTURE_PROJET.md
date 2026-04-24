@@ -2342,13 +2342,13 @@ C:.
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-a79a6d50b3241aaa.js
 |   |   |       
-|   |   +---media
-|   |   |       favicon.0b3bf435.ico
+|   |   +---DjX8zFzVWnhW6v9bukolb
+|   |   |       _buildManifest.js
+|   |   |       _clientMiddlewareManifest.json
+|   |   |       _ssgManifest.js
 |   |   |       
-|   |   \---rZh2iMVp9EnidP999NQFk
-|   |           _buildManifest.js
-|   |           _clientMiddlewareManifest.json
-|   |           _ssgManifest.js
+|   |   \---media
+|   |           favicon.0b3bf435.ico
 |   |           
 |   \---types
 |           routes.d.ts
@@ -3614,6 +3614,7 @@ C:.
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
+|   |   |   |   |           LIVRABLES__SESSION-20260424-11_A20_RH-03_A_PLAT.zip
 |   |   |   |   |           NO_PATCH.md
 |   |   |   |   |           
 |   |   |   |   \---SESSION-20260424-12_A20_CLOTURE_A20
