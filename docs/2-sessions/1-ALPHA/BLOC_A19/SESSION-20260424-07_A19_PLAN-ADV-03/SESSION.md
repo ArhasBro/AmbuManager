@@ -1,35 +1,40 @@
-﻿# SESSION
+# SESSION
 
 ## ID SESSION
-
-SESSION-20260424-07_A19_PLAN-ADV-03
+`SESSION-20260424-07_A19_PLAN-ADV-03`
 
 ## Date
-
 24/04/2026
 
-## Contexte
+## Projet
+- Projet : Investissement
+- Sous-projet : Ambulance Manager
+- Stage : `1-ALPHA`
+- Bloc : `A19 — Planning avancé`
+- Type : `VALIDATION`
 
-Projet : Investissement  
-Sous-projet : Ambulance Manager  
-Maturite : 1-ALPHA  
-Bloc : A19  
-Type : VALIDATION  
-Intitule : Validation complète du bloc planning avancé : exploitabilité terrain, gain de temps, cohérence métier
+## Intitulé
+Validation complète du bloc planning avancé : exploitabilité terrain, gain de temps, cohérence métier.
 
-## Objectif de la session
+## Objectif de session
+Valider l'état réel du planning avancé après `SESSION-20260424-06_A19_PLAN-ADV-LOT-02`, sans rejouer un audit complet ni une correction globale.
 
-INFORMATION NON FOURNIE - A CONFIRMER
+## Règles appliquées
+- Lecture obligatoire du noyau documentaire : `DOCUMENT_MAITRE.md`, `PLAN_DE_DEVELOPPEMENT.md`.
+- `docs/4-templates/TEMPLATE_DEBUT_SESSION.md` : non extrait / non constaté dans l'archive ciblée.
+- Lecture ciblée des documentations A19 utiles : `PLAN-ADV-01` et `PLAN-ADV-LOT-02`.
+- Source prioritaire : code réel extrait de l'archive fournie.
+- Contradiction éventuelle : `CODE > DOCUMENTATION`.
 
-## Perimetre exact traite
+## Périmètre strictement traité
+- `app/planning/page.tsx`
+- `app/planning/planning-client.tsx`
+- `app/planning/manual-planning-panel.tsx`
+- routes planning visibles / listées dans l'archive : `app/api/planning/**`
+- documentation A19 validée : `PLAN-ADV-01`, `PLAN-ADV-LOT-02`
 
-INFORMATION NON FOURNIE - A CONFIRMER
-
-## Resultat synthetique de session
-
-INFORMATION NON FOURNIE - A CONFIRMER
-
-## Dossiers lies
-
-- Session : docs/2-sessions/1-ALPHA/BLOC_A19/SESSION-20260424-07_A19_PLAN-ADV-03
-- PATCH   : docs/2-sessions/1-ALPHA/BLOC_A19/SESSION-20260424-07_A19_PLAN-ADV-03/PATCH
+## Hors périmètre
+- clôture `CLOTURE_A19`
+- blocs A18, A20, A21 ou suivants
+- refonte UI/UX globale
+- audit complet autoschedule / matching / exports

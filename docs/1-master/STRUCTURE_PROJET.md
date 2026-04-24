@@ -124,7 +124,6 @@ C:.
 |   |   |               00000067.meta
 |   |   |               00000070.meta
 |   |   |               00000071.meta
-|   |   |               00000075.del
 |   |   |               00000078.sst
 |   |   |               00000079.sst
 |   |   |               00000080.sst
@@ -149,7 +148,6 @@ C:.
 |   |   |               00000111.meta
 |   |   |               00000114.meta
 |   |   |               00000115.meta
-|   |   |               00000119.del
 |   |   |               00000122.sst
 |   |   |               00000123.sst
 |   |   |               00000124.sst
@@ -177,7 +175,6 @@ C:.
 |   |   |               00000172.sst
 |   |   |               00000173.sst
 |   |   |               00000174.meta
-|   |   |               00000176.del
 |   |   |               00000178.sst
 |   |   |               00000179.sst
 |   |   |               00000180.sst
@@ -222,13 +219,74 @@ C:.
 |   |   |               00000231.sst
 |   |   |               00000232.sst
 |   |   |               00000233.meta
-|   |   |               00000234.del
 |   |   |               00000235.sst
 |   |   |               00000236.sst
 |   |   |               00000237.sst
 |   |   |               00000238.meta
 |   |   |               00000239.meta
 |   |   |               00000240.meta
+|   |   |               00000241.sst
+|   |   |               00000242.sst
+|   |   |               00000243.sst
+|   |   |               00000244.meta
+|   |   |               00000245.meta
+|   |   |               00000246.meta
+|   |   |               00000247.sst
+|   |   |               00000248.sst
+|   |   |               00000249.sst
+|   |   |               00000250.sst
+|   |   |               00000251.sst
+|   |   |               00000252.meta
+|   |   |               00000253.meta
+|   |   |               00000254.meta
+|   |   |               00000255.meta
+|   |   |               00000256.meta
+|   |   |               00000257.sst
+|   |   |               00000258.sst
+|   |   |               00000259.sst
+|   |   |               00000260.meta
+|   |   |               00000261.meta
+|   |   |               00000262.meta
+|   |   |               00000263.sst
+|   |   |               00000264.sst
+|   |   |               00000265.sst
+|   |   |               00000266.meta
+|   |   |               00000267.meta
+|   |   |               00000268.meta
+|   |   |               00000269.sst
+|   |   |               00000270.sst
+|   |   |               00000271.sst
+|   |   |               00000272.sst
+|   |   |               00000273.sst
+|   |   |               00000274.meta
+|   |   |               00000275.meta
+|   |   |               00000276.meta
+|   |   |               00000277.meta
+|   |   |               00000278.meta
+|   |   |               00000279.sst
+|   |   |               00000280.sst
+|   |   |               00000281.sst
+|   |   |               00000282.meta
+|   |   |               00000283.meta
+|   |   |               00000284.meta
+|   |   |               00000285.sst
+|   |   |               00000286.sst
+|   |   |               00000287.sst
+|   |   |               00000288.meta
+|   |   |               00000289.meta
+|   |   |               00000290.meta
+|   |   |               00000291.sst
+|   |   |               00000292.sst
+|   |   |               00000293.sst
+|   |   |               00000294.meta
+|   |   |               00000295.meta
+|   |   |               00000296.meta
+|   |   |               00000297.sst
+|   |   |               00000298.sst
+|   |   |               00000299.sst
+|   |   |               00000300.meta
+|   |   |               00000301.meta
+|   |   |               00000302.meta
 |   |   |               CURRENT
 |   |   |               LOG
 |   |   |               
@@ -547,11 +605,22 @@ C:.
 |   |   |   |   |   |       |   route.js.map
 |   |   |   |   |   |       |   route_client-reference-manifest.js
 |   |   |   |   |   |       |   
-|   |   |   |   |   |       \---route
-|   |   |   |   |   |               app-paths-manifest.json
-|   |   |   |   |   |               build-manifest.json
-|   |   |   |   |   |               server-reference-manifest.json
-|   |   |   |   |   |               
+|   |   |   |   |   |       +---route
+|   |   |   |   |   |       |       app-paths-manifest.json
+|   |   |   |   |   |       |       build-manifest.json
+|   |   |   |   |   |       |       server-reference-manifest.json
+|   |   |   |   |   |       |       
+|   |   |   |   |   |       \---[id]
+|   |   |   |   |   |           \---assign
+|   |   |   |   |   |               |   route.js
+|   |   |   |   |   |               |   route.js.map
+|   |   |   |   |   |               |   route_client-reference-manifest.js
+|   |   |   |   |   |               |   
+|   |   |   |   |   |               \---route
+|   |   |   |   |   |                       app-paths-manifest.json
+|   |   |   |   |   |                       build-manifest.json
+|   |   |   |   |   |                       server-reference-manifest.json
+|   |   |   |   |   |                       
 |   |   |   |   |   +---templates
 |   |   |   |   |   |   |   route.js
 |   |   |   |   |   |   |   route.js.map
@@ -661,6 +730,18 @@ C:.
 |   |   |   |   |           react-loadable-manifest.json
 |   |   |   |   |           server-reference-manifest.json
 |   |   |   |   |           
+|   |   |   |   +---login
+|   |   |   |   |   |   page.js
+|   |   |   |   |   |   page.js.map
+|   |   |   |   |   |   page_client-reference-manifest.js
+|   |   |   |   |   |   
+|   |   |   |   |   \---page
+|   |   |   |   |           app-paths-manifest.json
+|   |   |   |   |           build-manifest.json
+|   |   |   |   |           next-font-manifest.json
+|   |   |   |   |           react-loadable-manifest.json
+|   |   |   |   |           server-reference-manifest.json
+|   |   |   |   |           
 |   |   |   |   +---page
 |   |   |   |   |       app-paths-manifest.json
 |   |   |   |   |       build-manifest.json
@@ -735,6 +816,8 @@ C:.
 |   |   |   |   |   node_modules_next-auth_1810886e._.js.map
 |   |   |   |   |   node_modules_next-auth_72b3a499._.js
 |   |   |   |   |   node_modules_next-auth_72b3a499._.js.map
+|   |   |   |   |   node_modules_next_0649d172._.js
+|   |   |   |   |   node_modules_next_0649d172._.js.map
 |   |   |   |   |   node_modules_next_21f81598._.js
 |   |   |   |   |   node_modules_next_21f81598._.js.map
 |   |   |   |   |   node_modules_next_240bb1a7._.js
@@ -779,6 +862,8 @@ C:.
 |   |   |   |   |   [root-of-the-server]__23067d2d._.js.map
 |   |   |   |   |   [root-of-the-server]__2f21fd63._.js
 |   |   |   |   |   [root-of-the-server]__2f21fd63._.js.map
+|   |   |   |   |   [root-of-the-server]__3085c38d._.js
+|   |   |   |   |   [root-of-the-server]__3085c38d._.js.map
 |   |   |   |   |   [root-of-the-server]__3220e87f._.js
 |   |   |   |   |   [root-of-the-server]__3220e87f._.js.map
 |   |   |   |   |   [root-of-the-server]__3302dbde._.js
@@ -829,6 +914,8 @@ C:.
 |   |   |   |   |   _next-internal_server_app_api_planning_autoschedule_week_route_actions_85583f47.js.map
 |   |   |   |   |   _next-internal_server_app_api_planning_shifts_route_actions_4dae3f6d.js
 |   |   |   |   |   _next-internal_server_app_api_planning_shifts_route_actions_4dae3f6d.js.map
+|   |   |   |   |   _next-internal_server_app_api_planning_shifts_[id]_assign_route_actions_75edfcab.js
+|   |   |   |   |   _next-internal_server_app_api_planning_shifts_[id]_assign_route_actions_75edfcab.js.map
 |   |   |   |   |   _next-internal_server_app_api_templates_route_actions_a59f4640.js
 |   |   |   |   |   _next-internal_server_app_api_templates_route_actions_a59f4640.js.map
 |   |   |   |   |   _next-internal_server_app_api_users_route_actions_4b9121e3.js
@@ -851,6 +938,8 @@ C:.
 |   |   |   |           app_dashboard_logout-button_tsx_efb5e489._.js.map
 |   |   |   |           app_depots_depots-client_tsx_0adc4040._.js
 |   |   |   |           app_depots_depots-client_tsx_0adc4040._.js.map
+|   |   |   |           app_login_page_tsx_ccc0019b._.js
+|   |   |   |           app_login_page_tsx_ccc0019b._.js.map
 |   |   |   |           app_vehicles_88a7827a._.js
 |   |   |   |           app_vehicles_88a7827a._.js.map
 |   |   |   |           node_modules_e2d1c5df._.js
@@ -877,6 +966,8 @@ C:.
 |   |   |   |           node_modules_next_dist_55616eb5._.js.map
 |   |   |   |           node_modules_next_dist_58dbd43e._.js
 |   |   |   |           node_modules_next_dist_58dbd43e._.js.map
+|   |   |   |           node_modules_next_dist_6c3f6d39._.js
+|   |   |   |           node_modules_next_dist_6c3f6d39._.js.map
 |   |   |   |           node_modules_next_dist_af9ba5a3._.js
 |   |   |   |           node_modules_next_dist_af9ba5a3._.js.map
 |   |   |   |           node_modules_next_dist_bab76886._.js
@@ -911,6 +1002,8 @@ C:.
 |   |   |   |           [root-of-the-server]__1a81b948._.js.map
 |   |   |   |           [root-of-the-server]__368e6fd5._.js
 |   |   |   |           [root-of-the-server]__368e6fd5._.js.map
+|   |   |   |           [root-of-the-server]__4e9dd690._.js
+|   |   |   |           [root-of-the-server]__4e9dd690._.js.map
 |   |   |   |           [root-of-the-server]__60f0131a._.js
 |   |   |   |           [root-of-the-server]__60f0131a._.js.map
 |   |   |   |           [root-of-the-server]__759f49c3._.js
@@ -953,6 +1046,8 @@ C:.
 |   |   |   |           _next-internal_server_app_dashboard_page_actions_7f01ccec.js.map
 |   |   |   |           _next-internal_server_app_depots_page_actions_4ef2fb4b.js
 |   |   |   |           _next-internal_server_app_depots_page_actions_4ef2fb4b.js.map
+|   |   |   |           _next-internal_server_app_login_page_actions_0e9aafc0.js
+|   |   |   |           _next-internal_server_app_login_page_actions_0e9aafc0.js.map
 |   |   |   |           _next-internal_server_app_page_actions_39d4fc33.js
 |   |   |   |           _next-internal_server_app_page_actions_39d4fc33.js.map
 |   |   |   |           _next-internal_server_app_planning_page_actions_09255cef.js
@@ -985,6 +1080,9 @@ C:.
 |   |   |   |       app_globals_71f961d1.css
 |   |   |   |       app_globals_71f961d1.css.map
 |   |   |   |       app_layout_tsx_1cf6b850._.js
+|   |   |   |       app_login_page_tsx_31d767ba._.js
+|   |   |   |       app_login_page_tsx_e96a26ee._.js
+|   |   |   |       app_login_page_tsx_e96a26ee._.js.map
 |   |   |   |       app_planning_page_tsx_31d767ba._.js
 |   |   |   |       app_templates_page_tsx_31d767ba._.js
 |   |   |   |       app_users_page_tsx_31d767ba._.js
