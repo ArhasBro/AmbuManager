@@ -50,7 +50,7 @@ test("privacy mentions stay reachable from login", () => {
   const privacySource = read("app/privacy/page.tsx");
 
   expectPattern(loginSource, /Link href=\"\/privacy\"/, "login page must link to privacy mentions");
-  expectPattern(privacySource, /Mentions d'information - Donnees personnelles/, "privacy page must expose RGPD information");
+  expectPattern(privacySource, /Mentions d(?:'|&apos;)information - Donnees personnelles/, "privacy page must expose RGPD information");
 });
 
 test("templates API keeps auth, permission gate and company-scoped persistence", () => {

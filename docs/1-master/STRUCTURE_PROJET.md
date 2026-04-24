@@ -2241,13 +2241,13 @@ C:.
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-a79a6d50b3241aaa.js
 |   |   |       
-|   |   +---media
-|   |   |       favicon.0b3bf435.ico
+|   |   +---LbVjoRx_kT_b5CeunpCN-
+|   |   |       _buildManifest.js
+|   |   |       _clientMiddlewareManifest.json
+|   |   |       _ssgManifest.js
 |   |   |       
-|   |   \---NFiy8bF6wTQBej8dAzoAw
-|   |           _buildManifest.js
-|   |           _clientMiddlewareManifest.json
-|   |           _ssgManifest.js
+|   |   \---media
+|   |           favicon.0b3bf435.ico
 |   |           
 |   \---types
 |           routes.d.ts
@@ -3085,7 +3085,9 @@ C:.
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
-|   |   |   |   |           NO_PATCH.md
+|   |   |   |   |           LIVRABLES__SESSION-20260423-11_A17_RGPD-03_A_PLAT.zip
+|   |   |   |   |           PATCH__SESSION-20260423-11_A17_RGPD-03.diff
+|   |   |   |   |           README_PATCH.md
 |   |   |   |   |           
 |   |   |   |   \---SESSION-20260423-12_A17_CLOTURE_A17
 |   |   |   |       |   EVIDENCES.md

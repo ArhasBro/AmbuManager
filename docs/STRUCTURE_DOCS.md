@@ -654,7 +654,9 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
-|   |   |   |           NO_PATCH.md
+|   |   |   |           LIVRABLES__SESSION-20260423-11_A17_RGPD-03_A_PLAT.zip
+|   |   |   |           PATCH__SESSION-20260423-11_A17_RGPD-03.diff
+|   |   |   |           README_PATCH.md
 |   |   |   |           
 |   |   |   \---SESSION-20260423-12_A17_CLOTURE_A17
 |   |   |       |   EVIDENCES.md

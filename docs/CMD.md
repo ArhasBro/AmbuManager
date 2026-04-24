@@ -170,7 +170,7 @@ IMPORTANT
 Références des sessions :
 
 - SESSION-20260423-12_A17_CLOTURE_A17
-- **CLOTURE_A17 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc RGPD
+- **BDD-01 — AUDIT** — Audit complet de la chaîne BDD existante : Prisma schema, migrations, seed, base locale, environnements, drifts potentiels, cohérence schéma ↔ base
 ------------------------------------
 
 Voici sa réponse ainsi que les documents généré :
@@ -191,21 +191,79 @@ Je n'ai pas intégré :
 Fait moi la commande pour le script de création de sessions pour les sessions suivante.
 Exemple de la commande : .\create_session.ps1 -Stage "1-ALPHA" -Block "A1" -SessionCode "RBAC-02" -Type "CORRECTION" -Title "Remplacement méthodique de DEA par ADE"
 
-### BLOC A17 — RGPD
+### BLOC A18 — BDD / Prisma / migrations / environnements
 **Objectif du bloc**  
-Mettre en place une base de conformité RGPD minimale et exploitable.
+Fiabiliser durablement la base de données et éviter les écarts entre schéma, migrations et base réelle.
 
 #### Sessions
-- **RGPD-01 — AUDIT** — Audit complet des données personnelles manipulées : utilisateurs, absences, audit, accès, finalités, rôles d’accès, conservation, export/correction/suppression
-- **RGPD-LOT-02 — CORRECTION+COMPLÉTION** — Correction et/ou complétion de la base RGPD : cartographie des données, finalités, accès, conservation, registre de traitement, besoins d’export/correction/suppression, mentions d’information
-- **RGPD-03 — VALIDATION** — Validation complète du bloc RGPD : cohérence documentaire et base de conformité minimale
-- **CLOTURE_A17 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc RGPD
+- **BDD-01 — AUDIT** — Audit complet de la chaîne BDD existante : Prisma schema, migrations, seed, base locale, environnements, drifts potentiels, cohérence schéma ↔ base
+- **BDD-LOT-02 — CORRECTION+COMPLÉTION** — Correction et/ou complétion de la chaîne BDD : migrations, colonnes manquantes, contraintes, relations, seeds, clarification des environnements, documentation des opérations sensibles
+- **BDD-03 — VALIDATION** — Validation complète du bloc BDD : Prisma / migrations / base / seed / environnements
+- **CLOTURE_A18 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc BDD
 
 #### Résultat attendu
-- base RGPD claire
-- données personnelles cartographiées
-- premières règles de conservation et d’accès définies
-- conformité minimale préparée proprement
+- base plus fiable
+- moins de drift
+- migrations mieux gouvernées
+- environnements plus clairs
+
+---
+
+### BLOC A19 — Planning avancé
+**Objectif du bloc**  
+Rendre le planning réellement plus exploitable au quotidien.
+
+#### Sessions
+- **PLAN-ADV-01 — AUDIT** — Audit complet des besoins planning avancé : affichages multiples, sélection multiple, affectation utilisateur, vue globale/personnelle/binôme, lisibilité opérationnelle
+- **PLAN-ADV-LOT-02 — CORRECTION+COMPLÉTION** — Correction et/ou complétion du planning avancé : affectation à un shift, sélection multiple, modes de vue, visibilité globale/personnelle/binôme
+- **PLAN-ADV-03 — VALIDATION** — Validation complète du bloc planning avancé : exploitabilité terrain, gain de temps, cohérence métier
+- **CLOTURE_A19 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc Planning avancé
+
+#### Résultat attendu
+- planning plus exploitable
+- affectations plus claires
+- vues mieux adaptées
+- usage quotidien facilité
+
+---
+
+### BLOC A20 — RH / Utilisateurs avancés
+**Objectif du bloc**  
+Compléter le module utilisateurs avec les besoins métier restants.
+
+#### Sessions
+- **RH-01 — AUDIT** — Audit complet des besoins RH restants : demandes d’absence, création utilisateur enrichie, stagiaires, horaires journaliers, contraintes métier associées
+- **RH-LOT-02 — CORRECTION+COMPLÉTION** — Correction et/ou complétion du module RH : demandes d’absence, nom/prénom/initiales, gestion des stagiaires, premiers éléments d’horaires journaliers selon cadrage validé
+- **RH-03 — VALIDATION** — Validation complète du bloc RH / utilisateurs avancés
+- **CLOTURE_A20 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc RH
+
+#### Résultat attendu
+- module users plus complet
+- absences mieux gérées
+- création utilisateur enrichie
+- base RH plus exploitable
+
+---
+
+### BLOC A21 — UI / UX / Navigation
+**Objectif du bloc**  
+Améliorer l’expérience produit et la navigation générale.
+
+#### Point de cadrage
+Une maquette Figma est en cours de réalisation.
+Le bloc A21 devra donc être repris au bon moment en s’appuyant sur cette maquette comme référence de travail, afin d’éviter une refonte UI/UX déconnectée de la vision cible.
+
+#### Sessions
+- **UX-01 — AUDIT** — Audit complet des besoins UI/UX : qualité graphique, navigation, lisibilité, dark mode, cohérence visuelle, besoin de maquette Figma
+- **UX-LOT-02 — CORRECTION+COMPLÉTION** — Correction et/ou complétion UI/UX : navigation latérale, amélioration du rendu visuel, cohérence graphique, préparation ou intégration d’une maquette de référence
+- **UX-03 — VALIDATION** — Validation complète du bloc UI/UX : lisibilité, ergonomie, cohérence des parcours
+- **CLOTURE_A21 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc UI/UX
+
+#### Résultat attendu
+- navigation plus claire
+- meilleure ergonomie
+- rendu plus professionnel
+- base plus propre avant BETA
 ------------------------------------
 
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
