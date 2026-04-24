@@ -169,9 +169,6 @@ IMPORTANT
 
 Références des sessions :
 
-- SESSION-20260424-10_A20_RH-LOT-02
-- **RH-LOT-02 — CORRECTION+COMPLÉTION** — Correction et/ou complétion du module RH : demandes d’absence, nom/prénom/initiales, gestion des stagiaires, premiers éléments d’horaires journaliers selon cadrage validé
-
 - SESSION-20260424-11_A20_RH-03
 - **RH-03 — VALIDATION** — Validation complète du bloc RH / utilisateurs avancés
 

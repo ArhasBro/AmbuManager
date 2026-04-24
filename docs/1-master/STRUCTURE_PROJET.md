@@ -3588,6 +3588,7 @@ C:.
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
+|   |   |   |   |           LIVRABLES__SESSION-20260424-09_A20_RH-01_A_PLAT.zip
 |   |   |   |   |           NO_PATCH.md
 |   |   |   |   |           
 |   |   |   |   +---SESSION-20260424-10_A20_RH-LOT-02
