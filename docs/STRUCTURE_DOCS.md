@@ -1219,7 +1219,149 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |       |   SESSION.md
 |   |   |       |   
 |   |   |       \---PATCH
+|   |   |               LIVRABLES__SESSION-20260425-09_A21_CLOTURE_A21_A_PLAT.zip
 |   |   |               NO_PATCH.md
+|   |   |               
+|   |   +---BLOC_A22
+|   |   |   +---SESSION-20260425-10_A22_UIINT-01
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           README_PATCH.md
+|   |   |   |           
+|   |   |   +---SESSION-20260425-11_A22_UIINT-02
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           README_PATCH.md
+|   |   |   |           
+|   |   |   +---SESSION-20260425-12_A22_UIINT-03
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           README_PATCH.md
+|   |   |   |           
+|   |   |   +---SESSION-20260425-13_A22_UIINT-04
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           README_PATCH.md
+|   |   |   |           
+|   |   |   +---SESSION-20260425-14_A22_UIINT-05
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           README_PATCH.md
+|   |   |   |           
+|   |   |   +---SESSION-20260425-15_A22_UIINT-06
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           README_PATCH.md
+|   |   |   |           
+|   |   |   +---SESSION-20260425-16_A22_UIINT-07
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           README_PATCH.md
+|   |   |   |           
+|   |   |   +---SESSION-20260425-17_A22_UIINT-08
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           README_PATCH.md
+|   |   |   |           
+|   |   |   +---SESSION-20260425-18_A22_UIINT-09
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           README_PATCH.md
+|   |   |   |           
+|   |   |   +---SESSION-20260425-19_A22_UIINT-10
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           README_PATCH.md
+|   |   |   |           
+|   |   |   +---SESSION-20260425-20_A22_UIINT-11
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           README_PATCH.md
+|   |   |   |           
+|   |   |   +---SESSION-20260425-21_A22_UIINT-12
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           README_PATCH.md
+|   |   |   |           
+|   |   |   +---SESSION-20260425-22_A22_UIINT-13
+|   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   NOTES.md
+|   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION.md
+|   |   |   |   |   
+|   |   |   |   \---PATCH
+|   |   |   |           README_PATCH.md
+|   |   |   |           
+|   |   |   \---SESSION-20260425-23_A22_CLOTURE_A22
+|   |   |       |   EVIDENCES.md
+|   |   |       |   FIN_SESSION.md
+|   |   |       |   NOTES.md
+|   |   |       |   RESULTATS.md
+|   |   |       |   SESSION.md
+|   |   |       |   
+|   |   |       \---PATCH
+|   |   |               README_PATCH.md
 |   |   |               
 |   |   +---BLOC_A3
 |   |   |   +---1-USER

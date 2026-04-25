@@ -84,7 +84,7 @@ Liste tracee dans `EVIDENCES.md` (inspection frontend ciblee uniquement).
 
 ### A22-UIINT-01
 
-- Type : CODAGE
+- Type : CORRECTION+COMPLÉTION
 - Objectif unique : Shell structurel
 - Perimetre : Sidebar + Topbar + Main
 - Livrable attendu : shell applique sur pages connectees
@@ -93,7 +93,7 @@ Liste tracee dans `EVIDENCES.md` (inspection frontend ciblee uniquement).
 
 ### A22-UIINT-02
 
-- Type : CODAGE
+- Type : CORRECTION+COMPLÉTION
 - Objectif unique : Navigation complete permissions
 - Perimetre : entrees nav et etats actifs
 - Livrable attendu : navigation complete et coherente
@@ -102,7 +102,7 @@ Liste tracee dans `EVIDENCES.md` (inspection frontend ciblee uniquement).
 
 ### A22-UIINT-03
 
-- Type : CODAGE
+- Type : CORRECTION+COMPLÉTION
 - Objectif unique : Socle composants UI communs
 - Perimetre : PageHeader, ActionButton, StatusBadge, EmptyState, ErrorMessage
 - Livrable attendu : socle UI mutualise
@@ -111,7 +111,7 @@ Liste tracee dans `EVIDENCES.md` (inspection frontend ciblee uniquement).
 
 ### A22-UIINT-04
 
-- Type : CODAGE
+- Type : CORRECTION+COMPLÉTION
 - Objectif unique : Tables / filtres / cartes statistiques
 - Perimetre : DataTable, FilterBar, StatCard
 - Livrable attendu : surfaces data homogenes
@@ -120,7 +120,7 @@ Liste tracee dans `EVIDENCES.md` (inspection frontend ciblee uniquement).
 
 ### A22-UIINT-05
 
-- Type : CODAGE
+- Type : CORRECTION+COMPLÉTION
 - Objectif unique : Dashboard
 - Perimetre : page dashboard UI
 - Livrable attendu : dashboard aligne reference
@@ -129,7 +129,7 @@ Liste tracee dans `EVIDENCES.md` (inspection frontend ciblee uniquement).
 
 ### A22-UIINT-06
 
-- Type : CODAGE
+- Type : CORRECTION+COMPLÉTION
 - Objectif unique : Planning
 - Perimetre : UI planning uniquement
 - Livrable attendu : planning harmonise
@@ -138,7 +138,7 @@ Liste tracee dans `EVIDENCES.md` (inspection frontend ciblee uniquement).
 
 ### A22-UIINT-07
 
-- Type : CODAGE
+- Type : CORRECTION+COMPLÉTION
 - Objectif unique : Users
 - Perimetre : UI module users
 - Livrable attendu : ecrans users harmonises
@@ -147,7 +147,7 @@ Liste tracee dans `EVIDENCES.md` (inspection frontend ciblee uniquement).
 
 ### A22-UIINT-08
 
-- Type : CODAGE
+- Type : CORRECTION+COMPLÉTION
 - Objectif unique : Vehicles
 - Perimetre : UI module vehicles
 - Livrable attendu : ecrans vehicles harmonises
@@ -156,7 +156,7 @@ Liste tracee dans `EVIDENCES.md` (inspection frontend ciblee uniquement).
 
 ### A22-UIINT-09
 
-- Type : CODAGE
+- Type : CORRECTION+COMPLÉTION
 - Objectif unique : Templates
 - Perimetre : UI module templates
 - Livrable attendu : ecrans templates harmonises
@@ -165,7 +165,7 @@ Liste tracee dans `EVIDENCES.md` (inspection frontend ciblee uniquement).
 
 ### A22-UIINT-10
 
-- Type : CODAGE
+- Type : CORRECTION+COMPLÉTION
 - Objectif unique : Company / Depots
 - Perimetre : UI company et depots
 - Livrable attendu : coherence visuelle modules structure
@@ -174,7 +174,7 @@ Liste tracee dans `EVIDENCES.md` (inspection frontend ciblee uniquement).
 
 ### A22-UIINT-11
 
-- Type : CODAGE
+- Type : CORRECTION+COMPLÉTION
 - Objectif unique : Onboarding
 - Perimetre : UI onboarding
 - Livrable attendu : ecran onboarding harmonise
@@ -183,7 +183,7 @@ Liste tracee dans `EVIDENCES.md` (inspection frontend ciblee uniquement).
 
 ### A22-UIINT-12
 
-- Type : CODAGE
+- Type : CORRECTION+COMPLÉTION
 - Objectif unique : Audit
 - Perimetre : UI audit
 - Livrable attendu : ecran audit harmonise
@@ -192,16 +192,16 @@ Liste tracee dans `EVIDENCES.md` (inspection frontend ciblee uniquement).
 
 ### A22-UIINT-13
 
-- Type : CODAGE
+- Type : CORRECTION+COMPLÉTION
 - Objectif unique : Login / Privacy
 - Perimetre : pages simples
 - Livrable attendu : alignement visuel pages simples
 - DoD : cohérence avec reference Login_V1.1 / Privacy_V1.0
 - Validation attendue : revue visuelle login/privacy
 
-### A22-CLOTURE
+### CLOTURE_A22
 
-- Type : VALIDATION
+- Type : AUDIT+CORRECTION+COMPLÉTION+VALIDATION
 - Objectif unique : Validation finale integration UI/UX code
 - Perimetre : bloc A22 complet
 - Livrable attendu : verdict de cloture A22

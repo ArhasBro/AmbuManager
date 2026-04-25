@@ -1,21 +1,27 @@
-# FIN_SESSION
+﻿# FIN_SESSION
 
 ## Statut
 
 ```text
-RÉORGANISATION DOCUMENTAIRE APPLIQUÉE — CLÔTURE CODE NON RÉALISÉE
+SESSION CLOTURE_A21 TERMINEE - NO_PATCH DOCUMENTAIRE
 ```
 
-## Décision patch
+## Verdict officiel de bloc
 
 ```text
-NO_PATCH
+BLOC A21 CLOTURABLE DEFINITIVEMENT : OUI
+PASSAGE AU BLOC A22 AUTORISE : OUI
 ```
 
 ## Conclusion
 
-Les livrables UI/UX correspondants sont désormais rattachés à la session standard du bloc A21.
+Le bloc A21 est cloture comme referentiel UI/UX / navigation documentaire valide, sans integration code realisee dans cette session.
 
-## Suite
+## Rappel de frontiere
 
-La future intégration code UI/UX devra être traitée séparément, dans des sessions dédiées.
+- A21 : reference documentaire UI/UX.
+- A22 (futur bloc distinct) : integration code UI/UX.
+
+## Suite recommandee
+
+`A22-UIINT-01 - Shell structurel` (a ouvrir ulterieurement, hors de cette session).

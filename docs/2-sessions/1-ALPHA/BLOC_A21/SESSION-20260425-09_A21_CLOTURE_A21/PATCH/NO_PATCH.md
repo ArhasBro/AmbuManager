@@ -1,6 +1,6 @@
-# NO_PATCH
+﻿# NO_PATCH
 
-## Décision
+## Decision
 
 ```text
 NO_PATCH
@@ -8,10 +8,14 @@ NO_PATCH
 
 ## Motif
 
-Session documentaire uniquement. Aucun code applicatif modifié.
+Session de cloture A21 strictement documentaire.
+Aucun code applicatif, Prisma, API, route, logique metier ou composant React modifie.
 
-## Validation terminale
+## Validations terminales
 
 ```text
-NON APPLICABLE
+npm run lint : NON RELANCE / NON REQUIS (NO_PATCH code)
+npm run build : NON RELANCE / NON REQUIS (NO_PATCH code)
+npx prisma validate : NON RELANCE / NON REQUIS (aucun Prisma modifie)
+npx prisma generate : NON RELANCE / NON REQUIS (aucun Prisma modifie)
 ```

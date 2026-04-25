@@ -1,7 +1,7 @@
 # Ambulance Manager — PLAN_DE_DEVELOPPEMENT
 
-Version : V2.2.0 (MASTER)  
-Date : 20/04/2026
+Version : V2.3.0 (MASTER)
+Date : 25/04/2026
 
 ## Sommaire
 - [1. Rôle du document](#1-rôle-du-document)
@@ -919,7 +919,7 @@ Améliorer l’expérience produit, la navigation générale, la lisibilité des
 - **UX-06 — RÉFÉRENCE UI/UX CODEX** — Consolidation de la référence UI/UX ALPHA exploitable pour une future intégration React / Next.js / Tailwind.
 - **UX-07 — CLÔTURE DOCUMENTAIRE UI/UX** — Clôture documentaire du chantier UI/UX, sans intégration code.
 - **UX-08 — PRÉPARATION INTÉGRATION CODE** — Préparation de l’intégration progressive de la nouvelle UI/UX dans le code existant, sans modification applicative immédiate.
-- **CLOTURE_A21 — VALIDATION** — Validation finale du bloc UI/UX / Navigation avant lancement des sessions d’intégration code.
+- **CLOTURE_A21 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Validation finale du bloc UI/UX / Navigation avant lancement des sessions d’intégration code.
 
 #### Résultat attendu
 - direction artistique ALPHA validée
@@ -929,6 +929,79 @@ Améliorer l’expérience produit, la navigation générale, la lisibilité des
 - distinction claire entre validation documentaire UI/UX et intégration code
 - base propre pour intégrer progressivement la nouvelle UI/UX dans l’application
 - application prête à poursuivre les tests ALPHA avec une UI/UX mieux cadrée
+
+---
+
+### BLOC A22 — Intégration code UI/UX / Navigation
+
+**Objectif du bloc**  
+Intégrer dans le code l’interface UI/UX validée lors du bloc A21, en respectant strictement la référence visuelle, les maquettes validées, la direction artistique figée, les règles UI documentées et les réserves actées.
+
+#### Point de cadrage
+Le bloc A22 est le bloc d’intégration code de l’UI/UX validée en A21.
+
+A22 s’appuie obligatoirement sur :
+- la référence UI/UX ALPHA validée ;
+- les maquettes validées du bloc A21 ;
+- le design system documentaire ;
+- la direction artistique figée ;
+- les décisions de clôture du bloc A21 ;
+- les réserves documentées, notamment sur `Privacy_V1.0`.
+
+A22 ne doit pas :
+- rouvrir la direction artistique ;
+- produire une nouvelle maquette ;
+- modifier le cadrage produit ;
+- modifier la logique métier hors nécessité strictement liée à l’intégration UI ;
+- mélanger refonte visuelle et évolution fonctionnelle ;
+- considérer A21 comme déjà intégré dans le code.
+
+A22 doit transformer progressivement la référence UI/UX validée en composants, structures et écrans réellement intégrés dans l’application.
+
+#### Sessions
+- **A22-UIINT-01 — CORRECTION+COMPLÉTION** — Shell structurel : sidebar, topbar et zone main. Livrable attendu : shell appliqué sur les pages connectées. DoD : shell stable, responsive de base, navigation non régressive.
+
+- **A22-UIINT-02 — CORRECTION+COMPLÉTION** — Navigation complète permissions : entrées de navigation, états actifs et affichage selon permissions. Livrable attendu : navigation complète et cohérente. DoD : aucun lien mort, affichage conforme aux permissions.
+
+- **A22-UIINT-03 — CORRECTION+COMPLÉTION** — Socle composants UI communs : `PageHeader`, `ActionButton`, `StatusBadge`, `EmptyState`, `ErrorMessage`. Livrable attendu : socle UI mutualisé. DoD : composants réutilisables sans impact métier.
+
+- **A22-UIINT-04 — CORRECTION+COMPLÉTION** — Tables / filtres / cartes statistiques : `DataTable`, `FilterBar`, `StatCard`. Livrable attendu : surfaces data homogènes. DoD : états loading / empty / error couverts.
+
+- **A22-UIINT-05 — CORRECTION+COMPLÉTION** — Dashboard : intégration de l’UI dashboard alignée sur la référence A21. Livrable attendu : dashboard harmonisé. DoD : parcours dashboard lisible et cohérent.
+
+- **A22-UIINT-06 — CORRECTION+COMPLÉTION** — Planning : harmonisation UI du planning uniquement. Livrable attendu : planning harmonisé. DoD : lisibilité métier conservée, sans régression fonctionnelle.
+
+- **A22-UIINT-07 — CORRECTION+COMPLÉTION** — Users : harmonisation UI du module utilisateurs / RH. Livrable attendu : écrans users harmonisés. DoD : formulaires et listes users cohérents.
+
+- **A22-UIINT-08 — CORRECTION+COMPLÉTION** — Vehicles : harmonisation UI du module véhicules. Livrable attendu : écrans vehicles harmonisés. DoD : formulaires et listes vehicles cohérents.
+
+- **A22-UIINT-09 — CORRECTION+COMPLÉTION** — Templates : harmonisation UI du module templates. Livrable attendu : écrans templates harmonisés. DoD : édition et listes templates cohérentes.
+
+- **A22-UIINT-10 — CORRECTION+COMPLÉTION** — Company / Dépôts : harmonisation UI des pages société et dépôts. Livrable attendu : cohérence visuelle des modules structure. DoD : formulaires et listes alignés avec le socle UI.
+
+- **A22-UIINT-11 — CORRECTION+COMPLÉTION** — Onboarding : harmonisation UI de l’onboarding. Livrable attendu : écran onboarding harmonisé. DoD : étapes lisibles et cohérentes.
+
+- **A22-UIINT-12 — CORRECTION+COMPLÉTION** — Audit : harmonisation UI du journal d’audit. Livrable attendu : écran audit harmonisé. DoD : filtres et lecture audit lisibles.
+
+- **A22-UIINT-13 — CORRECTION+COMPLÉTION** — Login / Privacy : intégration visuelle des pages simples. Livrable attendu : alignement visuel des pages login et privacy. DoD : cohérence avec les références `Login_V1.1` et `Privacy_V1.0`.
+
+- **CLOTURE_A22 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc intégration code UI/UX / Navigation.
+
+#### Résultat attendu
+- shell applicatif intégré ;
+- navigation complète et cohérente ;
+- composants UI communs mutualisés ;
+- surfaces data homogènes ;
+- dashboard aligné sur la référence A21 ;
+- planning harmonisé sans perte de lisibilité métier ;
+- modules users, vehicles, templates, company, dépôts, onboarding et audit harmonisés ;
+- pages login et privacy alignées avec les références validées ;
+- cohérence visuelle globale réellement présente dans le code ;
+- absence de nouvelle direction artistique ;
+- absence de régression fonctionnelle ;
+- bloc prêt à être clôturé par verdict explicite.
+
+---------------------------------------------------------------------------------------------------
 
 ## 13. BETA V1.x — Plan prévisionnel
 

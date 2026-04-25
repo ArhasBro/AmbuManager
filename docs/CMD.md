@@ -280,7 +280,8 @@ IMPORTANT
 
 Références des sessions :
 
-- [COLLER ICI LES SESSIONS CONCERNÉES]
+- SESSION-20260425-09_A21_CLOTURE_A21
+- **CLOTURE_A21 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Validation finale du bloc UI/UX / Navigation avant lancement des sessions d’intégration code.
 
 ------------------------------------
 
@@ -305,15 +306,33 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 Unblock-File -Path .\create_session.ps1
 .\create_session.ps1 -Stage "1-ALPHA" -Block "A1" -SessionCode "RBAC-02" -Type "CORRECTION" -Title "Remplacement méthodique de DEA par ADE"
 
-- **UX-01 — CADRAGE** — Cadrage initial UI/UX, analyse des écrans existants, définition de la direction artistique cible et des priorités de maquettage.
-- **UX-02 — DESIGN SYSTEM** — Formalisation du design system UI/UX ALPHA : shell, sidebar, topbar, couleurs, cards, badges, tableaux, drawers, formulaires et règles visuelles communes.
-- **UX-03 — MAQUETTES FONDATRICES** — Production et validation des maquettes principales : Dashboard, Planning, Utilisateurs / RH, Véhicules.
-- **UX-04 — MAQUETTES COMPLÉMENTAIRES** — Production et validation des maquettes métier complémentaires : Templates, Société, Dépôts, Onboarding, Audit.
-- **UX-05 — PAGES SIMPLES / FINITIONS** — Production et validation des pages simples : Login et Privacy.
-- **UX-06 — RÉFÉRENCE UI/UX CODEX** — Consolidation de la référence UI/UX ALPHA exploitable pour une future intégration React / Next.js / Tailwind.
-- **UX-07 — CLÔTURE DOCUMENTAIRE UI/UX** — Clôture documentaire du chantier UI/UX, sans intégration code.
-- **UX-08 — PRÉPARATION INTÉGRATION CODE** — Préparation de l’intégration progressive de la nouvelle UI/UX dans le code existant, sans modification applicative immédiate.
-- **CLOTURE_A21 — VALIDATION** — Validation finale du bloc UI/UX / Navigation avant lancement des sessions d’intégration code.
+- **A22-UIINT-01 — CORRECTION+COMPLÉTION** — Shell structurel : sidebar, topbar et zone main. Livrable attendu : shell appliqué sur les pages connectées. DoD : shell stable, responsive de base, navigation non régressive.
+
+- **A22-UIINT-02 — CORRECTION+COMPLÉTION** — Navigation complète permissions : entrées de navigation, états actifs et affichage selon permissions. Livrable attendu : navigation complète et cohérente. DoD : aucun lien mort, affichage conforme aux permissions.
+
+- **A22-UIINT-03 — CORRECTION+COMPLÉTION** — Socle composants UI communs : `PageHeader`, `ActionButton`, `StatusBadge`, `EmptyState`, `ErrorMessage`. Livrable attendu : socle UI mutualisé. DoD : composants réutilisables sans impact métier.
+
+- **A22-UIINT-04 — CORRECTION+COMPLÉTION** — Tables / filtres / cartes statistiques : `DataTable`, `FilterBar`, `StatCard`. Livrable attendu : surfaces data homogènes. DoD : états loading / empty / error couverts.
+
+- **A22-UIINT-05 — CORRECTION+COMPLÉTION** — Dashboard : intégration de l’UI dashboard alignée sur la référence A21. Livrable attendu : dashboard harmonisé. DoD : parcours dashboard lisible et cohérent.
+
+- **A22-UIINT-06 — CORRECTION+COMPLÉTION** — Planning : harmonisation UI du planning uniquement. Livrable attendu : planning harmonisé. DoD : lisibilité métier conservée, sans régression fonctionnelle.
+
+- **A22-UIINT-07 — CORRECTION+COMPLÉTION** — Users : harmonisation UI du module utilisateurs / RH. Livrable attendu : écrans users harmonisés. DoD : formulaires et listes users cohérents.
+
+- **A22-UIINT-08 — CORRECTION+COMPLÉTION** — Vehicles : harmonisation UI du module véhicules. Livrable attendu : écrans vehicles harmonisés. DoD : formulaires et listes vehicles cohérents.
+
+- **A22-UIINT-09 — CORRECTION+COMPLÉTION** — Templates : harmonisation UI du module templates. Livrable attendu : écrans templates harmonisés. DoD : édition et listes templates cohérentes.
+
+- **A22-UIINT-10 — CORRECTION+COMPLÉTION** — Company / Dépôts : harmonisation UI des pages société et dépôts. Livrable attendu : cohérence visuelle des modules structure. DoD : formulaires et listes alignés avec le socle UI.
+
+- **A22-UIINT-11 — CORRECTION+COMPLÉTION** — Onboarding : harmonisation UI de l’onboarding. Livrable attendu : écran onboarding harmonisé. DoD : étapes lisibles et cohérentes.
+
+- **A22-UIINT-12 — CORRECTION+COMPLÉTION** — Audit : harmonisation UI du journal d’audit. Livrable attendu : écran audit harmonisé. DoD : filtres et lecture audit lisibles.
+
+- **A22-UIINT-13 — CORRECTION+COMPLÉTION** — Login / Privacy : intégration visuelle des pages simples. Livrable attendu : alignement visuel des pages login et privacy. DoD : cohérence avec les références `Login_V1.1` et `Privacy_V1.0`.
+
+- **CLOTURE_A22 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc intégration code UI/UX / Navigation.
 ------------------------------------
 
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned

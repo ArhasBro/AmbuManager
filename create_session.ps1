@@ -1,4 +1,4 @@
-# ==============================
+﻿# ==============================
 # create_session.ps1
 # ==============================
 
@@ -22,7 +22,7 @@ $SessionTemplateDir  = Join-Path $DocsSessionsRoot "SESSION-YYYYMMDD-XX"
 $DefaultOpenInVSCode = $true
 
 $AlphaBlockMin = 1
-$AlphaBlockMax = 21
+$AlphaBlockMax = 22
 $BetaBlockMin  = 1
 $BetaBlockMax  = 4
 
