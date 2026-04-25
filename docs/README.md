@@ -27,7 +27,7 @@ Rappel :
 - `docs/2-sessions/` : historique des sessions ;
 - `docs/2-sessions/.../SESSION-.../PATCH/` : patchs officiels au plus près de la session ;
 - `docs/3-patches/` : legacy / historique éventuel à migrer si encore présent ;
-- `docs/4-templates/` : templates de session et de clôture ;
+- `docs/3-templates/` : templates de session et de clôture ;
 - `docs/*.md` : gouvernance transversale et guides d’usage ALPHA.
 
 ---
@@ -52,8 +52,8 @@ Ils ne remplacent ni le cadrage produit ni les documents de pilotage.
 - Structure documentaire attendue : `docs/STRUCTURE_DOCS.md`
 - Protocole de session : `docs/PROTOCOLE_SESSION.md`
 - Templates de session :
-  - `docs/4-templates/TEMPLATE_DEBUT_SESSION.md`
-  - `docs/4-templates/TEMPLATE_FIN_SESSION.md`
+  - `docs/3-templates/TEMPLATE_DEBUT_SESSION.md`
+  - `docs/3-templates/TEMPLATE_FIN_SESSION.md`
 
 ---
 

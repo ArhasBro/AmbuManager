@@ -9,7 +9,7 @@ RÈGLES DE SOURCE (NON NÉGOCIABLES)
 - Validation utilisateur uniquement via : "VALIDÉ :" ou "AUTORISÉ :"
 
 RAPPEL DOCUMENTAIRE  
-- `docs/master/DOCUMENT_CADRAGE_FONCTIONNEL.md` constitue la base officielle produit.
+- `docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md` constitue la base officielle produit.
 - Ce document est figé et ne doit pas être modifié sans validation explicite.
 - Toute session clôturée doit rester cohérente avec ce cadrage, sauf demande explicite de réouverture du périmètre.
 

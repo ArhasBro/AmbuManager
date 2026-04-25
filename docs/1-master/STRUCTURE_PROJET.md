@@ -3,6 +3,7 @@ Le numÚro de sÚrie du volume est 123E-4DB7
 C:.
 |   .env
 |   .gitignore
+|   create_session.backup.ps1
 |   create_session.ps1
 |   docs.zip
 |   eslint.config.mjs
@@ -2706,6 +2707,8 @@ C:.
 |   |   PROTOCOLE_SESSION.md
 |   |   QUALITY_TESTS.md
 |   |   README.md
+|   |   REALIGNEMENT_DOCUMENTAIRE_GLOBAL.md
+|   |   REALIGNEMENT_PLAN_DE_DEVELOPPEMENT_ALPHA_BETA.md
 |   |   SCENARIOS_MANUELS_ALPHA.md
 |   |   SOURCES_AUTORISEES.md
 |   |   STRUCTURE_DOCS.md
@@ -3799,6 +3802,97 @@ C:.
 |   |   |   |               NO_PATCH.md
 |   |   |   |               README_PATCH.md
 |   |   |   |               
+|   |   |   +---BLOC_A21
+|   |   |   |   +---SESSION-20260425-01_A21_UX-01
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           NO_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260425-02_A21_UX-02
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           NO_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260425-03_A21_UX-03
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           NO_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260425-04_A21_UX-04
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           NO_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260425-05_A21_UX-05
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           NO_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260425-06_A21_UX-06
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           NO_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260425-07_A21_UX-07
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           NO_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260425-08_A21_UX-08
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           NO_PATCH.md
+|   |   |   |   |           
+|   |   |   |   \---SESSION-20260425-09_A21_CLOTURE_A21
+|   |   |   |       |   EVIDENCES.md
+|   |   |   |       |   FIN_SESSION.md
+|   |   |   |       |   NOTES.md
+|   |   |   |       |   RESULTATS.md
+|   |   |   |       |   SESSION.md
+|   |   |   |       |   
+|   |   |   |       \---PATCH
+|   |   |   |               NO_PATCH.md
+|   |   |   |               
 |   |   |   +---BLOC_A3
 |   |   |   |   +---1-USER
 |   |   |   |   |   +---SESSION-20260319-09_A3_USERS-01
@@ -4570,6 +4664,7 @@ C:.
 |   |   |   |   CONFIRMATION_LOGIN_V1.1_VALID╔.md
 |   |   |   |   FUSION_DOCUMENTAIRE_3-UI_UX-ALPHA_LOGIN_V1.1.md
 |   |   |   |   PATCH_DOCUMENTAIRE_MINIMAL_3-UI_UX-ALPHA.md
+|   |   |   |   README.md
 |   |   |   |   
 |   |   |   +---A21-UX-01_CADRAGE
 |   |   |   |       CADRAGE_UI_UX_ALPHA_MAQUETTE_V0.2.md

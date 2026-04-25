@@ -15,10 +15,10 @@ Date : 20/04/2026
 - [8. Verdict obligatoire de sortie pour toute session AUDIT](#8-verdict-obligatoire-de-sortie-pour-toute-session-audit)
 - [9. Convention de structuration du plan](#9-convention-de-structuration-du-plan)
 - [10. Ordre global de développement retenu](#10-ordre-global-de-développement-retenu)
-- [11. ALPHA V0.x — Plan refondu complet](#11-alpha-v0x--plan-refondu-complet)
-- [12. BETA V1.x — Plan refondu](#12-beta-v1x--plan-refondu)
-- [13. VERSION OFFICIELLE V2.x — Plan refondu](#13-version-officielle-v2x--plan-refondu)
-- [14. ALPHA — Suite refondue complète](#14-alpha--suite-refondue-complète)
+- [11. ALPHA V1.0 — Socle et blocs historiques A1 à A13](#11-alpha-v10--socle-et-blocs-historiques-a1-à-a13)
+- [12. ALPHA — Suite active / consolidation A14 à A21](#12-alpha--suite-active--consolidation-a14-à-a21)
+- [13. BETA V1.x — Plan prévisionnel](#13-beta-v1x--plan-prévisionnel)
+- [14. VERSION OFFICIELLE V2.x — Plan prévisionnel](#14-version-officielle-v2x--plan-prévisionnel)
 - [15. Règle de maintenance du plan](#15-règle-de-maintenance-du-plan)
 
 ## 1. Rôle du document
@@ -33,6 +33,18 @@ Il a pour rôle de :
 
 Ce document ne remplace pas le cadrage produit.  
 Il doit s’y conformer.
+
+### Note de lecture — ordre ALPHA / BETA
+
+Le plan est volontairement ordonné ainsi :
+
+1. ALPHA — socle et blocs historiques A1 à A13 ;
+2. ALPHA — suite active / consolidation A14 à A21 ;
+3. BETA — évolutions prévisionnelles après stabilisation ALPHA ;
+4. VERSION OFFICIELLE / V2 — extensions long terme.
+
+La BETA ne doit pas être lancée tant que l’ALPHA n’est pas stabilisée et validée selon les règles de clôture du plan.
+
 
 ## 2. Référence produit officielle
 Le document suivant constitue la base officielle produit :
@@ -310,7 +322,7 @@ Cet ordre vise à :
 - ne pas construire un dashboard riche avant d’avoir des données fiables
 - séparer clairement le socle, l’exploitation et les finitions
 
-## 11. ALPHA V1.0 — Plan refondu complet
+## 11. ALPHA V1.0 — Socle et blocs historiques A1 à A13
 
 ### BLOC A1 — Accès, Auth, Multi-tenant, Permissions, API
 **Objectif du bloc**  
@@ -757,84 +769,7 @@ Finaliser l’ALPHA avec une vraie logique de contrôle qualité et une document
 - documentation d’usage minimale
 - décision propre d’entrée en test réel entreprise
 
-## 12. BETA V1.x — Plan refondu
-
-### BLOC B1 — Alertes applicatives
-**Objectif du bloc**  
-Traiter les alertes UI globales après stabilisation de l’ALPHA.
-
-#### Sessions
-- **ALERT-01 — AUDIT** — Audit du besoin réel après tests terrain
-- **ALERT-02 — COMPLÉTION** — Modèle d’alertes UI globales
-- **ALERT-03 — COMPLÉTION** — Alertes planning
-- **ALERT-04 — COMPLÉTION** — Alertes véhicule / conformité
-- **ALERT-05 — COMPLÉTION** — Alertes audit importantes
-- **ALERT-06 — VALIDATION** — Validation du bloc alertes
-- **CLOTURE_B1 — VALIDATION** — Clôture finale du bloc B1
-
-### BLOC B2 — Autoschedule mensuel et règles avancées
-**Objectif du bloc**  
-Étendre l’automatisation et les règles au-delà du socle ALPHA.
-
-#### Sessions
-- **AUTO-M-01 — AUDIT** — Audit du besoin mensuel réel
-- **AUTO-M-02 — COMPLÉTION** — Génération mensuelle par enchaînement semaine/jour
-- **RULES-ADV-01 — AUDIT** — Audit du besoin OFF / ALERT / BLOCK / BOTH
-- **RULES-ADV-02 — COMPLÉTION** — Implémentation des modes avancés
-- **RULES-ADV-03 — VALIDATION** — Validation du bloc règles avancées
-- **CLOTURE_B2 — VALIDATION** — Clôture finale du bloc B2
-
-### BLOC B3 — RBAC enrichi et multi-rôle
-**Objectif du bloc**  
-Étendre la gouvernance d’accès au-delà du modèle ALPHA.
-
-#### Sessions
-- **RBAC-ADV-01 — AUDIT** — Audit du besoin multi-rôle réel
-- **RBAC-ADV-02 — COMPLÉTION** — Modèle multi-rôle
-- **RBAC-ADV-03 — COMPLÉTION** — UI multi-rôle
-- **RBAC-ADV-04 — VALIDATION** — Validation du bloc RBAC avancé
-- **CLOTURE_B3 — VALIDATION** — Clôture finale du bloc B3
-
-### BLOC B4 — Historique enrichi
-**Objectif du bloc**  
-Rendre l’historique et la relecture métier plus riches après stabilisation du socle.
-
-#### Sessions
-- **HIST-01 — AUDIT** — Audit du besoin historique/versioning enrichi
-- **HIST-02 — COMPLÉTION** — Historique de planning enrichi
-- **HIST-03 — COMPLÉTION** — Ajout d’un audit métier plus lisible
-- **HIST-04 — VALIDATION** — Validation du bloc historique
-- **CLOTURE_B4 — VALIDATION** — Clôture finale du bloc B4
-
-
-## 13. VERSION OFFICIELLE V2.x — Plan refondu
-
-### BLOC V2-1 — Produit analytique et extensions
-**Objectif du bloc**  
-Étendre le produit après validation terrain et stabilisation des versions précédentes.
-
-#### Sessions
-- **REPORT-01 — AUDIT** — Audit du besoin reporting avancé
-- **REPORT-02 — COMPLÉTION** — Reporting avancé
-- **INTEG-01 — AUDIT** — Audit du besoin intégrations externes
-- **INTEG-02 — COMPLÉTION** — Intégrations externes priorisées
-- **MOBILE-01 — AUDIT** — Audit du besoin mobile
-- **MOBILE-02 — COMPLÉTION** — Stratégie mobile
-- **CLOTURE_V2-1 — VALIDATION** — Clôture finale du bloc V2-1
-
-### BLOC V2-2 — SaaS étendu
-**Objectif du bloc**  
-Faire passer Ambulance Manager vers une logique SaaS plus complète.
-
-#### Sessions
-- **TENANT-ADV-01 — COMPLÉTION** — Multi-agences
-- **BILL-01 — COMPLÉTION** — Billing / abonnement
-- **ONB-SELF-01 — COMPLÉTION** — Onboarding self-service avancé
-- **VEH-ADV-01 — COMPLÉTION** — Maintenance flotte avancée
-- **CLOTURE_V2-2 — VALIDATION** — Clôture finale du bloc V2-2
-
-
-## 14. Pr## 14. ALPHA — Suite refondue complète
+## 12. ALPHA — Suite active / consolidation
 
 L’ALPHA 1.0 est considérée comme clôturée sur son cycle de tests locaux et de validation du socle actuel.
 
@@ -971,26 +906,107 @@ Compléter le module utilisateurs avec les besoins métier restants.
 ---
 
 ### BLOC A21 — UI / UX / Navigation
-**Objectif du bloc**  
-Améliorer l’expérience produit et la navigation générale.
 
-#### Point de cadrage
-Une maquette Figma est en cours de réalisation.
-Le bloc A21 devra donc être repris au bon moment en s’appuyant sur cette maquette comme référence de travail, afin d’éviter une refonte UI/UX déconnectée de la vision cible.
+**Objectif du bloc**  
+Améliorer l’expérience produit, la navigation générale, la lisibilité des écrans et la cohérence visuelle de l’application avant poursuite des tests ALPHA et préparation de l’Alpha commerciale.
 
 #### Sessions
-- **UX-01 — AUDIT** — Audit complet des besoins UI/UX : qualité graphique, navigation, lisibilité, dark mode, cohérence visuelle, besoin de maquette Figma
-- **UX-LOT-02 — CORRECTION+COMPLÉTION** — Correction et/ou complétion UI/UX : navigation latérale, amélioration du rendu visuel, cohérence graphique, préparation ou intégration d’une maquette de référence
-- **UX-03 — VALIDATION** — Validation complète du bloc UI/UX : lisibilité, ergonomie, cohérence des parcours
-- **CLOTURE_A21 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc UI/UX
+- **UX-01 — CADRAGE** — Cadrage initial UI/UX, analyse des écrans existants, définition de la direction artistique cible et des priorités de maquettage.
+- **UX-02 — DESIGN SYSTEM** — Formalisation du design system UI/UX ALPHA : shell, sidebar, topbar, couleurs, cards, badges, tableaux, drawers, formulaires et règles visuelles communes.
+- **UX-03 — MAQUETTES FONDATRICES** — Production et validation des maquettes principales : Dashboard, Planning, Utilisateurs / RH, Véhicules.
+- **UX-04 — MAQUETTES COMPLÉMENTAIRES** — Production et validation des maquettes métier complémentaires : Templates, Société, Dépôts, Onboarding, Audit.
+- **UX-05 — PAGES SIMPLES / FINITIONS** — Production et validation des pages simples : Login et Privacy.
+- **UX-06 — RÉFÉRENCE UI/UX CODEX** — Consolidation de la référence UI/UX ALPHA exploitable pour une future intégration React / Next.js / Tailwind.
+- **UX-07 — CLÔTURE DOCUMENTAIRE UI/UX** — Clôture documentaire du chantier UI/UX, sans intégration code.
+- **UX-08 — PRÉPARATION INTÉGRATION CODE** — Préparation de l’intégration progressive de la nouvelle UI/UX dans le code existant, sans modification applicative immédiate.
+- **CLOTURE_A21 — VALIDATION** — Validation finale du bloc UI/UX / Navigation avant lancement des sessions d’intégration code.
 
 #### Résultat attendu
-- navigation plus claire
-- meilleure ergonomie
-- rendu plus professionnel
-- base plus propre avant BETA
+- direction artistique ALPHA validée
+- design system UI/UX documenté
+- maquettes de référence validées
+- référence UI/UX exploitable par Codex produite
+- distinction claire entre validation documentaire UI/UX et intégration code
+- base propre pour intégrer progressivement la nouvelle UI/UX dans l’application
+- application prête à poursuivre les tests ALPHA avec une UI/UX mieux cadrée
 
-gle de maintenance du plan
+## 13. BETA V1.x — Plan prévisionnel
+
+### BLOC B1 — Alertes applicatives
+**Objectif du bloc**  
+Traiter les alertes UI globales après stabilisation de l’ALPHA.
+
+#### Sessions
+- **ALERT-01 — AUDIT** — Audit du besoin réel après tests terrain
+- **ALERT-02 — COMPLÉTION** — Modèle d’alertes UI globales
+- **ALERT-03 — COMPLÉTION** — Alertes planning
+- **ALERT-04 — COMPLÉTION** — Alertes véhicule / conformité
+- **ALERT-05 — COMPLÉTION** — Alertes audit importantes
+- **ALERT-06 — VALIDATION** — Validation du bloc alertes
+- **CLOTURE_B1 — VALIDATION** — Clôture finale du bloc B1
+
+### BLOC B2 — Autoschedule mensuel et règles avancées
+**Objectif du bloc**  
+Étendre l’automatisation et les règles au-delà du socle ALPHA.
+
+#### Sessions
+- **AUTO-M-01 — AUDIT** — Audit du besoin mensuel réel
+- **AUTO-M-02 — COMPLÉTION** — Génération mensuelle par enchaînement semaine/jour
+- **RULES-ADV-01 — AUDIT** — Audit du besoin OFF / ALERT / BLOCK / BOTH
+- **RULES-ADV-02 — COMPLÉTION** — Implémentation des modes avancés
+- **RULES-ADV-03 — VALIDATION** — Validation du bloc règles avancées
+- **CLOTURE_B2 — VALIDATION** — Clôture finale du bloc B2
+
+### BLOC B3 — RBAC enrichi et multi-rôle
+**Objectif du bloc**  
+Étendre la gouvernance d’accès au-delà du modèle ALPHA.
+
+#### Sessions
+- **RBAC-ADV-01 — AUDIT** — Audit du besoin multi-rôle réel
+- **RBAC-ADV-02 — COMPLÉTION** — Modèle multi-rôle
+- **RBAC-ADV-03 — COMPLÉTION** — UI multi-rôle
+- **RBAC-ADV-04 — VALIDATION** — Validation du bloc RBAC avancé
+- **CLOTURE_B3 — VALIDATION** — Clôture finale du bloc B3
+
+### BLOC B4 — Historique enrichi
+**Objectif du bloc**  
+Rendre l’historique et la relecture métier plus riches après stabilisation du socle.
+
+#### Sessions
+- **HIST-01 — AUDIT** — Audit du besoin historique/versioning enrichi
+- **HIST-02 — COMPLÉTION** — Historique de planning enrichi
+- **HIST-03 — COMPLÉTION** — Ajout d’un audit métier plus lisible
+- **HIST-04 — VALIDATION** — Validation du bloc historique
+- **CLOTURE_B4 — VALIDATION** — Clôture finale du bloc B4
+
+## 14. VERSION OFFICIELLE V2.x — Plan prévisionnel
+
+### BLOC V2-1 — Produit analytique et extensions
+**Objectif du bloc**  
+Étendre le produit après validation terrain et stabilisation des versions précédentes.
+
+#### Sessions
+- **REPORT-01 — AUDIT** — Audit du besoin reporting avancé
+- **REPORT-02 — COMPLÉTION** — Reporting avancé
+- **INTEG-01 — AUDIT** — Audit du besoin intégrations externes
+- **INTEG-02 — COMPLÉTION** — Intégrations externes priorisées
+- **MOBILE-01 — AUDIT** — Audit du besoin mobile
+- **MOBILE-02 — COMPLÉTION** — Stratégie mobile
+- **CLOTURE_V2-1 — VALIDATION** — Clôture finale du bloc V2-1
+
+### BLOC V2-2 — SaaS étendu
+**Objectif du bloc**  
+Faire passer Ambulance Manager vers une logique SaaS plus complète.
+
+#### Sessions
+- **TENANT-ADV-01 — COMPLÉTION** — Multi-agences
+- **BILL-01 — COMPLÉTION** — Billing / abonnement
+- **ONB-SELF-01 — COMPLÉTION** — Onboarding self-service avancé
+- **VEH-ADV-01 — COMPLÉTION** — Maintenance flotte avancée
+- **CLOTURE_V2-2 — VALIDATION** — Clôture finale du bloc V2-2
+
+## 15. Règle de maintenance du plan
+
 - ce plan doit rester aligné sur `docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
 - il ne doit pas recontester le cadrage validé
 - une session validée ne supprime pas la nécessité d’une validation explicite utilisateur

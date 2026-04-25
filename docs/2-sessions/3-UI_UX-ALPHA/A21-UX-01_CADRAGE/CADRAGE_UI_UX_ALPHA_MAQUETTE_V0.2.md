@@ -788,3 +788,16 @@ CADRAGE VALIDABLE PAR UTILISATEUR
 Ce document peut être intégré dans le dépôt comme base de travail du bloc UI/UX ALPHA.
 
 Validation utilisateur requise avant passage à la production du design system.
+
+## Note de statut documentaire
+
+Ce document constitue le cadrage initial UI/UX.
+
+La référence finale UI/UX ALPHA validée pour une future intégration Codex est :
+
+```text
+docs/2-sessions/3-UI_UX-ALPHA/A21-UX-06_VALIDATION_CODEX/REFERENCE_UI_UX_ALPHA_V1.0.md
+```
+
+Ce document ne doit donc pas être utilisé seul comme référence finale d’intégration.
+

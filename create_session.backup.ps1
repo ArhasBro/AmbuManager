@@ -26,20 +26,7 @@ $AlphaBlockMax = 21
 $BetaBlockMin  = 1
 $BetaBlockMax  = 4
 
-$AllowedTypeTokens = @(
-    'AUDIT',
-    'CORRECTION',
-    'COMPLETION',
-    'VALIDATION',
-    'CADRAGE',
-    'DESIGN_SYSTEM',
-    'MAQUETTES_FONDATRICES',
-    'MAQUETTES_COMPLEMENTAIRES',
-    'PAGES_SIMPLES_FINITIONS',
-    'REFERENCE_UI_UX_CODEX',
-    'CLOTURE_DOCUMENTAIRE',
-    'PREPARATION_INTEGRATION_CODE'
-)
+$AllowedTypeTokens = @('AUDIT', 'CORRECTION', 'COMPLETION', 'VALIDATION')
 
 function Get-BlockRangeLabel {
     param(
@@ -417,7 +404,7 @@ git apply         "$PatchRelativePath/$patchFileName"
 $Stage = Read-ValueIfMissing -CurrentValue $Stage -PromptText "Stage (1-ALPHA / 2-BETA)"
 $Block = Read-ValueIfMissing -CurrentValue $Block -PromptText "Bloc (A1 a A21 / B1 a B4)"
 $SessionCode = Read-ValueIfMissing -CurrentValue $SessionCode -PromptText "Code session (ex: AUTH-01)"
-$Type = Read-ValueIfMissing -CurrentValue $Type -PromptText "Type (AUDIT / CORRECTION / COMPLETION / VALIDATION / CADRAGE / DESIGN_SYSTEM / etc. / combinaisons avec +)"
+$Type = Read-ValueIfMissing -CurrentValue $Type -PromptText "Type (AUDIT / CORRECTION / COMPLETION / VALIDATION / combinaisons avec +)"
 $Title = Read-ValueIfMissing -CurrentValue $Title -PromptText "Intitule de la session"
 
 $Stage = Get-CanonicalStage -Value $Stage

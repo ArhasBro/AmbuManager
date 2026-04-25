@@ -13,7 +13,7 @@ Ce dossier contient les traces documentaires officielles des sessions de travail
 ## Structure cible
 
 ```text
-docs/sessions/
+docs/2-sessions/
 ├── README.md
 ├── 1-ALPHA/
 │   ├── BLOC_A1/
@@ -71,3 +71,28 @@ La session de clôture :
   - ou `BLOC <ID> CLÔTURABLE DÉFINITIVEMENT : NON`
 
 Aucun bloc suivant ne doit être ouvert sans ce verdict explicite.
+
+
+## Dossier UI/UX documentaire séparé
+
+Le dossier suivant contient la référence documentaire UI/UX validée :
+
+```text
+docs/2-sessions/3-UI_UX-ALPHA/
+```
+
+Rôle de ce dossier :
+
+- conserver le cadrage UI/UX ;
+- conserver le design system ;
+- conserver les maquettes validées ;
+- conserver la référence UI/UX ALPHA exploitable pour Codex ;
+- conserver la clôture documentaire UI/UX.
+
+Ce dossier ne constitue pas une intégration code.
+
+La future intégration UI/UX devra être ouverte dans un dossier de session code séparé, par exemple :
+
+```text
+docs/2-sessions/1-ALPHA/BLOC_A21/1-INTEGRATION_UI/SESSION-YYYYMMDD-XX_A21_UI-INT-01/
+```

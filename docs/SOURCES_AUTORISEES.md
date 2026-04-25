@@ -48,10 +48,10 @@ Structure legacy encore tolérée pour l'historique déjà existant :
 
 ## Templates
 
-- `docs/4-templates/TEMPLATE_DEBUT_SESSION.md`
-- `docs/4-templates/TEMPLATE_FIN_SESSION.md`
-- `docs/4-templates/TEMPLATE_DOD_4_4.md`
-- `docs/4-templates/TEMPLATE_RECAP_SESSION.md`
+- `docs/3-templates/TEMPLATE_DEBUT_SESSION.md`
+- `docs/3-templates/TEMPLATE_FIN_SESSION.md`
+- `docs/3-templates/TEMPLATE_DOD_4_4.md`
+- `docs/3-templates/TEMPLATE_RECAP_SESSION.md`
 
 ## Protocole
 
