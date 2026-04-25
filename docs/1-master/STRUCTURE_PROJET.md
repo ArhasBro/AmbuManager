@@ -2378,14 +2378,14 @@ C:.
 |   |   |           [root-of-the-server]__0d5ae7ad._.js.map
 |   |   |           [root-of-the-server]__1b163f0c._.js
 |   |   |           [root-of-the-server]__1b163f0c._.js.map
+|   |   |           [root-of-the-server]__20420509._.js
+|   |   |           [root-of-the-server]__20420509._.js.map
 |   |   |           [root-of-the-server]__296a25b5._.js
 |   |   |           [root-of-the-server]__296a25b5._.js.map
 |   |   |           [root-of-the-server]__36ebbb9f._.js
 |   |   |           [root-of-the-server]__36ebbb9f._.js.map
 |   |   |           [root-of-the-server]__3ba1feaf._.js
 |   |   |           [root-of-the-server]__3ba1feaf._.js.map
-|   |   |           [root-of-the-server]__4e4f114d._.js
-|   |   |           [root-of-the-server]__4e4f114d._.js.map
 |   |   |           [root-of-the-server]__577d667d._.js
 |   |   |           [root-of-the-server]__577d667d._.js.map
 |   |   |           [root-of-the-server]__59463192._.js
@@ -2394,12 +2394,10 @@ C:.
 |   |   |           [root-of-the-server]__60029ce8._.js.map
 |   |   |           [root-of-the-server]__6497ad33._.js
 |   |   |           [root-of-the-server]__6497ad33._.js.map
+|   |   |           [root-of-the-server]__6521f0ec._.js
+|   |   |           [root-of-the-server]__6521f0ec._.js.map
 |   |   |           [root-of-the-server]__71e4ac9a._.js
 |   |   |           [root-of-the-server]__71e4ac9a._.js.map
-|   |   |           [root-of-the-server]__74781f0a._.js
-|   |   |           [root-of-the-server]__74781f0a._.js.map
-|   |   |           [root-of-the-server]__7f1adca8._.js
-|   |   |           [root-of-the-server]__7f1adca8._.js.map
 |   |   |           [root-of-the-server]__99048386._.js
 |   |   |           [root-of-the-server]__99048386._.js.map
 |   |   |           [root-of-the-server]__a457c799._.js
@@ -2412,8 +2410,10 @@ C:.
 |   |   |           [root-of-the-server]__be041a95._.js.map
 |   |   |           [root-of-the-server]__c28e3622._.js
 |   |   |           [root-of-the-server]__c28e3622._.js.map
-|   |   |           [root-of-the-server]__c83af424._.js
-|   |   |           [root-of-the-server]__c83af424._.js.map
+|   |   |           [root-of-the-server]__cc8cc2e9._.js
+|   |   |           [root-of-the-server]__cc8cc2e9._.js.map
+|   |   |           [root-of-the-server]__db96a8ca._.js
+|   |   |           [root-of-the-server]__db96a8ca._.js.map
 |   |   |           [root-of-the-server]__e0a07927._.js
 |   |   |           [root-of-the-server]__e0a07927._.js.map
 |   |   |           [root-of-the-server]__e1b2e646._.js
@@ -2486,16 +2486,9 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
-|   |   +---brOXp3CSMU9YvRIzpl8KK
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
-|   |   |       
 |   |   +---chunks
 |   |   |       05c065d3e137ac6c.js
-|   |   |       18b965c14f8a1f84.css
 |   |   |       263cdf52661a0d49.js
-|   |   |       274d763fc71039fe.js
 |   |   |       321e14092c3be8b6.js
 |   |   |       3814b133520d7a8c.js
 |   |   |       3d7add200578fdd5.js
@@ -2503,17 +2496,24 @@ C:.
 |   |   |       5fb9210c99014ea0.js
 |   |   |       61066a51d71ec27c.js
 |   |   |       619a7c6306d0d4a0.js
+|   |   |       66e2b5d4dc51b1b3.css
 |   |   |       81cbce106758ff1d.js
 |   |   |       82abf2d65f5428ae.js
 |   |   |       899b7782e7cb92a1.js
 |   |   |       99ad1d8197e6001d.js
 |   |   |       a6dad97d9634a72d.js
 |   |   |       a6dad97d9634a72d.js.map
+|   |   |       a80da94426603dcb.js
 |   |   |       af7027598a07baa5.js
 |   |   |       ee24e667dd0d7311.js
 |   |   |       fc3339c3f209e8c2.js
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-a79a6d50b3241aaa.js
+|   |   |       
+|   |   +---GRgYCNEto3J5QBWRAv0U-
+|   |   |       _buildManifest.js
+|   |   |       _clientMiddlewareManifest.json
+|   |   |       _ssgManifest.js
 |   |   |       
 |   |   \---media
 |   |           favicon.0b3bf435.ico
@@ -2682,6 +2682,14 @@ C:.
 |   +---templates
 |   |       page.tsx
 |   |       templates-client.tsx
+|   |       
+|   +---ui
+|   |       action-button.tsx
+|   |       empty-state.tsx
+|   |       error-message.tsx
+|   |       index.ts
+|   |       page-header.tsx
+|   |       status-badge.tsx
 |   |       
 |   +---users
 |   |       page.tsx
@@ -3950,12 +3958,14 @@ C:.
 |   |   |   |   +---SESSION-20260425-12_A22_UIINT-03
 |   |   |   |   |   |   EVIDENCES.md
 |   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   LIVRABLES__SESSION-20260425-12_A22_UIINT-03_A_PLAT.zip
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   RESULTATS.md
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
 |   |   |   |   |           README_PATCH.md
+|   |   |   |   |           SESSION-20260425-12_A22_UIINT-03.diff
 |   |   |   |   |           
 |   |   |   |   +---SESSION-20260425-13_A22_UIINT-04
 |   |   |   |   |   |   EVIDENCES.md

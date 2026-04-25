@@ -6,6 +6,7 @@ import { authOptions } from "@/lib/auth";
 import { canManageTemplates } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 import { serializeDates } from "@/lib/serializers";
+import { PageHeader } from "@/app/ui";
 
 import TemplatesClient from "./templates-client";
 
@@ -41,18 +42,15 @@ export default async function TemplatesPage() {
 
   return (
     <div className="page-wrap">
-      <div className="page-head">
-        <div>
-          <h1 className="page-title">Templates de shifts</h1>
-          <p className="page-description">
-            Base ALPHA: creation, edition, activation, archivage logique, couleur et composition d&apos;equipe.
-          </p>
-        </div>
-
-        <Link className="page-back" href="/dashboard">
-          Retour dashboard
-        </Link>
-      </div>
+      <PageHeader
+        title="Templates de shifts"
+        description="Base ALPHA: creation, edition, activation, archivage logique, couleur et composition d'equipe."
+        actions={
+          <Link className="page-back" href="/dashboard">
+            Retour dashboard
+          </Link>
+        }
+      />
 
       <TemplatesClient initialTemplates={serializeDates(templates)} />
     </div>

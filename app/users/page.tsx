@@ -6,6 +6,7 @@ import { authOptions } from "@/lib/auth";
 import { canGovernCompanyRulesDelegation } from "@/lib/company-rules/governance";
 import { canManageUsers } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
+import { PageHeader } from "@/app/ui";
 
 import ResetPasswordClient from "./reset-password-client";
 import UserCreationClient from "./user-creation-client";
@@ -36,18 +37,15 @@ export default async function UsersPage() {
 
   return (
     <div className="page-wrap">
-      <div className="page-head">
-        <div>
-          <h1 className="page-title">Utilisateurs</h1>
-          <p className="page-description">
-            Administration des comptes de la societe avec recherche, edition, archivage, absences et reinitialisation.
-          </p>
-        </div>
-
-        <Link className="page-back" href="/dashboard">
-          Retour dashboard
-        </Link>
-      </div>
+      <PageHeader
+        title="Utilisateurs"
+        description="Administration des comptes de la societe avec recherche, edition, archivage, absences et reinitialisation."
+        actions={
+          <Link className="page-back" href="/dashboard">
+            Retour dashboard
+          </Link>
+        }
+      />
 
       <UserCreationClient canGovernCompanyRules={canGovernCompanyRules} availableDepots={depots} />
       <UsersListClient />

@@ -15,19 +15,22 @@ Sous-projet : Ambulance Manager
 Maturite : 1-ALPHA  
 Bloc : A22  
 Type : CORRECTION+COMPLETION  
-Intitule : Socle composants UI communs : PageHeader, ActionButton, StatusBadge, EmptyState, ErrorMessage
+Intitule : Socle composants UI communs
 
 ## Objectif de la session
 
-INFORMATION NON FOURNIE - A CONFIRMER
+Creer ou stabiliser un socle minimal de composants UI communs (`PageHeader`, `ActionButton`, `StatusBadge`, `EmptyState`, `ErrorMessage`) reutilisable sur les pages connectees, sans impact metier.
 
 ## Perimetre exact traite
 
-INFORMATION NON FOURNIE - A CONFIRMER
+- Creation du dossier `app/ui` et des 5 composants communs attendus.
+- Ajout des styles globaux `ui-*` dans `app/globals.css`.
+- Remplacements cibles de verification d'usage sur des pages existantes : `dashboard`, `planning`, `users`, `templates`, `dashboard/logout-button`.
+- Aucun changement de logique metier, API, Prisma, roles, permissions ou navigation RBAC.
 
 ## Resultat synthetique de session
 
-INFORMATION NON FOURNIE - A CONFIRMER
+PATCH principal produit et applique : socle UI mutualise en place, composants reutilisables disponibles, usage cible valide, lint/build OK.
 
 ## Dossiers lies
 

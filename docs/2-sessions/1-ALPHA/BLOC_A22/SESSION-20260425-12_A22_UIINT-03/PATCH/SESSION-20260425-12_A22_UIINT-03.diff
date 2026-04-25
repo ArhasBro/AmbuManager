@@ -1,0 +1,632 @@
+diff --git a/app/dashboard/logout-button.tsx b/app/dashboard/logout-button.tsx
+index 20895ca..d873739 100644
+--- a/app/dashboard/logout-button.tsx
++++ b/app/dashboard/logout-button.tsx
+@@ -1,7 +1,12 @@
+ "use client";
+ 
+ import { signOut } from "next-auth/react";
++import { ActionButton } from "@/app/ui";
+ 
+ export default function LogoutButton() {
+-  return <button onClick={() => signOut({ callbackUrl: "/login" })}>Deconnexion</button>;
++  return (
++    <ActionButton variant="primary" onClick={() => signOut({ callbackUrl: "/login" })}>
++      Deconnexion
++    </ActionButton>
++  );
+ }
+diff --git a/app/dashboard/page.tsx b/app/dashboard/page.tsx
+index d35794e..ee35d5b 100644
+--- a/app/dashboard/page.tsx
++++ b/app/dashboard/page.tsx
+@@ -14,6 +14,7 @@ import {
+   canViewSelfPlanning,
+ } from "@/lib/permissions";
+ import { prisma } from "@/lib/prisma";
++import { EmptyState, PageHeader, StatusBadge } from "@/app/ui";
+ 
+ import LogoutButton from "./logout-button";
+ 
+@@ -213,25 +214,21 @@ export default async function DashboardPage() {
+ 
+   return (
+     <div className="page-wrap">
+-      <div className="page-head">
+-        <div>
+-          <h1 className="page-title">Portail d&apos;accueil</h1>
+-          <p className="page-description">
+-            Vue metier des acces modules filtres par role et permissions.
+-          </p>
+-        </div>
+-        <LogoutButton />
+-      </div>
++      <PageHeader
++        title="Portail d'accueil"
++        description="Vue metier des acces modules filtres par role et permissions."
++        actions={<LogoutButton />}
++      />
+ 
+       <section className="panel" style={{ display: "grid", gap: 8 }}>
+         <strong>Bienvenue {user.name ?? user.email ?? "Utilisateur"}</strong>
+         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+-          <span style={{ padding: "6px 10px", borderRadius: 999, background: "var(--ui-surface-strong)" }}>
++          <StatusBadge variant="info">
+             Profil : {getProfileLabel(user.role, user.platformRole)}
+-          </span>
+-          <span style={{ padding: "6px 10px", borderRadius: 999, background: "var(--ui-surface-strong)" }}>
++          </StatusBadge>
++          <StatusBadge variant={companyScopedSession ? "success" : "warning"}>
+             Societe : {companyScopedSession ? "rattachee" : "non rattachee"}
+-          </span>
++          </StatusBadge>
+         </div>
+         <p style={{ margin: 0, opacity: 0.82 }}>
+           Les liens ci-dessous sont filtres pour eviter les entrees qui ne debouchent pas sur un acces reel.
+@@ -263,9 +260,10 @@ export default async function DashboardPage() {
+               ))}
+             </div>
+           ) : (
+-            <p style={{ margin: 0, opacity: 0.82 }}>
+-              Aucun module terrain supplementaire n&apos;est actuellement exploitable.
+-            </p>
++            <EmptyState
++              title="Aucun module terrain disponible"
++              message="Aucun module terrain supplementaire n'est actuellement exploitable."
++            />
+           )}
+         </section>
+       ) : null}
+@@ -304,20 +302,19 @@ export default async function DashboardPage() {
+               ))}
+             </div>
+           ) : (
+-            <p style={{ margin: 0, opacity: 0.82 }}>
+-              Aucun module administratif supplementaire n&apos;est reellement accessible.
+-            </p>
++            <EmptyState
++              title="Aucun module administratif disponible"
++              message="Aucun module administratif supplementaire n'est reellement accessible."
++            />
+           )}
+         </section>
+       ) : null}
+ 
+       {!showTerrainSection && !showAdminSection && companyScopedSession ? (
+-        <section className="panel" style={{ display: "grid", gap: 8 }}>
+-          <strong>Aucun acces module exploitable</strong>
+-          <p style={{ margin: 0, opacity: 0.82 }}>
+-            Aucun module n&apos;est actuellement publie sur le dashboard pour cette session.
+-          </p>
+-        </section>
++        <EmptyState
++          title="Aucun acces module exploitable"
++          message="Aucun module n'est actuellement publie sur le dashboard pour cette session."
++        />
+       ) : null}
+ 
+       {process.env.NODE_ENV !== "production" ? (
+diff --git a/app/globals.css b/app/globals.css
+index a10ac45..4b4d174 100644
+--- a/app/globals.css
++++ b/app/globals.css
+@@ -395,6 +395,200 @@ pre {
+   font-weight: 700;
+ }
+ 
++.ui-page-header {
++  display: flex;
++  justify-content: space-between;
++  align-items: flex-start;
++  gap: 12px;
++  flex-wrap: wrap;
++}
++
++.ui-page-header__body {
++  display: grid;
++  gap: 8px;
++}
++
++.ui-page-header__title {
++  margin: 0;
++  font-size: 28px;
++  line-height: 1.2;
++  font-weight: 800;
++  color: #1e3a8a;
++}
++
++.ui-page-header__description {
++  margin: 0;
++  color: var(--ui-text-muted);
++  max-width: 980px;
++}
++
++.ui-page-header__actions {
++  display: inline-flex;
++  align-items: center;
++  gap: 8px;
++}
++
++.ui-action-button {
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  gap: 6px;
++  border-radius: 10px;
++  border: 1px solid var(--ui-border);
++  font-weight: 700;
++  transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
++}
++
++.ui-action-button--sm {
++  min-height: 34px;
++  padding: 0 10px;
++  font-size: 13px;
++}
++
++.ui-action-button--md {
++  min-height: 40px;
++  padding: 0 14px;
++  font-size: 14px;
++}
++
++.ui-action-button--primary {
++  border-color: var(--ui-primary);
++  background: var(--ui-primary);
++  color: var(--ui-primary-contrast);
++}
++
++.ui-action-button--secondary {
++  border-color: var(--ui-border);
++  background: var(--ui-surface);
++  color: var(--ui-text);
++}
++
++.ui-action-button--ghost {
++  border-color: transparent;
++  background: transparent;
++  color: var(--ui-link);
++}
++
++.ui-action-button--danger {
++  border-color: var(--ui-danger-border);
++  background: var(--ui-danger-bg);
++  color: var(--ui-danger-text);
++}
++
++.ui-action-button--primary:hover:not(:disabled) {
++  border-color: #1e40af;
++  background: #1e40af;
++}
++
++.ui-action-button--secondary:hover:not(:disabled) {
++  border-color: var(--ui-border-strong);
++  background: var(--ui-surface-soft);
++}
++
++.ui-action-button--ghost:hover:not(:disabled) {
++  border-color: var(--ui-border);
++  background: var(--ui-surface-soft);
++}
++
++.ui-action-button--danger:hover:not(:disabled) {
++  border-color: #fca5a5;
++  background: #fee2e2;
++}
++
++.ui-status-badge {
++  display: inline-flex;
++  align-items: center;
++  min-height: 28px;
++  padding: 0 10px;
++  border-radius: 999px;
++  border: 1px solid var(--ui-border);
++  background: var(--ui-surface-soft);
++  color: var(--ui-text);
++  font-size: 12px;
++  font-weight: 700;
++}
++
++.ui-status-badge--neutral {
++  border-color: var(--ui-border);
++  background: var(--ui-surface-strong);
++  color: var(--ui-text-muted);
++}
++
++.ui-status-badge--info {
++  border-color: #bfdbfe;
++  background: #eff6ff;
++  color: #1e3a8a;
++}
++
++.ui-status-badge--success {
++  border-color: var(--ui-success-border);
++  background: var(--ui-success-bg);
++  color: var(--ui-success-text);
++}
++
++.ui-status-badge--warning {
++  border-color: var(--ui-warning-border);
++  background: var(--ui-warning-bg);
++  color: var(--ui-warning-text);
++}
++
++.ui-status-badge--danger {
++  border-color: var(--ui-danger-border);
++  background: var(--ui-danger-bg);
++  color: var(--ui-danger-text);
++}
++
++.ui-empty-state {
++  display: grid;
++  gap: 10px;
++  border: 1px dashed var(--ui-border-strong);
++  border-radius: 12px;
++  background: var(--ui-surface-soft);
++  padding: 16px;
++}
++
++.ui-empty-state__title {
++  margin: 0;
++  font-size: 16px;
++  color: #1e3a8a;
++}
++
++.ui-empty-state__message {
++  margin: 0;
++  color: var(--ui-text-muted);
++}
++
++.ui-empty-state__action {
++  display: inline-flex;
++  align-items: center;
++  gap: 8px;
++}
++
++.ui-error-message {
++  display: grid;
++  gap: 8px;
++  border: 1px solid var(--ui-danger-border);
++  border-radius: 12px;
++  background: var(--ui-danger-bg);
++  color: var(--ui-danger-text);
++  padding: 14px 16px;
++}
++
++.ui-error-message__title {
++  margin: 0;
++  font-size: 16px;
++}
++
++.ui-error-message__message {
++  margin: 0;
++  line-height: 1.45;
++}
++
++.ui-error-message__details {
++  margin: 0;
++  font-size: 13px;
++}
++
+ .panel {
+   border: 1px solid var(--ui-border);
+   border-radius: 12px;
+@@ -495,6 +689,10 @@ pre {
+   .page-title {
+     font-size: 24px;
+   }
++
++  .ui-page-header__title {
++    font-size: 24px;
++  }
+ }
+ 
+ @media (max-width: 680px) {
+diff --git a/app/planning/page.tsx b/app/planning/page.tsx
+index 54384eb..6144ef9 100644
+--- a/app/planning/page.tsx
++++ b/app/planning/page.tsx
+@@ -13,6 +13,7 @@ import {
+   canViewSelfPlanning,
+ } from "@/lib/permissions";
+ import { prisma } from "@/lib/prisma";
++import { ErrorMessage, PageHeader } from "@/app/ui";
+ 
+ import PlanningClient from "./planning-client";
+ 
+@@ -48,10 +49,11 @@ export default async function PlanningPage() {
+   if (!canViewSelf && !canViewGlobal) {
+     return (
+       <main className="page-wrap">
+-        <div className="panel status-warning">
+-          <h1 className="page-title">Planning</h1>
+-          <p style={{ margin: 0, opacity: 0.85 }}>Acces non autorise a la consultation du planning.</p>
+-        </div>
++        <PageHeader title="Planning" />
++        <ErrorMessage
++          title="Acces non autorise"
++          message="Acces non autorise a la consultation du planning."
++        />
+       </main>
+     );
+   }
+@@ -79,19 +81,17 @@ export default async function PlanningPage() {
+ 
+   return (
+     <main className="page-wrap">
+-      <div className="page-head">
+-        <div>
+-          <h1 className="page-title">Planning</h1>
+-          <p className="page-description">
+-            Vue operationnelle avec planning manuel, autoschedule legacy masque par defaut, audit et exports selon droits.
+-          </p>
+-        </div>
+-        {canReadAudit ? (
+-          <Link className="page-back" href="/audit">
+-            Ouvrir l&apos;audit dedie
+-          </Link>
+-        ) : null}
+-      </div>
++      <PageHeader
++        title="Planning"
++        description="Vue operationnelle avec planning manuel, autoschedule legacy masque par defaut, audit et exports selon droits."
++        actions={
++          canReadAudit ? (
++            <Link className="page-back" href="/audit">
++              Ouvrir l&apos;audit dedie
++            </Link>
++          ) : null
++        }
++      />
+ 
+       <PlanningClient
+         availableDepots={depots}
+diff --git a/app/templates/page.tsx b/app/templates/page.tsx
+index df9bc66..5fbe010 100644
+--- a/app/templates/page.tsx
++++ b/app/templates/page.tsx
+@@ -6,6 +6,7 @@ import { authOptions } from "@/lib/auth";
+ import { canManageTemplates } from "@/lib/permissions";
+ import { prisma } from "@/lib/prisma";
+ import { serializeDates } from "@/lib/serializers";
++import { PageHeader } from "@/app/ui";
+ 
+ import TemplatesClient from "./templates-client";
+ 
+@@ -41,18 +42,15 @@ export default async function TemplatesPage() {
+ 
+   return (
+     <div className="page-wrap">
+-      <div className="page-head">
+-        <div>
+-          <h1 className="page-title">Templates de shifts</h1>
+-          <p className="page-description">
+-            Base ALPHA: creation, edition, activation, archivage logique, couleur et composition d&apos;equipe.
+-          </p>
+-        </div>
+-
+-        <Link className="page-back" href="/dashboard">
+-          Retour dashboard
+-        </Link>
+-      </div>
++      <PageHeader
++        title="Templates de shifts"
++        description="Base ALPHA: creation, edition, activation, archivage logique, couleur et composition d'equipe."
++        actions={
++          <Link className="page-back" href="/dashboard">
++            Retour dashboard
++          </Link>
++        }
++      />
+ 
+       <TemplatesClient initialTemplates={serializeDates(templates)} />
+     </div>
+diff --git a/app/ui/action-button.tsx b/app/ui/action-button.tsx
+new file mode 100644
+index 0000000..e4a5b86
+--- /dev/null
++++ b/app/ui/action-button.tsx
+@@ -0,0 +1,35 @@
++import { type ButtonHTMLAttributes } from "react";
++
++export type ActionButtonVariant = "primary" | "secondary" | "ghost" | "danger";
++export type ActionButtonSize = "sm" | "md";
++
++type ActionButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
++  variant?: ActionButtonVariant;
++  size?: ActionButtonSize;
++};
++
++const VARIANT_CLASS: Record<ActionButtonVariant, string> = {
++  primary: "ui-action-button--primary",
++  secondary: "ui-action-button--secondary",
++  ghost: "ui-action-button--ghost",
++  danger: "ui-action-button--danger",
++};
++
++const SIZE_CLASS: Record<ActionButtonSize, string> = {
++  sm: "ui-action-button--sm",
++  md: "ui-action-button--md",
++};
++
++export default function ActionButton({
++  variant = "secondary",
++  size = "md",
++  type,
++  className,
++  ...props
++}: ActionButtonProps) {
++  const classes = ["ui-action-button", VARIANT_CLASS[variant], SIZE_CLASS[size], className]
++    .filter(Boolean)
++    .join(" ");
++
++  return <button type={type ?? "button"} className={classes} {...props} />;
++}
+diff --git a/app/ui/empty-state.tsx b/app/ui/empty-state.tsx
+new file mode 100644
+index 0000000..ce34f7e
+--- /dev/null
++++ b/app/ui/empty-state.tsx
+@@ -0,0 +1,20 @@
++import { type ReactNode } from "react";
++
++type EmptyStateProps = {
++  title: string;
++  message: string;
++  action?: ReactNode;
++  className?: string;
++};
++
++export default function EmptyState({ title, message, action, className }: EmptyStateProps) {
++  const classes = ["ui-empty-state", className].filter(Boolean).join(" ");
++
++  return (
++    <section className={classes}>
++      <h2 className="ui-empty-state__title">{title}</h2>
++      <p className="ui-empty-state__message">{message}</p>
++      {action ? <div className="ui-empty-state__action">{action}</div> : null}
++    </section>
++  );
++}
+diff --git a/app/ui/error-message.tsx b/app/ui/error-message.tsx
+new file mode 100644
+index 0000000..fadcf4e
+--- /dev/null
++++ b/app/ui/error-message.tsx
+@@ -0,0 +1,25 @@
++import { type ReactNode } from "react";
++
++type ErrorMessageProps = {
++  message: string;
++  title?: string;
++  details?: ReactNode;
++  className?: string;
++};
++
++export default function ErrorMessage({
++  message,
++  title = "Une erreur est survenue",
++  details,
++  className,
++}: ErrorMessageProps) {
++  const classes = ["ui-error-message", className].filter(Boolean).join(" ");
++
++  return (
++    <section className={classes} role="alert">
++      <h2 className="ui-error-message__title">{title}</h2>
++      <p className="ui-error-message__message">{message}</p>
++      {details ? <div className="ui-error-message__details">{details}</div> : null}
++    </section>
++  );
++}
+diff --git a/app/ui/index.ts b/app/ui/index.ts
+new file mode 100644
+index 0000000..e0651cb
+--- /dev/null
++++ b/app/ui/index.ts
+@@ -0,0 +1,7 @@
++export { default as ActionButton } from "./action-button";
++export { default as EmptyState } from "./empty-state";
++export { default as ErrorMessage } from "./error-message";
++export { default as PageHeader } from "./page-header";
++export { default as StatusBadge } from "./status-badge";
++export type { ActionButtonSize, ActionButtonVariant } from "./action-button";
++export type { StatusBadgeVariant } from "./status-badge";
+diff --git a/app/ui/page-header.tsx b/app/ui/page-header.tsx
+new file mode 100644
+index 0000000..c06b5e7
+--- /dev/null
++++ b/app/ui/page-header.tsx
+@@ -0,0 +1,23 @@
++import { type ReactNode } from "react";
++
++type PageHeaderProps = {
++  title: string;
++  description?: string;
++  actions?: ReactNode;
++  className?: string;
++};
++
++export default function PageHeader({ title, description, actions, className }: PageHeaderProps) {
++  const classes = ["ui-page-header", className].filter(Boolean).join(" ");
++
++  return (
++    <header className={classes}>
++      <div className="ui-page-header__body">
++        <h1 className="ui-page-header__title">{title}</h1>
++        {description ? <p className="ui-page-header__description">{description}</p> : null}
++      </div>
++
++      {actions ? <div className="ui-page-header__actions">{actions}</div> : null}
++    </header>
++  );
++}
+diff --git a/app/ui/status-badge.tsx b/app/ui/status-badge.tsx
+new file mode 100644
+index 0000000..31ff6d9
+--- /dev/null
++++ b/app/ui/status-badge.tsx
+@@ -0,0 +1,23 @@
++import { type ReactNode } from "react";
++
++export type StatusBadgeVariant = "neutral" | "info" | "success" | "warning" | "danger";
++
++type StatusBadgeProps = {
++  children: ReactNode;
++  variant?: StatusBadgeVariant;
++  className?: string;
++};
++
++const VARIANT_CLASS: Record<StatusBadgeVariant, string> = {
++  neutral: "ui-status-badge--neutral",
++  info: "ui-status-badge--info",
++  success: "ui-status-badge--success",
++  warning: "ui-status-badge--warning",
++  danger: "ui-status-badge--danger",
++};
++
++export default function StatusBadge({ children, variant = "neutral", className }: StatusBadgeProps) {
++  const classes = ["ui-status-badge", VARIANT_CLASS[variant], className].filter(Boolean).join(" ");
++
++  return <span className={classes}>{children}</span>;
++}
+diff --git a/app/users/page.tsx b/app/users/page.tsx
+index 6b98962..ba5aa8e 100644
+--- a/app/users/page.tsx
++++ b/app/users/page.tsx
+@@ -6,6 +6,7 @@ import { authOptions } from "@/lib/auth";
+ import { canGovernCompanyRulesDelegation } from "@/lib/company-rules/governance";
+ import { canManageUsers } from "@/lib/permissions";
+ import { prisma } from "@/lib/prisma";
++import { PageHeader } from "@/app/ui";
+ 
+ import ResetPasswordClient from "./reset-password-client";
+ import UserCreationClient from "./user-creation-client";
+@@ -36,18 +37,15 @@ export default async function UsersPage() {
+ 
+   return (
+     <div className="page-wrap">
+-      <div className="page-head">
+-        <div>
+-          <h1 className="page-title">Utilisateurs</h1>
+-          <p className="page-description">
+-            Administration des comptes de la societe avec recherche, edition, archivage, absences et reinitialisation.
+-          </p>
+-        </div>
+-
+-        <Link className="page-back" href="/dashboard">
+-          Retour dashboard
+-        </Link>
+-      </div>
++      <PageHeader
++        title="Utilisateurs"
++        description="Administration des comptes de la societe avec recherche, edition, archivage, absences et reinitialisation."
++        actions={
++          <Link className="page-back" href="/dashboard">
++            Retour dashboard
++          </Link>
++        }
++      />
+ 
+       <UserCreationClient canGovernCompanyRules={canGovernCompanyRules} availableDepots={depots} />
+       <UsersListClient />

@@ -395,6 +395,200 @@ pre {
   font-weight: 700;
 }
 
+.ui-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ui-page-header__body {
+  display: grid;
+  gap: 8px;
+}
+
+.ui-page-header__title {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 800;
+  color: #1e3a8a;
+}
+
+.ui-page-header__description {
+  margin: 0;
+  color: var(--ui-text-muted);
+  max-width: 980px;
+}
+
+.ui-page-header__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ui-action-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: 10px;
+  border: 1px solid var(--ui-border);
+  font-weight: 700;
+  transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+
+.ui-action-button--sm {
+  min-height: 34px;
+  padding: 0 10px;
+  font-size: 13px;
+}
+
+.ui-action-button--md {
+  min-height: 40px;
+  padding: 0 14px;
+  font-size: 14px;
+}
+
+.ui-action-button--primary {
+  border-color: var(--ui-primary);
+  background: var(--ui-primary);
+  color: var(--ui-primary-contrast);
+}
+
+.ui-action-button--secondary {
+  border-color: var(--ui-border);
+  background: var(--ui-surface);
+  color: var(--ui-text);
+}
+
+.ui-action-button--ghost {
+  border-color: transparent;
+  background: transparent;
+  color: var(--ui-link);
+}
+
+.ui-action-button--danger {
+  border-color: var(--ui-danger-border);
+  background: var(--ui-danger-bg);
+  color: var(--ui-danger-text);
+}
+
+.ui-action-button--primary:hover:not(:disabled) {
+  border-color: #1e40af;
+  background: #1e40af;
+}
+
+.ui-action-button--secondary:hover:not(:disabled) {
+  border-color: var(--ui-border-strong);
+  background: var(--ui-surface-soft);
+}
+
+.ui-action-button--ghost:hover:not(:disabled) {
+  border-color: var(--ui-border);
+  background: var(--ui-surface-soft);
+}
+
+.ui-action-button--danger:hover:not(:disabled) {
+  border-color: #fca5a5;
+  background: #fee2e2;
+}
+
+.ui-status-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid var(--ui-border);
+  background: var(--ui-surface-soft);
+  color: var(--ui-text);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.ui-status-badge--neutral {
+  border-color: var(--ui-border);
+  background: var(--ui-surface-strong);
+  color: var(--ui-text-muted);
+}
+
+.ui-status-badge--info {
+  border-color: #bfdbfe;
+  background: #eff6ff;
+  color: #1e3a8a;
+}
+
+.ui-status-badge--success {
+  border-color: var(--ui-success-border);
+  background: var(--ui-success-bg);
+  color: var(--ui-success-text);
+}
+
+.ui-status-badge--warning {
+  border-color: var(--ui-warning-border);
+  background: var(--ui-warning-bg);
+  color: var(--ui-warning-text);
+}
+
+.ui-status-badge--danger {
+  border-color: var(--ui-danger-border);
+  background: var(--ui-danger-bg);
+  color: var(--ui-danger-text);
+}
+
+.ui-empty-state {
+  display: grid;
+  gap: 10px;
+  border: 1px dashed var(--ui-border-strong);
+  border-radius: 12px;
+  background: var(--ui-surface-soft);
+  padding: 16px;
+}
+
+.ui-empty-state__title {
+  margin: 0;
+  font-size: 16px;
+  color: #1e3a8a;
+}
+
+.ui-empty-state__message {
+  margin: 0;
+  color: var(--ui-text-muted);
+}
+
+.ui-empty-state__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ui-error-message {
+  display: grid;
+  gap: 8px;
+  border: 1px solid var(--ui-danger-border);
+  border-radius: 12px;
+  background: var(--ui-danger-bg);
+  color: var(--ui-danger-text);
+  padding: 14px 16px;
+}
+
+.ui-error-message__title {
+  margin: 0;
+  font-size: 16px;
+}
+
+.ui-error-message__message {
+  margin: 0;
+  line-height: 1.45;
+}
+
+.ui-error-message__details {
+  margin: 0;
+  font-size: 13px;
+}
+
 .panel {
   border: 1px solid var(--ui-border);
   border-radius: 12px;
@@ -495,6 +689,10 @@ pre {
   .page-title {
     font-size: 24px;
   }
+
+  .ui-page-header__title {
+    font-size: 24px;
+  }
 }
 
 @media (max-width: 680px) {
@@ -516,4 +714,4 @@ pre {
   .app-shell__logout {
     width: fit-content;
   }
-}
+}

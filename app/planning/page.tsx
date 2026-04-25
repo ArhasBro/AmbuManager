@@ -13,6 +13,7 @@ import {
   canViewSelfPlanning,
 } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
+import { ErrorMessage, PageHeader } from "@/app/ui";
 
 import PlanningClient from "./planning-client";
 
@@ -48,10 +49,11 @@ export default async function PlanningPage() {
   if (!canViewSelf && !canViewGlobal) {
     return (
       <main className="page-wrap">
-        <div className="panel status-warning">
-          <h1 className="page-title">Planning</h1>
-          <p style={{ margin: 0, opacity: 0.85 }}>Acces non autorise a la consultation du planning.</p>
-        </div>
+        <PageHeader title="Planning" />
+        <ErrorMessage
+          title="Acces non autorise"
+          message="Acces non autorise a la consultation du planning."
+        />
       </main>
     );
   }
@@ -79,19 +81,17 @@ export default async function PlanningPage() {
 
   return (
     <main className="page-wrap">
-      <div className="page-head">
-        <div>
-          <h1 className="page-title">Planning</h1>
-          <p className="page-description">
-            Vue operationnelle avec planning manuel, autoschedule legacy masque par defaut, audit et exports selon droits.
-          </p>
-        </div>
-        {canReadAudit ? (
-          <Link className="page-back" href="/audit">
-            Ouvrir l&apos;audit dedie
-          </Link>
-        ) : null}
-      </div>
+      <PageHeader
+        title="Planning"
+        description="Vue operationnelle avec planning manuel, autoschedule legacy masque par defaut, audit et exports selon droits."
+        actions={
+          canReadAudit ? (
+            <Link className="page-back" href="/audit">
+              Ouvrir l&apos;audit dedie
+            </Link>
+          ) : null
+        }
+      />
 
       <PlanningClient
         availableDepots={depots}

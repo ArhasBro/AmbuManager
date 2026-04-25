@@ -14,6 +14,7 @@ import {
   canViewSelfPlanning,
 } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
+import { EmptyState, PageHeader, StatusBadge } from "@/app/ui";
 
 import LogoutButton from "./logout-button";
 
@@ -213,25 +214,21 @@ export default async function DashboardPage() {
 
   return (
     <div className="page-wrap">
-      <div className="page-head">
-        <div>
-          <h1 className="page-title">Portail d&apos;accueil</h1>
-          <p className="page-description">
-            Vue metier des acces modules filtres par role et permissions.
-          </p>
-        </div>
-        <LogoutButton />
-      </div>
+      <PageHeader
+        title="Portail d'accueil"
+        description="Vue metier des acces modules filtres par role et permissions."
+        actions={<LogoutButton />}
+      />
 
       <section className="panel" style={{ display: "grid", gap: 8 }}>
         <strong>Bienvenue {user.name ?? user.email ?? "Utilisateur"}</strong>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-          <span style={{ padding: "6px 10px", borderRadius: 999, background: "var(--ui-surface-strong)" }}>
+          <StatusBadge variant="info">
             Profil : {getProfileLabel(user.role, user.platformRole)}
-          </span>
-          <span style={{ padding: "6px 10px", borderRadius: 999, background: "var(--ui-surface-strong)" }}>
+          </StatusBadge>
+          <StatusBadge variant={companyScopedSession ? "success" : "warning"}>
             Societe : {companyScopedSession ? "rattachee" : "non rattachee"}
-          </span>
+          </StatusBadge>
         </div>
         <p style={{ margin: 0, opacity: 0.82 }}>
           Les liens ci-dessous sont filtres pour eviter les entrees qui ne debouchent pas sur un acces reel.
@@ -263,9 +260,10 @@ export default async function DashboardPage() {
               ))}
             </div>
           ) : (
-            <p style={{ margin: 0, opacity: 0.82 }}>
-              Aucun module terrain supplementaire n&apos;est actuellement exploitable.
-            </p>
+            <EmptyState
+              title="Aucun module terrain disponible"
+              message="Aucun module terrain supplementaire n'est actuellement exploitable."
+            />
           )}
         </section>
       ) : null}
@@ -304,20 +302,19 @@ export default async function DashboardPage() {
               ))}
             </div>
           ) : (
-            <p style={{ margin: 0, opacity: 0.82 }}>
-              Aucun module administratif supplementaire n&apos;est reellement accessible.
-            </p>
+            <EmptyState
+              title="Aucun module administratif disponible"
+              message="Aucun module administratif supplementaire n'est reellement accessible."
+            />
           )}
         </section>
       ) : null}
 
       {!showTerrainSection && !showAdminSection && companyScopedSession ? (
-        <section className="panel" style={{ display: "grid", gap: 8 }}>
-          <strong>Aucun acces module exploitable</strong>
-          <p style={{ margin: 0, opacity: 0.82 }}>
-            Aucun module n&apos;est actuellement publie sur le dashboard pour cette session.
-          </p>
-        </section>
+        <EmptyState
+          title="Aucun acces module exploitable"
+          message="Aucun module n'est actuellement publie sur le dashboard pour cette session."
+        />
       ) : null}
 
       {process.env.NODE_ENV !== "production" ? (
