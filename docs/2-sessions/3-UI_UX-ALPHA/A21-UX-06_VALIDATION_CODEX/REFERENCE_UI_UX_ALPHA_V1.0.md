@@ -19,10 +19,10 @@
 Les étapes UI/UX précédentes du bloc A21 sont considérées comme intégrées :
 
 ```text
-A21-UX-02 — cadrage UI/UX : intégré
-A21-UX-03 — maquettes fondatrices : intégré
-A21-UX-04 — maquettes métier complémentaires : intégré
-A21-UX-05 — pages simples / finitions : intégré
+A21-UX-02 — Design System UI/UX ALPHA : validé documentairement / NO_PATCH
+A21-UX-03 — maquettes fondatrices : validé documentairement / NO_PATCH
+A21-UX-04 — maquettes métier complémentaires : validé documentairement / NO_PATCH
+A21-UX-05 — pages simples / finitions : validé documentairement / NO_PATCH
 ```
 
 La présente session `A21-UX-06` ne produit pas de nouvelle maquette.
@@ -99,7 +99,7 @@ Ces écrans confirment que la direction artistique peut être déclinée sur des
 Les pages simples validées sont :
 
 ```text
-Login_V1.0             — validé visuellement
+Login_V1.1             — validé visuellement
 Privacy_V1.0           — validé visuellement avec correctifs textuels à prévoir
 ```
 
@@ -939,17 +939,17 @@ Les badges doivent être :
 
 ## 12. Pages simples Login / Privacy
 
-## 12.1 `Login_V1.0`
+## 12.1 `Login_V1.1`
 
 ### Statut
 
 ```text
-Login_V1.0 — validée visuellement
+Login_V1.1 — validée visuellement
 ```
 
 ### Décision
 
-La maquette `Login_V1.0` est retenue comme version visuelle de référence pour la page `/login`.
+La maquette `Login_V1.1` est retenue comme version visuelle de référence pour la page `/login`.
 
 ### Règles à conserver
 

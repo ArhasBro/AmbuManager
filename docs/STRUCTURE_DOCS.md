@@ -1867,6 +1867,10 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |               README_PATCH.md
 |   |               
 |   +---3-UI_UX-ALPHA
+|   |   |   CONFIRMATION_LOGIN_V1.1_VALID╔.md
+|   |   |   FUSION_DOCUMENTAIRE_3-UI_UX-ALPHA_LOGIN_V1.1.md
+|   |   |   PATCH_DOCUMENTAIRE_MINIMAL_3-UI_UX-ALPHA.md
+|   |   |   
 |   |   +---A21-UX-01_CADRAGE
 |   |   |       CADRAGE_UI_UX_ALPHA_MAQUETTE_V0.2.md
 |   |   |       

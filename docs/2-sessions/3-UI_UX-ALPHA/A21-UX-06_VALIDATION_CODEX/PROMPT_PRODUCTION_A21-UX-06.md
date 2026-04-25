@@ -21,10 +21,10 @@ IMPORTANT :
 
 Les étapes UI/UX précédentes sont intégrées :
 
-A21-UX-02 — cadrage UI/UX : intégré
-A21-UX-03 — maquettes fondatrices : intégré
-A21-UX-04 — maquettes métier complémentaires : intégré
-A21-UX-05 — pages simples / finitions : intégré
+A21-UX-02 — Design System UI/UX ALPHA : validé documentairement / NO_PATCH
+A21-UX-03 — maquettes fondatrices : validé documentairement / NO_PATCH
+A21-UX-04 — maquettes métier complémentaires : validé documentairement / NO_PATCH
+A21-UX-05 — pages simples / finitions : validé documentairement / NO_PATCH
 
 A21-UX-06 doit consolider toute la DA validée dans un document de référence exploitable par Codex / VS Code.
 
@@ -47,7 +47,7 @@ A21-UX-06 doit consolider toute la DA validée dans un document de référence e
 
 ### A21-UX-05 — Pages simples / finitions
 
-- Login_V1.0 — validé visuellement
+- Login_V1.1 — validé visuellement
 - Privacy_V1.0 — validé visuellement avec correctifs textuels à prévoir
 
 ## 3. Direction artistique validée

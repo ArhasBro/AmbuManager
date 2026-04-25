@@ -86,12 +86,12 @@ La présente clôture ne porte pas sur :
 
 ## 5. Récapitulatif des sessions A21-UX
 
-### A21-UX-02 — Cadrage UI/UX
+### A21-UX-02 — Design System UI/UX ALPHA
 
 Statut :
 
 ```text
-A21-UX-02 — cadrage UI/UX : intégré
+A21-UX-02 — Design System UI/UX ALPHA : validé documentairement / NO_PATCH
 ```
 
 Rôle :
@@ -108,7 +108,7 @@ Rôle :
 Statut :
 
 ```text
-A21-UX-03 — maquettes fondatrices : intégré
+A21-UX-03 — maquettes fondatrices : validé documentairement / NO_PATCH
 ```
 
 Rôle :
@@ -125,7 +125,7 @@ Rôle :
 Statut :
 
 ```text
-A21-UX-04 — maquettes métier complémentaires : intégré
+A21-UX-04 — maquettes métier complémentaires : validé documentairement / NO_PATCH
 ```
 
 Rôle :
@@ -142,7 +142,7 @@ Rôle :
 Statut :
 
 ```text
-A21-UX-05 — pages simples / finitions : intégré
+A21-UX-05 — pages simples / finitions : validé documentairement / NO_PATCH
 ```
 
 Rôle :
@@ -232,13 +232,13 @@ Détail :
 ### 6.3 Pages simples / finitions — A21-UX-05
 
 ```text
-Login_V1.0             — VALIDÉ VISUELLEMENT
+Login_V1.1             — VALIDÉ VISUELLEMENT
 Privacy_V1.0           — VALIDÉ VISUELLEMENT AVEC CORRECTIFS TEXTUELS À PRÉVOIR
 ```
 
 Détail :
 
-- `Login_V1.0` — version visuelle de référence pour `/login` ;
+- `Login_V1.1` — version visuelle de référence pour `/login` ;
 - `Privacy_V1.0` — version visuelle de référence pour `/privacy`, avec correctifs textuels / juridiques à prévoir avant intégration finale.
 
 ---

@@ -1,6 +1,6 @@
 # A21-UX-05 — Prompts de génération
 
-## 1. Prompt Login_V1.0
+## 1. Prompt Login_V1.1
 
 ```text
 Tu es expert en maquette graphique pour web app SaaS, spécialisé dans les interfaces modernes, métier santé / ambulancier, et faisables en code avec VS Code / Codex.
@@ -100,7 +100,7 @@ Créer une page de connexion moderne, sobre, professionnelle :
 - modules hors périmètre.
 
 Génère directement la maquette :
-Login_V1.0
+Login_V1.1
 ```
 
 ---

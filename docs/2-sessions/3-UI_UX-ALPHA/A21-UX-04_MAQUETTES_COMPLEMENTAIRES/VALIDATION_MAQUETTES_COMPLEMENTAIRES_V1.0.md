@@ -156,6 +156,12 @@ Dépôts_V1.0 — validée visuellement
 Note : page validée en l’état, car elle n’est pas prioritaire pour le moment.
 ```
 
+#### Note de nommage
+
+Le fichier image source est `Dépôts-bases_V1.0.png`.
+
+La maquette est référencée dans la documentation sous le nom fonctionnel `Dépôts_V1.0`.
+
 #### Décision
 
 La maquette `Dépôts_V1.0` est retenue comme version visuelle de référence pour la page Dépôts / bases.
@@ -302,13 +308,13 @@ Audit_V1.0         — VALIDÉ VISUELLEMENT
 ## 9. Emplacement recommandé dans le dépôt
 
 ```text
-C:\Users\arche\ambulance-manager\docs\2-sessions\3-UI_UX-ALPHA\A21-UX-04_MAQUETTES_METIER_COMPLEMENTAIRES\
+C:\Users\arche\ambulance-manager\docs\2-sessions\3-UI_UX-ALPHA\A21-UX-04_MAQUETTES_COMPLEMENTAIRES\
 ```
 
 Structure recommandée :
 
 ```text
-A21-UX-04_MAQUETTES_METIER_COMPLEMENTAIRES\
+A21-UX-04_MAQUETTES_COMPLEMENTAIRES\
 ├─ MAQUETTES_METIER_COMPLEMENTAIRES_V0.2.md
 ├─ VALIDATION_MAQUETTES_COMPLEMENTAIRES_V1.0.md
 ├─ README.md

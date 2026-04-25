@@ -8,7 +8,7 @@
 - **Type** : cadrage UI/UX + préparation maquettes
 - **Décision patch code** : `NO_PATCH`
 - **Statut initial** : `EN COURS`
-- **Livrable principal attendu** : maquettes visuelles `Login_V1.0` et `Privacy_V1.0`, puis validation documentaire.
+- **Livrable principal attendu** : maquettes visuelles `Login_V1.1` et `Privacy_V1.0`, puis validation documentaire.
 
 ---
 
@@ -19,9 +19,9 @@ Les sessions précédentes ont permis de valider la direction artistique princip
 ### Déjà intégré
 
 ```text
-A21-UX-02 — cadrage UI/UX : intégré
-A21-UX-03 — maquettes fondatrices : intégré
-A21-UX-04 — maquettes métier complémentaires : intégré
+A21-UX-02 — Design System UI/UX ALPHA : validé documentairement / NO_PATCH
+A21-UX-03 — maquettes fondatrices : validé documentairement / NO_PATCH
+A21-UX-04 — maquettes métier complémentaires : validé documentairement / NO_PATCH
 ```
 
 ### Pages déjà validées visuellement
@@ -46,7 +46,7 @@ A21-UX-05 vise à terminer les pages simples et les finitions restantes.
 
 Produire et valider les maquettes des pages simples suivantes :
 
-1. `Login_V1.0`
+1. `Login_V1.1`
 2. `Privacy_V1.0`
 
 Ces pages ne doivent pas réouvrir la direction artistique.  
@@ -251,7 +251,7 @@ PROMPTS_GENERATION_A21-UX-05.md
 
 La session A21-UX-05 sera considérée validée lorsque :
 
-- `Login_V1.0` aura été générée ;
+- `Login_V1.1` aura été générée ;
 - `Privacy_V1.0` aura été générée ;
 - les deux maquettes auront été comparées à la DA validée ;
 - les éventuelles réserves auront été tracées ;
@@ -276,4 +276,4 @@ Aucune modification du code applicatif n’est prévue dans cette session.
 A21-UX-05 — PAGES SIMPLES / FINITIONS : EN COURS
 ```
 
-La validation finale sera produite après réception des maquettes `Login_V1.0` et `Privacy_V1.0`.
+La validation finale sera produite après réception des maquettes `Login_V1.1` et `Privacy_V1.0`.

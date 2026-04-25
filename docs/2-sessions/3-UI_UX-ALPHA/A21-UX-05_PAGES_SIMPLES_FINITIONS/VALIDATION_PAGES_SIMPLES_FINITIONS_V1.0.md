@@ -15,7 +15,7 @@
 
 Pages concernées :
 
-- `Login_V1.0`
+- `Login_V1.1`
 - `Privacy_V1.0`
 
 Objectif : documenter les pages simples / finitions du bloc `A21 — UI / UX / Navigation`, sans nouvelle direction artistique et sans réouverture des maquettes déjà validées.
@@ -29,9 +29,9 @@ Les sessions précédentes ont permis de valider la direction artistique princip
 ### Sessions UI/UX déjà intégrées
 
 ```text
-A21-UX-02 — cadrage UI/UX : intégré
-A21-UX-03 — maquettes fondatrices : intégré
-A21-UX-04 — maquettes métier complémentaires : intégré
+A21-UX-02 — Design System UI/UX ALPHA : validé documentairement / NO_PATCH
+A21-UX-03 — maquettes fondatrices : validé documentairement / NO_PATCH
+A21-UX-04 — maquettes métier complémentaires : validé documentairement / NO_PATCH
 ```
 
 ### Pages déjà validées avant A21-UX-05
@@ -54,7 +54,7 @@ A21-UX-05 clôture les pages simples restantes.
 
 ## 4. Direction artistique conservée
 
-Les maquettes `Login_V1.0` et `Privacy_V1.0` doivent rester alignées avec :
+Les maquettes `Login_V1.1` et `Privacy_V1.0` doivent rester alignées avec :
 
 - palette blanc / bleu médical / turquoise / vert santé ;
 - ambiance SaaS métier santé / ambulancier ;
@@ -71,17 +71,17 @@ Les maquettes `Login_V1.0` et `Privacy_V1.0` doivent rester alignées avec :
 
 ## 5. Validation par écran
 
-## 5.1 Login_V1.0
+## 5.1 Login_V1.1
 
 ### Statut exact à tracer
 
 ```text
-Login_V1.0 — validée visuellement
+Login_V1.1 — validée visuellement
 ```
 
 ### Décision
 
-La maquette `Login_V1.0` est retenue comme version visuelle de référence pour la page `/login`.
+La maquette `Login_V1.1` est retenue comme version visuelle de référence pour la page `/login`.
 
 ### Motifs de validation
 
@@ -100,9 +100,17 @@ La maquette `Login_V1.0` est retenue comme version visuelle de référence pour 
 - Absence de surcharge fonctionnelle.
 - Absence de modules hors périmètre.
 
+### Note de traçabilité archive
+
+L’archive `A21-UX-05_PAGES_SIMPLES_FINITIONS_IMAGE_V1.0.zip` contient également `Login_V1.0.png`.
+
+La version visuelle retenue pour la page `/login` est `Login_V1.1.png`.
+
+`Login_V1.0.png` est conservée dans l’archive comme itération antérieure non retenue comme référence finale.
+
 ### Exclusions importantes à tracer
 
-La maquette `Login_V1.0` ne doit pas introduire :
+La maquette `Login_V1.1` ne doit pas introduire :
 
 - inscription ;
 - essai gratuit ;
@@ -128,7 +136,7 @@ VALIDÉ VISUELLEMENT
 ### Statut exact à tracer
 
 ```text
-Privacy_V1.0 — validée visuellement
+Privacy_V1.0 — validée visuellement avec correctifs textuels à prévoir
 ```
 
 ### Décision
@@ -192,12 +200,12 @@ La présente étape correspond à une validation visuelle et documentaire des ma
 A21-UX-05 — PAGES SIMPLES / FINITIONS : VALIDÉ VISUELLEMENT
 ```
 
-Les pages simples / finitions `Login_V1.0` et `Privacy_V1.0` sont validées visuellement comme références exploitables pour la suite du bloc `A21 — UI / UX / Navigation`.
+Les pages simples / finitions `Login_V1.1` et `Privacy_V1.0` sont validées visuellement comme références exploitables pour la suite du bloc `A21 — UI / UX / Navigation`.
 
 ### Pages validées
 
 ```text
-Login_V1.0      — VALIDÉ VISUELLEMENT
+Login_V1.1      — VALIDÉ VISUELLEMENT
 Privacy_V1.0    — VALIDÉ VISUELLEMENT AVEC CORRECTIFS TEXTUELS À PRÉVOIR
 ```
 
@@ -217,7 +225,7 @@ A21-UX-05_PAGES_SIMPLES_FINITIONS\
 ├─ PROMPTS_GENERATION_A21-UX-05.md
 ├─ VALIDATION_PAGES_SIMPLES_FINITIONS_V1.0.md
 ├─ README.md
-└─ A21-UX-05_PAGES_SIMPLES_FINITIONS_IMAGES_V1.0.zip
+└─ A21-UX-05_PAGES_SIMPLES_FINITIONS_IMAGE_V1.0.zip
 ```
 
 ---

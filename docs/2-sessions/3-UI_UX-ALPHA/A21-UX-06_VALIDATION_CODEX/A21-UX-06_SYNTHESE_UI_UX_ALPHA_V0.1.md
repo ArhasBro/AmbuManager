@@ -18,10 +18,10 @@ Les étapes précédentes ont permis de cadrer, produire, corriger et valider vi
 ### Sessions déjà intégrées
 
 ```text
-A21-UX-02 — cadrage UI/UX : intégré
-A21-UX-03 — maquettes fondatrices : intégré
-A21-UX-04 — maquettes métier complémentaires : intégré
-A21-UX-05 — pages simples / finitions : intégré
+A21-UX-02 — Design System UI/UX ALPHA : validé documentairement / NO_PATCH
+A21-UX-03 — maquettes fondatrices : validé documentairement / NO_PATCH
+A21-UX-04 — maquettes métier complémentaires : validé documentairement / NO_PATCH
+A21-UX-05 — pages simples / finitions : validé documentairement / NO_PATCH
 ```
 
 A21-UX-06 ne doit pas générer une nouvelle maquette.  
@@ -70,7 +70,7 @@ Audit_V1.0             — validé visuellement
 ### Pages simples / finitions A21-UX-05
 
 ```text
-Login_V1.0             — validé visuellement
+Login_V1.1             — validé visuellement
 Privacy_V1.0           — validé visuellement avec correctifs textuels à prévoir
 ```
 
