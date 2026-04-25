@@ -280,8 +280,8 @@ IMPORTANT
 
 Références des sessions :
 
-- SESSION-20260425-09_A21_CLOTURE_A21
-- **CLOTURE_A21 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Validation finale du bloc UI/UX / Navigation avant lancement des sessions d’intégration code.
+- SESSION-20260425-10_A22_UIINT-01
+- **A22-UIINT-01 — CORRECTION+COMPLÉTION** — Shell structurel : sidebar, topbar et zone main. Livrable attendu : shell appliqué sur les pages connectées. DoD : shell stable, responsive de base, navigation non régressive.
 
 ------------------------------------
 
@@ -306,7 +306,7 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 Unblock-File -Path .\create_session.ps1
 .\create_session.ps1 -Stage "1-ALPHA" -Block "A1" -SessionCode "RBAC-02" -Type "CORRECTION" -Title "Remplacement méthodique de DEA par ADE"
 
-- **A22-UIINT-01 — CORRECTION+COMPLÉTION** — Shell structurel : sidebar, topbar et zone main. Livrable attendu : shell appliqué sur les pages connectées. DoD : shell stable, responsive de base, navigation non régressive.
+
 
 - **A22-UIINT-02 — CORRECTION+COMPLÉTION** — Navigation complète permissions : entrées de navigation, états actifs et affichage selon permissions. Livrable attendu : navigation complète et cohérente. DoD : aucun lien mort, affichage conforme aux permissions.
 

@@ -2486,18 +2486,14 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
-|   |   +---7KYLlOE1K2jhKPVcIYQ1z
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
-|   |   |       
 |   |   +---chunks
 |   |   |       05c065d3e137ac6c.js
-|   |   |       12049629bfda53e4.js
+|   |   |       18b965c14f8a1f84.css
 |   |   |       274d763fc71039fe.js
 |   |   |       321e14092c3be8b6.js
 |   |   |       3814b133520d7a8c.js
 |   |   |       3d7add200578fdd5.js
+|   |   |       3f157b7fbe5bab37.js
 |   |   |       5422d2cbe02db823.js
 |   |   |       5fb9210c99014ea0.js
 |   |   |       61066a51d71ec27c.js
@@ -2511,12 +2507,16 @@ C:.
 |   |   |       af7027598a07baa5.js
 |   |   |       ee24e667dd0d7311.js
 |   |   |       fc3339c3f209e8c2.js
-|   |   |       fdeadcb1b9c78c0c.css
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-a79a6d50b3241aaa.js
 |   |   |       
-|   |   \---media
-|   |           favicon.0b3bf435.ico
+|   |   +---media
+|   |   |       favicon.0b3bf435.ico
+|   |   |       
+|   |   \---uICB7KOdfi4F9xs0c67pI
+|   |           _buildManifest.js
+|   |           _clientMiddlewareManifest.json
+|   |           _ssgManifest.js
 |   |           
 |   \---types
 |           routes.d.ts
@@ -3931,7 +3931,9 @@ C:.
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
+|   |   |   |   |           LIVRABLES__SESSION-20260425-10_A22_UIINT-01_A_PLAT.zip
 |   |   |   |   |           README_PATCH.md
+|   |   |   |   |           SESSION-20260425-10_A22_UIINT-01.diff
 |   |   |   |   |           
 |   |   |   |   +---SESSION-20260425-11_A22_UIINT-02
 |   |   |   |   |   |   EVIDENCES.md

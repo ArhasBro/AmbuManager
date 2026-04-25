@@ -1231,7 +1231,9 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
+|   |   |   |           LIVRABLES__SESSION-20260425-10_A22_UIINT-01_A_PLAT.zip
 |   |   |   |           README_PATCH.md
+|   |   |   |           SESSION-20260425-10_A22_UIINT-01.diff
 |   |   |   |           
 |   |   |   +---SESSION-20260425-11_A22_UIINT-02
 |   |   |   |   |   EVIDENCES.md

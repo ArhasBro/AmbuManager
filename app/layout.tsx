@@ -1,7 +1,7 @@
 import "./globals.css";
 import { getServerSession } from "next-auth/next";
 
-import AppShell, { type AppShellNavLink } from "./app-shell";
+import AppShell, { type AppShellContext, type AppShellNavLink } from "./app-shell";
 import Providers from "./providers";
 import { authOptions } from "@/lib/auth";
 import {
@@ -9,9 +9,27 @@ import {
   canManageTemplates,
   canManageUsers,
   canManageVehicles,
+  canViewAudit,
   canViewGlobalPlanning,
   canViewSelfPlanning,
 } from "@/lib/permissions";
+import { prisma } from "@/lib/prisma";
+
+const ROLE_LABELS: Record<string, string> = {
+  ADMIN: "Administration",
+  GERANT: "Gerance",
+  BUREAU: "Bureau",
+  ADE: "Ambulancier diplome d'Etat",
+  AA: "Auxiliaire ambulancier",
+  TAXI: "Taxi",
+  REGULATEUR: "Regulation",
+};
+
+function getRoleLabel(role?: string | null, platformRole?: string | null): string {
+  if (platformRole === "SUPPORT") return "Support global";
+  if (!role) return "Profil non renseigne";
+  return ROLE_LABELS[role] ?? role;
+}
 
 function canManageCompanyProfile(role?: string | null): boolean {
   return role === "ADMIN" || role === "GERANT";
@@ -22,19 +40,36 @@ export const metadata = {
   description: "Gestion multi-entreprise",
 };
 
-async function getAppShellNavLinks(): Promise<AppShellNavLink[]> {
+async function getAppShellData(): Promise<{ navLinks: AppShellNavLink[]; context: AppShellContext }> {
   const session = await getServerSession(authOptions);
   const user = session?.user;
 
+  const fallbackContext: AppShellContext = {
+    companyLabel: "Session non connectee",
+    userLabel: "Non connecte",
+    roleLabel: "Aucun profil",
+    canLogout: false,
+  };
+
   if (!user?.id) {
-    return [];
+    return { navLinks: [], context: fallbackContext };
   }
 
-  const links: AppShellNavLink[] = [{ href: "/dashboard", label: "Dashboard" }];
+  const navLinks: AppShellNavLink[] = [{ href: "/dashboard", label: "Dashboard" }];
 
   if (!user.companyId) {
-    return links;
+    return {
+      navLinks,
+      context: {
+        companyLabel: "Societe non rattachee",
+        userLabel: user.name ?? user.email ?? "Utilisateur",
+        roleLabel: getRoleLabel(user.role, user.platformRole),
+        canLogout: true,
+      },
+    };
   }
+
+  const companyProfileAllowed = canManageCompanyProfile(user.role);
 
   const [
     planningSelfAllowed,
@@ -43,6 +78,8 @@ async function getAppShellNavLinks(): Promise<AppShellNavLink[]> {
     vehiclesAllowed,
     templatesAllowed,
     companyRulesAllowed,
+    auditAllowed,
+    company,
   ] = await Promise.all([
     canViewSelfPlanning(user.id, user.role, user.platformRole),
     canViewGlobalPlanning(user.id, user.role, user.platformRole),
@@ -50,18 +87,30 @@ async function getAppShellNavLinks(): Promise<AppShellNavLink[]> {
     canManageVehicles(user.id, user.role, user.platformRole),
     canManageTemplates(user.id, user.role, user.platformRole),
     canManageCompanyRules(user.id, user.role, user.platformRole),
+    canViewAudit(user.id, user.role, user.platformRole),
+    prisma.company.findUnique({
+      where: { id: user.companyId },
+      select: { name: true },
+    }),
   ]);
 
-  const companyProfileAllowed = canManageCompanyProfile(user.role);
+  if (planningSelfAllowed || planningGlobalAllowed) navLinks.push({ href: "/planning", label: "Planning" });
+  if (usersAllowed) navLinks.push({ href: "/users", label: "Utilisateurs" });
+  if (vehiclesAllowed) navLinks.push({ href: "/vehicles", label: "Vehicules" });
+  if (templatesAllowed) navLinks.push({ href: "/templates", label: "Templates" });
+  if (companyProfileAllowed || companyRulesAllowed) navLinks.push({ href: "/company", label: "Societe" });
+  if (companyProfileAllowed) navLinks.push({ href: "/depots", label: "Depots" });
+  if (companyProfileAllowed) navLinks.push({ href: "/onboarding", label: "Onboarding" });
+  if (auditAllowed) navLinks.push({ href: "/audit", label: "Audit" });
 
-  if (planningSelfAllowed || planningGlobalAllowed) links.push({ href: "/planning", label: "Planning" });
-  if (usersAllowed) links.push({ href: "/users", label: "Utilisateurs" });
-  if (vehiclesAllowed) links.push({ href: "/vehicles", label: "Vehicules" });
-  if (templatesAllowed) links.push({ href: "/templates", label: "Templates" });
-  if (companyProfileAllowed || companyRulesAllowed) links.push({ href: "/company", label: "Societe" });
-  if (companyProfileAllowed) links.push({ href: "/depots", label: "Depots" });
+  const context: AppShellContext = {
+    companyLabel: company?.name ?? "Societe courante",
+    userLabel: user.name ?? user.email ?? "Utilisateur",
+    roleLabel: getRoleLabel(user.role, user.platformRole),
+    canLogout: true,
+  };
 
-  return links;
+  return { navLinks, context };
 }
 
 export default async function RootLayout({
@@ -69,15 +118,17 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const navLinks = await getAppShellNavLinks();
+  const { navLinks, context } = await getAppShellData();
 
   return (
     <html lang="fr">
       <body>
         <Providers>
-          <AppShell navLinks={navLinks}>{children}</AppShell>
+          <AppShell navLinks={navLinks} context={context}>
+            {children}
+          </AppShell>
         </Providers>
       </body>
     </html>
   );
-}
+}
