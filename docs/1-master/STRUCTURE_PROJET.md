@@ -2726,6 +2726,7 @@ C:.
 |   |       STRUCTURE_PROJET.md
 |   |       
 |   +---2-sessions
+|   |   |   3-UI_UX-ALPHA.zip
 |   |   |   README.md
 |   |   |   
 |   |   +---1-ALPHA
@@ -4567,6 +4568,8 @@ C:.
 |   |   |               
 |   |   +---3-UI_UX-ALPHA
 |   |   |   +---A21-UX-01_CADRAGE
+|   |   |   |       CADRAGE_UI_UX_ALPHA_MAQUETTE_V0.2.md
+|   |   |   |       
 |   |   |   +---A21-UX-02_DESIGN_SYSTEM
 |   |   |   |       DESIGN_SYSTEM_UI_UX_ALPHA.md
 |   |   |   |       README.md
@@ -4590,10 +4593,14 @@ C:.
 |   |   |   |       README.md
 |   |   |   |       VALIDATION_PAGES_SIMPLES_FINITIONS_V1.0.md
 |   |   |   |       
-|   |   |   \---A21-UX-06_VALIDATION_CODEX
-|   |   |           A21-UX-06_SYNTHESE_UI_UX_ALPHA_V0.1.md
-|   |   |           PROMPT_PRODUCTION_A21-UX-06.md
-|   |   |           README.md
+|   |   |   +---A21-UX-06_VALIDATION_CODEX
+|   |   |   |       A21-UX-06_SYNTHESE_UI_UX_ALPHA_V0.1.md
+|   |   |   |       PROMPT_PRODUCTION_A21-UX-06.md
+|   |   |   |       README.md
+|   |   |   |       REFERENCE_UI_UX_ALPHA_V1.0.md
+|   |   |   |       
+|   |   |   \---A21-UX-07_CLOTURE_DOCUMENTAIRE_UI_UX
+|   |   |           A21-UX-07_CLOTURE_DOCUMENTAIRE_UI_UX.md
 |   |   |           
 |   |   \---SESSION-YYYYMMDD-XX
 |   |           EVIDENCES.md
