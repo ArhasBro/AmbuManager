@@ -1,12 +1,23 @@
-﻿# RESULTATS
+# RÉSULTATS
 
-## RÃ©sultats obtenus
+## Décision
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+```text
+NO_PATCH
+```
 
----
+## Résultat
 
-## Documents modifiÃ©s
+```text
+À LANCER — NON TRAITÉ DANS CE TRANSFERT
+```
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+## Livrables documentaires rattachés
 
+```text
+Aucun livrable transféré.
+```
+
+## Précision
+
+Cette session est documentaire. Elle ne constitue pas une intégration code de la nouvelle UI/UX.

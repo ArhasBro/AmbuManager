@@ -73,12 +73,12 @@ La session de clôture :
 Aucun bloc suivant ne doit être ouvert sans ce verdict explicite.
 
 
-## Dossier UI/UX documentaire séparé
+## Dossier UI/UX documentaire rattaché au BLOC_A21
 
 Le dossier suivant contient la référence documentaire UI/UX validée :
 
 ```text
-docs/2-sessions/3-UI_UX-ALPHA/
+docs/2-sessions/1-ALPHA/BLOC_A21/
 ```
 
 Rôle de ce dossier :
@@ -89,7 +89,7 @@ Rôle de ce dossier :
 - conserver la référence UI/UX ALPHA exploitable pour Codex ;
 - conserver la clôture documentaire UI/UX.
 
-Ce dossier ne constitue pas une intégration code.
+Ce dossier ne constitue pas une intégration code. Il est désormais rattaché au bloc A21.
 
 La future intégration UI/UX devra être ouverte dans un dossier de session code séparé, par exemple :
 

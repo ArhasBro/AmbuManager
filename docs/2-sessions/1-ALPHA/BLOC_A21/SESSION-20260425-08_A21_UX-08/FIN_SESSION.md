@@ -1,14 +1,21 @@
-﻿# FIN_SESSION
+# FIN_SESSION
 
-## ClÃ´ture
+## Statut
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+```text
+À LANCER — NON TRAITÉ DANS CE TRANSFERT
+```
 
-## Validation
+## Décision patch
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+```text
+NO_PATCH
+```
 
-## Verdict final
+## Conclusion
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+Les livrables UI/UX correspondants sont désormais rattachés à la session standard du bloc A21.
 
+## Suite
+
+La future intégration code UI/UX devra être traitée séparément, dans des sessions dédiées.

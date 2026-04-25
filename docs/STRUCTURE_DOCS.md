@@ -3,6 +3,7 @@ Le numÚro de sÚrie du volume est 123E-4DB7
 C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   BDD_OPERATIONS_SENSIBLES.md
 |   CMD.md
+|   CONTROLE_FINAL_DOCS.md
 |   PROTOCOLE_SESSION.md
 |   QUALITY_TESTS.md
 |   README.md
@@ -28,7 +29,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |       STRUCTURE_PROJET.md
 |       
 +---2-sessions
-|   |   3-UI_UX-ALPHA.zip
 |   |   README.md
 |   |   
 |   +---1-ALPHA
@@ -1102,7 +1102,12 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |               README_PATCH.md
 |   |   |               
 |   |   +---BLOC_A21
+|   |   |   |   CORRECTION_CHEMINS_UI_UX_BLOC_A21.md
+|   |   |   |   README.md
+|   |   |   |   README_REORGANISATION_UI_UX.md
+|   |   |   |   
 |   |   |   +---SESSION-20260425-01_A21_UX-01
+|   |   |   |   |   CADRAGE_UI_UX_ALPHA_MAQUETTE_V0.2.md
 |   |   |   |   |   EVIDENCES.md
 |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   NOTES.md
@@ -1113,9 +1118,11 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |           NO_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260425-02_A21_UX-02
+|   |   |   |   |   DESIGN_SYSTEM_UI_UX_ALPHA.md
 |   |   |   |   |   EVIDENCES.md
 |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   NOTES.md
+|   |   |   |   |   README.md
 |   |   |   |   |   RESULTATS.md
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
@@ -1123,39 +1130,56 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |           NO_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260425-03_A21_UX-03
+|   |   |   |   |   A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0.zip
 |   |   |   |   |   EVIDENCES.md
 |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   MAQUETTES_FONDATRICES_V0.2.md
 |   |   |   |   |   NOTES.md
+|   |   |   |   |   README.md
 |   |   |   |   |   RESULTATS.md
 |   |   |   |   |   SESSION.md
+|   |   |   |   |   VALIDATION_MAQUETTES_FONDATRICES_V1.0.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
 |   |   |   |           NO_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260425-04_A21_UX-04
+|   |   |   |   |   A21-UX-04_MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0.zip
 |   |   |   |   |   EVIDENCES.md
 |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   MAQUETTES_METIER_COMPLEMENTAIRES_V0.2.md
 |   |   |   |   |   NOTES.md
+|   |   |   |   |   README.md
 |   |   |   |   |   RESULTATS.md
 |   |   |   |   |   SESSION.md
+|   |   |   |   |   VALIDATION_MAQUETTES_COMPLEMENTAIRES_V1.0.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
 |   |   |   |           NO_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260425-05_A21_UX-05
+|   |   |   |   |   A21-UX-05_PAGES_SIMPLES_FINITIONS_IMAGE_V1.0.zip
+|   |   |   |   |   A21-UX-05_PAGES_SIMPLES_FINITIONS_V0.1.md
 |   |   |   |   |   EVIDENCES.md
 |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   NOTES.md
+|   |   |   |   |   PROMPTS_GENERATION_A21-UX-05.md
+|   |   |   |   |   README.md
 |   |   |   |   |   RESULTATS.md
 |   |   |   |   |   SESSION.md
+|   |   |   |   |   VALIDATION_PAGES_SIMPLES_FINITIONS_V1.0.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
 |   |   |   |           NO_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260425-06_A21_UX-06
+|   |   |   |   |   A21-UX-06_SYNTHESE_UI_UX_ALPHA_V0.1.md
 |   |   |   |   |   EVIDENCES.md
 |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   NOTES.md
+|   |   |   |   |   PROMPT_PRODUCTION_A21-UX-06.md
+|   |   |   |   |   README.md
+|   |   |   |   |   REFERENCE_UI_UX_ALPHA_V1.0.md
 |   |   |   |   |   RESULTATS.md
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
@@ -1163,6 +1187,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |           NO_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260425-07_A21_UX-07
+|   |   |   |   |   A21-UX-07_CLOTURE_DOCUMENTAIRE_UI_UX.md
 |   |   |   |   |   EVIDENCES.md
 |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   NOTES.md
@@ -1183,9 +1208,12 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |           NO_PATCH.md
 |   |   |   |           
 |   |   |   \---SESSION-20260425-09_A21_CLOTURE_A21
+|   |   |       |   CONFIRMATION_LOGIN_V1.1_VALID╔.md
 |   |   |       |   EVIDENCES.md
 |   |   |       |   FIN_SESSION.md
+|   |   |       |   FUSION_DOCUMENTAIRE_3-UI_UX-ALPHA_LOGIN_V1.1.md
 |   |   |       |   NOTES.md
+|   |   |       |   PATCH_DOCUMENTAIRE_MINIMAL_3-UI_UX-ALPHA.md
 |   |   |       |   RESULTATS.md
 |   |   |       |   SESSION.md
 |   |   |       |   
@@ -1959,47 +1987,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |               NO_PATCH.md
 |   |               README_PATCH.md
 |   |               
-|   +---3-UI_UX-ALPHA
-|   |   |   CONFIRMATION_LOGIN_V1.1_VALID╔.md
-|   |   |   FUSION_DOCUMENTAIRE_3-UI_UX-ALPHA_LOGIN_V1.1.md
-|   |   |   PATCH_DOCUMENTAIRE_MINIMAL_3-UI_UX-ALPHA.md
-|   |   |   README.md
-|   |   |   
-|   |   +---A21-UX-01_CADRAGE
-|   |   |       CADRAGE_UI_UX_ALPHA_MAQUETTE_V0.2.md
-|   |   |       
-|   |   +---A21-UX-02_DESIGN_SYSTEM
-|   |   |       DESIGN_SYSTEM_UI_UX_ALPHA.md
-|   |   |       README.md
-|   |   |       
-|   |   +---A21-UX-03_MAQUETTES_FONDATRICES
-|   |   |       A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0.zip
-|   |   |       MAQUETTES_FONDATRICES_V0.2.md
-|   |   |       README.md
-|   |   |       VALIDATION_MAQUETTES_FONDATRICES_V1.0.md
-|   |   |       
-|   |   +---A21-UX-04_MAQUETTES_COMPLEMENTAIRES
-|   |   |       A21-UX-04_MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0.zip
-|   |   |       MAQUETTES_METIER_COMPLEMENTAIRES_V0.2.md
-|   |   |       README.md
-|   |   |       VALIDATION_MAQUETTES_COMPLEMENTAIRES_V1.0.md
-|   |   |       
-|   |   +---A21-UX-05_PAGES_SIMPLES_FINITIONS
-|   |   |       A21-UX-05_PAGES_SIMPLES_FINITIONS_IMAGE_V1.0.zip
-|   |   |       A21-UX-05_PAGES_SIMPLES_FINITIONS_V0.1.md
-|   |   |       PROMPTS_GENERATION_A21-UX-05.md
-|   |   |       README.md
-|   |   |       VALIDATION_PAGES_SIMPLES_FINITIONS_V1.0.md
-|   |   |       
-|   |   +---A21-UX-06_VALIDATION_CODEX
-|   |   |       A21-UX-06_SYNTHESE_UI_UX_ALPHA_V0.1.md
-|   |   |       PROMPT_PRODUCTION_A21-UX-06.md
-|   |   |       README.md
-|   |   |       REFERENCE_UI_UX_ALPHA_V1.0.md
-|   |   |       
-|   |   \---A21-UX-07_CLOTURE_DOCUMENTAIRE_UI_UX
-|   |           A21-UX-07_CLOTURE_DOCUMENTAIRE_UI_UX.md
-|   |           
 |   \---SESSION-YYYYMMDD-XX
 |           EVIDENCES.md
 |           FIN_SESSION.md

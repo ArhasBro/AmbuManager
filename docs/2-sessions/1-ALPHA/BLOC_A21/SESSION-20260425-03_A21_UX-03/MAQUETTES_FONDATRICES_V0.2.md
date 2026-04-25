@@ -14,7 +14,7 @@
 ## 2. Références utilisées
 
 - `docs/1-master/CADRAGE_UI_UX_ALPHA_MAQUETTE_V0.2.md`
-- `docs/2-sessions/3-UI_UX-ALPHA/A21-UX-02_DESIGN_SYSTEM/DESIGN_SYSTEM_UI_UX_ALPHA.md`
+- `docs/2-sessions/1-ALPHA/BLOC_A21/SESSION-20260425-02_A21_UX-02/DESIGN_SYSTEM_UI_UX_ALPHA.md`
 - Écrans actuels fournis dans `Screen WebApp.zip`
 - Direction graphique initiale `ProtoV0.1`
 - Retours utilisateur sur ProtoV0.1

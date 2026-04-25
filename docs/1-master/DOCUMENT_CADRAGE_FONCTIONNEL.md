@@ -1194,10 +1194,10 @@ Rappels :
   - `./docs/1-master/STRUCTURE_PROJET.md`
   - `./docs/PROTOCOLE_SESSION.md`
   - `./docs/STRUCTURE_DOCS.md`
-  - `./docs/4-templates/TEMPLATE_DEBUT_SESSION.md`
-  - `./docs/4-templates/TEMPLATE_FIN_SESSION.md`
-  - `./docs/4-templates/TEMPLATE_DOD_4_4.md`
-  - `./docs/4-templates/TEMPLATE_RECAP_SESSION.md`
+  - `./docs/3-templates/TEMPLATE_DEBUT_SESSION.md`
+  - `./docs/3-templates/TEMPLATE_FIN_SESSION.md`
+  - `./docs/3-templates/TEMPLATE_DOD_4_4.md`
+  - `./docs/3-templates/TEMPLATE_RECAP_SESSION.md`
 - **Objectif métier** : éviter les dérives documentaires.
 - **Utilisateur cible** : pilotage projet
 - **Priorité** : IMPORTANT MAIS NON BLOQUANT
@@ -1216,7 +1216,7 @@ Rappels :
 - **Dépendances** : gouvernance documentaire
 - **Arbitrages éventuels** : non trouvés dans le ZIP actuel, mais à protéger s’ils existent ou sont créés.
 
-### 20.5 Règle sur `./docs/sessions`
+### 20.5 Règle sur `./docs/2-sessions`
 - **Description** :
   - sessions en cours = modifiables avec souplesse
   - sessions clôturées / validées = protégées

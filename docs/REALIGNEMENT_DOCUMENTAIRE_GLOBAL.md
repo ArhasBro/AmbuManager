@@ -80,7 +80,7 @@ Aucun patch code produit dans ce dossier UI/UX.
 Création / clarification du fichier :
 
 ```text
-docs/2-sessions/3-UI_UX-ALPHA/README.md
+docs/2-sessions/1-ALPHA/BLOC_A21/README.md
 ```
 
 Ce fichier indique :
@@ -104,7 +104,7 @@ Ajout d’un avertissement indiquant que `CMD.md` est un mémo historique / brou
 Ajout d’une note indiquant que `CADRAGE_UI_UX_ALPHA_MAQUETTE_V0.2.md` est un cadrage initial, et que la référence finale UI/UX est :
 
 ```text
-docs/2-sessions/3-UI_UX-ALPHA/A21-UX-06_VALIDATION_CODEX/REFERENCE_UI_UX_ALPHA_V1.0.md
+docs/2-sessions/1-ALPHA/BLOC_A21/SESSION-20260425-06_A21_UX-06/REFERENCE_UI_UX_ALPHA_V1.0.md
 ```
 
 ---
@@ -115,8 +115,8 @@ docs/2-sessions/3-UI_UX-ALPHA/A21-UX-06_VALIDATION_CODEX/REFERENCE_UI_UX_ALPHA_V
 1-master/CADRAGE_UI_UX_ALPHA_MAQUETTE_V0.2.md
 1-master/PLAN_DE_DEVELOPPEMENT.md
 1-master/REGISTRE_DECISIONS.md
-2-sessions/3-UI_UX-ALPHA/A21-UX-01_CADRAGE/CADRAGE_UI_UX_ALPHA_MAQUETTE_V0.2.md
-2-sessions/3-UI_UX-ALPHA/README.md
+2-sessions/1-ALPHA/BLOC_A21/SESSION-20260425-01_A21_UX-01/CADRAGE_UI_UX_ALPHA_MAQUETTE_V0.2.md
+2-sessions/1-ALPHA/BLOC_A21/README.md
 2-sessions/README.md
 3-templates/TEMPLATE_FIN_SESSION.md
 CMD.md
@@ -144,8 +144,8 @@ docs/1-master/STRUCTURE_PROJET.md
 ### UI/UX
 
 ```text
-docs/2-sessions/3-UI_UX-ALPHA/A21-UX-06_VALIDATION_CODEX/REFERENCE_UI_UX_ALPHA_V1.0.md
-docs/2-sessions/3-UI_UX-ALPHA/A21-UX-07_CLOTURE_DOCUMENTAIRE_UI_UX/A21-UX-07_CLOTURE_DOCUMENTAIRE_UI_UX.md
+docs/2-sessions/1-ALPHA/BLOC_A21/SESSION-20260425-06_A21_UX-06/REFERENCE_UI_UX_ALPHA_V1.0.md
+docs/2-sessions/1-ALPHA/BLOC_A21/SESSION-20260425-07_A21_UX-07/A21-UX-07_CLOTURE_DOCUMENTAIRE_UI_UX.md
 ```
 
 ### Templates
@@ -173,9 +173,9 @@ anciens ZIP
 Avant une future intégration UI/UX, lire :
 
 ```text
-docs/2-sessions/3-UI_UX-ALPHA/README.md
-docs/2-sessions/3-UI_UX-ALPHA/A21-UX-06_VALIDATION_CODEX/REFERENCE_UI_UX_ALPHA_V1.0.md
-docs/2-sessions/3-UI_UX-ALPHA/A21-UX-07_CLOTURE_DOCUMENTAIRE_UI_UX/A21-UX-07_CLOTURE_DOCUMENTAIRE_UI_UX.md
+docs/2-sessions/1-ALPHA/BLOC_A21/README.md
+docs/2-sessions/1-ALPHA/BLOC_A21/SESSION-20260425-06_A21_UX-06/REFERENCE_UI_UX_ALPHA_V1.0.md
+docs/2-sessions/1-ALPHA/BLOC_A21/SESSION-20260425-07_A21_UX-07/A21-UX-07_CLOTURE_DOCUMENTAIRE_UI_UX.md
 ```
 
 ---
@@ -193,3 +193,14 @@ Réserves mineures possibles :
 - conserver les historiques sans les utiliser comme sources décisionnelles ;
 - ne pas confondre validation UI/UX documentaire et intégration code ;
 - ne pas relancer l’intégration UI/UX avant cadrage de la session code dédiée.
+
+## Note de mise à jour post-transfert BLOC_A21
+
+Le dossier UI/UX séparé a ensuite été rattaché à la structure standard :
+
+```text
+docs/2-sessions/1-ALPHA/BLOC_A21/
+```
+
+L’ancien dossier séparé `docs/2-sessions/3-UI_UX-ALPHA/` et son ZIP ne doivent plus être utilisés comme références courantes.
+

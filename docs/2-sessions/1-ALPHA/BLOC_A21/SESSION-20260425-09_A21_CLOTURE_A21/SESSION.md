@@ -1,4 +1,4 @@
-﻿# SESSION
+# SESSION
 
 ## ID SESSION
 
@@ -12,24 +12,39 @@ SESSION-20260425-09_A21_CLOTURE_A21
 
 Projet : Investissement  
 Sous-projet : Ambulance Manager  
-Maturite : 1-ALPHA  
-Bloc : A21  
+Maturité : 1-ALPHA  
+Bloc : A21 — UI / UX / Navigation  
 Type : VALIDATION  
-Intitule : Validation finale du bloc UI/UX Navigation avant lancement des sessions d’intégration code
+Intitulé : Validation finale documentaire du bloc UI/UX / Navigation avant intégration code
 
 ## Objectif de la session
 
-INFORMATION NON FOURNIE - A CONFIRMER
+Rattacher au bloc A21 le livrable documentaire UI/UX correspondant, initialement produit dans le dossier séparé `docs/2-sessions/3-UI_UX-ALPHA/`.
 
-## Perimetre exact traite
+## Périmètre exact traité
 
-INFORMATION NON FOURNIE - A CONFIRMER
+- Réorganisation documentaire uniquement.
+- Aucun code applicatif modifié.
+- Aucun patch code produit.
+- Conservation des livrables UI/UX validés.
+- Rattachement au dossier standard `docs/2-sessions/1-ALPHA/BLOC_A21/`.
 
-## Resultat synthetique de session
+## Résultat synthétique de session
 
-INFORMATION NON FOURNIE - A CONFIRMER
+```text
+RÉORGANISATION DOCUMENTAIRE APPLIQUÉE — CLÔTURE CODE NON RÉALISÉE
+PATCH CODE REQUIS : NON
+```
 
-## Dossiers lies
+## Livrables rattachés
+
+```text
+CONFIRMATION_LOGIN_V1.1_VALIDÉ.md
+FUSION_DOCUMENTAIRE_3-UI_UX-ALPHA_LOGIN_V1.1.md
+PATCH_DOCUMENTAIRE_MINIMAL_3-UI_UX-ALPHA.md
+```
+
+## Dossiers liés
 
 - Session : docs/2-sessions/1-ALPHA/BLOC_A21/SESSION-20260425-09_A21_CLOTURE_A21
 - PATCH   : docs/2-sessions/1-ALPHA/BLOC_A21/SESSION-20260425-09_A21_CLOTURE_A21/PATCH

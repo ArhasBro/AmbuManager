@@ -1,12 +1,24 @@
-﻿# RESULTATS
+# RÉSULTATS
 
-## RÃ©sultats obtenus
+## Décision
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+```text
+NO_PATCH
+```
 
----
+## Résultat
 
-## Documents modifiÃ©s
+```text
+VALIDÉ DOCUMENTAIREMENT
+```
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+## Livrables documentaires rattachés
 
+```text
+DESIGN_SYSTEM_UI_UX_ALPHA.md
+README.md
+```
+
+## Précision
+
+Cette session est documentaire. Elle ne constitue pas une intégration code de la nouvelle UI/UX.

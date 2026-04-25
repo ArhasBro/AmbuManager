@@ -1,10 +1,28 @@
-﻿# EVIDENCES
+# EVIDENCES
 
-Ã‰lÃ©ments factuels utilisÃ©s pendant la session.
+## Source documentaire transférée
 
----
+Ancienne source :
 
-## Sources utilisÃ©es
+```text
+docs/2-sessions/3-UI_UX-ALPHA/
+```
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+Nouvelle destination :
 
+```text
+docs/2-sessions/1-ALPHA/BLOC_A21/SESSION-20260425-07_A21_UX-07/
+```
+
+## Fichiers rattachés
+
+```text
+A21-UX-07_CLOTURE_DOCUMENTAIRE_UI_UX.md
+```
+
+## Code
+
+```text
+PATCH CODE REQUIS : NON
+VALIDATION TERMINALE : NON APPLICABLE
+```

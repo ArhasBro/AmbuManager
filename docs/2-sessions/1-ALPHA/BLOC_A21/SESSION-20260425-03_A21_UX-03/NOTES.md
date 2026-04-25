@@ -1,10 +1,13 @@
-﻿# NOTES
+# NOTES
 
-Notes de travail de la session.
+## Note documentaire
 
----
+Cette session sert à rattacher le travail UI/UX validé au bloc A21 dans la structure standard des sessions ALPHA.
 
-## MÃ©thode / observations
+Elle ne doit pas être confondue avec une intégration applicative réelle.
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+## À retenir
 
+- Validation documentaire / visuelle : oui.
+- Intégration code : non.
+- Patch code : non.
