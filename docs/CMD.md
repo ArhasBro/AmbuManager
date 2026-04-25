@@ -280,8 +280,8 @@ IMPORTANT
 
 Références des sessions :
 
-- SESSION-20260425-10_A22_UIINT-01
-- **A22-UIINT-01 — CORRECTION+COMPLÉTION** — Shell structurel : sidebar, topbar et zone main. Livrable attendu : shell appliqué sur les pages connectées. DoD : shell stable, responsive de base, navigation non régressive.
+- SESSION-20260425-12_A22_UIINT-03
+- **A22-UIINT-03 — CORRECTION+COMPLÉTION** — Socle composants UI communs : `PageHeader`, `ActionButton`, `StatusBadge`, `EmptyState`, `ErrorMessage`. Livrable attendu : socle UI mutualisé. DoD : composants réutilisables sans impact métier.
 
 ------------------------------------
 
@@ -308,9 +308,9 @@ Unblock-File -Path .\create_session.ps1
 
 
 
-- **A22-UIINT-02 — CORRECTION+COMPLÉTION** — Navigation complète permissions : entrées de navigation, états actifs et affichage selon permissions. Livrable attendu : navigation complète et cohérente. DoD : aucun lien mort, affichage conforme aux permissions.
 
-- **A22-UIINT-03 — CORRECTION+COMPLÉTION** — Socle composants UI communs : `PageHeader`, `ActionButton`, `StatusBadge`, `EmptyState`, `ErrorMessage`. Livrable attendu : socle UI mutualisé. DoD : composants réutilisables sans impact métier.
+
+
 
 - **A22-UIINT-04 — CORRECTION+COMPLÉTION** — Tables / filtres / cartes statistiques : `DataTable`, `FilterBar`, `StatCard`. Livrable attendu : surfaces data homogènes. DoD : états loading / empty / error couverts.
 

@@ -56,18 +56,8 @@ async function getAppShellData(): Promise<{ navLinks: AppShellNavLink[]; context
   }
 
   const navLinks: AppShellNavLink[] = [{ href: "/dashboard", label: "Dashboard" }];
-
-  if (!user.companyId) {
-    return {
-      navLinks,
-      context: {
-        companyLabel: "Societe non rattachee",
-        userLabel: user.name ?? user.email ?? "Utilisateur",
-        roleLabel: getRoleLabel(user.role, user.platformRole),
-        canLogout: true,
-      },
-    };
-  }
+  const companyScopedSession = Boolean(user.companyId);
+  const supportActor = user.platformRole === "SUPPORT";
 
   const companyProfileAllowed = canManageCompanyProfile(user.role);
 
@@ -88,23 +78,25 @@ async function getAppShellData(): Promise<{ navLinks: AppShellNavLink[]; context
     canManageTemplates(user.id, user.role, user.platformRole),
     canManageCompanyRules(user.id, user.role, user.platformRole),
     canViewAudit(user.id, user.role, user.platformRole),
-    prisma.company.findUnique({
-      where: { id: user.companyId },
-      select: { name: true },
-    }),
+    user.companyId
+      ? prisma.company.findUnique({
+          where: { id: user.companyId },
+          select: { name: true },
+        })
+      : Promise.resolve(null),
   ]);
 
-  if (planningSelfAllowed || planningGlobalAllowed) navLinks.push({ href: "/planning", label: "Planning" });
-  if (usersAllowed) navLinks.push({ href: "/users", label: "Utilisateurs" });
-  if (vehiclesAllowed) navLinks.push({ href: "/vehicles", label: "Vehicules" });
-  if (templatesAllowed) navLinks.push({ href: "/templates", label: "Templates" });
-  if (companyProfileAllowed || companyRulesAllowed) navLinks.push({ href: "/company", label: "Societe" });
-  if (companyProfileAllowed) navLinks.push({ href: "/depots", label: "Depots" });
-  if (companyProfileAllowed) navLinks.push({ href: "/onboarding", label: "Onboarding" });
-  if (auditAllowed) navLinks.push({ href: "/audit", label: "Audit" });
+  if (companyScopedSession && (planningSelfAllowed || planningGlobalAllowed)) navLinks.push({ href: "/planning", label: "Planning" });
+  if (companyScopedSession && usersAllowed) navLinks.push({ href: "/users", label: "Utilisateurs" });
+  if (companyScopedSession && vehiclesAllowed) navLinks.push({ href: "/vehicles", label: "Vehicules" });
+  if (companyScopedSession && templatesAllowed) navLinks.push({ href: "/templates", label: "Templates" });
+  if (companyScopedSession && (companyProfileAllowed || companyRulesAllowed)) navLinks.push({ href: "/company", label: "Societe" });
+  if (companyScopedSession && companyProfileAllowed) navLinks.push({ href: "/depots", label: "Depots" });
+  if (companyScopedSession && companyProfileAllowed) navLinks.push({ href: "/onboarding", label: "Onboarding" });
+  if ((companyScopedSession || supportActor) && auditAllowed) navLinks.push({ href: "/audit", label: "Audit" });
 
   const context: AppShellContext = {
-    companyLabel: company?.name ?? "Societe courante",
+    companyLabel: company?.name ?? (companyScopedSession ? "Societe courante" : "Societe non rattachee"),
     userLabel: user.name ?? user.email ?? "Utilisateur",
     roleLabel: getRoleLabel(user.role, user.platformRole),
     canLogout: true,

@@ -35,10 +35,16 @@ export default function AppShell({
 }) {
   const pathname = usePathname();
 
-  const activePrefix = useMemo(() => {
+  const activeHref = useMemo(() => {
     if (!pathname) return "";
-    const match = navLinks.find((link) => pathname === link.href || pathname.startsWith(`${link.href}/`));
-    return match?.href ?? "";
+
+    const matches = navLinks
+      .filter((link) => pathname === link.href || pathname.startsWith(`${link.href}/`))
+      .map((link) => link.href);
+
+    if (matches.length === 0) return "";
+
+    return matches.reduce((best, current) => (current.length > best.length ? current : best), matches[0]);
   }, [navLinks, pathname]);
 
   if (isPublicRoute(pathname)) {
@@ -56,13 +62,14 @@ export default function AppShell({
         <nav className="app-shell__nav" aria-label="Navigation des modules">
           {navLinks.length > 0 ? (
             navLinks.map((link) => {
-              const isActive = activePrefix === link.href;
+              const isActive = activeHref === link.href;
 
               return (
                 <Link
                   key={link.href}
                   href={link.href}
                   className={`app-shell__nav-link${isActive ? " is-active" : ""}`}
+                  aria-current={isActive ? "page" : undefined}
                 >
                   {link.label}
                 </Link>
