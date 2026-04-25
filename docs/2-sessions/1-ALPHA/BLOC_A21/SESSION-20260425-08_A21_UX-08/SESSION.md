@@ -1,4 +1,4 @@
-# SESSION
+﻿# SESSION
 
 ## ID SESSION
 
@@ -12,37 +12,40 @@ SESSION-20260425-08_A21_UX-08
 
 Projet : Investissement  
 Sous-projet : Ambulance Manager  
-Maturité : 1-ALPHA  
-Bloc : A21 — UI / UX / Navigation  
-Type : PREPARATION_INTEGRATION_CODE  
-Intitulé : Préparation de l’intégration progressive de la nouvelle UI/UX dans le code existant
+Maturite : 1-ALPHA  
+Bloc : A21 - UI / UX / Navigation  
+Type : PREPARATION / AUDIT DOCUMENTAIRE PRE-INTEGRATION  
+Intitule : UX-08 - PREPARATION INTEGRATION CODE
 
-## Objectif de la session
+## Objectif unique de la session
 
-Rattacher au bloc A21 le livrable documentaire UI/UX correspondant, initialement produit dans le dossier séparé `docs/2-sessions/3-UI_UX-ALPHA/`.
+Preparer l'integration progressive de la reference UI/UX validee (UX-06 + UX-07) dans le frontend existant, sans modification applicative immediate.
 
-## Périmètre exact traité
-
-- Réorganisation documentaire uniquement.
-- Aucun code applicatif modifié.
-- Aucun patch code produit.
-- Conservation des livrables UI/UX validés.
-- Rattachement au dossier standard `docs/2-sessions/1-ALPHA/BLOC_A21/`.
-
-## Résultat synthétique de session
+## Decision de session
 
 ```text
-À LANCER — NON TRAITÉ DANS CE TRANSFERT
-PATCH CODE REQUIS : NON
+NO_PATCH
 ```
 
-## Livrables rattachés
+## Perimetre reellement traite
 
-```text
-Aucun livrable transféré depuis l'ancien dossier UI/UX.
-```
+1. Relecture du noyau documentaire obligatoire.
+2. Relecture des documents A21 strictement utiles.
+3. Inspection ciblee du frontend existant (layout, navigation, pages et clients UI).
+4. Identification des ecarts entre l'existant et la reference UI/UX validee.
+5. Proposition d'un plan d'integration progressif pour la suite, sans codage dans UX-08.
 
-## Dossiers liés
+## Limites volontaires
 
-- Session : docs/2-sessions/1-ALPHA/BLOC_A21/SESSION-20260425-08_A21_UX-08
-- PATCH   : docs/2-sessions/1-ALPHA/BLOC_A21/SESSION-20260425-08_A21_UX-08/PATCH
+- Aucun code applicatif modifie.
+- Aucune modification Prisma.
+- Aucune modification API.
+- Aucune modification logique metier.
+- Aucun patch code.
+- Aucune validation terminale build/lint relancee (non necessaire pour cette session preparatoire).
+
+## Suite methodologique
+
+- UX-08 reste une session preparatoire documentaire du bloc A21.
+- La session attendue immediatement apres UX-08 est la cloture explicite du bloc A21.
+- Toute integration code UI/UX devra etre preparee dans un bloc distinct A22, uniquement apres cloture explicite de A21.

@@ -1,6 +1,6 @@
-# NO_PATCH
+﻿# NO_PATCH
 
-## Décision
+## Decision
 
 ```text
 NO_PATCH
@@ -8,7 +8,11 @@ NO_PATCH
 
 ## Motif
 
-Session documentaire uniquement. Aucun code applicatif modifié.
+Session preparatoire UI/UX uniquement.
+
+Aucun code applicatif modifie.
+
+Aucun patch code produit.
 
 ## Validation terminale
 

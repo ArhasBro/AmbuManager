@@ -3905,6 +3905,7 @@ C:.
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
+|   |   |   |   |           LIVRABLES__SESSION-20260425-08_A21_UX-08_A_PLAT.zip
 |   |   |   |   |           NO_PATCH.md
 |   |   |   |   |           
 |   |   |   |   \---SESSION-20260425-09_A21_CLOTURE_A21
