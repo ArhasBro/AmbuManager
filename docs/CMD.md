@@ -280,8 +280,8 @@ IMPORTANT
 
 Références des sessions :
 
-- SESSION-20260425-14_A22_UIINT-05
-- **A22-UIINT-05 — CORRECTION+COMPLÉTION** — Dashboard : intégration de l’UI dashboard alignée sur la référence A21. Livrable attendu : dashboard harmonisé. DoD : parcours dashboard lisible et cohérent.
+- SESSION-20260425-15_A22_UIINT-06
+- **A22-UIINT-06 — CORRECTION+COMPLÉTION** — Planning : harmonisation UI du planning uniquement. Livrable attendu : planning harmonisé. DoD : lisibilité métier conservée, sans régression fonctionnelle.
 
 ------------------------------------
 
@@ -308,7 +308,7 @@ Unblock-File -Path .\create_session.ps1
 
 
 
-- **A22-UIINT-06 — CORRECTION+COMPLÉTION** — Planning : harmonisation UI du planning uniquement. Livrable attendu : planning harmonisé. DoD : lisibilité métier conservée, sans régression fonctionnelle.
+
 
 - **A22-UIINT-07 — CORRECTION+COMPLÉTION** — Users : harmonisation UI du module utilisateurs / RH. Livrable attendu : écrans users harmonisés. DoD : formulaires et listes users cohérents.
 

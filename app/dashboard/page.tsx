@@ -10,23 +10,32 @@ import {
   canManageTemplates,
   canManageUsers,
   canManageVehicles,
+  canViewAudit,
   canViewGlobalPlanning,
   canViewSelfPlanning,
 } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
-import { EmptyState, PageHeader, StatCard, StatusBadge } from "@/app/ui";
+import { EmptyState, PageHeader, StatCard, StatusBadge, type StatusBadgeVariant } from "@/app/ui";
 
 import LogoutButton from "./logout-button";
+
+type DashboardCardTone = "blue" | "teal" | "violet" | "amber" | "slate";
 
 type DashboardLink = {
   href: string;
   title: string;
   description: string;
+  iconLabel: string;
+  tone: DashboardCardTone;
+  statusLabel: string;
+  statusVariant: StatusBadgeVariant;
 };
 
 type DashboardMetric = {
   label: string;
   value: number;
+  hint: string;
+  tone: "neutral" | "info" | "success" | "warning";
 };
 
 const ROLE_LABELS: Record<string, string> = {
@@ -45,25 +54,33 @@ function getProfileLabel(role?: string | null, platformRole?: string | null): st
   return ROLE_LABELS[role] ?? role;
 }
 
-function SectionCard({ title, description, href }: DashboardLink) {
+function SectionCard({
+  title,
+  description,
+  href,
+  iconLabel,
+  tone,
+  statusLabel,
+  statusVariant,
+}: DashboardLink) {
   return (
-    <Link
-      href={href}
-      style={{
-        display: "grid",
-        gap: 8,
-        padding: 16,
-        border: "1px solid var(--ui-border)",
-        borderRadius: 12,
-        color: "inherit",
-        textDecoration: "none",
-        background: "var(--ui-surface)",
-        minHeight: 112,
-      }}
-    >
-      <strong style={{ fontSize: 16 }}>{title}</strong>
-      <span style={{ opacity: 0.82, lineHeight: 1.45 }}>{description}</span>
-      <span style={{ fontWeight: 600 }}>Ouvrir</span>
+    <Link href={href} className="dashboard-link-card">
+      <div className="dashboard-link-card__head">
+        <span className={`dashboard-link-card__icon dashboard-link-card__icon--${tone}`} aria-hidden="true">
+          {iconLabel}
+        </span>
+        <div className="dashboard-link-card__copy">
+          <strong className="dashboard-link-card__title">{title}</strong>
+          <span className="dashboard-link-card__description">{description}</span>
+        </div>
+      </div>
+
+      <StatusBadge variant={statusVariant}>{statusLabel}</StatusBadge>
+
+      <span className="dashboard-link-card__action">
+        Ouvrir
+        <span aria-hidden="true">{" >"}</span>
+      </span>
     </Link>
   );
 }
@@ -86,6 +103,7 @@ export default async function DashboardPage() {
     vehiclesAllowed,
     templatesAllowed,
     companyRulesAllowed,
+    auditAllowed,
   ] = await Promise.all([
     canAccessAdminDashboard(user.id, user.role, user.platformRole),
     canAccessTerrainDashboard(user.id, user.role, user.platformRole),
@@ -95,9 +113,11 @@ export default async function DashboardPage() {
     canManageVehicles(user.id, user.role, user.platformRole),
     canManageTemplates(user.id, user.role, user.platformRole),
     canManageCompanyRules(user.id, user.role, user.platformRole),
+    canViewAudit(user.id, user.role, user.platformRole),
   ]);
 
   const companyId = user.companyId ?? null;
+  const supportActor = user.platformRole === "SUPPORT";
   const companyProfileAllowed = user.role === "ADMIN" || user.role === "GERANT";
   const depotsAllowed = companyProfileAllowed;
   const companyScopedSession = Boolean(companyId);
@@ -138,10 +158,30 @@ export default async function DashboardPage() {
 
   const metrics: DashboardMetric[] = nativeAdminMetricsAllowed
     ? [
-        { label: "Utilisateurs actifs", value: activeUsersCount },
-        { label: "Vehicules actifs", value: activeVehiclesCount },
-        { label: "Depots actifs", value: activeDepotsCount },
-        { label: "Templates actifs", value: activeTemplatesCount },
+        {
+          label: "Utilisateurs actifs",
+          value: activeUsersCount,
+          hint: "Comptes en activite",
+          tone: "info",
+        },
+        {
+          label: "Vehicules actifs",
+          value: activeVehiclesCount,
+          hint: "Flotte operationnelle",
+          tone: "success",
+        },
+        {
+          label: "Depots actifs",
+          value: activeDepotsCount,
+          hint: "Bases en service",
+          tone: "neutral",
+        },
+        {
+          label: "Templates actifs",
+          value: activeTemplatesCount,
+          hint: "Modeles disponibles",
+          tone: "warning",
+        },
       ]
     : [];
 
@@ -149,10 +189,14 @@ export default async function DashboardPage() {
     ? [
         {
           href: "/planning",
-          title: planningGlobalAllowed ? "Planning global" : "Mon planning",
+          title: planningGlobalAllowed ? "Planning" : "Mon planning",
           description: planningGlobalAllowed
             ? "Consulter le planning de la societe selon vos droits reels."
             : "Acceder a votre planning sans exposer les modules d'administration.",
+          iconLabel: "PL",
+          tone: "blue",
+          statusLabel: "Disponible",
+          statusVariant: "success",
         },
       ]
     : [];
@@ -166,14 +210,22 @@ export default async function DashboardPage() {
       description: companyProfileAllowed
         ? "Profil societe et regles metier de la societe courante."
         : "Acces aux regles metier deleguees sur la societe courante.",
+      iconLabel: "SO",
+      tone: "slate",
+      statusLabel: companyProfileAllowed ? "Disponible" : "Selon permissions",
+      statusVariant: companyProfileAllowed ? "success" : "warning",
     });
   }
 
   if (companyScopedSession && companyProfileAllowed) {
     adminLinks.push({
       href: "/onboarding",
-      title: "Onboarding societe pilote",
+      title: "Onboarding",
       description: "Parcours manuel guide et imports initiaux simples pour demarrer.",
+      iconLabel: "ON",
+      tone: "violet",
+      statusLabel: "Disponible",
+      statusVariant: "success",
     });
   }
 
@@ -182,6 +234,10 @@ export default async function DashboardPage() {
       href: "/depots",
       title: "Bases / depots",
       description: "Gerer les depots actifs de la societe courante.",
+      iconLabel: "DP",
+      tone: "violet",
+      statusLabel: "Disponible",
+      statusVariant: "success",
     });
   }
 
@@ -190,6 +246,10 @@ export default async function DashboardPage() {
       href: "/users",
       title: "Utilisateurs",
       description: "Creer, modifier, archiver et administrer les comptes de la societe.",
+      iconLabel: "US",
+      tone: "blue",
+      statusLabel: "Disponible",
+      statusVariant: "success",
     });
   }
 
@@ -198,6 +258,10 @@ export default async function DashboardPage() {
       href: "/vehicles",
       title: "Vehicules",
       description: "Consulter et gerer la flotte reellement autorisee.",
+      iconLabel: "VH",
+      tone: "teal",
+      statusLabel: "Disponible",
+      statusVariant: "success",
     });
   }
 
@@ -206,55 +270,75 @@ export default async function DashboardPage() {
       href: "/templates",
       title: "Templates",
       description: "Gerer les templates de shifts disponibles dans le depot.",
+      iconLabel: "TP",
+      tone: "amber",
+      statusLabel: "Disponible",
+      statusVariant: "success",
+    });
+  }
+
+  if ((companyScopedSession || supportActor) && auditAllowed) {
+    adminLinks.push({
+      href: "/audit",
+      title: "Audit",
+      description: "Consulter les evenements de securite, support et modifications recentes.",
+      iconLabel: "AU",
+      tone: "slate",
+      statusLabel: "Disponible",
+      statusVariant: "success",
     });
   }
 
   const showTerrainSection = terrainDashboardAllowed || terrainLinks.length > 0;
-  const showAdminSection = adminDashboardAllowed;
+  const showAdminSection = adminDashboardAllowed || adminLinks.length > 0;
+  const visibleModuleCount = terrainLinks.length + adminLinks.length;
 
   return (
     <div className="page-wrap">
       <PageHeader
-        title="Portail d'accueil"
-        description="Vue metier des acces modules filtres par role et permissions."
+        title="Tableau de bord"
+        description="Portail d'acces aux modules de gestion de votre societe ambulanciere."
         actions={<LogoutButton />}
       />
 
-      <section className="panel" style={{ display: "grid", gap: 8 }}>
-        <strong>Bienvenue {user.name ?? user.email ?? "Utilisateur"}</strong>
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+      <section className="panel dashboard-welcome">
+        <h2 className="dashboard-welcome__title">
+          Connecte en tant que {user.name ?? user.email ?? "Utilisateur"}
+        </h2>
+        <div className="dashboard-welcome__badges">
           <StatusBadge variant="info">
             Profil : {getProfileLabel(user.role, user.platformRole)}
           </StatusBadge>
           <StatusBadge variant={companyScopedSession ? "success" : "warning"}>
             Societe : {companyScopedSession ? "rattachee" : "non rattachee"}
           </StatusBadge>
+          <StatusBadge variant="neutral">Modules visibles : {visibleModuleCount}</StatusBadge>
         </div>
-        <p style={{ margin: 0, opacity: 0.82 }}>
+        <p className="dashboard-welcome__note">
           Les liens ci-dessous sont filtres pour eviter les entrees qui ne debouchent pas sur un acces reel.
         </p>
       </section>
 
       {!companyScopedSession ? (
-        <section className="panel status-warning" style={{ display: "grid", gap: 8 }}>
+        <section className="panel status-warning dashboard-warning">
           <strong>Compte sans societe courante</strong>
-          <p style={{ margin: 0, opacity: 0.85 }}>
+          <p>
             La session n&apos;est pas rattachee a une societe cliente. Les modules societe restent masques.
           </p>
         </section>
       ) : null}
 
       {showTerrainSection ? (
-        <section className="panel" style={{ display: "grid", gap: 12 }}>
-          <div>
-            <h2 style={{ margin: 0 }}>Vue terrain</h2>
-            <p style={{ margin: "8px 0 0 0", opacity: 0.82 }}>
+        <section className="panel dashboard-section">
+          <header className="dashboard-section__head">
+            <h2 className="dashboard-section__title">Acces terrain</h2>
+            <p className="dashboard-section__description">
               Orientation vers les acces operationnels sans exposition des modules d&apos;administration.
             </p>
-          </div>
+          </header>
 
           {terrainLinks.length > 0 ? (
-            <div style={{ display: "grid", gap: 12, gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))" }}>
+            <div className="dashboard-card-grid">
               {terrainLinks.map((link) => (
                 <SectionCard key={link.href} {...link} />
               ))}
@@ -269,29 +353,30 @@ export default async function DashboardPage() {
       ) : null}
 
       {showAdminSection ? (
-        <section className="panel" style={{ display: "grid", gap: 12 }}>
-          <div>
-            <h2 style={{ margin: 0 }}>Vue admin / gerance</h2>
-            <p style={{ margin: "8px 0 0 0", opacity: 0.82 }}>
+        <section className="panel dashboard-section">
+          <header className="dashboard-section__head">
+            <h2 className="dashboard-section__title">Acces administration</h2>
+            <p className="dashboard-section__description">
               Distribution des acces administratifs selon les permissions reellement consommees.
             </p>
-          </div>
+          </header>
 
           {metrics.length > 0 ? (
-            <div style={{ display: "grid", gap: 12, gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))" }}>
+            <div className="dashboard-metrics-grid">
               {metrics.map((metric) => (
                 <StatCard
                   key={metric.label}
                   title={metric.label}
                   value={metric.value}
-                  hint="Elements actifs"
+                  hint={metric.hint}
+                  tone={metric.tone}
                 />
               ))}
             </div>
           ) : null}
 
           {adminLinks.length > 0 ? (
-            <div style={{ display: "grid", gap: 12, gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))" }}>
+            <div className="dashboard-card-grid">
               {adminLinks.map((link) => (
                 <SectionCard key={link.href} {...link} />
               ))}
@@ -313,9 +398,9 @@ export default async function DashboardPage() {
       ) : null}
 
       {process.env.NODE_ENV !== "production" ? (
-        <div className="panel-soft">
-          <h2 style={{ marginTop: 0 }}>Session (debug)</h2>
-          <pre style={{ margin: 0, whiteSpace: "pre-wrap" }}>{JSON.stringify(session, null, 2)}</pre>
+        <div className="panel-soft dashboard-debug">
+          <h2 className="dashboard-debug__title">Session (debug)</h2>
+          <pre className="dashboard-debug__payload">{JSON.stringify(session, null, 2)}</pre>
         </div>
       ) : null}
     </div>

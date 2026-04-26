@@ -1,14 +1,20 @@
-﻿# FIN_SESSION
+# FIN_SESSION
 
-## ClÃ´ture
+## Cloture
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+Session executee en mode CORRECTION+COMPLETION avec patch principal unique limite au dashboard et a ses styles associes.
 
 ## Validation
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+- Application stricte du patch principal : OK (`git apply --check`).
+- Application du patch principal : OK (`git apply`).
+- `npm.cmd run lint` : OK.
+- `npm.cmd run build` : OK.
+
+## DoD
+
+- Parcours dashboard lisible et coherent : OUI.
 
 ## Verdict final
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
-
+SESSION-20260425-14_A22_UIINT-05 : VALIDEE (PATCH)
