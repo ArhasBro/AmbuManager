@@ -14,7 +14,7 @@ import {
   canViewSelfPlanning,
 } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
-import { EmptyState, PageHeader, StatusBadge } from "@/app/ui";
+import { EmptyState, PageHeader, StatCard, StatusBadge } from "@/app/ui";
 
 import LogoutButton from "./logout-button";
 
@@ -280,17 +280,12 @@ export default async function DashboardPage() {
           {metrics.length > 0 ? (
             <div style={{ display: "grid", gap: 12, gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))" }}>
               {metrics.map((metric) => (
-                <div
+                <StatCard
                   key={metric.label}
-                  className="panel-soft"
-                  style={{
-                    display: "grid",
-                    gap: 6,
-                  }}
-                >
-                  <span style={{ opacity: 0.78 }}>{metric.label}</span>
-                  <strong style={{ fontSize: 28, lineHeight: 1 }}>{metric.value}</strong>
-                </div>
+                  title={metric.label}
+                  value={metric.value}
+                  hint="Elements actifs"
+                />
               ))}
             </div>
           ) : null}

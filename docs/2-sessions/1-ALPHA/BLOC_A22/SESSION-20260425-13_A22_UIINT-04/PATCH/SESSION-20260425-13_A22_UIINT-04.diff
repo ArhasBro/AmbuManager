@@ -1,0 +1,232 @@
+diff --git a/app/ui/data-table.tsx b/app/ui/data-table.tsx
+new file mode 100644
+index 0000000..0550d2d
+--- /dev/null
++++ b/app/ui/data-table.tsx
+@@ -0,0 +1,137 @@
++import { type ReactNode } from "react";
++
++import EmptyState from "./empty-state";
++import ErrorMessage from "./error-message";
++
++type Align = "left" | "center" | "right";
++
++export type DataTableColumn<T> = {
++  key: string;
++  header: ReactNode;
++  render: (row: T) => ReactNode;
++  align?: Align;
++  width?: string;
++  className?: string;
++};
++
++type DataTableProps<T> = {
++  columns: DataTableColumn<T>[];
++  rows: T[];
++  rowKey: (row: T) => string;
++  loading?: boolean;
++  error?: string | null;
++  loadingLabel?: string;
++  emptyTitle?: string;
++  emptyMessage?: string;
++  selectedRowKey?: string | null;
++  onRowClick?: (row: T) => void;
++  minWidth?: number;
++  caption?: string;
++  className?: string;
++};
++
++const ALIGN_CLASS: Record<Align, string> = {
++  left: "ui-data-table__cell--left",
++  center: "ui-data-table__cell--center",
++  right: "ui-data-table__cell--right",
++};
++
++export default function DataTable<T>({
++  columns,
++  rows,
++  rowKey,
++  loading = false,
++  error = null,
++  loadingLabel = "Chargement des donnees...",
++  emptyTitle = "Aucune donnee",
++  emptyMessage = "Aucun element n'est disponible pour cette vue.",
++  selectedRowKey = null,
++  onRowClick,
++  minWidth = 720,
++  caption,
++  className,
++}: DataTableProps<T>) {
++  const classes = ["ui-data-table", className].filter(Boolean).join(" ");
++
++  if (loading) {
++    return (
++      <section className={classes}>
++        <div className="ui-data-table__state ui-data-table__state--loading" role="status" aria-live="polite">
++          {loadingLabel}
++        </div>
++      </section>
++    );
++  }
++
++  if (error) {
++    return (
++      <section className={classes}>
++        <ErrorMessage
++          className="ui-data-table__error"
++          title="Impossible de charger la table"
++          message={error}
++        />
++      </section>
++    );
++  }
++
++  if (rows.length === 0) {
++    return (
++      <section className={classes}>
++        <EmptyState title={emptyTitle} message={emptyMessage} />
++      </section>
++    );
++  }
++
++  return (
++    <section className={classes}>
++      <div className="ui-data-table__container">
++        <table className="ui-data-table__table" style={{ minWidth }}>
++          {caption ? <caption className="ui-data-table__caption">{caption}</caption> : null}
++          <thead>
++            <tr className="ui-data-table__header-row">
++              {columns.map((column) => {
++                const alignment = ALIGN_CLASS[column.align ?? "left"];
++                const cellClasses = ["ui-data-table__head-cell", alignment, column.className].filter(Boolean).join(" ");
++
++                return (
++                  <th key={column.key} className={cellClasses} style={column.width ? { width: column.width } : undefined}>
++                    {column.header}
++                  </th>
++                );
++              })}
++            </tr>
++          </thead>
++          <tbody>
++            {rows.map((row) => {
++              const key = rowKey(row);
++              const isSelected = selectedRowKey !== null && selectedRowKey === key;
++              const isClickable = typeof onRowClick === "function";
++              const rowClasses = [
++                "ui-data-table__row",
++                isSelected ? "is-selected" : "",
++                isClickable ? "is-clickable" : "",
++              ]
++                .filter(Boolean)
++                .join(" ");
++
++              return (
++                <tr key={key} className={rowClasses} onClick={isClickable ? () => onRowClick(row) : undefined}>
++                  {columns.map((column) => {
++                    const alignment = ALIGN_CLASS[column.align ?? "left"];
++                    const cellClasses = ["ui-data-table__cell", alignment, column.className].filter(Boolean).join(" ");
++                    return (
++                      <td key={`${key}-${column.key}`} className={cellClasses}>
++                        {column.render(row)}
++                      </td>
++                    );
++                  })}
++                </tr>
++              );
++            })}
++          </tbody>
++        </table>
++      </div>
++    </section>
++  );
++}
+diff --git a/app/ui/filter-bar.tsx b/app/ui/filter-bar.tsx
+new file mode 100644
+index 0000000..2e94aa5
+--- /dev/null
++++ b/app/ui/filter-bar.tsx
+@@ -0,0 +1,24 @@
++import { type ReactNode } from "react";
++
++type FilterBarProps = {
++  children: ReactNode;
++  summary?: ReactNode;
++  actions?: ReactNode;
++  className?: string;
++};
++
++export default function FilterBar({ children, summary, actions, className }: FilterBarProps) {
++  const classes = ["ui-filter-bar", className].filter(Boolean).join(" ");
++
++  return (
++    <section className={classes}>
++      {summary || actions ? (
++        <div className="ui-filter-bar__meta">
++          <div className="ui-filter-bar__summary">{summary}</div>
++          {actions ? <div className="ui-filter-bar__actions">{actions}</div> : null}
++        </div>
++      ) : null}
++      <div className="ui-filter-bar__controls">{children}</div>
++    </section>
++  );
++}
+diff --git a/app/ui/index.ts b/app/ui/index.ts
+index e0651cb..734d46a 100644
+--- a/app/ui/index.ts
++++ b/app/ui/index.ts
+@@ -1,7 +1,11 @@
+ export { default as ActionButton } from "./action-button";
++export { default as DataTable } from "./data-table";
+ export { default as EmptyState } from "./empty-state";
+ export { default as ErrorMessage } from "./error-message";
++export { default as FilterBar } from "./filter-bar";
+ export { default as PageHeader } from "./page-header";
++export { default as StatCard } from "./stat-card";
+ export { default as StatusBadge } from "./status-badge";
+ export type { ActionButtonSize, ActionButtonVariant } from "./action-button";
++export type { DataTableColumn } from "./data-table";
+ export type { StatusBadgeVariant } from "./status-badge";
+diff --git a/app/ui/stat-card.tsx b/app/ui/stat-card.tsx
+new file mode 100644
+index 0000000..ff4837b
+--- /dev/null
++++ b/app/ui/stat-card.tsx
+@@ -0,0 +1,37 @@
++import { type ReactNode } from "react";
++
++type StatCardTone = "neutral" | "info" | "success" | "warning" | "danger";
++
++type StatCardProps = {
++  title: string;
++  value: ReactNode;
++  hint?: ReactNode;
++  tone?: StatCardTone;
++  className?: string;
++};
++
++const TONE_CLASS: Record<StatCardTone, string> = {
++  neutral: "ui-stat-card--neutral",
++  info: "ui-stat-card--info",
++  success: "ui-stat-card--success",
++  warning: "ui-stat-card--warning",
++  danger: "ui-stat-card--danger",
++};
++
++export default function StatCard({
++  title,
++  value,
++  hint,
++  tone = "neutral",
++  className,
++}: StatCardProps) {
++  const classes = ["ui-stat-card", TONE_CLASS[tone], className].filter(Boolean).join(" ");
++
++  return (
++    <article className={classes}>
++      <p className="ui-stat-card__title">{title}</p>
++      <strong className="ui-stat-card__value">{value}</strong>
++      {hint ? <p className="ui-stat-card__hint">{hint}</p> : null}
++    </article>
++  );
++}

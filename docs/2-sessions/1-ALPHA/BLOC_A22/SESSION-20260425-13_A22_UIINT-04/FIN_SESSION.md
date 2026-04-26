@@ -1,14 +1,16 @@
 ﻿# FIN_SESSION
 
-## ClÃ´ture
+## Cloture
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+Session A22-UIINT-04 cloturee en mode PATCH avec correctif minimal `FIX-01` suite au controle qualite.
 
 ## Validation
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+- `FIX-01` applique avec succes (`git apply --check` puis `git apply`).
+- `npm.cmd run lint` : OK.
+- `npm.cmd run build` : OK.
+- DoD valide (`loading / empty / error`).
 
 ## Verdict final
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
-
+SESSION-20260425-13_A22_UIINT-04 : VALIDEE (PATCH + FIX-01)

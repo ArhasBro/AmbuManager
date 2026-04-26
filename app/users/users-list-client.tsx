@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import { dailyScheduleLabel, depotLabel, USER_ROLE_OPTIONS, type UserListRow } from "./users-client-shared";
 import { USERS_REFRESH_EVENT, dispatchUsersSelection } from "./users-refresh";
+import { DataTable, FilterBar, type DataTableColumn } from "@/app/ui";
 
 type ApiOk<T> = {
   ok: true;
@@ -201,6 +202,64 @@ export default function UsersListClient() {
     () => rows.find((user) => user.id === selectedUserId) ?? null,
     [rows, selectedUserId],
   );
+  const columns = useMemo<DataTableColumn<UserListRow>[]>(() => ([
+    {
+      key: "name",
+      header: "Nom",
+      render: (user) => (
+        <>
+          <strong>{user.name}</strong>
+          {(user.firstName || user.lastName) ? (
+            <div style={{ fontSize: 12, opacity: 0.75 }}>
+              {[user.firstName, user.lastName].filter(Boolean).join(" ")}
+            </div>
+          ) : null}
+        </>
+      ),
+      width: "220px",
+    },
+    {
+      key: "initials",
+      header: "Initiales",
+      render: (user) => user.initials || "-",
+      width: "110px",
+    },
+    {
+      key: "email",
+      header: "Email",
+      render: (user) => user.email || "-",
+      width: "220px",
+    },
+    {
+      key: "phone",
+      header: "Telephone",
+      render: (user) => user.phone || "-",
+      width: "160px",
+    },
+    {
+      key: "role",
+      header: "Role",
+      render: (user) => user.role,
+      width: "140px",
+    },
+    {
+      key: "rh",
+      header: "RH",
+      render: (user) => (
+        <>
+          {user.isTrainee ? "Stagiaire" : "Titulaire"}
+          <div style={{ fontSize: 12, opacity: 0.75 }}>{dailyScheduleLabel(user)}</div>
+        </>
+      ),
+      width: "170px",
+    },
+    {
+      key: "depot",
+      header: "Base",
+      render: (user) => depotLabel(user.depot),
+      width: "160px",
+    },
+  ]), []);
 
   useEffect(() => {
     dispatchUsersSelection(selectedUser);
@@ -216,7 +275,9 @@ export default function UsersListClient() {
           </p>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "minmax(240px, 1fr) minmax(180px, 240px)", gap: 12 }}>
+        <FilterBar
+          summary={`Filtres actifs : ${search ? `recherche "${search}"` : "aucune recherche"}${role ? `, role ${role}` : ", tous les roles"}`}
+        >
           <label style={{ display: "grid", gap: 6 }}>
             <span>Recherche</span>
             <input
@@ -237,71 +298,25 @@ export default function UsersListClient() {
               ))}
             </select>
           </label>
-        </div>
+        </FilterBar>
 
-        {loading ? <div className="panel-soft">Chargement de la liste...</div> : null}
-
-        {!loading && error ? (
-          <div className="panel status-danger" style={{ padding: 12 }}>
-            Erreur de chargement : {error}
-          </div>
-        ) : null}
+        <DataTable
+          columns={columns}
+          rows={rows}
+          rowKey={(user) => user.id}
+          loading={loading}
+          error={error}
+          loadingLabel="Chargement de la liste utilisateurs..."
+          emptyTitle="Aucun utilisateur trouve"
+          emptyMessage="Aucun utilisateur ne correspond a ces criteres."
+          selectedRowKey={selectedUserId || null}
+          onRowClick={(user) => setSelectedUserId(user.id)}
+          minWidth={980}
+          caption="Liste des comptes actifs de la societe courante"
+        />
 
         {!loading && !error ? (
           <>
-            {rows.length === 0 ? (
-              <div className="panel-soft">
-                Aucun utilisateur trouve pour ces criteres.
-              </div>
-            ) : (
-              <div style={{ overflowX: "auto", border: "1px solid var(--ui-border)", borderRadius: 8 }}>
-                <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 980 }}>
-                  <thead>
-                    <tr>
-                      <th style={{ textAlign: "left", padding: 10, borderBottom: "1px solid var(--ui-border)" }}>Nom</th>
-                      <th style={{ textAlign: "left", padding: 10, borderBottom: "1px solid var(--ui-border)" }}>Initiales</th>
-                      <th style={{ textAlign: "left", padding: 10, borderBottom: "1px solid var(--ui-border)" }}>Email</th>
-                      <th style={{ textAlign: "left", padding: 10, borderBottom: "1px solid var(--ui-border)" }}>Telephone</th>
-                      <th style={{ textAlign: "left", padding: 10, borderBottom: "1px solid var(--ui-border)" }}>Role</th>
-                      <th style={{ textAlign: "left", padding: 10, borderBottom: "1px solid var(--ui-border)" }}>RH</th>
-                      <th style={{ textAlign: "left", padding: 10, borderBottom: "1px solid var(--ui-border)" }}>Base</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {rows.map((user) => {
-                      const isSelected = user.id === selectedUserId;
-
-                      return (
-                        <tr
-                          key={user.id}
-                          onClick={() => setSelectedUserId(user.id)}
-                          style={{ cursor: "pointer", background: isSelected ? "var(--ui-selected-row)" : "transparent" }}
-                        >
-                          <td style={{ padding: 10, borderBottom: "1px solid var(--ui-border)" }}>
-                            <strong>{user.name}</strong>
-                            {(user.firstName || user.lastName) ? (
-                              <div style={{ fontSize: 12, opacity: 0.75 }}>
-                                {[user.firstName, user.lastName].filter(Boolean).join(" ")}
-                              </div>
-                            ) : null}
-                          </td>
-                          <td style={{ padding: 10, borderBottom: "1px solid var(--ui-border)" }}>{user.initials || "-"}</td>
-                          <td style={{ padding: 10, borderBottom: "1px solid var(--ui-border)" }}>{user.email || "-"}</td>
-                          <td style={{ padding: 10, borderBottom: "1px solid var(--ui-border)" }}>{user.phone || "-"}</td>
-                          <td style={{ padding: 10, borderBottom: "1px solid var(--ui-border)" }}>{user.role}</td>
-                          <td style={{ padding: 10, borderBottom: "1px solid var(--ui-border)" }}>
-                            {user.isTrainee ? "Stagiaire" : "Titulaire"}
-                            <div style={{ fontSize: 12, opacity: 0.75 }}>{dailyScheduleLabel(user)}</div>
-                          </td>
-                          <td style={{ padding: 10, borderBottom: "1px solid var(--ui-border)" }}>{depotLabel(user.depot)}</td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            )}
-
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
               <div style={{ opacity: 0.8 }}>
                 {pagination.total} utilisateur{pagination.total > 1 ? "s" : ""} - page {pagination.page} / {pagination.totalPages}
