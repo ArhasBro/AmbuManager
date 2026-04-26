@@ -1,0 +1,1611 @@
+diff --git a/app/globals.css b/app/globals.css
+index 010c65b..f3b385a 100644
+--- a/app/globals.css
++++ b/app/globals.css
+@@ -770,6 +770,202 @@ pre {
+   padding: 16px;
+ }
+ 
++.users-section {
++  display: grid;
++  gap: 16px;
++}
++
++.users-card {
++  border: 1px solid var(--ui-border);
++  border-radius: 12px;
++  background: var(--ui-surface);
++  padding: 16px;
++  box-shadow: var(--ui-shadow);
++  display: grid;
++  gap: 12px;
++}
++
++.users-card--soft {
++  background: var(--ui-surface-soft);
++}
++
++.users-card__head {
++  display: grid;
++  gap: 8px;
++}
++
++.users-card__title {
++  margin: 0;
++  font-size: 20px;
++  color: #1e3a8a;
++}
++
++.users-card__description {
++  margin: 0;
++  color: var(--ui-text-muted);
++}
++
++.users-form {
++  display: grid;
++  gap: 12px;
++}
++
++.users-form-grid {
++  display: grid;
++  gap: 12px;
++  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
++}
++
++.users-form-grid--compact {
++  grid-template-columns: minmax(140px, 180px) minmax(220px, 1fr);
++}
++
++.users-form-grid--short {
++  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
++}
++
++.users-field {
++  display: grid;
++  gap: 6px;
++}
++
++.users-field__label {
++  font-size: 13px;
++  font-weight: 700;
++  color: var(--ui-text-muted);
++}
++
++.users-checkbox-group {
++  display: flex;
++  align-items: center;
++  gap: 16px;
++  flex-wrap: wrap;
++}
++
++.users-checkbox {
++  display: inline-flex;
++  align-items: center;
++  gap: 8px;
++}
++
++.users-fieldset {
++  display: grid;
++  gap: 10px;
++  border: 1px solid var(--ui-border);
++  border-radius: 12px;
++  padding: 12px;
++  background: var(--ui-surface-soft);
++}
++
++.users-fieldset > legend {
++  font-size: 13px;
++  font-weight: 700;
++  color: var(--ui-text-muted);
++  padding: 0 8px;
++}
++
++.users-permission-grid {
++  display: grid;
++  gap: 10px;
++  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
++}
++
++.users-permission-card {
++  display: grid;
++  gap: 4px;
++  border: 1px solid var(--ui-border);
++  border-radius: 10px;
++  background: var(--ui-surface);
++  padding: 10px;
++}
++
++.users-permission-card__head {
++  display: inline-flex;
++  align-items: center;
++  gap: 8px;
++}
++
++.users-help-text {
++  margin: 0;
++  font-size: 12px;
++  color: var(--ui-text-muted);
++}
++
++.users-selection-card {
++  border: 1px solid var(--ui-border);
++  border-radius: 10px;
++  background: var(--ui-surface-soft);
++  padding: 12px;
++  display: grid;
++  gap: 6px;
++}
++
++.users-alert {
++  border: 1px solid var(--ui-border);
++  border-radius: 10px;
++  padding: 10px 12px;
++}
++
++.users-alert--success {
++  border-color: var(--ui-success-border);
++  background: var(--ui-success-bg);
++  color: var(--ui-success-text);
++}
++
++.users-actions {
++  display: inline-flex;
++  align-items: center;
++  gap: 8px;
++  flex-wrap: wrap;
++}
++
++.users-table-cell-subtle {
++  font-size: 12px;
++  color: var(--ui-text-muted);
++}
++
++.users-inline-status {
++  display: inline-flex;
++  align-items: center;
++  gap: 6px;
++  flex-wrap: wrap;
++}
++
++.users-pagination {
++  display: flex;
++  justify-content: space-between;
++  align-items: center;
++  gap: 12px;
++  flex-wrap: wrap;
++}
++
++.users-absence-list {
++  display: grid;
++  gap: 12px;
++}
++
++.users-absence-item {
++  border: 1px solid var(--ui-border);
++  border-radius: 10px;
++  background: var(--ui-surface);
++  padding: 12px;
++  display: grid;
++  gap: 8px;
++}
++
++.users-absence-item__head {
++  display: flex;
++  justify-content: space-between;
++  align-items: flex-start;
++  gap: 12px;
++  flex-wrap: wrap;
++}
++
++.users-absence-item__meta {
++  font-size: 13px;
++  color: var(--ui-text-muted);
++}
++
+ .status-info {
+   border: 1px solid var(--ui-border);
+   background: var(--ui-surface-soft);
+diff --git a/app/users/reset-password-client.tsx b/app/users/reset-password-client.tsx
+index 427e463..5a512b1 100644
+--- a/app/users/reset-password-client.tsx
++++ b/app/users/reset-password-client.tsx
+@@ -2,6 +2,8 @@
+ 
+ import { useEffect, useMemo, useState, type FormEvent } from "react";
+ 
++import { ActionButton, EmptyState, ErrorMessage, StatusBadge } from "@/app/ui";
++
+ import { USERS_REFRESH_EVENT } from "./users-refresh";
+ 
+ type ApiOk<T> = {
+@@ -34,6 +36,12 @@ function isApiErr(value: unknown): value is ApiErr {
+   return typeof value === "object" && value !== null && "ok" in value && (value as { ok?: unknown }).ok === false;
+ }
+ 
++function roleStatusVariant(role: string): "neutral" | "info" | "warning" {
++  if (role === "ADMIN" || role === "GERANT") return "info";
++  if (role === "BUREAU" || role === "REGULATEUR") return "warning";
++  return "neutral";
++}
++
+ export default function ResetPasswordClient({ actorUserId }: Props) {
+   const [users, setUsers] = useState<UserLite[]>([]);
+   const [selectedUserId, setSelectedUserId] = useState("");
+@@ -121,7 +129,7 @@ export default function ResetPasswordClient({ actorUserId }: Props) {
+ 
+   const selectedUser = useMemo(
+     () => users.find((user) => user.id === selectedUserId) ?? null,
+-    [users, selectedUserId]
++    [users, selectedUserId],
+   );
+ 
+   async function onSubmit(event: FormEvent<HTMLFormElement>) {
+@@ -130,7 +138,7 @@ export default function ResetPasswordClient({ actorUserId }: Props) {
+     setSuccess(null);
+ 
+     if (!selectedUserId) {
+-      setError("Aucun utilisateur cible sélectionné.");
++      setError("Aucun utilisateur cible selectionne.");
+       return;
+     }
+ 
+@@ -152,7 +160,7 @@ export default function ResetPasswordClient({ actorUserId }: Props) {
+ 
+       setNewPassword("");
+       setConfirmPassword("");
+-      setSuccess(`Mot de passe réinitialisé pour ${selectedUser?.name ?? "l'utilisateur"}.`);
++      setSuccess(`Mot de passe reinitialise pour ${selectedUser?.name ?? "l'utilisateur"}.`);
+     } catch (e: unknown) {
+       setError(e instanceof Error ? e.message : "Unknown error");
+     } finally {
+@@ -161,81 +169,87 @@ export default function ResetPasswordClient({ actorUserId }: Props) {
+   }
+ 
+   return (
+-    <div style={{ display: "grid", gap: 16, maxWidth: 720 }}>
+-      <div style={{ padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
+-        <h2 style={{ marginTop: 0 }}>Cible</h2>
++    <section className="users-section">
++      <div className="users-card">
++        <div className="users-card__head">
++          <h2 className="users-card__title">Reinitialiser un mot de passe</h2>
++          <p className="users-card__description">
++            Le mot de passe est reinitialise pour un autre utilisateur de la societe courante.
++          </p>
++        </div>
+ 
+-        {loading ? <p style={{ marginBottom: 0 }}>Chargement des utilisateurs...</p> : null}
++        {loading ? <div className="users-selection-card">Chargement des utilisateurs...</div> : null}
+ 
+         {!loading && users.length === 0 ? (
+-          <p style={{ marginBottom: 0 }}>Aucun autre utilisateur de société administrable n&apos;est disponible pour un reset.</p>
++          <EmptyState
++            title="Aucun utilisateur cible disponible"
++            message="Aucun autre utilisateur administrable n'est disponible pour un reset."
++          />
+         ) : null}
+ 
+         {!loading && users.length > 0 ? (
+-          <div style={{ display: "grid", gap: 8 }}>
+-            <label style={{ display: "grid", gap: 6 }}>
+-              <span>Utilisateur</span>
++          <>
++            <label className="users-field">
++              <span className="users-field__label">Utilisateur</span>
+               <select value={selectedUserId} onChange={(e) => setSelectedUserId(e.target.value)}>
+                 {users.map((user) => (
+                   <option key={user.id} value={user.id}>
+-                    {user.name} — {user.role}
+-                    {user.email ? ` — ${user.email}` : ""}
++                    {user.name} - {user.role}
++                    {user.email ? ` - ${user.email}` : ""}
+                   </option>
+                 ))}
+               </select>
+             </label>
+ 
+             {selectedUser ? (
+-              <p style={{ margin: 0, opacity: 0.8 }}>
+-                Cible actuelle : <strong>{selectedUser.name}</strong>
+-                {selectedUser.email ? ` (${selectedUser.email})` : ""} — rôle {selectedUser.role}
+-              </p>
++              <div className="users-selection-card">
++                <span>
++                  <strong>{selectedUser.name}</strong>
++                  {selectedUser.email ? ` (${selectedUser.email})` : ""}
++                </span>
++                <div className="users-inline-status">
++                  <StatusBadge variant={roleStatusVariant(selectedUser.role)}>{selectedUser.role}</StatusBadge>
++                </div>
++              </div>
+             ) : null}
+-          </div>
++          </>
+         ) : null}
+-      </div>
+ 
+-      <form onSubmit={onSubmit} style={{ display: "grid", gap: 12, padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
+-        <h2 style={{ margin: 0 }}>Nouveau mot de passe</h2>
+-
+-        <label style={{ display: "grid", gap: 6 }}>
+-          <span>Nouveau mot de passe</span>
+-          <input
+-            type="password"
+-            value={newPassword}
+-            onChange={(e) => setNewPassword(e.target.value)}
+-            autoComplete="new-password"
+-            disabled={loading || users.length === 0 || submitting}
+-          />
+-        </label>
+-
+-        <label style={{ display: "grid", gap: 6 }}>
+-          <span>Confirmation</span>
+-          <input
+-            type="password"
+-            value={confirmPassword}
+-            onChange={(e) => setConfirmPassword(e.target.value)}
+-            autoComplete="new-password"
+-            disabled={loading || users.length === 0 || submitting}
+-          />
+-        </label>
++        <form onSubmit={onSubmit} className="users-form">
++          <div className="users-form-grid users-form-grid--short">
++            <label className="users-field">
++              <span className="users-field__label">Nouveau mot de passe</span>
++              <input
++                type="password"
++                value={newPassword}
++                onChange={(e) => setNewPassword(e.target.value)}
++                autoComplete="new-password"
++                disabled={loading || users.length === 0 || submitting}
++              />
++            </label>
+ 
+-        {error ? (
+-          <div style={{ padding: 10, border: "1px solid var(--ui-danger-border)", borderRadius: 8 }}>
+-            Erreur : {error}
++            <label className="users-field">
++              <span className="users-field__label">Confirmation</span>
++              <input
++                type="password"
++                value={confirmPassword}
++                onChange={(e) => setConfirmPassword(e.target.value)}
++                autoComplete="new-password"
++                disabled={loading || users.length === 0 || submitting}
++              />
++            </label>
+           </div>
+-        ) : null}
+ 
+-        {success ? (
+-          <div style={{ padding: 10, border: "1px solid var(--ui-success-border)", borderRadius: 8 }}>
+-            {success}
+-          </div>
+-        ) : null}
++          {error ? <ErrorMessage title="Echec de reinitialisation" message={error} /> : null}
++          {success ? <div className="users-alert users-alert--success">{success}</div> : null}
+ 
+-        <button type="submit" disabled={loading || users.length === 0 || submitting || !selectedUserId}>
+-          {submitting ? "Réinitialisation..." : "Réinitialiser le mot de passe"}
+-        </button>
+-      </form>
+-    </div>
++          <div className="users-actions">
++            <ActionButton type="submit" variant="primary" disabled={loading || users.length === 0 || submitting || !selectedUserId}>
++              {submitting ? "Reinitialisation..." : "Reinitialiser le mot de passe"}
++            </ActionButton>
++          </div>
++        </form>
++      </div>
++    </section>
+   );
+ }
+diff --git a/app/users/user-absence-client.tsx b/app/users/user-absence-client.tsx
+index 7b0cf69..a58b855 100644
+--- a/app/users/user-absence-client.tsx
++++ b/app/users/user-absence-client.tsx
+@@ -2,6 +2,8 @@
+ 
+ import { useEffect, useMemo, useState, type FormEvent } from "react";
+ 
++import { ActionButton, EmptyState, ErrorMessage, StatusBadge } from "@/app/ui";
++
+ import { type UserListRow } from "./users-client-shared";
+ import { USERS_SELECTION_EVENT, type UsersSelectionEventDetail } from "./users-refresh";
+ 
+@@ -89,7 +91,7 @@ function getErrorMessage(json: unknown, status: number) {
+       : null;
+ 
+     if (typeof conflict?.startAt === "string" && typeof conflict?.endAt === "string") {
+-      return `Une absence existe déjà sur le créneau ${formatIntervalLabel(conflict.startAt, conflict.endAt)}.`;
++      return `Une absence existe deja sur le creneau ${formatIntervalLabel(conflict.startAt, conflict.endAt)}.`;
+     }
+   }
+ 
+@@ -105,7 +107,7 @@ function getErrorMessage(json: unknown, status: number) {
+   }
+ 
+   if (json.error === "NOT_FOUND") return "Utilisateur ou absence introuvable.";
+-  if (json.error === "FORBIDDEN") return "Action non autorisée.";
++  if (json.error === "FORBIDDEN") return "Action non autorisee.";
+   if (json.error === "UNAUTHORIZED") return "Session invalide.";
+ 
+   return json.error;
+@@ -122,7 +124,7 @@ function formatDateTimeLabel(value: string) {
+ }
+ 
+ function formatIntervalLabel(startAt: string, endAt: string) {
+-  return `${formatDateTimeLabel(startAt)} → ${formatDateTimeLabel(endAt)}`;
++  return `${formatDateTimeLabel(startAt)} -> ${formatDateTimeLabel(endAt)}`;
+ }
+ 
+ function toDatetimeLocalValue(value: string) {
+@@ -147,6 +149,12 @@ function toEditableForm(absence: UserAbsenceRow): EditableAbsenceForm {
+   };
+ }
+ 
++function roleStatusVariant(role: string): "neutral" | "info" | "warning" {
++  if (role === "ADMIN" || role === "GERANT") return "info";
++  if (role === "BUREAU" || role === "REGULATEUR") return "warning";
++  return "neutral";
++}
++
+ export default function UserAbsenceClient() {
+   const [selectedUser, setSelectedUser] = useState<UserListRow | null>(null);
+   const [items, setItems] = useState<UserAbsenceRow[]>([]);
+@@ -230,14 +238,14 @@ export default function UserAbsenceClient() {
+   }
+ 
+   function validateForm() {
+-    if (!selectedUser?.id) return "Aucun utilisateur sélectionné.";
+-    if (!form.startAt || !form.endAt) return "Les dates de début et de fin sont obligatoires.";
++    if (!selectedUser?.id) return "Aucun utilisateur selectionne.";
++    if (!form.startAt || !form.endAt) return "Les dates de debut et de fin sont obligatoires.";
+ 
+     const startAt = toIsoString(form.startAt);
+     const endAt = toIsoString(form.endAt);
+ 
+     if (!startAt || !endAt) return "Les dates saisies sont invalides.";
+-    if (startAt >= endAt) return "La fin doit être strictement après le début.";
++    if (startAt >= endAt) return "La fin doit etre strictement apres le debut.";
+ 
+     return null;
+   }
+@@ -254,7 +262,7 @@ export default function UserAbsenceClient() {
+     }
+ 
+     if (!selectedUser?.id) {
+-      setError("Aucun utilisateur sélectionné.");
++      setError("Aucun utilisateur selectionne.");
+       return;
+     }
+ 
+@@ -288,7 +296,7 @@ export default function UserAbsenceClient() {
+         throw new Error(getErrorMessage(json, res.status));
+       }
+ 
+-      setSuccess(isEditing ? "Absence mise à jour." : "Absence créée.");
++      setSuccess(isEditing ? "Absence mise a jour." : "Absence creee.");
+       resetForm();
+       setReloadKey((current) => current + 1);
+     } catch (e: unknown) {
+@@ -300,11 +308,11 @@ export default function UserAbsenceClient() {
+ 
+   async function onDelete(absence: UserAbsenceRow) {
+     if (!selectedUser?.id) {
+-      setError("Aucun utilisateur sélectionné.");
++      setError("Aucun utilisateur selectionne.");
+       return;
+     }
+ 
+-    const confirmed = window.confirm(`Supprimer l'absence du créneau ${formatIntervalLabel(absence.startAt, absence.endAt)} ?`);
++    const confirmed = window.confirm(`Supprimer l'absence du creneau ${formatIntervalLabel(absence.startAt, absence.endAt)} ?`);
+     if (!confirmed) return;
+ 
+     setDeletingId(absence.id);
+@@ -322,7 +330,7 @@ export default function UserAbsenceClient() {
+       }
+ 
+       if (editingAbsenceId === absence.id) resetForm();
+-      setSuccess("Absence supprimée.");
++      setSuccess("Absence supprimee.");
+       setReloadKey((current) => current + 1);
+     } catch (e: unknown) {
+       setError(e instanceof Error ? e.message : "Unknown error");
+@@ -339,30 +347,40 @@ export default function UserAbsenceClient() {
+   }
+ 
+   return (
+-    <section style={{ display: "grid", gap: 16 }}>
+-      <div style={{ padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8, display: "grid", gap: 12 }}>
+-        <div>
+-          <h2 style={{ margin: 0 }}>Indisponibilités / absences</h2>
+-          <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
+-            Gestion UI minimale branchée sur l&apos;API users existante : lecture, création, modification et suppression des absences pour le salarié actuellement sélectionné dans la liste.
++    <section className="users-section">
++      <div className="users-card">
++        <div className="users-card__head">
++          <h2 className="users-card__title">Indisponibilites / absences</h2>
++          <p className="users-card__description">
++            Gestion UI minimale branchee sur l&apos;API users existante : lecture, creation, modification et suppression des absences pour le salarie selectionne.
+           </p>
+         </div>
+ 
+-        <div style={{ padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
+-          <strong>Utilisateur cible :</strong>{" "}
++        <div className="users-selection-card">
++          <strong>Utilisateur cible</strong>
+           {selectedUser
+-            ? `${selectedUser.name}${selectedUser.email ? ` (${selectedUser.email})` : ""} — rôle ${selectedUser.role}`
+-            : "sélectionnez un utilisateur dans la liste ci-dessus."}
++            ? (
++              <>
++                <span>
++                  {selectedUser.name}
++                  {selectedUser.email ? ` (${selectedUser.email})` : ""}
++                </span>
++                <div className="users-inline-status">
++                  <StatusBadge variant={roleStatusVariant(selectedUser.role)}>{selectedUser.role}</StatusBadge>
++                </div>
++              </>
++            )
++            : "Selectionnez un utilisateur dans la liste ci-dessus."}
+         </div>
+ 
+         {selectedUser ? (
+           <>
+-            <form onSubmit={onSubmit} style={{ display: "grid", gap: 12, padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
+-              <h3 style={{ margin: 0 }}>{editingAbsence ? "Modifier une absence" : "Créer une absence"}</h3>
++            <form onSubmit={onSubmit} className="users-card users-card--soft users-form">
++              <h3 className="users-card__title">{editingAbsence ? "Modifier une absence" : "Creer une absence"}</h3>
+ 
+-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12 }}>
+-                <label style={{ display: "grid", gap: 6 }}>
+-                  <span>Début</span>
++              <div className="users-form-grid">
++                <label className="users-field">
++                  <span className="users-field__label">Debut</span>
+                   <input
+                     type="datetime-local"
+                     value={form.startAt}
+@@ -372,8 +390,8 @@ export default function UserAbsenceClient() {
+                   />
+                 </label>
+ 
+-                <label style={{ display: "grid", gap: 6 }}>
+-                  <span>Fin</span>
++                <label className="users-field">
++                  <span className="users-field__label">Fin</span>
+                   <input
+                     type="datetime-local"
+                     value={form.endAt}
+@@ -384,79 +402,75 @@ export default function UserAbsenceClient() {
+                 </label>
+               </div>
+ 
+-              <label style={{ display: "grid", gap: 6 }}>
+-                <span>Motif</span>
++              <label className="users-field">
++                <span className="users-field__label">Motif</span>
+                 <input
+                   type="text"
+                   maxLength={160}
+                   value={form.reason}
+                   onChange={(event) => setForm((current) => ({ ...current, reason: event.target.value }))}
+-                  placeholder="Congé, formation, indisponible..."
++                  placeholder="Conge, formation, indisponible..."
+                   disabled={saving || loading || deletingId !== null}
+                 />
+               </label>
+ 
+-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+-                <button type="submit" disabled={saving || loading || deletingId !== null}>
+-                  {saving ? (editingAbsence ? "Mise à jour..." : "Création...") : (editingAbsence ? "Enregistrer" : "Créer l'absence")}
+-                </button>
++              <div className="users-actions">
++                <ActionButton type="submit" variant="primary" disabled={saving || loading || deletingId !== null}>
++                  {saving ? (editingAbsence ? "Mise a jour..." : "Creation...") : (editingAbsence ? "Enregistrer" : "Creer l'absence")}
++                </ActionButton>
+ 
+-                <button type="button" onClick={resetForm} disabled={saving || deletingId !== null || (!editingAbsence && !form.reason && !form.startAt && !form.endAt)}>
++                <ActionButton
++                  type="button"
++                  onClick={resetForm}
++                  disabled={saving || deletingId !== null || (!editingAbsence && !form.reason && !form.startAt && !form.endAt)}
++                >
+                   {editingAbsence ? "Annuler la modification" : "Vider le formulaire"}
+-                </button>
++                </ActionButton>
+               </div>
+             </form>
+ 
+-            {error ? (
+-              <div style={{ padding: 12, border: "1px solid var(--ui-danger-border)", borderRadius: 8 }}>
+-                Erreur : {error}
+-              </div>
+-            ) : null}
++            {error ? <ErrorMessage title="Echec de gestion des absences" message={error} /> : null}
++            {success ? <div className="users-alert users-alert--success">{success}</div> : null}
+ 
+-            {success ? (
+-              <div style={{ padding: 12, border: "1px solid var(--ui-success-border)", borderRadius: 8 }}>
+-                {success}
++            <div className="users-card users-card--soft">
++              <div className="users-pagination">
++                <h3 className="users-card__title">Absences enregistrees</h3>
++                <StatusBadge variant="neutral">{items.length} element{items.length > 1 ? "s" : ""}</StatusBadge>
+               </div>
+-            ) : null}
+ 
+-            <div style={{ display: "grid", gap: 12, padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
+-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+-                <h3 style={{ margin: 0 }}>Absences enregistrées</h3>
+-                <span style={{ opacity: 0.8 }}>{items.length} élément{items.length > 1 ? "s" : ""}</span>
+-              </div>
+-
+-              {loading ? <div>Chargement des absences...</div> : null}
++              {loading ? <div className="users-selection-card">Chargement des absences...</div> : null}
+ 
+               {!loading && items.length === 0 ? (
+-                <div style={{ padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
+-                  Aucune absence enregistrée pour cet utilisateur.
+-                </div>
++                <EmptyState
++                  title="Aucune absence enregistree"
++                  message="Aucune absence n'est actuellement enregistree pour cet utilisateur."
++                />
+               ) : null}
+ 
+               {!loading && items.length > 0 ? (
+-                <div style={{ display: "grid", gap: 12 }}>
++                <div className="users-absence-list">
+                   {items.map((absence) => {
+                     const isEditing = editingAbsenceId === absence.id;
+                     const isDeleting = deletingId === absence.id;
+ 
+                     return (
+-                      <article key={absence.id} style={{ padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8, display: "grid", gap: 8 }}>
+-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", gap: 12, flexWrap: "wrap" }}>
+-                          <div style={{ display: "grid", gap: 6 }}>
++                      <article key={absence.id} className="users-absence-item">
++                        <div className="users-absence-item__head">
++                          <div className="users-form">
+                             <strong>{formatIntervalLabel(absence.startAt, absence.endAt)}</strong>
+-                            <span>{absence.reason || "Motif non renseigné"}</span>
+-                            <span style={{ opacity: 0.7, fontSize: 13 }}>
+-                              Dernière mise à jour : {formatDateTimeLabel(absence.updatedAt)}
++                            <span>{absence.reason || "Motif non renseigne"}</span>
++                            <span className="users-absence-item__meta">
++                              Derniere mise a jour : {formatDateTimeLabel(absence.updatedAt)}
+                             </span>
+                           </div>
+ 
+-                          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+-                            <button type="button" onClick={() => startEdit(absence)} disabled={saving || isDeleting}>
+-                              {isEditing ? "En cours d'édition" : "Modifier"}
+-                            </button>
+-                            <button type="button" onClick={() => onDelete(absence)} disabled={saving || isDeleting}>
++                          <div className="users-actions">
++                            <ActionButton type="button" onClick={() => startEdit(absence)} disabled={saving || isDeleting}>
++                              {isEditing ? "En cours d'edition" : "Modifier"}
++                            </ActionButton>
++                            <ActionButton type="button" onClick={() => onDelete(absence)} variant="danger" disabled={saving || isDeleting}>
+                               {isDeleting ? "Suppression..." : "Supprimer"}
+-                            </button>
++                            </ActionButton>
+                           </div>
+                         </div>
+                       </article>
+diff --git a/app/users/user-archive-client.tsx b/app/users/user-archive-client.tsx
+index 4916ba5..fa52518 100644
+--- a/app/users/user-archive-client.tsx
++++ b/app/users/user-archive-client.tsx
+@@ -2,6 +2,8 @@
+ 
+ import { useEffect, useState } from "react";
+ 
++import { ActionButton, ErrorMessage, StatusBadge } from "@/app/ui";
++
+ import type { UserListRow } from "./users-client-shared";
+ import { USERS_SELECTION_EVENT, dispatchUsersRefresh, dispatchUsersSelection, type UsersSelectionEventDetail } from "./users-refresh";
+ 
+@@ -26,6 +28,12 @@ function readApiError(value: unknown, status: number) {
+   return value.error;
+ }
+ 
++function roleStatusVariant(role: string): "neutral" | "info" | "warning" {
++  if (role === "ADMIN" || role === "GERANT") return "info";
++  if (role === "BUREAU" || role === "REGULATEUR") return "warning";
++  return "neutral";
++}
++
+ export default function UserArchiveClient({ actorUserId }: Props) {
+   const [selectedUser, setSelectedUser] = useState<UserListRow | null>(null);
+   const [archiving, setArchiving] = useState(false);
+@@ -48,7 +56,7 @@ export default function UserArchiveClient({ actorUserId }: Props) {
+   async function handleArchive() {
+     setError(null);
+     setSuccess(null);
+-    if (!selectedUser) return setError("Sélectionnez d'abord un utilisateur actif dans la liste.");
++    if (!selectedUser) return setError("Selectionnez d'abord un utilisateur actif dans la liste.");
+     if (isSelf) return setError("Vous ne pouvez pas archiver votre propre compte depuis cette interface.");
+     if (!window.confirm(`Archiver ${selectedUser.name}${selectedUser.email ? ` (${selectedUser.email})` : ""} ?`)) return;
+ 
+@@ -58,7 +66,7 @@ export default function UserArchiveClient({ actorUserId }: Props) {
+       const json: unknown = await res.json();
+       if (!res.ok || !isApiOk<ArchivedUser>(json)) throw new Error(readApiError(json, res.status));
+       const archivedUser = json.data;
+-      setSuccess(`Utilisateur archivé : ${archivedUser.name}${archivedUser.email ? ` (${archivedUser.email})` : ""}.`);
++      setSuccess(`Utilisateur archive : ${archivedUser.name}${archivedUser.email ? ` (${archivedUser.email})` : ""}.`);
+       dispatchUsersSelection(null);
+       dispatchUsersRefresh();
+     } catch (e: unknown) {
+@@ -69,30 +77,38 @@ export default function UserArchiveClient({ actorUserId }: Props) {
+   }
+ 
+   return (
+-    <section style={{ display: "grid", gap: 16, maxWidth: 720 }}>
+-      <div style={{ padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8, display: "grid", gap: 12 }}>
+-        <div>
+-          <h2 style={{ margin: 0 }}>Archiver un utilisateur</h2>
+-          <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
++    <section className="users-section">
++      <div className="users-card">
++        <div className="users-card__head">
++          <h2 className="users-card__title">Archiver un utilisateur</h2>
++          <p className="users-card__description">
+             Archivage logique uniquement : le compte reste en base mais sort du flux standard des utilisateurs actifs.
+           </p>
+         </div>
+ 
+         {!selectedUser ? (
+-          <div style={{ padding: 10, border: "1px solid var(--ui-border-strong)", borderRadius: 8 }}>Aucun utilisateur sélectionné dans la liste.</div>
++          <div className="users-selection-card">Aucun utilisateur selectionne dans la liste.</div>
+         ) : (
+-          <div style={{ padding: 10, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
+-            <div><strong>{selectedUser.name}</strong>{selectedUser.email ? ` (${selectedUser.email})` : ""} — rôle {selectedUser.role}</div>
+-            {isSelf ? <div style={{ marginTop: 6, opacity: 0.8 }}>Votre propre compte ne peut pas être archivé depuis cette UI.</div> : null}
++          <div className="users-selection-card">
++            <span>
++              <strong>{selectedUser.name}</strong>
++              {selectedUser.email ? ` (${selectedUser.email})` : ""}
++            </span>
++            <div className="users-inline-status">
++              <StatusBadge variant={roleStatusVariant(selectedUser.role)}>{selectedUser.role}</StatusBadge>
++              {isSelf ? <StatusBadge variant="warning">Compte courant</StatusBadge> : null}
++            </div>
+           </div>
+         )}
+ 
+-        {error ? <div style={{ padding: 10, border: "1px solid var(--ui-danger-border)", borderRadius: 8 }}>Erreur : {error}</div> : null}
+-        {success ? <div style={{ padding: 10, border: "1px solid var(--ui-success-border)", borderRadius: 8 }}>{success}</div> : null}
++        {error ? <ErrorMessage title="Echec de l'archivage utilisateur" message={error} /> : null}
++        {success ? <div className="users-alert users-alert--success">{success}</div> : null}
+ 
+-        <button type="button" onClick={handleArchive} disabled={archiving || !selectedUser || isSelf} style={{ justifySelf: "start", padding: "10px 14px" }}>
+-          {archiving ? "Archivage..." : "Archiver l'utilisateur sélectionné"}
+-        </button>
++        <div className="users-actions">
++          <ActionButton type="button" onClick={handleArchive} variant="danger" disabled={archiving || !selectedUser || isSelf}>
++            {archiving ? "Archivage..." : "Archiver l'utilisateur selectionne"}
++          </ActionButton>
++        </div>
+       </div>
+     </section>
+   );
+diff --git a/app/users/user-creation-client.tsx b/app/users/user-creation-client.tsx
+index 0e452c8..28e185f 100644
+--- a/app/users/user-creation-client.tsx
++++ b/app/users/user-creation-client.tsx
+@@ -2,6 +2,7 @@
+ 
+ import { useMemo, useState, type FormEvent } from "react";
+ 
++import { ActionButton, ErrorMessage, StatusBadge } from "@/app/ui";
+ import {
+   COMPANY_RULES_MANAGE_PERMISSION,
+   isCompanyRulesGovernorRole,
+@@ -175,45 +176,50 @@ export default function UserCreationClient({ canGovernCompanyRules, availableDep
+   }
+ 
+   return (
+-    <form onSubmit={onSubmit} style={{ display: "grid", gap: 12, padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8, maxWidth: 920 }}>
+-      <div>
+-        <h2 style={{ margin: 0 }}>Creer un utilisateur</h2>
+-        <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
++    <form onSubmit={onSubmit} className="users-card users-form">
++      <div className="users-card__head">
++        <h2 className="users-card__title">Creer un utilisateur</h2>
++        <p className="users-card__description">
+           Creation enrichie : nom, prenom, initiales, telephone, role, permissions, base, statut, stagiaire et horaires journaliers simples.
+         </p>
++        <div className="users-inline-status">
++          <StatusBadge variant={canGovernCompanyRules ? "success" : "warning"}>
++            Gouvernance regles metier: {canGovernCompanyRules ? "autorisee" : "restreinte"}
++          </StatusBadge>
++        </div>
+       </div>
+ 
+-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12 }}>
+-        <label style={{ display: "grid", gap: 6 }}>
+-          <span>Prenom</span>
++      <div className="users-form-grid">
++        <label className="users-field">
++          <span className="users-field__label">Prenom</span>
+           <input type="text" value={firstName} onChange={(event) => setFirstName(event.target.value)} disabled={submitting} maxLength={80} />
+         </label>
+ 
+-        <label style={{ display: "grid", gap: 6 }}>
+-          <span>Nom</span>
++        <label className="users-field">
++          <span className="users-field__label">Nom</span>
+           <input type="text" value={lastName} onChange={(event) => setLastName(event.target.value)} disabled={submitting} maxLength={80} />
+         </label>
+       </div>
+ 
+-      <div style={{ display: "grid", gridTemplateColumns: "minmax(140px, 180px) minmax(220px, 1fr)", gap: 12 }}>
+-        <label style={{ display: "grid", gap: 6 }}>
+-          <span>Initiales</span>
++      <div className="users-form-grid users-form-grid--compact">
++        <label className="users-field">
++          <span className="users-field__label">Initiales</span>
+           <input type="text" value={initials} onChange={(event) => setInitials(event.target.value.toUpperCase())} disabled={submitting} maxLength={12} />
+         </label>
+ 
+-        <label style={{ display: "grid", gap: 6 }}>
+-          <span>Telephone</span>
++        <label className="users-field">
++          <span className="users-field__label">Telephone</span>
+           <input type="tel" value={phone} onChange={(event) => setPhone(event.target.value)} disabled={submitting} maxLength={50} />
+         </label>
+       </div>
+ 
+-      <label style={{ display: "grid", gap: 6 }}>
+-        <span>Email</span>
++      <label className="users-field">
++        <span className="users-field__label">Email</span>
+         <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="prenom.nom@entreprise.fr" disabled={submitting} autoComplete="email" />
+       </label>
+ 
+-      <label style={{ display: "grid", gap: 6 }}>
+-        <span>Role principal</span>
++      <label className="users-field">
++        <span className="users-field__label">Role principal</span>
+         <select value={role} onChange={(event) => setRole(event.target.value)} disabled={submitting}>
+           <option value="">Selectionner un role</option>
+           {assignableRoleOptions.map((option) => (
+@@ -224,28 +230,28 @@ export default function UserCreationClient({ canGovernCompanyRules, availableDep
+         </select>
+       </label>
+ 
+-      <fieldset style={{ display: "grid", gap: 10, padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8 }} disabled={submitting}>
++      <fieldset className="users-fieldset" disabled={submitting}>
+         <legend>Permissions applicatives ALPHA</legend>
+-        <div style={{ display: "grid", gap: 10, gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))" }}>
++        <div className="users-permission-grid">
+           {ALPHA_PERMISSION_CATALOG.map((permission) => {
+             const checked = permissionCodes.includes(permission.code);
+             const locked = permission.code === COMPANY_RULES_MANAGE_PERMISSION && !canGovernCompanyRules;
+ 
+             return (
+-              <label key={permission.code} style={{ display: "grid", gap: 4, padding: 10, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
+-                <span style={{ display: "flex", gap: 8, alignItems: "center" }}>
++              <label key={permission.code} className="users-permission-card">
++                <span className="users-permission-card__head">
+                   <input type="checkbox" checked={checked} onChange={() => togglePermission(permission.code)} disabled={locked} />
+                   <strong>{permission.label}</strong>
+                 </span>
+-                <span style={{ fontSize: 13, opacity: 0.8 }}>{permission.description}</span>
++                <span className="users-help-text">{permission.description}</span>
+               </label>
+             );
+           })}
+         </div>
+       </fieldset>
+ 
+-      <label style={{ display: "grid", gap: 6 }}>
+-        <span>Base</span>
++      <label className="users-field">
++        <span className="users-field__label">Base</span>
+         <select value={depotId} onChange={(event) => setDepotId(event.target.value)} disabled={submitting}>
+           <option value="">Aucune base</option>
+           {availableDepots.filter((depot) => depot.isActive).map((depot) => (
+@@ -256,50 +262,48 @@ export default function UserCreationClient({ canGovernCompanyRules, availableDep
+         </select>
+       </label>
+ 
+-      <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+-        <label style={{ display: "flex", gap: 8, alignItems: "center" }}>
++      <div className="users-checkbox-group">
++        <label className="users-checkbox">
+           <input type="checkbox" checked={isActive} onChange={(event) => setIsActive(event.target.checked)} disabled={submitting} />
+           <span>Compte actif</span>
+         </label>
+ 
+-        <label style={{ display: "flex", gap: 8, alignItems: "center" }}>
++        <label className="users-checkbox">
+           <input type="checkbox" checked={isTrainee} onChange={(event) => setIsTrainee(event.target.checked)} disabled={submitting} />
+           <span>Stagiaire</span>
+         </label>
+       </div>
+ 
+-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12 }}>
+-        <label style={{ display: "grid", gap: 6 }}>
+-          <span>Debut journalier</span>
++      <div className="users-form-grid users-form-grid--short">
++        <label className="users-field">
++          <span className="users-field__label">Debut journalier</span>
+           <input type="time" value={dailyWorkStartTime} onChange={(event) => setDailyWorkStartTime(event.target.value)} disabled={submitting} />
+         </label>
+ 
+-        <label style={{ display: "grid", gap: 6 }}>
+-          <span>Fin journaliere</span>
++        <label className="users-field">
++          <span className="users-field__label">Fin journaliere</span>
+           <input type="time" value={dailyWorkEndTime} onChange={(event) => setDailyWorkEndTime(event.target.value)} disabled={submitting} />
+         </label>
+       </div>
+ 
+-      <label style={{ display: "grid", gap: 6 }}>
+-        <span>Mot de passe initial</span>
++      <label className="users-field">
++        <span className="users-field__label">Mot de passe initial</span>
+         <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Mot de passe initial" disabled={submitting} autoComplete="new-password" />
+       </label>
+ 
+       {error ? (
+-        <div style={{ padding: 10, border: "1px solid var(--ui-danger-border)", borderRadius: 8 }}>
+-          Erreur : {error}
+-        </div>
++        <ErrorMessage title="Echec de creation utilisateur" message={error} />
+       ) : null}
+ 
+       {success ? (
+-        <div style={{ padding: 10, border: "1px solid var(--ui-success-border)", borderRadius: 8 }}>
+-          {success}
+-        </div>
++        <div className="users-alert users-alert--success">{success}</div>
+       ) : null}
+ 
+-      <button type="submit" disabled={submitting} style={{ justifySelf: "start", padding: "10px 14px" }}>
+-        {submitting ? "Creation..." : "Creer l'utilisateur"}
+-      </button>
++      <div className="users-actions">
++        <ActionButton type="submit" variant="primary" disabled={submitting}>
++          {submitting ? "Creation..." : "Creer l'utilisateur"}
++        </ActionButton>
++      </div>
+     </form>
+   );
+ }
+diff --git a/app/users/user-depot-assignment-client.tsx b/app/users/user-depot-assignment-client.tsx
+index 9c616c8..34df3e7 100644
+--- a/app/users/user-depot-assignment-client.tsx
++++ b/app/users/user-depot-assignment-client.tsx
+@@ -2,6 +2,8 @@
+ 
+ import { useEffect, useMemo, useState } from "react";
+ 
++import { ActionButton, EmptyState, ErrorMessage, StatusBadge } from "@/app/ui";
++
+ import { USERS_REFRESH_EVENT, dispatchUsersRefresh, dispatchUsersSelection } from "./users-refresh";
+ 
+ type ApiOk<T> = {
+@@ -39,13 +41,19 @@ function isApiErr(value: unknown): value is ApiErr {
+ }
+ 
+ function getDepotLabel(depot: DepotOption) {
+-  return depot.isActive ? depot.name : `${depot.name} (archivé)`;
++  return depot.isActive ? depot.name : `${depot.name} (archive)`;
+ }
+ 
+ function buildInitialSelectedDepotIds(users: UserLite[]) {
+   return Object.fromEntries(users.map((user) => [user.id, user.depotId ?? ""]));
+ }
+ 
++function roleStatusVariant(role: string): "neutral" | "info" | "warning" {
++  if (role === "ADMIN" || role === "GERANT") return "info";
++  if (role === "BUREAU" || role === "REGULATEUR") return "warning";
++  return "neutral";
++}
++
+ export default function UserDepotAssignmentClient({ availableDepots }: { availableDepots: DepotOption[] }) {
+   const [users, setUsers] = useState<UserLite[]>([]);
+   const [selectedUserId, setSelectedUserId] = useState("");
+@@ -212,7 +220,7 @@ export default function UserDepotAssignmentClient({ availableDepots }: { availab
+       }));
+       dispatchUsersSelection(nextSelectedUser);
+       dispatchUsersRefresh();
+-      setSuccess(`Base enregistrée pour ${selectedUser.name}.`);
++      setSuccess(`Base enregistree pour ${selectedUser.name}.`);
+     } catch (e: unknown) {
+       setError(e instanceof Error ? e.message : "Unknown error");
+     } finally {
+@@ -221,17 +229,17 @@ export default function UserDepotAssignmentClient({ availableDepots }: { availab
+   }
+ 
+   return (
+-    <div style={{ display: "grid", gap: 16, maxWidth: 720 }}>
+-      <div style={{ padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
+-        <h2 style={{ marginTop: 0 }}>Rattachement à une base</h2>
+-        <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
+-          Affectation minimale d&apos;un utilisateur de société à un dépôt unique de la société courante. Les comptes support globaux sont exclus. L&apos;utilisateur peut aussi rester sans base.
+-        </p>
+-      </div>
+-
+-      <div style={{ display: "grid", gap: 12, padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
+-        <label style={{ display: "grid", gap: 6 }}>
+-          <span>Utilisateur cible</span>
++    <section className="users-section">
++      <div className="users-card">
++        <div className="users-card__head">
++          <h2 className="users-card__title">Rattachement a une base</h2>
++          <p className="users-card__description">
++            Affectation d&apos;un utilisateur de societe a un depot unique de la societe courante. Les comptes support globaux sont exclus.
++          </p>
++        </div>
++
++        <label className="users-field">
++          <span className="users-field__label">Utilisateur cible</span>
+           <select
+             value={selectedUserId}
+             onChange={(e) => {
+@@ -243,34 +251,38 @@ export default function UserDepotAssignmentClient({ availableDepots }: { availab
+           >
+             {users.map((user) => (
+               <option key={user.id} value={user.id}>
+-                {user.name} — {user.role}
++                {user.name} - {user.role}
+               </option>
+             ))}
+           </select>
+         </label>
+ 
+-        {loading ? <p style={{ margin: 0 }}>Chargement des utilisateurs...</p> : null}
++        {loading ? <div className="users-selection-card">Chargement des utilisateurs...</div> : null}
+ 
+         {!loading && users.length === 0 ? (
+-          <div style={{ padding: 10, border: "1px solid var(--ui-border-strong)", borderRadius: 8 }}>
+-            Aucun utilisateur de société administrable disponible dans la société courante.
+-          </div>
++          <EmptyState
++            title="Aucun utilisateur administrable"
++            message="Aucun utilisateur de societe administrable n'est disponible dans la societe courante."
++          />
+         ) : null}
+ 
+         {selectedUser ? (
+           <>
+-            <div style={{ padding: 10, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
+-              <div>
++            <div className="users-selection-card">
++              <span>
+                 <strong>{selectedUser.name}</strong>
+-                {selectedUser.email ? ` (${selectedUser.email})` : ""} — rôle {selectedUser.role}
+-              </div>
+-              <div style={{ marginTop: 6, opacity: 0.8 }}>
+-                Base actuelle : {selectedUser.depot ? getDepotLabel(selectedUser.depot) : "Aucune"}
++                {selectedUser.email ? ` (${selectedUser.email})` : ""}
++              </span>
++              <div className="users-inline-status">
++                <StatusBadge variant={roleStatusVariant(selectedUser.role)}>{selectedUser.role}</StatusBadge>
++                <StatusBadge variant={selectedUser.depot?.isActive ? "success" : "warning"}>
++                  Base actuelle: {selectedUser.depot ? getDepotLabel(selectedUser.depot) : "Aucune"}
++                </StatusBadge>
+               </div>
+             </div>
+ 
+-            <label style={{ display: "grid", gap: 6 }}>
+-              <span>Nouvelle base</span>
++            <label className="users-field">
++              <span className="users-field__label">Nouvelle base</span>
+               <select
+                 value={selectedDepotIds[selectedUser.id] ?? ""}
+                 onChange={(e) => {
+@@ -294,34 +306,28 @@ export default function UserDepotAssignmentClient({ availableDepots }: { availab
+             </label>
+ 
+             {availableDepots.filter((depot) => depot.isActive).length === 0 ? (
+-              <div style={{ padding: 10, border: "1px solid var(--ui-border-strong)", borderRadius: 8 }}>
+-                Aucun dépôt actif disponible pour rattacher un utilisateur.
+-              </div>
++              <EmptyState
++                title="Aucun depot actif"
++                message="Aucun depot actif n'est disponible pour rattacher un utilisateur."
++              />
+             ) : null}
+           </>
+         ) : null}
+ 
+-        {error ? (
+-          <div style={{ padding: 10, border: "1px solid var(--ui-danger-border)", borderRadius: 8 }}>
+-            Erreur : {error}
+-          </div>
+-        ) : null}
++        {error ? <ErrorMessage title="Echec de l'affectation depot" message={error} /> : null}
++        {success ? <div className="users-alert users-alert--success">{success}</div> : null}
+ 
+-        {success ? (
+-          <div style={{ padding: 10, border: "1px solid var(--ui-success-border)", borderRadius: 8 }}>
+-            {success}
+-          </div>
+-        ) : null}
+-
+-        <button
+-          type="button"
+-          onClick={() => void handleSave()}
+-          disabled={loading || saving || !selectedUser || !hasPendingChange}
+-          style={{ justifySelf: "start", padding: "10px 14px" }}
+-        >
+-          {saving ? "Enregistrement..." : "Enregistrer la base"}
+-        </button>
++        <div className="users-actions">
++          <ActionButton
++            type="button"
++            onClick={() => void handleSave()}
++            variant="primary"
++            disabled={loading || saving || !selectedUser || !hasPendingChange}
++          >
++            {saving ? "Enregistrement..." : "Enregistrer la base"}
++          </ActionButton>
++        </div>
+       </div>
+-    </div>
++    </section>
+   );
+ }
+diff --git a/app/users/user-edit-client.tsx b/app/users/user-edit-client.tsx
+index 085a42f..754798f 100644
+--- a/app/users/user-edit-client.tsx
++++ b/app/users/user-edit-client.tsx
+@@ -2,6 +2,7 @@
+ 
+ import { useEffect, useMemo, useState, type FormEvent } from "react";
+ 
++import { ActionButton, ErrorMessage, StatusBadge } from "@/app/ui";
+ import {
+   COMPANY_RULES_MANAGE_PERMISSION,
+   isCompanyRulesGovernorRole,
+@@ -107,6 +108,12 @@ function getAssignableRoleOptions(canGovernCompanyRules: boolean, currentRole?:
+   return baseOptions;
+ }
+ 
++function roleStatusVariant(role: string): "neutral" | "info" | "warning" {
++  if (role === "ADMIN" || role === "GERANT") return "info";
++  if (role === "BUREAU" || role === "REGULATEUR") return "warning";
++  return "neutral";
++}
++
+ export default function UserEditClient({ canGovernCompanyRules }: UserEditClientProps) {
+   const [selectedUser, setSelectedUser] = useState<UserListRow | null>(null);
+   const [loadedUser, setLoadedUser] = useState<EditableUser | null>(null);
+@@ -159,7 +166,7 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
+         }
+ 
+         const user = toEditableUser(json.data);
+-        if (!user) throw new Error("Réponse invalide de l’API d’édition utilisateur.");
++        if (!user) throw new Error("Reponse invalide de l'API d'edition utilisateur.");
+ 
+         if (!cancelled) {
+           setLoadedUser(user);
+@@ -221,7 +228,7 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
+     setSuccess(null);
+ 
+     if (!selectedUser || !loadedUser) {
+-      setError("Sélectionnez d'abord un utilisateur et attendez le chargement complet du formulaire.");
++      setError("Selectionnez d'abord un utilisateur et attendez le chargement complet du formulaire.");
+       return;
+     }
+ 
+@@ -239,12 +246,12 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
+     }
+ 
+     if (!assignableRoleOptions.includes(role as (typeof assignableRoleOptions)[number])) {
+-      setError("Le rôle est obligatoire.");
++      setError("Le role est obligatoire.");
+       return;
+     }
+ 
+     if (!hasPendingChange) {
+-      setError("Aucune modification détectée.");
++      setError("Aucune modification detectee.");
+       return;
+     }
+ 
+@@ -253,7 +260,7 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
+       const permissionChangeTouchesGovernance = permissionSetTouchesCompanyRulesGovernance(loadedUser.permissionCodes, permissionCodes);
+ 
+       if (roleChangeTouchesGovernance || permissionChangeTouchesGovernance) {
+-        setError("Seuls les comptes ADMIN ou GERANT peuvent attribuer, retirer ou conférer le droit de modification des règles métier.");
++        setError("Seuls les comptes ADMIN ou GERANT peuvent attribuer, retirer ou conferer le droit de modification des regles metier.");
+         return;
+       }
+     }
+@@ -279,7 +286,7 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
+       }
+ 
+       const updatedUser = toEditableUser(json.data);
+-      if (!updatedUser) throw new Error("Réponse invalide de l’API d’édition utilisateur.");
++      if (!updatedUser) throw new Error("Reponse invalide de l'API d'edition utilisateur.");
+ 
+       setSelectedUser(updatedUser);
+       setLoadedUser(updatedUser);
+@@ -287,7 +294,7 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
+       setEmail(updatedUser.email ?? "");
+       setRole(updatedUser.role);
+       setPermissionCodes(updatedUser.permissionCodes);
+-      setSuccess(`Utilisateur modifié : ${updatedUser.name}${updatedUser.email ? ` (${updatedUser.email})` : ""}.`);
++      setSuccess(`Utilisateur modifie : ${updatedUser.name}${updatedUser.email ? ` (${updatedUser.email})` : ""}.`);
+       dispatchUsersSelection(updatedUser);
+       dispatchUsersRefresh();
+     } catch (e: unknown) {
+@@ -298,50 +305,51 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
+   }
+ 
+   return (
+-    <form onSubmit={onSubmit} style={{ display: "grid", gap: 12, padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8, maxWidth: 920 }}>
+-      <div>
+-        <h2 style={{ margin: 0 }}>Modifier un utilisateur</h2>
+-        <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
+-          Sélectionnez d&apos;abord un utilisateur dans la liste ci-dessus pour modifier les champs déjà couverts par USERS-06/07,
+-          puis ajuster ici ses permissions applicatives ALPHA.
++    <form onSubmit={onSubmit} className="users-card users-form">
++      <div className="users-card__head">
++        <h2 className="users-card__title">Modifier un utilisateur</h2>
++        <p className="users-card__description">
++          Selectionnez d&apos;abord un utilisateur dans la liste ci-dessus pour modifier les champs couverts par USERS-06/07,
++          puis ajuster ses permissions applicatives ALPHA.
+         </p>
+         {!canGovernCompanyRules ? (
+-          <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
+-            La délégation du droit de modification des règles métier reste réservée aux comptes <code>ADMIN</code> ou <code>GERANT</code>.
++          <p className="users-help-text">
++            La delegation du droit de modification des regles metier reste reservee aux comptes <code>ADMIN</code> ou <code>GERANT</code>.
+           </p>
+         ) : null}
+       </div>
+ 
+       {!selectedUser ? (
+-        <div style={{ padding: 10, border: "1px solid var(--ui-border-strong)", borderRadius: 8 }}>
+-          Aucun utilisateur sélectionné dans la liste.
++        <div className="users-selection-card">
++          Aucun utilisateur selectionne dans la liste.
+         </div>
+       ) : (
+         <>
+-          <div style={{ padding: 10, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
+-            <div>
++          <div className="users-selection-card">
++            <span>
+               <strong>{selectedUser.name}</strong>
+-              {selectedUser.email ? ` (${selectedUser.email})` : ""} — rôle {selectedUser.role}
+-            </div>
+-            <div style={{ marginTop: 6, opacity: 0.8 }}>
+-              Base actuelle : {depotLabel(selectedUser.depot)}
++              {selectedUser.email ? ` (${selectedUser.email})` : ""}
++            </span>
++            <div className="users-inline-status">
++              <StatusBadge variant={roleStatusVariant(selectedUser.role)}>
++                Role: {selectedUser.role}
++              </StatusBadge>
++              <StatusBadge variant={selectedUser.depot?.isActive ? "success" : "warning"}>
++                Base: {depotLabel(selectedUser.depot)}
++              </StatusBadge>
+             </div>
+           </div>
+ 
+           {loadingDetails ? (
+-            <div style={{ padding: 10, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
+-              Chargement des permissions et du détail d’édition...
+-            </div>
++            <div className="users-selection-card">Chargement des permissions et du detail d&apos;edition...</div>
+           ) : null}
+ 
+           {detailsError ? (
+-            <div style={{ padding: 10, border: "1px solid var(--ui-danger-border)", borderRadius: 8 }}>
+-              Erreur de chargement du détail utilisateur : {detailsError}
+-            </div>
++            <ErrorMessage title="Erreur de chargement utilisateur" message={detailsError} />
+           ) : null}
+ 
+-          <label style={{ display: "grid", gap: 6 }}>
+-            <span>Nom</span>
++          <label className="users-field">
++            <span className="users-field__label">Nom</span>
+             <input
+               type="text"
+               value={name}
+@@ -352,8 +360,8 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
+             />
+           </label>
+ 
+-          <label style={{ display: "grid", gap: 6 }}>
+-            <span>Email</span>
++          <label className="users-field">
++            <span className="users-field__label">Email</span>
+             <input
+               type="email"
+               value={email}
+@@ -364,10 +372,10 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
+             />
+           </label>
+ 
+-          <label style={{ display: "grid", gap: 6 }}>
+-            <span>Rôle principal</span>
++          <label className="users-field">
++            <span className="users-field__label">Role principal</span>
+             <select value={role} onChange={(event) => setRole(event.target.value)} disabled={submitting || loadingDetails || Boolean(detailsError) || roleFieldLocked}>
+-              <option value="">Sélectionner un rôle</option>
++              <option value="">Selectionner un role</option>
+               {assignableRoleOptions.map((option) => (
+                 <option key={option} value={option}>
+                   {option}
+@@ -376,22 +384,22 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
+             </select>
+           </label>
+ 
+-          <fieldset style={{ display: "grid", gap: 10, padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8 }} disabled={submitting || loadingDetails || Boolean(detailsError)}>
++          <fieldset className="users-fieldset" disabled={submitting || loadingDetails || Boolean(detailsError)}>
+             <legend>Permissions applicatives ALPHA</legend>
+-            <p style={{ margin: 0, opacity: 0.8 }}>
+-              Le rôle principal reste unique via le champ <code>role</code>. Les cases ci-dessous ajoutent ou retirent uniquement les permissions applicatives ALPHA du compte sélectionné.
+-              {!canGovernCompanyRules ? " La permission COMPANY_RULES_MANAGE reste verrouillée pour les comptes non natifs de gouvernance." : ""}
++            <p className="users-help-text">
++              Le role principal reste unique via le champ <code>role</code>. Les cases ci-dessous ajoutent ou retirent uniquement les permissions applicatives ALPHA.
++              {!canGovernCompanyRules ? " La permission COMPANY_RULES_MANAGE reste verrouillee pour les comptes non natifs de gouvernance." : ""}
+             </p>
+ 
+-            <div style={{ display: "grid", gap: 10, gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))" }}>
++            <div className="users-permission-grid">
+               {ALPHA_PERMISSION_CATALOG.map((permission) => {
+                 const checked = permissionCodes.includes(permission.code);
+                 const isCompanyRulesPermission = permission.code === COMPANY_RULES_MANAGE_PERMISSION;
+                 const permissionLocked = isCompanyRulesPermission && !canGovernCompanyRules;
+ 
+                 return (
+-                  <label key={permission.code} style={{ display: "grid", gap: 4, padding: 10, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
+-                    <span style={{ display: "flex", gap: 8, alignItems: "center" }}>
++                  <label key={permission.code} className="users-permission-card">
++                    <span className="users-permission-card__head">
+                       <input
+                         type="checkbox"
+                         checked={checked}
+@@ -400,13 +408,13 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
+                       />
+                       <strong>{permission.label}</strong>
+                     </span>
+-                    <span style={{ fontSize: 13, opacity: 0.8 }}>{permission.description}</span>
++                    <span className="users-help-text">{permission.description}</span>
+                     {permissionLocked ? (
+-                      <span style={{ fontSize: 12, opacity: 0.7 }}>
+-                        Délégation réservée à la gouvernance native <code>ADMIN</code> / <code>GERANT</code>.
++                      <span className="users-help-text">
++                        Delegation reservee a la gouvernance native <code>ADMIN</code> / <code>GERANT</code>.
+                       </span>
+                     ) : null}
+-                    <span style={{ fontSize: 12, opacity: 0.65 }}>{permission.code}</span>
++                    <span className="users-help-text">{permission.code}</span>
+                   </label>
+                 );
+               })}
+@@ -416,24 +424,22 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
+       )}
+ 
+       {error ? (
+-        <div style={{ padding: 10, border: "1px solid var(--ui-danger-border)", borderRadius: 8 }}>
+-          Erreur : {error}
+-        </div>
++        <ErrorMessage title="Echec de modification utilisateur" message={error} />
+       ) : null}
+ 
+       {success ? (
+-        <div style={{ padding: 10, border: "1px solid var(--ui-success-border)", borderRadius: 8 }}>
+-          {success}
+-        </div>
++        <div className="users-alert users-alert--success">{success}</div>
+       ) : null}
+ 
+-      <button
+-        type="submit"
+-        disabled={submitting || !selectedUser || !loadedUser || loadingDetails || Boolean(detailsError) || !hasPendingChange}
+-        style={{ justifySelf: "start", padding: "10px 14px" }}
+-      >
+-        {submitting ? "Enregistrement..." : "Enregistrer les modifications"}
+-      </button>
++      <div className="users-actions">
++        <ActionButton
++          type="submit"
++          variant="primary"
++          disabled={submitting || !selectedUser || !loadedUser || loadingDetails || Boolean(detailsError) || !hasPendingChange}
++        >
++          {submitting ? "Enregistrement..." : "Enregistrer les modifications"}
++        </ActionButton>
++      </div>
+     </form>
+   );
+ }
+diff --git a/app/users/users-list-client.tsx b/app/users/users-list-client.tsx
+index 06f7ed2..fd4b272 100644
+--- a/app/users/users-list-client.tsx
++++ b/app/users/users-list-client.tsx
+@@ -2,9 +2,10 @@
+ 
+ import { useEffect, useMemo, useState } from "react";
+ 
++import { ActionButton, DataTable, FilterBar, StatusBadge, type DataTableColumn } from "@/app/ui";
++
+ import { dailyScheduleLabel, depotLabel, USER_ROLE_OPTIONS, type UserListRow } from "./users-client-shared";
+ import { USERS_REFRESH_EVENT, dispatchUsersSelection } from "./users-refresh";
+-import { DataTable, FilterBar, type DataTableColumn } from "@/app/ui";
+ 
+ type ApiOk<T> = {
+   ok: true;
+@@ -76,6 +77,17 @@ function toUserRow(value: unknown): UserListRow | null {
+   return { id, name, firstName, lastName, initials, phone, email, role, depotId, depot, isTrainee, dailyWorkStartTime, dailyWorkEndTime };
+ }
+ 
++function roleStatusVariant(role: string): "neutral" | "info" | "success" | "warning" {
++  if (role === "ADMIN" || role === "GERANT") return "info";
++  if (role === "BUREAU" || role === "REGULATEUR") return "warning";
++  return "neutral";
++}
++
++function depotStatusVariant(user: UserListRow): "neutral" | "success" | "warning" {
++  if (!user.depot) return "neutral";
++  return user.depot.isActive ? "success" : "warning";
++}
++
+ export default function UsersListClient() {
+   const [searchInput, setSearchInput] = useState("");
+   const [search, setSearch] = useState("");
+@@ -202,6 +214,7 @@ export default function UsersListClient() {
+     () => rows.find((user) => user.id === selectedUserId) ?? null,
+     [rows, selectedUserId],
+   );
++
+   const columns = useMemo<DataTableColumn<UserListRow>[]>(() => ([
+     {
+       key: "name",
+@@ -210,7 +223,7 @@ export default function UsersListClient() {
+         <>
+           <strong>{user.name}</strong>
+           {(user.firstName || user.lastName) ? (
+-            <div style={{ fontSize: 12, opacity: 0.75 }}>
++            <div className="users-table-cell-subtle">
+               {[user.firstName, user.lastName].filter(Boolean).join(" ")}
+             </div>
+           ) : null}
+@@ -239,24 +252,30 @@ export default function UsersListClient() {
+     {
+       key: "role",
+       header: "Role",
+-      render: (user) => user.role,
++      render: (user) => (
++        <StatusBadge variant={roleStatusVariant(user.role)}>{user.role}</StatusBadge>
++      ),
+       width: "140px",
+     },
+     {
+       key: "rh",
+       header: "RH",
+       render: (user) => (
+-        <>
+-          {user.isTrainee ? "Stagiaire" : "Titulaire"}
+-          <div style={{ fontSize: 12, opacity: 0.75 }}>{dailyScheduleLabel(user)}</div>
+-        </>
++        <div className="users-form">
++          <StatusBadge variant={user.isTrainee ? "warning" : "success"}>
++            {user.isTrainee ? "Stagiaire" : "Titulaire"}
++          </StatusBadge>
++          <span className="users-table-cell-subtle">{dailyScheduleLabel(user)}</span>
++        </div>
+       ),
+       width: "170px",
+     },
+     {
+       key: "depot",
+       header: "Base",
+-      render: (user) => depotLabel(user.depot),
++      render: (user) => (
++        <StatusBadge variant={depotStatusVariant(user)}>{depotLabel(user.depot)}</StatusBadge>
++      ),
+       width: "160px",
+     },
+   ]), []);
+@@ -266,11 +285,11 @@ export default function UsersListClient() {
+   }, [selectedUser]);
+ 
+   return (
+-    <section style={{ display: "grid", gap: 16 }}>
+-      <div className="panel" style={{ display: "grid", gap: 12 }}>
+-        <div>
+-          <h2 style={{ margin: 0 }}>Liste utilisateurs</h2>
+-          <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
++    <section className="users-section">
++      <div className="users-card">
++        <div className="users-card__head">
++          <h2 className="users-card__title">Liste utilisateurs</h2>
++          <p className="users-card__description">
+             Recherche simple, filtre role et pagination minimale sur les comptes actifs de la societe.
+           </p>
+         </div>
+@@ -278,8 +297,8 @@ export default function UsersListClient() {
+         <FilterBar
+           summary={`Filtres actifs : ${search ? `recherche "${search}"` : "aucune recherche"}${role ? `, role ${role}` : ", tous les roles"}`}
+         >
+-          <label style={{ display: "grid", gap: 6 }}>
+-            <span>Recherche</span>
++          <label className="users-field">
++            <span className="users-field__label">Recherche</span>
+             <input
+               type="text"
+               value={searchInput}
+@@ -288,8 +307,8 @@ export default function UsersListClient() {
+             />
+           </label>
+ 
+-          <label style={{ display: "grid", gap: 6 }}>
+-            <span>Role</span>
++          <label className="users-field">
++            <span className="users-field__label">Role</span>
+             <select value={role} onChange={(event) => setRole(event.target.value)}>
+               {ROLE_FILTER_OPTIONS.map((value) => (
+                 <option key={value || "ALL"} value={value}>
+@@ -317,27 +336,46 @@ export default function UsersListClient() {
+ 
+         {!loading && !error ? (
+           <>
+-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+-              <div style={{ opacity: 0.8 }}>
++            <div className="users-pagination">
++              <div className="users-table-cell-subtle">
+                 {pagination.total} utilisateur{pagination.total > 1 ? "s" : ""} - page {pagination.page} / {pagination.totalPages}
+               </div>
+ 
+-              <div style={{ display: "flex", gap: 8 }}>
+-                <button type="button" onClick={() => setPage((current) => Math.max(1, current - 1))} disabled={loading || !pagination.hasPreviousPage}>
++              <div className="users-actions">
++                <ActionButton
++                  size="sm"
++                  onClick={() => setPage((current) => Math.max(1, current - 1))}
++                  disabled={loading || !pagination.hasPreviousPage}
++                >
+                   Precedent
+-                </button>
+-                <button type="button" onClick={() => setPage((current) => current + 1)} disabled={loading || !pagination.hasNextPage}>
++                </ActionButton>
++                <ActionButton
++                  size="sm"
++                  onClick={() => setPage((current) => current + 1)}
++                  disabled={loading || !pagination.hasNextPage}
++                >
+                   Suivant
+-                </button>
++                </ActionButton>
+               </div>
+             </div>
+ 
+-            <div className="panel-soft">
+-              <strong>Selection actuelle :</strong>{" "}
++            <div className="users-selection-card">
++              <strong>Selection actuelle</strong>
+               {selectedUser ? (
+                 <>
+-                  {selectedUser.name}
+-                  {selectedUser.email ? ` (${selectedUser.email})` : ""} - role {selectedUser.role} - {selectedUser.isTrainee ? "stagiaire" : "titulaire"} - base {depotLabel(selectedUser.depot)}
++                  <span>
++                    <strong>{selectedUser.name}</strong>
++                    {selectedUser.email ? ` (${selectedUser.email})` : ""}
++                  </span>
++                  <div className="users-inline-status">
++                    <StatusBadge variant={roleStatusVariant(selectedUser.role)}>{selectedUser.role}</StatusBadge>
++                    <StatusBadge variant={selectedUser.isTrainee ? "warning" : "success"}>
++                      {selectedUser.isTrainee ? "Stagiaire" : "Titulaire"}
++                    </StatusBadge>
++                    <StatusBadge variant={depotStatusVariant(selectedUser)}>
++                      Base: {depotLabel(selectedUser.depot)}
++                    </StatusBadge>
++                  </div>
+                 </>
+               ) : (
+                 "Aucun utilisateur selectionne"

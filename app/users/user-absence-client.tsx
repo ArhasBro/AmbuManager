@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 
+import { ActionButton, EmptyState, ErrorMessage, StatusBadge } from "@/app/ui";
+
 import { type UserListRow } from "./users-client-shared";
 import { USERS_SELECTION_EVENT, type UsersSelectionEventDetail } from "./users-refresh";
 
@@ -89,7 +91,7 @@ function getErrorMessage(json: unknown, status: number) {
       : null;
 
     if (typeof conflict?.startAt === "string" && typeof conflict?.endAt === "string") {
-      return `Une absence existe déjà sur le créneau ${formatIntervalLabel(conflict.startAt, conflict.endAt)}.`;
+      return `Une absence existe deja sur le creneau ${formatIntervalLabel(conflict.startAt, conflict.endAt)}.`;
     }
   }
 
@@ -105,7 +107,7 @@ function getErrorMessage(json: unknown, status: number) {
   }
 
   if (json.error === "NOT_FOUND") return "Utilisateur ou absence introuvable.";
-  if (json.error === "FORBIDDEN") return "Action non autorisée.";
+  if (json.error === "FORBIDDEN") return "Action non autorisee.";
   if (json.error === "UNAUTHORIZED") return "Session invalide.";
 
   return json.error;
@@ -122,7 +124,7 @@ function formatDateTimeLabel(value: string) {
 }
 
 function formatIntervalLabel(startAt: string, endAt: string) {
-  return `${formatDateTimeLabel(startAt)} → ${formatDateTimeLabel(endAt)}`;
+  return `${formatDateTimeLabel(startAt)} -> ${formatDateTimeLabel(endAt)}`;
 }
 
 function toDatetimeLocalValue(value: string) {
@@ -145,6 +147,12 @@ function toEditableForm(absence: UserAbsenceRow): EditableAbsenceForm {
     startAt: toDatetimeLocalValue(absence.startAt),
     endAt: toDatetimeLocalValue(absence.endAt),
   };
+}
+
+function roleStatusVariant(role: string): "neutral" | "info" | "warning" {
+  if (role === "ADMIN" || role === "GERANT") return "info";
+  if (role === "BUREAU" || role === "REGULATEUR") return "warning";
+  return "neutral";
 }
 
 export default function UserAbsenceClient() {
@@ -230,14 +238,14 @@ export default function UserAbsenceClient() {
   }
 
   function validateForm() {
-    if (!selectedUser?.id) return "Aucun utilisateur sélectionné.";
-    if (!form.startAt || !form.endAt) return "Les dates de début et de fin sont obligatoires.";
+    if (!selectedUser?.id) return "Aucun utilisateur selectionne.";
+    if (!form.startAt || !form.endAt) return "Les dates de debut et de fin sont obligatoires.";
 
     const startAt = toIsoString(form.startAt);
     const endAt = toIsoString(form.endAt);
 
     if (!startAt || !endAt) return "Les dates saisies sont invalides.";
-    if (startAt >= endAt) return "La fin doit être strictement après le début.";
+    if (startAt >= endAt) return "La fin doit etre strictement apres le debut.";
 
     return null;
   }
@@ -254,7 +262,7 @@ export default function UserAbsenceClient() {
     }
 
     if (!selectedUser?.id) {
-      setError("Aucun utilisateur sélectionné.");
+      setError("Aucun utilisateur selectionne.");
       return;
     }
 
@@ -288,7 +296,7 @@ export default function UserAbsenceClient() {
         throw new Error(getErrorMessage(json, res.status));
       }
 
-      setSuccess(isEditing ? "Absence mise à jour." : "Absence créée.");
+      setSuccess(isEditing ? "Absence mise a jour." : "Absence creee.");
       resetForm();
       setReloadKey((current) => current + 1);
     } catch (e: unknown) {
@@ -300,11 +308,11 @@ export default function UserAbsenceClient() {
 
   async function onDelete(absence: UserAbsenceRow) {
     if (!selectedUser?.id) {
-      setError("Aucun utilisateur sélectionné.");
+      setError("Aucun utilisateur selectionne.");
       return;
     }
 
-    const confirmed = window.confirm(`Supprimer l'absence du créneau ${formatIntervalLabel(absence.startAt, absence.endAt)} ?`);
+    const confirmed = window.confirm(`Supprimer l'absence du creneau ${formatIntervalLabel(absence.startAt, absence.endAt)} ?`);
     if (!confirmed) return;
 
     setDeletingId(absence.id);
@@ -322,7 +330,7 @@ export default function UserAbsenceClient() {
       }
 
       if (editingAbsenceId === absence.id) resetForm();
-      setSuccess("Absence supprimée.");
+      setSuccess("Absence supprimee.");
       setReloadKey((current) => current + 1);
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Unknown error");
@@ -339,30 +347,40 @@ export default function UserAbsenceClient() {
   }
 
   return (
-    <section style={{ display: "grid", gap: 16 }}>
-      <div style={{ padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8, display: "grid", gap: 12 }}>
-        <div>
-          <h2 style={{ margin: 0 }}>Indisponibilités / absences</h2>
-          <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
-            Gestion UI minimale branchée sur l&apos;API users existante : lecture, création, modification et suppression des absences pour le salarié actuellement sélectionné dans la liste.
+    <section className="users-section">
+      <div className="users-card">
+        <div className="users-card__head">
+          <h2 className="users-card__title">Indisponibilites / absences</h2>
+          <p className="users-card__description">
+            Gestion UI minimale branchee sur l&apos;API users existante : lecture, creation, modification et suppression des absences pour le salarie selectionne.
           </p>
         </div>
 
-        <div style={{ padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
-          <strong>Utilisateur cible :</strong>{" "}
+        <div className="users-selection-card">
+          <strong>Utilisateur cible</strong>
           {selectedUser
-            ? `${selectedUser.name}${selectedUser.email ? ` (${selectedUser.email})` : ""} — rôle ${selectedUser.role}`
-            : "sélectionnez un utilisateur dans la liste ci-dessus."}
+            ? (
+              <>
+                <span>
+                  {selectedUser.name}
+                  {selectedUser.email ? ` (${selectedUser.email})` : ""}
+                </span>
+                <div className="users-inline-status">
+                  <StatusBadge variant={roleStatusVariant(selectedUser.role)}>{selectedUser.role}</StatusBadge>
+                </div>
+              </>
+            )
+            : "Selectionnez un utilisateur dans la liste ci-dessus."}
         </div>
 
         {selectedUser ? (
           <>
-            <form onSubmit={onSubmit} style={{ display: "grid", gap: 12, padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
-              <h3 style={{ margin: 0 }}>{editingAbsence ? "Modifier une absence" : "Créer une absence"}</h3>
+            <form onSubmit={onSubmit} className="users-card users-card--soft users-form">
+              <h3 className="users-card__title">{editingAbsence ? "Modifier une absence" : "Creer une absence"}</h3>
 
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12 }}>
-                <label style={{ display: "grid", gap: 6 }}>
-                  <span>Début</span>
+              <div className="users-form-grid">
+                <label className="users-field">
+                  <span className="users-field__label">Debut</span>
                   <input
                     type="datetime-local"
                     value={form.startAt}
@@ -372,8 +390,8 @@ export default function UserAbsenceClient() {
                   />
                 </label>
 
-                <label style={{ display: "grid", gap: 6 }}>
-                  <span>Fin</span>
+                <label className="users-field">
+                  <span className="users-field__label">Fin</span>
                   <input
                     type="datetime-local"
                     value={form.endAt}
@@ -384,79 +402,75 @@ export default function UserAbsenceClient() {
                 </label>
               </div>
 
-              <label style={{ display: "grid", gap: 6 }}>
-                <span>Motif</span>
+              <label className="users-field">
+                <span className="users-field__label">Motif</span>
                 <input
                   type="text"
                   maxLength={160}
                   value={form.reason}
                   onChange={(event) => setForm((current) => ({ ...current, reason: event.target.value }))}
-                  placeholder="Congé, formation, indisponible..."
+                  placeholder="Conge, formation, indisponible..."
                   disabled={saving || loading || deletingId !== null}
                 />
               </label>
 
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                <button type="submit" disabled={saving || loading || deletingId !== null}>
-                  {saving ? (editingAbsence ? "Mise à jour..." : "Création...") : (editingAbsence ? "Enregistrer" : "Créer l'absence")}
-                </button>
+              <div className="users-actions">
+                <ActionButton type="submit" variant="primary" disabled={saving || loading || deletingId !== null}>
+                  {saving ? (editingAbsence ? "Mise a jour..." : "Creation...") : (editingAbsence ? "Enregistrer" : "Creer l'absence")}
+                </ActionButton>
 
-                <button type="button" onClick={resetForm} disabled={saving || deletingId !== null || (!editingAbsence && !form.reason && !form.startAt && !form.endAt)}>
+                <ActionButton
+                  type="button"
+                  onClick={resetForm}
+                  disabled={saving || deletingId !== null || (!editingAbsence && !form.reason && !form.startAt && !form.endAt)}
+                >
                   {editingAbsence ? "Annuler la modification" : "Vider le formulaire"}
-                </button>
+                </ActionButton>
               </div>
             </form>
 
-            {error ? (
-              <div style={{ padding: 12, border: "1px solid var(--ui-danger-border)", borderRadius: 8 }}>
-                Erreur : {error}
-              </div>
-            ) : null}
+            {error ? <ErrorMessage title="Echec de gestion des absences" message={error} /> : null}
+            {success ? <div className="users-alert users-alert--success">{success}</div> : null}
 
-            {success ? (
-              <div style={{ padding: 12, border: "1px solid var(--ui-success-border)", borderRadius: 8 }}>
-                {success}
-              </div>
-            ) : null}
-
-            <div style={{ display: "grid", gap: 12, padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-                <h3 style={{ margin: 0 }}>Absences enregistrées</h3>
-                <span style={{ opacity: 0.8 }}>{items.length} élément{items.length > 1 ? "s" : ""}</span>
+            <div className="users-card users-card--soft">
+              <div className="users-pagination">
+                <h3 className="users-card__title">Absences enregistrees</h3>
+                <StatusBadge variant="neutral">{items.length} element{items.length > 1 ? "s" : ""}</StatusBadge>
               </div>
 
-              {loading ? <div>Chargement des absences...</div> : null}
+              {loading ? <div className="users-selection-card">Chargement des absences...</div> : null}
 
               {!loading && items.length === 0 ? (
-                <div style={{ padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
-                  Aucune absence enregistrée pour cet utilisateur.
-                </div>
+                <EmptyState
+                  title="Aucune absence enregistree"
+                  message="Aucune absence n'est actuellement enregistree pour cet utilisateur."
+                />
               ) : null}
 
               {!loading && items.length > 0 ? (
-                <div style={{ display: "grid", gap: 12 }}>
+                <div className="users-absence-list">
                   {items.map((absence) => {
                     const isEditing = editingAbsenceId === absence.id;
                     const isDeleting = deletingId === absence.id;
 
                     return (
-                      <article key={absence.id} style={{ padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8, display: "grid", gap: 8 }}>
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", gap: 12, flexWrap: "wrap" }}>
-                          <div style={{ display: "grid", gap: 6 }}>
+                      <article key={absence.id} className="users-absence-item">
+                        <div className="users-absence-item__head">
+                          <div className="users-form">
                             <strong>{formatIntervalLabel(absence.startAt, absence.endAt)}</strong>
-                            <span>{absence.reason || "Motif non renseigné"}</span>
-                            <span style={{ opacity: 0.7, fontSize: 13 }}>
-                              Dernière mise à jour : {formatDateTimeLabel(absence.updatedAt)}
+                            <span>{absence.reason || "Motif non renseigne"}</span>
+                            <span className="users-absence-item__meta">
+                              Derniere mise a jour : {formatDateTimeLabel(absence.updatedAt)}
                             </span>
                           </div>
 
-                          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                            <button type="button" onClick={() => startEdit(absence)} disabled={saving || isDeleting}>
-                              {isEditing ? "En cours d'édition" : "Modifier"}
-                            </button>
-                            <button type="button" onClick={() => onDelete(absence)} disabled={saving || isDeleting}>
+                          <div className="users-actions">
+                            <ActionButton type="button" onClick={() => startEdit(absence)} disabled={saving || isDeleting}>
+                              {isEditing ? "En cours d'edition" : "Modifier"}
+                            </ActionButton>
+                            <ActionButton type="button" onClick={() => onDelete(absence)} variant="danger" disabled={saving || isDeleting}>
                               {isDeleting ? "Suppression..." : "Supprimer"}
-                            </button>
+                            </ActionButton>
                           </div>
                         </div>
                       </article>

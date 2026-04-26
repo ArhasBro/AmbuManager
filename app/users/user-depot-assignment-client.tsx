@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 
+import { ActionButton, EmptyState, ErrorMessage, StatusBadge } from "@/app/ui";
+
 import { USERS_REFRESH_EVENT, dispatchUsersRefresh, dispatchUsersSelection } from "./users-refresh";
 
 type ApiOk<T> = {
@@ -39,11 +41,17 @@ function isApiErr(value: unknown): value is ApiErr {
 }
 
 function getDepotLabel(depot: DepotOption) {
-  return depot.isActive ? depot.name : `${depot.name} (archivé)`;
+  return depot.isActive ? depot.name : `${depot.name} (archive)`;
 }
 
 function buildInitialSelectedDepotIds(users: UserLite[]) {
   return Object.fromEntries(users.map((user) => [user.id, user.depotId ?? ""]));
+}
+
+function roleStatusVariant(role: string): "neutral" | "info" | "warning" {
+  if (role === "ADMIN" || role === "GERANT") return "info";
+  if (role === "BUREAU" || role === "REGULATEUR") return "warning";
+  return "neutral";
 }
 
 export default function UserDepotAssignmentClient({ availableDepots }: { availableDepots: DepotOption[] }) {
@@ -212,7 +220,7 @@ export default function UserDepotAssignmentClient({ availableDepots }: { availab
       }));
       dispatchUsersSelection(nextSelectedUser);
       dispatchUsersRefresh();
-      setSuccess(`Base enregistrée pour ${selectedUser.name}.`);
+      setSuccess(`Base enregistree pour ${selectedUser.name}.`);
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Unknown error");
     } finally {
@@ -221,17 +229,17 @@ export default function UserDepotAssignmentClient({ availableDepots }: { availab
   }
 
   return (
-    <div style={{ display: "grid", gap: 16, maxWidth: 720 }}>
-      <div style={{ padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
-        <h2 style={{ marginTop: 0 }}>Rattachement à une base</h2>
-        <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
-          Affectation minimale d&apos;un utilisateur de société à un dépôt unique de la société courante. Les comptes support globaux sont exclus. L&apos;utilisateur peut aussi rester sans base.
-        </p>
-      </div>
+    <section className="users-section">
+      <div className="users-card">
+        <div className="users-card__head">
+          <h2 className="users-card__title">Rattachement a une base</h2>
+          <p className="users-card__description">
+            Affectation d&apos;un utilisateur de societe a un depot unique de la societe courante. Les comptes support globaux sont exclus.
+          </p>
+        </div>
 
-      <div style={{ display: "grid", gap: 12, padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
-        <label style={{ display: "grid", gap: 6 }}>
-          <span>Utilisateur cible</span>
+        <label className="users-field">
+          <span className="users-field__label">Utilisateur cible</span>
           <select
             value={selectedUserId}
             onChange={(e) => {
@@ -243,34 +251,38 @@ export default function UserDepotAssignmentClient({ availableDepots }: { availab
           >
             {users.map((user) => (
               <option key={user.id} value={user.id}>
-                {user.name} — {user.role}
+                {user.name} - {user.role}
               </option>
             ))}
           </select>
         </label>
 
-        {loading ? <p style={{ margin: 0 }}>Chargement des utilisateurs...</p> : null}
+        {loading ? <div className="users-selection-card">Chargement des utilisateurs...</div> : null}
 
         {!loading && users.length === 0 ? (
-          <div style={{ padding: 10, border: "1px solid var(--ui-border-strong)", borderRadius: 8 }}>
-            Aucun utilisateur de société administrable disponible dans la société courante.
-          </div>
+          <EmptyState
+            title="Aucun utilisateur administrable"
+            message="Aucun utilisateur de societe administrable n'est disponible dans la societe courante."
+          />
         ) : null}
 
         {selectedUser ? (
           <>
-            <div style={{ padding: 10, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
-              <div>
+            <div className="users-selection-card">
+              <span>
                 <strong>{selectedUser.name}</strong>
-                {selectedUser.email ? ` (${selectedUser.email})` : ""} — rôle {selectedUser.role}
-              </div>
-              <div style={{ marginTop: 6, opacity: 0.8 }}>
-                Base actuelle : {selectedUser.depot ? getDepotLabel(selectedUser.depot) : "Aucune"}
+                {selectedUser.email ? ` (${selectedUser.email})` : ""}
+              </span>
+              <div className="users-inline-status">
+                <StatusBadge variant={roleStatusVariant(selectedUser.role)}>{selectedUser.role}</StatusBadge>
+                <StatusBadge variant={selectedUser.depot?.isActive ? "success" : "warning"}>
+                  Base actuelle: {selectedUser.depot ? getDepotLabel(selectedUser.depot) : "Aucune"}
+                </StatusBadge>
               </div>
             </div>
 
-            <label style={{ display: "grid", gap: 6 }}>
-              <span>Nouvelle base</span>
+            <label className="users-field">
+              <span className="users-field__label">Nouvelle base</span>
               <select
                 value={selectedDepotIds[selectedUser.id] ?? ""}
                 onChange={(e) => {
@@ -294,34 +306,28 @@ export default function UserDepotAssignmentClient({ availableDepots }: { availab
             </label>
 
             {availableDepots.filter((depot) => depot.isActive).length === 0 ? (
-              <div style={{ padding: 10, border: "1px solid var(--ui-border-strong)", borderRadius: 8 }}>
-                Aucun dépôt actif disponible pour rattacher un utilisateur.
-              </div>
+              <EmptyState
+                title="Aucun depot actif"
+                message="Aucun depot actif n'est disponible pour rattacher un utilisateur."
+              />
             ) : null}
           </>
         ) : null}
 
-        {error ? (
-          <div style={{ padding: 10, border: "1px solid var(--ui-danger-border)", borderRadius: 8 }}>
-            Erreur : {error}
-          </div>
-        ) : null}
+        {error ? <ErrorMessage title="Echec de l'affectation depot" message={error} /> : null}
+        {success ? <div className="users-alert users-alert--success">{success}</div> : null}
 
-        {success ? (
-          <div style={{ padding: 10, border: "1px solid var(--ui-success-border)", borderRadius: 8 }}>
-            {success}
-          </div>
-        ) : null}
-
-        <button
-          type="button"
-          onClick={() => void handleSave()}
-          disabled={loading || saving || !selectedUser || !hasPendingChange}
-          style={{ justifySelf: "start", padding: "10px 14px" }}
-        >
-          {saving ? "Enregistrement..." : "Enregistrer la base"}
-        </button>
+        <div className="users-actions">
+          <ActionButton
+            type="button"
+            onClick={() => void handleSave()}
+            variant="primary"
+            disabled={loading || saving || !selectedUser || !hasPendingChange}
+          >
+            {saving ? "Enregistrement..." : "Enregistrer la base"}
+          </ActionButton>
+        </div>
       </div>
-    </div>
+    </section>
   );
 }

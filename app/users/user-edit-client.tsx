@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 
+import { ActionButton, ErrorMessage, StatusBadge } from "@/app/ui";
 import {
   COMPANY_RULES_MANAGE_PERMISSION,
   isCompanyRulesGovernorRole,
@@ -107,6 +108,12 @@ function getAssignableRoleOptions(canGovernCompanyRules: boolean, currentRole?: 
   return baseOptions;
 }
 
+function roleStatusVariant(role: string): "neutral" | "info" | "warning" {
+  if (role === "ADMIN" || role === "GERANT") return "info";
+  if (role === "BUREAU" || role === "REGULATEUR") return "warning";
+  return "neutral";
+}
+
 export default function UserEditClient({ canGovernCompanyRules }: UserEditClientProps) {
   const [selectedUser, setSelectedUser] = useState<UserListRow | null>(null);
   const [loadedUser, setLoadedUser] = useState<EditableUser | null>(null);
@@ -159,7 +166,7 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
         }
 
         const user = toEditableUser(json.data);
-        if (!user) throw new Error("Réponse invalide de l’API d’édition utilisateur.");
+        if (!user) throw new Error("Reponse invalide de l'API d'edition utilisateur.");
 
         if (!cancelled) {
           setLoadedUser(user);
@@ -221,7 +228,7 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
     setSuccess(null);
 
     if (!selectedUser || !loadedUser) {
-      setError("Sélectionnez d'abord un utilisateur et attendez le chargement complet du formulaire.");
+      setError("Selectionnez d'abord un utilisateur et attendez le chargement complet du formulaire.");
       return;
     }
 
@@ -239,12 +246,12 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
     }
 
     if (!assignableRoleOptions.includes(role as (typeof assignableRoleOptions)[number])) {
-      setError("Le rôle est obligatoire.");
+      setError("Le role est obligatoire.");
       return;
     }
 
     if (!hasPendingChange) {
-      setError("Aucune modification détectée.");
+      setError("Aucune modification detectee.");
       return;
     }
 
@@ -253,7 +260,7 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
       const permissionChangeTouchesGovernance = permissionSetTouchesCompanyRulesGovernance(loadedUser.permissionCodes, permissionCodes);
 
       if (roleChangeTouchesGovernance || permissionChangeTouchesGovernance) {
-        setError("Seuls les comptes ADMIN ou GERANT peuvent attribuer, retirer ou conférer le droit de modification des règles métier.");
+        setError("Seuls les comptes ADMIN ou GERANT peuvent attribuer, retirer ou conferer le droit de modification des regles metier.");
         return;
       }
     }
@@ -279,7 +286,7 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
       }
 
       const updatedUser = toEditableUser(json.data);
-      if (!updatedUser) throw new Error("Réponse invalide de l’API d’édition utilisateur.");
+      if (!updatedUser) throw new Error("Reponse invalide de l'API d'edition utilisateur.");
 
       setSelectedUser(updatedUser);
       setLoadedUser(updatedUser);
@@ -287,7 +294,7 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
       setEmail(updatedUser.email ?? "");
       setRole(updatedUser.role);
       setPermissionCodes(updatedUser.permissionCodes);
-      setSuccess(`Utilisateur modifié : ${updatedUser.name}${updatedUser.email ? ` (${updatedUser.email})` : ""}.`);
+      setSuccess(`Utilisateur modifie : ${updatedUser.name}${updatedUser.email ? ` (${updatedUser.email})` : ""}.`);
       dispatchUsersSelection(updatedUser);
       dispatchUsersRefresh();
     } catch (e: unknown) {
@@ -298,50 +305,51 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
   }
 
   return (
-    <form onSubmit={onSubmit} style={{ display: "grid", gap: 12, padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8, maxWidth: 920 }}>
-      <div>
-        <h2 style={{ margin: 0 }}>Modifier un utilisateur</h2>
-        <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
-          Sélectionnez d&apos;abord un utilisateur dans la liste ci-dessus pour modifier les champs déjà couverts par USERS-06/07,
-          puis ajuster ici ses permissions applicatives ALPHA.
+    <form onSubmit={onSubmit} className="users-card users-form">
+      <div className="users-card__head">
+        <h2 className="users-card__title">Modifier un utilisateur</h2>
+        <p className="users-card__description">
+          Selectionnez d&apos;abord un utilisateur dans la liste ci-dessus pour modifier les champs couverts par USERS-06/07,
+          puis ajuster ses permissions applicatives ALPHA.
         </p>
         {!canGovernCompanyRules ? (
-          <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
-            La délégation du droit de modification des règles métier reste réservée aux comptes <code>ADMIN</code> ou <code>GERANT</code>.
+          <p className="users-help-text">
+            La delegation du droit de modification des regles metier reste reservee aux comptes <code>ADMIN</code> ou <code>GERANT</code>.
           </p>
         ) : null}
       </div>
 
       {!selectedUser ? (
-        <div style={{ padding: 10, border: "1px solid var(--ui-border-strong)", borderRadius: 8 }}>
-          Aucun utilisateur sélectionné dans la liste.
+        <div className="users-selection-card">
+          Aucun utilisateur selectionne dans la liste.
         </div>
       ) : (
         <>
-          <div style={{ padding: 10, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
-            <div>
+          <div className="users-selection-card">
+            <span>
               <strong>{selectedUser.name}</strong>
-              {selectedUser.email ? ` (${selectedUser.email})` : ""} — rôle {selectedUser.role}
-            </div>
-            <div style={{ marginTop: 6, opacity: 0.8 }}>
-              Base actuelle : {depotLabel(selectedUser.depot)}
+              {selectedUser.email ? ` (${selectedUser.email})` : ""}
+            </span>
+            <div className="users-inline-status">
+              <StatusBadge variant={roleStatusVariant(selectedUser.role)}>
+                Role: {selectedUser.role}
+              </StatusBadge>
+              <StatusBadge variant={selectedUser.depot?.isActive ? "success" : "warning"}>
+                Base: {depotLabel(selectedUser.depot)}
+              </StatusBadge>
             </div>
           </div>
 
           {loadingDetails ? (
-            <div style={{ padding: 10, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
-              Chargement des permissions et du détail d’édition...
-            </div>
+            <div className="users-selection-card">Chargement des permissions et du detail d&apos;edition...</div>
           ) : null}
 
           {detailsError ? (
-            <div style={{ padding: 10, border: "1px solid var(--ui-danger-border)", borderRadius: 8 }}>
-              Erreur de chargement du détail utilisateur : {detailsError}
-            </div>
+            <ErrorMessage title="Erreur de chargement utilisateur" message={detailsError} />
           ) : null}
 
-          <label style={{ display: "grid", gap: 6 }}>
-            <span>Nom</span>
+          <label className="users-field">
+            <span className="users-field__label">Nom</span>
             <input
               type="text"
               value={name}
@@ -352,8 +360,8 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
             />
           </label>
 
-          <label style={{ display: "grid", gap: 6 }}>
-            <span>Email</span>
+          <label className="users-field">
+            <span className="users-field__label">Email</span>
             <input
               type="email"
               value={email}
@@ -364,10 +372,10 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
             />
           </label>
 
-          <label style={{ display: "grid", gap: 6 }}>
-            <span>Rôle principal</span>
+          <label className="users-field">
+            <span className="users-field__label">Role principal</span>
             <select value={role} onChange={(event) => setRole(event.target.value)} disabled={submitting || loadingDetails || Boolean(detailsError) || roleFieldLocked}>
-              <option value="">Sélectionner un rôle</option>
+              <option value="">Selectionner un role</option>
               {assignableRoleOptions.map((option) => (
                 <option key={option} value={option}>
                   {option}
@@ -376,22 +384,22 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
             </select>
           </label>
 
-          <fieldset style={{ display: "grid", gap: 10, padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8 }} disabled={submitting || loadingDetails || Boolean(detailsError)}>
+          <fieldset className="users-fieldset" disabled={submitting || loadingDetails || Boolean(detailsError)}>
             <legend>Permissions applicatives ALPHA</legend>
-            <p style={{ margin: 0, opacity: 0.8 }}>
-              Le rôle principal reste unique via le champ <code>role</code>. Les cases ci-dessous ajoutent ou retirent uniquement les permissions applicatives ALPHA du compte sélectionné.
-              {!canGovernCompanyRules ? " La permission COMPANY_RULES_MANAGE reste verrouillée pour les comptes non natifs de gouvernance." : ""}
+            <p className="users-help-text">
+              Le role principal reste unique via le champ <code>role</code>. Les cases ci-dessous ajoutent ou retirent uniquement les permissions applicatives ALPHA.
+              {!canGovernCompanyRules ? " La permission COMPANY_RULES_MANAGE reste verrouillee pour les comptes non natifs de gouvernance." : ""}
             </p>
 
-            <div style={{ display: "grid", gap: 10, gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))" }}>
+            <div className="users-permission-grid">
               {ALPHA_PERMISSION_CATALOG.map((permission) => {
                 const checked = permissionCodes.includes(permission.code);
                 const isCompanyRulesPermission = permission.code === COMPANY_RULES_MANAGE_PERMISSION;
                 const permissionLocked = isCompanyRulesPermission && !canGovernCompanyRules;
 
                 return (
-                  <label key={permission.code} style={{ display: "grid", gap: 4, padding: 10, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
-                    <span style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                  <label key={permission.code} className="users-permission-card">
+                    <span className="users-permission-card__head">
                       <input
                         type="checkbox"
                         checked={checked}
@@ -400,13 +408,13 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
                       />
                       <strong>{permission.label}</strong>
                     </span>
-                    <span style={{ fontSize: 13, opacity: 0.8 }}>{permission.description}</span>
+                    <span className="users-help-text">{permission.description}</span>
                     {permissionLocked ? (
-                      <span style={{ fontSize: 12, opacity: 0.7 }}>
-                        Délégation réservée à la gouvernance native <code>ADMIN</code> / <code>GERANT</code>.
+                      <span className="users-help-text">
+                        Delegation reservee a la gouvernance native <code>ADMIN</code> / <code>GERANT</code>.
                       </span>
                     ) : null}
-                    <span style={{ fontSize: 12, opacity: 0.65 }}>{permission.code}</span>
+                    <span className="users-help-text">{permission.code}</span>
                   </label>
                 );
               })}
@@ -416,24 +424,22 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
       )}
 
       {error ? (
-        <div style={{ padding: 10, border: "1px solid var(--ui-danger-border)", borderRadius: 8 }}>
-          Erreur : {error}
-        </div>
+        <ErrorMessage title="Echec de modification utilisateur" message={error} />
       ) : null}
 
       {success ? (
-        <div style={{ padding: 10, border: "1px solid var(--ui-success-border)", borderRadius: 8 }}>
-          {success}
-        </div>
+        <div className="users-alert users-alert--success">{success}</div>
       ) : null}
 
-      <button
-        type="submit"
-        disabled={submitting || !selectedUser || !loadedUser || loadingDetails || Boolean(detailsError) || !hasPendingChange}
-        style={{ justifySelf: "start", padding: "10px 14px" }}
-      >
-        {submitting ? "Enregistrement..." : "Enregistrer les modifications"}
-      </button>
+      <div className="users-actions">
+        <ActionButton
+          type="submit"
+          variant="primary"
+          disabled={submitting || !selectedUser || !loadedUser || loadingDetails || Boolean(detailsError) || !hasPendingChange}
+        >
+          {submitting ? "Enregistrement..." : "Enregistrer les modifications"}
+        </ActionButton>
+      </div>
     </form>
   );
 }

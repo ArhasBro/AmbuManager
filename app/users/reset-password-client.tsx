@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 
+import { ActionButton, EmptyState, ErrorMessage, StatusBadge } from "@/app/ui";
+
 import { USERS_REFRESH_EVENT } from "./users-refresh";
 
 type ApiOk<T> = {
@@ -32,6 +34,12 @@ function isApiOk<T>(value: unknown): value is ApiOk<T> {
 
 function isApiErr(value: unknown): value is ApiErr {
   return typeof value === "object" && value !== null && "ok" in value && (value as { ok?: unknown }).ok === false;
+}
+
+function roleStatusVariant(role: string): "neutral" | "info" | "warning" {
+  if (role === "ADMIN" || role === "GERANT") return "info";
+  if (role === "BUREAU" || role === "REGULATEUR") return "warning";
+  return "neutral";
 }
 
 export default function ResetPasswordClient({ actorUserId }: Props) {
@@ -121,7 +129,7 @@ export default function ResetPasswordClient({ actorUserId }: Props) {
 
   const selectedUser = useMemo(
     () => users.find((user) => user.id === selectedUserId) ?? null,
-    [users, selectedUserId]
+    [users, selectedUserId],
   );
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
@@ -130,7 +138,7 @@ export default function ResetPasswordClient({ actorUserId }: Props) {
     setSuccess(null);
 
     if (!selectedUserId) {
-      setError("Aucun utilisateur cible sélectionné.");
+      setError("Aucun utilisateur cible selectionne.");
       return;
     }
 
@@ -152,7 +160,7 @@ export default function ResetPasswordClient({ actorUserId }: Props) {
 
       setNewPassword("");
       setConfirmPassword("");
-      setSuccess(`Mot de passe réinitialisé pour ${selectedUser?.name ?? "l'utilisateur"}.`);
+      setSuccess(`Mot de passe reinitialise pour ${selectedUser?.name ?? "l'utilisateur"}.`);
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Unknown error");
     } finally {
@@ -161,81 +169,87 @@ export default function ResetPasswordClient({ actorUserId }: Props) {
   }
 
   return (
-    <div style={{ display: "grid", gap: 16, maxWidth: 720 }}>
-      <div style={{ padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
-        <h2 style={{ marginTop: 0 }}>Cible</h2>
+    <section className="users-section">
+      <div className="users-card">
+        <div className="users-card__head">
+          <h2 className="users-card__title">Reinitialiser un mot de passe</h2>
+          <p className="users-card__description">
+            Le mot de passe est reinitialise pour un autre utilisateur de la societe courante.
+          </p>
+        </div>
 
-        {loading ? <p style={{ marginBottom: 0 }}>Chargement des utilisateurs...</p> : null}
+        {loading ? <div className="users-selection-card">Chargement des utilisateurs...</div> : null}
 
         {!loading && users.length === 0 ? (
-          <p style={{ marginBottom: 0 }}>Aucun autre utilisateur de société administrable n&apos;est disponible pour un reset.</p>
+          <EmptyState
+            title="Aucun utilisateur cible disponible"
+            message="Aucun autre utilisateur administrable n'est disponible pour un reset."
+          />
         ) : null}
 
         {!loading && users.length > 0 ? (
-          <div style={{ display: "grid", gap: 8 }}>
-            <label style={{ display: "grid", gap: 6 }}>
-              <span>Utilisateur</span>
+          <>
+            <label className="users-field">
+              <span className="users-field__label">Utilisateur</span>
               <select value={selectedUserId} onChange={(e) => setSelectedUserId(e.target.value)}>
                 {users.map((user) => (
                   <option key={user.id} value={user.id}>
-                    {user.name} — {user.role}
-                    {user.email ? ` — ${user.email}` : ""}
+                    {user.name} - {user.role}
+                    {user.email ? ` - ${user.email}` : ""}
                   </option>
                 ))}
               </select>
             </label>
 
             {selectedUser ? (
-              <p style={{ margin: 0, opacity: 0.8 }}>
-                Cible actuelle : <strong>{selectedUser.name}</strong>
-                {selectedUser.email ? ` (${selectedUser.email})` : ""} — rôle {selectedUser.role}
-              </p>
+              <div className="users-selection-card">
+                <span>
+                  <strong>{selectedUser.name}</strong>
+                  {selectedUser.email ? ` (${selectedUser.email})` : ""}
+                </span>
+                <div className="users-inline-status">
+                  <StatusBadge variant={roleStatusVariant(selectedUser.role)}>{selectedUser.role}</StatusBadge>
+                </div>
+              </div>
             ) : null}
-          </div>
+          </>
         ) : null}
+
+        <form onSubmit={onSubmit} className="users-form">
+          <div className="users-form-grid users-form-grid--short">
+            <label className="users-field">
+              <span className="users-field__label">Nouveau mot de passe</span>
+              <input
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                autoComplete="new-password"
+                disabled={loading || users.length === 0 || submitting}
+              />
+            </label>
+
+            <label className="users-field">
+              <span className="users-field__label">Confirmation</span>
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                autoComplete="new-password"
+                disabled={loading || users.length === 0 || submitting}
+              />
+            </label>
+          </div>
+
+          {error ? <ErrorMessage title="Echec de reinitialisation" message={error} /> : null}
+          {success ? <div className="users-alert users-alert--success">{success}</div> : null}
+
+          <div className="users-actions">
+            <ActionButton type="submit" variant="primary" disabled={loading || users.length === 0 || submitting || !selectedUserId}>
+              {submitting ? "Reinitialisation..." : "Reinitialiser le mot de passe"}
+            </ActionButton>
+          </div>
+        </form>
       </div>
-
-      <form onSubmit={onSubmit} style={{ display: "grid", gap: 12, padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
-        <h2 style={{ margin: 0 }}>Nouveau mot de passe</h2>
-
-        <label style={{ display: "grid", gap: 6 }}>
-          <span>Nouveau mot de passe</span>
-          <input
-            type="password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            autoComplete="new-password"
-            disabled={loading || users.length === 0 || submitting}
-          />
-        </label>
-
-        <label style={{ display: "grid", gap: 6 }}>
-          <span>Confirmation</span>
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            autoComplete="new-password"
-            disabled={loading || users.length === 0 || submitting}
-          />
-        </label>
-
-        {error ? (
-          <div style={{ padding: 10, border: "1px solid var(--ui-danger-border)", borderRadius: 8 }}>
-            Erreur : {error}
-          </div>
-        ) : null}
-
-        {success ? (
-          <div style={{ padding: 10, border: "1px solid var(--ui-success-border)", borderRadius: 8 }}>
-            {success}
-          </div>
-        ) : null}
-
-        <button type="submit" disabled={loading || users.length === 0 || submitting || !selectedUserId}>
-          {submitting ? "Réinitialisation..." : "Réinitialiser le mot de passe"}
-        </button>
-      </form>
-    </div>
+    </section>
   );
 }

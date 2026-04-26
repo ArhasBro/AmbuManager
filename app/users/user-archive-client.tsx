@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 
+import { ActionButton, ErrorMessage, StatusBadge } from "@/app/ui";
+
 import type { UserListRow } from "./users-client-shared";
 import { USERS_SELECTION_EVENT, dispatchUsersRefresh, dispatchUsersSelection, type UsersSelectionEventDetail } from "./users-refresh";
 
@@ -26,6 +28,12 @@ function readApiError(value: unknown, status: number) {
   return value.error;
 }
 
+function roleStatusVariant(role: string): "neutral" | "info" | "warning" {
+  if (role === "ADMIN" || role === "GERANT") return "info";
+  if (role === "BUREAU" || role === "REGULATEUR") return "warning";
+  return "neutral";
+}
+
 export default function UserArchiveClient({ actorUserId }: Props) {
   const [selectedUser, setSelectedUser] = useState<UserListRow | null>(null);
   const [archiving, setArchiving] = useState(false);
@@ -48,7 +56,7 @@ export default function UserArchiveClient({ actorUserId }: Props) {
   async function handleArchive() {
     setError(null);
     setSuccess(null);
-    if (!selectedUser) return setError("Sélectionnez d'abord un utilisateur actif dans la liste.");
+    if (!selectedUser) return setError("Selectionnez d'abord un utilisateur actif dans la liste.");
     if (isSelf) return setError("Vous ne pouvez pas archiver votre propre compte depuis cette interface.");
     if (!window.confirm(`Archiver ${selectedUser.name}${selectedUser.email ? ` (${selectedUser.email})` : ""} ?`)) return;
 
@@ -58,7 +66,7 @@ export default function UserArchiveClient({ actorUserId }: Props) {
       const json: unknown = await res.json();
       if (!res.ok || !isApiOk<ArchivedUser>(json)) throw new Error(readApiError(json, res.status));
       const archivedUser = json.data;
-      setSuccess(`Utilisateur archivé : ${archivedUser.name}${archivedUser.email ? ` (${archivedUser.email})` : ""}.`);
+      setSuccess(`Utilisateur archive : ${archivedUser.name}${archivedUser.email ? ` (${archivedUser.email})` : ""}.`);
       dispatchUsersSelection(null);
       dispatchUsersRefresh();
     } catch (e: unknown) {
@@ -69,30 +77,38 @@ export default function UserArchiveClient({ actorUserId }: Props) {
   }
 
   return (
-    <section style={{ display: "grid", gap: 16, maxWidth: 720 }}>
-      <div style={{ padding: 12, border: "1px solid var(--ui-border)", borderRadius: 8, display: "grid", gap: 12 }}>
-        <div>
-          <h2 style={{ margin: 0 }}>Archiver un utilisateur</h2>
-          <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
+    <section className="users-section">
+      <div className="users-card">
+        <div className="users-card__head">
+          <h2 className="users-card__title">Archiver un utilisateur</h2>
+          <p className="users-card__description">
             Archivage logique uniquement : le compte reste en base mais sort du flux standard des utilisateurs actifs.
           </p>
         </div>
 
         {!selectedUser ? (
-          <div style={{ padding: 10, border: "1px solid var(--ui-border-strong)", borderRadius: 8 }}>Aucun utilisateur sélectionné dans la liste.</div>
+          <div className="users-selection-card">Aucun utilisateur selectionne dans la liste.</div>
         ) : (
-          <div style={{ padding: 10, border: "1px solid var(--ui-border)", borderRadius: 8 }}>
-            <div><strong>{selectedUser.name}</strong>{selectedUser.email ? ` (${selectedUser.email})` : ""} — rôle {selectedUser.role}</div>
-            {isSelf ? <div style={{ marginTop: 6, opacity: 0.8 }}>Votre propre compte ne peut pas être archivé depuis cette UI.</div> : null}
+          <div className="users-selection-card">
+            <span>
+              <strong>{selectedUser.name}</strong>
+              {selectedUser.email ? ` (${selectedUser.email})` : ""}
+            </span>
+            <div className="users-inline-status">
+              <StatusBadge variant={roleStatusVariant(selectedUser.role)}>{selectedUser.role}</StatusBadge>
+              {isSelf ? <StatusBadge variant="warning">Compte courant</StatusBadge> : null}
+            </div>
           </div>
         )}
 
-        {error ? <div style={{ padding: 10, border: "1px solid var(--ui-danger-border)", borderRadius: 8 }}>Erreur : {error}</div> : null}
-        {success ? <div style={{ padding: 10, border: "1px solid var(--ui-success-border)", borderRadius: 8 }}>{success}</div> : null}
+        {error ? <ErrorMessage title="Echec de l'archivage utilisateur" message={error} /> : null}
+        {success ? <div className="users-alert users-alert--success">{success}</div> : null}
 
-        <button type="button" onClick={handleArchive} disabled={archiving || !selectedUser || isSelf} style={{ justifySelf: "start", padding: "10px 14px" }}>
-          {archiving ? "Archivage..." : "Archiver l'utilisateur sélectionné"}
-        </button>
+        <div className="users-actions">
+          <ActionButton type="button" onClick={handleArchive} variant="danger" disabled={archiving || !selectedUser || isSelf}>
+            {archiving ? "Archivage..." : "Archiver l'utilisateur selectionne"}
+          </ActionButton>
+        </div>
       </div>
     </section>
   );

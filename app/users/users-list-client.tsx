@@ -2,9 +2,10 @@
 
 import { useEffect, useMemo, useState } from "react";
 
+import { ActionButton, DataTable, FilterBar, StatusBadge, type DataTableColumn } from "@/app/ui";
+
 import { dailyScheduleLabel, depotLabel, USER_ROLE_OPTIONS, type UserListRow } from "./users-client-shared";
 import { USERS_REFRESH_EVENT, dispatchUsersSelection } from "./users-refresh";
-import { DataTable, FilterBar, type DataTableColumn } from "@/app/ui";
 
 type ApiOk<T> = {
   ok: true;
@@ -74,6 +75,17 @@ function toUserRow(value: unknown): UserListRow | null {
 
   if (!id || !name || !role) return null;
   return { id, name, firstName, lastName, initials, phone, email, role, depotId, depot, isTrainee, dailyWorkStartTime, dailyWorkEndTime };
+}
+
+function roleStatusVariant(role: string): "neutral" | "info" | "success" | "warning" {
+  if (role === "ADMIN" || role === "GERANT") return "info";
+  if (role === "BUREAU" || role === "REGULATEUR") return "warning";
+  return "neutral";
+}
+
+function depotStatusVariant(user: UserListRow): "neutral" | "success" | "warning" {
+  if (!user.depot) return "neutral";
+  return user.depot.isActive ? "success" : "warning";
 }
 
 export default function UsersListClient() {
@@ -202,6 +214,7 @@ export default function UsersListClient() {
     () => rows.find((user) => user.id === selectedUserId) ?? null,
     [rows, selectedUserId],
   );
+
   const columns = useMemo<DataTableColumn<UserListRow>[]>(() => ([
     {
       key: "name",
@@ -210,7 +223,7 @@ export default function UsersListClient() {
         <>
           <strong>{user.name}</strong>
           {(user.firstName || user.lastName) ? (
-            <div style={{ fontSize: 12, opacity: 0.75 }}>
+            <div className="users-table-cell-subtle">
               {[user.firstName, user.lastName].filter(Boolean).join(" ")}
             </div>
           ) : null}
@@ -239,24 +252,30 @@ export default function UsersListClient() {
     {
       key: "role",
       header: "Role",
-      render: (user) => user.role,
+      render: (user) => (
+        <StatusBadge variant={roleStatusVariant(user.role)}>{user.role}</StatusBadge>
+      ),
       width: "140px",
     },
     {
       key: "rh",
       header: "RH",
       render: (user) => (
-        <>
-          {user.isTrainee ? "Stagiaire" : "Titulaire"}
-          <div style={{ fontSize: 12, opacity: 0.75 }}>{dailyScheduleLabel(user)}</div>
-        </>
+        <div className="users-form">
+          <StatusBadge variant={user.isTrainee ? "warning" : "success"}>
+            {user.isTrainee ? "Stagiaire" : "Titulaire"}
+          </StatusBadge>
+          <span className="users-table-cell-subtle">{dailyScheduleLabel(user)}</span>
+        </div>
       ),
       width: "170px",
     },
     {
       key: "depot",
       header: "Base",
-      render: (user) => depotLabel(user.depot),
+      render: (user) => (
+        <StatusBadge variant={depotStatusVariant(user)}>{depotLabel(user.depot)}</StatusBadge>
+      ),
       width: "160px",
     },
   ]), []);
@@ -266,11 +285,11 @@ export default function UsersListClient() {
   }, [selectedUser]);
 
   return (
-    <section style={{ display: "grid", gap: 16 }}>
-      <div className="panel" style={{ display: "grid", gap: 12 }}>
-        <div>
-          <h2 style={{ margin: 0 }}>Liste utilisateurs</h2>
-          <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
+    <section className="users-section">
+      <div className="users-card">
+        <div className="users-card__head">
+          <h2 className="users-card__title">Liste utilisateurs</h2>
+          <p className="users-card__description">
             Recherche simple, filtre role et pagination minimale sur les comptes actifs de la societe.
           </p>
         </div>
@@ -278,8 +297,8 @@ export default function UsersListClient() {
         <FilterBar
           summary={`Filtres actifs : ${search ? `recherche "${search}"` : "aucune recherche"}${role ? `, role ${role}` : ", tous les roles"}`}
         >
-          <label style={{ display: "grid", gap: 6 }}>
-            <span>Recherche</span>
+          <label className="users-field">
+            <span className="users-field__label">Recherche</span>
             <input
               type="text"
               value={searchInput}
@@ -288,8 +307,8 @@ export default function UsersListClient() {
             />
           </label>
 
-          <label style={{ display: "grid", gap: 6 }}>
-            <span>Role</span>
+          <label className="users-field">
+            <span className="users-field__label">Role</span>
             <select value={role} onChange={(event) => setRole(event.target.value)}>
               {ROLE_FILTER_OPTIONS.map((value) => (
                 <option key={value || "ALL"} value={value}>
@@ -317,27 +336,46 @@ export default function UsersListClient() {
 
         {!loading && !error ? (
           <>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-              <div style={{ opacity: 0.8 }}>
+            <div className="users-pagination">
+              <div className="users-table-cell-subtle">
                 {pagination.total} utilisateur{pagination.total > 1 ? "s" : ""} - page {pagination.page} / {pagination.totalPages}
               </div>
 
-              <div style={{ display: "flex", gap: 8 }}>
-                <button type="button" onClick={() => setPage((current) => Math.max(1, current - 1))} disabled={loading || !pagination.hasPreviousPage}>
+              <div className="users-actions">
+                <ActionButton
+                  size="sm"
+                  onClick={() => setPage((current) => Math.max(1, current - 1))}
+                  disabled={loading || !pagination.hasPreviousPage}
+                >
                   Precedent
-                </button>
-                <button type="button" onClick={() => setPage((current) => current + 1)} disabled={loading || !pagination.hasNextPage}>
+                </ActionButton>
+                <ActionButton
+                  size="sm"
+                  onClick={() => setPage((current) => current + 1)}
+                  disabled={loading || !pagination.hasNextPage}
+                >
                   Suivant
-                </button>
+                </ActionButton>
               </div>
             </div>
 
-            <div className="panel-soft">
-              <strong>Selection actuelle :</strong>{" "}
+            <div className="users-selection-card">
+              <strong>Selection actuelle</strong>
               {selectedUser ? (
                 <>
-                  {selectedUser.name}
-                  {selectedUser.email ? ` (${selectedUser.email})` : ""} - role {selectedUser.role} - {selectedUser.isTrainee ? "stagiaire" : "titulaire"} - base {depotLabel(selectedUser.depot)}
+                  <span>
+                    <strong>{selectedUser.name}</strong>
+                    {selectedUser.email ? ` (${selectedUser.email})` : ""}
+                  </span>
+                  <div className="users-inline-status">
+                    <StatusBadge variant={roleStatusVariant(selectedUser.role)}>{selectedUser.role}</StatusBadge>
+                    <StatusBadge variant={selectedUser.isTrainee ? "warning" : "success"}>
+                      {selectedUser.isTrainee ? "Stagiaire" : "Titulaire"}
+                    </StatusBadge>
+                    <StatusBadge variant={depotStatusVariant(selectedUser)}>
+                      Base: {depotLabel(selectedUser.depot)}
+                    </StatusBadge>
+                  </div>
                 </>
               ) : (
                 "Aucun utilisateur selectionne"
