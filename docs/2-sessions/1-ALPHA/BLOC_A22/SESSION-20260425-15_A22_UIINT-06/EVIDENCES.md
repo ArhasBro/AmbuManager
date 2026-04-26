@@ -1,10 +1,38 @@
 ﻿# EVIDENCES
 
-Ã‰lÃ©ments factuels utilisÃ©s pendant la session.
+Elements factuels utilises pendant la session.
 
 ---
 
-## Sources utilisÃ©es
+## Sources utilisees
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+Noyau documentaire obligatoire relu :
+- `docs/1-master/DOCUMENT_MAITRE.md`
+- `docs/1-master/PLAN_DE_DEVELOPPEMENT.md`
+
+Template relu :
+- `docs/3-templates/TEMPLATE_DEBUT_SESSION.md`
+
+References UI/UX relues :
+- `docs/2-sessions/1-ALPHA/BLOC_A21/SESSION-20260425-06_A21_UX-06/REFERENCE_UI_UX_ALPHA_V1.0.md`
+- `docs/2-sessions/1-ALPHA/BLOC_A21/SESSION-20260425-07_A21_UX-07/A21-UX-07_CLOTURE_DOCUMENTAIRE_UI_UX.md`
+
+Sessions A22 relues car utiles :
+- `docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-10_A22_UIINT-01/FIN_SESSION.md`
+- `docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-10_A22_UIINT-01/PATCH/README_PATCH.md`
+- `docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-11_A22_UIINT-02/FIN_SESSION.md`
+- `docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-11_A22_UIINT-02/PATCH/README_PATCH.md`
+- `docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-12_A22_UIINT-03/FIN_SESSION.md`
+- `docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-12_A22_UIINT-03/PATCH/README_PATCH.md`
+- `docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-13_A22_UIINT-04/FIN_SESSION.md`
+- `docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-13_A22_UIINT-04/PATCH/README_PATCH.md`
+- `docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-14_A22_UIINT-05/FIN_SESSION.md`
+- `docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-14_A22_UIINT-05/PATCH/README_PATCH.md`
+
+## Commandes factuelles executees
+
+- `git apply --check "docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-15_A22_UIINT-06/PATCH/SESSION-20260425-15_A22_UIINT-06.diff"` : OK
+- `git apply "docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-15_A22_UIINT-06/PATCH/SESSION-20260425-15_A22_UIINT-06.diff"` : OK
+- `npm.cmd run lint` : OK
+- `npm.cmd run build` : OK
 

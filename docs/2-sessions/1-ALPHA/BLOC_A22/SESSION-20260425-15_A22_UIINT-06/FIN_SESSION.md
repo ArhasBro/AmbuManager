@@ -1,14 +1,18 @@
 ﻿# FIN_SESSION
 
-## ClÃ´ture
+## Cloture
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+Session executee en mode CORRECTION+COMPLETION avec patch principal unique limite a l'harmonisation UI du planning.
 
 ## Validation
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+- `git apply --check` patch principal : OK
+- `git apply` patch principal : OK
+- `npm.cmd run lint` : OK
+- `npm.cmd run build` : OK
+- Prisma : NON CONCERNE
 
 ## Verdict final
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+SESSION-20260425-15_A22_UIINT-06 : VALIDEE (PATCH)
 

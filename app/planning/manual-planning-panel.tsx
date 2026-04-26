@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState, type Dispatch, type SetStateAction } from "react";
+import { ActionButton, EmptyState, ErrorMessage, StatusBadge } from "@/app/ui";
 
 type UserLite = { id: string; name: string; email?: string };
 type DepotLite = { id: string; name: string; isActive: boolean };
@@ -328,16 +329,20 @@ export default function ManualPlanningPanel({
   const userChoices = canViewGlobal ? [{ id: "", name: "Toute la société" }, ...availableUsers] : [currentUser];
 
   return (
-    <section className="panel" style={{ marginBottom: 18, display: "grid", gap: 14 }}>
-      <div>
-        <div style={{ fontSize: 20, fontWeight: 800 }}>Planning manuel</div>
-        <div style={{ opacity: 0.75, marginTop: 4 }}>Vue jour / semaine / mois, création manuelle, modification publiée, annulation logique et historique minimal.</div>
+    <section className="panel planning-manual" style={{ marginBottom: 18, display: "grid", gap: 14 }}>
+      <div className="planning-manual__header">
+        <div className="planning-manual__title">Planning manuel</div>
+        <div className="planning-manual__description">Vue jour / semaine / mois, creation manuelle, modification publiee, annulation logique et historique minimal.</div>
+        <div className="planning-manual__badges">
+          <StatusBadge variant="info">{items.length} shifts</StatusBadge>
+          <StatusBadge variant="neutral">Vue {viewMode}</StatusBadge>
+        </div>
       </div>
 
-      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
-        <button onClick={() => move(-1)}>← Précédent</button>
-        <button onClick={() => setCursorDate(new Date())}>Aujourd’hui</button>
-        <button onClick={() => move(1)}>Suivant →</button>
+      <div className="planning-manual__toolbar">
+        <ActionButton size="sm" onClick={() => move(-1)}>{"<- Precedent"}</ActionButton>
+        <ActionButton size="sm" onClick={() => setCursorDate(new Date())}>Aujourd&apos;hui</ActionButton>
+        <ActionButton size="sm" onClick={() => move(1)}>{"Suivant ->"}</ActionButton>
         <select value={viewMode} onChange={(e) => setViewMode(e.target.value as ViewMode)}>
           <option value="day">Jour</option>
           <option value="week">Semaine</option>
@@ -350,23 +355,23 @@ export default function ManualPlanningPanel({
             </option>
           ))}
         </select>
-        <div style={{ fontWeight: 700 }}>
+        <StatusBadge variant="info">
           {viewMode === "month" ? cursorDate.toLocaleDateString("fr-FR", { month: "long", year: "numeric" }) : dateLabel(cursorDate.toISOString())}
-        </div>
+        </StatusBadge>
         {canExportPlanning ? (
           <>
-            <button onClick={() => triggerExport("pdf")}>Export PDF</button>
-            <button onClick={() => triggerExport("xlsx")}>Export XLSX</button>
-            <button onClick={() => triggerExport("csv")}>Export CSV</button>
+            <ActionButton size="sm" onClick={() => triggerExport("pdf")}>Export PDF</ActionButton>
+            <ActionButton size="sm" onClick={() => triggerExport("xlsx")}>Export XLSX</ActionButton>
+            <ActionButton size="sm" onClick={() => triggerExport("csv")}>Export CSV</ActionButton>
           </>
         ) : null}
-        <button onClick={() => window.print()}>Imprimer</button>
+        <ActionButton size="sm" onClick={() => window.print()}>Imprimer</ActionButton>
       </div>
 
       {canEditPlanning && (
-        <div style={{ border: "1px solid var(--ui-border)", borderRadius: 12, padding: 12, display: "grid", gap: 8 }}>
-          <div style={{ fontWeight: 700 }}>Ajouter un shift publié</div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 8 }}>
+        <div className="planning-manual__editor" style={{ border: "1px solid var(--ui-border)", borderRadius: 12, padding: 12, display: "grid", gap: 8 }}>
+          <div className="planning-manual__editor-title">Ajouter un shift publie</div>
+          <div className="planning-manual__editor-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 8 }}>
             <input type="date" value={createForm.date} onChange={(e) => setCreateForm((v) => ({ ...v, date: e.target.value }))} />
             <input type="time" value={createForm.startTime} onChange={(e) => setCreateForm((v) => ({ ...v, startTime: e.target.value }))} />
             <input type="time" value={createForm.endTime} onChange={(e) => setCreateForm((v) => ({ ...v, endTime: e.target.value }))} />
@@ -384,17 +389,17 @@ export default function ManualPlanningPanel({
             </select>
           </div>
           <textarea rows={2} placeholder="Notes" value={createForm.notes} onChange={(e) => setCreateForm((v) => ({ ...v, notes: e.target.value }))} />
-          <div><button disabled={saving || !createForm.templateId} onClick={submitCreate}>Créer</button></div>
+          <div className="planning-manual__editor-actions"><ActionButton variant="primary" disabled={saving || !createForm.templateId} onClick={submitCreate}>Creer</ActionButton></div>
         </div>
       )}
 
-      {message && <div style={{ color: "var(--ui-success-text)" }}>{message}</div>}
-      {error && <div style={{ color: "var(--ui-danger-text)" }}>Erreur : {error}</div>}
-      {loading && <div>Chargement du planning manuel…</div>}
+      {message && <div className="planning-manual__feedback planning-manual__feedback--success">{message}</div>}
+      {error && <ErrorMessage title="Erreur planning manuel" message={error} />}
+      {loading && <div className="planning-manual__loading">Chargement du planning manuel...</div>}
 
       {!loading && viewMode !== "month" && (
-        <div style={{ display: "grid", gap: 10 }}>
-          {items.length === 0 ? <div style={{ opacity: 0.7 }}>Aucun shift sur cette période.</div> : items.map((shift) => (
+        <div className="planning-manual__list" style={{ display: "grid", gap: 10 }}>
+          {items.length === 0 ? <EmptyState title="Aucun shift sur cette periode" message="Ajustez la vue ou creez un shift publie pour cette plage." /> : items.map((shift) => (
             <ShiftCard
               key={shift.id}
               shift={shift}
@@ -416,25 +421,25 @@ export default function ManualPlanningPanel({
       )}
 
       {!loading && viewMode === "month" && (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(7, minmax(120px, 1fr))", gap: 8 }}>
+        <div className="planning-manual__month-grid" style={{ display: "grid", gridTemplateColumns: "repeat(7, minmax(120px, 1fr))", gap: 8 }}>
           {monthDays.map((day) => {
             const key = formatDate(day);
             const dayItems = groupedByDay.get(key) ?? [];
             const isCurrentMonth = day.getMonth() === cursorDate.getMonth();
             return (
-              <div key={key} style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 8, minHeight: 120, opacity: isCurrentMonth ? 1 : 0.55 }}>
-                <div style={{ fontWeight: 700, marginBottom: 6 }}>{day.toLocaleDateString("fr-FR", { weekday: "short", day: "2-digit" })}</div>
-                {dayItems.length === 0 ? <div style={{ opacity: 0.6, fontSize: 12 }}>Aucun shift</div> : (
-                  <div style={{ display: "grid", gap: 6 }}>
+              <div key={key} className={`planning-manual__day-card${isCurrentMonth ? "" : " is-muted"}`} style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 8, minHeight: 120, opacity: isCurrentMonth ? 1 : 0.55 }}>
+                <div className="planning-manual__day-title" style={{ fontWeight: 700, marginBottom: 6 }}>{day.toLocaleDateString("fr-FR", { weekday: "short", day: "2-digit" })}</div>
+                {dayItems.length === 0 ? <div className="planning-manual__day-empty" style={{ opacity: 0.6, fontSize: 12 }}>Aucun shift</div> : (
+                  <div className="planning-manual__day-list" style={{ display: "grid", gap: 6 }}>
                     {dayItems.slice(0, 4).map((shift) => (
-                      <div key={shift.id} style={{ borderLeft: `6px solid ${shift.template?.color ?? "#2563eb"}`, paddingLeft: 8, fontSize: 12 }}>
-                        <div style={{ fontWeight: 700 }}>{timeHM(shift.startAt)}–{timeHM(shift.endAt)}</div>
-                        <div>{shift.template?.name ?? "Sans template"}</div>
-                        <div style={{ opacity: 0.8 }}>{shift.user?.name ?? "Non affecté"}</div>
-                        {shift.isCancelled && <div style={{ color: "var(--ui-danger-text)" }}>Annulé</div>}
+                      <div key={shift.id} className="planning-manual__day-item" style={{ borderLeft: `6px solid ${shift.template?.color ?? "#2563eb"}`, paddingLeft: 8, fontSize: 12 }}>
+                        <div className="planning-manual__day-item-time" style={{ fontWeight: 700 }}>{timeHM(shift.startAt)}-{timeHM(shift.endAt)}</div>
+                        <div className="planning-manual__day-item-template">{shift.template?.name ?? "Sans template"}</div>
+                        <div className="planning-manual__day-item-user" style={{ opacity: 0.8 }}>{shift.user?.name ?? "Non affecte"}</div>
+                        {shift.isCancelled ? <StatusBadge variant="danger">Annule</StatusBadge> : null}
                       </div>
                     ))}
-                    {dayItems.length > 4 && <div style={{ fontSize: 12, opacity: 0.7 }}>+ {dayItems.length - 4} autre(s)</div>}
+                    {dayItems.length > 4 && <div className="planning-manual__day-more" style={{ fontSize: 12, opacity: 0.7 }}>+ {dayItems.length - 4} autre(s)</div>}
                   </div>
                 )}
               </div>
@@ -476,8 +481,8 @@ function ShiftCard({
   canViewAudit: boolean;
 }) {
   return (
-    <div style={{ border: "1px solid var(--ui-border)", borderRadius: 12, padding: 12, display: "grid", gap: 8 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "flex-start" }}>
+    <div className="planning-manual-shift" style={{ border: "1px solid var(--ui-border)", borderRadius: 12, padding: 12, display: "grid", gap: 8 }}>
+      <div className="planning-manual-shift__head" style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "flex-start" }}>
         <div>
           <div style={{ fontWeight: 800 }}>{shift.template?.name ?? "Sans template"} — {shift.template?.category ?? "N/A"}</div>
           <div>{dateLabel(shift.startAt)} • {timeHM(shift.startAt)} → {timeHM(shift.endAt)}</div>
@@ -487,17 +492,17 @@ function ShiftCard({
           {shift.isCancelled && <div style={{ color: "var(--ui-danger-text)", fontWeight: 700 }}>Annulé — {shift.cancellationReason ?? "sans motif"}</div>}
         </div>
         {canEditPlanning && !shift.isCancelled && (
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-            <button onClick={onEdit}>Modifier</button>
-            <button onClick={onCancelShift}>Annuler</button>
+          <div className="planning-manual-shift__actions" style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            <ActionButton size="sm" onClick={onEdit}>Modifier</ActionButton>
+            <ActionButton size="sm" variant="danger" onClick={onCancelShift}>Annuler</ActionButton>
           </div>
         )}
       </div>
 
       {isEditing && (
-        <div style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 10, display: "grid", gap: 8 }}>
-          <div style={{ fontWeight: 700 }}>Modifier le shift publié</div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 8 }}>
+        <div className="planning-manual-shift__edit" style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 10, display: "grid", gap: 8 }}>
+          <div className="planning-manual-shift__edit-title" style={{ fontWeight: 700 }}>Modifier le shift publie</div>
+          <div className="planning-manual-shift__edit-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 8 }}>
             <input type="date" value={editForm.date} onChange={(e) => setEditForm((v) => ({ ...v, date: e.target.value }))} />
             <input type="time" value={editForm.startTime} onChange={(e) => setEditForm((v) => ({ ...v, startTime: e.target.value }))} />
             <input type="time" value={editForm.endTime} onChange={(e) => setEditForm((v) => ({ ...v, endTime: e.target.value }))} />
@@ -515,15 +520,15 @@ function ShiftCard({
             </select>
           </div>
           <textarea rows={2} value={editForm.notes} onChange={(e) => setEditForm((v) => ({ ...v, notes: e.target.value }))} />
-          <div style={{ display: "flex", gap: 8 }}>
-            <button onClick={onSaveEdit}>Enregistrer</button>
-            <button onClick={onCancelEdit}>Fermer</button>
+          <div className="planning-manual-shift__edit-actions" style={{ display: "flex", gap: 8 }}>
+            <ActionButton size="sm" variant="primary" onClick={onSaveEdit}>Enregistrer</ActionButton>
+            <ActionButton size="sm" onClick={onCancelEdit}>Fermer</ActionButton>
           </div>
         </div>
       )}
 
-      <div style={{ display: "grid", gap: 6 }}>
-        <div style={{ fontWeight: 700 }}>Historique minimal</div>
+      <div className="planning-manual-shift__history" style={{ display: "grid", gap: 6 }}>
+        <div className="planning-manual-shift__history-title" style={{ fontWeight: 700 }}>Historique minimal</div>
         {!canViewAudit ? <div style={{ opacity: 0.65 }}>Accès audit non autorisé.</div> : history.length === 0 ? <div style={{ opacity: 0.65 }}>Aucune trace disponible.</div> : history.slice(0, 6).map((entry) => (
           <div key={entry.id} style={{ fontSize: 13, opacity: 0.9 }}>
             {dateTimeLabel(entry.createdAt)} — {entry.summary}

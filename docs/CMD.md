@@ -280,8 +280,8 @@ IMPORTANT
 
 Références des sessions :
 
-- SESSION-20260425-15_A22_UIINT-06
-- **A22-UIINT-06 — CORRECTION+COMPLÉTION** — Planning : harmonisation UI du planning uniquement. Livrable attendu : planning harmonisé. DoD : lisibilité métier conservée, sans régression fonctionnelle.
+- SESSION-20260425-16_A22_UIINT-07
+- **A22-UIINT-07 — CORRECTION+COMPLÉTION** — Users : harmonisation UI du module utilisateurs / RH. Livrable attendu : écrans users harmonisés. DoD : formulaires et listes users cohérents.
 
 ------------------------------------
 
@@ -305,12 +305,6 @@ Exemple de la commande :
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 Unblock-File -Path .\create_session.ps1
 .\create_session.ps1 -Stage "1-ALPHA" -Block "A1" -SessionCode "RBAC-02" -Type "CORRECTION" -Title "Remplacement méthodique de DEA par ADE"
-
-
-
-
-
-- **A22-UIINT-07 — CORRECTION+COMPLÉTION** — Users : harmonisation UI du module utilisateurs / RH. Livrable attendu : écrans users harmonisés. DoD : formulaires et listes users cohérents.
 
 - **A22-UIINT-08 — CORRECTION+COMPLÉTION** — Vehicles : harmonisation UI du module véhicules. Livrable attendu : écrans vehicles harmonisés. DoD : formulaires et listes vehicles cohérents.
 

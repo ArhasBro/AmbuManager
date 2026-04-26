@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { COMPANY_PARAMETER_KEYS, parsePlanningViewModeValue, serializePlanningViewModeValue, type PlanningViewModeValue } from "@/lib/company-rules/catalog";
 import { normalizeTemplateColor, resolveTemplateMinStaffCount } from "@/lib/templates/template-rules";
+import { ActionButton, StatusBadge } from "@/app/ui";
 
 import ManualPlanningPanel from "./manual-planning-panel";
 
@@ -1670,7 +1671,7 @@ export default function PlanningClient({
   }, [matchQuality]);
 
   return (
-    <section style={{ display: "grid", gap: 12 }}>
+    <section className="planning-page" style={{ display: "grid", gap: 12 }}>
       <ManualPlanningPanel
         availableDepots={availableDepots}
         availableUsers={availableUsers}
@@ -1681,26 +1682,31 @@ export default function PlanningClient({
         canExportPlanning={canExportPlanning}
       />
 
-      <section style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 12, display: "grid", gap: 8 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
+      <section className="planning-legacy" style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 12, display: "grid", gap: 8 }}>
+        <div className="planning-legacy__head" style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
           <div>
             <div style={{ fontWeight: 800 }}>Zone legacy / autoschedule</div>
             <div style={{ opacity: 0.75, fontSize: 13 }}>
               Hors surface principale A8. Le planning manuel exploitable est affiché ci-dessus.
             </div>
           </div>
-          <button onClick={() => setShowLegacyPlanning((value) => !value)}>
-            {showLegacyPlanning ? "Masquer" : "Afficher"}
-          </button>
+          <div className="planning-legacy__actions">
+            <StatusBadge variant={showLegacyPlanning ? "warning" : "neutral"}>
+              {showLegacyPlanning ? "Legacy visible" : "Legacy masque"}
+            </StatusBadge>
+            <ActionButton size="sm" onClick={() => setShowLegacyPlanning((value) => !value)}>
+              {showLegacyPlanning ? "Masquer" : "Afficher"}
+            </ActionButton>
+          </div>
         </div>
       </section>
 
       {showLegacyPlanning && (
         <>
-      <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-        <button onClick={() => setWeekStart(addDays(weekStart, -7))}>Semaine -1</button>
-        <button onClick={() => setWeekStart(startOfWeekMonday(new Date()))}>Aujourd&apos;hui</button>
-        <button onClick={() => setWeekStart(addDays(weekStart, 7))}>Semaine +1</button>
+      <div className="planning-legacy__toolbar" style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+        <ActionButton size="sm" onClick={() => setWeekStart(addDays(weekStart, -7))}>Semaine -1</ActionButton>
+        <ActionButton size="sm" onClick={() => setWeekStart(startOfWeekMonday(new Date()))}>Aujourd&apos;hui</ActionButton>
+        <ActionButton size="sm" onClick={() => setWeekStart(addDays(weekStart, 7))}>Semaine +1</ActionButton>
 
         <div style={{ marginLeft: 8, fontWeight: 700 }}>{title}</div>
       </div>
@@ -2269,7 +2275,7 @@ export default function PlanningClient({
       {error && <div style={{ color: "var(--ui-danger-text)" }}>Erreur : {error}</div>}
 
       {!loading && !error && (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(7, minmax(160px, 1fr))", gap: 10 }}>
+        <div className="planning-legacy__week-grid" style={{ display: "grid", gridTemplateColumns: "repeat(7, minmax(160px, 1fr))", gap: 10 }}>
           {weekDays.map((d) => {
             const key = formatDate(d);
             const dayShifts = grouped[key] ?? [];
@@ -2277,6 +2283,7 @@ export default function PlanningClient({
 
             return (
               <div
+                className="planning-legacy__day-card"
                 key={key}
                 style={{
                   border: "1px solid var(--ui-border)",
