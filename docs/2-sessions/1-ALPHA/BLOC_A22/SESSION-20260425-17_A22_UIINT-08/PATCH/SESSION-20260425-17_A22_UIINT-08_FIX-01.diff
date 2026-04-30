@@ -1,0 +1,49 @@
+﻿diff --git a/app/vehicles/vehicles-client.tsx b/app/vehicles/vehicles-client.tsx
+index 3fb8493..0524ba5 100644
+--- a/app/vehicles/vehicles-client.tsx
++++ b/app/vehicles/vehicles-client.tsx
+@@ -596,7 +596,7 @@ export default function VehiclesClient({
+ 
+               <ActionButton
+                 size="sm"
+-                variant="danger"
++                tone="danger"
+                 onClick={() => handleArchiveVehicle(vehicle)}
+                 disabled={isBusy}
+               >
+@@ -615,15 +615,18 @@ export default function VehiclesClient({
+     savingDepotVehicleId,
+     savingEditVehicleId,
+     selectedDepotIds,
++    handleArchiveVehicle,
++    handleSaveDepot,
++    openEditVehicle,
+   ]);
+ 
+   return (
+     <section className="vehicles-section">
+       <div className="vehicles-grid-stats">
+         <StatCard title="Vehicules actifs" value={vehicleStats.total} hint="Flotte active de la societe" />
+-        <StatCard title="Conformes" value={vehicleStats.conformes} hint="Dossiers a jour" variant="success" />
+-        <StatCard title="Bientot expires" value={vehicleStats.bientotExpires} hint={`A moins de ${DOCUMENT_WARNING_WINDOW_DAYS} jours`} variant="warning" />
+-        <StatCard title="Indisponibles" value={vehicleStats.indisponibles} hint="Maintenance ou hors service" variant="danger" />
++        <StatCard title="Conformes" value={vehicleStats.conformes} hint="Dossiers a jour" tone="success" />
++        <StatCard title="Bientot expires" value={vehicleStats.bientotExpires} hint={`A moins de ${DOCUMENT_WARNING_WINDOW_DAYS} jours`} tone="warning" />
++        <StatCard title="Indisponibles" value={vehicleStats.indisponibles} hint="Maintenance ou hors service" tone="danger" />
+       </div>
+ 
+       {error ? <ErrorMessage title="Erreur module vehicules" message={error} /> : null}
+@@ -637,7 +640,7 @@ export default function VehiclesClient({
+           </p>
+           {!canCreateVehicle ? (
+             <div className="vehicles-inline-status">
+-              <StatusBadge variant="warning">Creation reservee au profil ADMIN</StatusBadge>
++              <StatusBadge tone="warning">Creation reservee au profil ADMIN</StatusBadge>
+             </div>
+           ) : null}
+         </div>
+@@ -870,3 +873,4 @@ export default function VehiclesClient({
+     </section>
+   );
+ }
++

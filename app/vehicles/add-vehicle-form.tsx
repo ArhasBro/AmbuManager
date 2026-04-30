@@ -2,8 +2,22 @@
 
 import { useState } from "react";
 
+import { ActionButton } from "@/app/ui";
+
 type VehicleType = "AMBULANCE" | "VSL" | "TAXI";
 type VehicleStatus = "ACTIVE" | "MAINTENANCE" | "OUT_OF_SERVICE";
+
+const VEHICLE_TYPE_OPTIONS: Array<{ value: VehicleType; label: string }> = [
+  { value: "AMBULANCE", label: "Ambulance" },
+  { value: "VSL", label: "VSL" },
+  { value: "TAXI", label: "Taxi" },
+];
+
+const VEHICLE_STATUS_OPTIONS: Array<{ value: VehicleStatus; label: string }> = [
+  { value: "ACTIVE", label: "Disponible" },
+  { value: "MAINTENANCE", label: "Maintenance" },
+  { value: "OUT_OF_SERVICE", label: "Hors service" },
+];
 
 export function AddVehicleForm({
   onSubmit,
@@ -17,15 +31,15 @@ export function AddVehicleForm({
   const [status, setStatus] = useState<VehicleStatus>("ACTIVE");
 
   function isVehicleType(value: string): value is VehicleType {
-    return value === "AMBULANCE" || value === "VSL" || value === "TAXI";
+    return VEHICLE_TYPE_OPTIONS.some((option) => option.value === value);
   }
 
   function isVehicleStatus(value: string): value is VehicleStatus {
-    return value === "ACTIVE" || value === "MAINTENANCE" || value === "OUT_OF_SERVICE";
+    return VEHICLE_STATUS_OPTIONS.some((option) => option.value === value);
   }
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
 
     const payload = {
       immatriculation: immatriculation.trim().toUpperCase(),
@@ -42,46 +56,61 @@ export function AddVehicleForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-      <input
-        value={immatriculation}
-        onChange={(e) => setImmatriculation(e.target.value)}
-        placeholder="Immatriculation (ex: AA-123-AA)"
-        style={{ padding: 10, minWidth: 240 }}
-        disabled={disabled}
-      />
+    <form onSubmit={handleSubmit} className="vehicles-form vehicles-form-grid vehicles-form-grid--create">
+      <label className="vehicles-field">
+        <span className="vehicles-field__label">Immatriculation</span>
+        <input
+          type="text"
+          value={immatriculation}
+          onChange={(event) => setImmatriculation(event.target.value)}
+          placeholder="AA-123-AA"
+          disabled={disabled}
+          maxLength={24}
+          required
+        />
+      </label>
 
-      <select
-        value={type}
-        onChange={(e) => {
-          const v = e.target.value;
-          if (isVehicleType(v)) setType(v);
-        }}
-        style={{ padding: 10 }}
-        disabled={disabled}
-      >
-        <option value="AMBULANCE">AMBULANCE</option>
-        <option value="VSL">VSL</option>
-        <option value="TAXI">TAXI</option>
-      </select>
+      <label className="vehicles-field">
+        <span className="vehicles-field__label">Type</span>
+        <select
+          value={type}
+          onChange={(event) => {
+            const nextValue = event.target.value;
+            if (isVehicleType(nextValue)) setType(nextValue);
+          }}
+          disabled={disabled}
+        >
+          {VEHICLE_TYPE_OPTIONS.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </label>
 
-      <select
-        value={status}
-        onChange={(e) => {
-          const v = e.target.value;
-          if (isVehicleStatus(v)) setStatus(v);
-        }}
-        style={{ padding: 10 }}
-        disabled={disabled}
-      >
-        <option value="ACTIVE">ACTIVE</option>
-        <option value="MAINTENANCE">MAINTENANCE</option>
-        <option value="OUT_OF_SERVICE">OUT_OF_SERVICE</option>
-      </select>
+      <label className="vehicles-field">
+        <span className="vehicles-field__label">Statut</span>
+        <select
+          value={status}
+          onChange={(event) => {
+            const nextValue = event.target.value;
+            if (isVehicleStatus(nextValue)) setStatus(nextValue);
+          }}
+          disabled={disabled}
+        >
+          {VEHICLE_STATUS_OPTIONS.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </label>
 
-      <button disabled={disabled} style={{ padding: 10 }}>
-        {disabled ? "Ajout..." : "Ajouter"}
-      </button>
+      <div className="vehicles-actions vehicles-actions--end">
+        <ActionButton type="submit" variant="primary" disabled={disabled}>
+          {disabled ? "Ajout..." : "Ajouter le vehicule"}
+        </ActionButton>
+      </div>
     </form>
   );
 }

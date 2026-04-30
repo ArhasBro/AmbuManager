@@ -280,8 +280,8 @@ IMPORTANT
 
 Références des sessions :
 
-- SESSION-20260425-17_A22_UIINT-08
-- **A22-UIINT-08 — CORRECTION+COMPLÉTION** — Vehicles : harmonisation UI du module véhicules. Livrable attendu : écrans vehicles harmonisés. DoD : formulaires et listes vehicles cohérents.
+- SESSION-20260425-18_A22_UIINT-09
+- **A22-UIINT-09 — CORRECTION+COMPLÉTION** — Templates : harmonisation UI du module templates. Livrable attendu : écrans templates harmonisés. DoD : édition et listes templates cohérentes.
 
 ------------------------------------
 
@@ -306,10 +306,6 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 Unblock-File -Path .\create_session.ps1
 .\create_session.ps1 -Stage "1-ALPHA" -Block "A1" -SessionCode "RBAC-02" -Type "CORRECTION" -Title "Remplacement méthodique de DEA par ADE"
 
-
-
-- **A22-UIINT-09 — CORRECTION+COMPLÉTION** — Templates : harmonisation UI du module templates. Livrable attendu : écrans templates harmonisés. DoD : édition et listes templates cohérentes.
-
 - **A22-UIINT-10 — CORRECTION+COMPLÉTION** — Company / Dépôts : harmonisation UI des pages société et dépôts. Livrable attendu : cohérence visuelle des modules structure. DoD : formulaires et listes alignés avec le socle UI.
 
 - **A22-UIINT-11 — CORRECTION+COMPLÉTION** — Onboarding : harmonisation UI de l’onboarding. Livrable attendu : écran onboarding harmonisé. DoD : étapes lisibles et cohérentes.
@@ -318,7 +314,7 @@ Unblock-File -Path .\create_session.ps1
 
 - **A22-UIINT-13 — CORRECTION+COMPLÉTION** — Login / Privacy : intégration visuelle des pages simples. Livrable attendu : alignement visuel des pages login et privacy. DoD : cohérence avec les références `Login_V1.1` et `Privacy_V1.0`.
 
-- **CLOTURE_A22 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc intégration code UI/UX / Navigation.
+- **CLOTURE_A22 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc intégration code UI/UX / Navigation. Vérification et correction (si besoin) complète de **A22-UIINT-01 à **A22-UIINT-13.
 ------------------------------------
 
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned

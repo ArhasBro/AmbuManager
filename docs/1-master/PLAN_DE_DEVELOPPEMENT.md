@@ -985,7 +985,7 @@ A22 doit transformer progressivement la référence UI/UX validée en composants
 
 - **A22-UIINT-13 — CORRECTION+COMPLÉTION** — Login / Privacy : intégration visuelle des pages simples. Livrable attendu : alignement visuel des pages login et privacy. DoD : cohérence avec les références `Login_V1.1` et `Privacy_V1.0`.
 
-- **CLOTURE_A22 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc intégration code UI/UX / Navigation.
+- **CLOTURE_A22 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc intégration code UI/UX / Navigation. Vérification et correction (si besoin) complète de **A22-UIINT-01 à **A22-UIINT-13.
 
 #### Résultat attendu
 - shell applicatif intégré ;

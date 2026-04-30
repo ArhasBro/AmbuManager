@@ -1,6 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
+
+import { ActionButton, DataTable, ErrorMessage, FilterBar, StatCard, StatusBadge, type DataTableColumn } from "@/app/ui";
+
 import { AddVehicleForm } from "./add-vehicle-form";
 
 type DepotOption = {
@@ -30,47 +33,14 @@ type ApiResponse<T> = ApiSuccess<T> | ApiFailure;
 
 type VehicleTypeOption = "AMBULANCE" | "VSL" | "TAXI";
 type VehicleStatusOption = "ACTIVE" | "MAINTENANCE" | "OUT_OF_SERVICE";
-type VehicleDocumentStatus = "conforme" | "bientôt expiré" | "expiré";
+type VehicleDocumentStatus = "conforme" | "bientot_expire" | "expire";
+type VehicleStatusFilter = "" | VehicleStatusOption;
+type VehicleTypeFilter = "" | VehicleTypeOption;
+type VehicleDocumentFilter = "" | VehicleDocumentStatus;
 
 const VEHICLE_TYPE_OPTIONS: VehicleTypeOption[] = ["AMBULANCE", "VSL", "TAXI"];
 const VEHICLE_STATUS_OPTIONS: VehicleStatusOption[] = ["ACTIVE", "MAINTENANCE", "OUT_OF_SERVICE"];
 const DOCUMENT_WARNING_WINDOW_DAYS = 30;
-
-const DOCUMENT_STATUS_STYLES: Record<VehicleDocumentStatus, React.CSSProperties> = {
-  conforme: {
-    display: "inline-flex",
-    alignItems: "center",
-    padding: "4px 10px",
-    borderRadius: 999,
-    border: "1px solid var(--ui-success-border)",
-    backgroundColor: "var(--ui-success-bg)",
-    color: "var(--ui-success-text)",
-    fontSize: 13,
-    fontWeight: 600,
-  },
-  "bientôt expiré": {
-    display: "inline-flex",
-    alignItems: "center",
-    padding: "4px 10px",
-    borderRadius: 999,
-    border: "1px solid var(--ui-warning-border)",
-    backgroundColor: "var(--ui-warning-bg)",
-    color: "var(--ui-warning-text)",
-    fontSize: 13,
-    fontWeight: 600,
-  },
-  expiré: {
-    display: "inline-flex",
-    alignItems: "center",
-    padding: "4px 10px",
-    borderRadius: 999,
-    border: "1px solid var(--ui-danger-border)",
-    backgroundColor: "var(--ui-danger-bg)",
-    color: "var(--ui-danger-text)",
-    fontSize: 13,
-    fontWeight: 600,
-  },
-};
 
 function getApiError<T>(payload: ApiResponse<T> | null, fallback: string) {
   return payload && !payload.ok ? payload.error : fallback;
@@ -81,11 +51,19 @@ function buildInitialSelectedDepotIds(vehicles: Vehicle[]) {
 }
 
 function getDepotLabel(depot: DepotOption) {
-  return depot.isActive ? depot.name : `${depot.name} (archivé)`;
+  return depot.isActive ? depot.name : `${depot.name} (archive)`;
 }
 
 function compareVehiclesByImmatriculation(a: Vehicle, b: Vehicle) {
   return a.immatriculation.localeCompare(b.immatriculation, "fr", { sensitivity: "base" });
+}
+
+function isVehicleTypeOption(value: string): value is VehicleTypeOption {
+  return VEHICLE_TYPE_OPTIONS.some((option) => option === value);
+}
+
+function isVehicleStatusOption(value: string): value is VehicleStatusOption {
+  return VEHICLE_STATUS_OPTIONS.some((option) => option === value);
 }
 
 function getEditableVehicleType(value: Vehicle["type"]): VehicleTypeOption {
@@ -101,7 +79,7 @@ function formatDateInputValue(value: string | null) {
 }
 
 function formatDocumentDateLabel(value: string | null) {
-  if (!value) return "Non renseignée";
+  if (!value) return "Non renseignee";
 
   const date = new Date(value);
 
@@ -110,6 +88,44 @@ function formatDocumentDateLabel(value: string | null) {
   }
 
   return date.toLocaleDateString("fr-FR");
+}
+
+function getVehicleTypeLabel(value: string | null) {
+  if (value === "AMBULANCE") return "Ambulance";
+  if (value === "VSL") return "VSL";
+  if (value === "TAXI") return "Taxi";
+  return "Type non renseigne";
+}
+
+function getVehicleStatusLabel(value: string | null) {
+  if (value === "ACTIVE") return "Disponible";
+  if (value === "MAINTENANCE") return "Maintenance";
+  if (value === "OUT_OF_SERVICE") return "Hors service";
+  return "Statut non renseigne";
+}
+
+function vehicleStatusBadgeVariant(value: string | null): "neutral" | "success" | "warning" | "danger" {
+  if (value === "ACTIVE") return "success";
+  if (value === "MAINTENANCE") return "warning";
+  if (value === "OUT_OF_SERVICE") return "danger";
+  return "neutral";
+}
+
+function documentStatusBadgeVariant(value: VehicleDocumentStatus): "success" | "warning" | "danger" {
+  if (value === "conforme") return "success";
+  if (value === "bientot_expire") return "warning";
+  return "danger";
+}
+
+function documentStatusLabel(value: VehicleDocumentStatus) {
+  if (value === "conforme") return "Conforme";
+  if (value === "bientot_expire") return "Bientot expire";
+  return "Expire";
+}
+
+function depotStatusVariant(depot: DepotOption | null): "neutral" | "success" | "warning" {
+  if (!depot) return "neutral";
+  return depot.isActive ? "success" : "warning";
 }
 
 function getStartOfToday() {
@@ -155,24 +171,54 @@ function isSoonExpiringDocumentDate(value: string | null, today: Date, warningLi
 
 function getVehicleDocumentStatus(vehicle: Vehicle, today: Date, warningLimit: Date): VehicleDocumentStatus {
   const hasExpiredDocument =
-    isExpiredDocumentDate(vehicle.insuranceExpiresAt, today) ||
-    isExpiredDocumentDate(vehicle.technicalInspectionExpiresAt, today) ||
-    isExpiredDocumentDate(vehicle.sanitaryApprovalExpiresAt, today);
+    isExpiredDocumentDate(vehicle.insuranceExpiresAt, today)
+    || isExpiredDocumentDate(vehicle.technicalInspectionExpiresAt, today)
+    || isExpiredDocumentDate(vehicle.sanitaryApprovalExpiresAt, today);
 
   if (hasExpiredDocument || !vehicle.registrationDocumentPresent) {
-    return "expiré";
+    return "expire";
   }
 
   const hasSoonExpiringDocument =
-    isSoonExpiringDocumentDate(vehicle.insuranceExpiresAt, today, warningLimit) ||
-    isSoonExpiringDocumentDate(vehicle.technicalInspectionExpiresAt, today, warningLimit) ||
-    isSoonExpiringDocumentDate(vehicle.sanitaryApprovalExpiresAt, today, warningLimit);
+    isSoonExpiringDocumentDate(vehicle.insuranceExpiresAt, today, warningLimit)
+    || isSoonExpiringDocumentDate(vehicle.technicalInspectionExpiresAt, today, warningLimit)
+    || isSoonExpiringDocumentDate(vehicle.sanitaryApprovalExpiresAt, today, warningLimit);
 
   if (hasSoonExpiringDocument) {
-    return "bientôt expiré";
+    return "bientot_expire";
   }
 
   return "conforme";
+}
+
+function vehicleMatchesQuery(vehicle: Vehicle, query: string) {
+  if (!query) return true;
+
+  const normalizedQuery = query.toLowerCase();
+  const values = [
+    vehicle.immatriculation,
+    getVehicleTypeLabel(vehicle.type),
+    getVehicleStatusLabel(vehicle.status),
+    vehicle.depot?.name ?? "",
+  ];
+
+  return values.some((value) => value.toLowerCase().includes(normalizedQuery));
+}
+
+function toSafeTypeFilter(value: string): VehicleTypeFilter {
+  if (!value) return "";
+  return isVehicleTypeOption(value) ? value : "";
+}
+
+function toSafeStatusFilter(value: string): VehicleStatusFilter {
+  if (!value) return "";
+  return isVehicleStatusOption(value) ? value : "";
+}
+
+function toSafeDocumentFilter(value: string): VehicleDocumentFilter {
+  if (!value) return "";
+  if (value === "conforme" || value === "bientot_expire" || value === "expire") return value;
+  return "";
 }
 
 export default function VehiclesClient({
@@ -203,8 +249,14 @@ export default function VehiclesClient({
   const [editSanitaryApprovalExpiresAt, setEditSanitaryApprovalExpiresAt] = useState("");
   const [savingEditVehicleId, setSavingEditVehicleId] = useState<string | null>(null);
 
+  const [searchInput, setSearchInput] = useState("");
+  const [statusFilter, setStatusFilter] = useState<VehicleStatusFilter>("");
+  const [typeFilter, setTypeFilter] = useState<VehicleTypeFilter>("");
+  const [documentFilter, setDocumentFilter] = useState<VehicleDocumentFilter>("");
+
   const depotOptions = useMemo(() => availableDepots, [availableDepots]);
   const displayVehicles = useMemo(() => [...vehicles].sort(compareVehiclesByImmatriculation), [vehicles]);
+
   const documentStatusContext = useMemo(() => {
     const today = getStartOfToday();
     const warningLimit = new Date(today);
@@ -212,6 +264,53 @@ export default function VehiclesClient({
 
     return { today, warningLimit };
   }, []);
+
+  const documentStatusByVehicleId = useMemo(() => {
+    const entries = displayVehicles.map((vehicle) => {
+      const status = getVehicleDocumentStatus(vehicle, documentStatusContext.today, documentStatusContext.warningLimit);
+      return [vehicle.id, status] as const;
+    });
+
+    return new Map<string, VehicleDocumentStatus>(entries);
+  }, [displayVehicles, documentStatusContext.today, documentStatusContext.warningLimit]);
+
+  const filteredVehicles = useMemo(() => {
+    return displayVehicles.filter((vehicle) => {
+      if (!vehicleMatchesQuery(vehicle, searchInput.trim())) return false;
+      if (typeFilter && vehicle.type !== typeFilter) return false;
+      if (statusFilter && vehicle.status !== statusFilter) return false;
+
+      const documentStatus = documentStatusByVehicleId.get(vehicle.id) ?? "conforme";
+      if (documentFilter && documentStatus !== documentFilter) return false;
+
+      return true;
+    });
+  }, [displayVehicles, documentFilter, documentStatusByVehicleId, searchInput, statusFilter, typeFilter]);
+
+  const vehicleStats = useMemo(() => {
+    const counts = {
+      total: displayVehicles.length,
+      conformes: 0,
+      bientotExpires: 0,
+      expires: 0,
+      indisponibles: 0,
+    };
+
+    for (const vehicle of displayVehicles) {
+      const documentStatus = documentStatusByVehicleId.get(vehicle.id) ?? "conforme";
+      if (documentStatus === "conforme") counts.conformes += 1;
+      if (documentStatus === "bientot_expire") counts.bientotExpires += 1;
+      if (documentStatus === "expire") counts.expires += 1;
+      if (vehicle.status === "MAINTENANCE" || vehicle.status === "OUT_OF_SERVICE") counts.indisponibles += 1;
+    }
+
+    return counts;
+  }, [displayVehicles, documentStatusByVehicleId]);
+
+  const editingVehicle = useMemo(
+    () => displayVehicles.find((vehicle) => vehicle.id === editingVehicleId) ?? null,
+    [displayVehicles, editingVehicleId],
+  );
 
   function clearFeedback() {
     setError(null);
@@ -259,7 +358,7 @@ export default function VehiclesClient({
       const data = (await res.json().catch(() => null)) as ApiResponse<Vehicle> | null;
 
       if (!res.ok || !data?.ok) {
-        throw new Error(getApiError(data, "Erreur lors de la création du véhicule"));
+        throw new Error(getApiError(data, "Erreur lors de la creation du vehicule"));
       }
 
       setVehicles((prev) => [...prev, data.data]);
@@ -267,7 +366,7 @@ export default function VehiclesClient({
         ...prev,
         [data.data.id]: data.data.depotId ?? "",
       }));
-      setSuccessMessage(`Véhicule ${data.data.immatriculation} ajouté.`);
+      setSuccessMessage(`Vehicule ${data.data.immatriculation} ajoute.`);
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Erreur inconnue");
     } finally {
@@ -297,7 +396,7 @@ export default function VehiclesClient({
       const data = (await res.json().catch(() => null)) as ApiResponse<Vehicle> | null;
 
       if (!res.ok || !data?.ok) {
-        throw new Error(getApiError(data, "Erreur lors de la modification du véhicule"));
+        throw new Error(getApiError(data, "Erreur lors de la modification du vehicule"));
       }
 
       setVehicles((prev) => prev.map((vehicle) => (vehicle.id === vehicleId ? data.data : vehicle)));
@@ -305,7 +404,7 @@ export default function VehiclesClient({
         ...prev,
         [vehicleId]: data.data.depotId ?? "",
       }));
-      setSuccessMessage(`Véhicule ${data.data.immatriculation} mis à jour.`);
+      setSuccessMessage(`Vehicule ${data.data.immatriculation} mis a jour.`);
       resetEditForm();
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Erreur inconnue");
@@ -329,7 +428,7 @@ export default function VehiclesClient({
       const data = (await res.json().catch(() => null)) as ApiResponse<Vehicle> | null;
 
       if (!res.ok || !data?.ok) {
-        throw new Error(getApiError(data, "Erreur lors de l’enregistrement de la base"));
+        throw new Error(getApiError(data, "Erreur lors de l'enregistrement de la base"));
       }
 
       setVehicles((prev) => prev.map((vehicle) => (vehicle.id === vehicleId ? data.data : vehicle)));
@@ -337,7 +436,7 @@ export default function VehiclesClient({
         ...prev,
         [vehicleId]: data.data.depotId ?? "",
       }));
-      setSuccessMessage(`Base du véhicule ${data.data.immatriculation} mise à jour.`);
+      setSuccessMessage(`Base du vehicule ${data.data.immatriculation} mise a jour.`);
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Erreur inconnue");
     } finally {
@@ -346,7 +445,7 @@ export default function VehiclesClient({
   }
 
   async function handleArchiveVehicle(vehicle: Vehicle) {
-    const confirmed = window.confirm(`Archiver le véhicule ${vehicle.immatriculation} ?`);
+    const confirmed = window.confirm(`Archiver le vehicule ${vehicle.immatriculation} ?`);
     if (!confirmed) return;
 
     setArchivingVehicleId(vehicle.id);
@@ -360,7 +459,7 @@ export default function VehiclesClient({
       const data = (await res.json().catch(() => null)) as ApiResponse<Vehicle> | null;
 
       if (!res.ok || !data?.ok) {
-        throw new Error(getApiError(data, "Erreur lors de l’archivage du véhicule"));
+        throw new Error(getApiError(data, "Erreur lors de l'archivage du vehicule"));
       }
 
       setVehicles((prev) => prev.filter((currentVehicle) => currentVehicle.id !== vehicle.id));
@@ -372,7 +471,7 @@ export default function VehiclesClient({
       if (editingVehicleId === vehicle.id) {
         resetEditForm();
       }
-      setSuccessMessage(`Véhicule ${data.data.immatriculation} archivé.`);
+      setSuccessMessage(`Vehicule ${data.data.immatriculation} archive.`);
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Erreur inconnue");
     } finally {
@@ -380,240 +479,385 @@ export default function VehiclesClient({
     }
   }
 
+  function resetFilters() {
+    setSearchInput("");
+    setTypeFilter("");
+    setStatusFilter("");
+    setDocumentFilter("");
+  }
+
+  const columns: DataTableColumn<Vehicle>[] = [
+      {
+        key: "immatriculation",
+        header: "Vehicule",
+        width: "220px",
+        render: (vehicle) => (
+          <div className="vehicles-cell-main">
+            <strong>{vehicle.immatriculation}</strong>
+            <span className="vehicles-table-cell-subtle">{getVehicleTypeLabel(vehicle.type)}</span>
+          </div>
+        ),
+      },
+      {
+        key: "status",
+        header: "Statut",
+        width: "150px",
+        render: (vehicle) => (
+          <StatusBadge variant={vehicleStatusBadgeVariant(vehicle.status)}>{getVehicleStatusLabel(vehicle.status)}</StatusBadge>
+        ),
+      },
+      {
+        key: "documents",
+        header: "Conformite",
+        width: "170px",
+        render: (vehicle) => {
+          const documentStatus = documentStatusByVehicleId.get(vehicle.id) ?? "conforme";
+          return (
+            <StatusBadge variant={documentStatusBadgeVariant(documentStatus)}>
+              {documentStatusLabel(documentStatus)}
+            </StatusBadge>
+          );
+        },
+      },
+      {
+        key: "depot",
+        header: "Base",
+        width: "340px",
+        render: (vehicle) => {
+          const currentDepot = vehicle.depot;
+          const currentSelection = selectedDepotIds[vehicle.id] ?? "";
+          const options = currentDepot && !depotOptions.some((depot) => depot.id === currentDepot.id)
+            ? [currentDepot, ...depotOptions]
+            : depotOptions;
+          const hasPendingDepotChange = currentSelection !== (vehicle.depotId ?? "");
+          const isSavingDepot = savingDepotVehicleId === vehicle.id;
+          const isArchiving = archivingVehicleId === vehicle.id;
+
+          return (
+            <div className="vehicles-depot-cell">
+              <StatusBadge variant={depotStatusVariant(vehicle.depot)}>
+                {vehicle.depot ? getDepotLabel(vehicle.depot) : "Aucune base"}
+              </StatusBadge>
+
+              <div className="vehicles-depot-editor">
+                <select
+                  value={currentSelection}
+                  onChange={(event) => {
+                    const value = event.target.value;
+                    setSelectedDepotIds((prev) => ({
+                      ...prev,
+                      [vehicle.id]: value,
+                    }));
+                  }}
+                  disabled={isSavingDepot || isArchiving}
+                >
+                  <option value="">Aucune base</option>
+                  {options.map((depot) => (
+                    <option key={depot.id} value={depot.id}>
+                      {getDepotLabel(depot)}
+                    </option>
+                  ))}
+                </select>
+
+                <ActionButton
+                  size="sm"
+                  onClick={() => handleSaveDepot(vehicle.id)}
+                  disabled={isSavingDepot || isArchiving || !hasPendingDepotChange}
+                >
+                  {isSavingDepot ? "Enregistrement..." : "Enregistrer"}
+                </ActionButton>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        key: "actions",
+        header: "Actions",
+        align: "right",
+        width: "230px",
+        render: (vehicle) => {
+          const isSavingEdit = savingEditVehicleId === vehicle.id;
+          const isArchiving = archivingVehicleId === vehicle.id;
+          const isEditing = editingVehicleId === vehicle.id;
+          const isBusy = isSavingEdit || isArchiving;
+
+          return (
+            <div className="vehicles-actions vehicles-actions--wrap vehicles-actions--end">
+              <ActionButton
+                size="sm"
+                variant="secondary"
+                onClick={() => openEditVehicle(vehicle)}
+                disabled={isBusy}
+              >
+                {isEditing ? "Edition en cours" : "Modifier"}
+              </ActionButton>
+
+              <ActionButton
+                size="sm"
+                variant="danger"
+                onClick={() => handleArchiveVehicle(vehicle)}
+                disabled={isBusy}
+              >
+                {isArchiving ? "Archivage..." : "Archiver"}
+              </ActionButton>
+            </div>
+          );
+        },
+      },
+    ];
+
   return (
-    <div style={{ display: "grid", gap: 16 }}>
-      <div className="panel" style={{ padding: 16 }}>
-        <h2 style={{ marginTop: 0 }}>Ajouter un véhicule</h2>
+    <section className="vehicles-section">
+      <div className="vehicles-grid-stats">
+        <StatCard title="Vehicules actifs" value={vehicleStats.total} hint="Flotte active de la societe" />
+        <StatCard title="Conformes" value={vehicleStats.conformes} hint="Dossiers a jour" tone="success" />
+        <StatCard title="Bientot expires" value={vehicleStats.bientotExpires} hint={`A moins de ${DOCUMENT_WARNING_WINDOW_DAYS} jours`} tone="warning" />
+        <StatCard title="Indisponibles" value={vehicleStats.indisponibles} hint="Maintenance ou hors service" tone="danger" />
+      </div>
+
+      {error ? <ErrorMessage title="Erreur module vehicules" message={error} /> : null}
+      {successMessage ? <div className="vehicles-alert vehicles-alert--success">{successMessage}</div> : null}
+
+      <section className="vehicles-card">
+        <div className="vehicles-card__head">
+          <h2 className="vehicles-card__title">Ajouter un vehicule</h2>
+          <p className="vehicles-card__description">
+            Creation d&apos;un vehicule actif avec type et statut initial, sans modification de logique metier.
+          </p>
+          {!canCreateVehicle ? (
+            <div className="vehicles-inline-status">
+              <StatusBadge variant="warning">Creation reservee au profil ADMIN</StatusBadge>
+            </div>
+          ) : null}
+        </div>
+
         {canCreateVehicle ? (
           <AddVehicleForm onSubmit={handleAddVehicle} disabled={isSubmitting} />
         ) : (
-          <p style={{ margin: 0, opacity: 0.8 }}>Création réservée au profil ADMIN.</p>
+          <p className="vehicles-table-cell-subtle">Votre role ne permet pas la creation de vehicules.</p>
         )}
-        {error && <p className="status-danger" style={{ marginTop: 10, padding: 10, borderRadius: 8 }}>{error}</p>}
-        {successMessage && <p className="status-success" style={{ marginTop: 10, padding: 10, borderRadius: 8 }}>{successMessage}</p>}
-      </div>
+      </section>
 
-      <div className="panel" style={{ display: "grid", gap: 12 }}>
-        <p style={{ marginTop: 0, opacity: 0.8 }}>
-          État documentaire affiché sur la base des 4 champs minimaux existants. Seuil local UI pour “bientôt expiré” : {DOCUMENT_WARNING_WINDOW_DAYS} jours.
-        </p>
+      <section className="vehicles-card">
+        <div className="vehicles-card__head">
+          <h2 className="vehicles-card__title">Liste des vehicules</h2>
+          <p className="vehicles-card__description">
+            Consultation, filtrage simple, affectation de base, edition et archivage logique des vehicules actifs.
+          </p>
+        </div>
 
-        {displayVehicles.length === 0 ? (
-          <p>Aucun véhicule pour le moment.</p>
-        ) : (
-          <ul style={{ marginTop: 16, paddingLeft: 16 }}>
-            {displayVehicles.map((v) => {
-              const currentDepot = v.depot;
-              const currentSelection = selectedDepotIds[v.id] ?? "";
-              const options = currentDepot && !depotOptions.some((depot) => depot.id === currentDepot.id)
-                ? [currentDepot, ...depotOptions]
-                : depotOptions;
-              const hasPendingDepotChange = currentSelection !== (v.depotId ?? "");
-              const isEditing = editingVehicleId === v.id;
-              const isSavingEdit = savingEditVehicleId === v.id;
-              const isArchiving = archivingVehicleId === v.id;
-              const isSavingDepot = savingDepotVehicleId === v.id;
-              const isBusy = isArchiving || isSavingDepot || isSavingEdit;
-              const documentStatus = getVehicleDocumentStatus(
-                v,
-                documentStatusContext.today,
-                documentStatusContext.warningLimit,
-              );
+        <FilterBar
+          summary={`Filtres actifs : ${searchInput.trim() ? `recherche "${searchInput.trim()}"` : "aucune recherche"}${typeFilter ? `, type ${getVehicleTypeLabel(typeFilter)}` : ""}${statusFilter ? `, statut ${getVehicleStatusLabel(statusFilter)}` : ""}${documentFilter ? `, conformite ${documentStatusLabel(documentFilter)}` : ""}`}
+          actions={(
+            <ActionButton size="sm" variant="ghost" onClick={resetFilters}>
+              Reinitialiser
+            </ActionButton>
+          )}
+        >
+          <label className="vehicles-field">
+            <span className="vehicles-field__label">Recherche</span>
+            <input
+              type="text"
+              value={searchInput}
+              onChange={(event) => setSearchInput(event.target.value)}
+              placeholder="Immatriculation, type, statut ou base"
+            />
+          </label>
 
-              return (
-                <li key={v.id} style={{ marginBottom: 14 }}>
-                  <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-                    <strong>{v.immatriculation}</strong> — {v.type ?? "-"} — {v.status ?? "-"}
-                    <span style={DOCUMENT_STATUS_STYLES[documentStatus]}>Conformité : {documentStatus}</span>
-                  </div>
+          <label className="vehicles-field">
+            <span className="vehicles-field__label">Type</span>
+            <select value={typeFilter} onChange={(event) => setTypeFilter(toSafeTypeFilter(event.target.value))}>
+              <option value="">Tous les types</option>
+              <option value="AMBULANCE">Ambulance</option>
+              <option value="VSL">VSL</option>
+              <option value="TAXI">Taxi</option>
+            </select>
+          </label>
 
-                  <div style={{ marginTop: 6, display: "flex", gap: 16, flexWrap: "wrap" }}>
-                    <span>Assurance : {formatDocumentDateLabel(v.insuranceExpiresAt)}</span>
-                    <span>Contrôle technique : {formatDocumentDateLabel(v.technicalInspectionExpiresAt)}</span>
-                    <span>Carte grise : {v.registrationDocumentPresent ? "Présente" : "Absente"}</span>
-                    <span>Agrément sanitaire : {formatDocumentDateLabel(v.sanitaryApprovalExpiresAt)}</span>
-                  </div>
+          <label className="vehicles-field">
+            <span className="vehicles-field__label">Statut</span>
+            <select value={statusFilter} onChange={(event) => setStatusFilter(toSafeStatusFilter(event.target.value))}>
+              <option value="">Tous les statuts</option>
+              <option value="ACTIVE">Disponible</option>
+              <option value="MAINTENANCE">Maintenance</option>
+              <option value="OUT_OF_SERVICE">Hors service</option>
+            </select>
+          </label>
 
-                  <div style={{ marginTop: 6, display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-                    <span>Base actuelle : {v.depot ? getDepotLabel(v.depot) : "Aucune"}</span>
+          <label className="vehicles-field">
+            <span className="vehicles-field__label">Conformite</span>
+            <select
+              value={documentFilter}
+              onChange={(event) => setDocumentFilter(toSafeDocumentFilter(event.target.value))}
+            >
+              <option value="">Tous les niveaux</option>
+              <option value="conforme">Conforme</option>
+              <option value="bientot_expire">Bientot expire</option>
+              <option value="expire">Expire</option>
+            </select>
+          </label>
+        </FilterBar>
 
-                    <select
-                      value={currentSelection}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        setSelectedDepotIds((prev) => ({
-                          ...prev,
-                          [v.id]: value,
-                        }));
-                      }}
-                      disabled={isSavingDepot || isArchiving}
-                      style={{ padding: 8 }}
-                    >
-                      <option value="">Aucune base</option>
-                      {options.map((depot) => (
-                        <option key={depot.id} value={depot.id}>
-                          {getDepotLabel(depot)}
-                        </option>
-                      ))}
-                    </select>
+        <DataTable
+          columns={columns}
+          rows={filteredVehicles}
+          rowKey={(vehicle) => vehicle.id}
+          loading={false}
+          error={null}
+          emptyTitle="Aucun vehicule trouve"
+          emptyMessage="Aucun vehicule ne correspond aux criteres de recherche."
+          minWidth={1200}
+          caption="Vehicules actifs de la societe courante"
+        />
+      </section>
 
-                    <button
-                      type="button"
-                      onClick={() => handleSaveDepot(v.id)}
-                      disabled={isSavingDepot || !hasPendingDepotChange || isArchiving}
-                      style={{ padding: "6px 10px" }}
-                    >
-                      {isSavingDepot ? "Enregistrement..." : "Enregistrer base"}
-                    </button>
+      {editingVehicle ? (
+        <section className="vehicles-card">
+          <div className="vehicles-card__head">
+            <h2 className="vehicles-card__title">Modifier le vehicule selectionne</h2>
+            <p className="vehicles-card__description">
+              Mise a jour des donnees du vehicule et des dates documentaires, sans changement fonctionnel hors perimetre.
+            </p>
+          </div>
 
-                    <button
-                      type="button"
-                      onClick={() => openEditVehicle(v)}
-                      disabled={isSavingEdit || isArchiving}
-                      style={{
-                        padding: "4px 10px",
-                        border: "1px solid var(--ui-border)",
-                        borderRadius: 6,
-                        cursor: isSavingEdit || isArchiving ? "not-allowed" : "pointer",
-                      }}
-                    >
-                      {isEditing ? "Édition en cours" : "Modifier"}
-                    </button>
+          <div className="vehicles-selection-card">
+            <span>
+              <strong>{editingVehicle.immatriculation}</strong>
+            </span>
+            <div className="vehicles-inline-status">
+              <StatusBadge variant={vehicleStatusBadgeVariant(editingVehicle.status)}>
+                {getVehicleStatusLabel(editingVehicle.status)}
+              </StatusBadge>
+              <StatusBadge variant={documentStatusBadgeVariant(documentStatusByVehicleId.get(editingVehicle.id) ?? "conforme")}>
+                Conformite: {documentStatusLabel(documentStatusByVehicleId.get(editingVehicle.id) ?? "conforme")}
+              </StatusBadge>
+              <StatusBadge variant={depotStatusVariant(editingVehicle.depot)}>
+                Base: {editingVehicle.depot ? getDepotLabel(editingVehicle.depot) : "Aucune"}
+              </StatusBadge>
+            </div>
+          </div>
 
-                    <button
-                      type="button"
-                      onClick={() => handleArchiveVehicle(v)}
-                      disabled={isBusy}
-                      style={{
-                        padding: "4px 10px",
-                        border: "1px solid var(--ui-border)",
-                        borderRadius: 6,
-                        cursor: isBusy ? "not-allowed" : "pointer",
-                      }}
-                    >
-                      {isArchiving ? "Archivage..." : "Archiver"}
-                    </button>
-                  </div>
+          <form
+            className="vehicles-form"
+            onSubmit={(event) => {
+              event.preventDefault();
+              void handleSaveVehicle(editingVehicle.id);
+            }}
+          >
+            <div className="vehicles-form-grid vehicles-form-grid--edit">
+              <label className="vehicles-field">
+                <span className="vehicles-field__label">Immatriculation</span>
+                <input
+                  type="text"
+                  value={editImmatriculation}
+                  onChange={(event) => setEditImmatriculation(event.target.value.toUpperCase())}
+                  disabled={savingEditVehicleId === editingVehicle.id || archivingVehicleId === editingVehicle.id}
+                  maxLength={24}
+                  required
+                />
+              </label>
 
-                  {isEditing && (
-                    <form
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        void handleSaveVehicle(v.id);
-                      }}
-                      style={{
-                        marginTop: 10,
-                        display: "flex",
-                        gap: 8,
-                        flexWrap: "wrap",
-                        alignItems: "center",
-                        padding: 12,
-                        border: "1px solid var(--ui-border)",
-                        borderRadius: 8,
-                      }}
-                    >
-                      <input
-                        value={editImmatriculation}
-                        onChange={(e) => setEditImmatriculation(e.target.value)}
-                        placeholder="Immatriculation"
-                        disabled={isSavingEdit || isArchiving}
-                        style={{ padding: 8, minWidth: 180 }}
-                      />
+              <label className="vehicles-field">
+                <span className="vehicles-field__label">Type</span>
+                <select
+                  value={editType}
+                  onChange={(event) => setEditType(getEditableVehicleType(event.target.value))}
+                  disabled={savingEditVehicleId === editingVehicle.id || archivingVehicleId === editingVehicle.id}
+                >
+                  <option value="AMBULANCE">Ambulance</option>
+                  <option value="VSL">VSL</option>
+                  <option value="TAXI">Taxi</option>
+                </select>
+              </label>
 
-                      <select
-                        value={editType}
-                        onChange={(e) => setEditType(getEditableVehicleType(e.target.value))}
-                        disabled={isSavingEdit || isArchiving}
-                        style={{ padding: 8 }}
-                      >
-                        {VEHICLE_TYPE_OPTIONS.map((type) => (
-                          <option key={type} value={type}>
-                            {type}
-                          </option>
-                        ))}
-                      </select>
+              <label className="vehicles-field">
+                <span className="vehicles-field__label">Statut</span>
+                <select
+                  value={editStatus}
+                  onChange={(event) => setEditStatus(getEditableVehicleStatus(event.target.value))}
+                  disabled={savingEditVehicleId === editingVehicle.id || archivingVehicleId === editingVehicle.id}
+                >
+                  <option value="ACTIVE">Disponible</option>
+                  <option value="MAINTENANCE">Maintenance</option>
+                  <option value="OUT_OF_SERVICE">Hors service</option>
+                </select>
+              </label>
 
-                      <select
-                        value={editStatus}
-                        onChange={(e) => setEditStatus(getEditableVehicleStatus(e.target.value))}
-                        disabled={isSavingEdit || isArchiving}
-                        style={{ padding: 8 }}
-                      >
-                        {VEHICLE_STATUS_OPTIONS.map((status) => (
-                          <option key={status} value={status}>
-                            {status}
-                          </option>
-                        ))}
-                      </select>
+              <label className="vehicles-field">
+                <span className="vehicles-field__label">Expiration assurance</span>
+                <input
+                  type="date"
+                  value={editInsuranceExpiresAt}
+                  onChange={(event) => setEditInsuranceExpiresAt(event.target.value)}
+                  disabled={savingEditVehicleId === editingVehicle.id || archivingVehicleId === editingVehicle.id}
+                />
+              </label>
 
-                      <label style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                        <span>Assurance</span>
-                        <input
-                          type="date"
-                          value={editInsuranceExpiresAt}
-                          onChange={(e) => setEditInsuranceExpiresAt(e.target.value)}
-                          disabled={isSavingEdit || isArchiving}
-                          style={{ padding: 8 }}
-                        />
-                      </label>
+              <label className="vehicles-field">
+                <span className="vehicles-field__label">Expiration controle technique</span>
+                <input
+                  type="date"
+                  value={editTechnicalInspectionExpiresAt}
+                  onChange={(event) => setEditTechnicalInspectionExpiresAt(event.target.value)}
+                  disabled={savingEditVehicleId === editingVehicle.id || archivingVehicleId === editingVehicle.id}
+                />
+              </label>
 
-                      <label style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                        <span>Contrôle technique</span>
-                        <input
-                          type="date"
-                          value={editTechnicalInspectionExpiresAt}
-                          onChange={(e) => setEditTechnicalInspectionExpiresAt(e.target.value)}
-                          disabled={isSavingEdit || isArchiving}
-                          style={{ padding: 8 }}
-                        />
-                      </label>
+              <label className="vehicles-field">
+                <span className="vehicles-field__label">Expiration agrement sanitaire</span>
+                <input
+                  type="date"
+                  value={editSanitaryApprovalExpiresAt}
+                  onChange={(event) => setEditSanitaryApprovalExpiresAt(event.target.value)}
+                  disabled={savingEditVehicleId === editingVehicle.id || archivingVehicleId === editingVehicle.id}
+                />
+              </label>
+            </div>
 
-                      <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <input
-                          type="checkbox"
-                          checked={editRegistrationDocumentPresent}
-                          onChange={(e) => setEditRegistrationDocumentPresent(e.target.checked)}
-                          disabled={isSavingEdit || isArchiving}
-                        />
-                        <span>Carte grise présente</span>
-                      </label>
+            <label className="vehicles-checkbox">
+              <input
+                type="checkbox"
+                checked={editRegistrationDocumentPresent}
+                onChange={(event) => setEditRegistrationDocumentPresent(event.target.checked)}
+                disabled={savingEditVehicleId === editingVehicle.id || archivingVehicleId === editingVehicle.id}
+              />
+              <span>Carte grise presente</span>
+            </label>
 
-                      <label style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                        <span>Agrément sanitaire</span>
-                        <input
-                          type="date"
-                          value={editSanitaryApprovalExpiresAt}
-                          onChange={(e) => setEditSanitaryApprovalExpiresAt(e.target.value)}
-                          disabled={isSavingEdit || isArchiving}
-                          style={{ padding: 8 }}
-                        />
-                      </label>
+            <div className="vehicles-doc-grid">
+              <div className="vehicles-doc-item">
+                Assurance actuelle: <strong>{formatDocumentDateLabel(editingVehicle.insuranceExpiresAt)}</strong>
+              </div>
+              <div className="vehicles-doc-item">
+                Controle technique actuel: <strong>{formatDocumentDateLabel(editingVehicle.technicalInspectionExpiresAt)}</strong>
+              </div>
+              <div className="vehicles-doc-item">
+                Agrement sanitaire actuel: <strong>{formatDocumentDateLabel(editingVehicle.sanitaryApprovalExpiresAt)}</strong>
+              </div>
+            </div>
 
-                      <button type="submit" disabled={isSavingEdit || isArchiving} style={{ padding: "6px 10px" }}>
-                        {isSavingEdit ? "Enregistrement..." : "Enregistrer modifications"}
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={resetEditForm}
-                        disabled={isSavingEdit || isArchiving}
-                        style={{
-                          padding: "6px 10px",
-                          border: "1px solid var(--ui-border)",
-                          borderRadius: 6,
-                          cursor: isSavingEdit || isArchiving ? "not-allowed" : "pointer",
-                        }}
-                      >
-                        Annuler
-                      </button>
-                    </form>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </div>
-    </div>
+            <div className="vehicles-actions">
+              <ActionButton
+                type="submit"
+                variant="primary"
+                disabled={savingEditVehicleId === editingVehicle.id || archivingVehicleId === editingVehicle.id}
+              >
+                {savingEditVehicleId === editingVehicle.id ? "Enregistrement..." : "Enregistrer les modifications"}
+              </ActionButton>
+              <ActionButton
+                type="button"
+                variant="secondary"
+                onClick={resetEditForm}
+                disabled={savingEditVehicleId === editingVehicle.id || archivingVehicleId === editingVehicle.id}
+              >
+                Annuler
+              </ActionButton>
+            </div>
+          </form>
+        </section>
+      ) : null}
+    </section>
   );
 }
+

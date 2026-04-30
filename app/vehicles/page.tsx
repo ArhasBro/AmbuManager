@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 
+import { PageHeader } from "@/app/ui";
 import { authOptions } from "@/lib/auth";
 import { canManageVehicles } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
@@ -59,18 +60,15 @@ export default async function VehiclesPage() {
 
   return (
     <div className="page-wrap">
-      <div className="page-head">
-        <div>
-          <h1 className="page-title">Vehicules</h1>
-          <p className="page-description">
-            Gestion de la flotte active et rattachement optionnel a une base de la societe courante.
-          </p>
-        </div>
-
-        <Link className="page-back" href="/dashboard">
-          Retour dashboard
-        </Link>
-      </div>
+      <PageHeader
+        title="Vehicules"
+        description="Gestion de la flotte active, conformite documentaire et rattachement optionnel a une base."
+        actions={
+          <Link className="page-back" href="/dashboard">
+            Retour dashboard
+          </Link>
+        }
+      />
 
       <VehiclesClient
         initialVehicles={serializeDates(vehicles)}
