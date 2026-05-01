@@ -1,4 +1,4 @@
-﻿# README_PATCH
+# README_PATCH
 
 ## Session liee
 SESSION-20260425-19_A22_UIINT-10
@@ -6,19 +6,26 @@ SESSION-20260425-19_A22_UIINT-10
 ## Type
 CORRECTION+COMPLETION
 
-## Dossier PATCH
-docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-19_A22_UIINT-10/PATCH
+## Patch principal
+- Fichier : `SESSION-20260425-19_A22_UIINT-10.diff`
+- Application : `git apply -p2`
+- Verification : `git apply --check -p2`
 
-## Patch officiel attendu
-PATCH__SESSION-20260425-19_A22_UIINT-10.diff
+## Perimetre du patch
+- `app/company/page.tsx`
+- `app/company/company-profile-form.tsx`
+- `app/company/company-rules-panel.tsx`
+- `app/depots/page.tsx`
+- `app/depots/depots-client.tsx`
+- `app/globals.css`
 
-## Commandes d'application
+## Preuves associees
+- `QA_PREUVES_BRUTES.txt`
+- `QA_PREUVES_BRUTES_FIX-01.txt`
+- `QA_PREUVES_BRUTES_FIX-02.txt`
+- `QA_PREUVES_BRUTES_FIX-FINAL.txt`
 
-`ash
-git apply --check "docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-19_A22_UIINT-10/PATCH/PATCH__SESSION-20260425-19_A22_UIINT-10.diff"
-git apply         "docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-19_A22_UIINT-10/PATCH/PATCH__SESSION-20260425-19_A22_UIINT-10.diff"
-`
-
-## Statut
-- Dossier patch initialise.
-- Patch officiel a produire dans cette session si du code est modifie.
+## Correctifs minimaux appliques
+- `SESSION-20260425-19_A22_UIINT-10_FIX-01.diff`
+- `SESSION-20260425-19_A22_UIINT-10_FIX-02.diff`
+- `SESSION-20260425-19_A22_UIINT-10_FIX-FINAL.diff`

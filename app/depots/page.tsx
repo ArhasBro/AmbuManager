@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 
+import { PageHeader, StatCard } from "@/app/ui";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
@@ -31,17 +32,21 @@ export default async function DepotsPage() {
     },
   });
 
-  return (
-    <div style={{ padding: 16, display: "grid", gap: 16 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-        <div>
-          <h1 style={{ margin: 0 }}>Bases / dépôts</h1>
-          <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
-            Gestion minimale ALPHA des dépôts de la société courante : création, édition de nom/adresse et archivage logique.
-          </p>
-        </div>
+  const activeCount = depots.filter((depot) => depot.isActive).length;
+  const archivedCount = depots.length - activeCount;
 
-        <Link href="/dashboard">Retour dashboard</Link>
+  return (
+    <section className="depots-section">
+      <PageHeader
+        title="Bases / depots"
+        description="Gestion ALPHA des depots de la societe courante : creation, edition et archivage logique."
+        actions={<Link href="/dashboard" className="depots-page__back-link">Retour dashboard</Link>}
+      />
+
+      <div className="depots-grid-stats">
+        <StatCard title="Depots actifs" value={activeCount} hint="Disponibles a l'exploitation" tone="success" />
+        <StatCard title="Depots archives" value={archivedCount} hint="Historique conserve" tone="neutral" />
+        <StatCard title="Total depots" value={depots.length} hint="Perimetre societe courante" tone="info" />
       </div>
 
       <DepotsClient
@@ -51,6 +56,6 @@ export default async function DepotsPage() {
           updatedAt: depot.updatedAt.toISOString(),
         }))}
       />
-    </div>
+    </section>
   );
 }

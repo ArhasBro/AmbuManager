@@ -1,0 +1,1857 @@
+diff --git a/orig/app/company/company-profile-form.tsx b/mod/app/company/company-profile-form.tsx
+index f8f6f2d..fb8ea2e 100644
+--- a/orig/app/company/company-profile-form.tsx
++++ b/mod/app/company/company-profile-form.tsx
+@@ -2,6 +2,8 @@
+ 
+ import { useState } from "react";
+ 
++import { ActionButton, ErrorMessage } from "@/app/ui";
++
+ type CompanyProfile = {
+   name: string;
+   managerNames: string;
+@@ -53,7 +55,7 @@ export default function CompanyProfileForm({
+       const data = (await res.json().catch(() => null)) as ApiResponse<CompanyProfileResponse> | null;
+ 
+       if (!res.ok || !data?.ok) {
+-        throw new Error(getApiError(data, "Erreur lors de la mise à jour du profil société"));
++        throw new Error(getApiError(data, "Erreur lors de la mise a jour du profil societe"));
+       }
+ 
+       setForm({
+@@ -63,7 +65,7 @@ export default function CompanyProfileForm({
+         phone: data.data.phone,
+         siret: data.data.siret,
+       });
+-      setSuccess("Profil société mis à jour.");
++      setSuccess("Profil societe mis a jour.");
+     } catch (e: unknown) {
+       setError(e instanceof Error ? e.message : "Erreur inconnue");
+     } finally {
+@@ -72,84 +74,81 @@ export default function CompanyProfileForm({
+   }
+ 
+   return (
+-    <form
+-      onSubmit={handleSubmit}
+-      style={{
+-        display: "grid",
+-        gap: 16,
+-        padding: 16,
+-        border: "1px solid #ddd",
+-        borderRadius: 10,
+-        maxWidth: 720,
+-      }}
+-    >
+-      <div style={{ display: "grid", gap: 8 }}>
+-        <label htmlFor="company-name">Nom société</label>
+-        <input
+-          id="company-name"
+-          value={form.name}
+-          onChange={(e) => updateField("name", e.target.value)}
+-          required
+-          disabled={isSubmitting}
+-          style={{ padding: 10 }}
+-        />
+-      </div>
+-
+-      <div style={{ display: "grid", gap: 8 }}>
+-        <label htmlFor="company-managers">Nom des gérants</label>
+-        <input
+-          id="company-managers"
+-          value={form.managerNames}
+-          onChange={(e) => updateField("managerNames", e.target.value)}
+-          required
+-          disabled={isSubmitting}
+-          style={{ padding: 10 }}
+-        />
+-      </div>
+-
+-      <div style={{ display: "grid", gap: 8 }}>
+-        <label htmlFor="company-address">Adresse</label>
+-        <input
+-          id="company-address"
+-          value={form.address}
+-          onChange={(e) => updateField("address", e.target.value)}
+-          required
+-          disabled={isSubmitting}
+-          style={{ padding: 10 }}
+-        />
++    <section className="company-card">
++      <div className="company-card__head">
++        <h2 className="company-card__title">Informations societe</h2>
++        <p className="company-card__description">
++          Mise a jour des informations generales, sans modification de logique metier.
++        </p>
+       </div>
+ 
+-      <div style={{ display: "grid", gap: 8 }}>
+-        <label htmlFor="company-phone">Téléphone</label>
+-        <input
+-          id="company-phone"
+-          value={form.phone}
+-          onChange={(e) => updateField("phone", e.target.value)}
+-          required
+-          disabled={isSubmitting}
+-          style={{ padding: 10 }}
+-        />
+-      </div>
+-
+-      <div style={{ display: "grid", gap: 8 }}>
+-        <label htmlFor="company-siret">SIRET</label>
+-        <input
+-          id="company-siret"
+-          value={form.siret}
+-          onChange={(e) => updateField("siret", e.target.value)}
+-          required
+-          disabled={isSubmitting}
+-          style={{ padding: 10 }}
+-        />
+-      </div>
+-
+-      <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+-        <button disabled={isSubmitting} style={{ padding: "10px 14px" }}>
+-          {isSubmitting ? "Enregistrement..." : "Enregistrer"}
+-        </button>
+-        {success ? <span style={{ color: "green" }}>{success}</span> : null}
+-        {error ? <span style={{ color: "crimson" }}>{error}</span> : null}
+-      </div>
+-    </form>
++      {error ? <ErrorMessage title="Erreur profil societe" message={error} /> : null}
++      {success ? <div className="company-alert company-alert--success">{success}</div> : null}
++
++      <form onSubmit={handleSubmit} className="company-form">
++        <div className="company-form-grid">
++          <label className="company-field">
++            <span className="company-field__label">Nom societe</span>
++            <input
++              id="company-name"
++              value={form.name}
++              onChange={(e) => updateField("name", e.target.value)}
++              required
++              disabled={isSubmitting}
++            />
++          </label>
++
++          <label className="company-field">
++            <span className="company-field__label">Nom des gerants</span>
++            <input
++              id="company-managers"
++              value={form.managerNames}
++              onChange={(e) => updateField("managerNames", e.target.value)}
++              required
++              disabled={isSubmitting}
++            />
++          </label>
++
++          <label className="company-field">
++            <span className="company-field__label">Telephone</span>
++            <input
++              id="company-phone"
++              value={form.phone}
++              onChange={(e) => updateField("phone", e.target.value)}
++              required
++              disabled={isSubmitting}
++            />
++          </label>
++
++          <label className="company-field">
++            <span className="company-field__label">SIRET</span>
++            <input
++              id="company-siret"
++              value={form.siret}
++              onChange={(e) => updateField("siret", e.target.value)}
++              required
++              disabled={isSubmitting}
++            />
++          </label>
++        </div>
++
++        <label className="company-field">
++          <span className="company-field__label">Adresse</span>
++          <input
++            id="company-address"
++            value={form.address}
++            onChange={(e) => updateField("address", e.target.value)}
++            required
++            disabled={isSubmitting}
++          />
++        </label>
++
++        <div className="company-actions company-actions--end">
++          <ActionButton type="submit" variant="primary" disabled={isSubmitting}>
++            {isSubmitting ? "Enregistrement..." : "Enregistrer"}
++          </ActionButton>
++        </div>
++      </form>
++    </section>
+   );
+ }
+diff --git a/orig/app/company/company-rules-panel.tsx b/mod/app/company/company-rules-panel.tsx
+index fe7e559..fe46490 100644
+--- a/orig/app/company/company-rules-panel.tsx
++++ b/mod/app/company/company-rules-panel.tsx
+@@ -2,6 +2,7 @@
+ 
+ import { useEffect, useState } from "react";
+ 
++import { ActionButton, EmptyState, ErrorMessage, StatusBadge } from "@/app/ui";
+ import { COMPANY_RULE_MODE_VALUES } from "@/lib/company-rules/catalog";
+ 
+ type RuleModeValue = (typeof COMPANY_RULE_MODE_VALUES)[number];
+@@ -46,11 +47,11 @@ type SaveFeedback = {
+ };
+ 
+ function formatKind(kind: CompanyParameter["kind"]) {
+-  return kind === "BUSINESS_RULE" ? "Paramètre métier ALPHA" : "Réglage UI / exploitation";
++  return kind === "BUSINESS_RULE" ? "Parametre metier ALPHA" : "Reglage UI / exploitation";
+ }
+ 
+ function formatEngineStatus(engineStatus: CompanyParameter["engineStatus"]) {
+-  return engineStatus === "BRANCHED" ? "Branché" : "Préparé";
++  return engineStatus === "BRANCHED" ? "Branche" : "Prepare";
+ }
+ 
+ function formatValueType(valueType: CompanyParameter["valueType"]) {
+@@ -60,31 +61,29 @@ function formatValueType(valueType: CompanyParameter["valueType"]) {
+     case "ENUM":
+       return "Liste de valeurs";
+     default:
+-      return "INFORMATION NON FOURNIE — À CONFIRMER";
++      return "INFORMATION NON FOURNIE - A CONFIRMER";
+   }
+ }
+ 
+ function formatValueStatus(valueStatus: CompanyParameter["valueStatus"]) {
+   switch (valueStatus) {
+     case "STORED_VALID":
+-      return "Stockée et valide";
++      return "Stockee et valide";
+     case "STORED_INVALID":
+-      return "Stockée mais invalide";
++      return "Stockee mais invalide";
+     default:
+-      return "Non stockée";
++      return "Non stockee";
+   }
+ }
+ 
+ function formatModeLabel(mode: RuleModeValue | null, modeUsage: CompanyParameter["modeUsage"]) {
+   if (modeUsage === "FIXED_OFF") return "OFF (fixe)";
+-  return mode ?? "Non configuré";
++  return mode ?? "Non configure";
+ }
+ 
+ function formatCurrentValue(parameter: CompanyParameter) {
+   if (parameter.valueStatus === "NOT_STORED") {
+-    return parameter.kind === "UI_SETTING"
+-      ? "Non stockée"
+-      : "Non configurée";
++    return parameter.kind === "UI_SETTING" ? "Non stockee" : "Non configuree";
+   }
+ 
+   if (parameter.normalizedValue !== null) {
+@@ -95,7 +94,7 @@ function formatCurrentValue(parameter: CompanyParameter) {
+     return parameter.value;
+   }
+ 
+-  return "INFORMATION NON FOURNIE — À CONFIRMER";
++  return "INFORMATION NON FOURNIE - A CONFIRMER";
+ }
+ 
+ function getInitialDraft(parameter: CompanyParameter): DraftState {
+@@ -140,6 +139,20 @@ function getMutationError(payload: unknown, fallback: string) {
+   return fallback;
+ }
+ 
++function ParameterStatusBadges({ parameter }: { parameter: CompanyParameter }) {
++  return (
++    <div className="company-rule-tags">
++      <StatusBadge variant="info">{formatKind(parameter.kind)}</StatusBadge>
++      <StatusBadge variant={parameter.engineStatus === "BRANCHED" ? "success" : "warning"}>
++        {formatEngineStatus(parameter.engineStatus)}
++      </StatusBadge>
++      <StatusBadge variant={parameter.isWritable ? "success" : "neutral"}>
++        {parameter.isWritable ? "Editable" : "Lecture seule"}
++      </StatusBadge>
++    </div>
++  );
++}
++
+ export default function CompanyRulesPanel() {
+   const [parameters, setParameters] = useState<CompanyParameter[]>([]);
+   const [drafts, setDrafts] = useState<Record<string, DraftState>>({});
+@@ -160,13 +173,13 @@ export default function CompanyRulesPanel() {
+         const data = (await res.json().catch(() => null)) as ParametersResponse | null;
+ 
+         if (!res.ok || !data?.ok) {
+-          throw new Error(getApiError(data, "Erreur lors du chargement des paramètres métier"));
++          throw new Error(getApiError(data, "Erreur lors du chargement des parametres metier"));
+         }
+ 
+         if (!cancelled) {
+           setParameters(data.data);
+           setDrafts(
+-            Object.fromEntries(data.data.map((parameter) => [parameter.id, getInitialDraft(parameter)]))
++            Object.fromEntries(data.data.map((parameter) => [parameter.id, getInitialDraft(parameter)])),
+           );
+         }
+       } catch (e: unknown) {
+@@ -231,7 +244,7 @@ export default function CompanyRulesPanel() {
+         | null;
+ 
+       if (!res.ok || !payload?.ok) {
+-        throw new Error(getMutationError(payload, "Erreur lors de l’enregistrement du paramètre"));
++        throw new Error(getMutationError(payload, "Erreur lors de l'enregistrement du parametre"));
+       }
+ 
+       setParameters((prev) => prev.map((item) => (item.id === parameter.id ? payload.data : item)));
+@@ -242,7 +255,7 @@ export default function CompanyRulesPanel() {
+       setFeedbackById((prev) => ({
+         ...prev,
+         [parameter.id]: {
+-          message: "Paramètre mis à jour.",
++          message: "Parametre mis a jour.",
+           error: null,
+         },
+       }));
+@@ -263,271 +276,223 @@ export default function CompanyRulesPanel() {
+   const uiParameters = parameters.filter((parameter) => parameter.kind === "UI_SETTING");
+ 
+   return (
+-    <section
+-      style={{
+-        display: "grid",
+-        gap: 16,
+-        padding: 16,
+-        border: "1px solid #ddd",
+-        borderRadius: 10,
+-      }}
+-    >
+-      <div style={{ display: "grid", gap: 8 }}>
+-        <h2 style={{ margin: 0 }}>Paramètres métier ALPHA</h2>
+-        <p style={{ margin: 0, opacity: 0.85 }}>
+-          Vue lisible des règles réellement branchées, des règles préparées mais non encore stockables,
+-          et des réglages UI d’exploitation déjà prouvés dans le code.
++    <section className="company-card company-rules-section">
++      <div className="company-card__head">
++        <h2 className="company-card__title">Parametres metier ALPHA</h2>
++        <p className="company-card__description">
++          Vue lisible des regles branchees, des regles preparees non stockables, et des reglages UI d&apos;exploitation.
+         </p>
+       </div>
+ 
+-      {loading ? <p style={{ margin: 0 }}>Chargement des paramètres…</p> : null}
+-      {error ? <p style={{ margin: 0, color: "crimson" }}>{error}</p> : null}
++      {loading ? <div className="company-loading">Chargement des parametres...</div> : null}
++      {error ? <ErrorMessage title="Erreur parametres societe" message={error} /> : null}
+ 
+       {!loading && !error ? (
+         <>
+-          <div style={{ display: "grid", gap: 12 }}>
+-            <div>
+-              <h3 style={{ margin: 0 }}>Règles métier ALPHA</h3>
+-              <p style={{ margin: "6px 0 0 0", opacity: 0.8 }}>
+-                Les règles préparées sont visibles pour cadrage, mais restent non éditables tant qu’aucune clé
+-                de stockage réelle n’est prouvée.
++          <section className="company-rules-block">
++            <div className="company-rules-block__head">
++              <h3 className="company-rules-block__title">Regles metier ALPHA</h3>
++              <p className="company-rules-block__description">
++                Les regles preparees restent visibles pour cadrage mais non editables sans cle de stockage prouvee.
+               </p>
+             </div>
+ 
+-            {businessParameters.map((parameter) => {
+-              const draft = drafts[parameter.id] ?? getInitialDraft(parameter);
+-              const feedback = feedbackById[parameter.id];
+-              const isSaving = savingId === parameter.id;
+-
+-              return (
+-                <article
+-                  key={parameter.id}
+-                  style={{
+-                    display: "grid",
+-                    gap: 12,
+-                    padding: 16,
+-                    border: "1px solid #ddd",
+-                    borderRadius: 10,
+-                    background: parameter.engineStatus === "BRANCHED" ? "#fafafa" : "#fcfcfc",
+-                  }}
+-                >
+-                  <div style={{ display: "grid", gap: 8 }}>
+-                    <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+-                      <strong>{parameter.label}</strong>
+-                      <span style={{ padding: "4px 8px", borderRadius: 999, border: "1px solid #ddd", fontSize: 12 }}>
+-                        {formatKind(parameter.kind)}
+-                      </span>
+-                      <span style={{ padding: "4px 8px", borderRadius: 999, border: "1px solid #ddd", fontSize: 12 }}>
+-                        {formatEngineStatus(parameter.engineStatus)}
+-                      </span>
+-                      <span style={{ padding: "4px 8px", borderRadius: 999, border: "1px solid #ddd", fontSize: 12 }}>
+-                        {parameter.isWritable ? "Éditable" : "Lecture seule"}
+-                      </span>
+-                    </div>
+-                    <p style={{ margin: 0 }}>{parameter.description}</p>
+-                  </div>
+-
+-                  <div style={{ display: "grid", gap: 8 }}>
+-                    <div><strong>Identifiant :</strong> {parameter.id}</div>
+-                    <div><strong>Type de valeur :</strong> {formatValueType(parameter.valueType)}</div>
+-                    <div><strong>Mode :</strong> {formatModeLabel(parameter.mode, parameter.modeUsage)}</div>
+-                    <div><strong>État stockage :</strong> {formatValueStatus(parameter.valueStatus)}</div>
+-                    <div><strong>Valeur actuelle :</strong> {formatCurrentValue(parameter)}</div>
+-                    <div>
+-                      <strong>Stockage :</strong>{" "}
+-                      {parameter.storage.key
+-                        ? `${parameter.storage.model}.${parameter.storage.key}`
+-                        : "Préparé sans clé prouvée"}
+-                    </div>
+-                    {parameter.note ? <div><strong>Note :</strong> {parameter.note}</div> : null}
+-                  </div>
+-
+-                  {parameter.isWritable ? (
+-                    <div
+-                      style={{
+-                        display: "grid",
+-                        gap: 12,
+-                        padding: 12,
+-                        border: "1px solid #eee",
+-                        borderRadius: 8,
+-                      }}
++            {businessParameters.length === 0 ? (
++              <EmptyState
++                title="Aucune regle metier"
++                message="Aucun parametre metier n'est disponible pour cette societe."
++              />
++            ) : (
++              <div className="company-rules-list">
++                {businessParameters.map((parameter) => {
++                  const draft = drafts[parameter.id] ?? getInitialDraft(parameter);
++                  const feedback = feedbackById[parameter.id];
++                  const isSaving = savingId === parameter.id;
++
++                  return (
++                    <article
++                      key={parameter.id}
++                      className={`company-rule-card${parameter.engineStatus === "PREPARED" ? " company-rule-card--prepared" : ""}`}
+                     >
+-                      <strong>Édition réelle</strong>
+-
+-                      {parameter.valueType === "POSITIVE_NUMBER" ? (
+-                        <label style={{ display: "grid", gap: 6 }}>
+-                          <span>Valeur</span>
+-                          <input
+-                            type="number"
+-                            min={1}
+-                            step={1}
+-                            value={draft.value}
+-                            onChange={(e) => updateDraft(parameter.id, { value: e.target.value })}
+-                            disabled={isSaving}
+-                            style={{ padding: 10 }}
+-                          />
+-                        </label>
+-                      ) : null}
+-
+-                      {parameter.allowedValues && parameter.allowedValues.length > 0 ? (
+-                        <label style={{ display: "grid", gap: 6 }}>
+-                          <span>Valeur</span>
+-                          <select
+-                            value={draft.value}
+-                            onChange={(e) => updateDraft(parameter.id, { value: e.target.value })}
+-                            disabled={isSaving}
+-                            style={{ padding: 10 }}
+-                          >
+-                            <option value="">Sélectionner</option>
+-                            {parameter.allowedValues.map((value) => (
+-                              <option key={value} value={value}>
+-                                {value}
+-                              </option>
+-                            ))}
+-                          </select>
+-                        </label>
+-                      ) : null}
+-
+-                      {parameter.modeUsage === "RULE_MODE" ? (
+-                        <label style={{ display: "grid", gap: 6 }}>
+-                          <span>Mode de règle</span>
+-                          <select
+-                            value={draft.mode}
+-                            onChange={(e) => updateDraft(parameter.id, { mode: e.target.value as RuleModeValue })}
+-                            disabled={isSaving}
+-                            style={{ padding: 10 }}
+-                          >
+-                            {COMPANY_RULE_MODE_VALUES.map((mode) => (
+-                              <option key={mode} value={mode}>
+-                                {mode}
+-                              </option>
+-                            ))}
+-                          </select>
+-                        </label>
+-                      ) : null}
++                      <div className="company-rule-card__head">
++                        <div>
++                          <h4 className="company-rule-card__title">{parameter.label}</h4>
++                          <p className="company-rule-card__description">{parameter.description}</p>
++                        </div>
++                        <ParameterStatusBadges parameter={parameter} />
++                      </div>
+ 
+-                      <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
+-                        <button type="button" onClick={() => saveParameter(parameter)} disabled={isSaving} style={{ padding: "10px 14px" }}>
+-                          {isSaving ? "Enregistrement…" : "Enregistrer"}
+-                        </button>
+-                        {feedback?.message ? <span style={{ color: "green" }}>{feedback.message}</span> : null}
+-                        {feedback?.error ? <span style={{ color: "crimson" }}>{feedback.error}</span> : null}
++                      <div className="company-rule-details">
++                        <p><strong>Identifiant :</strong> {parameter.id}</p>
++                        <p><strong>Type de valeur :</strong> {formatValueType(parameter.valueType)}</p>
++                        <p><strong>Mode :</strong> {formatModeLabel(parameter.mode, parameter.modeUsage)}</p>
++                        <p><strong>Etat stockage :</strong> {formatValueStatus(parameter.valueStatus)}</p>
++                        <p><strong>Valeur actuelle :</strong> {formatCurrentValue(parameter)}</p>
++                        <p>
++                          <strong>Stockage :</strong>{" "}
++                          {parameter.storage.key
++                            ? `${parameter.storage.model}.${parameter.storage.key}`
++                            : "Prepare sans cle prouvee"}
++                        </p>
++                        {parameter.note ? <p><strong>Note :</strong> {parameter.note}</p> : null}
+                       </div>
+-                    </div>
+-                  ) : (
+-                    <div
+-                      style={{
+-                        padding: 12,
+-                        borderRadius: 8,
+-                        border: "1px solid #eee",
+-                        background: "#fafafa",
+-                      }}
+-                    >
+-                      Paramètre préparé uniquement : aucune édition n’est proposée tant que la clé de stockage et
+-                      le format métier réels ne sont pas prouvés.
+-                    </div>
+-                  )}
+-                </article>
+-              );
+-            })}
+-          </div>
+-
+-          <div style={{ display: "grid", gap: 12 }}>
+-            <div>
+-              <h3 style={{ margin: 0 }}>Réglages UI / exploitation</h3>
+-              <p style={{ margin: "6px 0 0 0", opacity: 0.8 }}>
+-                Ces réglages restent fonctionnels, mais ne doivent pas être présentés comme des règles moteur.
++
++                      {parameter.isWritable ? (
++                        <div className="company-rule-edit">
++                          {parameter.valueType === "POSITIVE_NUMBER" ? (
++                            <label className="company-field">
++                              <span className="company-field__label">Valeur</span>
++                              <input
++                                type="number"
++                                min={1}
++                                step={1}
++                                value={draft.value}
++                                onChange={(e) => updateDraft(parameter.id, { value: e.target.value })}
++                                disabled={isSaving}
++                              />
++                            </label>
++                          ) : null}
++
++                          {parameter.allowedValues && parameter.allowedValues.length > 0 ? (
++                            <label className="company-field">
++                              <span className="company-field__label">Valeur</span>
++                              <select
++                                value={draft.value}
++                                onChange={(e) => updateDraft(parameter.id, { value: e.target.value })}
++                                disabled={isSaving}
++                              >
++                                <option value="">Selectionner</option>
++                                {parameter.allowedValues.map((value) => (
++                                  <option key={value} value={value}>
++                                    {value}
++                                  </option>
++                                ))}
++                              </select>
++                            </label>
++                          ) : null}
++
++                          {parameter.modeUsage === "RULE_MODE" ? (
++                            <label className="company-field">
++                              <span className="company-field__label">Mode de regle</span>
++                              <select
++                                value={draft.mode}
++                                onChange={(e) => updateDraft(parameter.id, { mode: e.target.value as RuleModeValue })}
++                                disabled={isSaving}
++                              >
++                                {COMPANY_RULE_MODE_VALUES.map((mode) => (
++                                  <option key={mode} value={mode}>
++                                    {mode}
++                                  </option>
++                                ))}
++                              </select>
++                            </label>
++                          ) : null}
++
++                          <div className="company-actions company-actions--between">
++                            <ActionButton variant="primary" onClick={() => saveParameter(parameter)} disabled={isSaving}>
++                              {isSaving ? "Enregistrement..." : "Enregistrer"}
++                            </ActionButton>
++                            {feedback?.message ? <span className="company-feedback company-feedback--success">{feedback.message}</span> : null}
++                            {feedback?.error ? <span className="company-feedback company-feedback--error">{feedback.error}</span> : null}
++                          </div>
++                        </div>
++                      ) : (
++                        <div className="company-rule-readonly">
++                          Parametre prepare uniquement : edition bloquee tant que la cle de stockage et le format metier
++                          reels ne sont pas prouves.
++                        </div>
++                      )}
++                    </article>
++                  );
++                })}
++              </div>
++            )}
++          </section>
++
++          <section className="company-rules-block">
++            <div className="company-rules-block__head">
++              <h3 className="company-rules-block__title">Reglages UI / exploitation</h3>
++              <p className="company-rules-block__description">
++                Reglages fonctionnels conserves, sans les presenter comme des regles moteur.
+               </p>
+             </div>
+ 
+-            {uiParameters.map((parameter) => {
+-              const draft = drafts[parameter.id] ?? getInitialDraft(parameter);
+-              const feedback = feedbackById[parameter.id];
+-              const isSaving = savingId === parameter.id;
+-
+-              return (
+-                <article
+-                  key={parameter.id}
+-                  style={{
+-                    display: "grid",
+-                    gap: 12,
+-                    padding: 16,
+-                    border: "1px solid #ddd",
+-                    borderRadius: 10,
+-                  }}
+-                >
+-                  <div style={{ display: "grid", gap: 8 }}>
+-                    <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+-                      <strong>{parameter.label}</strong>
+-                      <span style={{ padding: "4px 8px", borderRadius: 999, border: "1px solid #ddd", fontSize: 12 }}>
+-                        {formatKind(parameter.kind)}
+-                      </span>
+-                      <span style={{ padding: "4px 8px", borderRadius: 999, border: "1px solid #ddd", fontSize: 12 }}>
+-                        {formatEngineStatus(parameter.engineStatus)}
+-                      </span>
+-                      <span style={{ padding: "4px 8px", borderRadius: 999, border: "1px solid #ddd", fontSize: 12 }}>
+-                        Non moteur
+-                      </span>
+-                    </div>
+-                    <p style={{ margin: 0 }}>{parameter.description}</p>
+-                  </div>
+-
+-                  <div style={{ display: "grid", gap: 8 }}>
+-                    <div><strong>Identifiant :</strong> {parameter.id}</div>
+-                    <div><strong>Type de valeur :</strong> {formatValueType(parameter.valueType)}</div>
+-                    <div><strong>Mode :</strong> {formatModeLabel(parameter.mode, parameter.modeUsage)}</div>
+-                    <div><strong>État stockage :</strong> {formatValueStatus(parameter.valueStatus)}</div>
+-                    <div><strong>Valeur actuelle :</strong> {formatCurrentValue(parameter)}</div>
+-                    <div>
+-                      <strong>Stockage :</strong>{" "}
+-                      {parameter.storage.key
+-                        ? `${parameter.storage.model}.${parameter.storage.key}`
+-                        : "INFORMATION NON FOURNIE — À CONFIRMER"}
+-                    </div>
+-                    {parameter.note ? <div><strong>Note :</strong> {parameter.note}</div> : null}
+-                  </div>
+-
+-                  {parameter.allowedValues && parameter.allowedValues.length > 0 ? (
+-                    <div
+-                      style={{
+-                        display: "grid",
+-                        gap: 12,
+-                        padding: 12,
+-                        border: "1px solid #eee",
+-                        borderRadius: 8,
+-                      }}
+-                    >
+-                      <strong>Édition réelle</strong>
+-                      <label style={{ display: "grid", gap: 6 }}>
+-                        <span>Mode d’affichage</span>
+-                        <select
+-                          value={draft.value}
+-                          onChange={(e) => updateDraft(parameter.id, { value: e.target.value })}
+-                          disabled={isSaving}
+-                          style={{ padding: 10 }}
+-                        >
+-                          <option value="">Sélectionner</option>
+-                          {parameter.allowedValues.map((value) => (
+-                            <option key={value} value={value}>
+-                              {value}
+-                            </option>
+-                          ))}
+-                        </select>
+-                      </label>
+-
+-                      <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
+-                        <button type="button" onClick={() => saveParameter(parameter)} disabled={isSaving} style={{ padding: "10px 14px" }}>
+-                          {isSaving ? "Enregistrement…" : "Enregistrer"}
+-                        </button>
+-                        {feedback?.message ? <span style={{ color: "green" }}>{feedback.message}</span> : null}
+-                        {feedback?.error ? <span style={{ color: "crimson" }}>{feedback.error}</span> : null}
++            {uiParameters.length === 0 ? (
++              <EmptyState
++                title="Aucun reglage UI"
++                message="Aucun reglage UI / exploitation n'est disponible pour cette societe."
++              />
++            ) : (
++              <div className="company-rules-list">
++                {uiParameters.map((parameter) => {
++                  const draft = drafts[parameter.id] ?? getInitialDraft(parameter);
++                  const feedback = feedbackById[parameter.id];
++                  const isSaving = savingId === parameter.id;
++
++                  return (
++                    <article key={parameter.id} className="company-rule-card">
++                      <div className="company-rule-card__head">
++                        <div>
++                          <h4 className="company-rule-card__title">{parameter.label}</h4>
++                          <p className="company-rule-card__description">{parameter.description}</p>
++                        </div>
++                        <div className="company-rule-tags">
++                          <StatusBadge variant="info">{formatKind(parameter.kind)}</StatusBadge>
++                          <StatusBadge variant="neutral">Non moteur</StatusBadge>
++                          <StatusBadge variant={parameter.isWritable ? "success" : "neutral"}>
++                            {parameter.isWritable ? "Editable" : "Lecture seule"}
++                          </StatusBadge>
++                        </div>
+                       </div>
+-                    </div>
+-                  ) : null}
+-                </article>
+-              );
+-            })}
+-          </div>
++
++                      <div className="company-rule-details">
++                        <p><strong>Identifiant :</strong> {parameter.id}</p>
++                        <p><strong>Type de valeur :</strong> {formatValueType(parameter.valueType)}</p>
++                        <p><strong>Mode :</strong> {formatModeLabel(parameter.mode, parameter.modeUsage)}</p>
++                        <p><strong>Etat stockage :</strong> {formatValueStatus(parameter.valueStatus)}</p>
++                        <p><strong>Valeur actuelle :</strong> {formatCurrentValue(parameter)}</p>
++                        <p>
++                          <strong>Stockage :</strong>{" "}
++                          {parameter.storage.key
++                            ? `${parameter.storage.model}.${parameter.storage.key}`
++                            : "INFORMATION NON FOURNIE - A CONFIRMER"}
++                        </p>
++                        {parameter.note ? <p><strong>Note :</strong> {parameter.note}</p> : null}
++                      </div>
++
++                      {parameter.allowedValues && parameter.allowedValues.length > 0 ? (
++                        <div className="company-rule-edit">
++                          <label className="company-field">
++                            <span className="company-field__label">Mode d&apos;affichage</span>
++                            <select
++                              value={draft.value}
++                              onChange={(e) => updateDraft(parameter.id, { value: e.target.value })}
++                              disabled={isSaving}
++                            >
++                              <option value="">Selectionner</option>
++                              {parameter.allowedValues.map((value) => (
++                                <option key={value} value={value}>
++                                  {value}
++                                </option>
++                              ))}
++                            </select>
++                          </label>
++
++                          <div className="company-actions company-actions--between">
++                            <ActionButton variant="primary" onClick={() => saveParameter(parameter)} disabled={isSaving}>
++                              {isSaving ? "Enregistrement..." : "Enregistrer"}
++                            </ActionButton>
++                            {feedback?.message ? <span className="company-feedback company-feedback--success">{feedback.message}</span> : null}
++                            {feedback?.error ? <span className="company-feedback company-feedback--error">{feedback.error}</span> : null}
++                          </div>
++                        </div>
++                      ) : null}
++                    </article>
++                  );
++                })}
++              </div>
++            )}
++          </section>
+         </>
+       ) : null}
+     </section>
+diff --git a/orig/app/company/page.tsx b/mod/app/company/page.tsx
+index c2f19c7..76af73b 100644
+--- a/orig/app/company/page.tsx
++++ b/mod/app/company/page.tsx
+@@ -2,6 +2,7 @@ import Link from "next/link";
+ import { getServerSession } from "next-auth/next";
+ import { redirect } from "next/navigation";
+ 
++import { PageHeader, StatCard } from "@/app/ui";
+ import { authOptions } from "@/lib/auth";
+ import { canManageCompanyRules } from "@/lib/permissions";
+ import { prisma } from "@/lib/prisma";
+@@ -52,16 +53,26 @@ export default async function CompanyPage() {
+   }
+ 
+   return (
+-    <div style={{ padding: 16, display: "grid", gap: 16 }}>
+-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
+-        <div>
+-          <h1 style={{ margin: 0 }}>Profil société</h1>
+-          <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
+-            Consultation et édition minimales de la société courante sur le périmètre ALPHA.
+-          </p>
+-        </div>
++    <section className="company-section">
++      <PageHeader
++        title="Profil societe"
++        description="Consultation et edition minimales de la societe courante sur le perimetre ALPHA."
++        actions={<Link href="/dashboard" className="company-page__back-link">Retour dashboard</Link>}
++      />
+ 
+-        <Link href="/dashboard">Retour dashboard</Link>
++      <div className="company-grid-stats">
++        <StatCard
++          title="Edition profil"
++          value={canManageProfile ? "Autorisee" : "Restreinte"}
++          hint={canManageProfile ? "Comptes ADMIN / GERANT" : "Lecture seule"}
++          tone={canManageProfile ? "success" : "warning"}
++        />
++        <StatCard
++          title="Regles metier"
++          value={canManageRules ? "Accessible" : "Restreint"}
++          hint={canManageRules ? "Parametres visibles" : "Permission requise"}
++          tone={canManageRules ? "info" : "neutral"}
++        />
+       </div>
+ 
+       {canManageProfile && company ? (
+@@ -75,24 +86,17 @@ export default async function CompanyPage() {
+           }}
+         />
+       ) : (
+-        <section
+-          style={{
+-            display: "grid",
+-            gap: 8,
+-            padding: 16,
+-            border: "1px solid #ddd",
+-            borderRadius: 10,
+-            maxWidth: 720,
+-          }}
+-        >
+-          <strong>Profil société</strong>
+-          <p style={{ margin: 0, opacity: 0.8 }}>
+-            L’édition du profil société reste réservée aux comptes ADMIN / GERANT.
+-          </p>
++        <section className="company-card company-card--soft">
++          <div className="company-card__head">
++            <h2 className="company-card__title">Profil societe</h2>
++            <p className="company-card__description">
++              L&apos;edition du profil societe reste reservee aux comptes ADMIN / GERANT.
++            </p>
++          </div>
+         </section>
+       )}
+ 
+       {canManageRules ? <CompanyRulesPanel /> : null}
+-    </div>
++    </section>
+   );
+ }
+diff --git a/orig/app/depots/depots-client.tsx b/mod/app/depots/depots-client.tsx
+index 6b3bdcf..41265f5 100644
+--- a/orig/app/depots/depots-client.tsx
++++ b/mod/app/depots/depots-client.tsx
+@@ -1,6 +1,16 @@
+ "use client";
+ 
+-import { useState } from "react";
++import { useMemo, useState } from "react";
++
++import {
++  ActionButton,
++  DataTable,
++  EmptyState,
++  ErrorMessage,
++  FilterBar,
++  StatusBadge,
++  type DataTableColumn,
++} from "@/app/ui";
+ 
+ type Depot = {
+   id: string;
+@@ -16,6 +26,8 @@ type DepotForm = {
+   address: string;
+ };
+ 
++type DepotStatusFilter = "" | "ACTIVE" | "ARCHIVED";
++
+ type ApiSuccess<T> = { ok: true; data: T };
+ type ApiFailure = { ok: false; error: string; details?: unknown };
+ type ApiResponse<T> = ApiSuccess<T> | ApiFailure;
+@@ -42,6 +54,23 @@ function buildForms(items: Depot[]) {
+   return Object.fromEntries(items.map((item) => [item.id, toDepotForm(item)]));
+ }
+ 
++function formatDateTime(value: string) {
++  const date = new Date(value);
++  if (Number.isNaN(date.getTime())) return value;
++  return date.toLocaleString("fr-FR");
++}
++
++function depotMatchesSearch(depot: Depot, searchInput: string) {
++  const query = searchInput.trim().toLowerCase();
++  if (!query) return true;
++
++  return [
++    depot.name,
++    depot.address ?? "",
++    depot.isActive ? "actif" : "archive",
++  ].some((value) => value.toLowerCase().includes(query));
++}
++
+ export default function DepotsClient({
+   initialDepots,
+ }: {
+@@ -50,6 +79,10 @@ export default function DepotsClient({
+   const [depots, setDepots] = useState<Depot[]>(() => sortDepots(initialDepots));
+   const [forms, setForms] = useState<Record<string, DepotForm>>(() => buildForms(initialDepots));
+   const [createForm, setCreateForm] = useState<DepotForm>({ name: "", address: "" });
++  const [selectedDepotId, setSelectedDepotId] = useState<string | null>(initialDepots[0]?.id ?? null);
++  const [searchInput, setSearchInput] = useState("");
++  const [statusFilter, setStatusFilter] = useState<DepotStatusFilter>("");
++
+   const [isCreating, setIsCreating] = useState(false);
+   const [savingId, setSavingId] = useState<string | null>(null);
+   const [archivingId, setArchivingId] = useState<string | null>(null);
+@@ -70,6 +103,11 @@ export default function DepotsClient({
+     }));
+   }
+ 
++  function resetFilters() {
++    setSearchInput("");
++    setStatusFilter("");
++  }
++
+   async function handleCreate(event: React.FormEvent<HTMLFormElement>) {
+     event.preventDefault();
+     setIsCreating(true);
+@@ -89,13 +127,14 @@ export default function DepotsClient({
+       const data = (await res.json().catch(() => null)) as ApiResponse<Depot> | null;
+ 
+       if (!res.ok || !data?.ok) {
+-        throw new Error(getApiError(data, "Erreur lors de la création du dépôt"));
++        throw new Error(getApiError(data, "Erreur lors de la creation du depot"));
+       }
+ 
+       setDepots((prev) => sortDepots([data.data, ...prev]));
+       setForms((prev) => ({ ...prev, [data.data.id]: toDepotForm(data.data) }));
+       setCreateForm({ name: "", address: "" });
+-      setSuccess("Dépôt créé.");
++      setSelectedDepotId(data.data.id);
++      setSuccess("Depot cree.");
+     } catch (e: unknown) {
+       setError(e instanceof Error ? e.message : "Erreur inconnue");
+     } finally {
+@@ -124,14 +163,14 @@ export default function DepotsClient({
+       const data = (await res.json().catch(() => null)) as ApiResponse<Depot> | null;
+ 
+       if (!res.ok || !data?.ok) {
+-        throw new Error(getApiError(data, "Erreur lors de la modification du dépôt"));
++        throw new Error(getApiError(data, "Erreur lors de la modification du depot"));
+       }
+ 
+       setDepots((prev) =>
+-        sortDepots(prev.map((item) => (item.id === id ? data.data : item)))
++        sortDepots(prev.map((item) => (item.id === id ? data.data : item))),
+       );
+       setForms((prev) => ({ ...prev, [id]: toDepotForm(data.data) }));
+-      setSuccess("Dépôt mis à jour.");
++      setSuccess("Depot mis a jour.");
+     } catch (e: unknown) {
+       setError(e instanceof Error ? e.message : "Erreur inconnue");
+     } finally {
+@@ -140,7 +179,7 @@ export default function DepotsClient({
+   }
+ 
+   async function handleArchive(id: string) {
+-    const confirmed = window.confirm("Archiver ce dépôt ?");
++    const confirmed = window.confirm("Archiver ce depot ?");
+     if (!confirmed) return;
+ 
+     setArchivingId(id);
+@@ -155,14 +194,14 @@ export default function DepotsClient({
+       const data = (await res.json().catch(() => null)) as ApiResponse<Depot> | null;
+ 
+       if (!res.ok || !data?.ok) {
+-        throw new Error(getApiError(data, "Erreur lors de l'archivage du dépôt"));
++        throw new Error(getApiError(data, "Erreur lors de l'archivage du depot"));
+       }
+ 
+       setDepots((prev) =>
+-        sortDepots(prev.map((item) => (item.id === id ? data.data : item)))
++        sortDepots(prev.map((item) => (item.id === id ? data.data : item))),
+       );
+       setForms((prev) => ({ ...prev, [id]: toDepotForm(data.data) }));
+-      setSuccess("Dépôt archivé.");
++      setSuccess("Depot archive.");
+     } catch (e: unknown) {
+       setError(e instanceof Error ? e.message : "Erreur inconnue");
+     } finally {
+@@ -170,144 +209,270 @@ export default function DepotsClient({
+     }
+   }
+ 
+-  return (
+-    <div style={{ display: "grid", gap: 16 }}>
+-      <form
+-        onSubmit={handleCreate}
+-        style={{
+-          display: "grid",
+-          gap: 12,
+-          padding: 16,
+-          border: "1px solid #ddd",
+-          borderRadius: 10,
+-          maxWidth: 720,
+-        }}
+-      >
+-        <h2 style={{ margin: 0 }}>Créer un dépôt</h2>
+-
+-        <label style={{ display: "grid", gap: 6 }}>
+-          <span>Nom</span>
+-          <input
+-            value={createForm.name}
+-            onChange={(event) => updateCreateForm("name", event.target.value)}
+-            disabled={isCreating}
+-            required
+-            style={{ padding: 10 }}
+-          />
+-        </label>
+-
+-        <label style={{ display: "grid", gap: 6 }}>
+-          <span>Adresse</span>
+-          <input
+-            value={createForm.address}
+-            onChange={(event) => updateCreateForm("address", event.target.value)}
+-            disabled={isCreating}
+-            style={{ padding: 10 }}
+-          />
+-        </label>
+-
+-        <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+-          <button type="submit" disabled={isCreating} style={{ padding: "10px 14px" }}>
+-            {isCreating ? "Création..." : "Créer le dépôt"}
+-          </button>
++  const depotStats = useMemo(() => {
++    let active = 0;
++    let archived = 0;
++
++    for (const depot of depots) {
++      if (depot.isActive) {
++        active += 1;
++      } else {
++        archived += 1;
++      }
++    }
++
++    return {
++      total: depots.length,
++      active,
++      archived,
++    };
++  }, [depots]);
++
++  const filteredDepots = useMemo(() => {
++    return depots.filter((depot) => {
++      if (!depotMatchesSearch(depot, searchInput)) return false;
++
++      if (statusFilter === "ACTIVE" && !depot.isActive) return false;
++      if (statusFilter === "ARCHIVED" && depot.isActive) return false;
++
++      return true;
++    });
++  }, [depots, searchInput, statusFilter]);
++
++  const selectedDepot = useMemo(
++    () => depots.find((depot) => depot.id === selectedDepotId) ?? null,
++    [depots, selectedDepotId],
++  );
++
++  const selectedDepotForm = selectedDepot ? forms[selectedDepot.id] ?? toDepotForm(selectedDepot) : null;
++
++  const columns: DataTableColumn<Depot>[] = [
++    {
++      key: "name",
++      header: "Depot",
++      width: "280px",
++      render: (depot) => (
++        <div className="depots-cell-main">
++          <strong>{depot.name}</strong>
++          <span className="depots-table-cell-subtle">{depot.address || "Adresse non renseignee"}</span>
+         </div>
+-      </form>
++      ),
++    },
++    {
++      key: "status",
++      header: "Statut",
++      width: "130px",
++      render: (depot) => (
++        <StatusBadge variant={depot.isActive ? "success" : "neutral"}>
++          {depot.isActive ? "Actif" : "Archive"}
++        </StatusBadge>
++      ),
++    },
++    {
++      key: "updatedAt",
++      header: "Mise a jour",
++      width: "190px",
++      render: (depot) => formatDateTime(depot.updatedAt),
++    },
++    {
++      key: "actions",
++      header: "Actions",
++      align: "right",
++      width: "250px",
++      render: (depot) => {
++        const isSaving = savingId === depot.id;
++        const isArchiving = archivingId === depot.id;
++        const isBusy = isSaving || isArchiving;
++
++        return (
++          <div className="depots-actions depots-actions--end depots-actions--wrap">
++            <ActionButton
++              size="sm"
++              variant="secondary"
++              disabled={isBusy}
++              onClick={() => setSelectedDepotId(depot.id)}
++            >
++              Modifier
++            </ActionButton>
++            {depot.isActive ? (
++              <ActionButton
++                size="sm"
++                variant="danger"
++                disabled={isBusy}
++                onClick={() => handleArchive(depot.id)}
++              >
++                {isArchiving ? "Archivage..." : "Archiver"}
++              </ActionButton>
++            ) : null}
++          </div>
++        );
++      },
++    },
++  ];
+ 
+-      {success ? (
+-        <div style={{ padding: 12, border: "1px solid #335533", borderRadius: 8 }}>{success}</div>
+-      ) : null}
++  return (
++    <section className="depots-module">
++      {error ? <ErrorMessage title="Erreur module depots" message={error} /> : null}
++      {success ? <div className="depots-alert depots-alert--success">{success}</div> : null}
++
++      <section className="depots-card">
++        <div className="depots-card__head">
++          <h2 className="depots-card__title">Creer un depot</h2>
++          <p className="depots-card__description">
++            Creation rapide d&apos;un depot avec nom et adresse, sans impact sur la logique metier.
++          </p>
++        </div>
+ 
+-      {error ? (
+-        <div style={{ padding: 12, border: "1px solid #663333", borderRadius: 8 }}>Erreur : {error}</div>
+-      ) : null}
++        <form onSubmit={handleCreate} className="depots-form">
++          <div className="depots-form-grid depots-form-grid--create">
++            <label className="depots-field">
++              <span className="depots-field__label">Nom</span>
++              <input
++                value={createForm.name}
++                onChange={(event) => updateCreateForm("name", event.target.value)}
++                disabled={isCreating}
++                required
++              />
++            </label>
++
++            <label className="depots-field">
++              <span className="depots-field__label">Adresse</span>
++              <input
++                value={createForm.address}
++                onChange={(event) => updateCreateForm("address", event.target.value)}
++                disabled={isCreating}
++              />
++            </label>
++
++            <div className="depots-actions depots-actions--end depots-actions--align-end">
++              <ActionButton type="submit" variant="primary" disabled={isCreating}>
++                {isCreating ? "Creation..." : "Creer le depot"}
++              </ActionButton>
++            </div>
++          </div>
++        </form>
++      </section>
++
++      <section className="depots-card">
++        <div className="depots-card__head">
++          <h2 className="depots-card__title">Liste des depots</h2>
++          <p className="depots-card__description">
++            Consultation, filtrage simple et archivage visuel des depots de la societe courante.
++          </p>
++        </div>
+ 
+-      <div style={{ display: "grid", gap: 12 }}>
+-        <h2 style={{ margin: 0 }}>Liste des dépôts</h2>
++        <FilterBar
++          summary={`Total ${depotStats.total} | Actifs ${depotStats.active} | Archives ${depotStats.archived}`}
++          actions={(
++            <ActionButton size="sm" variant="ghost" onClick={resetFilters}>
++              Reinitialiser
++            </ActionButton>
++          )}
++        >
++          <label className="depots-field">
++            <span className="depots-field__label">Recherche</span>
++            <input
++              type="text"
++              value={searchInput}
++              onChange={(event) => setSearchInput(event.target.value)}
++              placeholder="Nom, adresse ou statut"
++            />
++          </label>
++
++          <label className="depots-field">
++            <span className="depots-field__label">Statut</span>
++            <select
++              value={statusFilter}
++              onChange={(event) => setStatusFilter(event.target.value as DepotStatusFilter)}
++            >
++              <option value="">Tous les statuts</option>
++              <option value="ACTIVE">Actif</option>
++              <option value="ARCHIVED">Archive</option>
++            </select>
++          </label>
++        </FilterBar>
++
++        <DataTable
++          columns={columns}
++          rows={filteredDepots}
++          rowKey={(depot) => depot.id}
++          selectedRowKey={selectedDepotId}
++          onRowClick={(depot) => setSelectedDepotId(depot.id)}
++          emptyTitle="Aucun depot"
++          emptyMessage="Aucun depot ne correspond aux filtres selectionnes."
++          caption="Depots de la societe courante"
++          minWidth={980}
++        />
++      </section>
++
++      {selectedDepot && selectedDepotForm ? (
++        <section className="depots-card">
++          <div className="depots-card__head">
++            <h2 className="depots-card__title">Modifier le depot selectionne</h2>
++            <p className="depots-card__description">
++              Edition visuelle des informations de depot et archivage logique si necessaire.
++            </p>
++          </div>
+ 
+-        {depots.length === 0 ? (
+-          <div style={{ padding: 16, border: "1px solid #ddd", borderRadius: 10 }}>
+-            Aucun dépôt enregistré pour cette société.
++          <div className="depots-selection-card">
++            <strong>{selectedDepot.name}</strong>
++            <div className="depots-inline-status">
++              <StatusBadge variant={selectedDepot.isActive ? "success" : "neutral"}>
++                {selectedDepot.isActive ? "Actif" : "Archive"}
++              </StatusBadge>
++              <StatusBadge variant="neutral">Cree le {formatDateTime(selectedDepot.createdAt)}</StatusBadge>
++              <StatusBadge variant="neutral">Maj le {formatDateTime(selectedDepot.updatedAt)}</StatusBadge>
++            </div>
+           </div>
+-        ) : (
+-          depots.map((depot) => {
+-            const form = forms[depot.id] ?? toDepotForm(depot);
+-            const isSaving = savingId === depot.id;
+-            const isArchiving = archivingId === depot.id;
+-            const isBusy = isSaving || isArchiving;
+-
+-            return (
+-              <div
+-                key={depot.id}
+-                style={{
+-                  display: "grid",
+-                  gap: 12,
+-                  padding: 16,
+-                  border: "1px solid #ddd",
+-                  borderRadius: 10,
+-                  opacity: depot.isActive ? 1 : 0.8,
+-                }}
++
++          <div className="depots-form">
++            <div className="depots-form-grid depots-form-grid--edit">
++              <label className="depots-field">
++                <span className="depots-field__label">Nom</span>
++                <input
++                  value={selectedDepotForm.name}
++                  onChange={(event) => updateDepotForm(selectedDepot.id, "name", event.target.value)}
++                  disabled={savingId === selectedDepot.id || archivingId === selectedDepot.id}
++                  required
++                />
++              </label>
++
++              <label className="depots-field">
++                <span className="depots-field__label">Adresse</span>
++                <input
++                  value={selectedDepotForm.address}
++                  onChange={(event) => updateDepotForm(selectedDepot.id, "address", event.target.value)}
++                  disabled={savingId === selectedDepot.id || archivingId === selectedDepot.id}
++                />
++              </label>
++            </div>
++
++            <div className="depots-actions depots-actions--end">
++              <ActionButton
++                variant="primary"
++                onClick={() => handleSave(selectedDepot.id)}
++                disabled={savingId === selectedDepot.id || archivingId === selectedDepot.id}
+               >
+-                <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
+-                  <div>
+-                    <strong>{depot.name}</strong>
+-                    <div style={{ marginTop: 6, opacity: 0.8 }}>
+-                      Statut : {depot.isActive ? "actif" : "archivé"}
+-                    </div>
+-                  </div>
+-
+-                  <span
+-                    style={{
+-                      padding: "4px 10px",
+-                      border: "1px solid #ccc",
+-                      borderRadius: 999,
+-                    }}
+-                  >
+-                    {depot.isActive ? "Actif" : "Archivé"}
+-                  </span>
+-                </div>
+-
+-                <label style={{ display: "grid", gap: 6 }}>
+-                  <span>Nom</span>
+-                  <input
+-                    value={form.name}
+-                    onChange={(event) => updateDepotForm(depot.id, "name", event.target.value)}
+-                    disabled={isBusy}
+-                    required
+-                    style={{ padding: 10 }}
+-                  />
+-                </label>
+-
+-                <label style={{ display: "grid", gap: 6 }}>
+-                  <span>Adresse</span>
+-                  <input
+-                    value={form.address}
+-                    onChange={(event) => updateDepotForm(depot.id, "address", event.target.value)}
+-                    disabled={isBusy}
+-                    style={{ padding: 10 }}
+-                  />
+-                </label>
+-
+-                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+-                  <button type="button" onClick={() => handleSave(depot.id)} disabled={isBusy} style={{ padding: "10px 14px" }}>
+-                    {isSaving ? "Enregistrement..." : "Enregistrer"}
+-                  </button>
+-
+-                  {depot.isActive ? (
+-                    <button
+-                      type="button"
+-                      onClick={() => handleArchive(depot.id)}
+-                      disabled={isBusy}
+-                      style={{ padding: "10px 14px" }}
+-                    >
+-                      {isArchiving ? "Archivage..." : "Archiver"}
+-                    </button>
+-                  ) : null}
+-                </div>
+-              </div>
+-            );
+-          })
+-        )}
+-      </div>
+-    </div>
++                {savingId === selectedDepot.id ? "Enregistrement..." : "Enregistrer"}
++              </ActionButton>
++              {selectedDepot.isActive ? (
++                <ActionButton
++                  variant="danger"
++                  onClick={() => handleArchive(selectedDepot.id)}
++                  disabled={savingId === selectedDepot.id || archivingId === selectedDepot.id}
++                >
++                  {archivingId === selectedDepot.id ? "Archivage..." : "Archiver"}
++                </ActionButton>
++              ) : null}
++            </div>
++          </div>
++        </section>
++      ) : (
++        <EmptyState
++          title="Aucun depot selectionne"
++          message="Selectionnez une ligne de la liste pour afficher le formulaire d'edition."
++        />
++      )}
++    </section>
+   );
+ }
+diff --git a/orig/app/depots/page.tsx b/mod/app/depots/page.tsx
+index 9c7354b..11ebeca 100644
+--- a/orig/app/depots/page.tsx
++++ b/mod/app/depots/page.tsx
+@@ -2,6 +2,7 @@ import Link from "next/link";
+ import { getServerSession } from "next-auth/next";
+ import { redirect } from "next/navigation";
+ 
++import { PageHeader, StatCard } from "@/app/ui";
+ import { authOptions } from "@/lib/auth";
+ import { prisma } from "@/lib/prisma";
+ 
+@@ -31,17 +32,21 @@ export default async function DepotsPage() {
+     },
+   });
+ 
++  const activeCount = depots.filter((depot) => depot.isActive).length;
++  const archivedCount = depots.length - activeCount;
++
+   return (
+-    <div style={{ padding: 16, display: "grid", gap: 16 }}>
+-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+-        <div>
+-          <h1 style={{ margin: 0 }}>Bases / dépôts</h1>
+-          <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
+-            Gestion minimale ALPHA des dépôts de la société courante : création, édition de nom/adresse et archivage logique.
+-          </p>
+-        </div>
+-
+-        <Link href="/dashboard">Retour dashboard</Link>
++    <section className="depots-section">
++      <PageHeader
++        title="Bases / depots"
++        description="Gestion ALPHA des depots de la societe courante : creation, edition et archivage logique."
++        actions={<Link href="/dashboard" className="depots-page__back-link">Retour dashboard</Link>}
++      />
++
++      <div className="depots-grid-stats">
++        <StatCard title="Depots actifs" value={activeCount} hint="Disponibles a l'exploitation" tone="success" />
++        <StatCard title="Depots archives" value={archivedCount} hint="Historique conserve" tone="neutral" />
++        <StatCard title="Total depots" value={depots.length} hint="Perimetre societe courante" tone="info" />
+       </div>
+ 
+       <DepotsClient
+@@ -51,6 +56,6 @@ export default async function DepotsPage() {
+           updatedAt: depot.updatedAt.toISOString(),
+         }))}
+       />
+-    </div>
++    </section>
+   );
+ }
+diff --git a/orig/app/globals.css b/mod/app/globals.css
+index 00c4a54..1b06ad9 100644
+--- a/orig/app/globals.css
++++ b/mod/app/globals.css
+@@ -1823,3 +1823,385 @@ pre {
+     justify-content: flex-start;
+   }
+ }
++
++.company-section {
++  display: grid;
++  gap: 16px;
++}
++
++.company-page__back-link {
++  display: inline-flex;
++  align-items: center;
++  min-height: 40px;
++  padding: 0 14px;
++  border-radius: 10px;
++  border: 1px solid var(--ui-border);
++  background: var(--ui-surface);
++  color: var(--ui-link);
++  font-weight: 700;
++}
++
++.company-page__back-link:hover {
++  text-decoration: none;
++  border-color: var(--ui-border-strong);
++  background: var(--ui-surface-soft);
++}
++
++.company-grid-stats {
++  display: grid;
++  gap: 12px;
++  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
++}
++
++.company-card {
++  border: 1px solid var(--ui-border);
++  border-radius: 12px;
++  background: var(--ui-surface);
++  padding: 16px;
++  box-shadow: var(--ui-shadow);
++  display: grid;
++  gap: 12px;
++}
++
++.company-card--soft {
++  background: var(--ui-surface-soft);
++}
++
++.company-card__head {
++  display: grid;
++  gap: 8px;
++}
++
++.company-card__title {
++  margin: 0;
++  font-size: 20px;
++  color: #1e3a8a;
++}
++
++.company-card__description {
++  margin: 0;
++  color: var(--ui-text-muted);
++}
++
++.company-form {
++  display: grid;
++  gap: 12px;
++}
++
++.company-form-grid {
++  display: grid;
++  gap: 12px;
++  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
++}
++
++.company-field {
++  display: grid;
++  gap: 6px;
++}
++
++.company-field__label {
++  font-size: 13px;
++  font-weight: 700;
++  color: var(--ui-text-muted);
++}
++
++.company-actions {
++  display: inline-flex;
++  align-items: center;
++  gap: 8px;
++  flex-wrap: wrap;
++}
++
++.company-actions--end {
++  justify-content: flex-end;
++}
++
++.company-actions--between {
++  justify-content: space-between;
++}
++
++.company-alert {
++  border: 1px solid var(--ui-border);
++  border-radius: 10px;
++  padding: 10px 12px;
++}
++
++.company-alert--success {
++  border-color: var(--ui-success-border);
++  background: var(--ui-success-bg);
++  color: var(--ui-success-text);
++}
++
++.company-loading {
++  border: 1px dashed var(--ui-border-strong);
++  border-radius: 12px;
++  padding: 12px;
++  color: var(--ui-text-muted);
++  background: var(--ui-surface-soft);
++}
++
++.company-rules-section {
++  gap: 16px;
++}
++
++.company-rules-block {
++  display: grid;
++  gap: 12px;
++}
++
++.company-rules-block__head {
++  display: grid;
++  gap: 6px;
++}
++
++.company-rules-block__title {
++  margin: 0;
++  font-size: 18px;
++  color: #1e3a8a;
++}
++
++.company-rules-block__description {
++  margin: 0;
++  color: var(--ui-text-muted);
++}
++
++.company-rules-list {
++  display: grid;
++  gap: 12px;
++}
++
++.company-rule-card {
++  border: 1px solid var(--ui-border);
++  border-radius: 12px;
++  background: var(--ui-surface);
++  padding: 14px;
++  display: grid;
++  gap: 12px;
++}
++
++.company-rule-card--prepared {
++  background: var(--ui-surface-soft);
++}
++
++.company-rule-card__head {
++  display: grid;
++  gap: 10px;
++}
++
++.company-rule-card__title {
++  margin: 0;
++  font-size: 17px;
++  color: #1e3a8a;
++}
++
++.company-rule-card__description {
++  margin: 6px 0 0 0;
++  color: var(--ui-text-muted);
++}
++
++.company-rule-tags {
++  display: inline-flex;
++  align-items: center;
++  gap: 8px;
++  flex-wrap: wrap;
++}
++
++.company-rule-details {
++  display: grid;
++  gap: 6px;
++}
++
++.company-rule-details p {
++  margin: 0;
++}
++
++.company-rule-edit {
++  border: 1px solid var(--ui-border);
++  border-radius: 10px;
++  background: var(--ui-surface-soft);
++  padding: 12px;
++  display: grid;
++  gap: 10px;
++}
++
++.company-rule-readonly {
++  border: 1px dashed var(--ui-border-strong);
++  border-radius: 10px;
++  background: var(--ui-surface-soft);
++  padding: 10px 12px;
++  color: var(--ui-text-muted);
++}
++
++.company-feedback {
++  font-size: 13px;
++  font-weight: 600;
++}
++
++.company-feedback--success {
++  color: var(--ui-success-text);
++}
++
++.company-feedback--error {
++  color: var(--ui-danger-text);
++}
++
++.depots-section {
++  display: grid;
++  gap: 16px;
++}
++
++.depots-page__back-link {
++  display: inline-flex;
++  align-items: center;
++  min-height: 40px;
++  padding: 0 14px;
++  border-radius: 10px;
++  border: 1px solid var(--ui-border);
++  background: var(--ui-surface);
++  color: var(--ui-link);
++  font-weight: 700;
++}
++
++.depots-page__back-link:hover {
++  text-decoration: none;
++  border-color: var(--ui-border-strong);
++  background: var(--ui-surface-soft);
++}
++
++.depots-grid-stats {
++  display: grid;
++  gap: 12px;
++  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
++}
++
++.depots-module {
++  display: grid;
++  gap: 16px;
++}
++
++.depots-card {
++  border: 1px solid var(--ui-border);
++  border-radius: 12px;
++  background: var(--ui-surface);
++  padding: 16px;
++  box-shadow: var(--ui-shadow);
++  display: grid;
++  gap: 12px;
++}
++
++.depots-card__head {
++  display: grid;
++  gap: 8px;
++}
++
++.depots-card__title {
++  margin: 0;
++  font-size: 20px;
++  color: #1e3a8a;
++}
++
++.depots-card__description {
++  margin: 0;
++  color: var(--ui-text-muted);
++}
++
++.depots-form {
++  display: grid;
++  gap: 12px;
++}
++
++.depots-form-grid {
++  display: grid;
++  gap: 12px;
++}
++
++.depots-form-grid--create {
++  grid-template-columns: minmax(240px, 2fr) minmax(260px, 2fr) auto;
++  align-items: end;
++}
++
++.depots-form-grid--edit {
++  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
++}
++
++.depots-field {
++  display: grid;
++  gap: 6px;
++}
++
++.depots-field__label {
++  font-size: 13px;
++  font-weight: 700;
++  color: var(--ui-text-muted);
++}
++
++.depots-actions {
++  display: inline-flex;
++  align-items: center;
++  gap: 8px;
++  flex-wrap: wrap;
++}
++
++.depots-actions--end {
++  justify-content: flex-end;
++}
++
++.depots-actions--align-end {
++  align-self: end;
++}
++
++.depots-actions--wrap {
++  width: 100%;
++}
++
++.depots-alert {
++  border: 1px solid var(--ui-border);
++  border-radius: 10px;
++  padding: 10px 12px;
++}
++
++.depots-alert--success {
++  border-color: var(--ui-success-border);
++  background: var(--ui-success-bg);
++  color: var(--ui-success-text);
++}
++
++.depots-cell-main {
++  display: grid;
++  gap: 4px;
++}
++
++.depots-table-cell-subtle {
++  font-size: 12px;
++  color: var(--ui-text-muted);
++}
++
++.depots-selection-card {
++  border: 1px solid var(--ui-border);
++  border-radius: 10px;
++  background: var(--ui-surface-soft);
++  padding: 12px;
++  display: grid;
++  gap: 8px;
++}
++
++.depots-inline-status {
++  display: inline-flex;
++  align-items: center;
++  gap: 6px;
++  flex-wrap: wrap;
++}
++
++@media (max-width: 1140px) {
++  .depots-form-grid--create {
++    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
++  }
++}
++
++@media (max-width: 980px) {
++  .company-actions--end,
++  .depots-actions--end,
++  .depots-actions--wrap {
++    justify-content: flex-start;
++  }
++}

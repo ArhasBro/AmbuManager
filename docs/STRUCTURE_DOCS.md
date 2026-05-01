@@ -1346,11 +1346,22 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   EVIDENCES.md
 |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   NOTES.md
+|   |   |   |   |   README_PATCH.md
 |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION-20260425-19_A22_UIINT-10__DOCS_FINAL.zip
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
+|   |   |   |           QA_PREUVES_BRUTES.txt
+|   |   |   |           QA_PREUVES_BRUTES_FIX-01.txt
+|   |   |   |           QA_PREUVES_BRUTES_FIX-01_V2.txt
+|   |   |   |           QA_PREUVES_BRUTES_FIX-02.txt
+|   |   |   |           QA_PREUVES_BRUTES_FIX-FINAL.txt
 |   |   |   |           README_PATCH.md
+|   |   |   |           SESSION-20260425-19_A22_UIINT-10.diff
+|   |   |   |           SESSION-20260425-19_A22_UIINT-10_FIX-01.diff
+|   |   |   |           SESSION-20260425-19_A22_UIINT-10_FIX-02.diff
+|   |   |   |           SESSION-20260425-19_A22_UIINT-10_FIX-FINAL.diff
 |   |   |   |           
 |   |   |   +---SESSION-20260425-20_A22_UIINT-11
 |   |   |   |   |   EVIDENCES.md

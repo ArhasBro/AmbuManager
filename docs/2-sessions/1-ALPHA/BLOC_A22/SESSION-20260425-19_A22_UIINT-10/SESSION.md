@@ -1,4 +1,4 @@
-﻿# SESSION
+# SESSION
 
 ## ID SESSION
 
@@ -6,30 +6,37 @@ SESSION-20260425-19_A22_UIINT-10
 
 ## Date
 
-25/04/2026
+2026-05-01
 
 ## Contexte
 
-Projet : Investissement  
-Sous-projet : Ambulance Manager  
-Maturite : 1-ALPHA  
-Bloc : A22  
+Projet : Ambulance Manager  
+Stage : 1-ALPHA  
+Bloc : A22 - Integration UI/UX  
 Type : CORRECTION+COMPLETION  
-Intitule : Company et Dépôts : harmonisation UI des pages société et dépôts
+Intitule : Company / Depots : harmonisation UI des pages societe et depots
 
-## Objectif de la session
+## Objectif unique de la session
 
-INFORMATION NON FOURNIE - A CONFIRMER
+Harmoniser uniquement l'UI des pages Company/Societe et Depots avec le socle UI commun A21/A22, sans modifier la logique metier.
 
 ## Perimetre exact traite
 
-INFORMATION NON FOURNIE - A CONFIRMER
+- `app/company/page.tsx`
+- `app/company/company-profile-form.tsx`
+- `app/company/company-rules-panel.tsx`
+- `app/depots/page.tsx`
+- `app/depots/depots-client.tsx`
+- `app/globals.css` (ajouts CSS cibles company/depots)
 
-## Resultat synthetique de session
+## Perimetre explicitement exclu (respecte)
 
-INFORMATION NON FOURNIE - A CONFIRMER
+- Prisma, migrations, seed
+- API routes, logique metier serveur
+- RBAC, auth, permissions, multi-tenant
+- navigation globale / shell global
+- modules hors Company/Depots
 
-## Dossiers lies
+## Decision de session
 
-- Session : docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-19_A22_UIINT-10
-- PATCH   : docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-19_A22_UIINT-10/PATCH
+PATCH

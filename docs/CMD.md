@@ -280,8 +280,8 @@ IMPORTANT
 
 Références des sessions :
 
-- SESSION-20260425-19_A22_UIINT-10
-- **A22-UIINT-10 — CORRECTION+COMPLÉTION** — Company / Dépôts : harmonisation UI des pages société et dépôts. Livrable attendu : cohérence visuelle des modules structure. DoD : formulaires et listes alignés avec le socle UI.
+- SESSION-20260425-20_A22_UIINT-11
+- **A22-UIINT-11 — CORRECTION+COMPLÉTION** — Onboarding : harmonisation UI de l’onboarding. Livrable attendu : écran onboarding harmonisé. DoD : étapes lisibles et cohérentes.
 
 ------------------------------------
 
@@ -308,7 +308,7 @@ Unblock-File -Path .\create_session.ps1
 
 
 
-- **A22-UIINT-11 — CORRECTION+COMPLÉTION** — Onboarding : harmonisation UI de l’onboarding. Livrable attendu : écran onboarding harmonisé. DoD : étapes lisibles et cohérentes.
+
 
 - **A22-UIINT-12 — CORRECTION+COMPLÉTION** — Audit : harmonisation UI du journal d’audit. Livrable attendu : écran audit harmonisé. DoD : filtres et lecture audit lisibles.
 

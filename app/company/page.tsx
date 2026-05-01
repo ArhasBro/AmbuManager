@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 
+import { PageHeader, StatCard } from "@/app/ui";
 import { authOptions } from "@/lib/auth";
 import { canManageCompanyRules } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
@@ -52,16 +53,26 @@ export default async function CompanyPage() {
   }
 
   return (
-    <div style={{ padding: 16, display: "grid", gap: 16 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
-        <div>
-          <h1 style={{ margin: 0 }}>Profil société</h1>
-          <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
-            Consultation et édition minimales de la société courante sur le périmètre ALPHA.
-          </p>
-        </div>
+    <section className="company-section">
+      <PageHeader
+        title="Profil societe"
+        description="Consultation et edition minimales de la societe courante sur le perimetre ALPHA."
+        actions={<Link href="/dashboard" className="company-page__back-link">Retour dashboard</Link>}
+      />
 
-        <Link href="/dashboard">Retour dashboard</Link>
+      <div className="company-grid-stats">
+        <StatCard
+          title="Edition profil"
+          value={canManageProfile ? "Autorisee" : "Restreinte"}
+          hint={canManageProfile ? "Comptes ADMIN / GERANT" : "Lecture seule"}
+          tone={canManageProfile ? "success" : "warning"}
+        />
+        <StatCard
+          title="Regles metier"
+          value={canManageRules ? "Accessible" : "Restreint"}
+          hint={canManageRules ? "Parametres visibles" : "Permission requise"}
+          tone={canManageRules ? "info" : "neutral"}
+        />
       </div>
 
       {canManageProfile && company ? (
@@ -75,24 +86,17 @@ export default async function CompanyPage() {
           }}
         />
       ) : (
-        <section
-          style={{
-            display: "grid",
-            gap: 8,
-            padding: 16,
-            border: "1px solid #ddd",
-            borderRadius: 10,
-            maxWidth: 720,
-          }}
-        >
-          <strong>Profil société</strong>
-          <p style={{ margin: 0, opacity: 0.8 }}>
-            L’édition du profil société reste réservée aux comptes ADMIN / GERANT.
-          </p>
+        <section className="company-card company-card--soft">
+          <div className="company-card__head">
+            <h2 className="company-card__title">Profil societe</h2>
+            <p className="company-card__description">
+              L&apos;edition du profil societe reste reservee aux comptes ADMIN / GERANT.
+            </p>
+          </div>
         </section>
       )}
 
       {canManageRules ? <CompanyRulesPanel /> : null}
-    </div>
+    </section>
   );
 }

@@ -1,0 +1,42 @@
+diff --git a/orig/app/company/company-rules-panel.tsx b/mod/app/company/company-rules-panel.tsx
+index fe46490..4735acb 100644
+--- a/orig/app/company/company-rules-panel.tsx
++++ b/mod/app/company/company-rules-panel.tsx
+@@ -1,4 +1,4 @@
+-"use client";
++﻿"use client";
+ 
+ import { useEffect, useState } from "react";
+ 
+@@ -61,7 +61,7 @@ function formatValueType(valueType: CompanyParameter["valueType"]) {
+     case "ENUM":
+       return "Liste de valeurs";
+     default:
+-      return "INFORMATION NON FOURNIE - A CONFIRMER";
++      return "INFORMATION NON FOURNIE — À CONFIRMER";
+   }
+ }
+ 
+@@ -94,7 +94,7 @@ function formatCurrentValue(parameter: CompanyParameter) {
+     return parameter.value;
+   }
+ 
+-  return "INFORMATION NON FOURNIE - A CONFIRMER";
++  return "INFORMATION NON FOURNIE — À CONFIRMER";
+ }
+ 
+ function getInitialDraft(parameter: CompanyParameter): DraftState {
+@@ -455,7 +455,7 @@ export default function CompanyRulesPanel() {
+                           <strong>Stockage :</strong>{" "}
+                           {parameter.storage.key
+                             ? `${parameter.storage.model}.${parameter.storage.key}`
+-                            : "INFORMATION NON FOURNIE - A CONFIRMER"}
++                            : "INFORMATION NON FOURNIE — À CONFIRMER"}
+                         </p>
+                         {parameter.note ? <p><strong>Note :</strong> {parameter.note}</p> : null}
+                       </div>
+@@ -498,3 +498,4 @@ export default function CompanyRulesPanel() {
+     </section>
+   );
+ }
++

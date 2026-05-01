@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 
+import { ActionButton, EmptyState, ErrorMessage, StatusBadge } from "@/app/ui";
 import { COMPANY_RULE_MODE_VALUES } from "@/lib/company-rules/catalog";
 
 type RuleModeValue = (typeof COMPANY_RULE_MODE_VALUES)[number];
@@ -46,11 +47,11 @@ type SaveFeedback = {
 };
 
 function formatKind(kind: CompanyParameter["kind"]) {
-  return kind === "BUSINESS_RULE" ? "Paramètre métier ALPHA" : "Réglage UI / exploitation";
+  return kind === "BUSINESS_RULE" ? "Parametre metier ALPHA" : "Reglage UI / exploitation";
 }
 
 function formatEngineStatus(engineStatus: CompanyParameter["engineStatus"]) {
-  return engineStatus === "BRANCHED" ? "Branché" : "Préparé";
+  return engineStatus === "BRANCHED" ? "Branche" : "Prepare";
 }
 
 function formatValueType(valueType: CompanyParameter["valueType"]) {
@@ -67,24 +68,22 @@ function formatValueType(valueType: CompanyParameter["valueType"]) {
 function formatValueStatus(valueStatus: CompanyParameter["valueStatus"]) {
   switch (valueStatus) {
     case "STORED_VALID":
-      return "Stockée et valide";
+      return "Stockee et valide";
     case "STORED_INVALID":
-      return "Stockée mais invalide";
+      return "Stockee mais invalide";
     default:
-      return "Non stockée";
+      return "Non stockee";
   }
 }
 
 function formatModeLabel(mode: RuleModeValue | null, modeUsage: CompanyParameter["modeUsage"]) {
   if (modeUsage === "FIXED_OFF") return "OFF (fixe)";
-  return mode ?? "Non configuré";
+  return mode ?? "Non configure";
 }
 
 function formatCurrentValue(parameter: CompanyParameter) {
   if (parameter.valueStatus === "NOT_STORED") {
-    return parameter.kind === "UI_SETTING"
-      ? "Non stockée"
-      : "Non configurée";
+    return parameter.kind === "UI_SETTING" ? "Non stockee" : "Non configuree";
   }
 
   if (parameter.normalizedValue !== null) {
@@ -140,6 +139,20 @@ function getMutationError(payload: unknown, fallback: string) {
   return fallback;
 }
 
+function ParameterStatusBadges({ parameter }: { parameter: CompanyParameter }) {
+  return (
+    <div className="company-rule-tags">
+      <StatusBadge variant="info">{formatKind(parameter.kind)}</StatusBadge>
+      <StatusBadge variant={parameter.engineStatus === "BRANCHED" ? "success" : "warning"}>
+        {formatEngineStatus(parameter.engineStatus)}
+      </StatusBadge>
+      <StatusBadge variant={parameter.isWritable ? "success" : "neutral"}>
+        {parameter.isWritable ? "Editable" : "Lecture seule"}
+      </StatusBadge>
+    </div>
+  );
+}
+
 export default function CompanyRulesPanel() {
   const [parameters, setParameters] = useState<CompanyParameter[]>([]);
   const [drafts, setDrafts] = useState<Record<string, DraftState>>({});
@@ -160,13 +173,13 @@ export default function CompanyRulesPanel() {
         const data = (await res.json().catch(() => null)) as ParametersResponse | null;
 
         if (!res.ok || !data?.ok) {
-          throw new Error(getApiError(data, "Erreur lors du chargement des paramètres métier"));
+          throw new Error(getApiError(data, "Erreur lors du chargement des parametres metier"));
         }
 
         if (!cancelled) {
           setParameters(data.data);
           setDrafts(
-            Object.fromEntries(data.data.map((parameter) => [parameter.id, getInitialDraft(parameter)]))
+            Object.fromEntries(data.data.map((parameter) => [parameter.id, getInitialDraft(parameter)])),
           );
         }
       } catch (e: unknown) {
@@ -231,7 +244,7 @@ export default function CompanyRulesPanel() {
         | null;
 
       if (!res.ok || !payload?.ok) {
-        throw new Error(getMutationError(payload, "Erreur lors de l’enregistrement du paramètre"));
+        throw new Error(getMutationError(payload, "Erreur lors de l'enregistrement du parametre"));
       }
 
       setParameters((prev) => prev.map((item) => (item.id === parameter.id ? payload.data : item)));
@@ -242,7 +255,7 @@ export default function CompanyRulesPanel() {
       setFeedbackById((prev) => ({
         ...prev,
         [parameter.id]: {
-          message: "Paramètre mis à jour.",
+          message: "Parametre mis a jour.",
           error: null,
         },
       }));
@@ -263,271 +276,223 @@ export default function CompanyRulesPanel() {
   const uiParameters = parameters.filter((parameter) => parameter.kind === "UI_SETTING");
 
   return (
-    <section
-      style={{
-        display: "grid",
-        gap: 16,
-        padding: 16,
-        border: "1px solid #ddd",
-        borderRadius: 10,
-      }}
-    >
-      <div style={{ display: "grid", gap: 8 }}>
-        <h2 style={{ margin: 0 }}>Paramètres métier ALPHA</h2>
-        <p style={{ margin: 0, opacity: 0.85 }}>
-          Vue lisible des règles réellement branchées, des règles préparées mais non encore stockables,
-          et des réglages UI d’exploitation déjà prouvés dans le code.
+    <section className="company-card company-rules-section">
+      <div className="company-card__head">
+        <h2 className="company-card__title">Parametres metier ALPHA</h2>
+        <p className="company-card__description">
+          Vue lisible des regles branchees, des regles preparees non stockables, et des reglages UI d&apos;exploitation.
         </p>
       </div>
 
-      {loading ? <p style={{ margin: 0 }}>Chargement des paramètres…</p> : null}
-      {error ? <p style={{ margin: 0, color: "crimson" }}>{error}</p> : null}
+      {loading ? <div className="company-loading">Chargement des parametres...</div> : null}
+      {error ? <ErrorMessage title="Erreur parametres societe" message={error} /> : null}
 
       {!loading && !error ? (
         <>
-          <div style={{ display: "grid", gap: 12 }}>
-            <div>
-              <h3 style={{ margin: 0 }}>Règles métier ALPHA</h3>
-              <p style={{ margin: "6px 0 0 0", opacity: 0.8 }}>
-                Les règles préparées sont visibles pour cadrage, mais restent non éditables tant qu’aucune clé
-                de stockage réelle n’est prouvée.
+          <section className="company-rules-block">
+            <div className="company-rules-block__head">
+              <h3 className="company-rules-block__title">Regles metier ALPHA</h3>
+              <p className="company-rules-block__description">
+                Les regles preparees restent visibles pour cadrage mais non editables sans cle de stockage prouvee.
               </p>
             </div>
 
-            {businessParameters.map((parameter) => {
-              const draft = drafts[parameter.id] ?? getInitialDraft(parameter);
-              const feedback = feedbackById[parameter.id];
-              const isSaving = savingId === parameter.id;
+            {businessParameters.length === 0 ? (
+              <EmptyState
+                title="Aucune regle metier"
+                message="Aucun parametre metier n'est disponible pour cette societe."
+              />
+            ) : (
+              <div className="company-rules-list">
+                {businessParameters.map((parameter) => {
+                  const draft = drafts[parameter.id] ?? getInitialDraft(parameter);
+                  const feedback = feedbackById[parameter.id];
+                  const isSaving = savingId === parameter.id;
 
-              return (
-                <article
-                  key={parameter.id}
-                  style={{
-                    display: "grid",
-                    gap: 12,
-                    padding: 16,
-                    border: "1px solid #ddd",
-                    borderRadius: 10,
-                    background: parameter.engineStatus === "BRANCHED" ? "#fafafa" : "#fcfcfc",
-                  }}
-                >
-                  <div style={{ display: "grid", gap: 8 }}>
-                    <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
-                      <strong>{parameter.label}</strong>
-                      <span style={{ padding: "4px 8px", borderRadius: 999, border: "1px solid #ddd", fontSize: 12 }}>
-                        {formatKind(parameter.kind)}
-                      </span>
-                      <span style={{ padding: "4px 8px", borderRadius: 999, border: "1px solid #ddd", fontSize: 12 }}>
-                        {formatEngineStatus(parameter.engineStatus)}
-                      </span>
-                      <span style={{ padding: "4px 8px", borderRadius: 999, border: "1px solid #ddd", fontSize: 12 }}>
-                        {parameter.isWritable ? "Éditable" : "Lecture seule"}
-                      </span>
-                    </div>
-                    <p style={{ margin: 0 }}>{parameter.description}</p>
-                  </div>
-
-                  <div style={{ display: "grid", gap: 8 }}>
-                    <div><strong>Identifiant :</strong> {parameter.id}</div>
-                    <div><strong>Type de valeur :</strong> {formatValueType(parameter.valueType)}</div>
-                    <div><strong>Mode :</strong> {formatModeLabel(parameter.mode, parameter.modeUsage)}</div>
-                    <div><strong>État stockage :</strong> {formatValueStatus(parameter.valueStatus)}</div>
-                    <div><strong>Valeur actuelle :</strong> {formatCurrentValue(parameter)}</div>
-                    <div>
-                      <strong>Stockage :</strong>{" "}
-                      {parameter.storage.key
-                        ? `${parameter.storage.model}.${parameter.storage.key}`
-                        : "Préparé sans clé prouvée"}
-                    </div>
-                    {parameter.note ? <div><strong>Note :</strong> {parameter.note}</div> : null}
-                  </div>
-
-                  {parameter.isWritable ? (
-                    <div
-                      style={{
-                        display: "grid",
-                        gap: 12,
-                        padding: 12,
-                        border: "1px solid #eee",
-                        borderRadius: 8,
-                      }}
+                  return (
+                    <article
+                      key={parameter.id}
+                      className={`company-rule-card${parameter.engineStatus === "PREPARED" ? " company-rule-card--prepared" : ""}`}
                     >
-                      <strong>Édition réelle</strong>
+                      <div className="company-rule-card__head">
+                        <div>
+                          <h4 className="company-rule-card__title">{parameter.label}</h4>
+                          <p className="company-rule-card__description">{parameter.description}</p>
+                        </div>
+                        <ParameterStatusBadges parameter={parameter} />
+                      </div>
 
-                      {parameter.valueType === "POSITIVE_NUMBER" ? (
-                        <label style={{ display: "grid", gap: 6 }}>
-                          <span>Valeur</span>
-                          <input
-                            type="number"
-                            min={1}
-                            step={1}
-                            value={draft.value}
-                            onChange={(e) => updateDraft(parameter.id, { value: e.target.value })}
-                            disabled={isSaving}
-                            style={{ padding: 10 }}
-                          />
-                        </label>
-                      ) : null}
+                      <div className="company-rule-details">
+                        <p><strong>Identifiant :</strong> {parameter.id}</p>
+                        <p><strong>Type de valeur :</strong> {formatValueType(parameter.valueType)}</p>
+                        <p><strong>Mode :</strong> {formatModeLabel(parameter.mode, parameter.modeUsage)}</p>
+                        <p><strong>Etat stockage :</strong> {formatValueStatus(parameter.valueStatus)}</p>
+                        <p><strong>Valeur actuelle :</strong> {formatCurrentValue(parameter)}</p>
+                        <p>
+                          <strong>Stockage :</strong>{" "}
+                          {parameter.storage.key
+                            ? `${parameter.storage.model}.${parameter.storage.key}`
+                            : "Prepare sans cle prouvee"}
+                        </p>
+                        {parameter.note ? <p><strong>Note :</strong> {parameter.note}</p> : null}
+                      </div>
+
+                      {parameter.isWritable ? (
+                        <div className="company-rule-edit">
+                          {parameter.valueType === "POSITIVE_NUMBER" ? (
+                            <label className="company-field">
+                              <span className="company-field__label">Valeur</span>
+                              <input
+                                type="number"
+                                min={1}
+                                step={1}
+                                value={draft.value}
+                                onChange={(e) => updateDraft(parameter.id, { value: e.target.value })}
+                                disabled={isSaving}
+                              />
+                            </label>
+                          ) : null}
+
+                          {parameter.allowedValues && parameter.allowedValues.length > 0 ? (
+                            <label className="company-field">
+                              <span className="company-field__label">Valeur</span>
+                              <select
+                                value={draft.value}
+                                onChange={(e) => updateDraft(parameter.id, { value: e.target.value })}
+                                disabled={isSaving}
+                              >
+                                <option value="">Selectionner</option>
+                                {parameter.allowedValues.map((value) => (
+                                  <option key={value} value={value}>
+                                    {value}
+                                  </option>
+                                ))}
+                              </select>
+                            </label>
+                          ) : null}
+
+                          {parameter.modeUsage === "RULE_MODE" ? (
+                            <label className="company-field">
+                              <span className="company-field__label">Mode de regle</span>
+                              <select
+                                value={draft.mode}
+                                onChange={(e) => updateDraft(parameter.id, { mode: e.target.value as RuleModeValue })}
+                                disabled={isSaving}
+                              >
+                                {COMPANY_RULE_MODE_VALUES.map((mode) => (
+                                  <option key={mode} value={mode}>
+                                    {mode}
+                                  </option>
+                                ))}
+                              </select>
+                            </label>
+                          ) : null}
+
+                          <div className="company-actions company-actions--between">
+                            <ActionButton variant="primary" onClick={() => saveParameter(parameter)} disabled={isSaving}>
+                              {isSaving ? "Enregistrement..." : "Enregistrer"}
+                            </ActionButton>
+                            {feedback?.message ? <span className="company-feedback company-feedback--success">{feedback.message}</span> : null}
+                            {feedback?.error ? <span className="company-feedback company-feedback--error">{feedback.error}</span> : null}
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="company-rule-readonly">
+                          Parametre prepare uniquement : edition bloquee tant que la cle de stockage et le format metier
+                          reels ne sont pas prouves.
+                        </div>
+                      )}
+                    </article>
+                  );
+                })}
+              </div>
+            )}
+          </section>
+
+          <section className="company-rules-block">
+            <div className="company-rules-block__head">
+              <h3 className="company-rules-block__title">Reglages UI / exploitation</h3>
+              <p className="company-rules-block__description">
+                Reglages fonctionnels conserves, sans les presenter comme des regles moteur.
+              </p>
+            </div>
+
+            {uiParameters.length === 0 ? (
+              <EmptyState
+                title="Aucun reglage UI"
+                message="Aucun reglage UI / exploitation n'est disponible pour cette societe."
+              />
+            ) : (
+              <div className="company-rules-list">
+                {uiParameters.map((parameter) => {
+                  const draft = drafts[parameter.id] ?? getInitialDraft(parameter);
+                  const feedback = feedbackById[parameter.id];
+                  const isSaving = savingId === parameter.id;
+
+                  return (
+                    <article key={parameter.id} className="company-rule-card">
+                      <div className="company-rule-card__head">
+                        <div>
+                          <h4 className="company-rule-card__title">{parameter.label}</h4>
+                          <p className="company-rule-card__description">{parameter.description}</p>
+                        </div>
+                        <div className="company-rule-tags">
+                          <StatusBadge variant="info">{formatKind(parameter.kind)}</StatusBadge>
+                          <StatusBadge variant="neutral">Non moteur</StatusBadge>
+                          <StatusBadge variant={parameter.isWritable ? "success" : "neutral"}>
+                            {parameter.isWritable ? "Editable" : "Lecture seule"}
+                          </StatusBadge>
+                        </div>
+                      </div>
+
+                      <div className="company-rule-details">
+                        <p><strong>Identifiant :</strong> {parameter.id}</p>
+                        <p><strong>Type de valeur :</strong> {formatValueType(parameter.valueType)}</p>
+                        <p><strong>Mode :</strong> {formatModeLabel(parameter.mode, parameter.modeUsage)}</p>
+                        <p><strong>Etat stockage :</strong> {formatValueStatus(parameter.valueStatus)}</p>
+                        <p><strong>Valeur actuelle :</strong> {formatCurrentValue(parameter)}</p>
+                        <p>
+                          <strong>Stockage :</strong>{" "}
+                          {parameter.storage.key
+                            ? `${parameter.storage.model}.${parameter.storage.key}`
+                            : "INFORMATION NON FOURNIE — À CONFIRMER"}
+                        </p>
+                        {parameter.note ? <p><strong>Note :</strong> {parameter.note}</p> : null}
+                      </div>
 
                       {parameter.allowedValues && parameter.allowedValues.length > 0 ? (
-                        <label style={{ display: "grid", gap: 6 }}>
-                          <span>Valeur</span>
-                          <select
-                            value={draft.value}
-                            onChange={(e) => updateDraft(parameter.id, { value: e.target.value })}
-                            disabled={isSaving}
-                            style={{ padding: 10 }}
-                          >
-                            <option value="">Sélectionner</option>
-                            {parameter.allowedValues.map((value) => (
-                              <option key={value} value={value}>
-                                {value}
-                              </option>
-                            ))}
-                          </select>
-                        </label>
+                        <div className="company-rule-edit">
+                          <label className="company-field">
+                            <span className="company-field__label">Mode d&apos;affichage</span>
+                            <select
+                              value={draft.value}
+                              onChange={(e) => updateDraft(parameter.id, { value: e.target.value })}
+                              disabled={isSaving}
+                            >
+                              <option value="">Selectionner</option>
+                              {parameter.allowedValues.map((value) => (
+                                <option key={value} value={value}>
+                                  {value}
+                                </option>
+                              ))}
+                            </select>
+                          </label>
+
+                          <div className="company-actions company-actions--between">
+                            <ActionButton variant="primary" onClick={() => saveParameter(parameter)} disabled={isSaving}>
+                              {isSaving ? "Enregistrement..." : "Enregistrer"}
+                            </ActionButton>
+                            {feedback?.message ? <span className="company-feedback company-feedback--success">{feedback.message}</span> : null}
+                            {feedback?.error ? <span className="company-feedback company-feedback--error">{feedback.error}</span> : null}
+                          </div>
+                        </div>
                       ) : null}
-
-                      {parameter.modeUsage === "RULE_MODE" ? (
-                        <label style={{ display: "grid", gap: 6 }}>
-                          <span>Mode de règle</span>
-                          <select
-                            value={draft.mode}
-                            onChange={(e) => updateDraft(parameter.id, { mode: e.target.value as RuleModeValue })}
-                            disabled={isSaving}
-                            style={{ padding: 10 }}
-                          >
-                            {COMPANY_RULE_MODE_VALUES.map((mode) => (
-                              <option key={mode} value={mode}>
-                                {mode}
-                              </option>
-                            ))}
-                          </select>
-                        </label>
-                      ) : null}
-
-                      <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
-                        <button type="button" onClick={() => saveParameter(parameter)} disabled={isSaving} style={{ padding: "10px 14px" }}>
-                          {isSaving ? "Enregistrement…" : "Enregistrer"}
-                        </button>
-                        {feedback?.message ? <span style={{ color: "green" }}>{feedback.message}</span> : null}
-                        {feedback?.error ? <span style={{ color: "crimson" }}>{feedback.error}</span> : null}
-                      </div>
-                    </div>
-                  ) : (
-                    <div
-                      style={{
-                        padding: 12,
-                        borderRadius: 8,
-                        border: "1px solid #eee",
-                        background: "#fafafa",
-                      }}
-                    >
-                      Paramètre préparé uniquement : aucune édition n’est proposée tant que la clé de stockage et
-                      le format métier réels ne sont pas prouvés.
-                    </div>
-                  )}
-                </article>
-              );
-            })}
-          </div>
-
-          <div style={{ display: "grid", gap: 12 }}>
-            <div>
-              <h3 style={{ margin: 0 }}>Réglages UI / exploitation</h3>
-              <p style={{ margin: "6px 0 0 0", opacity: 0.8 }}>
-                Ces réglages restent fonctionnels, mais ne doivent pas être présentés comme des règles moteur.
-              </p>
-            </div>
-
-            {uiParameters.map((parameter) => {
-              const draft = drafts[parameter.id] ?? getInitialDraft(parameter);
-              const feedback = feedbackById[parameter.id];
-              const isSaving = savingId === parameter.id;
-
-              return (
-                <article
-                  key={parameter.id}
-                  style={{
-                    display: "grid",
-                    gap: 12,
-                    padding: 16,
-                    border: "1px solid #ddd",
-                    borderRadius: 10,
-                  }}
-                >
-                  <div style={{ display: "grid", gap: 8 }}>
-                    <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
-                      <strong>{parameter.label}</strong>
-                      <span style={{ padding: "4px 8px", borderRadius: 999, border: "1px solid #ddd", fontSize: 12 }}>
-                        {formatKind(parameter.kind)}
-                      </span>
-                      <span style={{ padding: "4px 8px", borderRadius: 999, border: "1px solid #ddd", fontSize: 12 }}>
-                        {formatEngineStatus(parameter.engineStatus)}
-                      </span>
-                      <span style={{ padding: "4px 8px", borderRadius: 999, border: "1px solid #ddd", fontSize: 12 }}>
-                        Non moteur
-                      </span>
-                    </div>
-                    <p style={{ margin: 0 }}>{parameter.description}</p>
-                  </div>
-
-                  <div style={{ display: "grid", gap: 8 }}>
-                    <div><strong>Identifiant :</strong> {parameter.id}</div>
-                    <div><strong>Type de valeur :</strong> {formatValueType(parameter.valueType)}</div>
-                    <div><strong>Mode :</strong> {formatModeLabel(parameter.mode, parameter.modeUsage)}</div>
-                    <div><strong>État stockage :</strong> {formatValueStatus(parameter.valueStatus)}</div>
-                    <div><strong>Valeur actuelle :</strong> {formatCurrentValue(parameter)}</div>
-                    <div>
-                      <strong>Stockage :</strong>{" "}
-                      {parameter.storage.key
-                        ? `${parameter.storage.model}.${parameter.storage.key}`
-                        : "INFORMATION NON FOURNIE — À CONFIRMER"}
-                    </div>
-                    {parameter.note ? <div><strong>Note :</strong> {parameter.note}</div> : null}
-                  </div>
-
-                  {parameter.allowedValues && parameter.allowedValues.length > 0 ? (
-                    <div
-                      style={{
-                        display: "grid",
-                        gap: 12,
-                        padding: 12,
-                        border: "1px solid #eee",
-                        borderRadius: 8,
-                      }}
-                    >
-                      <strong>Édition réelle</strong>
-                      <label style={{ display: "grid", gap: 6 }}>
-                        <span>Mode d’affichage</span>
-                        <select
-                          value={draft.value}
-                          onChange={(e) => updateDraft(parameter.id, { value: e.target.value })}
-                          disabled={isSaving}
-                          style={{ padding: 10 }}
-                        >
-                          <option value="">Sélectionner</option>
-                          {parameter.allowedValues.map((value) => (
-                            <option key={value} value={value}>
-                              {value}
-                            </option>
-                          ))}
-                        </select>
-                      </label>
-
-                      <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
-                        <button type="button" onClick={() => saveParameter(parameter)} disabled={isSaving} style={{ padding: "10px 14px" }}>
-                          {isSaving ? "Enregistrement…" : "Enregistrer"}
-                        </button>
-                        {feedback?.message ? <span style={{ color: "green" }}>{feedback.message}</span> : null}
-                        {feedback?.error ? <span style={{ color: "crimson" }}>{feedback.error}</span> : null}
-                      </div>
-                    </div>
-                  ) : null}
-                </article>
-              );
-            })}
-          </div>
+                    </article>
+                  );
+                })}
+              </div>
+            )}
+          </section>
         </>
       ) : null}
     </section>

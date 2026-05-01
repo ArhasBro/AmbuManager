@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import { ActionButton, ErrorMessage } from "@/app/ui";
+
 type CompanyProfile = {
   name: string;
   managerNames: string;
@@ -53,7 +55,7 @@ export default function CompanyProfileForm({
       const data = (await res.json().catch(() => null)) as ApiResponse<CompanyProfileResponse> | null;
 
       if (!res.ok || !data?.ok) {
-        throw new Error(getApiError(data, "Erreur lors de la mise à jour du profil société"));
+        throw new Error(getApiError(data, "Erreur lors de la mise a jour du profil societe"));
       }
 
       setForm({
@@ -63,7 +65,7 @@ export default function CompanyProfileForm({
         phone: data.data.phone,
         siret: data.data.siret,
       });
-      setSuccess("Profil société mis à jour.");
+      setSuccess("Profil societe mis a jour.");
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Erreur inconnue");
     } finally {
@@ -72,84 +74,81 @@ export default function CompanyProfileForm({
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{
-        display: "grid",
-        gap: 16,
-        padding: 16,
-        border: "1px solid #ddd",
-        borderRadius: 10,
-        maxWidth: 720,
-      }}
-    >
-      <div style={{ display: "grid", gap: 8 }}>
-        <label htmlFor="company-name">Nom société</label>
-        <input
-          id="company-name"
-          value={form.name}
-          onChange={(e) => updateField("name", e.target.value)}
-          required
-          disabled={isSubmitting}
-          style={{ padding: 10 }}
-        />
+    <section className="company-card">
+      <div className="company-card__head">
+        <h2 className="company-card__title">Informations societe</h2>
+        <p className="company-card__description">
+          Mise a jour des informations generales, sans modification de logique metier.
+        </p>
       </div>
 
-      <div style={{ display: "grid", gap: 8 }}>
-        <label htmlFor="company-managers">Nom des gérants</label>
-        <input
-          id="company-managers"
-          value={form.managerNames}
-          onChange={(e) => updateField("managerNames", e.target.value)}
-          required
-          disabled={isSubmitting}
-          style={{ padding: 10 }}
-        />
-      </div>
+      {error ? <ErrorMessage title="Erreur profil societe" message={error} /> : null}
+      {success ? <div className="company-alert company-alert--success">{success}</div> : null}
 
-      <div style={{ display: "grid", gap: 8 }}>
-        <label htmlFor="company-address">Adresse</label>
-        <input
-          id="company-address"
-          value={form.address}
-          onChange={(e) => updateField("address", e.target.value)}
-          required
-          disabled={isSubmitting}
-          style={{ padding: 10 }}
-        />
-      </div>
+      <form onSubmit={handleSubmit} className="company-form">
+        <div className="company-form-grid">
+          <label className="company-field">
+            <span className="company-field__label">Nom societe</span>
+            <input
+              id="company-name"
+              value={form.name}
+              onChange={(e) => updateField("name", e.target.value)}
+              required
+              disabled={isSubmitting}
+            />
+          </label>
 
-      <div style={{ display: "grid", gap: 8 }}>
-        <label htmlFor="company-phone">Téléphone</label>
-        <input
-          id="company-phone"
-          value={form.phone}
-          onChange={(e) => updateField("phone", e.target.value)}
-          required
-          disabled={isSubmitting}
-          style={{ padding: 10 }}
-        />
-      </div>
+          <label className="company-field">
+            <span className="company-field__label">Nom des gerants</span>
+            <input
+              id="company-managers"
+              value={form.managerNames}
+              onChange={(e) => updateField("managerNames", e.target.value)}
+              required
+              disabled={isSubmitting}
+            />
+          </label>
 
-      <div style={{ display: "grid", gap: 8 }}>
-        <label htmlFor="company-siret">SIRET</label>
-        <input
-          id="company-siret"
-          value={form.siret}
-          onChange={(e) => updateField("siret", e.target.value)}
-          required
-          disabled={isSubmitting}
-          style={{ padding: 10 }}
-        />
-      </div>
+          <label className="company-field">
+            <span className="company-field__label">Telephone</span>
+            <input
+              id="company-phone"
+              value={form.phone}
+              onChange={(e) => updateField("phone", e.target.value)}
+              required
+              disabled={isSubmitting}
+            />
+          </label>
 
-      <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-        <button disabled={isSubmitting} style={{ padding: "10px 14px" }}>
-          {isSubmitting ? "Enregistrement..." : "Enregistrer"}
-        </button>
-        {success ? <span style={{ color: "green" }}>{success}</span> : null}
-        {error ? <span style={{ color: "crimson" }}>{error}</span> : null}
-      </div>
-    </form>
+          <label className="company-field">
+            <span className="company-field__label">SIRET</span>
+            <input
+              id="company-siret"
+              value={form.siret}
+              onChange={(e) => updateField("siret", e.target.value)}
+              required
+              disabled={isSubmitting}
+            />
+          </label>
+        </div>
+
+        <label className="company-field">
+          <span className="company-field__label">Adresse</span>
+          <input
+            id="company-address"
+            value={form.address}
+            onChange={(e) => updateField("address", e.target.value)}
+            required
+            disabled={isSubmitting}
+          />
+        </label>
+
+        <div className="company-actions company-actions--end">
+          <ActionButton type="submit" variant="primary" disabled={isSubmitting}>
+            {isSubmitting ? "Enregistrement..." : "Enregistrer"}
+          </ActionButton>
+        </div>
+      </form>
+    </section>
   );
 }
