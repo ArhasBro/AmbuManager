@@ -425,185 +425,8 @@ C:.
 |   |   +---node_modules
 |   |   |   +---@prisma
 |   |   |   |   \---client-2c3a283f134fdcb6
-|   |   |   |       |   default.d.ts
-|   |   |   |       |   default.js
-|   |   |   |       |   edge.d.ts
-|   |   |   |       |   edge.js
-|   |   |   |       |   extension.d.ts
-|   |   |   |       |   extension.js
-|   |   |   |       |   index-browser.js
-|   |   |   |       |   index.d.ts
-|   |   |   |       |   index.js
-|   |   |   |       |   LICENSE
-|   |   |   |       |   package.json
-|   |   |   |       |   README.md
-|   |   |   |       |   sql.d.ts
-|   |   |   |       |   sql.js
-|   |   |   |       |   sql.mjs
-|   |   |   |       |   
-|   |   |   |       +---generator-build
-|   |   |   |       |       index.js
-|   |   |   |       |       
-|   |   |   |       +---runtime
-|   |   |   |       |       client.d.mts
-|   |   |   |       |       client.d.ts
-|   |   |   |       |       client.js
-|   |   |   |       |       client.js.map
-|   |   |   |       |       client.mjs
-|   |   |   |       |       client.mjs.map
-|   |   |   |       |       index-browser.d.mts
-|   |   |   |       |       index-browser.d.ts
-|   |   |   |       |       index-browser.js
-|   |   |   |       |       index-browser.js.map
-|   |   |   |       |       index-browser.mjs
-|   |   |   |       |       index-browser.mjs.map
-|   |   |   |       |       query_compiler_fast_bg.cockroachdb.js
-|   |   |   |       |       query_compiler_fast_bg.cockroachdb.mjs
-|   |   |   |       |       query_compiler_fast_bg.cockroachdb.wasm-base64.js
-|   |   |   |       |       query_compiler_fast_bg.cockroachdb.wasm-base64.mjs
-|   |   |   |       |       query_compiler_fast_bg.mysql.js
-|   |   |   |       |       query_compiler_fast_bg.mysql.mjs
-|   |   |   |       |       query_compiler_fast_bg.mysql.wasm-base64.js
-|   |   |   |       |       query_compiler_fast_bg.mysql.wasm-base64.mjs
-|   |   |   |       |       query_compiler_fast_bg.postgresql.js
-|   |   |   |       |       query_compiler_fast_bg.postgresql.mjs
-|   |   |   |       |       query_compiler_fast_bg.postgresql.wasm-base64.js
-|   |   |   |       |       query_compiler_fast_bg.postgresql.wasm-base64.mjs
-|   |   |   |       |       query_compiler_fast_bg.sqlite.js
-|   |   |   |       |       query_compiler_fast_bg.sqlite.mjs
-|   |   |   |       |       query_compiler_fast_bg.sqlite.wasm-base64.js
-|   |   |   |       |       query_compiler_fast_bg.sqlite.wasm-base64.mjs
-|   |   |   |       |       query_compiler_fast_bg.sqlserver.js
-|   |   |   |       |       query_compiler_fast_bg.sqlserver.mjs
-|   |   |   |       |       query_compiler_fast_bg.sqlserver.wasm-base64.js
-|   |   |   |       |       query_compiler_fast_bg.sqlserver.wasm-base64.mjs
-|   |   |   |       |       query_compiler_small_bg.cockroachdb.js
-|   |   |   |       |       query_compiler_small_bg.cockroachdb.mjs
-|   |   |   |       |       query_compiler_small_bg.cockroachdb.wasm-base64.js
-|   |   |   |       |       query_compiler_small_bg.cockroachdb.wasm-base64.mjs
-|   |   |   |       |       query_compiler_small_bg.mysql.js
-|   |   |   |       |       query_compiler_small_bg.mysql.mjs
-|   |   |   |       |       query_compiler_small_bg.mysql.wasm-base64.js
-|   |   |   |       |       query_compiler_small_bg.mysql.wasm-base64.mjs
-|   |   |   |       |       query_compiler_small_bg.postgresql.js
-|   |   |   |       |       query_compiler_small_bg.postgresql.mjs
-|   |   |   |       |       query_compiler_small_bg.postgresql.wasm-base64.js
-|   |   |   |       |       query_compiler_small_bg.postgresql.wasm-base64.mjs
-|   |   |   |       |       query_compiler_small_bg.sqlite.js
-|   |   |   |       |       query_compiler_small_bg.sqlite.mjs
-|   |   |   |       |       query_compiler_small_bg.sqlite.wasm-base64.js
-|   |   |   |       |       query_compiler_small_bg.sqlite.wasm-base64.mjs
-|   |   |   |       |       query_compiler_small_bg.sqlserver.js
-|   |   |   |       |       query_compiler_small_bg.sqlserver.mjs
-|   |   |   |       |       query_compiler_small_bg.sqlserver.wasm-base64.js
-|   |   |   |       |       query_compiler_small_bg.sqlserver.wasm-base64.mjs
-|   |   |   |       |       wasm-compiler-edge.d.ts
-|   |   |   |       |       wasm-compiler-edge.js
-|   |   |   |       |       wasm-compiler-edge.js.map
-|   |   |   |       |       wasm-compiler-edge.mjs
-|   |   |   |       |       wasm-compiler-edge.mjs.map
-|   |   |   |       |       
-|   |   |   |       \---scripts
-|   |   |   |               colors.js
-|   |   |   |               default-index.d.ts
-|   |   |   |               default-index.js
-|   |   |   |               
 |   |   |   +---bcrypt-a3fecf8c027c10c9
-|   |   |   |   |   .dockerignore
-|   |   |   |   |   .editorconfig
-|   |   |   |   |   bcrypt.js
-|   |   |   |   |   binding.gyp
-|   |   |   |   |   build-all.sh
-|   |   |   |   |   CHANGELOG.md
-|   |   |   |   |   Dockerfile
-|   |   |   |   |   Dockerfile-alpine
-|   |   |   |   |   ISSUE_TEMPLATE.md
-|   |   |   |   |   LICENSE
-|   |   |   |   |   Makefile
-|   |   |   |   |   package.json
-|   |   |   |   |   promises.js
-|   |   |   |   |   README.md
-|   |   |   |   |   SECURITY.md
-|   |   |   |   |   
-|   |   |   |   +---.github
-|   |   |   |   |   \---workflows
-|   |   |   |   |           build-pack-publish.yml
-|   |   |   |   |           ci.yaml
-|   |   |   |   |           
-|   |   |   |   +---examples
-|   |   |   |   |       async_compare.js
-|   |   |   |   |       forever_gen_salt.js
-|   |   |   |   |       
-|   |   |   |   +---prebuilds
-|   |   |   |   |   +---darwin-arm64
-|   |   |   |   |   |       bcrypt.node
-|   |   |   |   |   |       
-|   |   |   |   |   +---darwin-x64
-|   |   |   |   |   |       bcrypt.node
-|   |   |   |   |   |       
-|   |   |   |   |   +---linux-arm
-|   |   |   |   |   |       bcrypt.glibc.node
-|   |   |   |   |   |       bcrypt.musl.node
-|   |   |   |   |   |       
-|   |   |   |   |   +---linux-arm64
-|   |   |   |   |   |       bcrypt.glibc.node
-|   |   |   |   |   |       bcrypt.musl.node
-|   |   |   |   |   |       
-|   |   |   |   |   +---linux-x64
-|   |   |   |   |   |       bcrypt.glibc.node
-|   |   |   |   |   |       bcrypt.musl.node
-|   |   |   |   |   |       
-|   |   |   |   |   +---win32-arm64
-|   |   |   |   |   |       bcrypt.node
-|   |   |   |   |   |       
-|   |   |   |   |   \---win32-x64
-|   |   |   |   |           bcrypt.node
-|   |   |   |   |           
-|   |   |   |   +---src
-|   |   |   |   |       bcrypt.cc
-|   |   |   |   |       bcrypt_node.cc
-|   |   |   |   |       blowfish.cc
-|   |   |   |   |       node_blf.h
-|   |   |   |   |       
-|   |   |   |   \---test
-|   |   |   |           async.test.js
-|   |   |   |           implementation.test.js
-|   |   |   |           promise.test.js
-|   |   |   |           repetitions.test.js
-|   |   |   |           sync.test.js
-|   |   |   |           
 |   |   |   \---pg-587764f78a6c7a9c
-|   |   |       |   LICENSE
-|   |   |       |   package.json
-|   |   |       |   README.md
-|   |   |       |   
-|   |   |       +---esm
-|   |   |       |       index.mjs
-|   |   |       |       
-|   |   |       \---lib
-|   |   |           |   client.js
-|   |   |           |   connection-parameters.js
-|   |   |           |   connection.js
-|   |   |           |   defaults.js
-|   |   |           |   index.js
-|   |   |           |   query.js
-|   |   |           |   result.js
-|   |   |           |   stream.js
-|   |   |           |   type-overrides.js
-|   |   |           |   utils.js
-|   |   |           |   
-|   |   |           +---crypto
-|   |   |           |       cert-signatures.js
-|   |   |           |       sasl.js
-|   |   |           |       utils-legacy.js
-|   |   |           |       utils-webcrypto.js
-|   |   |           |       utils.js
-|   |   |           |       
-|   |   |           \---native
-|   |   |                   client.js
-|   |   |                   index.js
-|   |   |                   query.js
-|   |   |                   
 |   |   +---server
 |   |   |   |   app-paths-manifest.json
 |   |   |   |   interception-route-rewrite-manifest.js
@@ -1337,185 +1160,8 @@ C:.
 |   +---node_modules
 |   |   +---@prisma
 |   |   |   \---client-2c3a283f134fdcb6
-|   |   |       |   default.d.ts
-|   |   |       |   default.js
-|   |   |       |   edge.d.ts
-|   |   |       |   edge.js
-|   |   |       |   extension.d.ts
-|   |   |       |   extension.js
-|   |   |       |   index-browser.js
-|   |   |       |   index.d.ts
-|   |   |       |   index.js
-|   |   |       |   LICENSE
-|   |   |       |   package.json
-|   |   |       |   README.md
-|   |   |       |   sql.d.ts
-|   |   |       |   sql.js
-|   |   |       |   sql.mjs
-|   |   |       |   
-|   |   |       +---generator-build
-|   |   |       |       index.js
-|   |   |       |       
-|   |   |       +---runtime
-|   |   |       |       client.d.mts
-|   |   |       |       client.d.ts
-|   |   |       |       client.js
-|   |   |       |       client.js.map
-|   |   |       |       client.mjs
-|   |   |       |       client.mjs.map
-|   |   |       |       index-browser.d.mts
-|   |   |       |       index-browser.d.ts
-|   |   |       |       index-browser.js
-|   |   |       |       index-browser.js.map
-|   |   |       |       index-browser.mjs
-|   |   |       |       index-browser.mjs.map
-|   |   |       |       query_compiler_fast_bg.cockroachdb.js
-|   |   |       |       query_compiler_fast_bg.cockroachdb.mjs
-|   |   |       |       query_compiler_fast_bg.cockroachdb.wasm-base64.js
-|   |   |       |       query_compiler_fast_bg.cockroachdb.wasm-base64.mjs
-|   |   |       |       query_compiler_fast_bg.mysql.js
-|   |   |       |       query_compiler_fast_bg.mysql.mjs
-|   |   |       |       query_compiler_fast_bg.mysql.wasm-base64.js
-|   |   |       |       query_compiler_fast_bg.mysql.wasm-base64.mjs
-|   |   |       |       query_compiler_fast_bg.postgresql.js
-|   |   |       |       query_compiler_fast_bg.postgresql.mjs
-|   |   |       |       query_compiler_fast_bg.postgresql.wasm-base64.js
-|   |   |       |       query_compiler_fast_bg.postgresql.wasm-base64.mjs
-|   |   |       |       query_compiler_fast_bg.sqlite.js
-|   |   |       |       query_compiler_fast_bg.sqlite.mjs
-|   |   |       |       query_compiler_fast_bg.sqlite.wasm-base64.js
-|   |   |       |       query_compiler_fast_bg.sqlite.wasm-base64.mjs
-|   |   |       |       query_compiler_fast_bg.sqlserver.js
-|   |   |       |       query_compiler_fast_bg.sqlserver.mjs
-|   |   |       |       query_compiler_fast_bg.sqlserver.wasm-base64.js
-|   |   |       |       query_compiler_fast_bg.sqlserver.wasm-base64.mjs
-|   |   |       |       query_compiler_small_bg.cockroachdb.js
-|   |   |       |       query_compiler_small_bg.cockroachdb.mjs
-|   |   |       |       query_compiler_small_bg.cockroachdb.wasm-base64.js
-|   |   |       |       query_compiler_small_bg.cockroachdb.wasm-base64.mjs
-|   |   |       |       query_compiler_small_bg.mysql.js
-|   |   |       |       query_compiler_small_bg.mysql.mjs
-|   |   |       |       query_compiler_small_bg.mysql.wasm-base64.js
-|   |   |       |       query_compiler_small_bg.mysql.wasm-base64.mjs
-|   |   |       |       query_compiler_small_bg.postgresql.js
-|   |   |       |       query_compiler_small_bg.postgresql.mjs
-|   |   |       |       query_compiler_small_bg.postgresql.wasm-base64.js
-|   |   |       |       query_compiler_small_bg.postgresql.wasm-base64.mjs
-|   |   |       |       query_compiler_small_bg.sqlite.js
-|   |   |       |       query_compiler_small_bg.sqlite.mjs
-|   |   |       |       query_compiler_small_bg.sqlite.wasm-base64.js
-|   |   |       |       query_compiler_small_bg.sqlite.wasm-base64.mjs
-|   |   |       |       query_compiler_small_bg.sqlserver.js
-|   |   |       |       query_compiler_small_bg.sqlserver.mjs
-|   |   |       |       query_compiler_small_bg.sqlserver.wasm-base64.js
-|   |   |       |       query_compiler_small_bg.sqlserver.wasm-base64.mjs
-|   |   |       |       wasm-compiler-edge.d.ts
-|   |   |       |       wasm-compiler-edge.js
-|   |   |       |       wasm-compiler-edge.js.map
-|   |   |       |       wasm-compiler-edge.mjs
-|   |   |       |       wasm-compiler-edge.mjs.map
-|   |   |       |       
-|   |   |       \---scripts
-|   |   |               colors.js
-|   |   |               default-index.d.ts
-|   |   |               default-index.js
-|   |   |               
 |   |   +---bcrypt-a3fecf8c027c10c9
-|   |   |   |   .dockerignore
-|   |   |   |   .editorconfig
-|   |   |   |   bcrypt.js
-|   |   |   |   binding.gyp
-|   |   |   |   build-all.sh
-|   |   |   |   CHANGELOG.md
-|   |   |   |   Dockerfile
-|   |   |   |   Dockerfile-alpine
-|   |   |   |   ISSUE_TEMPLATE.md
-|   |   |   |   LICENSE
-|   |   |   |   Makefile
-|   |   |   |   package.json
-|   |   |   |   promises.js
-|   |   |   |   README.md
-|   |   |   |   SECURITY.md
-|   |   |   |   
-|   |   |   +---.github
-|   |   |   |   \---workflows
-|   |   |   |           build-pack-publish.yml
-|   |   |   |           ci.yaml
-|   |   |   |           
-|   |   |   +---examples
-|   |   |   |       async_compare.js
-|   |   |   |       forever_gen_salt.js
-|   |   |   |       
-|   |   |   +---prebuilds
-|   |   |   |   +---darwin-arm64
-|   |   |   |   |       bcrypt.node
-|   |   |   |   |       
-|   |   |   |   +---darwin-x64
-|   |   |   |   |       bcrypt.node
-|   |   |   |   |       
-|   |   |   |   +---linux-arm
-|   |   |   |   |       bcrypt.glibc.node
-|   |   |   |   |       bcrypt.musl.node
-|   |   |   |   |       
-|   |   |   |   +---linux-arm64
-|   |   |   |   |       bcrypt.glibc.node
-|   |   |   |   |       bcrypt.musl.node
-|   |   |   |   |       
-|   |   |   |   +---linux-x64
-|   |   |   |   |       bcrypt.glibc.node
-|   |   |   |   |       bcrypt.musl.node
-|   |   |   |   |       
-|   |   |   |   +---win32-arm64
-|   |   |   |   |       bcrypt.node
-|   |   |   |   |       
-|   |   |   |   \---win32-x64
-|   |   |   |           bcrypt.node
-|   |   |   |           
-|   |   |   +---src
-|   |   |   |       bcrypt.cc
-|   |   |   |       bcrypt_node.cc
-|   |   |   |       blowfish.cc
-|   |   |   |       node_blf.h
-|   |   |   |       
-|   |   |   \---test
-|   |   |           async.test.js
-|   |   |           implementation.test.js
-|   |   |           promise.test.js
-|   |   |           repetitions.test.js
-|   |   |           sync.test.js
-|   |   |           
 |   |   \---pg-587764f78a6c7a9c
-|   |       |   LICENSE
-|   |       |   package.json
-|   |       |   README.md
-|   |       |   
-|   |       +---esm
-|   |       |       index.mjs
-|   |       |       
-|   |       \---lib
-|   |           |   client.js
-|   |           |   connection-parameters.js
-|   |           |   connection.js
-|   |           |   defaults.js
-|   |           |   index.js
-|   |           |   query.js
-|   |           |   result.js
-|   |           |   stream.js
-|   |           |   type-overrides.js
-|   |           |   utils.js
-|   |           |   
-|   |           +---crypto
-|   |           |       cert-signatures.js
-|   |           |       sasl.js
-|   |           |       utils-legacy.js
-|   |           |       utils-webcrypto.js
-|   |           |       utils.js
-|   |           |       
-|   |           \---native
-|   |                   client.js
-|   |                   index.js
-|   |                   query.js
-|   |                   
 |   +---server
 |   |   |   app-paths-manifest.json
 |   |   |   functions-config-manifest.json
@@ -2364,16 +2010,14 @@ C:.
 |   |   |           app_planning_planning-client_tsx_ec2e83fd._.js.map
 |   |   |           app_templates_templates-client_tsx_08bc665c._.js
 |   |   |           app_templates_templates-client_tsx_08bc665c._.js.map
-|   |   |           app_ui_8efe3503._.js
-|   |   |           app_ui_8efe3503._.js.map
-|   |   |           app_ui_f7b18bcd._.js
-|   |   |           app_ui_f7b18bcd._.js.map
+|   |   |           app_ui_933eac9d._.js
+|   |   |           app_ui_933eac9d._.js.map
+|   |   |           app_ui_b1972fd1._.js
+|   |   |           app_ui_b1972fd1._.js.map
 |   |   |           app_vehicles_vehicles-client_tsx_94295d31._.js
 |   |   |           app_vehicles_vehicles-client_tsx_94295d31._.js.map
 |   |   |           lib_company-rules_catalog_ts_1c531f7d._.js
 |   |   |           lib_company-rules_catalog_ts_1c531f7d._.js.map
-|   |   |           lib_templates_template-rules_ts_829308f1._.js
-|   |   |           lib_templates_template-rules_ts_829308f1._.js.map
 |   |   |           node_modules_ea845e5f._.js
 |   |   |           node_modules_ea845e5f._.js.map
 |   |   |           node_modules_eee573be._.js
@@ -2444,8 +2088,6 @@ C:.
 |   |   |           [root-of-the-server]__e1b2e646._.js.map
 |   |   |           [turbopack]_runtime.js
 |   |   |           [turbopack]_runtime.js.map
-|   |   |           _017ba757._.js
-|   |   |           _017ba757._.js.map
 |   |   |           _0dac8f4c._.js
 |   |   |           _0dac8f4c._.js.map
 |   |   |           _190bd073._.js
@@ -2464,10 +2106,14 @@ C:.
 |   |   |           _5c5d5a9d._.js.map
 |   |   |           _6139f1ce._.js
 |   |   |           _6139f1ce._.js.map
+|   |   |           _72a8d4f5._.js
+|   |   |           _72a8d4f5._.js.map
 |   |   |           _74c1132d._.js
 |   |   |           _74c1132d._.js.map
 |   |   |           _78309920._.js
 |   |   |           _78309920._.js.map
+|   |   |           _8aad6571._.js
+|   |   |           _8aad6571._.js.map
 |   |   |           _90c0d2c3._.js
 |   |   |           _90c0d2c3._.js.map
 |   |   |           _a70391a9._.js
@@ -2512,16 +2158,22 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
+|   |   +---8szfrlwsSC_xraM0GlbTe
+|   |   |       _buildManifest.js
+|   |   |       _clientMiddlewareManifest.json
+|   |   |       _ssgManifest.js
+|   |   |       
 |   |   +---chunks
-|   |   |       05c065d3e137ac6c.js
 |   |   |       08c27b20fef4d675.js
+|   |   |       0beecfc46f57dad3.js
 |   |   |       263cdf52661a0d49.js
 |   |   |       321e14092c3be8b6.js
 |   |   |       3814b133520d7a8c.js
-|   |   |       51d179811171b6e2.js
-|   |   |       5c9cdee74a9705f7.css
 |   |   |       5e440c1b91a51c0a.js
+|   |   |       6102ed6dfb2edbec.js
 |   |   |       61066a51d71ec27c.js
+|   |   |       70bf37a7f4bbd141.css
+|   |   |       7233746556f24896.js
 |   |   |       7f2c963819d174cb.js
 |   |   |       81cbce106758ff1d.js
 |   |   |       82abf2d65f5428ae.js
@@ -2530,17 +2182,11 @@ C:.
 |   |   |       a6dad97d9634a72d.js
 |   |   |       a6dad97d9634a72d.js.map
 |   |   |       af7027598a07baa5.js
-|   |   |       b8b731441a1860e4.js
-|   |   |       ba18530d2f960670.js
+|   |   |       d52d38b7fb698a65.js
 |   |   |       ee24e667dd0d7311.js
 |   |   |       fc3339c3f209e8c2.js
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-a79a6d50b3241aaa.js
-|   |   |       
-|   |   +---f3LL3iKw2kpUwdIlItYtJ
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
 |   |   |       
 |   |   \---media
 |   |           favicon.0b3bf435.ico
@@ -4067,11 +3713,18 @@ C:.
 |   |   |   |   |   |   EVIDENCES.md
 |   |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   README_PATCH.md
 |   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION-20260425-18_A22_UIINT-09__DOCS_FINAL.zip
+|   |   |   |   |   |   SESSION-20260425-18_A22_UIINT-09__DOCS_PATCH_PREUVES_QA.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
+|   |   |   |   |           QA_COHERENCE_CONTROLE.md
+|   |   |   |   |           QA_PREUVES_BRUTES.txt
 |   |   |   |   |           README_PATCH.md
+|   |   |   |   |           SESSION-20260425-18_A22_UIINT-09.diff
+|   |   |   |   |           SESSION-20260425-18_A22_UIINT-09_FIX-01.diff
 |   |   |   |   |           
 |   |   |   |   +---SESSION-20260425-19_A22_UIINT-10
 |   |   |   |   |   |   EVIDENCES.md
@@ -7653,89 +7306,6 @@ C:.
 |   |   |           index.mjs
 |   |   |           
 |   |   +---client
-|   |   |   |   default.d.ts
-|   |   |   |   default.js
-|   |   |   |   edge.d.ts
-|   |   |   |   edge.js
-|   |   |   |   extension.d.ts
-|   |   |   |   extension.js
-|   |   |   |   index-browser.js
-|   |   |   |   index.d.ts
-|   |   |   |   index.js
-|   |   |   |   LICENSE
-|   |   |   |   package.json
-|   |   |   |   README.md
-|   |   |   |   sql.d.ts
-|   |   |   |   sql.js
-|   |   |   |   sql.mjs
-|   |   |   |   
-|   |   |   +---generator-build
-|   |   |   |       index.js
-|   |   |   |       
-|   |   |   +---runtime
-|   |   |   |       client.d.mts
-|   |   |   |       client.d.ts
-|   |   |   |       client.js
-|   |   |   |       client.js.map
-|   |   |   |       client.mjs
-|   |   |   |       client.mjs.map
-|   |   |   |       index-browser.d.mts
-|   |   |   |       index-browser.d.ts
-|   |   |   |       index-browser.js
-|   |   |   |       index-browser.js.map
-|   |   |   |       index-browser.mjs
-|   |   |   |       index-browser.mjs.map
-|   |   |   |       query_compiler_fast_bg.cockroachdb.js
-|   |   |   |       query_compiler_fast_bg.cockroachdb.mjs
-|   |   |   |       query_compiler_fast_bg.cockroachdb.wasm-base64.js
-|   |   |   |       query_compiler_fast_bg.cockroachdb.wasm-base64.mjs
-|   |   |   |       query_compiler_fast_bg.mysql.js
-|   |   |   |       query_compiler_fast_bg.mysql.mjs
-|   |   |   |       query_compiler_fast_bg.mysql.wasm-base64.js
-|   |   |   |       query_compiler_fast_bg.mysql.wasm-base64.mjs
-|   |   |   |       query_compiler_fast_bg.postgresql.js
-|   |   |   |       query_compiler_fast_bg.postgresql.mjs
-|   |   |   |       query_compiler_fast_bg.postgresql.wasm-base64.js
-|   |   |   |       query_compiler_fast_bg.postgresql.wasm-base64.mjs
-|   |   |   |       query_compiler_fast_bg.sqlite.js
-|   |   |   |       query_compiler_fast_bg.sqlite.mjs
-|   |   |   |       query_compiler_fast_bg.sqlite.wasm-base64.js
-|   |   |   |       query_compiler_fast_bg.sqlite.wasm-base64.mjs
-|   |   |   |       query_compiler_fast_bg.sqlserver.js
-|   |   |   |       query_compiler_fast_bg.sqlserver.mjs
-|   |   |   |       query_compiler_fast_bg.sqlserver.wasm-base64.js
-|   |   |   |       query_compiler_fast_bg.sqlserver.wasm-base64.mjs
-|   |   |   |       query_compiler_small_bg.cockroachdb.js
-|   |   |   |       query_compiler_small_bg.cockroachdb.mjs
-|   |   |   |       query_compiler_small_bg.cockroachdb.wasm-base64.js
-|   |   |   |       query_compiler_small_bg.cockroachdb.wasm-base64.mjs
-|   |   |   |       query_compiler_small_bg.mysql.js
-|   |   |   |       query_compiler_small_bg.mysql.mjs
-|   |   |   |       query_compiler_small_bg.mysql.wasm-base64.js
-|   |   |   |       query_compiler_small_bg.mysql.wasm-base64.mjs
-|   |   |   |       query_compiler_small_bg.postgresql.js
-|   |   |   |       query_compiler_small_bg.postgresql.mjs
-|   |   |   |       query_compiler_small_bg.postgresql.wasm-base64.js
-|   |   |   |       query_compiler_small_bg.postgresql.wasm-base64.mjs
-|   |   |   |       query_compiler_small_bg.sqlite.js
-|   |   |   |       query_compiler_small_bg.sqlite.mjs
-|   |   |   |       query_compiler_small_bg.sqlite.wasm-base64.js
-|   |   |   |       query_compiler_small_bg.sqlite.wasm-base64.mjs
-|   |   |   |       query_compiler_small_bg.sqlserver.js
-|   |   |   |       query_compiler_small_bg.sqlserver.mjs
-|   |   |   |       query_compiler_small_bg.sqlserver.wasm-base64.js
-|   |   |   |       query_compiler_small_bg.sqlserver.wasm-base64.mjs
-|   |   |   |       wasm-compiler-edge.d.ts
-|   |   |   |       wasm-compiler-edge.js
-|   |   |   |       wasm-compiler-edge.js.map
-|   |   |   |       wasm-compiler-edge.mjs
-|   |   |   |       wasm-compiler-edge.mjs.map
-|   |   |   |       
-|   |   |   \---scripts
-|   |   |           colors.js
-|   |   |           default-index.d.ts
-|   |   |           default-index.js
-|   |   |           
 |   |   +---client-runtime-utils
 |   |   |   |   LICENSE
 |   |   |   |   package.json
@@ -12026,69 +11596,6 @@ C:.
 |   |           index.js
 |   |           
 |   +---bcrypt
-|   |   |   .dockerignore
-|   |   |   .editorconfig
-|   |   |   bcrypt.js
-|   |   |   binding.gyp
-|   |   |   build-all.sh
-|   |   |   CHANGELOG.md
-|   |   |   Dockerfile
-|   |   |   Dockerfile-alpine
-|   |   |   ISSUE_TEMPLATE.md
-|   |   |   LICENSE
-|   |   |   Makefile
-|   |   |   package.json
-|   |   |   promises.js
-|   |   |   README.md
-|   |   |   SECURITY.md
-|   |   |   
-|   |   +---.github
-|   |   |   \---workflows
-|   |   |           build-pack-publish.yml
-|   |   |           ci.yaml
-|   |   |           
-|   |   +---examples
-|   |   |       async_compare.js
-|   |   |       forever_gen_salt.js
-|   |   |       
-|   |   +---prebuilds
-|   |   |   +---darwin-arm64
-|   |   |   |       bcrypt.node
-|   |   |   |       
-|   |   |   +---darwin-x64
-|   |   |   |       bcrypt.node
-|   |   |   |       
-|   |   |   +---linux-arm
-|   |   |   |       bcrypt.glibc.node
-|   |   |   |       bcrypt.musl.node
-|   |   |   |       
-|   |   |   +---linux-arm64
-|   |   |   |       bcrypt.glibc.node
-|   |   |   |       bcrypt.musl.node
-|   |   |   |       
-|   |   |   +---linux-x64
-|   |   |   |       bcrypt.glibc.node
-|   |   |   |       bcrypt.musl.node
-|   |   |   |       
-|   |   |   +---win32-arm64
-|   |   |   |       bcrypt.node
-|   |   |   |       
-|   |   |   \---win32-x64
-|   |   |           bcrypt.node
-|   |   |           
-|   |   +---src
-|   |   |       bcrypt.cc
-|   |   |       bcrypt_node.cc
-|   |   |       blowfish.cc
-|   |   |       node_blf.h
-|   |   |       
-|   |   \---test
-|   |           async.test.js
-|   |           implementation.test.js
-|   |           promise.test.js
-|   |           repetitions.test.js
-|   |           sync.test.js
-|   |           
 |   +---better-result
 |   |   |   LICENSE
 |   |   |   package.json
@@ -36350,37 +35857,6 @@ C:.
 |   |           index.mjs
 |   |           
 |   +---pg
-|   |   |   LICENSE
-|   |   |   package.json
-|   |   |   README.md
-|   |   |   
-|   |   +---esm
-|   |   |       index.mjs
-|   |   |       
-|   |   \---lib
-|   |       |   client.js
-|   |       |   connection-parameters.js
-|   |       |   connection.js
-|   |       |   defaults.js
-|   |       |   index.js
-|   |       |   query.js
-|   |       |   result.js
-|   |       |   stream.js
-|   |       |   type-overrides.js
-|   |       |   utils.js
-|   |       |   
-|   |       +---crypto
-|   |       |       cert-signatures.js
-|   |       |       sasl.js
-|   |       |       utils-legacy.js
-|   |       |       utils-webcrypto.js
-|   |       |       utils.js
-|   |       |       
-|   |       \---native
-|   |               client.js
-|   |               index.js
-|   |               query.js
-|   |               
 |   +---pg-cloudflare
 |   |   |   LICENSE
 |   |   |   package.json
