@@ -1945,14 +1945,14 @@ C:.
 |   |   |   |   _next-internal_server_app_favicon_ico_route_actions_353150a5.js.map
 |   |   |   |   
 |   |   |   \---ssr
-|   |   |           app_6916529d._.js
-|   |   |           app_6916529d._.js.map
+|   |   |           app_06f7ebef._.js
+|   |   |           app_06f7ebef._.js.map
 |   |   |           app_797b0307._.js
 |   |   |           app_797b0307._.js.map
+|   |   |           app_8bb86ff2._.js
+|   |   |           app_8bb86ff2._.js.map
 |   |   |           app_ad68d12a._.js
 |   |   |           app_ad68d12a._.js.map
-|   |   |           app_audit_audit-client_tsx_2d3c01ab._.js
-|   |   |           app_audit_audit-client_tsx_2d3c01ab._.js.map
 |   |   |           app_b9b1292a._.js
 |   |   |           app_b9b1292a._.js.map
 |   |   |           app_company_a9f5ad05._.js
@@ -1963,10 +1963,10 @@ C:.
 |   |   |           app_planning_planning-client_tsx_ec2e83fd._.js.map
 |   |   |           app_templates_templates-client_tsx_08bc665c._.js
 |   |   |           app_templates_templates-client_tsx_08bc665c._.js.map
-|   |   |           app_ui_8efe3503._.js
-|   |   |           app_ui_8efe3503._.js.map
 |   |   |           app_ui_933eac9d._.js
 |   |   |           app_ui_933eac9d._.js.map
+|   |   |           app_ui_b1972fd1._.js
+|   |   |           app_ui_b1972fd1._.js.map
 |   |   |           app_vehicles_vehicles-client_tsx_94295d31._.js
 |   |   |           app_vehicles_vehicles-client_tsx_94295d31._.js.map
 |   |   |           node_modules_ea845e5f._.js
@@ -2013,8 +2013,6 @@ C:.
 |   |   |           [root-of-the-server]__4e4f114d._.js.map
 |   |   |           [root-of-the-server]__59463192._.js
 |   |   |           [root-of-the-server]__59463192._.js.map
-|   |   |           [root-of-the-server]__6497ad33._.js
-|   |   |           [root-of-the-server]__6497ad33._.js.map
 |   |   |           [root-of-the-server]__71e4ac9a._.js
 |   |   |           [root-of-the-server]__71e4ac9a._.js.map
 |   |   |           [root-of-the-server]__7f1adca8._.js
@@ -2023,6 +2021,8 @@ C:.
 |   |   |           [root-of-the-server]__99048386._.js.map
 |   |   |           [root-of-the-server]__a457c799._.js
 |   |   |           [root-of-the-server]__a457c799._.js.map
+|   |   |           [root-of-the-server]__ad104e29._.js
+|   |   |           [root-of-the-server]__ad104e29._.js.map
 |   |   |           [root-of-the-server]__b2dd6248._.js
 |   |   |           [root-of-the-server]__b2dd6248._.js.map
 |   |   |           [root-of-the-server]__b9356576._.js
@@ -2108,35 +2108,35 @@ C:.
 |   |           middleware-manifest.json
 |   |           
 |   +---static
-|   |   +---5yTnxsaGAIIG8M7Zi0kRI
 |   |   +---chunks
 |   |   |       08c27b20fef4d675.js
 |   |   |       0beecfc46f57dad3.js
+|   |   |       10ef5cd64280ee73.js
+|   |   |       156c498ccfc566da.js
 |   |   |       263cdf52661a0d49.js
 |   |   |       321e14092c3be8b6.js
 |   |   |       5e440c1b91a51c0a.js
-|   |   |       61066a51d71ec27c.js
+|   |   |       7233746556f24896.js
 |   |   |       7f2c963819d174cb.js
-|   |   |       7fa5393be5cbd90f.css
 |   |   |       82abf2d65f5428ae.js
+|   |   |       88647cf28c6125ed.js
 |   |   |       899b7782e7cb92a1.js
+|   |   |       902ecdc0813c7475.js
 |   |   |       93d8903943205743.js
-|   |   |       99ad1d8197e6001d.js
 |   |   |       a6dad97d9634a72d.js
 |   |   |       a6dad97d9634a72d.js.map
 |   |   |       af7027598a07baa5.js
-|   |   |       ba18530d2f960670.js
-|   |   |       bf89855db595f6b3.js
+|   |   |       b45b8bfc426f238a.js
 |   |   |       d52d38b7fb698a65.js
-|   |   |       f59c707d2ee7b86e.js
 |   |   |       fa08fb6dbd7c6100.js
-|   |   |       fc3339c3f209e8c2.js
+|   |   |       fce9c70f5f5d592a.css
 |   |   |       ff1a16fafef87110.js
-|   |   |       turbopack-a79a6d50b3241aaa.js
+|   |   |       turbopack-2322a3ca4ff8762b.js
 |   |   |       
-|   |   \---media
-|   |           favicon.0b3bf435.ico
-|   |           
+|   |   +---media
+|   |   |       favicon.0b3bf435.ico
+|   |   |       
+|   |   \---vZwGGTWZNOmvKoptSf-MG
 |   \---types
 |           routes.d.ts
 |           validator.ts
@@ -3713,9 +3713,13 @@ C:.
 |   |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION-20260425-21_A22_UIINT-12__DOCS_FINAL.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
+|   |   |   |   |           PATCH__SESSION-20260425-21_A22_UIINT-12.diff
+|   |   |   |   |           PATCH__SESSION-20260425-21_A22_UIINT-12_FIX-01.diff
+|   |   |   |   |           PATCH__SESSION-20260425-21_A22_UIINT-12_FIX-02.diff
 |   |   |   |   |           README_PATCH.md
 |   |   |   |   |           
 |   |   |   |   +---SESSION-20260425-22_A22_UIINT-13

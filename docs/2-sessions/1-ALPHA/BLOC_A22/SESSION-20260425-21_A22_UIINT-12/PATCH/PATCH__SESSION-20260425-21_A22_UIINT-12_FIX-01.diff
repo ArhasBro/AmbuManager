@@ -1,0 +1,6 @@
+diff --git a/app/audit/audit-client.tsx b/app/audit/audit-client.tsx
+--- a/app/audit/audit-client.tsx
++++ b/app/audit/audit-client.tsx
+@@ -354,1 +354,1 @@
+-            <h2 className="audit-card__title">Detail de l'entree selectionnee</h2>
++            <h2 className="audit-card__title">Detail de l&apos;entree selectionnee</h2>

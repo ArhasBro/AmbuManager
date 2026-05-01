@@ -1383,9 +1383,13 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   NOTES.md
 |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION-20260425-21_A22_UIINT-12__DOCS_FINAL.zip
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
+|   |   |   |           PATCH__SESSION-20260425-21_A22_UIINT-12.diff
+|   |   |   |           PATCH__SESSION-20260425-21_A22_UIINT-12_FIX-01.diff
+|   |   |   |           PATCH__SESSION-20260425-21_A22_UIINT-12_FIX-02.diff
 |   |   |   |           README_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260425-22_A22_UIINT-13
