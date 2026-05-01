@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState, type ReactNode } from "react";
+import { useMemo, useState } from "react";
+
+import { ActionButton, ErrorMessage, StatusBadge } from "@/app/ui";
 
 type Checklist = {
   profileComplete: boolean;
@@ -55,23 +57,28 @@ type CommitData = {
   errors: PreviewError[];
 };
 
+type StepStatus = {
+  label: string;
+  variant: "success" | "warning";
+};
+
 const DOMAIN_OPTIONS: Array<{ value: ImportDomain; label: string; help: string; columns: string[] }> = [
   {
     value: "depots",
-    label: "Bases / dépôts",
-    help: "Ajout simple de dépôts. Colonnes minimales : nom, adresse.",
+    label: "Bases / depots",
+    help: "Ajout simple de depots. Colonnes minimales : nom, adresse.",
     columns: ["nom", "adresse"],
   },
   {
     value: "users",
     label: "Utilisateurs",
-    help: "Ajout simple d’utilisateurs. Colonnes minimales : email, nom, role, motDePasseInitial.",
+    help: "Ajout simple d'utilisateurs. Colonnes minimales : email, nom, role, motDePasseInitial.",
     columns: ["email", "nom", "role", "motDePasseInitial", "depot"],
   },
   {
     value: "vehicles",
-    label: "Véhicules",
-    help: "Ajout simple de véhicules. Colonnes minimales : immatriculation, type. Colonnes optionnelles : statut, dépôt, dates.",
+    label: "Vehicules",
+    help: "Ajout simple de vehicules. Colonnes minimales : immatriculation, type. Colonnes optionnelles : statut, depot, dates.",
     columns: ["immatriculation", "type", "statut", "depot", "insuranceExpiresAt", "technicalInspectionExpiresAt", "registrationDocumentPresent", "sanitaryApprovalExpiresAt"],
   },
   {
@@ -82,20 +89,29 @@ const DOMAIN_OPTIONS: Array<{ value: ImportDomain; label: string; help: string; 
   },
   {
     value: "user-absences",
-    label: "Indisponibilités utilisateurs",
-    help: "Ajout simple d’indisponibilités. Colonnes minimales : userEmail, startAt, endAt.",
+    label: "Indisponibilites utilisateurs",
+    help: "Ajout simple d'indisponibilites. Colonnes minimales : userEmail, startAt, endAt.",
     columns: ["userEmail", "reason", "startAt", "endAt"],
   },
 ];
 
-function statusLabel(done: boolean, count?: number) {
-  if (typeof count === "number") return done ? `OK (${count})` : `À compléter (${count})`;
-  return done ? "OK" : "À compléter";
+function getStepStatus(done: boolean, count?: number): StepStatus {
+  if (typeof count === "number") {
+    return {
+      label: done ? `OK (${count})` : `A completer (${count})`,
+      variant: done ? "success" : "warning",
+    };
+  }
+
+  return {
+    label: done ? "OK" : "A completer",
+    variant: done ? "success" : "warning",
+  };
 }
 
 function renderValue(value: unknown) {
   if (Array.isArray(value)) return value.join(", ");
-  if (value === null || value === undefined) return "—";
+  if (value === null || value === undefined) return "-";
   if (typeof value === "boolean") return value ? "Oui" : "Non";
   return String(value);
 }
@@ -165,168 +181,183 @@ export default function OnboardingClient({ checklist, links }: { checklist: Chec
   }
 
   return (
-    <div style={{ display: "grid", gap: 16 }}>
-      <section style={{ display: "grid", gap: 12, border: "1px solid #d0d7de", borderRadius: 12, padding: 16, background: "#fff" }}>
-        <div>
-          <div style={{ fontWeight: 700, fontSize: 18 }}>Parcours manuel recommandé</div>
-          <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
-            Une société pilote peut être configurée sans import. L’objectif ici est de rendre l’ordre logique visible depuis l’UI réelle.
+    <section className="onboarding-layout">
+      <section className="panel onboarding-card">
+        <div className="onboarding-card__head">
+          <h2 className="onboarding-card__title">Parcours manuel recommande</h2>
+          <p className="onboarding-card__description">
+            Une societe pilote peut etre configuree sans import. L&apos;objectif est de rendre l&apos;ordre logique visible depuis l&apos;UI reelle.
           </p>
         </div>
 
-        <div style={{ display: "grid", gap: 10 }}>
-          <StepRow href={links.company} title="1. Profil société" description="Renseigner le profil complet de la société." status={statusLabel(checklist.profileComplete)} />
-          <StepRow href={links.depots} title="2. Bases / dépôts" description="Créer les dépôts actifs utilisés au démarrage." status={statusLabel(checklist.depotsCount > 0, checklist.depotsCount)} />
-          <StepRow href={links.users} title="3. Utilisateurs" description="Créer les comptes, rôles et rattachements dépôts nécessaires." status={statusLabel(checklist.usersCount > 0, checklist.usersCount)} />
-          <StepRow href={links.vehicles} title="4. Véhicules" description="Créer la flotte active et les rattachements bases." status={statusLabel(checklist.vehiclesCount > 0, checklist.vehiclesCount)} />
-          <StepRow href={links.templates} title="5. Templates" description="Créer les modèles de shifts utiles à la société pilote." status={statusLabel(checklist.templatesCount > 0, checklist.templatesCount)} />
-          <StepRow href={links.users} title="6. Indisponibilités utilisateurs" description="Saisir les absences directement depuis le module utilisateurs." status={statusLabel(checklist.absencesCount > 0, checklist.absencesCount)} />
+        <div className="onboarding-steps">
+          <StepRow href={links.company} title="1. Profil societe" description="Renseigner le profil complet de la societe." status={getStepStatus(checklist.profileComplete)} />
+          <StepRow href={links.depots} title="2. Bases / depots" description="Creer les depots actifs utilises au demarrage." status={getStepStatus(checklist.depotsCount > 0, checklist.depotsCount)} />
+          <StepRow href={links.users} title="3. Utilisateurs" description="Creer les comptes, roles et rattachements depots necessaires." status={getStepStatus(checklist.usersCount > 0, checklist.usersCount)} />
+          <StepRow href={links.vehicles} title="4. Vehicules" description="Creer la flotte active et les rattachements bases." status={getStepStatus(checklist.vehiclesCount > 0, checklist.vehiclesCount)} />
+          <StepRow href={links.templates} title="5. Templates" description="Creer les modeles de shifts utiles a la societe pilote." status={getStepStatus(checklist.templatesCount > 0, checklist.templatesCount)} />
+          <StepRow href={links.users} title="6. Indisponibilites utilisateurs" description="Saisir les absences depuis le module utilisateurs." status={getStepStatus(checklist.absencesCount > 0, checklist.absencesCount)} />
         </div>
       </section>
 
-      <section style={{ display: "grid", gap: 12, border: "1px solid #d0d7de", borderRadius: 12, padding: 16, background: "#fff" }}>
-        <div>
-          <div style={{ fontWeight: 700, fontSize: 18 }}>Imports initiaux simples ALPHA</div>
-          <p style={{ margin: "8px 0 0 0", opacity: 0.8 }}>
-            Ajout uniquement. Aucun import destructeur, aucune mise à jour automatique des existants, aperçu obligatoire avant validation manuelle.
+      <section className="panel onboarding-card">
+        <div className="onboarding-card__head">
+          <h2 className="onboarding-card__title">Imports initiaux simples ALPHA</h2>
+          <p className="onboarding-card__description">
+            Ajout uniquement. Aucun import destructeur, aucune mise a jour automatique des existants, apercu obligatoire avant validation manuelle.
           </p>
         </div>
 
-        <div style={{ display: "grid", gap: 8, gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}>
-          <label style={{ display: "grid", gap: 6 }}>
-            <span>Domaine</span>
-            <select value={domain} onChange={(event) => { setDomain(event.target.value as ImportDomain); setPreview(null); setCommitResult(null); setError(null); }}>
+        <div className="onboarding-import-form">
+          <label className="onboarding-field">
+            <span className="onboarding-field__label">Domaine</span>
+            <select
+              value={domain}
+              onChange={(event) => {
+                setDomain(event.target.value as ImportDomain);
+                setPreview(null);
+                setCommitResult(null);
+                setError(null);
+              }}
+            >
               {DOMAIN_OPTIONS.map((option) => (
                 <option key={option.value} value={option.value}>{option.label}</option>
               ))}
             </select>
           </label>
 
-          <label style={{ display: "grid", gap: 6 }}>
-            <span>Fichier CSV ou XLSX</span>
-            <input type="file" accept=".csv,.xlsx" onChange={(event) => { setFile(event.target.files?.[0] ?? null); setPreview(null); setCommitResult(null); setError(null); }} />
+          <label className="onboarding-field">
+            <span className="onboarding-field__label">Fichier CSV ou XLSX</span>
+            <input
+              type="file"
+              accept=".csv,.xlsx"
+              onChange={(event) => {
+                setFile(event.target.files?.[0] ?? null);
+                setPreview(null);
+                setCommitResult(null);
+                setError(null);
+              }}
+            />
           </label>
         </div>
 
-        <div style={{ display: "grid", gap: 6, padding: 12, borderRadius: 10, background: "#f6f8fa" }}>
+        <section className="panel-soft onboarding-hint">
           <strong>{selectedDomain.label}</strong>
-          <span style={{ opacity: 0.85 }}>{selectedDomain.help}</span>
-          <span style={{ fontFamily: "monospace", fontSize: 13 }}>Colonnes conseillées : {selectedDomain.columns.join(", ")}</span>
+          <p>{selectedDomain.help}</p>
+          <p className="onboarding-hint__columns">Colonnes conseillees : {selectedDomain.columns.join(", ")}</p>
+        </section>
+
+        <div className="onboarding-actions">
+          <ActionButton type="button" variant="secondary" disabled={!file || loading} onClick={() => void previewImport()}>
+            {loading ? "Preparation..." : "Apercu avant import"}
+          </ActionButton>
+          <ActionButton type="button" variant="primary" disabled={!preview || preview.rows.length === 0 || committing} onClick={() => void commitImport()}>
+            {committing ? "Import en cours..." : "Valider l'import"}
+          </ActionButton>
         </div>
 
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-          <button type="button" disabled={!file || loading} onClick={() => void previewImport()}>
-            {loading ? "Préparation..." : "Aperçu avant import"}
-          </button>
-          <button type="button" disabled={!preview || preview.rows.length === 0 || committing} onClick={() => void commitImport()}>
-            {committing ? "Import en cours..." : "Valider l’import"}
-          </button>
-        </div>
-
-        {error ? <div style={{ color: "crimson" }}>Erreur : {error}</div> : null}
+        {error ? <ErrorMessage title="Erreur import" message={error} /> : null}
 
         {preview ? (
-          <div style={{ display: "grid", gap: 12, borderTop: "1px solid #d0d7de", paddingTop: 12 }}>
-            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-              <Badge>{preview.fileName}</Badge>
-              <Badge>{preview.format.toUpperCase()}</Badge>
-              <Badge>{preview.validRows} ligne(s) prête(s)</Badge>
-              <Badge>{preview.invalidRows} ligne(s) en erreur</Badge>
+          <section className="onboarding-preview">
+            <div className="onboarding-preview__badges">
+              <StatusBadge variant="neutral">{preview.fileName}</StatusBadge>
+              <StatusBadge variant="info">{preview.format.toUpperCase()}</StatusBadge>
+              <StatusBadge variant="success">{preview.validRows} ligne(s) prete(s)</StatusBadge>
+              <StatusBadge variant={preview.invalidRows > 0 ? "warning" : "neutral"}>{preview.invalidRows} ligne(s) en erreur</StatusBadge>
             </div>
 
             {preview.notes.length > 0 ? (
-              <div style={{ display: "grid", gap: 4 }}>
-                {preview.notes.map((note) => <div key={note} style={{ opacity: 0.85 }}>• {note}</div>)}
+              <div className="onboarding-notes">
+                {preview.notes.map((note) => <div key={note}>{note}</div>)}
               </div>
             ) : null}
 
-            <div style={{ display: "grid", gap: 6 }}>
-              <strong>Aperçu des lignes prêtes</strong>
+            <section className="onboarding-block">
+              <h3 className="onboarding-block__title">Apercu des lignes pretes</h3>
               {preview.previewRows.length === 0 ? (
-                <div style={{ opacity: 0.7 }}>Aucune ligne prête à importer.</div>
+                <div className="panel-soft onboarding-empty">Aucune ligne prete a importer.</div>
               ) : (
-                <div style={{ display: "grid", gap: 8 }}>
+                <div className="onboarding-row-list">
                   {preview.previewRows.map((row) => (
-                    <div key={row.rowNumber} style={{ border: "1px solid #d0d7de", borderRadius: 10, padding: 10 }}>
-                      <div style={{ fontWeight: 600, marginBottom: 6 }}>Ligne {row.rowNumber}</div>
-                      <div style={{ display: "grid", gap: 4 }}>
+                    <article key={row.rowNumber} className="onboarding-row-card">
+                      <strong>Ligne {row.rowNumber}</strong>
+                      <div className="onboarding-row-grid">
                         {Object.entries(row.values).map(([key, value]) => (
-                          <div key={key} style={{ display: "grid", gridTemplateColumns: "180px 1fr", gap: 8 }}>
-                            <span style={{ opacity: 0.75 }}>{key}</span>
+                          <div key={key} className="onboarding-row-grid__item">
+                            <span className="onboarding-row-grid__label">{key}</span>
                             <span>{renderValue(value)}</span>
                           </div>
                         ))}
                       </div>
-                    </div>
+                    </article>
                   ))}
                 </div>
               )}
-            </div>
+            </section>
 
-            <div style={{ display: "grid", gap: 6 }}>
-              <strong>Rapport d’erreurs</strong>
+            <section className="onboarding-block">
+              <h3 className="onboarding-block__title">Rapport d&apos;erreurs</h3>
               {preview.errors.length === 0 ? (
-                <div style={{ color: "green" }}>Aucune erreur bloquante détectée dans l’aperçu.</div>
+                <div className="status-success onboarding-feedback">Aucune erreur bloquante detectee dans l&apos;apercu.</div>
               ) : (
-                <div style={{ display: "grid", gap: 4 }}>
+                <div className="onboarding-errors">
                   {preview.errors.map((item, index) => (
-                    <div key={`${item.rowNumber}-${index}`} style={{ color: "crimson" }}>
-                      Ligne {item.rowNumber}{item.field ? ` • ${item.field}` : ""} — {item.message}
+                    <div key={`${item.rowNumber}-${index}`} className="onboarding-errors__item">
+                      Ligne {item.rowNumber}{item.field ? ` • ${item.field}` : ""} - {item.message}
                     </div>
                   ))}
                 </div>
               )}
-            </div>
-          </div>
+            </section>
+          </section>
         ) : null}
 
         {commitResult ? (
-          <div style={{ display: "grid", gap: 8, borderTop: "1px solid #d0d7de", paddingTop: 12 }}>
-            <strong>Résultat d’import</strong>
-            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-              <Badge>{commitResult.insertedCount} insertion(s)</Badge>
-              <Badge>{commitResult.errorCount} ligne(s) rejetée(s)</Badge>
+          <section className="onboarding-preview">
+            <h3 className="onboarding-block__title">Resultat d&apos;import</h3>
+            <div className="onboarding-preview__badges">
+              <StatusBadge variant="success">{commitResult.insertedCount} insertion(s)</StatusBadge>
+              <StatusBadge variant={commitResult.errorCount > 0 ? "warning" : "neutral"}>{commitResult.errorCount} ligne(s) rejetee(s)</StatusBadge>
             </div>
 
             {commitResult.insertedPreview.length > 0 ? (
-              <div style={{ display: "grid", gap: 4 }}>
+              <div className="onboarding-notes">
                 {commitResult.insertedPreview.map((row) => (
-                  <div key={row.rowNumber} style={{ opacity: 0.85 }}>Ligne {row.rowNumber} importée.</div>
+                  <div key={row.rowNumber}>Ligne {row.rowNumber} importee.</div>
                 ))}
               </div>
             ) : null}
 
             {commitResult.errors.length > 0 ? (
-              <div style={{ display: "grid", gap: 4 }}>
+              <div className="onboarding-errors">
                 {commitResult.errors.map((item, index) => (
-                  <div key={`${item.rowNumber}-${index}`} style={{ color: "crimson" }}>
-                    Ligne {item.rowNumber}{item.field ? ` • ${item.field}` : ""} — {item.message}
+                  <div key={`${item.rowNumber}-${index}`} className="onboarding-errors__item">
+                    Ligne {item.rowNumber}{item.field ? ` • ${item.field}` : ""} - {item.message}
                   </div>
                 ))}
               </div>
             ) : (
-              <div style={{ color: "green" }}>Import validé sans erreur résiduelle.</div>
+              <div className="status-success onboarding-feedback">Import valide sans erreur residuelle.</div>
             )}
-          </div>
+          </section>
         ) : null}
       </section>
-    </div>
+    </section>
   );
 }
 
-function StepRow({ href, title, description, status }: { href: string; title: string; description: string; status: string }) {
+function StepRow({ href, title, description, status }: { href: string; title: string; description: string; status: StepStatus }) {
   return (
-    <Link href={href} style={{ display: "grid", gap: 6, textDecoration: "none", color: "inherit", border: "1px solid #d0d7de", borderRadius: 10, padding: 12 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+    <Link href={href} className="onboarding-step">
+      <div className="onboarding-step__top">
         <strong>{title}</strong>
-        <span style={{ opacity: 0.75 }}>{status}</span>
+        <StatusBadge variant={status.variant}>{status.label}</StatusBadge>
       </div>
-      <span style={{ opacity: 0.8 }}>{description}</span>
-      <span style={{ fontWeight: 600 }}>Ouvrir</span>
+      <p className="onboarding-step__description">{description}</p>
+      <span className="onboarding-step__action">Ouvrir</span>
     </Link>
   );
 }
 
-function Badge({ children }: { children: ReactNode }) {
-  return <span style={{ padding: "6px 10px", borderRadius: 999, background: "#f3f4f6" }}>{children}</span>;
-}
+
