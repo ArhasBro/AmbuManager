@@ -9,16 +9,31 @@ CORRECTION+COMPLETION
 ## Dossier PATCH
 docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH
 
-## Patch officiel attendu
-PATCH__SESSION-20260425-22_A22_UIINT-13.diff
+## Patch principal
+- `PATCH__SESSION-20260425-22_A22_UIINT-13.diff`
 
-## Commandes d'application
-
-`ash
+### Application
+```bash
 git apply --check "docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/PATCH__SESSION-20260425-22_A22_UIINT-13.diff"
 git apply         "docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/PATCH__SESSION-20260425-22_A22_UIINT-13.diff"
-`
+```
+
+## Correctif minimal
+- `PATCH__SESSION-20260425-22_A22_UIINT-13_FIX-01.diff`
+
+### Application
+```bash
+git apply --check "docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/PATCH__SESSION-20260425-22_A22_UIINT-13_FIX-01.diff"
+git apply         "docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/PATCH__SESSION-20260425-22_A22_UIINT-13_FIX-01.diff"
+```
+
+## Fichiers code touches
+- `app/login/page.tsx`
+- `app/privacy/page.tsx`
+- `app/globals.css`
 
 ## Statut
-- Dossier patch initialise.
-- Patch officiel a produire dans cette session si du code est modifie.
+- Patch principal applique.
+- Correctif minimal applique.
+- `npm.cmd run lint` : OK
+- `npm.cmd run build` : KO hors perimetre (dependances globales manquantes : `@prisma/client`, `bcrypt`, `pg`).

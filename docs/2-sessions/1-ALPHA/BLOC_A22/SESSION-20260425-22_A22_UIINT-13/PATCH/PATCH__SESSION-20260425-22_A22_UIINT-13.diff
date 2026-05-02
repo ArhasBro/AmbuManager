@@ -1,0 +1,810 @@
+﻿diff --git a/app/login/page.tsx b/app/login/page.tsx
+index 93dfc0e..fcda9af 100644
+--- a/app/login/page.tsx
++++ b/app/login/page.tsx
+@@ -1,4 +1,4 @@
+-"use client";
++﻿"use client";
+ 
+ import Link from "next/link";
+ import { signIn, useSession } from "next-auth/react";
+@@ -36,6 +36,21 @@ function getSafeRouterTarget(value: string | null, fallback: string): string {
+   return fallback;
+ }
+ 
++const loginHighlights = [
++  {
++    title: "Planning intelligent",
++    description: "Organisez vos equipes et vos interventions en toute clarte.",
++  },
++  {
++    title: "Flotte optimisee",
++    description: "Suivez vos vehicules et vos equipements sans perte d'information.",
++  },
++  {
++    title: "Conformite et securite",
++    description: "Donnees tracees et acces reserves aux utilisateurs autorises.",
++  },
++] as const;
++
+ function LoginPageContent() {
+   const router = useRouter();
+   const searchParams = useSearchParams();
+@@ -48,7 +63,7 @@ function LoginPageContent() {
+   const [error, setError] = useState<string | null>(null);
+   const [loading, setLoading] = useState(false);
+ 
+-  // ✅ Si déjà connecté -> go vers une destination interne sûre, sinon dashboard
++  // âœ… Si dÃ©jÃ  connectÃ© -> go vers une destination interne sÃ»re, sinon dashboard
+   useEffect(() => {
+     if (status === "authenticated") router.replace(callbackUrl);
+   }, [status, router, callbackUrl]);
+@@ -76,53 +91,95 @@ function LoginPageContent() {
+   }
+ 
+   if (status === "loading") {
+-    return <div style={{ padding: 16 }}>Chargement...</div>;
++    return <div className="login-loading">Chargement...</div>;
+   }
+ 
+   return (
+-    <div style={{ maxWidth: 420, margin: "40px auto", padding: 16 }}>
+-      <h1>Connexion</h1>
+-
+-      <form onSubmit={onSubmit} style={{ display: "grid", gap: 12 }}>
+-        <label>
+-          Email
+-          <input
+-            value={email}
+-            onChange={(e) => setEmail(e.target.value)}
+-            type="email"
+-            style={{ width: "100%", padding: 10 }}
+-          />
+-        </label>
+-
+-        <label>
+-          Mot de passe
+-          <input
+-            value={password}
+-            onChange={(e) => setPassword(e.target.value)}
+-            type="password"
+-            style={{ width: "100%", padding: 10 }}
+-          />
+-        </label>
+-
+-        {error && <p style={{ color: "crimson" }}>{error}</p>}
+-
+-        <button disabled={loading} type="submit" style={{ padding: 10 }}>
+-          {loading ? "Connexion..." : "Se connecter"}
+-        </button>
+-      </form>
+-
+-      <p style={{ marginTop: 16, fontSize: 14, lineHeight: 1.5 }}>
+-        En poursuivant, vous utilisez une application qui traite des donnees personnelles de gestion,
+-        d&apos;authentification, d&apos;absence et d&apos;audit. Consultez les{" "}
+-        <Link href="/privacy">mentions d&apos;information</Link>.
+-      </p>
+-    </div>
++    <main className="login-page">
++      <section className="login-page__showcase" aria-label="Presentation de la plateforme">
++        <div className="login-page__brand">
++          <p className="login-page__brand-title">Ambulance Manager</p>
++          <span className="login-page__brand-chip">ALPHA</span>
++        </div>
++
++        <div className="login-page__intro">
++          <h1 className="login-page__intro-title">Simplifiez la gestion operationnelle de votre societe.</h1>
++          <p className="login-page__intro-description">
++            Un espace clair et fiable pour piloter equipes, planning et conformite depuis une seule interface.
++          </p>
++        </div>
++
++        <ul className="login-page__highlights" aria-label="Points cles">
++          {loginHighlights.map((item) => (
++            <li key={item.title}>
++              <p className="login-page__highlight-title">{item.title}</p>
++              <p className="login-page__highlight-description">{item.description}</p>
++            </li>
++          ))}
++        </ul>
++
++        <p className="login-page__security-note">Acces reserve aux utilisateurs autorises. Donnees hebergees en France.</p>
++      </section>
++
++      <section className="login-page__form-area" aria-label="Formulaire de connexion">
++        <article className="login-card">
++          <div className="login-card__icon" aria-hidden="true">
++            AM
++          </div>
++
++          <h2 className="login-card__title">Connexion</h2>
++          <p className="login-card__subtitle">Accedez a votre espace Ambulance Manager.</p>
++
++          <form onSubmit={onSubmit} className="login-form">
++            <label className="login-field">
++              <span className="login-field__label">Adresse email</span>
++              <input
++                value={email}
++                onChange={(e) => setEmail(e.target.value)}
++                type="email"
++                autoComplete="email"
++                required
++                placeholder="exemple@ambulances.fr"
++              />
++            </label>
++
++            <label className="login-field">
++              <span className="login-field__label">Mot de passe</span>
++              <input
++                value={password}
++                onChange={(e) => setPassword(e.target.value)}
++                type="password"
++                autoComplete="current-password"
++                required
++                placeholder="Votre mot de passe"
++              />
++            </label>
++
++            {error ? (
++              <p className="login-error" role="alert">
++                {error}
++              </p>
++            ) : null}
++
++            <button disabled={loading} type="submit" className="login-submit">
++              {loading ? "Connexion..." : "Se connecter"}
++            </button>
++          </form>
++
++          <p className="login-card__privacy-note">
++            En vous connectant, vous acceptez les <Link href="/privacy">mentions d'information</Link>.
++          </p>
++        </article>
++
++        <p className="login-page__bottom-note">Conforme RGPD | Application professionnelle de transport sanitaire</p>
++      </section>
++    </main>
+   );
+ }
+ 
+ export default function LoginPage() {
+   return (
+-    <Suspense fallback={<div style={{ padding: 16 }}>Chargement...</div>}>
++    <Suspense fallback={<div className="login-loading">Chargement...</div>}>
+       <LoginPageContent />
+     </Suspense>
+   );
+diff --git a/app/privacy/page.tsx b/app/privacy/page.tsx
+index 7a39a21..d83f3aa 100644
+--- a/app/privacy/page.tsx
++++ b/app/privacy/page.tsx
+@@ -1,3 +1,6 @@
++﻿import Link from "next/link";
++import { PageHeader } from "@/app/ui";
++
+ const dataCategories = [
+   "Comptes utilisateurs : email, nom, role, rattachement societe/depot, statut actif, permissions.",
+   "Authentification : mot de passe hache, traces de connexion reussie ou echouee.",
+@@ -36,64 +39,104 @@ const rightsRules = [
+   "Contact DPO ou canal privacy officiel : INFORMATION NON FOURNIE — À CONFIRMER.",
+ ];
+ 
++type PrivacySection = {
++  id: string;
++  title: string;
++  intro: string;
++  items: readonly string[];
++};
++
++const privacySections: readonly PrivacySection[] = [
++  {
++    id: "categories-donnees",
++    title: "Categories de donnees observees",
++    intro: "Donnees strictement necessaires a l'administration et au suivi operationnel.",
++    items: dataCategories,
++  },
++  {
++    id: "finalites-observees",
++    title: "Finalites observees",
++    intro: "Finalites constatees dans le depot et la documentation de reference.",
++    items: purposes,
++  },
++  {
++    id: "acces-observes",
++    title: "Acces observes",
++    intro: "Regles d'acces reliees a la session, aux roles et aux permissions.",
++    items: accessRules,
++  },
++  {
++    id: "conservation-suppression",
++    title: "Conservation et suppression",
++    intro: "Etat des informations prouvees sur la retention et l'archivage.",
++    items: retentionRules,
++  },
++  {
++    id: "droits-rgpd",
++    title: "Droits, export, correction, suppression",
++    intro: "Elements disponibles pour l'exercice des droits et limites de preuve actuelles.",
++    items: rightsRules,
++  },
++];
++
+ export default function PrivacyPage() {
+   return (
+-    <main style={{ maxWidth: 860, margin: "0 auto", padding: "32px 16px 56px" }}>
+-      <h1>Mentions d&apos;information - Donnees personnelles</h1>
+-      <p>
+-        Cette page expose la base RGPD minimale actuellement formalisee dans le depot pour Ambulance Manager.
+-        Elle decrit exclusivement les traitements et mecanismes observes dans le code et la documentation du
+-        projet au 23/04/2026.
+-      </p>
+-      <p>
+-        Si une information organisationnelle n&apos;est pas prouvee dans le depot, elle est maintenue sous la forme
+-        <strong> INFORMATION NON FOURNIE — À CONFIRMER</strong>.
+-      </p>
+-
+-      <section style={{ marginTop: 28 }}>
+-        <h2>Categories de donnees observees</h2>
+-        <ul>
+-          {dataCategories.map((item) => (
+-            <li key={item}>{item}</li>
+-          ))}
+-        </ul>
+-      </section>
++    <main className="privacy-page">
++      <div className="privacy-page__wrap">
++        <nav aria-label="Fil d'ariane" className="privacy-page__breadcrumb">
++          <Link href="/login">Connexion</Link>
++          <span>/</span>
++          <span>Mention d'information</span>
++        </nav>
+ 
+-      <section style={{ marginTop: 28 }}>
+-        <h2>Finalites observees</h2>
+-        <ul>
+-          {purposes.map((item) => (
+-            <li key={item}>{item}</li>
+-          ))}
+-        </ul>
+-      </section>
++        <div className="privacy-page__header-row">
++          <PageHeader
++            title="Mentions d'information"
++            description="Cette page presente les traitements observes dans le depot pour Ambulance Manager, en restant strictement alignee sur les preuves disponibles."
++          />
++          <p className="privacy-page__updated">Derniere mise a jour : 18 avr. 2024</p>
++        </div>
+ 
+-      <section style={{ marginTop: 28 }}>
+-        <h2>Acces observes</h2>
+-        <ul>
+-          {accessRules.map((item) => (
+-            <li key={item}>{item}</li>
+-          ))}
+-        </ul>
+-      </section>
++        <section className="privacy-page__layout" aria-label="Contenu des mentions d'information">
++          <aside className="privacy-summary" aria-label="Sommaire de la page">
++            <h2 className="privacy-summary__title">Sommaire</h2>
++            <ol className="privacy-summary__list">
++              {privacySections.map((section) => (
++                <li key={section.id}>
++                  <a href={`#${section.id}`}>{section.title}</a>
++                </li>
++              ))}
++            </ol>
++            <p className="privacy-summary__note">Information non prouvee : INFORMATION NON FOURNIE — À CONFIRMER.</p>
++          </aside>
+ 
+-      <section style={{ marginTop: 28 }}>
+-        <h2>Conservation et suppression</h2>
+-        <ul>
+-          {retentionRules.map((item) => (
+-            <li key={item}>{item}</li>
+-          ))}
+-        </ul>
+-      </section>
++          <div className="privacy-content">
++            {privacySections.map((section, index) => (
++              <article key={section.id} id={section.id} className="privacy-card" aria-labelledby={`${section.id}-title`}>
++                <div className="privacy-card__icon" aria-hidden="true">
++                  {index + 1}
++                </div>
++                <div className="privacy-card__body">
++                  <h2 id={`${section.id}-title`} className="privacy-card__title">
++                    {section.title}
++                  </h2>
++                  <p className="privacy-card__intro">{section.intro}</p>
++                  <ul className="privacy-card__list">
++                    {section.items.map((item) => (
++                      <li key={item}>{item}</li>
++                    ))}
++                  </ul>
++                </div>
++              </article>
++            ))}
++          </div>
++        </section>
+ 
+-      <section style={{ marginTop: 28 }}>
+-        <h2>Droits, export, correction, suppression</h2>
+-        <ul>
+-          {rightsRules.map((item) => (
+-            <li key={item}>{item}</li>
+-          ))}
+-        </ul>
+-      </section>
++        <footer className="privacy-page__footer">
++          <p>Mentions d'information RGPD du projet Ambulance Manager.</p>
++          <Link href="/login">Retour a la connexion</Link>
++        </footer>
++      </div>
+     </main>
+   );
+ }
+diff --git a/app/globals.css b/app/globals.css
+index 3a5fdd3..3ab204a 100644
+--- a/app/globals.css
++++ b/app/globals.css
+@@ -1,4 +1,4 @@
+-@import "tailwindcss";
++﻿@import "tailwindcss";
+ 
+ :root {
+   --ui-bg: #f3f6fb;
+@@ -2538,3 +2538,455 @@ pre {
+     grid-template-columns: 1fr;
+   }
+ }
++
++.login-loading {
++  min-height: 100vh;
++  display: grid;
++  place-items: center;
++  padding: 24px;
++  color: var(--ui-text-muted);
++  background: var(--ui-bg);
++}
++
++.login-page {
++  min-height: 100vh;
++  display: grid;
++  grid-template-columns: minmax(320px, 1fr) minmax(420px, 1fr);
++  background: linear-gradient(90deg, #0b2a66 0%, #0f3b85 48%, #f4f7fc 48%, #f8fafd 100%);
++}
++
++.login-page__showcase {
++  display: grid;
++  align-content: space-between;
++  gap: 28px;
++  padding: clamp(24px, 5vw, 56px);
++  color: #e6efff;
++}
++
++.login-page__brand {
++  display: inline-flex;
++  flex-wrap: wrap;
++  align-items: center;
++  gap: 10px;
++}
++
++.login-page__brand-title {
++  margin: 0;
++  font-size: clamp(28px, 4vw, 46px);
++  font-weight: 800;
++  letter-spacing: -0.02em;
++  line-height: 1.05;
++}
++
++.login-page__brand-chip {
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  min-height: 28px;
++  padding: 0 12px;
++  border-radius: 999px;
++  border: 1px solid rgba(191, 219, 254, 0.6);
++  background: rgba(37, 99, 235, 0.4);
++  font-size: 12px;
++  font-weight: 700;
++  letter-spacing: 0.04em;
++}
++
++.login-page__intro {
++  display: grid;
++  gap: 12px;
++  max-width: 520px;
++}
++
++.login-page__intro-title {
++  margin: 0;
++  font-size: clamp(28px, 4vw, 46px);
++  line-height: 1.08;
++  letter-spacing: -0.02em;
++}
++
++.login-page__intro-description {
++  margin: 0;
++  color: rgba(230, 239, 255, 0.88);
++  font-size: clamp(15px, 2vw, 18px);
++}
++
++.login-page__highlights {
++  margin: 0;
++  padding: 0;
++  list-style: none;
++  display: grid;
++  gap: 12px;
++}
++
++.login-page__highlights li {
++  border: 1px solid rgba(148, 163, 184, 0.28);
++  border-radius: 14px;
++  background: rgba(15, 39, 85, 0.5);
++  padding: 12px 14px;
++}
++
++.login-page__highlight-title {
++  margin: 0;
++  font-size: 15px;
++  font-weight: 700;
++}
++
++.login-page__highlight-description {
++  margin: 6px 0 0 0;
++  font-size: 14px;
++  color: rgba(230, 239, 255, 0.82);
++}
++
++.login-page__security-note {
++  margin: 0;
++  padding: 12px 14px;
++  border-radius: 12px;
++  border: 1px solid rgba(125, 211, 252, 0.35);
++  background: rgba(2, 132, 199, 0.2);
++  color: #dbeafe;
++  font-weight: 600;
++  max-width: 520px;
++}
++
++.login-page__form-area {
++  display: grid;
++  align-content: center;
++  justify-items: center;
++  gap: 18px;
++  padding: clamp(20px, 5vw, 44px);
++}
++
++.login-card {
++  width: min(100%, 520px);
++  border: 1px solid var(--ui-border);
++  border-radius: 18px;
++  background: var(--ui-surface);
++  box-shadow: var(--ui-shadow);
++  padding: clamp(20px, 4vw, 34px);
++  display: grid;
++  gap: 14px;
++}
++
++.login-card__icon {
++  width: 58px;
++  height: 58px;
++  border-radius: 50%;
++  border: 1px solid #bfdbfe;
++  background: #eff6ff;
++  color: #1d4ed8;
++  display: grid;
++  place-items: center;
++  font-weight: 800;
++  letter-spacing: 0.04em;
++}
++
++.login-card__title {
++  margin: 4px 0 0 0;
++  color: #1e3a8a;
++  font-size: clamp(28px, 4vw, 40px);
++  line-height: 1.1;
++  letter-spacing: -0.01em;
++}
++
++.login-card__subtitle {
++  margin: 0;
++  color: var(--ui-text-muted);
++}
++
++.login-form {
++  margin-top: 6px;
++  display: grid;
++  gap: 12px;
++}
++
++.login-field {
++  display: grid;
++  gap: 6px;
++}
++
++.login-field__label {
++  font-size: 13px;
++  font-weight: 700;
++  color: var(--ui-text-muted);
++}
++
++.login-field input {
++  min-height: 42px;
++}
++
++.login-error {
++  margin: 0;
++  border: 1px solid var(--ui-danger-border);
++  border-radius: 10px;
++  padding: 10px 12px;
++  background: var(--ui-danger-bg);
++  color: var(--ui-danger-text);
++  font-size: 14px;
++  font-weight: 600;
++}
++
++.login-submit {
++  min-height: 44px;
++  border-color: var(--ui-primary);
++  background: var(--ui-primary);
++  color: var(--ui-primary-contrast);
++  font-weight: 700;
++}
++
++.login-submit:hover:not(:disabled) {
++  border-color: #1e40af;
++  background: #1e40af;
++}
++
++.login-card__privacy-note {
++  margin: 4px 0 0 0;
++  color: var(--ui-text-muted);
++  font-size: 14px;
++  line-height: 1.5;
++}
++
++.login-card__privacy-note a {
++  color: #1d4ed8;
++  font-weight: 700;
++}
++
++.login-page__bottom-note {
++  margin: 0;
++  text-align: center;
++  color: var(--ui-text-muted);
++  font-size: 13px;
++}
++
++.privacy-page {
++  padding: 22px 16px 28px;
++  background: var(--ui-bg);
++}
++
++.privacy-page__wrap {
++  width: min(1240px, 100%);
++  margin: 0 auto;
++  display: grid;
++  gap: 16px;
++}
++
++.privacy-page__breadcrumb {
++  display: inline-flex;
++  align-items: center;
++  gap: 8px;
++  color: var(--ui-text-muted);
++  font-size: 13px;
++}
++
++.privacy-page__breadcrumb a {
++  color: var(--ui-link);
++  font-weight: 700;
++}
++
++.privacy-page__header-row {
++  display: flex;
++  align-items: flex-start;
++  justify-content: space-between;
++  gap: 12px;
++  flex-wrap: wrap;
++}
++
++.privacy-page__updated {
++  margin: 0;
++  min-height: 40px;
++  display: inline-flex;
++  align-items: center;
++  padding: 0 12px;
++  border-radius: 10px;
++  border: 1px solid var(--ui-border);
++  background: var(--ui-surface);
++  color: var(--ui-text-muted);
++  font-size: 13px;
++  font-weight: 600;
++}
++
++.privacy-page__layout {
++  display: grid;
++  gap: 14px;
++  grid-template-columns: minmax(240px, 300px) minmax(0, 1fr);
++  align-items: start;
++}
++
++.privacy-summary {
++  position: sticky;
++  top: 16px;
++  border: 1px solid var(--ui-border);
++  border-radius: 14px;
++  background: var(--ui-surface);
++  padding: 14px;
++  display: grid;
++  gap: 12px;
++}
++
++.privacy-summary__title {
++  margin: 0;
++  font-size: 16px;
++  color: #1e3a8a;
++}
++
++.privacy-summary__list {
++  margin: 0;
++  padding-left: 18px;
++  display: grid;
++  gap: 8px;
++}
++
++.privacy-summary__list a {
++  color: var(--ui-text);
++  font-size: 14px;
++}
++
++.privacy-summary__list a:hover {
++  color: var(--ui-link);
++}
++
++.privacy-summary__note {
++  margin: 0;
++  border: 1px solid var(--ui-warning-border);
++  border-radius: 10px;
++  background: var(--ui-warning-bg);
++  color: var(--ui-warning-text);
++  font-size: 12px;
++  font-weight: 600;
++  line-height: 1.45;
++  padding: 10px 12px;
++}
++
++.privacy-content {
++  display: grid;
++  gap: 12px;
++}
++
++.privacy-card {
++  border: 1px solid var(--ui-border);
++  border-radius: 14px;
++  background: var(--ui-surface);
++  padding: 14px;
++  display: grid;
++  gap: 12px;
++  grid-template-columns: 56px minmax(0, 1fr);
++}
++
++.privacy-card__icon {
++  width: 56px;
++  height: 56px;
++  border-radius: 12px;
++  border: 1px solid #bfdbfe;
++  background: #eff6ff;
++  color: #1d4ed8;
++  display: grid;
++  place-items: center;
++  font-weight: 800;
++}
++
++.privacy-card__body {
++  display: grid;
++  gap: 8px;
++}
++
++.privacy-card__title {
++  margin: 0;
++  color: #1e3a8a;
++  font-size: 21px;
++}
++
++.privacy-card__intro {
++  margin: 0;
++  color: var(--ui-text-muted);
++}
++
++.privacy-card__list {
++  margin: 0;
++  padding-left: 18px;
++  display: grid;
++  gap: 8px;
++}
++
++.privacy-card__list li {
++  color: var(--ui-text);
++  line-height: 1.45;
++}
++
++.privacy-page__footer {
++  border-top: 1px solid var(--ui-border);
++  padding-top: 12px;
++  display: flex;
++  align-items: center;
++  justify-content: space-between;
++  gap: 12px;
++  flex-wrap: wrap;
++  color: var(--ui-text-muted);
++}
++
++.privacy-page__footer p {
++  margin: 0;
++}
++
++.privacy-page__footer a {
++  color: var(--ui-link);
++  font-weight: 700;
++}
++
++@media (max-width: 1160px) {
++  .login-page {
++    grid-template-columns: 1fr;
++    background: linear-gradient(180deg, #0b2a66 0%, #0f3b85 40%, #f4f7fc 40%, #f8fafd 100%);
++  }
++
++  .login-page__showcase {
++    gap: 20px;
++    padding-bottom: 20px;
++  }
++
++  .login-page__form-area {
++    align-content: start;
++    padding-top: 10px;
++  }
++
++  .privacy-page__layout {
++    grid-template-columns: 1fr;
++  }
++
++  .privacy-summary {
++    position: static;
++  }
++}
++
++@media (max-width: 760px) {
++  .login-page__showcase {
++    padding: 22px 16px;
++  }
++
++  .login-page__highlights li {
++    padding: 10px 12px;
++  }
++
++  .login-card {
++    border-radius: 14px;
++    padding: 16px;
++  }
++
++  .login-card__title {
++    font-size: 30px;
++  }
++
++  .privacy-card {
++    grid-template-columns: 1fr;
++  }
++
++  .privacy-card__icon {
++    width: 44px;
++    height: 44px;
++    border-radius: 10px;
++  }
++
++  .privacy-card__title {
++    font-size: 19px;
++  }
++}
++

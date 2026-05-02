@@ -1,3 +1,6 @@
+﻿import Link from "next/link";
+import { PageHeader } from "@/app/ui";
+
 const dataCategories = [
   "Comptes utilisateurs : email, nom, role, rattachement societe/depot, statut actif, permissions.",
   "Authentification : mot de passe hache, traces de connexion reussie ou echouee.",
@@ -36,64 +39,105 @@ const rightsRules = [
   "Contact DPO ou canal privacy officiel : INFORMATION NON FOURNIE — À CONFIRMER.",
 ];
 
+type PrivacySection = {
+  id: string;
+  title: string;
+  intro: string;
+  items: readonly string[];
+};
+
+const privacySections: readonly PrivacySection[] = [
+  {
+    id: "categories-donnees",
+    title: "Categories de donnees observees",
+    intro: "Donnees strictement necessaires a l'administration et au suivi operationnel.",
+    items: dataCategories,
+  },
+  {
+    id: "finalites-observees",
+    title: "Finalites observees",
+    intro: "Finalites constatees dans le depot et la documentation de reference.",
+    items: purposes,
+  },
+  {
+    id: "acces-observes",
+    title: "Acces observes",
+    intro: "Regles d'acces reliees a la session, aux roles et aux permissions.",
+    items: accessRules,
+  },
+  {
+    id: "conservation-suppression",
+    title: "Conservation et suppression",
+    intro: "Etat des informations prouvees sur la retention et l'archivage.",
+    items: retentionRules,
+  },
+  {
+    id: "droits-rgpd",
+    title: "Droits, export, correction, suppression",
+    intro: "Elements disponibles pour l'exercice des droits et limites de preuve actuelles.",
+    items: rightsRules,
+  },
+];
+
 export default function PrivacyPage() {
   return (
-    <main style={{ maxWidth: 860, margin: "0 auto", padding: "32px 16px 56px" }}>
-      <h1>Mentions d&apos;information - Donnees personnelles</h1>
-      <p>
-        Cette page expose la base RGPD minimale actuellement formalisee dans le depot pour Ambulance Manager.
-        Elle decrit exclusivement les traitements et mecanismes observes dans le code et la documentation du
-        projet au 23/04/2026.
-      </p>
-      <p>
-        Si une information organisationnelle n&apos;est pas prouvee dans le depot, elle est maintenue sous la forme
-        <strong> INFORMATION NON FOURNIE — À CONFIRMER</strong>.
-      </p>
+    <main className="privacy-page">
+      <div className="privacy-page__wrap">
+        <nav aria-label="Fil d&apos;ariane" className="privacy-page__breadcrumb">
+          <Link href="/login">Connexion</Link>
+          <span>/</span>
+          <span>Mention d&apos;information</span>
+        </nav>
 
-      <section style={{ marginTop: 28 }}>
-        <h2>Categories de donnees observees</h2>
-        <ul>
-          {dataCategories.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
-      </section>
+        <div className="privacy-page__header-row">
+          <PageHeader
+            title="Mentions d'information"
+            description="Cette page presente les traitements observes dans le depot pour Ambulance Manager, en restant strictement alignee sur les preuves disponibles."
+          />
+          <p className="privacy-page__updated">Derniere mise a jour : 18 avr. 2024</p>
+        </div>
 
-      <section style={{ marginTop: 28 }}>
-        <h2>Finalites observees</h2>
-        <ul>
-          {purposes.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
-      </section>
+        <section className="privacy-page__layout" aria-label="Contenu des mentions d'information">
+          <aside className="privacy-summary" aria-label="Sommaire de la page">
+            <h2 className="privacy-summary__title">Sommaire</h2>
+            <ol className="privacy-summary__list">
+              {privacySections.map((section) => (
+                <li key={section.id}>
+                  <a href={`#${section.id}`}>{section.title}</a>
+                </li>
+              ))}
+            </ol>
+            <p className="privacy-summary__note">Information non prouvee : INFORMATION NON FOURNIE — À CONFIRMER.</p>
+          </aside>
 
-      <section style={{ marginTop: 28 }}>
-        <h2>Acces observes</h2>
-        <ul>
-          {accessRules.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
-      </section>
+          <div className="privacy-content">
+            {privacySections.map((section, index) => (
+              <article key={section.id} id={section.id} className="privacy-card" aria-labelledby={`${section.id}-title`}>
+                <div className="privacy-card__icon" aria-hidden="true">
+                  {index + 1}
+                </div>
+                <div className="privacy-card__body">
+                  <h2 id={`${section.id}-title`} className="privacy-card__title">
+                    {section.title}
+                  </h2>
+                  <p className="privacy-card__intro">{section.intro}</p>
+                  <ul className="privacy-card__list">
+                    {section.items.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
 
-      <section style={{ marginTop: 28 }}>
-        <h2>Conservation et suppression</h2>
-        <ul>
-          {retentionRules.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
-      </section>
-
-      <section style={{ marginTop: 28 }}>
-        <h2>Droits, export, correction, suppression</h2>
-        <ul>
-          {rightsRules.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
-      </section>
+        <footer className="privacy-page__footer">
+          <p>Mentions d&apos;information RGPD du projet Ambulance Manager.</p>
+          <Link href="/login">Retour a la connexion</Link>
+        </footer>
+      </div>
     </main>
   );
 }
+
