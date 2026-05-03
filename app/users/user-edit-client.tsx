@@ -26,6 +26,13 @@ type ApiErr = {
 };
 
 type EditableUser = Pick<UserListRow, "id" | "name" | "email" | "role" | "depotId" | "depot"> & {
+  firstName: string | null;
+  lastName: string | null;
+  initials: string | null;
+  phone: string | null;
+  isTrainee: boolean;
+  dailyWorkStartTime: string | null;
+  dailyWorkEndTime: string | null;
   permissionCodes: AlphaPermissionCode[];
 };
 
@@ -39,13 +46,38 @@ function isApiErr(value: unknown): value is ApiErr {
   return typeof value === "object" && value !== null && "ok" in value && (value as { ok?: unknown }).ok === false;
 }
 
+function readValidationMessage(details: unknown): string | null {
+  if (typeof details !== "object" || details === null) return null;
+
+  const record = details as Record<string, unknown>;
+  if (typeof record.message === "string" && record.message.trim()) {
+    return record.message;
+  }
+
+  const formErrors = Array.isArray(record.formErrors) ? record.formErrors : [];
+  const firstFormError = formErrors.find((item) => typeof item === "string" && item.trim());
+  if (typeof firstFormError === "string") return firstFormError;
+
+  const fieldErrors = typeof record.fieldErrors === "object" && record.fieldErrors !== null
+    ? (record.fieldErrors as Record<string, unknown>)
+    : null;
+
+  if (fieldErrors) {
+    for (const value of Object.values(fieldErrors)) {
+      if (!Array.isArray(value)) continue;
+      const firstFieldError = value.find((item) => typeof item === "string" && item.trim());
+      if (typeof firstFieldError === "string") return firstFieldError;
+    }
+  }
+
+  return null;
+}
+
 function readApiError(value: unknown, status: number) {
   if (!isApiErr(value)) return `HTTP_${status}`;
 
-  if (typeof value.details === "object" && value.details !== null && "message" in (value.details as Record<string, unknown>)) {
-    const message = (value.details as Record<string, unknown>).message;
-    if (typeof message === "string" && message.trim()) return message;
-  }
+  const validationMessage = readValidationMessage(value.details);
+  if (validationMessage) return validationMessage;
 
   return value.error;
 }
@@ -68,6 +100,13 @@ function toEditableUser(value: unknown): EditableUser | null {
   const email = typeof record.email === "string" ? record.email : null;
   const role = typeof record.role === "string" ? record.role : null;
   const depotId = typeof record.depotId === "string" ? record.depotId : null;
+  const firstName = typeof record.firstName === "string" ? record.firstName : null;
+  const lastName = typeof record.lastName === "string" ? record.lastName : null;
+  const initials = typeof record.initials === "string" ? record.initials : null;
+  const phone = typeof record.phone === "string" ? record.phone : null;
+  const isTrainee = record.isTrainee === true;
+  const dailyWorkStartTime = typeof record.dailyWorkStartTime === "string" ? record.dailyWorkStartTime : null;
+  const dailyWorkEndTime = typeof record.dailyWorkEndTime === "string" ? record.dailyWorkEndTime : null;
   const permissionCodesRaw = Array.isArray(record.permissionCodes) ? record.permissionCodes : null;
   const permissionCodes = permissionCodesRaw
     ?.filter((code): code is AlphaPermissionCode => typeof code === "string" && permissionOrder.has(code as AlphaPermissionCode));
@@ -85,7 +124,22 @@ function toEditableUser(value: unknown): EditableUser | null {
     : null;
 
   if (!id || !name || !role || !permissionCodes) return null;
-  return { id, name, email, role, depotId, depot, permissionCodes: normalizePermissionCodes(permissionCodes) };
+  return {
+    id,
+    name,
+    email,
+    role,
+    depotId,
+    depot,
+    firstName,
+    lastName,
+    initials,
+    phone,
+    isTrainee,
+    dailyWorkStartTime,
+    dailyWorkEndTime,
+    permissionCodes: normalizePermissionCodes(permissionCodes),
+  };
 }
 
 type UserEditClientProps = {
@@ -120,6 +174,13 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [initials, setInitials] = useState("");
+  const [phone, setPhone] = useState("");
+  const [isTrainee, setIsTrainee] = useState(false);
+  const [dailyWorkStartTime, setDailyWorkStartTime] = useState("");
+  const [dailyWorkEndTime, setDailyWorkEndTime] = useState("");
   const [permissionCodes, setPermissionCodes] = useState<AlphaPermissionCode[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [loadingDetails, setLoadingDetails] = useState(false);
@@ -137,6 +198,13 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
       setName(nextSelectedUser?.name ?? "");
       setEmail(nextSelectedUser?.email ?? "");
       setRole(nextSelectedUser?.role ?? "");
+      setFirstName(nextSelectedUser?.firstName ?? "");
+      setLastName(nextSelectedUser?.lastName ?? "");
+      setInitials(nextSelectedUser?.initials ?? "");
+      setPhone(nextSelectedUser?.phone ?? "");
+      setIsTrainee(nextSelectedUser?.isTrainee === true);
+      setDailyWorkStartTime(nextSelectedUser?.dailyWorkStartTime ?? "");
+      setDailyWorkEndTime(nextSelectedUser?.dailyWorkEndTime ?? "");
       setPermissionCodes([]);
       setError(null);
       setDetailsError(null);
@@ -173,11 +241,25 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
           setName(user.name);
           setEmail(user.email ?? "");
           setRole(user.role);
+          setFirstName(user.firstName ?? "");
+          setLastName(user.lastName ?? "");
+          setInitials(user.initials ?? "");
+          setPhone(user.phone ?? "");
+          setIsTrainee(user.isTrainee);
+          setDailyWorkStartTime(user.dailyWorkStartTime ?? "");
+          setDailyWorkEndTime(user.dailyWorkEndTime ?? "");
           setPermissionCodes(user.permissionCodes);
         }
       } catch (e: unknown) {
         if (!cancelled) {
           setLoadedUser(null);
+          setFirstName("");
+          setLastName("");
+          setInitials("");
+          setPhone("");
+          setIsTrainee(false);
+          setDailyWorkStartTime("");
+          setDailyWorkEndTime("");
           setPermissionCodes([]);
           setDetailsError(e instanceof Error ? e.message : "Erreur inconnue");
         }
@@ -207,8 +289,15 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
     return name.trim() !== loadedUser.name
       || email.trim() !== (loadedUser.email ?? "")
       || role !== loadedUser.role
+      || firstName.trim() !== (loadedUser.firstName ?? "")
+      || lastName.trim() !== (loadedUser.lastName ?? "")
+      || initials.trim() !== (loadedUser.initials ?? "")
+      || phone.trim() !== (loadedUser.phone ?? "")
+      || isTrainee !== loadedUser.isTrainee
+      || (dailyWorkStartTime || null) !== loadedUser.dailyWorkStartTime
+      || (dailyWorkEndTime || null) !== loadedUser.dailyWorkEndTime
       || !arePermissionSetsEqual(permissionCodes, loadedUser.permissionCodes);
-  }, [email, loadedUser, name, permissionCodes, role, selectedUser]);
+  }, [dailyWorkEndTime, dailyWorkStartTime, email, firstName, initials, isTrainee, lastName, loadedUser, name, permissionCodes, phone, role, selectedUser]);
 
   function togglePermission(code: AlphaPermissionCode) {
     if (!canGovernCompanyRules && code === COMPANY_RULES_MANAGE_PERMISSION) return;
@@ -234,6 +323,10 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
 
     const trimmedName = name.trim();
     const trimmedEmail = email.trim();
+    const trimmedFirstName = firstName.trim();
+    const trimmedLastName = lastName.trim();
+    const trimmedInitials = initials.trim();
+    const trimmedPhone = phone.trim();
 
     if (!trimmedName) {
       setError("Le nom est obligatoire.");
@@ -247,6 +340,11 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
 
     if (!assignableRoleOptions.includes(role as (typeof assignableRoleOptions)[number])) {
       setError("Le role est obligatoire.");
+      return;
+    }
+
+    if ((dailyWorkStartTime && !dailyWorkEndTime) || (!dailyWorkStartTime && dailyWorkEndTime)) {
+      setError("Les horaires journaliers doivent contenir un debut et une fin, ou rester vides.");
       return;
     }
 
@@ -273,8 +371,15 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: trimmedName,
+          firstName: trimmedFirstName || null,
+          lastName: trimmedLastName || null,
+          initials: trimmedInitials || null,
+          phone: trimmedPhone || null,
           email: trimmedEmail,
           role,
+          isTrainee,
+          dailyWorkStartTime: dailyWorkStartTime || null,
+          dailyWorkEndTime: dailyWorkEndTime || null,
           permissionCodes,
         }),
       });
@@ -293,6 +398,13 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
       setName(updatedUser.name);
       setEmail(updatedUser.email ?? "");
       setRole(updatedUser.role);
+      setFirstName(updatedUser.firstName ?? "");
+      setLastName(updatedUser.lastName ?? "");
+      setInitials(updatedUser.initials ?? "");
+      setPhone(updatedUser.phone ?? "");
+      setIsTrainee(updatedUser.isTrainee);
+      setDailyWorkStartTime(updatedUser.dailyWorkStartTime ?? "");
+      setDailyWorkEndTime(updatedUser.dailyWorkEndTime ?? "");
       setPermissionCodes(updatedUser.permissionCodes);
       setSuccess(`Utilisateur modifie : ${updatedUser.name}${updatedUser.email ? ` (${updatedUser.email})` : ""}.`);
       dispatchUsersSelection(updatedUser);
@@ -360,6 +472,54 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
             />
           </label>
 
+          <div className="users-form-grid">
+            <label className="users-field">
+              <span className="users-field__label">Prenom</span>
+              <input
+                type="text"
+                value={firstName}
+                onChange={(event) => setFirstName(event.target.value)}
+                disabled={submitting || loadingDetails || Boolean(detailsError)}
+                maxLength={80}
+              />
+            </label>
+
+            <label className="users-field">
+              <span className="users-field__label">Nom de famille</span>
+              <input
+                type="text"
+                value={lastName}
+                onChange={(event) => setLastName(event.target.value)}
+                disabled={submitting || loadingDetails || Boolean(detailsError)}
+                maxLength={80}
+              />
+            </label>
+          </div>
+
+          <div className="users-form-grid users-form-grid--compact">
+            <label className="users-field">
+              <span className="users-field__label">Initiales</span>
+              <input
+                type="text"
+                value={initials}
+                onChange={(event) => setInitials(event.target.value.toUpperCase())}
+                disabled={submitting || loadingDetails || Boolean(detailsError)}
+                maxLength={12}
+              />
+            </label>
+
+            <label className="users-field">
+              <span className="users-field__label">Telephone</span>
+              <input
+                type="tel"
+                value={phone}
+                onChange={(event) => setPhone(event.target.value)}
+                disabled={submitting || loadingDetails || Boolean(detailsError)}
+                maxLength={50}
+              />
+            </label>
+          </div>
+
           <label className="users-field">
             <span className="users-field__label">Email</span>
             <input
@@ -383,6 +543,40 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
               ))}
             </select>
           </label>
+
+          <div className="users-checkbox-group">
+            <label className="users-checkbox">
+              <input
+                type="checkbox"
+                checked={isTrainee}
+                onChange={(event) => setIsTrainee(event.target.checked)}
+                disabled={submitting || loadingDetails || Boolean(detailsError)}
+              />
+              <span>Stagiaire</span>
+            </label>
+          </div>
+
+          <div className="users-form-grid users-form-grid--short">
+            <label className="users-field">
+              <span className="users-field__label">Debut journalier</span>
+              <input
+                type="time"
+                value={dailyWorkStartTime}
+                onChange={(event) => setDailyWorkStartTime(event.target.value)}
+                disabled={submitting || loadingDetails || Boolean(detailsError)}
+              />
+            </label>
+
+            <label className="users-field">
+              <span className="users-field__label">Fin journaliere</span>
+              <input
+                type="time"
+                value={dailyWorkEndTime}
+                onChange={(event) => setDailyWorkEndTime(event.target.value)}
+                disabled={submitting || loadingDetails || Boolean(detailsError)}
+              />
+            </label>
+          </div>
 
           <fieldset className="users-fieldset" disabled={submitting || loadingDetails || Boolean(detailsError)}>
             <legend>Permissions applicatives ALPHA</legend>

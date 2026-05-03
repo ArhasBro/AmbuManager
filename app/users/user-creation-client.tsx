@@ -38,13 +38,38 @@ function isApiErr(value: unknown): value is ApiErr {
   return typeof value === "object" && value !== null && "ok" in value && (value as { ok?: unknown }).ok === false;
 }
 
+function readValidationMessage(details: unknown): string | null {
+  if (typeof details !== "object" || details === null) return null;
+
+  const record = details as Record<string, unknown>;
+  if (typeof record.message === "string" && record.message.trim()) {
+    return record.message;
+  }
+
+  const formErrors = Array.isArray(record.formErrors) ? record.formErrors : [];
+  const firstFormError = formErrors.find((item) => typeof item === "string" && item.trim());
+  if (typeof firstFormError === "string") return firstFormError;
+
+  const fieldErrors = typeof record.fieldErrors === "object" && record.fieldErrors !== null
+    ? (record.fieldErrors as Record<string, unknown>)
+    : null;
+
+  if (fieldErrors) {
+    for (const value of Object.values(fieldErrors)) {
+      if (!Array.isArray(value)) continue;
+      const firstFieldError = value.find((item) => typeof item === "string" && item.trim());
+      if (typeof firstFieldError === "string") return firstFieldError;
+    }
+  }
+
+  return null;
+}
+
 function readApiError(value: unknown, status: number) {
   if (!isApiErr(value)) return `HTTP_${status}`;
 
-  if (typeof value.details === "object" && value.details !== null && "message" in (value.details as Record<string, unknown>)) {
-    const message = (value.details as Record<string, unknown>).message;
-    if (typeof message === "string" && message.trim()) return message;
-  }
+  const validationMessage = readValidationMessage(value.details);
+  if (validationMessage) return validationMessage;
 
   return value.error;
 }

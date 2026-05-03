@@ -6,19 +6,19 @@ SESSION-20260503-03_A23_A23-USERS-03
 ## Type
 CORRECTION
 
-## Dossier PATCH
-docs/2-sessions/1-ALPHA/BLOC_A23/SESSION-20260503-03_A23_A23-USERS-03/PATCH
-
-## Patch officiel attendu
+## Patch officiel
 PATCH__SESSION-20260503-03_A23_A23-USERS-03.diff
 
-## Commandes d'application
+## Emplacement
+`docs/2-sessions/1-ALPHA/BLOC_A23/SESSION-20260503-03_A23_A23-USERS-03/PATCH/`
 
-`ash
-git apply --check "docs/2-sessions/1-ALPHA/BLOC_A23/SESSION-20260503-03_A23_A23-USERS-03/PATCH/PATCH__SESSION-20260503-03_A23_A23-USERS-03.diff"
-git apply         "docs/2-sessions/1-ALPHA/BLOC_A23/SESSION-20260503-03_A23_A23-USERS-03/PATCH/PATCH__SESSION-20260503-03_A23_A23-USERS-03.diff"
-`
+## Application
+```bash
+git apply --check docs/2-sessions/1-ALPHA/BLOC_A23/SESSION-20260503-03_A23_A23-USERS-03/PATCH/PATCH__SESSION-20260503-03_A23_A23-USERS-03.diff
+git apply docs/2-sessions/1-ALPHA/BLOC_A23/SESSION-20260503-03_A23_A23-USERS-03/PATCH/PATCH__SESSION-20260503-03_A23_A23-USERS-03.diff
+```
 
 ## Statut
-- Dossier patch initialise.
-- Patch officiel a produire dans cette session si du code est modifie.
+- Patch principal produit.
+- Patch principal applique et valide.
+- Aucun correctif `FIX-01` requis.
