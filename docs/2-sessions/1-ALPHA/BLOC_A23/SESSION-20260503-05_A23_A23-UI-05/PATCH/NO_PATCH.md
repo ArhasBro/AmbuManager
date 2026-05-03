@@ -4,7 +4,10 @@ Session : SESSION-20260503-05_A23_A23-UI-05
 
 Type : AUDIT
 
-Raison :
-- Session documentaire de type AUDIT.
-- Aucun patch officiel a produire pour cette session.
-- Le dossier PATCH reste present dans la session pour centraliser la documentation et les patchs.
+Decision : NO_PATCH
+
+Justification :
+
+- La session est un audit d'ecart UI/UX, pas une session de correction applicative.
+- Le livrable attendu est une matrice factuelle des ecarts, pas un patch de code.
+- Les preuves (captures runtime + comparaison documentaire) ont ete produites sans modifier le code UI.

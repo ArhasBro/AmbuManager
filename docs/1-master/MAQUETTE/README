@@ -1,0 +1,86 @@
+# Référence maquettes A23 — Ambulance Manager
+
+## 1. Rôle du dossier
+
+Ce dossier contient les maquettes visuelles de référence pour le réalignement UI/UX du bloc A23.
+
+Ces maquettes constituent la référence prioritaire pour la session :
+
+`SESSION-20260503-06_A23_A23-UI-06`
+
+Règle de priorité :
+
+1. Les fichiers présents dans `docs/1-master/MAQUETTE/` priment pour le rendu visuel attendu.
+2. Les captures runtime de `SESSION-20260503-05_A23_A23-UI-05/CAPTURES/` représentent l’état réel avant correction.
+3. La documentation A21/A22 sert de contexte de direction artistique.
+4. Le code existant doit être corrigé pour se rapprocher des maquettes, sans nouvelle direction artistique.
+
+## 2. Mapping route / maquette
+
+| Route application | Maquette attendue | Statut de référence |
+|---|---|---|
+| `/login` | `login.png` | Référence prioritaire |
+| `/dashboard` | `dashboard.png` | Référence prioritaire |
+| `/users` | `users.png` | Référence prioritaire |
+| `/vehicles` | `vehicles.png` | Référence prioritaire |
+| `/templates` | `templates.png` | Référence prioritaire |
+| `/company` | `company.png` | Référence prioritaire |
+| `/depots` | `depots.png` | Référence prioritaire |
+| `/planning` | `planning.png` | Référence prioritaire |
+| `/audit` | `audit.png` | Référence prioritaire |
+| `/onboarding` | `onboarding.png` | Référence prioritaire |
+| `/privacy` | `privacy.png` | Référence prioritaire |
+
+## 3. Attendus transversaux
+
+Les corrections UI doivent respecter les éléments suivants :
+
+- sidebar claire et stable ;
+- topbar cohérente ;
+- AppShell commun ;
+- PageHeader homogène ;
+- cards sobres ;
+- tableaux compacts ;
+- filtres lisibles ;
+- boutons cohérents ;
+- badges sobres ;
+- drawers / panneaux latéraux conformes ;
+- densité professionnelle ;
+- espacements réguliers ;
+- hiérarchie visuelle claire ;
+- couleurs alignées avec la direction artistique validée ;
+- aucun élément technique visible non prévu par la maquette.
+
+## 4. Interdictions
+
+La session de correction ne doit pas :
+
+- créer une nouvelle direction artistique ;
+- refaire librement l’UI ;
+- modifier la logique métier ;
+- modifier Prisma ;
+- modifier les migrations ;
+- modifier le backend hors nécessité strictement UI ;
+- modifier le RBAC global ;
+- traiter RGPD juridiquement ;
+- transformer la correction visuelle en refonte fonctionnelle.
+
+## 5. Méthode attendue pour A23-UI-06
+
+Pour chaque page, la production doit comparer :
+
+- maquette attendue : `docs/1-master/MAQUETTE/<page>.png`
+- capture avant correction : `docs/2-sessions/1-ALPHA/BLOC_A23/SESSION-20260503-05_A23_A23-UI-05/CAPTURES/<page>.png`
+- capture après correction : `docs/2-sessions/1-ALPHA/BLOC_A23/SESSION-20260503-06_A23_A23-UI-06/CAPTURES_APRES/<page>.png`
+
+La documentation finale de A23-UI-06 doit contenir une matrice :
+
+| Page | Maquette attendue | Capture avant | Capture après | Statut après | Écart restant |
+|---|---|---|---|---|---|
+
+Statuts autorisés :
+
+- `CONFORME`
+- `PARTIEL`
+- `NON CONFORME`
+- `INFORMATION NON FOURNIE — À CONFIRMER`

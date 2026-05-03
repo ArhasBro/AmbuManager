@@ -280,8 +280,8 @@ IMPORTANT
 
 Références des sessions :
 
-- SESSION-20260503-05_A23_A23-UI-05
-- **A23-UI-05 — AUDIT** — Audit d’écart UI/UX réel entre application intégrée et maquettes validées A21 / référence A22. Livrable attendu : matrice par page des écarts visuels. DoD : ne pas conclure sur une refonte UI sans comparaison factuelle écran par écran.
+- SESSION-20260503-06_A23_A23-UI-06
+- **A23-UI-06 — CORRECTION+COMPLÉTION** — Réalignement UI/UX prioritaire si l’audit A23-UI-05 confirme l’écart. Livrable attendu : corrections visuelles ciblées sur les pages critiques. DoD : respect démontré des maquettes validées et de la direction artistique.
 
 ------------------------------------
 
