@@ -1,4 +1,4 @@
-﻿# FIN_SESSION
+# FIN_SESSION
 
 ## Cloture
 
@@ -8,6 +8,7 @@ Session executee sur le perimetre strict `A22-UIINT-13` (integration visuelle Lo
 
 - Patch principal produit et applique.
 - Correctif minimal `FIX-01` produit et applique (lint JSX).
+- Correctif residuel `FIX-02` produit et applique (encodage + formulations QA Login/Privacy).
 - Validations terminales relancees :
   - `npm.cmd run lint` : OK
   - `npm.cmd run build` : KO hors perimetre (dependances globales manquantes)

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { signIn, useSession } from "next-auth/react";
@@ -62,8 +62,6 @@ function LoginPageContent() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
-  // âœ… Si dÃ©jÃ  connectÃ© -> go vers une destination interne sÃ»re, sinon dashboard
   useEffect(() => {
     if (status === "authenticated") router.replace(callbackUrl);
   }, [status, router, callbackUrl]);
@@ -118,7 +116,7 @@ function LoginPageContent() {
           ))}
         </ul>
 
-        <p className="login-page__security-note">Acces reserve aux utilisateurs autorises. Donnees hebergees en France.</p>
+        <p className="login-page__security-note">Acces reserve aux utilisateurs autorises.</p>
       </section>
 
       <section className="login-page__form-area" aria-label="Formulaire de connexion">
@@ -167,11 +165,11 @@ function LoginPageContent() {
           </form>
 
           <p className="login-card__privacy-note">
-            En vous connectant, vous acceptez les <Link href="/privacy">mentions d&apos;information</Link>.
+            Consultez les <Link href="/privacy">mentions d&apos;information</Link>.
           </p>
         </article>
 
-        <p className="login-page__bottom-note">Conforme RGPD | Application professionnelle de transport sanitaire</p>
+        <p className="login-page__bottom-note">Application professionnelle de transport sanitaire</p>
       </section>
     </main>
   );

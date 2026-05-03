@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { PageHeader } from "@/app/ui";
 
 const dataCategories = [
@@ -94,7 +94,7 @@ export default function PrivacyPage() {
             title="Mentions d'information"
             description="Cette page presente les traitements observes dans le depot pour Ambulance Manager, en restant strictement alignee sur les preuves disponibles."
           />
-          <p className="privacy-page__updated">Derniere mise a jour : 18 avr. 2024</p>
+          <p className="privacy-page__updated">Derniere mise a jour : INFORMATION NON FOURNIE — À CONFIRMER</p>
         </div>
 
         <section className="privacy-page__layout" aria-label="Contenu des mentions d'information">

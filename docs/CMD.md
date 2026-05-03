@@ -280,8 +280,8 @@ IMPORTANT
 
 Références des sessions :
 
-- SESSION-20260425-22_A22_UIINT-13
-- **A22-UIINT-13 — CORRECTION+COMPLÉTION** — Login / Privacy : intégration visuelle des pages simples. Livrable attendu : alignement visuel des pages login et privacy. DoD : cohérence avec les références `Login_V1.1` et `Privacy_V1.0`.
+- SESSION-20260425-23_A22_CLOTURE_A22
+- **CLOTURE_A22 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc intégration code UI/UX / Navigation. Vérification et correction (si besoin) complète de **A22-UIINT-01 à **A22-UIINT-13.
 
 ------------------------------------
 
@@ -308,7 +308,7 @@ Unblock-File -Path .\create_session.ps1
 
 
 
-- **CLOTURE_A22 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc intégration code UI/UX / Navigation. Vérification et correction (si besoin) complète de **A22-UIINT-01 à **A22-UIINT-13.
+
 ------------------------------------
 
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned

@@ -1,0 +1,253 @@
+diff --git a/app/login/page.tsx b/app/login/page.tsx
+index 6a0fc64..5aa8192 100644
+--- a/app/login/page.tsx
++++ b/app/login/page.tsx
+@@ -1,4 +1,4 @@
+-﻿"use client";
++"use client";
+ 
+ import Link from "next/link";
+ import { signIn, useSession } from "next-auth/react";
+@@ -62,8 +62,6 @@ function LoginPageContent() {
+   const [password, setPassword] = useState("");
+   const [error, setError] = useState<string | null>(null);
+   const [loading, setLoading] = useState(false);
+-
+-  // âœ… Si dÃ©jÃ  connectÃ© -> go vers une destination interne sÃ»re, sinon dashboard
+   useEffect(() => {
+     if (status === "authenticated") router.replace(callbackUrl);
+   }, [status, router, callbackUrl]);
+@@ -118,7 +116,7 @@ function LoginPageContent() {
+           ))}
+         </ul>
+ 
+-        <p className="login-page__security-note">Acces reserve aux utilisateurs autorises. Donnees hebergees en France.</p>
++        <p className="login-page__security-note">Acces reserve aux utilisateurs autorises.</p>
+       </section>
+ 
+       <section className="login-page__form-area" aria-label="Formulaire de connexion">
+@@ -167,11 +165,11 @@ function LoginPageContent() {
+           </form>
+ 
+           <p className="login-card__privacy-note">
+-            En vous connectant, vous acceptez les <Link href="/privacy">mentions d&apos;information</Link>.
++            Consultez les <Link href="/privacy">mentions d&apos;information</Link>.
+           </p>
+         </article>
+ 
+-        <p className="login-page__bottom-note">Conforme RGPD | Application professionnelle de transport sanitaire</p>
++        <p className="login-page__bottom-note">Application professionnelle de transport sanitaire</p>
+       </section>
+     </main>
+   );
+diff --git a/app/privacy/page.tsx b/app/privacy/page.tsx
+index a7a7fab..e257af9 100644
+--- a/app/privacy/page.tsx
++++ b/app/privacy/page.tsx
+@@ -1,4 +1,4 @@
+-﻿import Link from "next/link";
++import Link from "next/link";
+ import { PageHeader } from "@/app/ui";
+ 
+ const dataCategories = [
+@@ -94,7 +94,7 @@ export default function PrivacyPage() {
+             title="Mentions d'information"
+             description="Cette page presente les traitements observes dans le depot pour Ambulance Manager, en restant strictement alignee sur les preuves disponibles."
+           />
+-          <p className="privacy-page__updated">Derniere mise a jour : 18 avr. 2024</p>
++          <p className="privacy-page__updated">Derniere mise a jour : INFORMATION NON FOURNIE — À CONFIRMER</p>
+         </div>
+ 
+         <section className="privacy-page__layout" aria-label="Contenu des mentions d'information">
+diff --git a/app/globals.css b/app/globals.css
+index 3ab204a..0ef97ed 100644
+--- a/app/globals.css
++++ b/app/globals.css
+@@ -1,4 +1,4 @@
+-﻿@import "tailwindcss";
++@import "tailwindcss";
+ 
+ :root {
+   --ui-bg: #f3f6fb;
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/EVIDENCES.md b/docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/EVIDENCES.md
+index f8af783..774c0e0 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/EVIDENCES.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/EVIDENCES.md
+@@ -1,4 +1,4 @@
+-﻿# EVIDENCES
++# EVIDENCES
+ 
+ Elements factuels utilises pendant la session.
+ 
+@@ -18,30 +18,27 @@ References UI/UX relues :
+ - `docs/2-sessions/1-ALPHA/BLOC_A21/SESSION-20260425-07_A21_UX-07/A21-UX-07_CLOTURE_DOCUMENTAIRE_UI_UX.md`
+ - `docs/2-sessions/1-ALPHA/BLOC_A21/SESSION-20260425-05_A21_UX-05/VALIDATION_PAGES_SIMPLES_FINITIONS_V1.0.md`
+ 
+-Continuite A22 immediate relue :
+-- `docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-21_A22_UIINT-12/SESSION.md`
+-- `docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-21_A22_UIINT-12/RESULTATS.md`
+-- `docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-21_A22_UIINT-12/FIN_SESSION.md`
+-
+ Code reel inspecte :
+ - `app/login/page.tsx`
+ - `app/privacy/page.tsx`
+ - `app/globals.css`
+-- `app/app-shell.tsx`
+-- `app/ui/page-header.tsx`
+ 
+ ## Preuves commandes
+ 
+ Patch principal :
+ - `git apply --check docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/PATCH__SESSION-20260425-22_A22_UIINT-13.diff` : OK
+-- `git apply docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/PATCH__SESSION-20260425-22_A22_UIINT-13.diff` : OK (warnings whitespace sur le fichier patch)
++- `git apply docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/PATCH__SESSION-20260425-22_A22_UIINT-13.diff` : OK
+ 
+-Patch correctif minimal :
++Patch correctif FIX-01 :
+ - `git apply --check docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/PATCH__SESSION-20260425-22_A22_UIINT-13_FIX-01.diff` : OK
+-- `git apply docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/PATCH__SESSION-20260425-22_A22_UIINT-13_FIX-01.diff` : OK (warnings whitespace sur le fichier patch)
++- `git apply docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/PATCH__SESSION-20260425-22_A22_UIINT-13_FIX-01.diff` : OK
++
++Patch correctif residuel FIX-02 :
++- `git apply --check docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/PATCH__SESSION-20260425-22_A22_UIINT-13_FIX-02.diff` : OK
++- `git apply docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/PATCH__SESSION-20260425-22_A22_UIINT-13_FIX-02.diff` : OK
+ 
+-Validations terminales :
+-- `npm.cmd run lint` : KO puis OK apres `FIX-01`
++Validations terminales apres FIX-02 :
++- `npm.cmd run lint` : OK
+ - `npm.cmd run build` : KO hors perimetre
+ 
+ Erreur build utile (premieres causes bloquantes) :
+@@ -49,5 +46,9 @@ Erreur build utile (premieres causes bloquantes) :
+ - `Module not found: Can't resolve 'bcrypt'`
+ - `Module not found: Can't resolve 'pg'`
+ 
+-Confirmation perimetre :
+-- Aucune erreur liee aux modifications `app/login/page.tsx`, `app/privacy/page.tsx`, `app/globals.css` n'apparait avant les erreurs de dependances globales.
++Correctifs effectifs FIX-02 :
++- suppression BOM dans `app/login/page.tsx`, `app/privacy/page.tsx`, `app/globals.css` ;
++- suppression commentaire mojibake login ;
++- suppression/reformulation des affirmations non demontrees sur Login ;
++- reformulation neutre vers Privacy (consultation, pas acceptation) ;
++- remplacement date Privacy par `INFORMATION NON FOURNIE — À CONFIRMER`.
+\ No newline at end of file
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/RESULTATS.md b/docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/RESULTATS.md
+index 1e2c6ea..f3615dc 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/RESULTATS.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/RESULTATS.md
+@@ -1,21 +1,15 @@
+-﻿# RESULTATS
++# RESULTATS
+ 
+ ## Resultats obtenus
+ 
+-- Login (`/login`) aligne visuellement avec `Login_V1.1` :
+-  - split layout de presentation + zone formulaire ;
+-  - card de connexion lisible ;
+-  - etat d'erreur harmonise ;
+-  - lien mentions d'information integre.
+-
+-- Privacy (`/privacy`) alignee visuellement avec `Privacy_V1.0` :
+-  - header et hierarchie clarifies ;
+-  - sommaire lateral ;
+-  - sections en cards ;
+-  - footer discret.
+-
+-- Direction artistique A21 conservee.
+-- Continuite socle A22 preservee.
++- Login (`/login`) aligne visuellement avec `Login_V1.1`.
++- Privacy (`/privacy`) alignee visuellement avec `Privacy_V1.0`.
++- Correctif residuel `FIX-02` applique :
++  - artefacts d'encodage (BOM) supprimes sur login/privacy/globals ;
++  - commentaire mojibake supprime ;
++  - formulations non demontrees retirees/reformulees (Login) ;
++  - formulation neutre de consultation des mentions d'information ;
++  - date Privacy remplacee par `INFORMATION NON FOURNIE — À CONFIRMER`.
+ - Aucun changement metier/technique hors perimetre.
+ 
+ ---
+@@ -26,6 +20,8 @@
+ - `git apply` patch principal : OK
+ - `git apply --check` fix-01 : OK
+ - `git apply` fix-01 : OK
++- `git apply --check` fix-02 : OK
++- `git apply` fix-02 : OK
+ - `npm.cmd run lint` : OK
+ - `npm.cmd run build` : KO hors perimetre (`@prisma/client`, `bcrypt`, `pg` manquants)
+ 
+@@ -43,11 +39,10 @@ Code :
+ Patchs :
+ - `docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/PATCH__SESSION-20260425-22_A22_UIINT-13.diff`
+ - `docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/PATCH__SESSION-20260425-22_A22_UIINT-13_FIX-01.diff`
++- `docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/PATCH__SESSION-20260425-22_A22_UIINT-13_FIX-02.diff`
+ 
+ Documentation session :
+-- `docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/SESSION.md`
+-- `docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/NOTES.md`
+ - `docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/EVIDENCES.md`
+ - `docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/RESULTATS.md`
+ - `docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/FIN_SESSION.md`
+-- `docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/README_PATCH.md`
++- `docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/README_PATCH.md`
+\ No newline at end of file
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/FIN_SESSION.md b/docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/FIN_SESSION.md
+index 64d8cdb..5d82f69 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/FIN_SESSION.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/FIN_SESSION.md
+@@ -1,4 +1,4 @@
+-﻿# FIN_SESSION
++# FIN_SESSION
+ 
+ ## Cloture
+ 
+@@ -8,6 +8,7 @@ Session executee sur le perimetre strict `A22-UIINT-13` (integration visuelle Lo
+ 
+ - Patch principal produit et applique.
+ - Correctif minimal `FIX-01` produit et applique (lint JSX).
++- Correctif residuel `FIX-02` produit et applique (encodage + formulations QA Login/Privacy).
+ - Validations terminales relancees :
+   - `npm.cmd run lint` : OK
+   - `npm.cmd run build` : KO hors perimetre (dependances globales manquantes)
+@@ -26,4 +27,4 @@ Session executee sur le perimetre strict `A22-UIINT-13` (integration visuelle Lo
+ DoD `coherence avec Login_V1.1 et Privacy_V1.0` : VALIDEE.
+ 
+ Session cloturable pour son perimetre UI Login/Privacy.
+-Build global KO hors perimetre a traiter dans une session dediee environnement/dependances.
++Build global KO hors perimetre a traiter dans une session dediee environnement/dependances.
+\ No newline at end of file
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/README_PATCH.md b/docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/README_PATCH.md
+index ab59f3b..cf93492 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/README_PATCH.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/README_PATCH.md
+@@ -1,4 +1,4 @@
+-﻿# README_PATCH
++# README_PATCH
+ 
+ ## Session liee
+ SESSION-20260425-22_A22_UIINT-13
+@@ -27,6 +27,15 @@ git apply --check "docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIIN
+ git apply         "docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/PATCH__SESSION-20260425-22_A22_UIINT-13_FIX-01.diff"
+ ```
+ 
++## Correctif residuel
++- `PATCH__SESSION-20260425-22_A22_UIINT-13_FIX-02.diff`
++
++### Application
++```bash
++git apply --check "docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/PATCH__SESSION-20260425-22_A22_UIINT-13_FIX-02.diff"
++git apply         "docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/PATCH__SESSION-20260425-22_A22_UIINT-13_FIX-02.diff"
++```
++
+ ## Fichiers code touches
+ - `app/login/page.tsx`
+ - `app/privacy/page.tsx`
+@@ -35,5 +44,6 @@ git apply         "docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIIN
+ ## Statut
+ - Patch principal applique.
+ - Correctif minimal applique.
++- Correctif residuel FIX-02 applique.
+ - `npm.cmd run lint` : OK
+-- `npm.cmd run build` : KO hors perimetre (dependances globales manquantes : `@prisma/client`, `bcrypt`, `pg`).
++- `npm.cmd run build` : KO hors perimetre (dependances globales manquantes : `@prisma/client`, `bcrypt`, `pg`).
+\ No newline at end of file

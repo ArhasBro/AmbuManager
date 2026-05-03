@@ -1,4 +1,4 @@
-﻿# EVIDENCES
+# EVIDENCES
 
 Elements factuels utilises pendant la session.
 
@@ -18,30 +18,27 @@ References UI/UX relues :
 - `docs/2-sessions/1-ALPHA/BLOC_A21/SESSION-20260425-07_A21_UX-07/A21-UX-07_CLOTURE_DOCUMENTAIRE_UI_UX.md`
 - `docs/2-sessions/1-ALPHA/BLOC_A21/SESSION-20260425-05_A21_UX-05/VALIDATION_PAGES_SIMPLES_FINITIONS_V1.0.md`
 
-Continuite A22 immediate relue :
-- `docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-21_A22_UIINT-12/SESSION.md`
-- `docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-21_A22_UIINT-12/RESULTATS.md`
-- `docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-21_A22_UIINT-12/FIN_SESSION.md`
-
 Code reel inspecte :
 - `app/login/page.tsx`
 - `app/privacy/page.tsx`
 - `app/globals.css`
-- `app/app-shell.tsx`
-- `app/ui/page-header.tsx`
 
 ## Preuves commandes
 
 Patch principal :
 - `git apply --check docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/PATCH__SESSION-20260425-22_A22_UIINT-13.diff` : OK
-- `git apply docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/PATCH__SESSION-20260425-22_A22_UIINT-13.diff` : OK (warnings whitespace sur le fichier patch)
+- `git apply docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/PATCH__SESSION-20260425-22_A22_UIINT-13.diff` : OK
 
-Patch correctif minimal :
+Patch correctif FIX-01 :
 - `git apply --check docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/PATCH__SESSION-20260425-22_A22_UIINT-13_FIX-01.diff` : OK
-- `git apply docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/PATCH__SESSION-20260425-22_A22_UIINT-13_FIX-01.diff` : OK (warnings whitespace sur le fichier patch)
+- `git apply docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/PATCH__SESSION-20260425-22_A22_UIINT-13_FIX-01.diff` : OK
 
-Validations terminales :
-- `npm.cmd run lint` : KO puis OK apres `FIX-01`
+Patch correctif residuel FIX-02 :
+- `git apply --check docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/PATCH__SESSION-20260425-22_A22_UIINT-13_FIX-02.diff` : OK
+- `git apply docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/PATCH/PATCH__SESSION-20260425-22_A22_UIINT-13_FIX-02.diff` : OK
+
+Validations terminales apres FIX-02 :
+- `npm.cmd run lint` : OK
 - `npm.cmd run build` : KO hors perimetre
 
 Erreur build utile (premieres causes bloquantes) :
@@ -49,5 +46,9 @@ Erreur build utile (premieres causes bloquantes) :
 - `Module not found: Can't resolve 'bcrypt'`
 - `Module not found: Can't resolve 'pg'`
 
-Confirmation perimetre :
-- Aucune erreur liee aux modifications `app/login/page.tsx`, `app/privacy/page.tsx`, `app/globals.css` n'apparait avant les erreurs de dependances globales.
+Correctifs effectifs FIX-02 :
+- suppression BOM dans `app/login/page.tsx`, `app/privacy/page.tsx`, `app/globals.css` ;
+- suppression commentaire mojibake login ;
+- suppression/reformulation des affirmations non demontrees sur Login ;
+- reformulation neutre vers Privacy (consultation, pas acceptation) ;
+- remplacement date Privacy par `INFORMATION NON FOURNIE — À CONFIRMER`.
