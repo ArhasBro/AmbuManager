@@ -280,24 +280,9 @@ IMPORTANT
 
 Références des sessions :
 
-- SESSION-20260425-23_A22_CLOTURE_A22
-- **CLOTURE_A22 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc intégration code UI/UX / Navigation. Vérification et correction (si besoin) complète de **A22-UIINT-01 à **A22-UIINT-13.
+- SESSION-20260503-01_A23_A23-TEST-01
+- **A23-TEST-01 — AUDIT** — Reproduction ciblée et qualification technique des anomalies consolidées de `SESSION-20260503_TEST-LOCAL-02`. Livrable attendu : liste confirmée / non confirmée des anomalies. DoD : aucune correction lancée sans reproduction ou justification explicite.
 
-------------------------------------
-
-Voici sa réponse ainsi que les documents généré :
-
-Je vais intégrer le .diff et je te renvoi le retour terminal de (Si faut enlever ou rajouter des cmd fait moi un copier/coller de ce que tu veux que je fasse): 
-git apply --check ".\"
-git apply ".\"
-npm run lint
-npm run build
-Attend le retour du terminal avant de me répondre. 
-Si il y a Fix a faire rédige le prompt. (Il ne doit pas le refaire en entier, juste faire un fix sur les erreurs) 
-Je n'ai pas intégré : 
--les fichiers documentaires de session (SESSION.md, NOTES.md, EVIDENCES.md, RESULTATS.md, FIN_SESSION.md) 
--le fichier documentaire de patches (README.md) Il seront à crée dans le patch docs en 1 ZIP téléchargeable sans sous dossier, quand la session sera validé pour qu'il soient complet.
- 
 ------------------------------------
 
 Fait moi la commande pour le script de création de sessions pour les sessions suivante.
@@ -305,22 +290,6 @@ Exemple de la commande :
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 Unblock-File -Path .\create_session.ps1
 .\create_session.ps1 -Stage "1-ALPHA" -Block "A1" -SessionCode "RBAC-02" -Type "CORRECTION" -Title "Remplacement méthodique de DEA par ADE"
-
-
-### BLOC A23 — Stabilisation post-test manuel ADMIN / Go-No-Go société pilote
-
-**Objectif du bloc**  
-Traiter les constats issus de `SESSION-20260503_TEST-LOCAL-02` avant toute présentation société pilote, sans mélanger corrections immédiates, réalignement UI/UX, reprise planning et backlog futur.
-
-#### Point de cadrage
-Le bloc A23 ne remplace pas les blocs A1 à A22.  
-Il sert de bloc de stabilisation post-test manuel, fondé sur des constats utilisateur réels.
-
-A23 doit respecter l’ordre suivant :
-- corriger d’abord ce qui empêche de tester correctement ;
-- retester ensuite les modules dépendants ;
-- auditer les écarts UI/UX avant de lancer une reprise visuelle globale ;
-- ne pas transformer les sujets BETA / backlog en corrections ALPHA immédiates.
 
 #### Sessions
 - **A23-TEST-01 — AUDIT** — Reproduction ciblée et qualification technique des anomalies consolidées de `SESSION-20260503_TEST-LOCAL-02`. Livrable attendu : liste confirmée / non confirmée des anomalies. DoD : aucune correction lancée sans reproduction ou justification explicite.
