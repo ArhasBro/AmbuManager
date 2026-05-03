@@ -1,7 +1,7 @@
 # Ambulance Manager — ETAT_GLOBAL_PROJET
 
-Version : V1.6.0 (MASTER)  
-Date : 20/04/2026
+Version : V1.7.0 (MASTER)  
+Date : 03/05/2026
 
 ## Sommaire
 - [1. Rôle](#1-rôle)
@@ -10,6 +10,7 @@ Date : 20/04/2026
 - [4. Décision de pilotage au 19/03/2026](#4-décision-de-pilotage-au-19032026)
 - [5. Décision de pilotage au 20/04/2026](#5-décision-de-pilotage-au-20042026)
 - [6. Statut officiel global](#6-statut-officiel-global)
+- [6.5 Constat de test manuel ADMIN au 03/05/2026](#65-constat-de-test-manuel-admin-au-03052026)
 - [7. Points à confirmer](#7-points-à-confirmer)
 - [8. Prochaine étape logique officielle](#8-prochaine-étape-logique-officielle)
 
@@ -88,16 +89,36 @@ Ordre officiel de suite :
 6. amélioration UX / navigation / graphisme ;
 7. sujets métier sensibles à cadrer séparément.
 
+### 6.5 Constat de test manuel ADMIN au 03/05/2026
+Les constats suivants sont désormais officiellement retenus au titre de `SESSION-20260503_TEST-LOCAL-02` :
+- test manuel ADMIN partiel exécuté sur les fonctionnalités principales ;
+- session post-login / hydratation du shell instable avant rafraîchissement ;
+- module utilisateurs non exploitable côté ADMIN au moment du test ;
+- absences / indisponibilités non testables tant que le module utilisateurs reste non exploitable ;
+- planning manuel partiellement inutilisable, avec affectation utilisateur KO, modification / annulation KO et application des horaires template à revoir ;
+- règles métier société partiellement préparées mais non éditables ;
+- UI réelle jugée non suffisamment alignée avec les maquettes visuelles validées A21, point majeur de non-présentabilité ;
+- besoins complémentaires à cadrer : rôle `PSC1`, affectation planning simplifiée, enrichissement RH salarié, plusieurs gérants, gouvernance suppression / archivage ;
+- verdict produit temporaire : `NO-GO TEMPORAIRE SOCIÉTÉ PILOTE`.
+
+Conséquence : la campagne `2-TEST-ALPHA` ne remet pas en cause les validations terminales locales précédentes, mais elle impose une reprise de correction / complétion ciblée avant présentation société pilote.
+
 ## 7. Points à confirmer
 - le traitement définitif à retenir pour l’écart `Vehicle.isActive` : correction repo dédiée ou simple réalignement environnemental documenté ;
 - le périmètre exact des prochaines sessions de consolidation du socle ;
 - la profondeur de traitement du dark mode dans l’ALPHA ;
+- la reproduction technique du défaut utilisateurs observé en test manuel ADMIN ;
+- la cause exacte de l’écart UI/UX ressenti entre application intégrée et maquettes validées ;
+- le statut exact de `PSC1` : rôle principal, qualification ou compétence ;
+- la possibilité réelle de plusieurs gérants par entreprise ;
+- la politique de suppression définitive des éléments archivables ;
 - les besoins oubliés ou encore non remontés dans le backlog ALPHA.
 
 ## 8. Prochaine étape logique officielle
-La prochaine étape logique officielle est l’ouverture d’une phase de **consolidation du socle ALPHA**, sans rouvrir artificiellement les anciens blocs historiques, avec priorité donnée à :
-- cohérence backend / frontend ;
-- sécurité minimale ;
-- BDD / Prisma / migrations / environnements ;
-- base RGPD ;
-- puis backlog fonctionnel priorisé.
+La prochaine étape logique officielle, après `SESSION-20260503_TEST-LOCAL-02`, est une phase de **stabilisation post-test manuel ADMIN**, avant tout nouveau test société pilote, avec priorité donnée à :
+- correction de l’hydratation session / shell après login ;
+- correction du module utilisateurs ADMIN ;
+- retest ciblé utilisateurs + absences ;
+- audit d’écart UI/UX réel versus maquettes validées A21 / intégration A22 ;
+- reprise ciblée du planning manuel ;
+- décision Go / No-Go société pilote après retest.

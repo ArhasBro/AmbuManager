@@ -3218,6 +3218,7 @@ C:.
 |   |   BDD_OPERATIONS_SENSIBLES.md
 |   |   CMD.md
 |   |   CONTROLE_FINAL_DOCS.md
+|   |   NOTE_STRATEGIE_A23_A24_UI_UX_AMBULANCE_MANAGER.md
 |   |   PROTOCOLE_SESSION.md
 |   |   QUALITY_TESTS.md
 |   |   README.md
@@ -4632,6 +4633,117 @@ C:.
 |   |   |   |       \---PATCH
 |   |   |   |               README_PATCH.md
 |   |   |   |               
+|   |   |   +---BLOC_A23
+|   |   |   |   +---SESSION-20260503-01_A23_A23-TEST-01
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           NO_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260503-02_A23_A23-LOGIN-02
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           README_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260503-03_A23_A23-USERS-03
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           README_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260503-04_A23_A23-USERS-04
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           NO_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260503-05_A23_A23-UI-05
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           NO_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260503-06_A23_A23-UI-06
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           README_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260503-07_A23_A23-PLAN-07
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           NO_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260503-08_A23_A23-PLAN-08
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           README_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260503-09_A23_A23-ROLES-RH-09
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           NO_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260503-10_A23_A23-GONOGO-10
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           NO_PATCH.md
+|   |   |   |   |           
+|   |   |   |   \---SESSION-20260503-11_A23_CLOTURE_A23
+|   |   |   |       |   EVIDENCES.md
+|   |   |   |       |   FIN_SESSION.md
+|   |   |   |       |   NOTES.md
+|   |   |   |       |   RESULTATS.md
+|   |   |   |       |   SESSION.md
+|   |   |   |       |   
+|   |   |   |       \---PATCH
+|   |   |   |               README_PATCH.md
+|   |   |   |               
 |   |   |   +---BLOC_A3
 |   |   |   |   +---1-USER
 |   |   |   |   |   +---SESSION-20260319-09_A3_USERS-01
@@ -5404,7 +5516,11 @@ C:.
 |   |   |   |           SESSION.md
 |   |   |   |           
 |   |   |   \---2-PATCHS
-|   |   |       \---SESSION-20260418_TEST-LOCAL-01
+|   |   |       +---SESSION-20260418_TEST-LOCAL-01
+|   |   |       |       NO_PATCH.md
+|   |   |       |       README_PATCH.md
+|   |   |       |       
+|   |   |       \---SESSION-20260503_TEST-LOCAL-02
 |   |   |               NO_PATCH.md
 |   |   |               README_PATCH.md
 |   |   |               

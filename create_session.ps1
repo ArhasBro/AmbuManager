@@ -22,9 +22,9 @@ $SessionTemplateDir  = Join-Path $DocsSessionsRoot "SESSION-YYYYMMDD-XX"
 $DefaultOpenInVSCode = $true
 
 $AlphaBlockMin = 1
-$AlphaBlockMax = 22
+$AlphaBlockMax = 99
 $BetaBlockMin  = 1
-$BetaBlockMax  = 4
+$BetaBlockMax  = 99
 
 $AllowedTypeTokens = @(
     'AUDIT',

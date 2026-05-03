@@ -307,7 +307,33 @@ Unblock-File -Path .\create_session.ps1
 .\create_session.ps1 -Stage "1-ALPHA" -Block "A1" -SessionCode "RBAC-02" -Type "CORRECTION" -Title "Remplacement méthodique de DEA par ADE"
 
 
+### BLOC A23 — Stabilisation post-test manuel ADMIN / Go-No-Go société pilote
 
+**Objectif du bloc**  
+Traiter les constats issus de `SESSION-20260503_TEST-LOCAL-02` avant toute présentation société pilote, sans mélanger corrections immédiates, réalignement UI/UX, reprise planning et backlog futur.
+
+#### Point de cadrage
+Le bloc A23 ne remplace pas les blocs A1 à A22.  
+Il sert de bloc de stabilisation post-test manuel, fondé sur des constats utilisateur réels.
+
+A23 doit respecter l’ordre suivant :
+- corriger d’abord ce qui empêche de tester correctement ;
+- retester ensuite les modules dépendants ;
+- auditer les écarts UI/UX avant de lancer une reprise visuelle globale ;
+- ne pas transformer les sujets BETA / backlog en corrections ALPHA immédiates.
+
+#### Sessions
+- **A23-TEST-01 — AUDIT** — Reproduction ciblée et qualification technique des anomalies consolidées de `SESSION-20260503_TEST-LOCAL-02`. Livrable attendu : liste confirmée / non confirmée des anomalies. DoD : aucune correction lancée sans reproduction ou justification explicite.
+- **A23-LOGIN-02 — CORRECTION** — Correction de l’hydratation session / shell après connexion. Livrable attendu : dashboard, sidebar, topbar, utilisateur, rôle et société cohérents dès l’arrivée post-login. DoD : plus besoin de rafraîchir manuellement pour obtenir une session visuelle correcte.
+- **A23-USERS-03 — CORRECTION** — Correction du module utilisateurs ADMIN. Livrable attendu : liste, création, validation, édition, rôle, base et archivage exploitables. DoD : les utilisateurs créés sont visibles et disponibles pour les modules dépendants.
+- **A23-USERS-04 — VALIDATION** — Retest ciblé utilisateurs + absences / indisponibilités. Livrable attendu : verdict clair sur users et sur les absences. DoD : distinguer ce qui est corrigé, ce qui reste KO et ce qui est à confirmer.
+- **A23-UI-05 — AUDIT** — Audit d’écart UI/UX réel entre application intégrée et maquettes validées A21 / référence A22. Livrable attendu : matrice par page des écarts visuels. DoD : ne pas conclure sur une refonte UI sans comparaison factuelle écran par écran.
+- **A23-UI-06 — CORRECTION+COMPLÉTION** — Réalignement UI/UX prioritaire si l’audit A23-UI-05 confirme l’écart. Livrable attendu : corrections visuelles ciblées sur les pages critiques. DoD : respect démontré des maquettes validées et de la direction artistique.
+- **A23-PLAN-07 — AUDIT** — Audit ciblé du planning manuel après correction utilisateurs. Livrable attendu : état réel sur template → horaires, affectation personnel, modification et annulation logique. DoD : distinguer bug fonctionnel, problème métier et amélioration UX.
+- **A23-PLAN-08 — CORRECTION+COMPLÉTION** — Correction / complétion du planning manuel prioritaire. Livrable attendu : affectation utilisateur exploitable, modification et annulation logique fonctionnelles, application cohérente des horaires template. DoD : parcours planning manuel ADMIN testable sans blocage majeur.
+- **A23-ROLES-RH-09 — AUDIT** — Audit des besoins métier complémentaires : `PSC1`, plusieurs gérants, fiche salarié enrichie, suppression définitive contrôlée. Livrable attendu : arbitrage entre ALPHA, BETA et backlog. DoD : aucun champ RH ou rôle métier ajouté sans décision claire.
+- **A23-GONOGO-10 — VALIDATION** — Retest ADMIN ciblé et décision Go / No-Go société pilote. Livrable attendu : verdict final post-corrections. DoD : décision explicite `GO`, `GO AVEC RÉSERVES` ou `NO-GO TEMPORAIRE`.
+- **CLOTURE_A23 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc de stabilisation post-test manuel ADMIN.
 
 ------------------------------------
 

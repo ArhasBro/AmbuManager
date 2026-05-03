@@ -1,7 +1,7 @@
 # Ambulance Manager — PLAN_DE_DEVELOPPEMENT
 
-Version : V2.3.0 (MASTER)
-Date : 25/04/2026
+Version : V2.4.0 (MASTER)
+Date : 03/05/2026
 
 ## Sommaire
 - [1. Rôle du document](#1-rôle-du-document)
@@ -16,7 +16,7 @@ Date : 25/04/2026
 - [9. Convention de structuration du plan](#9-convention-de-structuration-du-plan)
 - [10. Ordre global de développement retenu](#10-ordre-global-de-développement-retenu)
 - [11. ALPHA V1.0 — Socle et blocs historiques A1 à A13](#11-alpha-v10--socle-et-blocs-historiques-a1-à-a13)
-- [12. ALPHA — Suite active / consolidation A14 à A21](#12-alpha--suite-active--consolidation-a14-à-a21)
+- [12. ALPHA — Suite active / consolidation A14 à A23](#12-alpha--suite-active--consolidation-a14-à-a23)
 - [13. BETA V1.x — Plan prévisionnel](#13-beta-v1x--plan-prévisionnel)
 - [14. VERSION OFFICIELLE V2.x — Plan prévisionnel](#14-version-officielle-v2x--plan-prévisionnel)
 - [15. Règle de maintenance du plan](#15-règle-de-maintenance-du-plan)
@@ -972,7 +972,7 @@ A22 doit transformer progressivement la référence UI/UX validée en composants
 - **A22-UIINT-11 — CORRECTION+COMPLÉTION** — Onboarding : harmonisation UI de l’onboarding. Livrable attendu : écran onboarding harmonisé. DoD : étapes lisibles et cohérentes.
 - **A22-UIINT-12 — CORRECTION+COMPLÉTION** — Audit : harmonisation UI du journal d’audit. Livrable attendu : écran audit harmonisé. DoD : filtres et lecture audit lisibles.
 - **A22-UIINT-13 — CORRECTION+COMPLÉTION** — Login / Privacy : intégration visuelle des pages simples. Livrable attendu : alignement visuel des pages login et privacy. DoD : cohérence avec les références `Login_V1.1` et `Privacy_V1.0`.
-- **CLOTURE_A22 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc intégration code UI/UX / Navigation. Vérification et correction (si besoin) complète de **A22-UIINT-01 à **A22-UIINT-13.
+- **CLOTURE_A22 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc intégration code UI/UX / Navigation. Vérification et correction (si besoin) complète de **A22-UIINT-01 à A22-UIINT-13**.
 
 #### Résultat attendu
 - shell applicatif intégré ;
@@ -987,6 +987,44 @@ A22 doit transformer progressivement la référence UI/UX validée en composants
 - absence de nouvelle direction artistique ;
 - absence de régression fonctionnelle ;
 - bloc prêt à être clôturé par verdict explicite.
+
+
+### BLOC A23 — Stabilisation post-test manuel ADMIN / Go-No-Go société pilote
+
+**Objectif du bloc**  
+Traiter les constats issus de `SESSION-20260503_TEST-LOCAL-02` avant toute présentation société pilote, sans mélanger corrections immédiates, réalignement UI/UX, reprise planning et backlog futur.
+
+#### Point de cadrage
+Le bloc A23 ne remplace pas les blocs A1 à A22.  
+Il sert de bloc de stabilisation post-test manuel, fondé sur des constats utilisateur réels.
+
+A23 doit respecter l’ordre suivant :
+- corriger d’abord ce qui empêche de tester correctement ;
+- retester ensuite les modules dépendants ;
+- auditer les écarts UI/UX avant de lancer une reprise visuelle globale ;
+- ne pas transformer les sujets BETA / backlog en corrections ALPHA immédiates.
+
+#### Sessions
+- **A23-TEST-01 — AUDIT** — Reproduction ciblée et qualification technique des anomalies consolidées de `SESSION-20260503_TEST-LOCAL-02`. Livrable attendu : liste confirmée / non confirmée des anomalies. DoD : aucune correction lancée sans reproduction ou justification explicite.
+- **A23-LOGIN-02 — CORRECTION** — Correction de l’hydratation session / shell après connexion. Livrable attendu : dashboard, sidebar, topbar, utilisateur, rôle et société cohérents dès l’arrivée post-login. DoD : plus besoin de rafraîchir manuellement pour obtenir une session visuelle correcte.
+- **A23-USERS-03 — CORRECTION** — Correction du module utilisateurs ADMIN. Livrable attendu : liste, création, validation, édition, rôle, base et archivage exploitables. DoD : les utilisateurs créés sont visibles et disponibles pour les modules dépendants.
+- **A23-USERS-04 — VALIDATION** — Retest ciblé utilisateurs + absences / indisponibilités. Livrable attendu : verdict clair sur users et sur les absences. DoD : distinguer ce qui est corrigé, ce qui reste KO et ce qui est à confirmer.
+- **A23-UI-05 — AUDIT** — Audit d’écart UI/UX réel entre application intégrée et maquettes validées A21 / référence A22. Livrable attendu : matrice par page des écarts visuels. DoD : ne pas conclure sur une refonte UI sans comparaison factuelle écran par écran.
+- **A23-UI-06 — CORRECTION+COMPLÉTION** — Réalignement UI/UX prioritaire si l’audit A23-UI-05 confirme l’écart. Livrable attendu : corrections visuelles ciblées sur les pages critiques. DoD : respect démontré des maquettes validées et de la direction artistique.
+- **A23-PLAN-07 — AUDIT** — Audit ciblé du planning manuel après correction utilisateurs. Livrable attendu : état réel sur template → horaires, affectation personnel, modification et annulation logique. DoD : distinguer bug fonctionnel, problème métier et amélioration UX.
+- **A23-PLAN-08 — CORRECTION+COMPLÉTION** — Correction / complétion du planning manuel prioritaire. Livrable attendu : affectation utilisateur exploitable, modification et annulation logique fonctionnelles, application cohérente des horaires template. DoD : parcours planning manuel ADMIN testable sans blocage majeur.
+- **A23-ROLES-RH-09 — AUDIT** — Audit des besoins métier complémentaires : `PSC1`, plusieurs gérants, fiche salarié enrichie, suppression définitive contrôlée. Livrable attendu : arbitrage entre ALPHA, BETA et backlog. DoD : aucun champ RH ou rôle métier ajouté sans décision claire.
+- **A23-GONOGO-10 — VALIDATION** — Retest ADMIN ciblé et décision Go / No-Go société pilote. Livrable attendu : verdict final post-corrections. DoD : décision explicite `GO`, `GO AVEC RÉSERVES` ou `NO-GO TEMPORAIRE`.
+- **CLOTURE_A23 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc de stabilisation post-test manuel ADMIN.
+
+#### Résultat attendu
+- session post-login stable ;
+- module utilisateurs exploitable ;
+- absences retestées ou clairement classées ;
+- UI/UX réelle comparée aux maquettes validées ;
+- planning manuel stabilisé sur les usages ADMIN essentiels ;
+- sujets métier complémentaires cadrés sans dérive ;
+- nouveau verdict société pilote fiable.
 
 ---------------------------------------------------------------------------------------------------
 
