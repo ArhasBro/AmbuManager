@@ -359,3 +359,16 @@ RESULTATS.md
 FIN_SESSION.md 
 README_PATCH.md
 
+Identifiants: 
+
+Admin
+admin@ambulance.local
+adminPasswordA
+
+Planner 
+planner@ambulance.local
+userPassword
+
+Viewer
+viewer@ambulance.local
+userPassword

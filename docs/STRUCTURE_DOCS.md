@@ -2172,7 +2172,16 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |               
 |   +---2-TEST-ALPHA
 |   |   +---1-DOCUMENTATION
-|   |   |   \---SESSION-20260418_TEST-LOCAL-01
+|   |   |   +---SESSION-20260418_TEST-LOCAL-01
+|   |   |   |       EVIDENCES.md
+|   |   |   |       FIN_SESSION.md
+|   |   |   |       NOTES.md
+|   |   |   |       README_PATCH.md
+|   |   |   |       RESULTATS.md
+|   |   |   |       SESSION.md
+|   |   |   |       
+|   |   |   \---SESSION-20260503_TEST-LOCAL-02
+|   |   |           ANOMALIES_CONSOLIDEES.md
 |   |   |           EVIDENCES.md
 |   |   |           FIN_SESSION.md
 |   |   |           NOTES.md
