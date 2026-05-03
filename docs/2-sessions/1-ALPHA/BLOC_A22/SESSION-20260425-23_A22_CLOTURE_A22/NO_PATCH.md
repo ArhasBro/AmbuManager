@@ -6,17 +6,22 @@
 
 ## Motif
 
-Aucun écart résiduel bloquant n'a été démontré après audit complet des sessions `A22-UIINT-01` à `A22-UIINT-13`, contrôle de leur documentation finale, revue de leurs patchs principaux et correctifs minimaux, puis inspection ciblée du code final réellement présent dans le dépôt.
+Aucun patch code projet n'a été nécessaire. Le blocage terminal provenait d'une installation locale corrompue des dépendances `@prisma/client`, `bcrypt` et `pg`, alors que `package.json` et `package-lock.json` étaient cohérents.
+
+## Correction réellement exécutée
+
+- `npm install`
+- `npx prisma generate`
 
 ## Conséquence
 
-- Aucun fichier applicatif n'est modifié dans la présente clôture.
+- Aucun fichier applicatif du dépôt n'est modifié pour corriger le build.
 - Aucun patch `.diff` de correction finale n'est produit.
-- Les validations terminales historiques restent celles documentées dans les sessions A22 précédentes.
+- Les validations terminales relancées sont toutes OK.
 
 ## Réserve
 
-Résultat d'un `npm run build` global relancé spécifiquement pendant la présente clôture : INFORMATION NON FOURNIE — À CONFIRMER
+Cause racine externe de la corruption initiale de l'installation locale : INFORMATION NON FOURNIE — À CONFIRMER
 
 ## Verdict
 

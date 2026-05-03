@@ -14,7 +14,7 @@ AUDIT+CORRECTION+COMPLÉTION+VALIDATION
 
 ## Statut patch de clôture
 
-Aucun patch code n'a été produit pour la clôture A22.
+Aucun patch code projet n'a été produit pour la clôture A22.
 
 ## Décision associée
 
@@ -22,4 +22,8 @@ Aucun patch code n'a été produit pour la clôture A22.
 
 ## Justification
 
-L'audit final du bloc `A22` n'a pas démontré d'écart résiduel bloquant nécessitant un correctif applicatif. Le dossier `PATCH/` est conservé pour traçabilité documentaire, mais aucun fichier `.diff` officiel de clôture n'est requis dans cette session.
+Le blocage terminal démontré pendant la clôture provenait d'une installation locale corrompue des dépendances `@prisma/client`, `bcrypt` et `pg`. Les fichiers projet `package.json` et `package-lock.json` étaient cohérents, et la correction minimale réellement nécessaire a consisté à réparer l'installation locale avec `npm install`, puis à régénérer Prisma avec `npx prisma generate`.
+
+## Conséquence documentaire
+
+Le dossier `PATCH/` est conservé pour traçabilité, mais aucun fichier `.diff` officiel de clôture n'est requis dans cette session.

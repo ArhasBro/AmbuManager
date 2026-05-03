@@ -29,18 +29,55 @@
   - `docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-21_A22_UIINT-12/`
   - `docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-22_A22_UIINT-13/`
 
-## Vérifications réalisées pendant la clôture
+## Diagnostic démontré
 
-- Vérification de propreté du dépôt : `git status --short`
-  - Résultat constaté : sortie vide, aucun changement préalable en attente.
-- Vérification documentaire de l'inventaire de clôture :
-  - les fichiers `SESSION.md`, `NOTES.md`, `EVIDENCES.md`, `RESULTATS.md`, `FIN_SESSION.md` étaient présents dans le dossier de clôture ;
-  - le sous-dossier `PATCH/` était présent avec `README_PATCH.md`.
-- Vérification de présence locale des dépendances historiquement manquantes dans les documents `A22-UIINT-10` à `A22-UIINT-13` :
-  - `node_modules/@prisma/client` : présent
-  - `node_modules/bcrypt` : présent
-  - `node_modules/pg` : présent
-  - cette vérification ne constitue pas un `build` relancé.
+- `package.json` :
+  - dépendances déclarées pour `@prisma/client`, `bcrypt`, `pg`
+- `package-lock.json` :
+  - entrées cohérentes pour `node_modules/@prisma/client`, `node_modules/bcrypt`, `node_modules/pg`
+- état initial constaté dans `node_modules` :
+  - dossiers `node_modules/@prisma/client`, `node_modules/bcrypt` et `node_modules/pg` présents ;
+  - absence de `package.json` dans ces dossiers au moment du diagnostic ;
+  - `npm ls @prisma/client bcrypt pg --depth=0` en `ELSPROBLEMS`
+- conclusion démontrée :
+  - problème d'installation locale corrompue ;
+  - pas de contradiction démontrée dans `package.json` ou `package-lock.json`.
+
+## Corrections réellement exécutées
+
+- `npm install`
+  - résultat réel : OK
+  - effet constaté : trois paquets réparés
+- `npx prisma generate`
+  - résultat réel : OK
+  - effet constaté : Prisma Client généré dans `node_modules/@prisma/client`
+
+## Validations terminales réellement exécutées
+
+- `git status --short`
+  - résultat avant mise à jour documentaire finale : sortie vide
+  - résultat après mise à jour documentaire finale : uniquement les fichiers de clôture A22 modifiés
+- `git diff -- 'docs/1-master/PLAN_DE_DEVELOPPEMENT.md'`
+  - résultat réel : sortie vide
+  - conclusion : aucune modification encore présente sur ce fichier
+- `npm ls @prisma/client bcrypt pg --depth=0`
+  - résultat réel : OK
+  - versions constatées :
+    - `@prisma/client@7.7.0`
+    - `bcrypt@6.0.0`
+    - `pg@8.19.0`
+- `npx prisma validate`
+  - résultat réel : `The schema at prisma\\schema.prisma is valid`
+- `npx prisma generate`
+  - résultat réel : `Generated Prisma Client (v7.7.0)`
+- `npm run lint`
+  - résultat réel : OK
+- `npm run build`
+  - résultat réel : OK
+  - preuves notables :
+    - `Compiled successfully`
+    - `Generating static pages ...`
+    - routes applicatives et API générées sans erreur bloquante
 
 ## Zones de code final inspectées
 
@@ -80,14 +117,9 @@
   - `app/audit/audit-client.tsx`
   - `app/login/page.tsx`
   - `app/privacy/page.tsx`
-- Permissions et typage utiles :
-  - `lib/auth.ts`
-  - `lib/permissions.ts`
-  - `types/next-auth.d.ts`
 
-## Constats factuels de cohérence finale
+## Constats factuels consolidés
 
-- La navigation finale est pilotée par permissions et périmètre société dans `app/layout.tsx`.
-- `app/app-shell.tsx` exclut bien `login` et `privacy` du shell applicatif.
-- Le code final conserve la direction UI/UX A21 validée et n'introduit pas de nouveau système visuel autonome.
-- Les composants UI communs A22 sont bien présents et réutilisés dans les pages cibles du bloc.
+- La réserve précédente sur `docs/1-master/PLAN_DE_DEVELOPPEMENT.md` est levée : aucune modification n'est encore présente sur ce fichier.
+- Le dépôt final actuel passe `lint`, `prisma validate`, `prisma generate` et `build`.
+- Le blocage terminal initial a été corrigé sans patch code projet, par réparation de l'installation locale.

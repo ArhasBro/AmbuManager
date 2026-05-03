@@ -4,7 +4,7 @@
 
 `NO_PATCH`
 
-Justification : aucun écart résiduel bloquant n'a été démontré entre le bloc A22 documenté, la référence UI/UX A21 et le code final inspecté.
+Justification : aucun patch code projet n'a été nécessaire. Le blocage terminal démontré provenait d'une installation locale corrompue des dépendances, réparée par réinstallation et régénération Prisma sans modification du périmètre fonctionnel ni du code applicatif.
 
 ## Audit session par session
 
@@ -113,7 +113,7 @@ Justification : aucun écart résiduel bloquant n'a été démontré entre le bl
   - `build` en échec historique documenté au moment de la session
 - Cohérence avec A21 : oui
 - Cohérence avec le code final : oui
-- Résiduel : échec historique de `build` attribué dans la documentation à des dépendances globales manquantes hors périmètre UI strict ; résultat d'un `build` relancé en clôture : INFORMATION NON FOURNIE — À CONFIRMER
+- Résiduel : aucun résiduel bloquant A22 après relance finale des validations de clôture
 
 ### A22-UIINT-11
 
@@ -127,7 +127,7 @@ Justification : aucun écart résiduel bloquant n'a été démontré entre le bl
   - `build` en échec historique documenté au moment de la session
 - Cohérence avec A21 : oui
 - Cohérence avec le code final : oui
-- Résiduel : échec historique de `build` attribué dans la documentation à des dépendances globales manquantes hors périmètre UI strict ; résultat d'un `build` relancé en clôture : INFORMATION NON FOURNIE — À CONFIRMER
+- Résiduel : aucun résiduel bloquant A22 après relance finale des validations de clôture
 
 ### A22-UIINT-12
 
@@ -141,7 +141,7 @@ Justification : aucun écart résiduel bloquant n'a été démontré entre le bl
   - `build` en échec historique documenté au moment de la session
 - Cohérence avec A21 : oui
 - Cohérence avec le code final : oui
-- Résiduel : échec historique de `build` attribué dans la documentation à des dépendances globales manquantes hors périmètre UI strict ; résultat d'un `build` relancé en clôture : INFORMATION NON FOURNIE — À CONFIRMER
+- Résiduel : aucun résiduel bloquant A22 après relance finale des validations de clôture
 
 ### A22-UIINT-13
 
@@ -155,23 +155,44 @@ Justification : aucun écart résiduel bloquant n'a été démontré entre le bl
   - `build` en échec historique documenté au moment de la session
 - Cohérence avec A21 : oui
 - Cohérence avec le code final : oui
-- Résiduel : échec historique de `build` attribué dans la documentation à des dépendances globales manquantes hors périmètre UI strict ; résultat d'un `build` relancé en clôture : INFORMATION NON FOURNIE — À CONFIRMER
+- Résiduel : aucun résiduel bloquant A22 après relance finale des validations de clôture
+
+## Validations terminales relancées pendant la clôture
+
+- `git status --short`
+  - avant mise à jour documentaire finale : sortie vide
+  - après mise à jour documentaire finale : uniquement les fichiers de clôture A22 modifiés
+- `npm ls @prisma/client bcrypt pg --depth=0`
+  - OK
+- `npx prisma validate`
+  - OK
+- `npx prisma generate`
+  - OK
+- `npm run lint`
+  - OK
+- `npm run build`
+  - OK
 
 ## Écarts résiduels consolidés
 
 ### Bloquants
 
-Aucun écart résiduel bloquant démontré sur le périmètre A22 contrôlé.
+Aucun écart résiduel bloquant démontré dans l'état final validé.
 
 ### Non bloquants
 
 - Réserve historique d'application stricte du patch `A22-UIINT-01` sans `--ignore-whitespace`.
 - Absence de preuve de régression manuelle exhaustive formalisée pour `A22-UIINT-07`.
-- Échecs historiques de `build` documentés sur `A22-UIINT-10` à `A22-UIINT-13`, décrits comme hors périmètre UI strict au moment de ces sessions.
 
 ### Informations non fournies
 
-- Résultat d'un `npm run build` global relancé spécifiquement pendant la présente clôture : INFORMATION NON FOURNIE — À CONFIRMER
+- Cause racine externe de la corruption initiale de l'installation locale : INFORMATION NON FOURNIE — À CONFIRMER
+
+## Clarification sur `docs/1-master/PLAN_DE_DEVELOPPEMENT.md`
+
+- La modification mentionnée précédemment n'existe plus dans l'état final contrôlé.
+- Elle n'est pas liée à la clôture A22 dans les preuves réellement exécutées.
+- Elle n'empêche pas la clôture A22.
 
 ## Documents modifiés dans la session de clôture
 

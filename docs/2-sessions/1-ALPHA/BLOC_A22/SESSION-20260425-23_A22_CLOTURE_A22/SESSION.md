@@ -19,7 +19,7 @@ Intitulé : CLOTURE_A22 — Clôture finale du bloc A22 — Intégration UI/UX
 
 ## Objectif de la session
 
-Vérifier, session par session, l'intégralité du bloc A22 de `A22-UIINT-01` à `A22-UIINT-13`, contrôler le résultat final réel dans le dépôt, corriger uniquement un écart résiduel bloquant si nécessaire, puis statuer explicitement sur la clôture définitive du bloc A22.
+Vérifier, session par session, l'intégralité du bloc A22 de `A22-UIINT-01` à `A22-UIINT-13`, contrôler le résultat final réel dans le dépôt, corriger les erreurs bloquantes réellement démontrées pendant la clôture si nécessaire, puis statuer explicitement sur la clôture définitive du bloc A22.
 
 ## Périmètre exact traité
 
@@ -49,18 +49,12 @@ Vérifier, session par session, l'intégralité du bloc A22 de `A22-UIINT-01` à
   - `A22-UIINT-11`
   - `A22-UIINT-12`
   - `A22-UIINT-13`
-- Inspection ciblée du code final sur les zones UI/UX liées à A22 :
-  - shell applicatif
-  - sidebar
-  - topbar
-  - navigation
-  - permissions de navigation
-  - composants UI communs
-  - pages reliées au périmètre A22
+- Inspection ciblée du code final sur les zones UI/UX liées à A22.
+- Diagnostic et correction minimale du blocage transverse réellement démontré sur les dépendances locales du dépôt final.
 
 ## Résultat synthétique de session
 
-Audit de clôture A22 réalisé sur le périmètre demandé. Aucun écart résiduel bloquant n'a été démontré dans le code final ni dans la cohérence documentaire utile du bloc A22. Aucun patch code n'est nécessaire pour cette clôture ; la décision de production est `NO_PATCH`.
+Le blocage terminal démontré sur `npm run build` provenait d'une installation locale corrompue des dépendances `@prisma/client`, `bcrypt` et `pg`, alors que `package.json` et `package-lock.json` étaient cohérents. La correction minimale a consisté à réparer l'installation locale par `npm install`, puis à relancer `prisma generate`. Les validations finales demandées sont toutes OK. Aucun patch code projet n'a été nécessaire ; la décision de production reste `NO_PATCH`.
 
 ## Dossiers liés
 
