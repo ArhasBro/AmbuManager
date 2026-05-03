@@ -1,24 +1,25 @@
-﻿# README_PATCH
+# README_PATCH
 
-## Session liee
+## Session liée
+
 SESSION-20260425-23_A22_CLOTURE_A22
 
 ## Type
-AUDIT+CORRECTION+COMPLETION+VALIDATION
+
+AUDIT+CORRECTION+COMPLÉTION+VALIDATION
 
 ## Dossier PATCH
-docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-23_A22_CLOTURE_A22/PATCH
 
-## Patch officiel attendu
-PATCH__SESSION-20260425-23_A22_CLOTURE_A22.diff
+`docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-23_A22_CLOTURE_A22/PATCH`
 
-## Commandes d'application
+## Statut patch de clôture
 
-`ash
-git apply --check "docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-23_A22_CLOTURE_A22/PATCH/PATCH__SESSION-20260425-23_A22_CLOTURE_A22.diff"
-git apply         "docs/2-sessions/1-ALPHA/BLOC_A22/SESSION-20260425-23_A22_CLOTURE_A22/PATCH/PATCH__SESSION-20260425-23_A22_CLOTURE_A22.diff"
-`
+Aucun patch code n'a été produit pour la clôture A22.
 
-## Statut
-- Dossier patch initialise.
-- Patch officiel a produire dans cette session si du code est modifie.
+## Décision associée
+
+`NO_PATCH`
+
+## Justification
+
+L'audit final du bloc `A22` n'a pas démontré d'écart résiduel bloquant nécessitant un correctif applicatif. Le dossier `PATCH/` est conservé pour traçabilité documentaire, mais aucun fichier `.diff` officiel de clôture n'est requis dans cette session.

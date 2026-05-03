@@ -1410,7 +1410,9 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |       |   EVIDENCES.md
 |   |   |       |   FIN_SESSION.md
 |   |   |       |   NOTES.md
+|   |   |       |   NO_PATCH.md
 |   |   |       |   RESULTATS.md
+|   |   |       |   SESSION-20260425-23_A22_CLOTURE_A22__DOCS_FINAL.zip
 |   |   |       |   SESSION.md
 |   |   |       |   
 |   |   |       \---PATCH
