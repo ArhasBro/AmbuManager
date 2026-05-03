@@ -280,8 +280,8 @@ IMPORTANT
 
 Références des sessions :
 
-- SESSION-20260503-04_A23_A23-USERS-04
-- **A23-USERS-04 — VALIDATION** — Retest ciblé utilisateurs + absences / indisponibilités. Livrable attendu : verdict clair sur users et sur les absences. DoD : distinguer ce qui est corrigé, ce qui reste KO et ce qui est à confirmer.
+- SESSION-20260503-05_A23_A23-UI-05
+- **A23-UI-05 — AUDIT** — Audit d’écart UI/UX réel entre application intégrée et maquettes validées A21 / référence A22. Livrable attendu : matrice par page des écarts visuels. DoD : ne pas conclure sur une refonte UI sans comparaison factuelle écran par écran.
 
 ------------------------------------
 
@@ -292,8 +292,7 @@ Unblock-File -Path .\create_session.ps1
 .\create_session.ps1 -Stage "1-ALPHA" -Block "A1" -SessionCode "RBAC-02" -Type "CORRECTION" -Title "Remplacement méthodique de DEA par ADE"
 
 #### Sessions
-- **A23-USERS-04 — VALIDATION** — Retest ciblé utilisateurs + absences / indisponibilités. Livrable attendu : verdict clair sur users et sur les absences. DoD : distinguer ce qui est corrigé, ce qui reste KO et ce qui est à confirmer.
-- **A23-UI-05 — AUDIT** — Audit d’écart UI/UX réel entre application intégrée et maquettes validées A21 / référence A22. Livrable attendu : matrice par page des écarts visuels. DoD : ne pas conclure sur une refonte UI sans comparaison factuelle écran par écran.
+
 - **A23-UI-06 — CORRECTION+COMPLÉTION** — Réalignement UI/UX prioritaire si l’audit A23-UI-05 confirme l’écart. Livrable attendu : corrections visuelles ciblées sur les pages critiques. DoD : respect démontré des maquettes validées et de la direction artistique.
 - **A23-PLAN-07 — AUDIT** — Audit ciblé du planning manuel après correction utilisateurs. Livrable attendu : état réel sur template → horaires, affectation personnel, modification et annulation logique. DoD : distinguer bug fonctionnel, problème métier et amélioration UX.
 - **A23-PLAN-08 — CORRECTION+COMPLÉTION** — Correction / complétion du planning manuel prioritaire. Livrable attendu : affectation utilisateur exploitable, modification et annulation logique fonctionnelles, application cohérente des horaires template. DoD : parcours planning manuel ADMIN testable sans blocage majeur.

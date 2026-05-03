@@ -67,7 +67,6 @@ C:.
 |   +---dev
 |   |   |   build-manifest.json
 |   |   |   fallback-build-manifest.json
-|   |   |   lock
 |   |   |   package.json
 |   |   |   prerender-manifest.json
 |   |   |   routes-manifest.json
@@ -988,6 +987,130 @@ C:.
 |   |   |               00001416.meta
 |   |   |               00001417.meta
 |   |   |               00001418.meta
+|   |   |               00001419.sst
+|   |   |               00001420.sst
+|   |   |               00001421.sst
+|   |   |               00001422.meta
+|   |   |               00001423.meta
+|   |   |               00001424.meta
+|   |   |               00001425.sst
+|   |   |               00001426.sst
+|   |   |               00001427.sst
+|   |   |               00001428.meta
+|   |   |               00001429.meta
+|   |   |               00001430.meta
+|   |   |               00001431.sst
+|   |   |               00001432.sst
+|   |   |               00001433.sst
+|   |   |               00001434.meta
+|   |   |               00001435.meta
+|   |   |               00001436.meta
+|   |   |               00001437.sst
+|   |   |               00001438.sst
+|   |   |               00001439.sst
+|   |   |               00001440.meta
+|   |   |               00001441.meta
+|   |   |               00001442.meta
+|   |   |               00001443.sst
+|   |   |               00001444.sst
+|   |   |               00001445.sst
+|   |   |               00001446.meta
+|   |   |               00001447.meta
+|   |   |               00001448.meta
+|   |   |               00001449.sst
+|   |   |               00001450.sst
+|   |   |               00001451.sst
+|   |   |               00001452.meta
+|   |   |               00001453.meta
+|   |   |               00001454.meta
+|   |   |               00001455.sst
+|   |   |               00001456.sst
+|   |   |               00001457.sst
+|   |   |               00001458.meta
+|   |   |               00001459.meta
+|   |   |               00001460.meta
+|   |   |               00001461.sst
+|   |   |               00001462.sst
+|   |   |               00001463.sst
+|   |   |               00001464.meta
+|   |   |               00001465.meta
+|   |   |               00001466.meta
+|   |   |               00001467.sst
+|   |   |               00001468.sst
+|   |   |               00001469.sst
+|   |   |               00001470.meta
+|   |   |               00001471.meta
+|   |   |               00001472.meta
+|   |   |               00001473.sst
+|   |   |               00001474.sst
+|   |   |               00001475.sst
+|   |   |               00001476.meta
+|   |   |               00001477.meta
+|   |   |               00001478.meta
+|   |   |               00001479.sst
+|   |   |               00001480.sst
+|   |   |               00001481.sst
+|   |   |               00001482.meta
+|   |   |               00001483.meta
+|   |   |               00001484.meta
+|   |   |               00001485.sst
+|   |   |               00001486.sst
+|   |   |               00001487.sst
+|   |   |               00001488.sst
+|   |   |               00001489.sst
+|   |   |               00001490.meta
+|   |   |               00001491.meta
+|   |   |               00001492.meta
+|   |   |               00001493.meta
+|   |   |               00001494.meta
+|   |   |               00001495.sst
+|   |   |               00001496.sst
+|   |   |               00001497.sst
+|   |   |               00001498.meta
+|   |   |               00001499.meta
+|   |   |               00001500.meta
+|   |   |               00001501.sst
+|   |   |               00001502.sst
+|   |   |               00001503.sst
+|   |   |               00001504.meta
+|   |   |               00001505.meta
+|   |   |               00001506.meta
+|   |   |               00001507.sst
+|   |   |               00001508.sst
+|   |   |               00001509.sst
+|   |   |               00001510.meta
+|   |   |               00001511.meta
+|   |   |               00001512.meta
+|   |   |               00001513.sst
+|   |   |               00001514.sst
+|   |   |               00001515.sst
+|   |   |               00001516.meta
+|   |   |               00001517.meta
+|   |   |               00001518.meta
+|   |   |               00001519.sst
+|   |   |               00001520.sst
+|   |   |               00001521.sst
+|   |   |               00001522.meta
+|   |   |               00001523.meta
+|   |   |               00001524.meta
+|   |   |               00001525.sst
+|   |   |               00001526.sst
+|   |   |               00001527.sst
+|   |   |               00001528.meta
+|   |   |               00001529.meta
+|   |   |               00001530.meta
+|   |   |               00001531.sst
+|   |   |               00001532.sst
+|   |   |               00001533.sst
+|   |   |               00001534.meta
+|   |   |               00001535.meta
+|   |   |               00001536.meta
+|   |   |               00001537.sst
+|   |   |               00001538.sst
+|   |   |               00001539.sst
+|   |   |               00001540.meta
+|   |   |               00001541.meta
+|   |   |               00001542.meta
 |   |   |               CURRENT
 |   |   |               LOG
 |   |   |               
@@ -1258,6 +1381,17 @@ C:.
 |   |   |   |   |   |                   build-manifest.json
 |   |   |   |   |   |                   server-reference-manifest.json
 |   |   |   |   |   |                   
+|   |   |   |   |   +---health
+|   |   |   |   |   |   \---prisma
+|   |   |   |   |   |       |   route.js
+|   |   |   |   |   |       |   route.js.map
+|   |   |   |   |   |       |   route_client-reference-manifest.js
+|   |   |   |   |   |       |   
+|   |   |   |   |   |       \---route
+|   |   |   |   |   |               app-paths-manifest.json
+|   |   |   |   |   |               build-manifest.json
+|   |   |   |   |   |               server-reference-manifest.json
+|   |   |   |   |   |               
 |   |   |   |   |   +---planning
 |   |   |   |   |   |   +---autoschedule
 |   |   |   |   |   |   |   +---day
@@ -1680,6 +1814,8 @@ C:.
 |   |   |   |   |   node_modules_next_d59b9542._.js.map
 |   |   |   |   |   node_modules_next_d6c786de._.js
 |   |   |   |   |   node_modules_next_d6c786de._.js.map
+|   |   |   |   |   node_modules_next_dc13686a._.js
+|   |   |   |   |   node_modules_next_dc13686a._.js.map
 |   |   |   |   |   node_modules_next_e2ee23d7._.js
 |   |   |   |   |   node_modules_next_e2ee23d7._.js.map
 |   |   |   |   |   node_modules_next_f74960b7._.js
@@ -1708,6 +1844,8 @@ C:.
 |   |   |   |   |   [root-of-the-server]__3302dbde._.js.map
 |   |   |   |   |   [root-of-the-server]__3366d735._.js
 |   |   |   |   |   [root-of-the-server]__3366d735._.js.map
+|   |   |   |   |   [root-of-the-server]__42b12b62._.js
+|   |   |   |   |   [root-of-the-server]__42b12b62._.js.map
 |   |   |   |   |   [root-of-the-server]__42d5f90e._.js
 |   |   |   |   |   [root-of-the-server]__42d5f90e._.js.map
 |   |   |   |   |   [root-of-the-server]__47886e4b._.js
@@ -1726,6 +1864,8 @@ C:.
 |   |   |   |   |   [root-of-the-server]__6be53bc1._.js.map
 |   |   |   |   |   [root-of-the-server]__6e8be590._.js
 |   |   |   |   |   [root-of-the-server]__6e8be590._.js.map
+|   |   |   |   |   [root-of-the-server]__81baafc8._.js
+|   |   |   |   |   [root-of-the-server]__81baafc8._.js.map
 |   |   |   |   |   [root-of-the-server]__8de3e5da._.js
 |   |   |   |   |   [root-of-the-server]__8de3e5da._.js.map
 |   |   |   |   |   [root-of-the-server]__98496806._.js
@@ -1762,6 +1902,8 @@ C:.
 |   |   |   |   |   _next-internal_server_app_api_depots_route_actions_15f1d8d0.js.map
 |   |   |   |   |   _next-internal_server_app_api_depots_[id]_archive_route_actions_f3951954.js
 |   |   |   |   |   _next-internal_server_app_api_depots_[id]_archive_route_actions_f3951954.js.map
+|   |   |   |   |   _next-internal_server_app_api_health_prisma_route_actions_c9f47495.js
+|   |   |   |   |   _next-internal_server_app_api_health_prisma_route_actions_c9f47495.js.map
 |   |   |   |   |   _next-internal_server_app_api_planning_autoschedule_day_route_actions_970e369e.js
 |   |   |   |   |   _next-internal_server_app_api_planning_autoschedule_day_route_actions_970e369e.js.map
 |   |   |   |   |   _next-internal_server_app_api_planning_autoschedule_week_route_actions_85583f47.js
@@ -3388,13 +3530,13 @@ C:.
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-2322a3ca4ff8762b.js
 |   |   |       
-|   |   +---media
-|   |   |       favicon.0b3bf435.ico
+|   |   +---l7VmAPV1erIgqZBIsqEE0
+|   |   |       _buildManifest.js
+|   |   |       _clientMiddlewareManifest.json
+|   |   |       _ssgManifest.js
 |   |   |       
-|   |   \---q9nFVN1y0kE3NhDvX9E2i
-|   |           _buildManifest.js
-|   |           _clientMiddlewareManifest.json
-|   |           _ssgManifest.js
+|   |   \---media
+|   |           favicon.0b3bf435.ico
 |   |           
 |   \---types
 |           routes.d.ts
@@ -5052,6 +5194,7 @@ C:.
 |   |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION-20260503-04_A23_A23-USERS-04__DOCS_FINAL.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
