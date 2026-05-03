@@ -1436,10 +1436,13 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   EVIDENCES.md
 |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   NOTES.md
+|   |   |   |   |   README_PATCH.md
 |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION-20260503-02_A23_A23-LOGIN-02__DOCS_FINAL.zip
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
+|   |   |   |           PATCH__SESSION-20260503-02_A23_A23-LOGIN-02.diff
 |   |   |   |           README_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260503-03_A23_A23-USERS-03

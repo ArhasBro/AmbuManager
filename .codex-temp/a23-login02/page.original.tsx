@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { signIn, useSession } from "next-auth/react";
 import { Suspense, useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const DEFAULT_LOGIN_REDIRECT = "/dashboard";
 
@@ -52,6 +52,7 @@ const loginHighlights = [
 ] as const;
 
 function LoginPageContent() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const { status } = useSession();
 
@@ -62,13 +63,8 @@ function LoginPageContent() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
-    if (status !== "authenticated") {
-      return;
-    }
-
-    // Force un rechargement serveur pour obtenir un shell coherent apres login.
-    window.location.replace(callbackUrl);
-  }, [status, callbackUrl]);
+    if (status === "authenticated") router.replace(callbackUrl);
+  }, [status, router, callbackUrl]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -89,8 +85,7 @@ function LoginPageContent() {
       return;
     }
 
-    const target = getSafeRouterTarget(res?.url ?? null, callbackUrl);
-    window.location.replace(target);
+    router.push(getSafeRouterTarget(res?.url ?? null, callbackUrl));
   }
 
   if (status === "loading") {

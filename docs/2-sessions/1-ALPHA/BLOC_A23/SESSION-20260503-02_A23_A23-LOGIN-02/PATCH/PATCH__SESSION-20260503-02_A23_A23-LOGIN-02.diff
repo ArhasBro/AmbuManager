@@ -1,0 +1,47 @@
+diff --git a/app/login/page.tsx b/app/login/page.tsx
+index 5aa8192..0f4ef17 100644
+--- a/app/login/page.tsx
++++ b/app/login/page.tsx
+@@ -3,7 +3,7 @@
+ import Link from "next/link";
+ import { signIn, useSession } from "next-auth/react";
+ import { Suspense, useEffect, useState } from "react";
+-import { useRouter, useSearchParams } from "next/navigation";
++import { useSearchParams } from "next/navigation";
+ 
+ const DEFAULT_LOGIN_REDIRECT = "/dashboard";
+ 
+@@ -52,7 +52,6 @@ const loginHighlights = [
+ ] as const;
+ 
+ function LoginPageContent() {
+-  const router = useRouter();
+   const searchParams = useSearchParams();
+   const { status } = useSession();
+ 
+@@ -63,8 +62,13 @@ function LoginPageContent() {
+   const [error, setError] = useState<string | null>(null);
+   const [loading, setLoading] = useState(false);
+   useEffect(() => {
+-    if (status === "authenticated") router.replace(callbackUrl);
+-  }, [status, router, callbackUrl]);
++    if (status !== "authenticated") {
++      return;
++    }
++
++    // Force un rechargement serveur pour obtenir un shell coherent apres login.
++    window.location.replace(callbackUrl);
++  }, [status, callbackUrl]);
+ 
+   async function onSubmit(e: React.FormEvent) {
+     e.preventDefault();
+@@ -85,7 +89,8 @@ function LoginPageContent() {
+       return;
+     }
+ 
+-    router.push(getSafeRouterTarget(res?.url ?? null, callbackUrl));
++    const target = getSafeRouterTarget(res?.url ?? null, callbackUrl);
++    window.location.replace(target);
+   }
+ 
+   if (status === "loading") {

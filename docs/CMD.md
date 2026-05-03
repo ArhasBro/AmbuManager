@@ -280,8 +280,8 @@ IMPORTANT
 
 Références des sessions :
 
-- SESSION-20260503-02_A23_A23-LOGIN-02
-- **A23-LOGIN-02 — CORRECTION** — Correction de l’hydratation session / shell après connexion. Livrable attendu : dashboard, sidebar, topbar, utilisateur, rôle et société cohérents dès l’arrivée post-login. DoD : plus besoin de rafraîchir manuellement pour obtenir une session visuelle correcte.
+- SESSION-20260503-03_A23_A23-USERS-03
+- **A23-USERS-03 — CORRECTION** — Correction du module utilisateurs ADMIN. Livrable attendu : liste, création, validation, édition, rôle, base et archivage exploitables. DoD : les utilisateurs créés sont visibles et disponibles pour les modules dépendants.
 
 ------------------------------------
 
