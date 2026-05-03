@@ -280,8 +280,8 @@ IMPORTANT
 
 Références des sessions :
 
-- SESSION-20260503-01_A23_A23-TEST-01
-- **A23-TEST-01 — AUDIT** — Reproduction ciblée et qualification technique des anomalies consolidées de `SESSION-20260503_TEST-LOCAL-02`. Livrable attendu : liste confirmée / non confirmée des anomalies. DoD : aucune correction lancée sans reproduction ou justification explicite.
+- SESSION-20260503-02_A23_A23-LOGIN-02
+- **A23-LOGIN-02 — CORRECTION** — Correction de l’hydratation session / shell après connexion. Livrable attendu : dashboard, sidebar, topbar, utilisateur, rôle et société cohérents dès l’arrivée post-login. DoD : plus besoin de rafraîchir manuellement pour obtenir une session visuelle correcte.
 
 ------------------------------------
 
@@ -292,7 +292,6 @@ Unblock-File -Path .\create_session.ps1
 .\create_session.ps1 -Stage "1-ALPHA" -Block "A1" -SessionCode "RBAC-02" -Type "CORRECTION" -Title "Remplacement méthodique de DEA par ADE"
 
 #### Sessions
-- **A23-TEST-01 — AUDIT** — Reproduction ciblée et qualification technique des anomalies consolidées de `SESSION-20260503_TEST-LOCAL-02`. Livrable attendu : liste confirmée / non confirmée des anomalies. DoD : aucune correction lancée sans reproduction ou justification explicite.
 - **A23-LOGIN-02 — CORRECTION** — Correction de l’hydratation session / shell après connexion. Livrable attendu : dashboard, sidebar, topbar, utilisateur, rôle et société cohérents dès l’arrivée post-login. DoD : plus besoin de rafraîchir manuellement pour obtenir une session visuelle correcte.
 - **A23-USERS-03 — CORRECTION** — Correction du module utilisateurs ADMIN. Livrable attendu : liste, création, validation, édition, rôle, base et archivage exploitables. DoD : les utilisateurs créés sont visibles et disponibles pour les modules dépendants.
 - **A23-USERS-04 — VALIDATION** — Retest ciblé utilisateurs + absences / indisponibilités. Livrable attendu : verdict clair sur users et sur les absences. DoD : distinguer ce qui est corrigé, ce qui reste KO et ce qui est à confirmer.

@@ -16,7 +16,6 @@ C:.
 |   README.md
 |   tsconfig.json
 |   
-+---.codex-temp
 +---.next
 |   |   app-path-routes-manifest.json
 |   |   build-manifest.json
@@ -472,7 +471,6 @@ C:.
 |   |   |               00000777.sst
 |   |   |               00000778.sst
 |   |   |               00000779.meta
-|   |   |               00000780.del
 |   |   |               00000782.sst
 |   |   |               00000783.sst
 |   |   |               00000784.sst
@@ -493,7 +491,6 @@ C:.
 |   |   |               00000803.meta
 |   |   |               00000805.meta
 |   |   |               00000806.meta
-|   |   |               00000811.del
 |   |   |               00000813.sst
 |   |   |               00000814.sst
 |   |   |               00000815.sst
@@ -586,7 +583,6 @@ C:.
 |   |   |               00000931.sst
 |   |   |               00000932.sst
 |   |   |               00000933.meta
-|   |   |               00000934.del
 |   |   |               00000935.sst
 |   |   |               00000936.sst
 |   |   |               00000937.sst
@@ -629,6 +625,114 @@ C:.
 |   |   |               00000974.meta
 |   |   |               00000975.meta
 |   |   |               00000976.meta
+|   |   |               00000977.sst
+|   |   |               00000978.sst
+|   |   |               00000979.sst
+|   |   |               00000980.meta
+|   |   |               00000981.meta
+|   |   |               00000982.meta
+|   |   |               00000983.sst
+|   |   |               00000984.sst
+|   |   |               00000985.sst
+|   |   |               00000986.meta
+|   |   |               00000987.meta
+|   |   |               00000988.meta
+|   |   |               00000989.sst
+|   |   |               00000990.sst
+|   |   |               00000991.sst
+|   |   |               00000992.meta
+|   |   |               00000993.meta
+|   |   |               00000994.meta
+|   |   |               00000995.sst
+|   |   |               00000996.sst
+|   |   |               00000997.sst
+|   |   |               00000998.meta
+|   |   |               00000999.meta
+|   |   |               00001000.meta
+|   |   |               00001001.sst
+|   |   |               00001002.sst
+|   |   |               00001003.sst
+|   |   |               00001004.meta
+|   |   |               00001005.meta
+|   |   |               00001006.meta
+|   |   |               00001007.sst
+|   |   |               00001008.sst
+|   |   |               00001009.sst
+|   |   |               00001010.sst
+|   |   |               00001011.sst
+|   |   |               00001012.meta
+|   |   |               00001013.meta
+|   |   |               00001014.meta
+|   |   |               00001015.meta
+|   |   |               00001016.meta
+|   |   |               00001017.sst
+|   |   |               00001018.sst
+|   |   |               00001019.sst
+|   |   |               00001020.meta
+|   |   |               00001021.meta
+|   |   |               00001022.meta
+|   |   |               00001023.sst
+|   |   |               00001024.sst
+|   |   |               00001025.sst
+|   |   |               00001026.meta
+|   |   |               00001027.meta
+|   |   |               00001028.meta
+|   |   |               00001029.sst
+|   |   |               00001030.sst
+|   |   |               00001031.sst
+|   |   |               00001032.meta
+|   |   |               00001033.meta
+|   |   |               00001034.meta
+|   |   |               00001035.sst
+|   |   |               00001036.sst
+|   |   |               00001037.sst
+|   |   |               00001038.meta
+|   |   |               00001039.meta
+|   |   |               00001040.meta
+|   |   |               00001041.sst
+|   |   |               00001042.sst
+|   |   |               00001043.sst
+|   |   |               00001044.meta
+|   |   |               00001045.meta
+|   |   |               00001046.meta
+|   |   |               00001047.sst
+|   |   |               00001048.sst
+|   |   |               00001049.sst
+|   |   |               00001050.sst
+|   |   |               00001051.sst
+|   |   |               00001052.meta
+|   |   |               00001053.meta
+|   |   |               00001054.meta
+|   |   |               00001055.meta
+|   |   |               00001056.meta
+|   |   |               00001057.sst
+|   |   |               00001058.sst
+|   |   |               00001059.sst
+|   |   |               00001060.meta
+|   |   |               00001061.meta
+|   |   |               00001062.meta
+|   |   |               00001063.sst
+|   |   |               00001064.sst
+|   |   |               00001065.sst
+|   |   |               00001066.sst
+|   |   |               00001067.sst
+|   |   |               00001068.meta
+|   |   |               00001069.meta
+|   |   |               00001070.meta
+|   |   |               00001071.meta
+|   |   |               00001072.meta
+|   |   |               00001073.sst
+|   |   |               00001074.sst
+|   |   |               00001075.sst
+|   |   |               00001076.meta
+|   |   |               00001077.meta
+|   |   |               00001078.meta
+|   |   |               00001079.sst
+|   |   |               00001080.sst
+|   |   |               00001081.sst
+|   |   |               00001082.meta
+|   |   |               00001083.meta
+|   |   |               00001084.meta
 |   |   |               CURRENT
 |   |   |               LOG
 |   |   |               
@@ -998,6 +1102,16 @@ C:.
 |   |   |   |   |   |           |           build-manifest.json
 |   |   |   |   |   |           |           server-reference-manifest.json
 |   |   |   |   |   |           |           
+|   |   |   |   |   |           +---cancel
+|   |   |   |   |   |           |   |   route.js
+|   |   |   |   |   |           |   |   route.js.map
+|   |   |   |   |   |           |   |   route_client-reference-manifest.js
+|   |   |   |   |   |           |   |   
+|   |   |   |   |   |           |   \---route
+|   |   |   |   |   |           |           app-paths-manifest.json
+|   |   |   |   |   |           |           build-manifest.json
+|   |   |   |   |   |           |           server-reference-manifest.json
+|   |   |   |   |   |           |           
 |   |   |   |   |   |           \---route
 |   |   |   |   |   |                   app-paths-manifest.json
 |   |   |   |   |   |                   build-manifest.json
@@ -1277,6 +1391,8 @@ C:.
 |   |   |   |   |   node_modules_next_3ec75972._.js.map
 |   |   |   |   |   node_modules_next_40e466c0._.js
 |   |   |   |   |   node_modules_next_40e466c0._.js.map
+|   |   |   |   |   node_modules_next_57a4c9f2._.js
+|   |   |   |   |   node_modules_next_57a4c9f2._.js.map
 |   |   |   |   |   node_modules_next_5933b57c._.js
 |   |   |   |   |   node_modules_next_5933b57c._.js.map
 |   |   |   |   |   node_modules_next_5ec90256._.js
@@ -1359,6 +1475,8 @@ C:.
 |   |   |   |   |   [root-of-the-server]__8de3e5da._.js.map
 |   |   |   |   |   [root-of-the-server]__98496806._.js
 |   |   |   |   |   [root-of-the-server]__98496806._.js.map
+|   |   |   |   |   [root-of-the-server]__a8258255._.js
+|   |   |   |   |   [root-of-the-server]__a8258255._.js.map
 |   |   |   |   |   [root-of-the-server]__ab4ee520._.js
 |   |   |   |   |   [root-of-the-server]__ab4ee520._.js.map
 |   |   |   |   |   [root-of-the-server]__b911cca7._.js
@@ -1397,6 +1515,8 @@ C:.
 |   |   |   |   |   _next-internal_server_app_api_planning_shifts_route_actions_4dae3f6d.js.map
 |   |   |   |   |   _next-internal_server_app_api_planning_shifts_[id]_assign_route_actions_75edfcab.js
 |   |   |   |   |   _next-internal_server_app_api_planning_shifts_[id]_assign_route_actions_75edfcab.js.map
+|   |   |   |   |   _next-internal_server_app_api_planning_shifts_[id]_cancel_route_actions_aedba3ba.js
+|   |   |   |   |   _next-internal_server_app_api_planning_shifts_[id]_cancel_route_actions_aedba3ba.js.map
 |   |   |   |   |   _next-internal_server_app_api_planning_shifts_[id]_route_actions_e81087ba.js
 |   |   |   |   |   _next-internal_server_app_api_planning_shifts_[id]_route_actions_e81087ba.js.map
 |   |   |   |   |   _next-internal_server_app_api_templates_route_actions_a59f4640.js
@@ -3013,13 +3133,13 @@ C:.
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-2322a3ca4ff8762b.js
 |   |   |       
-|   |   +---g_GBrqfyc5S0goygCiX-m
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
+|   |   +---media
+|   |   |       favicon.0b3bf435.ico
 |   |   |       
-|   |   \---media
-|   |           favicon.0b3bf435.ico
+|   |   \---qJCkWSU3XovB4PU518cn2
+|   |           _buildManifest.js
+|   |           _clientMiddlewareManifest.json
+|   |           _ssgManifest.js
 |   |           
 |   \---types
 |           routes.d.ts
@@ -4638,7 +4758,9 @@ C:.
 |   |   |   |   |   |   EVIDENCES.md
 |   |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   README_PATCH.md
 |   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION-20260503-01_A23_A23-TEST-01__DOCS_FINAL.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
