@@ -1,5 +1,8 @@
 ﻿import { PrismaClient } from "@prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
+import pg from "pg";
 
+const { Pool } = pg;
 const base = "http://localhost:3000";
 let cookie = "";
 
@@ -141,12 +144,15 @@ const afterItems = Array.isArray(shiftsAfterResp.json?.data) ? shiftsAfterResp.j
 const shiftAfter = afterItems.find((s) => s.id === shiftId) || null;
 const historyAfter = shiftsAfterResp.json?.historyByShiftId?.[shiftId] ?? [];
 
-const prisma = new PrismaClient();
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const adapter = new PrismaPg(pool);
+const prisma = new PrismaClient({ adapter });
 const dbShift = await prisma.shift.findUnique({
   where: { id: shiftId },
   select: { id: true, isCancelled: true, cancelledAt: true, cancellationReason: true, templateId: true, startAt: true, endAt: true },
 });
 await prisma.$disconnect();
+await pool.end();
 
 const result = {
   login_status: loginResp.res.status,

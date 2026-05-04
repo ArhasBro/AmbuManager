@@ -1,5 +1,5 @@
 ﻿Structure du dossier pour le volume Windows
-Le numÚro de sÚrie du volume est 00000050 123E:4DB7
+Le numÚro de sÚrie du volume est 123E-4DB7
 C:.
 |   .env
 |   .gitignore
@@ -19,6 +19,8 @@ C:.
 +---.codex-temp
 |   |   a23-login02-cookies.txt
 |   |   a23-login02-dev.log
+|   |   a23-plan07-audit.mjs
+|   |   a23-plan07-dev.log
 |   |   a23-ui-06-dev-webpack.log
 |   |   a23-ui-06-dev.log
 |   |   a23-ui-06-start.log
@@ -96,6 +98,7 @@ C:.
 |   +---dev
 |   |   |   build-manifest.json
 |   |   |   fallback-build-manifest.json
+|   |   |   lock
 |   |   |   package.json
 |   |   |   prerender-manifest.json
 |   |   |   react-loadable-manifest.json
@@ -1460,6 +1463,34 @@ C:.
 |   |   |   |           00002582.meta
 |   |   |   |           00002583.meta
 |   |   |   |           00002584.meta
+|   |   |   |           00002585.sst
+|   |   |   |           00002586.sst
+|   |   |   |           00002587.sst
+|   |   |   |           00002588.meta
+|   |   |   |           00002589.meta
+|   |   |   |           00002590.meta
+|   |   |   |           00002591.sst
+|   |   |   |           00002592.sst
+|   |   |   |           00002593.sst
+|   |   |   |           00002594.meta
+|   |   |   |           00002595.meta
+|   |   |   |           00002596.meta
+|   |   |   |           00002597.sst
+|   |   |   |           00002598.sst
+|   |   |   |           00002599.sst
+|   |   |   |           00002600.sst
+|   |   |   |           00002601.sst
+|   |   |   |           00002602.meta
+|   |   |   |           00002603.meta
+|   |   |   |           00002604.meta
+|   |   |   |           00002605.meta
+|   |   |   |           00002606.meta
+|   |   |   |           00002607.sst
+|   |   |   |           00002608.sst
+|   |   |   |           00002609.sst
+|   |   |   |           00002610.meta
+|   |   |   |           00002611.meta
+|   |   |   |           00002612.meta
 |   |   |   |           CURRENT
 |   |   |   |           LOG
 |   |   |   |           
@@ -1742,17 +1773,57 @@ C:.
 |   |   |   |   |   |               build-manifest.json
 |   |   |   |   |   |               server-reference-manifest.json
 |   |   |   |   |   |               
+|   |   |   |   |   +---depots
+|   |   |   |   |   |   |   route.js
+|   |   |   |   |   |   |   route.js.map
+|   |   |   |   |   |   |   route_client-reference-manifest.js
+|   |   |   |   |   |   |   
+|   |   |   |   |   |   \---route
+|   |   |   |   |   |           app-paths-manifest.json
+|   |   |   |   |   |           build-manifest.json
+|   |   |   |   |   |           server-reference-manifest.json
+|   |   |   |   |   |           
 |   |   |   |   |   +---planning
 |   |   |   |   |   |   \---shifts
 |   |   |   |   |   |       |   route.js
 |   |   |   |   |   |       |   route.js.map
 |   |   |   |   |   |       |   route_client-reference-manifest.js
 |   |   |   |   |   |       |   
-|   |   |   |   |   |       \---route
-|   |   |   |   |   |               app-paths-manifest.json
-|   |   |   |   |   |               build-manifest.json
-|   |   |   |   |   |               server-reference-manifest.json
-|   |   |   |   |   |               
+|   |   |   |   |   |       +---route
+|   |   |   |   |   |       |       app-paths-manifest.json
+|   |   |   |   |   |       |       build-manifest.json
+|   |   |   |   |   |       |       server-reference-manifest.json
+|   |   |   |   |   |       |       
+|   |   |   |   |   |       \---[id]
+|   |   |   |   |   |           |   route.js
+|   |   |   |   |   |           |   route.js.map
+|   |   |   |   |   |           |   route_client-reference-manifest.js
+|   |   |   |   |   |           |   
+|   |   |   |   |   |           +---assign
+|   |   |   |   |   |           |   |   route.js
+|   |   |   |   |   |           |   |   route.js.map
+|   |   |   |   |   |           |   |   route_client-reference-manifest.js
+|   |   |   |   |   |           |   |   
+|   |   |   |   |   |           |   \---route
+|   |   |   |   |   |           |           app-paths-manifest.json
+|   |   |   |   |   |           |           build-manifest.json
+|   |   |   |   |   |           |           server-reference-manifest.json
+|   |   |   |   |   |           |           
+|   |   |   |   |   |           +---cancel
+|   |   |   |   |   |           |   |   route.js
+|   |   |   |   |   |           |   |   route.js.map
+|   |   |   |   |   |           |   |   route_client-reference-manifest.js
+|   |   |   |   |   |           |   |   
+|   |   |   |   |   |           |   \---route
+|   |   |   |   |   |           |           app-paths-manifest.json
+|   |   |   |   |   |           |           build-manifest.json
+|   |   |   |   |   |           |           server-reference-manifest.json
+|   |   |   |   |   |           |           
+|   |   |   |   |   |           \---route
+|   |   |   |   |   |                   app-paths-manifest.json
+|   |   |   |   |   |                   build-manifest.json
+|   |   |   |   |   |                   server-reference-manifest.json
+|   |   |   |   |   |                   
 |   |   |   |   |   +---templates
 |   |   |   |   |   |   |   route.js
 |   |   |   |   |   |   |   route.js.map
@@ -1951,12 +2022,20 @@ C:.
 |   |   |   |   |   node_modules_next-auth_1810886e._.js.map
 |   |   |   |   |   node_modules_next-auth_72b3a499._.js
 |   |   |   |   |   node_modules_next-auth_72b3a499._.js.map
+|   |   |   |   |   node_modules_next_0649d172._.js
+|   |   |   |   |   node_modules_next_0649d172._.js.map
 |   |   |   |   |   node_modules_next_21f81598._.js
 |   |   |   |   |   node_modules_next_21f81598._.js.map
 |   |   |   |   |   node_modules_next_240bb1a7._.js
 |   |   |   |   |   node_modules_next_240bb1a7._.js.map
 |   |   |   |   |   node_modules_next_3ec75972._.js
 |   |   |   |   |   node_modules_next_3ec75972._.js.map
+|   |   |   |   |   node_modules_next_40e466c0._.js
+|   |   |   |   |   node_modules_next_40e466c0._.js.map
+|   |   |   |   |   node_modules_next_57a4c9f2._.js
+|   |   |   |   |   node_modules_next_57a4c9f2._.js.map
+|   |   |   |   |   node_modules_next_5ec90256._.js
+|   |   |   |   |   node_modules_next_5ec90256._.js.map
 |   |   |   |   |   node_modules_next_79741a44._.js
 |   |   |   |   |   node_modules_next_79741a44._.js.map
 |   |   |   |   |   node_modules_next_961d13b2._.js
@@ -1973,6 +2052,10 @@ C:.
 |   |   |   |   |   node_modules_openid-client_d15f72b3._.js.map
 |   |   |   |   |   node_modules_zod_v4_da12b5b3._.js
 |   |   |   |   |   node_modules_zod_v4_da12b5b3._.js.map
+|   |   |   |   |   [root-of-the-server]__2c652975._.js
+|   |   |   |   |   [root-of-the-server]__2c652975._.js.map
+|   |   |   |   |   [root-of-the-server]__3085c38d._.js
+|   |   |   |   |   [root-of-the-server]__3085c38d._.js.map
 |   |   |   |   |   [root-of-the-server]__3220e87f._.js
 |   |   |   |   |   [root-of-the-server]__3220e87f._.js.map
 |   |   |   |   |   [root-of-the-server]__3302dbde._.js
@@ -1987,6 +2070,10 @@ C:.
 |   |   |   |   |   [root-of-the-server]__6be53bc1._.js.map
 |   |   |   |   |   [root-of-the-server]__6e8be590._.js
 |   |   |   |   |   [root-of-the-server]__6e8be590._.js.map
+|   |   |   |   |   [root-of-the-server]__8de3e5da._.js
+|   |   |   |   |   [root-of-the-server]__8de3e5da._.js.map
+|   |   |   |   |   [root-of-the-server]__a8258255._.js
+|   |   |   |   |   [root-of-the-server]__a8258255._.js.map
 |   |   |   |   |   [root-of-the-server]__ab4ee520._.js
 |   |   |   |   |   [root-of-the-server]__ab4ee520._.js.map
 |   |   |   |   |   [root-of-the-server]__bec63f38._.js
@@ -2005,8 +2092,16 @@ C:.
 |   |   |   |   |   _next-internal_server_app_api_auth_[___nextauth]_route_actions_1c865db8.js.map
 |   |   |   |   |   _next-internal_server_app_api_company_rules_route_actions_774d72f1.js
 |   |   |   |   |   _next-internal_server_app_api_company_rules_route_actions_774d72f1.js.map
+|   |   |   |   |   _next-internal_server_app_api_depots_route_actions_15f1d8d0.js
+|   |   |   |   |   _next-internal_server_app_api_depots_route_actions_15f1d8d0.js.map
 |   |   |   |   |   _next-internal_server_app_api_planning_shifts_route_actions_4dae3f6d.js
 |   |   |   |   |   _next-internal_server_app_api_planning_shifts_route_actions_4dae3f6d.js.map
+|   |   |   |   |   _next-internal_server_app_api_planning_shifts_[id]_assign_route_actions_75edfcab.js
+|   |   |   |   |   _next-internal_server_app_api_planning_shifts_[id]_assign_route_actions_75edfcab.js.map
+|   |   |   |   |   _next-internal_server_app_api_planning_shifts_[id]_cancel_route_actions_aedba3ba.js
+|   |   |   |   |   _next-internal_server_app_api_planning_shifts_[id]_cancel_route_actions_aedba3ba.js.map
+|   |   |   |   |   _next-internal_server_app_api_planning_shifts_[id]_route_actions_e81087ba.js
+|   |   |   |   |   _next-internal_server_app_api_planning_shifts_[id]_route_actions_e81087ba.js.map
 |   |   |   |   |   _next-internal_server_app_api_templates_route_actions_a59f4640.js
 |   |   |   |   |   _next-internal_server_app_api_templates_route_actions_a59f4640.js.map
 |   |   |   |   |   _next-internal_server_app_api_users_route_actions_4b9121e3.js
