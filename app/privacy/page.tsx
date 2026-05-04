@@ -54,7 +54,7 @@ export default function PrivacyPage() {
 
         <div className="privacy-page__header-row">
           <PageHeader
-            title="Mentions d'information"
+            title="Mentions d'information - Donnees personnelles"
             description="Cette page vous informe sur la collecte, l'utilisation et la protection de vos donnees personnelles conformement a la reglementation en vigueur."
           />
           <p className="privacy-page__updated">Derniere mise a jour : 18 avr. 2024</p>

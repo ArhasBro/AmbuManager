@@ -1422,7 +1422,6 @@ C:.
 |   |   |   |           00002742.sst
 |   |   |   |           00002743.sst
 |   |   |   |           00002744.meta
-|   |   |   |           00002745.del
 |   |   |   |           00002746.sst
 |   |   |   |           00002747.sst
 |   |   |   |           00002748.sst
@@ -1605,6 +1604,118 @@ C:.
 |   |   |   |           00002925.meta
 |   |   |   |           00002926.meta
 |   |   |   |           00002927.meta
+|   |   |   |           00002928.sst
+|   |   |   |           00002929.sst
+|   |   |   |           00002930.sst
+|   |   |   |           00002931.meta
+|   |   |   |           00002932.meta
+|   |   |   |           00002933.meta
+|   |   |   |           00002934.sst
+|   |   |   |           00002935.sst
+|   |   |   |           00002936.sst
+|   |   |   |           00002937.meta
+|   |   |   |           00002938.meta
+|   |   |   |           00002939.meta
+|   |   |   |           00002940.sst
+|   |   |   |           00002941.sst
+|   |   |   |           00002942.sst
+|   |   |   |           00002943.meta
+|   |   |   |           00002944.meta
+|   |   |   |           00002945.meta
+|   |   |   |           00002946.sst
+|   |   |   |           00002947.sst
+|   |   |   |           00002948.sst
+|   |   |   |           00002949.meta
+|   |   |   |           00002950.meta
+|   |   |   |           00002951.meta
+|   |   |   |           00002952.sst
+|   |   |   |           00002953.sst
+|   |   |   |           00002954.sst
+|   |   |   |           00002955.meta
+|   |   |   |           00002956.meta
+|   |   |   |           00002957.meta
+|   |   |   |           00002958.sst
+|   |   |   |           00002959.sst
+|   |   |   |           00002960.sst
+|   |   |   |           00002961.sst
+|   |   |   |           00002962.sst
+|   |   |   |           00002963.meta
+|   |   |   |           00002964.meta
+|   |   |   |           00002965.meta
+|   |   |   |           00002966.meta
+|   |   |   |           00002967.meta
+|   |   |   |           00002968.sst
+|   |   |   |           00002969.sst
+|   |   |   |           00002970.sst
+|   |   |   |           00002971.sst
+|   |   |   |           00002972.sst
+|   |   |   |           00002973.meta
+|   |   |   |           00002974.meta
+|   |   |   |           00002975.meta
+|   |   |   |           00002976.meta
+|   |   |   |           00002977.meta
+|   |   |   |           00002978.sst
+|   |   |   |           00002979.sst
+|   |   |   |           00002980.sst
+|   |   |   |           00002981.meta
+|   |   |   |           00002982.meta
+|   |   |   |           00002983.meta
+|   |   |   |           00002984.sst
+|   |   |   |           00002985.sst
+|   |   |   |           00002986.sst
+|   |   |   |           00002987.meta
+|   |   |   |           00002988.meta
+|   |   |   |           00002989.meta
+|   |   |   |           00002990.sst
+|   |   |   |           00002991.sst
+|   |   |   |           00002992.sst
+|   |   |   |           00002993.sst
+|   |   |   |           00002994.sst
+|   |   |   |           00002995.meta
+|   |   |   |           00002996.meta
+|   |   |   |           00002997.meta
+|   |   |   |           00002998.meta
+|   |   |   |           00002999.meta
+|   |   |   |           00003000.sst
+|   |   |   |           00003001.sst
+|   |   |   |           00003002.sst
+|   |   |   |           00003003.meta
+|   |   |   |           00003004.meta
+|   |   |   |           00003005.meta
+|   |   |   |           00003006.sst
+|   |   |   |           00003007.sst
+|   |   |   |           00003008.sst
+|   |   |   |           00003009.meta
+|   |   |   |           00003010.meta
+|   |   |   |           00003011.meta
+|   |   |   |           00003012.sst
+|   |   |   |           00003013.sst
+|   |   |   |           00003014.sst
+|   |   |   |           00003015.sst
+|   |   |   |           00003016.sst
+|   |   |   |           00003017.meta
+|   |   |   |           00003018.meta
+|   |   |   |           00003019.meta
+|   |   |   |           00003020.meta
+|   |   |   |           00003021.meta
+|   |   |   |           00003022.sst
+|   |   |   |           00003023.sst
+|   |   |   |           00003024.sst
+|   |   |   |           00003025.meta
+|   |   |   |           00003026.meta
+|   |   |   |           00003027.meta
+|   |   |   |           00003028.sst
+|   |   |   |           00003029.sst
+|   |   |   |           00003030.sst
+|   |   |   |           00003031.meta
+|   |   |   |           00003032.meta
+|   |   |   |           00003033.meta
+|   |   |   |           00003034.sst
+|   |   |   |           00003035.sst
+|   |   |   |           00003036.sst
+|   |   |   |           00003037.meta
+|   |   |   |           00003038.meta
+|   |   |   |           00003039.meta
 |   |   |   |           CURRENT
 |   |   |   |           LOG
 |   |   |   |           
@@ -1984,6 +2095,16 @@ C:.
 |   |   |   |   |   |       |           build-manifest.json
 |   |   |   |   |   |       |           server-reference-manifest.json
 |   |   |   |   |   |       |           
+|   |   |   |   |   |       +---depot
+|   |   |   |   |   |       |   |   route.js
+|   |   |   |   |   |       |   |   route.js.map
+|   |   |   |   |   |       |   |   route_client-reference-manifest.js
+|   |   |   |   |   |       |   |   
+|   |   |   |   |   |       |   \---route
+|   |   |   |   |   |       |           app-paths-manifest.json
+|   |   |   |   |   |       |           build-manifest.json
+|   |   |   |   |   |       |           server-reference-manifest.json
+|   |   |   |   |   |       |           
 |   |   |   |   |   |       \---route
 |   |   |   |   |   |               app-paths-manifest.json
 |   |   |   |   |   |               build-manifest.json
@@ -2167,6 +2288,8 @@ C:.
 |   |   |   |   |   node_modules_next_961d13b2._.js.map
 |   |   |   |   |   node_modules_next_96da75da._.js
 |   |   |   |   |   node_modules_next_96da75da._.js.map
+|   |   |   |   |   node_modules_next_c2173d48._.js
+|   |   |   |   |   node_modules_next_c2173d48._.js.map
 |   |   |   |   |   node_modules_next_c31bb4d4._.js
 |   |   |   |   |   node_modules_next_c31bb4d4._.js.map
 |   |   |   |   |   node_modules_next_dc13686a._.js
@@ -2189,6 +2312,8 @@ C:.
 |   |   |   |   |   [root-of-the-server]__3302dbde._.js.map
 |   |   |   |   |   [root-of-the-server]__42b12b62._.js
 |   |   |   |   |   [root-of-the-server]__42b12b62._.js.map
+|   |   |   |   |   [root-of-the-server]__4354e60b._.js
+|   |   |   |   |   [root-of-the-server]__4354e60b._.js.map
 |   |   |   |   |   [root-of-the-server]__47886e4b._.js
 |   |   |   |   |   [root-of-the-server]__47886e4b._.js.map
 |   |   |   |   |   [root-of-the-server]__55612d18._.js
@@ -2241,6 +2366,8 @@ C:.
 |   |   |   |   |   _next-internal_server_app_api_users_route_actions_4b9121e3.js.map
 |   |   |   |   |   _next-internal_server_app_api_users_[id]_absences_route_actions_719d36bc.js
 |   |   |   |   |   _next-internal_server_app_api_users_[id]_absences_route_actions_719d36bc.js.map
+|   |   |   |   |   _next-internal_server_app_api_users_[id]_depot_route_actions_75bb32be.js
+|   |   |   |   |   _next-internal_server_app_api_users_[id]_depot_route_actions_75bb32be.js.map
 |   |   |   |   |   _next-internal_server_app_api_users_[id]_route_actions_e7269cbb.js
 |   |   |   |   |   _next-internal_server_app_api_users_[id]_route_actions_e7269cbb.js.map
 |   |   |   |   |   _next-internal_server_app_api_vehicles_route_actions_7bc5da8c.js
@@ -3945,6 +4072,11 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
+|   |   +---99U0b9QRdrEDPuT7iSOof
+|   |   |       _buildManifest.js
+|   |   |       _clientMiddlewareManifest.json
+|   |   |       _ssgManifest.js
+|   |   |       
 |   |   +---chunks
 |   |   |       0beecfc46f57dad3.js
 |   |   |       148523911dd4489e.js
@@ -3969,13 +4101,8 @@ C:.
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-7673dbeff453a2b3.js
 |   |   |       
-|   |   +---media
-|   |   |       favicon.0b3bf435.ico
-|   |   |       
-|   |   \---tpl3Fu3IVqwqfAWXPQ_q3
-|   |           _buildManifest.js
-|   |           _clientMiddlewareManifest.json
-|   |           _ssgManifest.js
+|   |   \---media
+|   |           favicon.0b3bf435.ico
 |   |           
 |   \---types
 |           routes.d.ts
@@ -4211,6 +4338,142 @@ C:.
 |   |       |   \---ICONES_MAQUETTES_V1_1
 |   |       |       \---icons_maquettes_v1_1
 |   |       |               CONTACT_SHEET_ICONES_V1_1.png
+|   |       |               icon_action_assign_employee.png
+|   |       |               icon_action_assign_vehicle.png
+|   |       |               icon_action_clear.png
+|   |       |               icon_audit_copy_id.png
+|   |       |               icon_audit_copy_json.png
+|   |       |               icon_audit_export.png
+|   |       |               icon_audit_kpi_actions.png
+|   |       |               icon_audit_kpi_alerts.png
+|   |       |               icon_audit_kpi_connections.png
+|   |       |               icon_audit_kpi_sensitive.png
+|   |       |               icon_audit_kpi_support.png
+|   |       |               icon_audit_reset.png
+|   |       |               icon_button_add_shift.png
+|   |       |               icon_button_add_user.png
+|   |       |               icon_button_add_vehicle.png
+|   |       |               icon_button_new_template.png
+|   |       |               icon_button_save.png
+|   |       |               icon_cell_detail_calendar.png
+|   |       |               icon_company_identity.png
+|   |       |               icon_company_summary_building.png
+|   |       |               icon_company_summary_calendar.png
+|   |       |               icon_company_summary_depots.png
+|   |       |               icon_company_summary_users.png
+|   |       |               icon_company_summary_vehicles.png
+|   |       |               icon_dashboard_mail.png
+|   |       |               icon_dashboard_user_avatar.png
+|   |       |               icon_depots_archive_depot.png
+|   |       |               icon_depots_attachment_users.png
+|   |       |               icon_depots_attachment_vehicles.png
+|   |       |               icon_depots_danger_warning.png
+|   |       |               icon_depots_filter.png
+|   |       |               icon_depots_kpi_active.png
+|   |       |               icon_depots_kpi_archive.png
+|   |       |               icon_depots_kpi_users.png
+|   |       |               icon_depots_kpi_vehicles.png
+|   |       |               icon_depots_note_info.png
+|   |       |               icon_depots_search.png
+|   |       |               icon_export_csv.png
+|   |       |               icon_export_excel.png
+|   |       |               icon_export_pdf.png
+|   |       |               icon_filter_calendar.png
+|   |       |               icon_filter_depot.png
+|   |       |               icon_filter_role.png
+|   |       |               icon_filter_user.png
+|   |       |               icon_kpi_depots_active.png
+|   |       |               icon_kpi_templates_active.png
+|   |       |               icon_kpi_users_active.png
+|   |       |               icon_kpi_vehicles_active.png
+|   |       |               icon_login_alert_warning.png
+|   |       |               icon_login_brand_ambulance.png
+|   |       |               icon_login_button_lock.png
+|   |       |               icon_login_card_ambulance.png
+|   |       |               icon_login_checkbox_checked.png
+|   |       |               icon_login_feature_calendar.png
+|   |       |               icon_login_feature_shield.png
+|   |       |               icon_login_feature_users.png
+|   |       |               icon_login_feature_vehicle.png
+|   |       |               icon_login_footer_france_flag.png
+|   |       |               icon_login_footer_shield.png
+|   |       |               icon_login_input_email.png
+|   |       |               icon_login_input_eye.png
+|   |       |               icon_login_input_lock.png
+|   |       |               icon_login_trust_lock.png
+|   |       |               icon_module_audit.png
+|   |       |               icon_module_company.png
+|   |       |               icon_module_depots.png
+|   |       |               icon_module_onboarding.png
+|   |       |               icon_module_planning.png
+|   |       |               icon_module_templates.png
+|   |       |               icon_module_users.png
+|   |       |               icon_module_vehicles.png
+|   |       |               icon_onboarding_download_template.png
+|   |       |               icon_onboarding_error_warning.png
+|   |       |               icon_onboarding_file_excel.png
+|   |       |               icon_onboarding_progress_ring.png
+|   |       |               icon_onboarding_ready_check.png
+|   |       |               icon_onboarding_step_company.png
+|   |       |               icon_onboarding_step_depots.png
+|   |       |               icon_onboarding_step_templates.png
+|   |       |               icon_onboarding_step_users.png
+|   |       |               icon_onboarding_step_vehicles.png
+|   |       |               icon_onboarding_tab_absences.png
+|   |       |               icon_onboarding_tab_depots.png
+|   |       |               icon_onboarding_tab_templates.png
+|   |       |               icon_onboarding_tab_users.png
+|   |       |               icon_onboarding_tab_vehicles.png
+|   |       |               icon_onboarding_upload_cloud.png
+|   |       |               icon_print.png
+|   |       |               icon_privacy_breadcrumb_home.png
+|   |       |               icon_privacy_data_id.png
+|   |       |               icon_privacy_editor_building.png
+|   |       |               icon_privacy_footer_shield.png
+|   |       |               icon_privacy_hosting_cloud.png
+|   |       |               icon_privacy_purpose_target.png
+|   |       |               icon_privacy_update_calendar.png
+|   |       |               icon_sidebar_audit.png
+|   |       |               icon_sidebar_company.png
+|   |       |               icon_sidebar_dashboard.png
+|   |       |               icon_sidebar_depots.png
+|   |       |               icon_sidebar_logo_ambulance.png
+|   |       |               icon_sidebar_onboarding.png
+|   |       |               icon_sidebar_planning.png
+|   |       |               icon_sidebar_templates.png
+|   |       |               icon_sidebar_users.png
+|   |       |               icon_sidebar_vehicles.png
+|   |       |               icon_templates_button_duplicate.png
+|   |       |               icon_templates_drawer_chart.png
+|   |       |               icon_templates_drawer_clock.png
+|   |       |               icon_templates_drawer_info.png
+|   |       |               icon_templates_drawer_team.png
+|   |       |               icon_templates_export.png
+|   |       |               icon_templates_kpi_active.png
+|   |       |               icon_templates_kpi_archive.png
+|   |       |               icon_templates_kpi_disabled.png
+|   |       |               icon_templates_kpi_team.png
+|   |       |               icon_templates_kpi_total.png
+|   |       |               icon_templates_view.png
+|   |       |               icon_topbar_company.png
+|   |       |               icon_topbar_logout.png
+|   |       |               icon_topbar_theme_sun.png
+|   |       |               icon_users_action_edit.png
+|   |       |               icon_users_action_menu.png
+|   |       |               icon_users_archive_trash.png
+|   |       |               icon_users_drawer_profile.png
+|   |       |               icon_users_kpi_absence.png
+|   |       |               icon_users_kpi_archive.png
+|   |       |               icon_users_kpi_student.png
+|   |       |               icon_users_kpi_users.png
+|   |       |               icon_users_security_key.png
+|   |       |               icon_vehicles_kpi_maintenance.png
+|   |       |               icon_vehicles_kpi_out_service.png
+|   |       |               icon_vehicles_kpi_service.png
+|   |       |               icon_vehicles_kpi_total.png
+|   |       |               icon_vehicles_kpi_warning.png
+|   |       |               icon_vehicle_button_history.png
+|   |       |               icon_vehicle_filter_advanced.png
 |   |       |               LISTE_ICONES_EXPORT╔ES.md
 |   |       |               TABLE_MAPPING_ICONES.csv
 |   |       |               
@@ -5846,9 +6109,23 @@ C:.
 |   |   |   |       |   FIN_SESSION.md
 |   |   |   |       |   NOTES.md
 |   |   |   |       |   RESULTATS.md
+|   |   |   |       |   SESSION-20260503-11_A23_CLOTURE_A23__DOCS_FINAL.zip
 |   |   |   |       |   SESSION.md
 |   |   |   |       |   
+|   |   |   |       +---CAPTURES_CONNECTEES
+|   |   |   |       |       audit.png
+|   |   |   |       |       company.png
+|   |   |   |       |       dashboard.png
+|   |   |   |       |       depots.png
+|   |   |   |       |       onboarding.png
+|   |   |   |       |       planning.png
+|   |   |   |       |       privacy.png
+|   |   |   |       |       templates.png
+|   |   |   |       |       users.png
+|   |   |   |       |       vehicles.png
+|   |   |   |       |       
 |   |   |   |       \---PATCH
+|   |   |   |               PATCH__SESSION-20260503-11_A23_CLOTURE_A23.diff
 |   |   |   |               README_PATCH.md
 |   |   |   |               
 |   |   |   +---BLOC_A3
