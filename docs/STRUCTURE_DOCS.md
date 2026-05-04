@@ -1637,13 +1637,16 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |           README_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260503-08_A23_A23-PLAN-08
+|   |   |   |   |   ANNEXE_PREUVE_BRUTE_NODE.md
 |   |   |   |   |   EVIDENCES.md
 |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   NOTES.md
 |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION-20260503-08_A23_A23-PLAN-08__DOCS_FINAL.zip
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
+|   |   |   |           PATCH__SESSION-20260503-08_A23_A23-PLAN-08.diff
 |   |   |   |           README_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260503-09_A23_A23-ROLES-RH-09

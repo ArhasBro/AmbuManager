@@ -1,14 +1,15 @@
-﻿# FIN_SESSION
+# FIN_SESSION
 
-## ClÃ´ture
+## Cloture
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+Session A23-PLAN-08 executee en `CORRECTION+COMPLETION` avec patch principal applique.
 
 ## Validation
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+- validations terminales executees et OK : `git apply --check`, `git apply`, `npm run lint`, `npm run build` ;
+- preuve fonctionnelle script�e executee : `.codex-temp/a23-plan08-validate.mjs` ;
+- preuve brute archivee dans `ANNEXE_PREUVE_BRUTE_NODE.md`.
 
 ## Verdict final
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
-
+PARCOURS PLANNING MANUEL ADMIN TESTABLE SANS BLOCAGE MAJEUR : OUI

@@ -1,24 +1,26 @@
-﻿# README_PATCH
+# README_PATCH
 
 ## Session liee
+
 SESSION-20260503-08_A23_A23-PLAN-08
 
 ## Type
+
 CORRECTION+COMPLETION
 
-## Dossier PATCH
-docs/2-sessions/1-ALPHA/BLOC_A23/SESSION-20260503-08_A23_A23-PLAN-08/PATCH
+## Patch principal
 
-## Patch officiel attendu
-PATCH__SESSION-20260503-08_A23_A23-PLAN-08.diff
+- Nom : `PATCH__SESSION-20260503-08_A23_A23-PLAN-08.diff`
+- Chemin : `docs/2-sessions/1-ALPHA/BLOC_A23/SESSION-20260503-08_A23_A23-PLAN-08/PATCH/PATCH__SESSION-20260503-08_A23_A23-PLAN-08.diff`
+- Statut : applique
 
 ## Commandes d'application
 
-`ash
+```bash
 git apply --check "docs/2-sessions/1-ALPHA/BLOC_A23/SESSION-20260503-08_A23_A23-PLAN-08/PATCH/PATCH__SESSION-20260503-08_A23_A23-PLAN-08.diff"
 git apply         "docs/2-sessions/1-ALPHA/BLOC_A23/SESSION-20260503-08_A23_A23-PLAN-08/PATCH/PATCH__SESSION-20260503-08_A23_A23-PLAN-08.diff"
-`
+```
 
-## Statut
-- Dossier patch initialise.
-- Patch officiel a produire dans cette session si du code est modifie.
+## Correctif(s) additionnel(s)
+
+Aucun (`FIX-01` non necessaire).

@@ -52,6 +52,10 @@ function toTimeString(d: Date) {
   return `${h}:${m}`;
 }
 
+function shouldValidateTemplateTimeAgainstPayload(input: { templateId?: string | null; startTime?: string; endTime?: string }): boolean {
+  return input.templateId !== undefined || input.startTime !== undefined || input.endTime !== undefined;
+}
+
 export async function PATCH(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
 
@@ -110,12 +114,45 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
     const nextTemplate = nextTemplateId
       ? await prisma.shiftTemplate.findFirst({
           where: { id: nextTemplateId, companyId },
-          select: { id: true, category: true, minStaffCount: true, requiredRole: true, secondaryAllowedRoles: true, requiredVehicleType: true },
+          select: {
+            id: true,
+            category: true,
+            minStaffCount: true,
+            requiredRole: true,
+            secondaryAllowedRoles: true,
+            requiredVehicleType: true,
+            isTimeDefined: true,
+            startTime: true,
+            endTime: true,
+            crossesMidnight: true,
+          },
         })
       : null;
 
     if (nextTemplateId && !nextTemplate) {
       return NextResponse.json({ ok: false, error: "TEMPLATE_NOT_FOUND" }, { status: 404 });
+    }
+
+    if (nextTemplate?.isTimeDefined && shouldValidateTemplateTimeAgainstPayload(parsed.data)) {
+      if (!nextTemplate.startTime || !nextTemplate.endTime) {
+        return NextResponse.json({ ok: false, error: "TEMPLATE_TIME_CONFIG_ERROR" }, { status: 409 });
+      }
+      if (nextStartTime !== nextTemplate.startTime || nextEndTime !== nextTemplate.endTime) {
+        return NextResponse.json(
+          {
+            ok: false,
+            error: "TEMPLATE_TIME_MISMATCH",
+            details: {
+              templateStartTime: nextTemplate.startTime,
+              templateEndTime: nextTemplate.endTime,
+              templateCrossesMidnight: nextTemplate.crossesMidnight === true,
+              submittedStartTime: nextStartTime,
+              submittedEndTime: nextEndTime,
+            },
+          },
+          { status: 409 }
+        );
+      }
     }
 
     if (nextDepotId) {

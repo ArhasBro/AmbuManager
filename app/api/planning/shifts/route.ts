@@ -45,6 +45,16 @@ function addDays(d: Date, days: number): Date {
   return new Date(d.getTime() + days * 24 * 60 * 60 * 1000);
 }
 
+function isTemplateTimeMismatch(
+  template: { isTimeDefined: boolean; startTime: string | null; endTime: string | null },
+  startTime: string,
+  endTime: string
+): boolean {
+  if (!template.isTimeDefined) return false;
+  if (!template.startTime || !template.endTime) return true;
+  return template.startTime !== startTime || template.endTime !== endTime;
+}
+
 function toMondayLocal(dayStr: string): Date {
   const base = buildDateTimeLocal(dayStr, "00:00");
   const jsDay = base.getDay();
@@ -236,7 +246,7 @@ export async function POST(req: NextRequest) {
     const [template, depot] = await Promise.all([
       prisma.shiftTemplate.findFirst({
         where: { id: templateId, companyId, isActive: true },
-        select: { id: true },
+        select: { id: true, isTimeDefined: true, startTime: true, endTime: true, crossesMidnight: true },
       }),
       depotId
         ? prisma.depot.findFirst({ where: { id: depotId, companyId }, select: { id: true } })
@@ -249,6 +259,26 @@ export async function POST(req: NextRequest) {
 
     if (depotId && !depot) {
       return NextResponse.json({ ok: false, error: "DEPOT_NOT_FOUND" }, { status: 404 });
+    }
+
+    if (template && isTemplateTimeMismatch(template, startTime, endTime)) {
+      if (!template.startTime || !template.endTime) {
+        return NextResponse.json({ ok: false, error: "TEMPLATE_TIME_CONFIG_ERROR" }, { status: 409 });
+      }
+      return NextResponse.json(
+        {
+          ok: false,
+          error: "TEMPLATE_TIME_MISMATCH",
+          details: {
+            templateStartTime: template.startTime,
+            templateEndTime: template.endTime,
+            templateCrossesMidnight: template.crossesMidnight === true,
+            submittedStartTime: startTime,
+            submittedEndTime: endTime,
+          },
+        },
+        { status: 409 }
+      );
     }
 
     const startAt = buildDateTimeLocal(date, startTime);
