@@ -1,7 +1,7 @@
 # Ambulance Manager — PLAN_DE_DEVELOPPEMENT
 
-Version : V2.4.0 (MASTER)
-Date : 03/05/2026
+Version : V2.4.1 (MASTER)
+Date : 04/05/2026
 
 ## Sommaire
 - [1. Rôle du document](#1-rôle-du-document)
@@ -16,7 +16,7 @@ Date : 03/05/2026
 - [9. Convention de structuration du plan](#9-convention-de-structuration-du-plan)
 - [10. Ordre global de développement retenu](#10-ordre-global-de-développement-retenu)
 - [11. ALPHA V1.0 — Socle et blocs historiques A1 à A13](#11-alpha-v10--socle-et-blocs-historiques-a1-à-a13)
-- [12. ALPHA — Suite active / consolidation A14 à A23](#12-alpha--suite-active--consolidation-a14-à-a23)
+- [12. ALPHA — Suite active / consolidation A14 à A26](#12-alpha--suite-active--consolidation-a14-à-a26)
 - [13. BETA V1.x — Plan prévisionnel](#13-beta-v1x--plan-prévisionnel)
 - [14. VERSION OFFICIELLE V2.x — Plan prévisionnel](#14-version-officielle-v2x--plan-prévisionnel)
 - [15. Règle de maintenance du plan](#15-règle-de-maintenance-du-plan)
@@ -39,7 +39,7 @@ Il doit s’y conformer.
 Le plan est volontairement ordonné ainsi :
 
 1. ALPHA — socle et blocs historiques A1 à A13 ;
-2. ALPHA — suite active / consolidation A14 à A21 ;
+2. ALPHA — suite active / consolidation A14 à A26 ;
 3. BETA — évolutions prévisionnelles après stabilisation ALPHA ;
 4. VERSION OFFICIELLE / V2 — extensions long terme.
 
@@ -769,7 +769,7 @@ Finaliser l’ALPHA avec une vraie logique de contrôle qualité et une document
 - documentation d’usage minimale
 - décision propre d’entrée en test réel entreprise
 
-## 12. ALPHA — Suite active / consolidation
+## 12. ALPHA — Suite active / consolidation A14 à A26
 
 L’ALPHA 1.0 est considérée comme clôturée sur son cycle de tests locaux et de validation du socle actuel.
 
@@ -1027,6 +1027,418 @@ A23 doit respecter l’ordre suivant :
 - nouveau verdict société pilote fiable.
 
 ---------------------------------------------------------------------------------------------------
+
+
+### BLOC A24 — Réalignement UI/UX global sur MAQUETTE_DA
+
+**Objectif du bloc**  
+Réaligner l’ensemble de l’interface intégrée sur la direction artistique officielle `MAQUETTE_DA`, afin d’obtenir une application plus pure, plus simple, plus lisible et visuellement cohérente avant de poursuivre les travaux métier avancés.
+
+Le bloc A24 intervient après la clôture A23.  
+A23 a stabilisé les anomalies post-test manuel ADMIN.  
+A24 traite désormais le réalignement UI/UX global de l’application, sans transformer ce bloc en refonte fonctionnelle ni en préparation de déploiement société pilote.
+
+**Référence UI/UX officielle**  
+La direction artistique officielle est exclusivement :
+
+`docs/1-master/MAQUETTE/MAQUETTE_DA`
+
+En cas de contradiction entre anciens documents, anciennes captures, anciens prompts, anciennes interprétations ou références partielles, la référence prioritaire est :
+
+`docs/1-master/MAQUETTE/MAQUETTE_DA`
+
+Les autres éléments du dossier `docs/1-master/MAQUETTE/` peuvent servir de support d’analyse, de documentation, de mapping ou de référence complémentaire, mais ils ne doivent pas contredire `MAQUETTE_DA`.
+
+**Principe directeur**  
+A24 doit appliquer la DA officielle définie par `MAQUETTE_DA`.  
+Aucune autre direction artistique ne doit être inventée ou priorisée.
+
+Le travail doit viser :
+- une interface très proche des maquettes validées ;
+- une structure plus pure et plus simple ;
+- une meilleure lisibilité ;
+- une densité maîtrisée ;
+- des composants cohérents ;
+- des icônes propres ;
+- une navigation claire ;
+- une compatibilité mode clair / mode sombre ;
+- des captures avant/après pour éviter de reproduire les erreurs précédentes.
+
+**Mode sombre**  
+Le mode sombre fait partie du périmètre A24.
+
+Il doit être traité en français sous le nom **mode sombre**.
+
+Le mode sombre doit être une déclinaison sobre de `MAQUETTE_DA` :
+- fond général sombre ;
+- textes clairs ;
+- cartes et panneaux légèrement différenciés du fond ;
+- bordures sobres ;
+- boutons, badges, tableaux et états visuels lisibles ;
+- conservation de l’identité visuelle officielle.
+
+Le mode sombre ne doit pas être une simple inversion automatique noir/blanc.  
+Le mode clair reste le thème principal de référence, avec un bouton visible permettant de basculer en mode sombre.
+
+**Icônes**  
+Les icônes doivent être auditées et classées.
+
+L’ajout de `lucide-react` est autorisé pour les icônes génériques si cela améliore la propreté visuelle et évite les initiales ou pictogrammes approximatifs.
+
+Les assets PNG/SVG doivent être conservés uniquement s’ils sont réellement spécifiques à Ambulance Manager, notamment logo, marque ou pictogrammes ambulance spécifiques.  
+Les icônes génériques doivent être remplacées par des composants propres lorsque c’est pertinent.
+
+**Périmètre**  
+Le bloc A24 peut traiter :
+- shell applicatif ;
+- sidebar ;
+- topbar ;
+- navigation ;
+- tokens couleurs clair / sombre ;
+- bouton mode clair / mode sombre ;
+- dashboard ;
+- login ;
+- société ;
+- dépôts ;
+- véhicules ;
+- templates ;
+- utilisateurs / RH visuel ;
+- audit ;
+- onboarding ;
+- privacy ;
+- pages simples ;
+- boutons ;
+- badges ;
+- cards ;
+- tableaux ;
+- filtres ;
+- drawers / panneaux ;
+- icônes ;
+- responsive minimal sans refonte mobile complète ;
+- audit préparatoire du planning pour A25.
+
+**Exclusions**  
+Le bloc A24 ne doit pas traiter :
+- refonte planning profonde ;
+- nouveau moteur planning ;
+- autoschedule complet ;
+- matching complet ;
+- règles métier avancées ;
+- refonte RBAC ;
+- rôle `PSC1` réel ;
+- RH avancée ;
+- saisie réelle des heures travaillées ;
+- paie ;
+- primes ;
+- suppression physique généralisée ;
+- RGPD complet ;
+- sécurité avancée ;
+- application mobile complète ;
+- préparation société pilote ;
+- déploiement.
+
+A24 peut réorganiser visuellement l’information pour se rapprocher de `MAQUETTE_DA`, mais il ne doit pas supprimer silencieusement une donnée métier, casser un flux validé ou ajouter une fonctionnalité métier.
+
+Si une page réelle contient plus d’informations que la maquette, la correction doit privilégier :
+- repli ;
+- panneau droit ;
+- drawer ;
+- onglets ;
+- section secondaire ;
+- hiérarchie visuelle plus claire.
+
+#### Sessions
+
+- **A24-UI-01 — AUDIT** — Audit global UI/UX et cadrage des références `MAQUETTE_DA`.  
+  Objectif : officialiser les références UI/UX, vérifier les maquettes disponibles, classer les pages couvertes, auditer les icônes, cadrer le mode sombre, cadrer le responsive minimal et préparer l’ordre de correction.  
+  Livrable attendu : rapport d’audit UI/UX avec matrice page → maquette → route → fichier code, classement des écarts, statut des icônes et recommandations de correction.  
+  DoD : chaque page couverte possède un verdict visuel : conforme / non conforme / incomplet / à confirmer.
+
+- **A24-UI-02 — CORRECTION+COMPLÉTION** — Socle UI partagé, mode clair / mode sombre et icônes.  
+  Périmètre : tokens CSS, fond global, AppShell, Sidebar, Topbar, PageHeader, boutons, cards, badges, tableaux, filtres, drawers, bouton mode clair / mode sombre et icônes génériques.  
+  Livrable attendu : patch code ciblé du socle visuel partagé.  
+  DoD : les pages applicatives partagent une base visuelle cohérente avec `MAQUETTE_DA`, avec mode clair et mode sombre exploitables, sans nouvelle DA.
+
+- **A24-UI-03 — CORRECTION+COMPLÉTION** — Login et Dashboard.  
+  Périmètre : page login, dashboard, cartes d’accès, cards de synthèse, icônes, hiérarchie visuelle, fond, espacements, mode clair et mode sombre.  
+  Livrable attendu : patch code ciblé Login + Dashboard.  
+  DoD : Login et Dashboard sont proches de `MAQUETTE_DA`, simples, lisibles et fonctionnels.
+
+- **A24-UI-04 — CORRECTION+COMPLÉTION** — Société et Dépôts.  
+  Périmètre : page société, pages dépôts / bases, formulaires, cards, sections, tableaux, boutons, badges, panneaux et cohérence visuelle.  
+  Livrable attendu : patch code ciblé Société + Dépôts.  
+  DoD : les pages de structure société sont sobres, lisibles et alignées avec la DA officielle.
+
+- **A24-UI-05 — CORRECTION+COMPLÉTION** — Véhicules et Templates.  
+  Périmètre : pages véhicules, pages templates, tableaux, filtres, badges, formulaires, détails, états visuels, actions principales et secondaires.  
+  Livrable attendu : patch code ciblé Véhicules + Templates.  
+  DoD : les pages référentielles métier sont propres, cohérentes et visuellement proches de `MAQUETTE_DA`.
+
+- **A24-UI-06 — CORRECTION+COMPLÉTION** — Utilisateurs / RH visuel.  
+  Périmètre : page utilisateurs, liste, filtres, création, édition, fiche utilisateur, badges rôles/statuts et cohérence RH visible.  
+  Livrable attendu : patch code ciblé Users / RH visuel.  
+  DoD : la page Utilisateurs / RH est plus pure, plus lisible, alignée avec `MAQUETTE_DA`, sans ajout de RH avancée.
+
+- **A24-UI-07 — CORRECTION+COMPLÉTION** — Audit, Onboarding, Privacy et pages simples.  
+  Périmètre : audit, onboarding, privacy, pages simples, sections, cards, tableaux, filtres, textes, états et finitions globales.  
+  Livrable attendu : patch code ciblé pages complémentaires.  
+  DoD : les pages complémentaires sont alignées avec la DA officielle et ne créent pas de rupture visuelle.
+
+- **A24-UI-08 — AUDIT** — Audit préparatoire Planning pour A25.  
+  Objectif : auditer le planning après application du socle UI A24, sans correction profonde du planning, afin de préparer le bloc A25.  
+  Livrable attendu : rapport préparatoire A25 avec captures avant, écarts planning, zones sensibles, risques fonctionnels et recommandations de découpage.  
+  DoD : le planning possède une cartographie claire des écarts UI/UX à traiter en A25.
+
+- **A24-UI-09 — VALIDATION** — Validation globale UI/UX post-réalignement.  
+  À vérifier : cohérence visuelle globale, respect de `MAQUETTE_DA`, mode clair, mode sombre, navigation connectée, captures avant/après, absence de régression fonctionnelle et pages sœurs cohérentes.  
+  Livrable attendu : rapport de validation UI/UX avec preuves terminales, captures et classement des résiduels.  
+  DoD : toutes les pages A24 sont validées ou les résiduels sont classés explicitement bloquants / non bloquants.
+
+- **CLOTURE_A24 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc A24.  
+  Livrable attendu : contrôle final du bloc UI/UX global, vérification des patchs, preuves, captures, documentation finale et ZIP documentaire.  
+  Verdict attendu :
+  - `BLOC A24 CLÔTURABLE DÉFINITIVEMENT : OUI`
+  - ou
+  - `BLOC A24 CLÔTURABLE DÉFINITIVEMENT : NON`
+
+#### Résultat attendu
+- application réalignée visuellement avec `MAQUETTE_DA` ;
+- interface plus pure, simple et lisible ;
+- shell commun cohérent ;
+- composants UI harmonisés ;
+- icônes propres ;
+- mode clair et mode sombre disponibles ;
+- pages principales rapprochées de la DA officielle ;
+- planning audité et préparé pour A25 ;
+- aucune refonte planning profonde ;
+- aucune extension fonctionnelle hors périmètre UI/UX global.
+
+---
+
+### BLOC A25 — Planning UI/UX & ergonomie métier
+
+**Objectif du bloc**  
+Reprendre le planning comme sujet UI/UX principal et dédié, afin d’améliorer sa lisibilité, sa structure visuelle et son ergonomie métier sans transformer ce bloc en refonte fonctionnelle avancée.
+
+Le planning est un écran central du produit Ambulance Manager.  
+Il ne doit pas être traité comme une simple page secondaire du réalignement UI/UX global A24.
+
+Le bloc A25 intervient après :
+- le réalignement UI/UX global A24 ;
+- l’application du socle visuel commun ;
+- l’intégration de la direction artistique officielle `MAQUETTE_DA`.
+
+**Référence UI/UX officielle**  
+La direction artistique officielle reste exclusivement :
+
+`docs/1-master/MAQUETTE/MAQUETTE_DA`
+
+Le planning doit être réaligné avec cette direction artistique, sans inventer une nouvelle DA.
+
+**Principe directeur**  
+Le bloc A25 doit rendre le planning :
+- plus pur ;
+- plus simple ;
+- plus lisible ;
+- plus exploitable métier ;
+- plus cohérent avec le reste de l’application ;
+- compatible avec le mode clair et le mode sombre ;
+- sans casser les fonctionnalités stabilisées.
+
+**Périmètre**  
+Le bloc A25 peut traiter :
+- vue jour ;
+- vue semaine ;
+- vue mois ;
+- navigation planning ;
+- header planning ;
+- filtres ;
+- toolbar ;
+- cellules de planning ;
+- cards de shifts ;
+- badges ;
+- états visuels ;
+- horaires ;
+- équipes ;
+- véhicules ;
+- panneaux de détail ;
+- panneaux d’affectation ;
+- actions principales et secondaires ;
+- densité métier ;
+- lisibilité terrain ;
+- responsive minimal sans refonte mobile complète.
+
+**Exclusions**  
+Le bloc A25 ne doit pas traiter :
+- refonte fonctionnelle complète du planning ;
+- nouveau moteur planning ;
+- autoschedule complet ;
+- matching complet ;
+- règles métier avancées ;
+- refonte RBAC ;
+- RH avancée ;
+- saisie réelle des heures travaillées ;
+- paie ;
+- primes ;
+- suppression physique généralisée ;
+- application mobile complète ;
+- préparation société pilote.
+
+Le bloc A25 peut améliorer l’ergonomie et la présentation d’un flux existant, mais il ne doit pas créer une nouvelle logique métier lourde.
+
+#### Sessions
+
+- **A25-PLAN-UI-01 — AUDIT** — Audit UI/UX complet du planning.  
+  Objectif : comparer le planning réel avec `MAQUETTE_DA`, identifier les écarts visuels, ergonomiques et de densité, puis décider précisément ce qui doit être corrigé dans A25.  
+  Livrable attendu : rapport d’audit planning avec captures avant, matrice des écarts, risques de régression et ordre de correction recommandé.  
+  DoD : chaque zone du planning possède un verdict : conforme / non conforme / incomplet / à confirmer.
+
+- **A25-PLAN-UI-02 — CORRECTION+COMPLÉTION** — Réalignement de la structure générale du planning.  
+  Périmètre : header planning, navigation, filtres, toolbar, fond, cards globales, structure générale, panneaux et cohérence avec le socle A24.  
+  Livrable attendu : patch code ciblé structure planning.  
+  DoD : le planning possède une structure visuelle claire, cohérente avec `MAQUETTE_DA`, sans changement fonctionnel lourd.
+
+- **A25-PLAN-UI-03 — CORRECTION+COMPLÉTION** — Réalignement des vues jour et semaine.  
+  Périmètre : grilles, lignes horaires, cards de shifts, badges, équipes, véhicules, actions visibles, densité et lisibilité métier.  
+  Livrable attendu : patch code ciblé vues jour/semaine.  
+  DoD : les vues jour et semaine sont lisibles, exploitables et visuellement cohérentes avec la DA officielle.
+
+- **A25-PLAN-UI-04 — CORRECTION+COMPLÉTION** — Réalignement de la vue mois.  
+  Périmètre : structure mensuelle, cellules, indicateurs, résumé des shifts, états visuels, navigation mensuelle et densité.  
+  Livrable attendu : patch code ciblé vue mois.  
+  DoD : la vue mois devient lisible et cohérente sans devenir une refonte fonctionnelle avancée.
+
+- **A25-PLAN-UI-05 — CORRECTION+COMPLÉTION** — Réalignement des panneaux d’action et d’affectation.  
+  Périmètre : drawer, panneau droit, affectation personnel, affectation véhicule, détail shift, modification, annulation, actions principales et secondaires.  
+  Livrable attendu : patch code ciblé panneaux/actions planning.  
+  DoD : les actions planning sont plus claires, mieux hiérarchisées et plus proches de l’ergonomie attendue, sans nouvelle logique métier lourde.
+
+- **A25-PLAN-UI-06 — VALIDATION** — Validation globale du planning UI/UX.  
+  À vérifier : vues jour/semaine/mois, lisibilité, cohérence avec `MAQUETTE_DA`, mode clair, mode sombre, navigation connectée, absence de régression fonctionnelle, captures avant/après.  
+  Livrable attendu : rapport de validation planning avec preuves terminales et captures.  
+  DoD : le planning est validé ou les résiduels sont classés explicitement bloquants / non bloquants.
+
+- **CLOTURE_A25 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc A25.  
+  Livrable attendu : contrôle final du bloc Planning UI/UX, vérification des patchs, preuves, captures, documentation finale et ZIP documentaire.  
+  Verdict attendu :
+  - `BLOC A25 CLÔTURABLE DÉFINITIVEMENT : OUI`
+  - ou
+  - `BLOC A25 CLÔTURABLE DÉFINITIVEMENT : NON`
+
+#### Résultat attendu
+- planning visuellement réaligné avec `MAQUETTE_DA` ;
+- vues jour/semaine/mois plus lisibles ;
+- actions planning mieux hiérarchisées ;
+- affectation plus compréhensible visuellement ;
+- densité métier maîtrisée ;
+- cohérence avec le socle UI A24 ;
+- compatibilité mode clair / mode sombre ;
+- aucune refonte fonctionnelle lourde ;
+- aucune extension hors périmètre planning UI/UX.
+
+---
+
+### BLOC A26 — Stabilisation / non-régression post UI/UX
+
+**Objectif du bloc**  
+Vérifier que les réalignements UI/UX réalisés en A24 et A25 n’ont pas introduit de régressions visuelles, fonctionnelles ou de navigation, puis corriger uniquement les régressions prouvées.
+
+Le bloc A26 intervient après :
+- A24 — Réalignement UI/UX global sur `MAQUETTE_DA` ;
+- A25 — Planning UI/UX & ergonomie métier.
+
+A26 n’est pas un nouveau bloc de refonte.  
+A26 est un bloc de sécurisation finale après réalignement UI/UX.
+
+**Principe directeur**  
+Le bloc A26 doit contrôler l’application dans son ensemble après les modifications UI/UX, afin de garantir que :
+- les pages restent fonctionnelles ;
+- la navigation reste cohérente ;
+- le mode clair fonctionne ;
+- le mode sombre fonctionne ;
+- les pages principales restent alignées avec `MAQUETTE_DA` ;
+- aucune fonctionnalité stabilisée n’a été cassée ;
+- aucune régression majeure n’est laissée avant la suite du développement.
+
+**Périmètre**  
+Le bloc A26 peut contrôler :
+- login ;
+- dashboard ;
+- sidebar ;
+- topbar ;
+- navigation connectée ;
+- société ;
+- dépôts ;
+- véhicules ;
+- templates ;
+- utilisateurs/RH ;
+- planning ;
+- audit ;
+- onboarding ;
+- privacy ;
+- mode clair ;
+- mode sombre ;
+- responsive minimal ;
+- permissions et accès visibles côté UI ;
+- captures finales ;
+- validations terminales.
+
+**Exclusions**  
+Le bloc A26 ne doit pas traiter :
+- nouvelle refonte UI/UX ;
+- nouvelle fonctionnalité métier ;
+- nouveau module ;
+- refonte planning avancée ;
+- autoschedule complet ;
+- matching complet ;
+- RH avancée ;
+- refonte RBAC ;
+- RGPD complet ;
+- sécurité avancée ;
+- préparation société pilote ;
+- déploiement.
+
+A26 doit corriger uniquement les régressions réellement démontrées.
+
+#### Sessions
+
+- **A26-STAB-01 — AUDIT** — Audit global de non-régression post A24-A25.  
+  Objectif : vérifier l’état réel de l’application après les réalignements UI/UX global et planning.  
+  Livrable attendu : rapport d’audit de non-régression avec captures, routes contrôlées, anomalies visuelles, anomalies fonctionnelles et classement bloquant / non bloquant.  
+  DoD : chaque page principale possède un statut clair : OK / régression mineure / régression bloquante / à confirmer.
+
+- **A26-STAB-02 — CORRECTION** — Correction ciblée des régressions bloquantes post UI/UX.  
+  Objectif : corriger uniquement les régressions prouvées qui empêchent la navigation, l’usage ou la cohérence minimale de l’application.  
+  Livrable attendu : patch code minimal de correction.  
+  DoD : aucune correction ne sort du périmètre des régressions constatées en A26-STAB-01.
+
+- **A26-STAB-03 — COMPLÉTION** — Complétion des preuves visuelles et documentaires post-correction.  
+  Objectif : compléter les captures, preuves, notes de non-régression et documentation finale.  
+  Livrable attendu : documentation consolidée des contrôles post UI/UX.  
+  DoD : les preuves permettent de comparer l’état final aux objectifs A24 et A25.
+
+- **A26-STAB-04 — VALIDATION** — Validation finale de non-régression post UI/UX.  
+  À vérifier : navigation connectée, pages principales, mode clair, mode sombre, planning, absence de régression bloquante, validations terminales.  
+  Livrable attendu : rapport de validation finale avec preuves terminales et captures.  
+  DoD : toutes les régressions bloquantes sont corrigées ou classées explicitement.
+
+- **CLOTURE_A26 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc A26.  
+  Livrable attendu : contrôle final de stabilisation post UI/UX, vérification des patchs, preuves, captures, documentation finale et ZIP documentaire.  
+  Verdict attendu :
+  - `BLOC A26 CLÔTURABLE DÉFINITIVEMENT : OUI`
+  - ou
+  - `BLOC A26 CLÔTURABLE DÉFINITIVEMENT : NON`
+
+#### Résultat attendu
+- application stable après A24 et A25 ;
+- aucune régression bloquante post UI/UX ;
+- navigation connectée validée ;
+- pages principales contrôlées ;
+- mode clair et mode sombre validés ;
+- planning contrôlé après réalignement ;
+- documentation finale complète ;
+- base saine avant la suite du développement.
+
 
 ## 13. BETA V1.x — Plan prévisionnel
 

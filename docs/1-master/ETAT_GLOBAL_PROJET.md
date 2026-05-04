@@ -1,7 +1,7 @@
 # Ambulance Manager — ETAT_GLOBAL_PROJET
 
-Version : V1.7.0 (MASTER)  
-Date : 03/05/2026
+Version : V1.8.0 (MASTER)  
+Date : 04/05/2026
 
 ## Sommaire
 - [1. Rôle](#1-rôle)
@@ -11,6 +11,8 @@ Date : 03/05/2026
 - [5. Décision de pilotage au 20/04/2026](#5-décision-de-pilotage-au-20042026)
 - [6. Statut officiel global](#6-statut-officiel-global)
 - [6.5 Constat de test manuel ADMIN au 03/05/2026](#65-constat-de-test-manuel-admin-au-03052026)
+- [6.6 Clôture du bloc A23 au 04/05/2026](#66-clôture-du-bloc-a23-au-04052026)
+- [6.7 Suite ALPHA officielle A24 à A26](#67-suite-alpha-officielle-a24-à-a26)
 - [7. Points à confirmer](#7-points-à-confirmer)
 - [8. Prochaine étape logique officielle](#8-prochaine-étape-logique-officielle)
 
@@ -59,11 +61,12 @@ Les statuts historiques ci-dessous ont été fixés selon :
 ## 6. Statut officiel global
 ### 6.1 Références produit et pilotage
 - **DOCUMENT_CADRAGE_FONCTIONNEL** : **VALIDÉ**
-- **PLAN_DE_DEVELOPPEMENT** : **VALIDÉ**
-- **ETAT_GLOBAL_PROJET** : **VALIDÉ**
-- **REGISTRE_DECISIONS** : **VALIDÉ**
+- **PLAN_DE_DEVELOPPEMENT** : **VALIDÉ — V2.4.1**
+- **ETAT_GLOBAL_PROJET** : **VALIDÉ — V1.8.0**
+- **REGISTRE_DECISIONS** : **VALIDÉ — V1.8.0**
 - **DOCUMENT_MAITRE** : **VALIDÉ**
-- **RECAP_DISCUSSIONS** : **VALIDÉ**
+- **RECAP_DISCUSSIONS** : **VALIDÉ — V1.8.0**
+- **REFERENCE_UI_UX_A24** : **CRÉÉE / VALIDÉE COMME RÉFÉRENCE D’EXÉCUTION A24**
 
 ### 6.2 ALPHA historique
 - **A1 à A13** : **TRAITÉS DANS LE CYCLE ALPHA 1.0**
@@ -71,23 +74,21 @@ Les statuts historiques ci-dessous ont été fixés selon :
 - **Produit ALPHA** : **NON TERMINÉ**
 
 ### 6.3 Constat de test local officiel
-Les constats suivants sont désormais officiellement retenus au titre de la campagne `2-TEST-ALPHA` :
+Les constats suivants sont officiellement retenus au titre de la campagne `2-TEST-ALPHA` :
 - le dépôt démarre en local ;
 - Prisma nécessite un réalignement rigoureux de la base locale avant usage ;
 - des écarts schéma / base réelle peuvent encore exister sur l’environnement local ;
 - le dashboard a été rendu fonctionnel après réalignement local de la base ;
-- un défaut UI de lisibilité en environnement dark mode a été constaté comme sujet thème / frontend, non comme bug métier ;
+- un défaut UI de lisibilité en environnement mode sombre a été constaté comme sujet thème / frontend, non comme bug métier ;
 - aucune refonte du cadrage produit n’est décidée à ce stade.
 
 ### 6.4 Suite prioritaire officielle
-Ordre officiel de suite :
-1. consolidation du socle ;
-2. sécurité minimale ;
-3. fiabilisation BDD / Prisma / migrations / environnements ;
-4. base RGPD ;
-5. reprise des priorités fonctionnelles ALPHA ;
-6. amélioration UX / navigation / graphisme ;
-7. sujets métier sensibles à cadrer séparément.
+Ordre officiel de suite, actualisé après clôture A23 :
+1. réalignement UI/UX global sur `MAQUETTE_DA` ;
+2. planning UI/UX & ergonomie métier ;
+3. stabilisation / non-régression post UI/UX ;
+4. reprise des tests selon décision utilisateur ;
+5. poursuite des blocs fonctionnels ou techniques suivants selon résultats de stabilisation.
 
 ### 6.5 Constat de test manuel ADMIN au 03/05/2026
 Les constats suivants sont désormais officiellement retenus au titre de `SESSION-20260503_TEST-LOCAL-02` :
@@ -99,26 +100,81 @@ Les constats suivants sont désormais officiellement retenus au titre de `SESSIO
 - règles métier société partiellement préparées mais non éditables ;
 - UI réelle jugée non suffisamment alignée avec les maquettes visuelles validées A21, point majeur de non-présentabilité ;
 - besoins complémentaires à cadrer : rôle `PSC1`, affectation planning simplifiée, enrichissement RH salarié, plusieurs gérants, gouvernance suppression / archivage ;
-- verdict produit temporaire : `NO-GO TEMPORAIRE SOCIÉTÉ PILOTE`.
+- verdict produit temporaire initial : `NO-GO TEMPORAIRE SOCIÉTÉ PILOTE`.
 
-Conséquence : la campagne `2-TEST-ALPHA` ne remet pas en cause les validations terminales locales précédentes, mais elle impose une reprise de correction / complétion ciblée avant présentation société pilote.
+Conséquence : la campagne `2-TEST-ALPHA` n’a pas remis en cause les validations terminales locales précédentes, mais elle a imposé une reprise de correction / complétion ciblée avant toute présentation société pilote.
+
+### 6.6 Clôture du bloc A23 au 04/05/2026
+Le bloc `A23 — Stabilisation post-test manuel ADMIN / Go-No-Go société pilote` est considéré comme clôturé définitivement après contrôle qualité de `SESSION-20260503-11_A23_CLOTURE_A23`.
+
+Verdict officiel :
+
+```txt
+BLOC A23 CLÔTURABLE DÉFINITIVEMENT : OUI
+```
+
+Points retenus :
+- session post-login stabilisée ;
+- module utilisateurs ADMIN stabilisé ;
+- absences / indisponibilités retestées ou classées ;
+- planning manuel ADMIN stabilisé sur les usages essentiels ;
+- résiduel `privacy/RGPD` du smoke test corrigé ;
+- validations terminales finales prouvées ;
+- navigation connectée et shell applicatif prouvés ;
+- affectation dépôt utilisateur prouvée ;
+- documentation finale et ZIP documentaire produits ;
+- passage à la suite autorisé.
+
+Le verdict société pilote reste à traiter dans la logique de suite du projet. La clôture A23 autorise la poursuite de l’ALPHA, mais ne constitue pas à elle seule un déploiement société pilote.
+
+### 6.7 Suite ALPHA officielle A24 à A26
+La suite officielle immédiatement validée dans `PLAN_DE_DEVELOPPEMENT.md` est :
+
+1. **A24 — Réalignement UI/UX global sur `MAQUETTE_DA`**  
+   Objectif : réaligner l’application sur la direction artistique officielle, avec interface pure, simple, lisible, mode clair/sombre, icônes propres, captures avant/après et exclusion du planning profond.
+
+2. **A25 — Planning UI/UX & ergonomie métier**  
+   Objectif : traiter le planning comme bloc dédié, en travaillant la lisibilité, les vues jour/semaine/mois, l’ergonomie d’affectation et la cohérence avec le socle A24.
+
+3. **A26 — Stabilisation / non-régression post UI/UX**  
+   Objectif : vérifier et corriger uniquement les régressions prouvées après A24 et A25.
+
+La direction artistique officielle pour A24, A25 et A26 est exclusivement :
+
+```txt
+docs/1-master/MAQUETTE/MAQUETTE_DA
+```
 
 ## 7. Points à confirmer
-- le traitement définitif à retenir pour l’écart `Vehicle.isActive` : correction repo dédiée ou simple réalignement environnemental documenté ;
-- le périmètre exact des prochaines sessions de consolidation du socle ;
-- la profondeur de traitement du dark mode dans l’ALPHA ;
-- la reproduction technique du défaut utilisateurs observé en test manuel ADMIN ;
-- la cause exacte de l’écart UI/UX ressenti entre application intégrée et maquettes validées ;
-- le statut exact de `PSC1` : rôle principal, qualification ou compétence ;
-- la possibilité réelle de plusieurs gérants par entreprise ;
-- la politique de suppression définitive des éléments archivables ;
-- les besoins oubliés ou encore non remontés dans le backlog ALPHA.
+- niveau réel de proximité atteint par A24 avec `MAQUETTE_DA` après captures avant/après ;
+- qualité finale des icônes génériques et spécifiques après audit A24 ;
+- comportement exact du mode sombre après intégration A24 ;
+- résiduels éventuels du planning à traiter en A25 après audit A24 ;
+- régressions éventuelles post UI/UX à traiter en A26 ;
+- décision après A26 : relancer un bloc de développement ou ouvrir une nouvelle campagne de tests.
+
+Ne sont plus des points à confirmer pour l’ouverture A24 :
+- l’ordre A24 / A25 / A26 ;
+- la priorité de `MAQUETTE_DA` ;
+- le principe des captures avant/après ;
+- l’intégration du mode sombre dans A24 ;
+- l’autorisation de Lucide React pour les icônes génériques.
 
 ## 8. Prochaine étape logique officielle
-La prochaine étape logique officielle, après `SESSION-20260503_TEST-LOCAL-02`, est une phase de **stabilisation post-test manuel ADMIN**, avant tout nouveau test société pilote, avec priorité donnée à :
-- correction de l’hydratation session / shell après login ;
-- correction du module utilisateurs ADMIN ;
-- retest ciblé utilisateurs + absences ;
-- audit d’écart UI/UX réel versus maquettes validées A21 / intégration A22 ;
-- reprise ciblée du planning manuel ;
-- décision Go / No-Go société pilote après retest.
+La prochaine étape logique officielle, après clôture du bloc A23, est :
+
+```txt
+BLOC A24 — Réalignement UI/UX global sur MAQUETTE_DA
+```
+
+Priorités A24 :
+- officialiser et appliquer `MAQUETTE_DA` comme direction artistique unique ;
+- corriger le socle UI partagé ;
+- intégrer le mode clair / mode sombre avec bouton visible ;
+- traiter les icônes génériques via Lucide React ou équivalent ;
+- conserver uniquement les assets réellement spécifiques et propres ;
+- réaligner Login, Dashboard, Société, Dépôts, Véhicules, Templates, Utilisateurs/RH, Audit, Onboarding, Privacy et pages simples ;
+- produire des captures avant/après ;
+- auditer le planning pour préparer A25 sans le traiter profondément dans A24.
+
+Le passage à A25 n’est autorisé qu’après clôture explicite de A24.

@@ -1,7 +1,7 @@
 # Ambulance Manager — RECAP_DISCUSSIONS
 
-Version : V1.7.0 (MASTER)  
-Date : 03/05/2026
+Version : V1.8.0 (MASTER)  
+Date : 04/05/2026
 
 ## Sommaire
 - [0. Gouvernance anti-reconstruction](#0-gouvernance-anti-reconstruction)
@@ -9,6 +9,7 @@ Date : 03/05/2026
 - [2. Validation du cadrage fonctionnel — 09/03/2026](#2-validation-du-cadrage-fonctionnel--09032026)
 - [3. Clôture des tests ALPHA 1.0 et suite du projet — 20/04/2026](#3-clôture-des-tests-alpha-10-et-suite-du-projet--20042026)
 - [4. Phase 2 de test manuel ADMIN — 03/05/2026](#4-phase-2-de-test-manuel-admin--03052026)
+- [5. Clôture A23 et cadrage A24-A26 — 04/05/2026](#5-clôture-a23-et-cadrage-a24-a26--04052026)
 
 ## 0. Gouvernance anti-reconstruction
 Règle : ce document contient uniquement ce qui est présent dans les discussions, sessions et décisions réellement observées.  
@@ -100,3 +101,45 @@ Ils ne sont pas annulés par la présente mise à jour.
 4. Auditer et réaligner l’UI réelle avec les maquettes validées si l’écart est confirmé.
 5. Reprendre le planning manuel.
 6. Reprendre autoschedule / matching seulement après stabilisation utilisateurs + planning.
+
+
+## 5. Clôture A23 et cadrage A24-A26 — 04/05/2026
+### Métadonnées
+- Date : 04/05/2026
+- Source : clôture contrôlée du bloc A23 + arbitrages utilisateur sur A24/A25/A26
+- Statut de source : **DÉCISIONS UTILISATEUR + PLAN DE DÉVELOPPEMENT MIS À JOUR**
+
+### Synthèse dérivée
+- Le bloc A23 est clôturé définitivement avec le verdict :
+
+```txt
+BLOC A23 CLÔTURABLE DÉFINITIVEMENT : OUI
+```
+
+- La suite immédiate du développement ne consiste pas à lancer directement les tests société pilote.
+- La suite officielle est structurée en trois blocs :
+  1. `A24 — Réalignement UI/UX global sur MAQUETTE_DA` ;
+  2. `A25 — Planning UI/UX & ergonomie métier` ;
+  3. `A26 — Stabilisation / non-régression post UI/UX`.
+- La direction artistique officielle est exclusivement :
+
+```txt
+docs/1-master/MAQUETTE/MAQUETTE_DA
+```
+
+- Les anciennes interprétations UI/UX, anciens prompts, anciennes captures ou anciens documents ne priment pas sur `MAQUETTE_DA` en cas de contradiction.
+- Le bloc A24 doit viser une interface pure, simple, lisible et très proche des maquettes.
+- Le mode sombre est intégré dans A24 comme déclinaison sobre de `MAQUETTE_DA`, avec bouton clair/sombre visible.
+- Lucide React est autorisé pour les icônes génériques, sous réserve d’un audit qualité des icônes.
+- Les captures avant/après sont obligatoires pour éviter de reproduire les écarts UI/UX déjà constatés.
+- Le planning est reconnu comme un sujet majeur et ne doit pas être noyé dans A24 : il est traité dans A25.
+- A26 sert de filet de sécurité après A24 et A25 pour corriger uniquement les régressions prouvées.
+
+### Suites recommandées
+1. Ouvrir `A24-UI-01 — AUDIT` avec lecture du noyau documentaire minimal et de `REFERENCE_UI_UX_A24.md`.
+2. Ne pas lancer de correction globale UI sans audit A24 préalable.
+3. Préparer les captures avant pour les pages concernées.
+4. Traiter A24 globalement, puis A25 planning, puis A26 stabilisation.
+5. Après A26, décider entre :
+   - relancer un bloc de développement ;
+   - ou lancer une nouvelle campagne de tests.

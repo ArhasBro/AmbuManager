@@ -2,10 +2,22 @@
 
 Projet : Investissement  
 Sous-projet : Ambulance Manager  
-Bloc concerné : A24 — Réalignement UI/UX sur maquettes validées  
+Bloc concerné : A24 — Réalignement UI/UX global sur MAQUETTE_DA  
 Statut : Référence visuelle officielle pour A24  
-Version : V1.0  
-Date : 04/05/2026  
+Version : V1.1  
+Date : 04/05/2026
+
+---
+
+## Décision utilisateur du 04/05/2026
+
+La direction artistique officielle est exclusivement :
+
+```txt
+docs/1-master/MAQUETTE/MAQUETTE_DA
+```
+
+Cette décision prime sur les anciens documents, anciennes captures, anciens prompts et anciennes interprétations.
 
 ---
 
@@ -37,7 +49,9 @@ Pour toute session A24, l’ordre de priorité des sources est le suivant :
 
 En cas de contradiction :
 
-`MAQUETTE PNG > SPEC UI/UX > ICONES > CAPTURE RÉELLE > DOCUMENTATION > RÉCIT`
+`MAQUETTE_DA > SPEC UI/UX > ICONES > CAPTURE RÉELLE > DOCUMENTATION > RÉCIT`
+
+Les autres fichiers du dossier `docs/1-master/MAQUETTE/` peuvent servir de références complémentaires, mais ils ne priment jamais sur `MAQUETTE_DA`.
 
 Toute information non prouvée doit être notée exactement :
 
@@ -385,7 +399,7 @@ Ne jamais remplacer silencieusement une maquette validée sans mettre à jour ce
 
 # 16. Décision finale
 
-Ce dossier devient la référence officielle pour préparer et exécuter le bloc A24.
+Ce dossier documente les références officielles pour préparer et exécuter le bloc A24. La source prioritaire de direction artistique reste `docs/1-master/MAQUETTE/MAQUETTE_DA`.
 
 Toute session A24 doit s’appuyer sur ce dossier avant de produire un audit, une correction, une validation ou une clôture.
 
