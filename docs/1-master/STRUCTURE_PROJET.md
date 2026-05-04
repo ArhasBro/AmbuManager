@@ -5571,8 +5571,6 @@ C:.
 |   |   |   |               README_PATCH.md
 |   |   |   |               
 |   |   |   +---BLOC_A23
-|   |   |   |   |   SESSION-20260503-07_A23_A23-PLAN-07.zip
-|   |   |   |   |   
 |   |   |   |   +---SESSION-20260503-01_A23_A23-TEST-01
 |   |   |   |   |   |   EVIDENCES.md
 |   |   |   |   |   |   FIN_SESSION.md
