@@ -1523,7 +1523,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |               README_PATCH.md
 |   |   |               
 |   |   +---BLOC_A23
-|   |   |   |   SESSION-20260503-06_A23_A23-UI-06.zip
+|   |   |   |   SESSION-20260503-07_A23_A23-PLAN-07.zip
 |   |   |   |   
 |   |   |   +---SESSION-20260503-01_A23_A23-TEST-01
 |   |   |   |   |   EVIDENCES.md
@@ -1626,14 +1626,17 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |           README_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260503-07_A23_A23-PLAN-07
+|   |   |   |   |   ANNEXE_PREUVE_BRUTE_NODE.md
 |   |   |   |   |   EVIDENCES.md
 |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   NOTES.md
 |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION-20260503-07_A23_A23-PLAN-07__DOCS_FINAL.zip
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
 |   |   |   |           NO_PATCH.md
+|   |   |   |           README_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260503-08_A23_A23-PLAN-08
 |   |   |   |   |   EVIDENCES.md
