@@ -17,7 +17,7 @@ export type AppShellContext = {
   canLogout: boolean;
 };
 
-const PUBLIC_ROUTES = new Set(["/login", "/privacy"]);
+const PUBLIC_ROUTES = new Set(["/login"]);
 
 function isPublicRoute(pathname: string | null): boolean {
   if (!pathname) return false;
@@ -63,6 +63,30 @@ export default function AppShell({
           {navLinks.length > 0 ? (
             navLinks.map((link) => {
               const isActive = activeHref === link.href;
+              const iconLabel = (() => {
+                switch (link.href) {
+                  case "/dashboard":
+                    return "DB";
+                  case "/planning":
+                    return "PL";
+                  case "/users":
+                    return "US";
+                  case "/vehicles":
+                    return "VH";
+                  case "/templates":
+                    return "TP";
+                  case "/company":
+                    return "SO";
+                  case "/depots":
+                    return "DP";
+                  case "/onboarding":
+                    return "ON";
+                  case "/audit":
+                    return "AU";
+                  default:
+                    return "AM";
+                }
+              })();
 
               return (
                 <Link
@@ -71,7 +95,10 @@ export default function AppShell({
                   className={`app-shell__nav-link${isActive ? " is-active" : ""}`}
                   aria-current={isActive ? "page" : undefined}
                 >
-                  {link.label}
+                  <span className="app-shell__nav-icon" aria-hidden="true">
+                    {iconLabel}
+                  </span>
+                  <span>{link.label}</span>
                 </Link>
               );
             })
@@ -82,6 +109,10 @@ export default function AppShell({
 
         <div className="app-shell__sidebar-footer">
           <span className="app-shell__sidebar-note">Espace connecte</span>
+          <div className="app-shell__user-card" aria-label="Profil de session">
+            <strong className="app-shell__user-name">{context.userLabel}</strong>
+            <span className="app-shell__user-role">{context.roleLabel}</span>
+          </div>
         </div>
       </aside>
 
@@ -120,4 +151,4 @@ export default function AppShell({
       </section>
     </div>
   );
-}
+}

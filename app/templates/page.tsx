@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 
@@ -45,11 +44,6 @@ export default async function TemplatesPage() {
       <PageHeader
         title="Templates de shifts"
         description="Base ALPHA: creation, edition, activation, archivage logique, couleur et composition d'equipe."
-        actions={
-          <Link className="page-back" href="/dashboard">
-            Retour dashboard
-          </Link>
-        }
       />
 
       <TemplatesClient initialTemplates={serializeDates(templates)} />

@@ -23,11 +23,11 @@ export type UserListRow = {
 };
 
 export function dailyScheduleLabel(user: Pick<UserListRow, "dailyWorkStartTime" | "dailyWorkEndTime">) {
-  if (!user.dailyWorkStartTime || !user.dailyWorkEndTime) return "Non renseignÃ©";
+  if (!user.dailyWorkStartTime || !user.dailyWorkEndTime) return "Non renseigne";
   return `${user.dailyWorkStartTime} - ${user.dailyWorkEndTime}`;
 }
 
 export function depotLabel(depot: DepotLite | null) {
   if (!depot) return "Aucune";
-  return depot.isActive ? depot.name : `${depot.name} (archivé)`;
+  return depot.isActive ? depot.name : `${depot.name} (archive)`;
 }

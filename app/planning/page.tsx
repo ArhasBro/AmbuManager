@@ -83,7 +83,7 @@ export default async function PlanningPage() {
     <main className="page-wrap">
       <PageHeader
         title="Planning"
-        description="Vue operationnelle avec planning manuel, autoschedule legacy masque par defaut, audit et exports selon droits."
+        description="Vue globale des shifts, affectations, absences et exports selon vos droits."
         actions={
           canReadAudit ? (
             <Link className="page-back" href="/audit">

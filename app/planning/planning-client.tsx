@@ -612,7 +612,7 @@ export default function PlanningClient({
   const [runMatchQuality, setRunMatchQuality] = useState<PlanningQuality | null>(null);
   const [runMatchingVariant, setRunMatchingVariant] = useState<MatchingVariantDefinition | null>(null);
   const [selectedMatchingVariant, setSelectedMatchingVariant] = useState<MatchingVariantKey>("VARIANT_1");
-  const [showLegacyPlanning, setShowLegacyPlanning] = useState(false);
+  const [showLegacyPlanning, setShowLegacyPlanning] = useState(true);
 
   // ✅ verrou : le preview est lié à un runId précis
   const [matchPreviewRunId, setMatchPreviewRunId] = useState<string | null>(null);
@@ -1672,27 +1672,17 @@ export default function PlanningClient({
 
   return (
     <section className="planning-page" style={{ display: "grid", gap: 12 }}>
-      <ManualPlanningPanel
-        availableDepots={availableDepots}
-        availableUsers={availableUsers}
-        currentUser={currentUser}
-        canViewGlobal={canViewGlobal}
-        canEditPlanning={canEditPlanning}
-        canViewAudit={canViewAudit}
-        canExportPlanning={canExportPlanning}
-      />
-
       <section className="planning-legacy" style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 12, display: "grid", gap: 8 }}>
         <div className="planning-legacy__head" style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
           <div>
-            <div style={{ fontWeight: 800 }}>Zone legacy / autoschedule</div>
+            <div style={{ fontWeight: 800 }}>Grille planning operationnelle</div>
             <div style={{ opacity: 0.75, fontSize: 13 }}>
-              Hors surface principale A8. Le planning manuel exploitable est affiché ci-dessus.
+              Vue hebdomadaire des affectations. Le mode manuel complet reste disponible en section avancee.
             </div>
           </div>
           <div className="planning-legacy__actions">
-            <StatusBadge variant={showLegacyPlanning ? "warning" : "neutral"}>
-              {showLegacyPlanning ? "Legacy visible" : "Legacy masque"}
+            <StatusBadge variant={showLegacyPlanning ? "success" : "neutral"}>
+              {showLegacyPlanning ? "Grille visible" : "Grille masquee"}
             </StatusBadge>
             <ActionButton size="sm" onClick={() => setShowLegacyPlanning((value) => !value)}>
               {showLegacyPlanning ? "Masquer" : "Afficher"}
@@ -2384,6 +2374,19 @@ export default function PlanningClient({
       )}
         </>
       )}
+
+      <details className="planning-manual-advanced">
+        <summary>Mode manuel avance (creation, edition, annulation)</summary>
+        <ManualPlanningPanel
+          availableDepots={availableDepots}
+          availableUsers={availableUsers}
+          currentUser={currentUser}
+          canViewGlobal={canViewGlobal}
+          canEditPlanning={canEditPlanning}
+          canViewAudit={canViewAudit}
+          canExportPlanning={canExportPlanning}
+        />
+      </details>
     </section>
   );
 }
@@ -2676,3 +2679,4 @@ function Row({ label, value }: { label: string; value: string }) {
     </div>
   );
 }
+

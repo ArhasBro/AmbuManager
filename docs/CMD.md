@@ -280,8 +280,8 @@ IMPORTANT
 
 Références des sessions :
 
-- SESSION-20260503-06_A23_A23-UI-06
-- **A23-UI-06 — CORRECTION+COMPLÉTION** — Réalignement UI/UX prioritaire si l’audit A23-UI-05 confirme l’écart. Livrable attendu : corrections visuelles ciblées sur les pages critiques. DoD : respect démontré des maquettes validées et de la direction artistique.
+- SESSION-20260503-07_A23_A23-PLAN-07
+- **A23-PLAN-07 — AUDIT** — Audit ciblé du planning manuel après correction utilisateurs. Livrable attendu : état réel sur template → horaires, affectation personnel, modification et annulation logique. DoD : distinguer bug fonctionnel, problème métier et amélioration UX.
 
 ------------------------------------
 
@@ -293,8 +293,6 @@ Unblock-File -Path .\create_session.ps1
 
 #### Sessions
 
-- **A23-UI-06 — CORRECTION+COMPLÉTION** — Réalignement UI/UX prioritaire si l’audit A23-UI-05 confirme l’écart. Livrable attendu : corrections visuelles ciblées sur les pages critiques. DoD : respect démontré des maquettes validées et de la direction artistique.
-- **A23-PLAN-07 — AUDIT** — Audit ciblé du planning manuel après correction utilisateurs. Livrable attendu : état réel sur template → horaires, affectation personnel, modification et annulation logique. DoD : distinguer bug fonctionnel, problème métier et amélioration UX.
 - **A23-PLAN-08 — CORRECTION+COMPLÉTION** — Correction / complétion du planning manuel prioritaire. Livrable attendu : affectation utilisateur exploitable, modification et annulation logique fonctionnelles, application cohérente des horaires template. DoD : parcours planning manuel ADMIN testable sans blocage majeur.
 - **A23-ROLES-RH-09 — AUDIT** — Audit des besoins métier complémentaires : `PSC1`, plusieurs gérants, fiche salarié enrichie, suppression définitive contrôlée. Livrable attendu : arbitrage entre ALPHA, BETA et backlog. DoD : aucun champ RH ou rôle métier ajouté sans décision claire.
 - **A23-GONOGO-10 — VALIDATION** — Retest ADMIN ciblé et décision Go / No-Go société pilote. Livrable attendu : verdict final post-corrections. DoD : décision explicite `GO`, `GO AVEC RÉSERVES` ou `NO-GO TEMPORAIRE`.

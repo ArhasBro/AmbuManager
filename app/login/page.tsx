@@ -93,10 +93,6 @@ function LoginPageContent() {
     window.location.replace(target);
   }
 
-  if (status === "loading") {
-    return <div className="login-loading">Chargement...</div>;
-  }
-
   return (
     <main className="login-page">
       <section className="login-page__showcase" aria-label="Presentation de la plateforme">
@@ -182,7 +178,7 @@ function LoginPageContent() {
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="login-loading">Chargement...</div>}>
+    <Suspense fallback={null}>
       <LoginPageContent />
     </Suspense>
   );

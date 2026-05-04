@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 
@@ -40,7 +39,6 @@ export default async function DepotsPage() {
       <PageHeader
         title="Bases / depots"
         description="Gestion ALPHA des depots de la societe courante : creation, edition et archivage logique."
-        actions={<Link href="/dashboard" className="depots-page__back-link">Retour dashboard</Link>}
       />
 
       <div className="depots-grid-stats">

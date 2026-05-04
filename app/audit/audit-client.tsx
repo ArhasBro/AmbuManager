@@ -323,65 +323,69 @@ export default function AuditClient({
       {error ? (
         <ErrorMessage title="Erreur de lecture audit" message={error} />
       ) : (
-        <section className="audit-card">
-          <div className="audit-card__head">
-            <h2 className="audit-card__title">Lecture audit</h2>
-            <p className="audit-card__description">
-              Selectionnez une ligne pour afficher le detail et le payload JSON associe.
-            </p>
-          </div>
+        <section className="audit-main-grid">
+          <section className="audit-card">
+            <div className="audit-card__head">
+              <h2 className="audit-card__title">Lecture audit</h2>
+              <p className="audit-card__description">
+                Selectionnez une ligne pour afficher le detail et le payload JSON associe.
+              </p>
+            </div>
 
-          <DataTable
-            columns={columns}
-            rows={filteredEntries}
-            rowKey={(entry) => entry.id}
-            loading={loading}
-            error={null}
-            selectedRowKey={selectedEntryId}
-            onRowClick={(entry) => setSelectedEntryId(entry.id)}
-            emptyTitle="Aucune entree d'audit"
-            emptyMessage="Aucune entree ne correspond aux filtres selectionnes."
-            caption="Journal d'audit consolide"
-            minWidth={1200}
-            loadingLabel="Chargement du journal d'audit..."
-          />
+            <DataTable
+              columns={columns}
+              rows={filteredEntries}
+              rowKey={(entry) => entry.id}
+              loading={loading}
+              error={null}
+              selectedRowKey={selectedEntryId}
+              onRowClick={(entry) => setSelectedEntryId(entry.id)}
+              emptyTitle="Aucune entree d'audit"
+              emptyMessage="Aucune entree ne correspond aux filtres selectionnes."
+              caption="Journal d'audit consolide"
+              minWidth={980}
+              loadingLabel="Chargement du journal d'audit..."
+            />
+          </section>
+
+          <aside className="audit-card audit-card--drawer">
+            <div className="audit-card__head">
+              <h2 className="audit-card__title">Detail de la ligne</h2>
+              <p className="audit-card__description">Panneau lateral de relecture de l&apos;evenement.</p>
+            </div>
+
+            {selectedEntry ? (
+              <>
+                <div className="audit-selection-card">
+                  <strong>{selectedEntry.summary}</strong>
+                  <div className="audit-inline-status">
+                    <StatusBadge variant={sourceVariant(selectedEntry.source)}>{sourceLabel(selectedEntry.source)}</StatusBadge>
+                    <StatusBadge variant={actionVariant(selectedEntry.action)}>{selectedEntry.action}</StatusBadge>
+                    <StatusBadge variant="neutral">{formatDateTime(selectedEntry.createdAt)}</StatusBadge>
+                  </div>
+                  <p className="audit-selection-card__line">
+                    <strong>Acteur :</strong> {selectedEntry.actorUser?.name ?? "Systeme"} ({selectedEntry.actorUser?.email ?? "N/A"})
+                  </p>
+                  <p className="audit-selection-card__line">
+                    <strong>Cible :</strong> {selectedEntry.entityType} - {selectedEntry.entityId}
+                  </p>
+                </div>
+
+                <div className="audit-payload-panel">
+                  <h3 className="audit-payload-panel__title">Payload JSON</h3>
+                  {selectedEntry.payload !== undefined ? (
+                    <pre className="audit-payload-panel__content">{JSON.stringify(selectedEntry.payload, null, 2)}</pre>
+                  ) : (
+                    <p className="audit-payload-panel__empty">Aucun payload disponible pour cette entree.</p>
+                  )}
+                </div>
+              </>
+            ) : (
+              <p className="audit-table-cell-subtle">Selectionnez une entree pour afficher le panneau detail.</p>
+            )}
+          </aside>
         </section>
       )}
-
-      {selectedEntry ? (
-        <section className="audit-card">
-          <div className="audit-card__head">
-            <h2 className="audit-card__title">Detail de l&apos;entree selectionnee</h2>
-            <p className="audit-card__description">
-              Visualisation lisible du contexte metier et du payload brut pour relecture.
-            </p>
-          </div>
-
-          <div className="audit-selection-card">
-            <strong>{selectedEntry.summary}</strong>
-            <div className="audit-inline-status">
-              <StatusBadge variant={sourceVariant(selectedEntry.source)}>{sourceLabel(selectedEntry.source)}</StatusBadge>
-              <StatusBadge variant={actionVariant(selectedEntry.action)}>{selectedEntry.action}</StatusBadge>
-              <StatusBadge variant="neutral">{formatDateTime(selectedEntry.createdAt)}</StatusBadge>
-            </div>
-            <p className="audit-selection-card__line">
-              <strong>Acteur :</strong> {selectedEntry.actorUser?.name ?? "Systeme"} ({selectedEntry.actorUser?.email ?? "N/A"})
-            </p>
-            <p className="audit-selection-card__line">
-              <strong>Cible :</strong> {selectedEntry.entityType} - {selectedEntry.entityId}
-            </p>
-          </div>
-
-          <div className="audit-payload-panel">
-            <h3 className="audit-payload-panel__title">Payload JSON</h3>
-            {selectedEntry.payload !== undefined ? (
-              <pre className="audit-payload-panel__content">{JSON.stringify(selectedEntry.payload, null, 2)}</pre>
-            ) : (
-              <p className="audit-payload-panel__empty">Aucun payload disponible pour cette entree.</p>
-            )}
-          </div>
-        </section>
-      ) : null}
     </section>
   );
 }

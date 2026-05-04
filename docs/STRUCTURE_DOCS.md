@@ -30,23 +30,157 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   STRUCTURE_PROJET.md
 |   |   
 |   \---MAQUETTE
-|       |   README
+|       |   README_MAQUETTES_A24.md
+|       |   SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md
 |       |   
-|       +---A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0
-|       |   \---A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0
-|       |       +---1-Dashboard
-|       |       |       Dashboard_V1.png
-|       |       |       
-|       |       +---2-Planning
-|       |       |       Planning_V1.2.png
-|       |       |       
-|       |       +---3-Utilisateurs-RH
-|       |       |       Utilisateurs-RH_V1.png
-|       |       |       
-|       |       \---4-VÚhicules
-|       |               VÚhicules_V1.2.png
+|       +---ICONES
+|       |   |   CONTACT_SHEET_ICONES_V1_1.png
+|       |   |   LISTE_ICONES_EXPORTEES_V1_1.md
+|       |   |   TABLE_MAPPING_ICONES_V1_1.csv
+|       |   |   
+|       |   \---ICONES_MAQUETTES_V1_1
+|       |       \---icons_maquettes_v1_1
+|       |               CONTACT_SHEET_ICONES_V1_1.png
+|       |               icon_action_assign_employee.png
+|       |               icon_action_assign_vehicle.png
+|       |               icon_action_clear.png
+|       |               icon_audit_copy_id.png
+|       |               icon_audit_copy_json.png
+|       |               icon_audit_export.png
+|       |               icon_audit_kpi_actions.png
+|       |               icon_audit_kpi_alerts.png
+|       |               icon_audit_kpi_connections.png
+|       |               icon_audit_kpi_sensitive.png
+|       |               icon_audit_kpi_support.png
+|       |               icon_audit_reset.png
+|       |               icon_button_add_shift.png
+|       |               icon_button_add_user.png
+|       |               icon_button_add_vehicle.png
+|       |               icon_button_new_template.png
+|       |               icon_button_save.png
+|       |               icon_cell_detail_calendar.png
+|       |               icon_company_identity.png
+|       |               icon_company_summary_building.png
+|       |               icon_company_summary_calendar.png
+|       |               icon_company_summary_depots.png
+|       |               icon_company_summary_users.png
+|       |               icon_company_summary_vehicles.png
+|       |               icon_dashboard_mail.png
+|       |               icon_dashboard_user_avatar.png
+|       |               icon_depots_archive_depot.png
+|       |               icon_depots_attachment_users.png
+|       |               icon_depots_attachment_vehicles.png
+|       |               icon_depots_danger_warning.png
+|       |               icon_depots_filter.png
+|       |               icon_depots_kpi_active.png
+|       |               icon_depots_kpi_archive.png
+|       |               icon_depots_kpi_users.png
+|       |               icon_depots_kpi_vehicles.png
+|       |               icon_depots_note_info.png
+|       |               icon_depots_search.png
+|       |               icon_export_csv.png
+|       |               icon_export_excel.png
+|       |               icon_export_pdf.png
+|       |               icon_filter_calendar.png
+|       |               icon_filter_depot.png
+|       |               icon_filter_role.png
+|       |               icon_filter_user.png
+|       |               icon_kpi_depots_active.png
+|       |               icon_kpi_templates_active.png
+|       |               icon_kpi_users_active.png
+|       |               icon_kpi_vehicles_active.png
+|       |               icon_login_alert_warning.png
+|       |               icon_login_brand_ambulance.png
+|       |               icon_login_button_lock.png
+|       |               icon_login_card_ambulance.png
+|       |               icon_login_checkbox_checked.png
+|       |               icon_login_feature_calendar.png
+|       |               icon_login_feature_shield.png
+|       |               icon_login_feature_users.png
+|       |               icon_login_feature_vehicle.png
+|       |               icon_login_footer_france_flag.png
+|       |               icon_login_footer_shield.png
+|       |               icon_login_input_email.png
+|       |               icon_login_input_eye.png
+|       |               icon_login_input_lock.png
+|       |               icon_login_trust_lock.png
+|       |               icon_module_audit.png
+|       |               icon_module_company.png
+|       |               icon_module_depots.png
+|       |               icon_module_onboarding.png
+|       |               icon_module_planning.png
+|       |               icon_module_templates.png
+|       |               icon_module_users.png
+|       |               icon_module_vehicles.png
+|       |               icon_onboarding_download_template.png
+|       |               icon_onboarding_error_warning.png
+|       |               icon_onboarding_file_excel.png
+|       |               icon_onboarding_progress_ring.png
+|       |               icon_onboarding_ready_check.png
+|       |               icon_onboarding_step_company.png
+|       |               icon_onboarding_step_depots.png
+|       |               icon_onboarding_step_templates.png
+|       |               icon_onboarding_step_users.png
+|       |               icon_onboarding_step_vehicles.png
+|       |               icon_onboarding_tab_absences.png
+|       |               icon_onboarding_tab_depots.png
+|       |               icon_onboarding_tab_templates.png
+|       |               icon_onboarding_tab_users.png
+|       |               icon_onboarding_tab_vehicles.png
+|       |               icon_onboarding_upload_cloud.png
+|       |               icon_print.png
+|       |               icon_privacy_breadcrumb_home.png
+|       |               icon_privacy_data_id.png
+|       |               icon_privacy_editor_building.png
+|       |               icon_privacy_footer_shield.png
+|       |               icon_privacy_hosting_cloud.png
+|       |               icon_privacy_purpose_target.png
+|       |               icon_privacy_update_calendar.png
+|       |               icon_sidebar_audit.png
+|       |               icon_sidebar_company.png
+|       |               icon_sidebar_dashboard.png
+|       |               icon_sidebar_depots.png
+|       |               icon_sidebar_logo_ambulance.png
+|       |               icon_sidebar_onboarding.png
+|       |               icon_sidebar_planning.png
+|       |               icon_sidebar_templates.png
+|       |               icon_sidebar_users.png
+|       |               icon_sidebar_vehicles.png
+|       |               icon_templates_button_duplicate.png
+|       |               icon_templates_drawer_chart.png
+|       |               icon_templates_drawer_clock.png
+|       |               icon_templates_drawer_info.png
+|       |               icon_templates_drawer_team.png
+|       |               icon_templates_export.png
+|       |               icon_templates_kpi_active.png
+|       |               icon_templates_kpi_archive.png
+|       |               icon_templates_kpi_disabled.png
+|       |               icon_templates_kpi_team.png
+|       |               icon_templates_kpi_total.png
+|       |               icon_templates_view.png
+|       |               icon_topbar_company.png
+|       |               icon_topbar_logout.png
+|       |               icon_topbar_theme_sun.png
+|       |               icon_users_action_edit.png
+|       |               icon_users_action_menu.png
+|       |               icon_users_archive_trash.png
+|       |               icon_users_drawer_profile.png
+|       |               icon_users_kpi_absence.png
+|       |               icon_users_kpi_archive.png
+|       |               icon_users_kpi_student.png
+|       |               icon_users_kpi_users.png
+|       |               icon_users_security_key.png
+|       |               icon_vehicles_kpi_maintenance.png
+|       |               icon_vehicles_kpi_out_service.png
+|       |               icon_vehicles_kpi_service.png
+|       |               icon_vehicles_kpi_total.png
+|       |               icon_vehicles_kpi_warning.png
+|       |               icon_vehicle_button_history.png
+|       |               icon_vehicle_filter_advanced.png
+|       |               LISTE_ICONES_EXPORT╔ES.md
+|       |               TABLE_MAPPING_ICONES.csv
 |       |               
-|       +---A21-UX-04_MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0
+|       +---MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0
 |       |   \---A21-UX-04_MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0
 |       |       +---1-Templates
 |       |       |       Templates_V1.1.png
@@ -63,7 +197,21 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |       |       \---5-Audit
 |       |               Audit_V1.0.png
 |       |               
-|       \---A21-UX-05_PAGES_SIMPLES_FINITIONS_IMAGE_V1.0
+|       +---MAQUETTES_FONDATRICES_IMAGES_V1.0
+|       |   \---A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0
+|       |       +---1-Dashboard
+|       |       |       Dashboard_V1.png
+|       |       |       
+|       |       +---2-Planning
+|       |       |       Planning_V1.2.png
+|       |       |       
+|       |       +---3-Utilisateurs-RH
+|       |       |       Utilisateurs-RH_V1.png
+|       |       |       
+|       |       \---4-VÚhicules
+|       |               VÚhicules_V1.2.png
+|       |               
+|       \---PAGES_SIMPLES_FINITIONS_IMAGE_V1.0
 |           \---A21-UX-05_PAGES_SIMPLES_FINITIONS_IMAGE_V1.0
 |               +---1-Login
 |               |       Login_V1.1.png
@@ -1183,6 +1331,25 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   VALIDATION_MAQUETTES_FONDATRICES_V1.0.md
 |   |   |   |   |   
+|   |   |   |   +---A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0
+|   |   |   |   |   \---A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0
+|   |   |   |   |       +---1-Dashboard
+|   |   |   |   |       |       Dashboard_V1.png
+|   |   |   |   |       |       
+|   |   |   |   |       +---2-Planning
+|   |   |   |   |       |       Planning_V1(1).png
+|   |   |   |   |       |       Planning_V1.1.png
+|   |   |   |   |       |       Planning_V1.2.png
+|   |   |   |   |       |       Planning_V1.png
+|   |   |   |   |       |       
+|   |   |   |   |       +---3-Utilisateurs-RH
+|   |   |   |   |       |       Utilisateurs-RH_V1.png
+|   |   |   |   |       |       
+|   |   |   |   |       \---4-VÚhicules
+|   |   |   |   |               VÚhicules_V1.0.png
+|   |   |   |   |               VÚhicules_V1.1.png
+|   |   |   |   |               VÚhicules_V1.2.png
+|   |   |   |   |               
 |   |   |   |   \---PATCH
 |   |   |   |           NO_PATCH.md
 |   |   |   |           
@@ -1197,6 +1364,27 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   VALIDATION_MAQUETTES_COMPLEMENTAIRES_V1.0.md
 |   |   |   |   |   
+|   |   |   |   +---A21-UX-04_MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0
+|   |   |   |   |   \---A21-UX-04_MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0
+|   |   |   |   |       +---1-Templates
+|   |   |   |   |       |       Templates_V1.0.png
+|   |   |   |   |       |       Templates_V1.1.png
+|   |   |   |   |       |       
+|   |   |   |   |       +---2-SociÚtÚ-paramÞtres-mÚtier
+|   |   |   |   |       |       SociÚtÚ_V1.0.png
+|   |   |   |   |       |       
+|   |   |   |   |       +---3-DÚp¶ts-bases
+|   |   |   |   |       |       DÚp¶ts-bases_V1.0.png
+|   |   |   |   |       |       
+|   |   |   |   |       +---4-Onboarding sociÚtÚ pilote
+|   |   |   |   |       |       Onboarding_V1.0.png
+|   |   |   |   |       |       Onboarding_V1.1.2.png
+|   |   |   |   |       |       Onboarding_V1.1.png
+|   |   |   |   |       |       Onboarding_V1.2.png
+|   |   |   |   |       |       
+|   |   |   |   |       \---5-Audit
+|   |   |   |   |               Audit_V1.0.png
+|   |   |   |   |               
 |   |   |   |   \---PATCH
 |   |   |   |           NO_PATCH.md
 |   |   |   |           
@@ -1212,6 +1400,15 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   VALIDATION_PAGES_SIMPLES_FINITIONS_V1.0.md
 |   |   |   |   |   
+|   |   |   |   +---A21-UX-05_PAGES_SIMPLES_FINITIONS_IMAGE_V1.0
+|   |   |   |   |   \---A21-UX-05_PAGES_SIMPLES_FINITIONS_IMAGE_V1.0
+|   |   |   |   |       +---1-Login
+|   |   |   |   |       |       Login_V1.0.png
+|   |   |   |   |       |       Login_V1.1.png
+|   |   |   |   |       |       
+|   |   |   |   |       \---2-Privacy
+|   |   |   |   |               Privacy_V1.0.png
+|   |   |   |   |               
 |   |   |   |   \---PATCH
 |   |   |   |           NO_PATCH.md
 |   |   |   |           
@@ -1462,6 +1659,8 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |               README_PATCH.md
 |   |   |               
 |   |   +---BLOC_A23
+|   |   |   |   SESSION-20260503-06_A23_A23-UI-06.zip
+|   |   |   |   
 |   |   |   +---SESSION-20260503-01_A23_A23-TEST-01
 |   |   |   |   |   EVIDENCES.md
 |   |   |   |   |   FIN_SESSION.md
@@ -1541,9 +1740,25 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   NOTES.md
 |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION-20260503-06_A23_A23-UI-06__DOCS_FINAL.zip
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
+|   |   |   |   +---CAPTURES_APRES
+|   |   |   |   |       audit.png
+|   |   |   |   |       company.png
+|   |   |   |   |       dashboard.png
+|   |   |   |   |       depots.png
+|   |   |   |   |       login.png
+|   |   |   |   |       onboarding.png
+|   |   |   |   |       planning.png
+|   |   |   |   |       privacy.png
+|   |   |   |   |       templates.png
+|   |   |   |   |       users.png
+|   |   |   |   |       vehicles.png
+|   |   |   |   |       
 |   |   |   |   \---PATCH
+|   |   |   |           PATCH__SESSION-20260503-06_A23_A23-UI-06.diff
+|   |   |   |           PATCH__SESSION-20260503-06_A23_A23-UI-06_FIX-01.diff
 |   |   |   |           README_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260503-07_A23_A23-PLAN-07

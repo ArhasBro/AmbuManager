@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 
@@ -24,11 +23,6 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
       <PageHeader
         title="Journal d'audit"
         description="Lecture unifiee des entrees d'audit planning et connexions, avec filtres simples et details lisibles."
-        actions={(
-          <Link className="page-back" href="/dashboard">
-            Retour dashboard
-          </Link>
-        )}
       />
 
       <AuditClient defaultCompanyId={companyId} isGlobalSupport={Boolean(user.isGlobalSupport)} />

@@ -358,29 +358,6 @@ export default function UsersListClient() {
                 </ActionButton>
               </div>
             </div>
-
-            <div className="users-selection-card">
-              <strong>Selection actuelle</strong>
-              {selectedUser ? (
-                <>
-                  <span>
-                    <strong>{selectedUser.name}</strong>
-                    {selectedUser.email ? ` (${selectedUser.email})` : ""}
-                  </span>
-                  <div className="users-inline-status">
-                    <StatusBadge variant={roleStatusVariant(selectedUser.role)}>{selectedUser.role}</StatusBadge>
-                    <StatusBadge variant={selectedUser.isTrainee ? "warning" : "success"}>
-                      {selectedUser.isTrainee ? "Stagiaire" : "Titulaire"}
-                    </StatusBadge>
-                    <StatusBadge variant={depotStatusVariant(selectedUser)}>
-                      Base: {depotLabel(selectedUser.depot)}
-                    </StatusBadge>
-                  </div>
-                </>
-              ) : (
-                "Aucun utilisateur selectionne"
-              )}
-            </div>
           </>
         ) : null}
       </div>

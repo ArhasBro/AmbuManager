@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 
@@ -52,7 +51,6 @@ export default async function OnboardingPage() {
       <PageHeader
         title="Onboarding societe pilote"
         description="Parcours manuel guide et imports initiaux simples ALPHA, sans import obligatoire."
-        actions={<Link href="/dashboard" className="page-back">Retour dashboard</Link>}
       />
 
       <section className="panel onboarding-summary">

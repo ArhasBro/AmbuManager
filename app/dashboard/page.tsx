@@ -17,7 +17,6 @@ import {
 import { prisma } from "@/lib/prisma";
 import { EmptyState, PageHeader, StatCard, StatusBadge, type StatusBadgeVariant } from "@/app/ui";
 
-import LogoutButton from "./logout-button";
 
 type DashboardCardTone = "blue" | "teal" | "violet" | "amber" | "slate";
 
@@ -298,7 +297,6 @@ export default async function DashboardPage() {
       <PageHeader
         title="Tableau de bord"
         description="Portail d'acces aux modules de gestion de votre societe ambulanciere."
-        actions={<LogoutButton />}
       />
 
       <section className="panel dashboard-welcome">
@@ -397,12 +395,6 @@ export default async function DashboardPage() {
         />
       ) : null}
 
-      {process.env.NODE_ENV !== "production" ? (
-        <div className="panel-soft dashboard-debug">
-          <h2 className="dashboard-debug__title">Session (debug)</h2>
-          <pre className="dashboard-debug__payload">{JSON.stringify(session, null, 2)}</pre>
-        </div>
-      ) : null}
     </div>
   );
 }

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 
@@ -63,11 +62,6 @@ export default async function VehiclesPage() {
       <PageHeader
         title="Vehicules"
         description="Gestion de la flotte active, conformite documentaire et rattachement optionnel a une base."
-        actions={
-          <Link className="page-back" href="/dashboard">
-            Retour dashboard
-          </Link>
-        }
       />
 
       <VehiclesClient
