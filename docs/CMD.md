@@ -280,8 +280,8 @@ IMPORTANT
 
 Références des sessions :
 
-- SESSION-20260503-10_A23_A23-GONOGO-10
-- **A23-GONOGO-10 — VALIDATION** — Retest ADMIN ciblé et décision Go / No-Go société pilote. Livrable attendu : verdict final post-corrections. DoD : décision explicite `GO`, `GO AVEC RÉSERVES` ou `NO-GO TEMPORAIRE`.
+- SESSION-20260503-11_A23_CLOTURE_A23
+- **CLOTURE_A23 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc de stabilisation post-test manuel ADMIN.
 
 ------------------------------------
 
@@ -294,20 +294,7 @@ Unblock-File -Path .\create_session.ps1
 #### Sessions
 
 
-
-
-- **CLOTURE_A23 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc de stabilisation post-test manuel ADMIN.
-
 ------------------------------------
-
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
-Unblock-File -Path .\create_session.ps1
-.\create_session.ps1 -Stage "1-ALPHA" -Block "A1" -SessionCode "RBAC-02" -Type "CORRECTION" -Title "Remplacement méthodique de DEA par ADE"
-
-- **BACK-01 — AUDIT** — Audit complet du backend existant : routes API, services métier, validations serveur, accès Prisma, cohérence des erreurs et séparation des responsabilités
-- **BACK-LOT-02 — CORRECTION+COMPLÉTION** — Correction et/ou complétion de la structure backend : services métier, validations serveur, gestion homogène des erreurs, centralisation des traitements sensibles et cohérence des contrôles RBAC côté serveur
-- **BACK-03 — VALIDATION** — Validation complète du backend : cohérence API / logique métier / Prisma / permissions
-- **CLOTURE_A14 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc Backend
 
 git apply --check ".\"
 git apply ".\"
@@ -339,14 +326,7 @@ npm run db:seed
 npm run db:reset
 npm run db:studio
 
-
-DOCUMENTS À PRODUIRE quand je te le demande (après que je valide le patch). 
-SESSION.md 
-NOTES.md 
-EVIDENCES.md 
-RESULTATS.md 
-FIN_SESSION.md 
-README_PATCH.md
+# Identifiants
 
 Identifiants: 
 
