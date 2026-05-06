@@ -598,7 +598,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
-|   |   |   |           LIVRABLES__SESSION-20260423-02_A15_FRONT-LOT-02_A_PLAT.zip
 |   |   |   |           PATCH__SESSION-20260423-02_A15_FRONT-LOT-02.diff
 |   |   |   |           README_PATCH.md
 |   |   |   |           
@@ -633,7 +632,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
-|   |   |   |           LIVRABLES__SESSION-20260423-05_A16_SEC-01_A_PLAT.zip
 |   |   |   |           NO_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260423-06_A16_SEC-LOT-02
@@ -644,7 +642,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
-|   |   |   |           LIVRABLES__SESSION-20260423-06_A16_SEC-LOT-02_A_PLAT.zip
 |   |   |   |           PATCH__SESSION-20260423-06_A16_SEC-LOT-02.diff
 |   |   |   |           PATCH__SESSION-20260423-06_A16_SEC-LOT-02_FIX-01.diff
 |   |   |   |           PATCH__SESSION-20260423-06_A16_SEC-LOT-02_FIX-02.diff
@@ -658,7 +655,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
-|   |   |   |           LIVRABLES__SESSION-20260423-07_A16_SEC-03_A_PLAT.zip
 |   |   |   |           NO_PATCH.md
 |   |   |   |           
 |   |   |   \---SESSION-20260423-08_A16_CLOTURE_A16
@@ -669,7 +665,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |       |   SESSION.md
 |   |   |       |   
 |   |   |       \---PATCH
-|   |   |               LIVRABLES__SESSION-20260423-08_A16_CLOTURE_A16_A_PLAT.zip
 |   |   |               NO_PATCH.md
 |   |   |               README_PATCH.md
 |   |   |               
@@ -682,7 +677,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
-|   |   |   |           LIVRABLES__SESSION-20260423-09_A17_RGPD-01_A_PLAT.zip
 |   |   |   |           NO_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260423-10_A17_RGPD-LOT-02
@@ -693,7 +687,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
-|   |   |   |           LIVRABLES__SESSION-20260423-10_A17_RGPD-LOT-02_A_PLAT.zip
 |   |   |   |           PATCH__SESSION-20260423-10_A17_RGPD-LOT-02.diff
 |   |   |   |           README_PATCH.md
 |   |   |   |           
@@ -705,7 +698,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
-|   |   |   |           LIVRABLES__SESSION-20260423-11_A17_RGPD-03_A_PLAT.zip
 |   |   |   |           PATCH__SESSION-20260423-11_A17_RGPD-03.diff
 |   |   |   |           README_PATCH.md
 |   |   |   |           
@@ -717,7 +709,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |       |   SESSION.md
 |   |   |       |   
 |   |   |       \---PATCH
-|   |   |               LIVRABLES__SESSION-20260423-12_A17_CLOTURE_A17_A_PLAT.zip
 |   |   |               NO_PATCH.md
 |   |   |               README_PATCH.md
 |   |   |               
@@ -727,7 +718,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   NOTES.md
 |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   SESSION-20260424-01_A18_BDD-01_DOCS.zip
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
@@ -738,7 +728,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   NOTES.md
 |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   SESSION-20260424-02_A18_BDD-LOT-02_DOCS.zip
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
@@ -751,7 +740,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   NOTES.md
 |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   SESSION-20260424-03_A18_BDD-03_DOCS.zip
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
@@ -765,7 +753,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |       |   SESSION.md
 |   |   |       |   
 |   |   |       \---PATCH
-|   |   |               LIVRABLES__SESSION-20260424-04_A18_CLOTURE_A18_A_PLAT.zip
 |   |   |               NO_PATCH.md
 |   |   |               README_PATCH.md
 |   |   |               
@@ -785,7 +772,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   NOTES.md
 |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   SESSION-20260424-06_A19_PLAN-ADV-LOT-02_DOCUMENTAIRE_FINAL.zip
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
@@ -813,7 +799,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |       |   SESSION.md
 |   |   |       |   
 |   |   |       \---PATCH
-|   |   |               LIVRABLES__SESSION-20260424-08_A19_CLOTURE_A19_A_PLAT.zip
 |   |   |               NO_PATCH.md
 |   |   |               README_PATCH.md
 |   |   |               
@@ -1108,7 +1093,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
-|   |   |   |           LIVRABLES__SESSION-20260424-09_A20_RH-01_A_PLAT.zip
 |   |   |   |           NO_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260424-10_A20_RH-LOT-02
@@ -1119,7 +1103,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
-|   |   |   |           LIVRABLES__SESSION-20260424-10_A20_RH-LOT-02_A_PLAT.zip
 |   |   |   |           PATCH_DOCS_FIX_TRACEABILITE__SESSION-20260424-10_A20_RH-LOT-02.diff
 |   |   |   |           PATCH__SESSION-20260424-10_A20_RH-LOT-02.diff
 |   |   |   |           README_PATCH.md
@@ -1132,7 +1115,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
-|   |   |   |           LIVRABLES__SESSION-20260424-11_A20_RH-03_A_PLAT.zip
 |   |   |   |           NO_PATCH.md
 |   |   |   |           
 |   |   |   \---SESSION-20260424-12_A20_CLOTURE_A20
@@ -1143,7 +1125,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |       |   SESSION.md
 |   |   |       |   
 |   |   |       \---PATCH
-|   |   |               LIVRABLES__SESSION-20260424-12_A20_CLOTURE_A20_A_PLAT.zip
 |   |   |               NO_PATCH.md
 |   |   |               README_PATCH.md
 |   |   |               
@@ -1188,21 +1169,15 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   +---A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0
 |   |   |   |   |   \---A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0
 |   |   |   |   |       +---1-Dashboard
-|   |   |   |   |       |       Dashboard_V1.png
-|   |   |   |   |       |       
 |   |   |   |   |       +---2-Planning
 |   |   |   |   |       |       Planning_V1(1).png
 |   |   |   |   |       |       Planning_V1.1.png
-|   |   |   |   |       |       Planning_V1.2.png
 |   |   |   |   |       |       Planning_V1.png
 |   |   |   |   |       |       
 |   |   |   |   |       +---3-Utilisateurs-RH
-|   |   |   |   |       |       Utilisateurs-RH_V1.png
-|   |   |   |   |       |       
 |   |   |   |   |       \---4-VÚhicules
 |   |   |   |   |               VÚhicules_V1.0.png
 |   |   |   |   |               VÚhicules_V1.1.png
-|   |   |   |   |               VÚhicules_V1.2.png
 |   |   |   |   |               
 |   |   |   |   \---PATCH
 |   |   |   |           NO_PATCH.md
@@ -1221,23 +1196,15 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   \---A21-UX-04_MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0
 |   |   |   |   |       +---1-Templates
 |   |   |   |   |       |       Templates_V1.0.png
-|   |   |   |   |       |       Templates_V1.1.png
 |   |   |   |   |       |       
 |   |   |   |   |       +---2-SociÚtÚ-paramÞtres-mÚtier
-|   |   |   |   |       |       SociÚtÚ_V1.0.png
-|   |   |   |   |       |       
 |   |   |   |   |       +---3-DÚp¶ts-bases
-|   |   |   |   |       |       DÚp¶ts-bases_V1.0.png
-|   |   |   |   |       |       
 |   |   |   |   |       +---4-Onboarding sociÚtÚ pilote
 |   |   |   |   |       |       Onboarding_V1.0.png
 |   |   |   |   |       |       Onboarding_V1.1.2.png
 |   |   |   |   |       |       Onboarding_V1.1.png
-|   |   |   |   |       |       Onboarding_V1.2.png
 |   |   |   |   |       |       
 |   |   |   |   |       \---5-Audit
-|   |   |   |   |               Audit_V1.0.png
-|   |   |   |   |               
 |   |   |   |   \---PATCH
 |   |   |   |           NO_PATCH.md
 |   |   |   |           
@@ -1256,11 +1223,8 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   \---A21-UX-05_PAGES_SIMPLES_FINITIONS_IMAGE_V1.0
 |   |   |   |   |       +---1-Login
 |   |   |   |   |       |       Login_V1.0.png
-|   |   |   |   |       |       Login_V1.1.png
 |   |   |   |   |       |       
 |   |   |   |   |       \---2-Privacy
-|   |   |   |   |               Privacy_V1.0.png
-|   |   |   |   |               
 |   |   |   |   \---PATCH
 |   |   |   |           NO_PATCH.md
 |   |   |   |           
@@ -2502,7 +2466,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |       |   FIN_SESSION.md
 |   |   |       |   NOTES.md
 |   |   |       |   RESULTATS.md
-|   |   |       |   SESSION-DOCS-REORG-01__DOCS_FINAL.zip
 |   |   |       |   SESSION.md
 |   |   |       |   
 |   |   |       \---PATCH
