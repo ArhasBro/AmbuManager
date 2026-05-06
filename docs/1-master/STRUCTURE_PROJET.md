@@ -99,7 +99,6 @@ C:.
 |   +---dev
 |   |   |   build-manifest.json
 |   |   |   fallback-build-manifest.json
-|   |   |   lock
 |   |   |   package.json
 |   |   |   prerender-manifest.json
 |   |   |   react-loadable-manifest.json
@@ -1871,6 +1870,12 @@ C:.
 |   |   |   |           00003191.meta
 |   |   |   |           00003192.meta
 |   |   |   |           00003193.meta
+|   |   |   |           00003194.sst
+|   |   |   |           00003195.sst
+|   |   |   |           00003196.sst
+|   |   |   |           00003197.meta
+|   |   |   |           00003198.meta
+|   |   |   |           00003199.meta
 |   |   |   |           CURRENT
 |   |   |   |           LOG
 |   |   |   |           
@@ -4453,22 +4458,10 @@ C:.
 |           vehicles-client.tsx
 |           
 +---docs
-|   |   BDD_OPERATIONS_SENSIBLES.md
 |   |   CMD.md
-|   |   CONTROLE_FINAL_DOCS.md
-|   |   NOTE_STRATEGIE_A23_A24_UI_UX_AMBULANCE_MANAGER.md
-|   |   PROTOCOLE_SESSION.md
-|   |   QUALITY_TESTS.md
 |   |   README.md
-|   |   REALIGNEMENT_DOCUMENTAIRE_GLOBAL.md
-|   |   REALIGNEMENT_PLAN_DE_DEVELOPPEMENT_ALPHA_BETA.md
-|   |   SCENARIOS_MANUELS_ALPHA.md
-|   |   SOURCES_AUTORISEES.md
+|   |   README_DOCS.md
 |   |   STRUCTURE_DOCS.md
-|   |   USAGE_PLANNING_AUTOSCHEDULE.md
-|   |   USAGE_TEMPLATES.md
-|   |   USAGE_USERS.md
-|   |   USAGE_VEHICLES.md
 |   |   
 |   +---1-master
 |   |   |   CADRAGE_UI_UX_ALPHA_MAQUETTE_V0.2.md
@@ -4481,6 +4474,7 @@ C:.
 |   |   |   REGISTRE_DECISIONS.md
 |   |   |   RGPD_BASE_MINIMALE.md
 |   |   |   STRUCTURE_PROJET.md
+|   |   |   _INDEX_MASTER.md
 |   |   |   
 |   |   \---MAQUETTE
 |   |       |   CADRAGE_UI_UX_ALPHA_MAQUETTE_V0.2.md
@@ -6285,6 +6279,107 @@ C:.
 |   |   |   |               PATCH__SESSION-20260503-11_A23_CLOTURE_A23.diff
 |   |   |   |               README_PATCH.md
 |   |   |   |               
+|   |   |   +---BLOC_A24
+|   |   |   |   +---SESSION-20260506-01_A24_A24-UI-01
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           NO_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260506-02_A24_A24-UI-02
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           README_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260506-03_A24_A24-UI-03
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           README_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260506-04_A24_A24-UI-04
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           README_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260506-05_A24_A24-UI-05
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           README_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260506-06_A24_A24-UI-06
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           README_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260506-07_A24_A24-UI-07
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           README_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260506-08_A24_A24-UI-08
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           NO_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260506-09_A24_A24-UI-09
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           NO_PATCH.md
+|   |   |   |   |           
+|   |   |   |   \---SESSION-20260506-10_A24_CLOTURE_A24
+|   |   |   |       |   EVIDENCES.md
+|   |   |   |       |   FIN_SESSION.md
+|   |   |   |       |   NOTES.md
+|   |   |   |       |   RESULTATS.md
+|   |   |   |       |   SESSION.md
+|   |   |   |       |   
+|   |   |   |       \---PATCH
+|   |   |   |               README_PATCH.md
+|   |   |   |               
 |   |   |   +---BLOC_A3
 |   |   |   |   +---1-USER
 |   |   |   |   |   +---SESSION-20260319-09_A3_USERS-01
@@ -7026,6 +7121,20 @@ C:.
 |   |   |   |               NO_PATCH.md
 |   |   |   |               README_PATCH.md
 |   |   |   |               
+|   |   |   +---BLOC_DOCS
+|   |   |   |   \---SESSION-DOCS-REORG-01
+|   |   |   |       |   EVIDENCES.md
+|   |   |   |       |   FIN_SESSION.md
+|   |   |   |       |   NOTES.md
+|   |   |   |       |   RESULTATS.md
+|   |   |   |       |   SESSION-DOCS-REORG-01__DOCS_FINAL.zip
+|   |   |   |       |   SESSION.md
+|   |   |   |       |   
+|   |   |   |       \---PATCH
+|   |   |   |               PATCH__SESSION-DOCS-REORG-01_DOCS.diff
+|   |   |   |               PATCH__SESSION-DOCS-REORG-01_FIX-01_DOCS.diff
+|   |   |   |               README_PATCH.md
+|   |   |   |               
 |   |   |   \---CLOTURE-ALPHA
 |   |   |       |   EVIDENCES.md
 |   |   |       |   FIN_SESSION.md
@@ -7037,6 +7146,9 @@ C:.
 |   |   |               NO_PATCH.md
 |   |   |               README_PATCH.md
 |   |   |               
+|   |   +---2-BETA
+|   |   |       .gitkeep
+|   |   |       
 |   |   +---2-TEST-ALPHA
 |   |   |   +---1-DOCUMENTATION
 |   |   |   |   +---SESSION-20260418_TEST-LOCAL-01
@@ -7065,6 +7177,9 @@ C:.
 |   |   |               NO_PATCH.md
 |   |   |               README_PATCH.md
 |   |   |               
+|   |   +---3-VERSION_OFFICIELLE
+|   |   |       .gitkeep
+|   |   |       
 |   |   \---SESSION-YYYYMMDD-XX
 |   |           EVIDENCES.md
 |   |           FIN_SESSION.md
@@ -7078,9 +7193,38 @@ C:.
 |   |       TEMPLATE_FIN_SESSION.md
 |   |       TEMPLATE_RECAP_SESSION.md
 |   |       
-|   \---REFONTE
-|           REFONTE.md
-|           
+|   \---4-archives
+|       |   .gitkeep
+|       |   
+|       +---a-confirmer
+|       |       .gitkeep
+|       |       BDD_OPERATIONS_SENSIBLES.md
+|       |       SOURCES_AUTORISEES.md
+|       |       STRUCTURE_DOCS.md
+|       |       
+|       +---anciens-zips
+|       |       .gitkeep
+|       |       
+|       +---brouillons
+|       |   |   .gitkeep
+|       |   |   
+|       |   \---REFONTE
+|       |           REFONTE.md
+|       |           
+|       \---notes-historiques
+|               .gitkeep
+|               CONTROLE_FINAL_DOCS.md
+|               NOTE_STRATEGIE_A23_A24_UI_UX_AMBULANCE_MANAGER.md
+|               PROTOCOLE_SESSION.md
+|               QUALITY_TESTS.md
+|               REALIGNEMENT_DOCUMENTAIRE_GLOBAL.md
+|               REALIGNEMENT_PLAN_DE_DEVELOPPEMENT_ALPHA_BETA.md
+|               SCENARIOS_MANUELS_ALPHA.md
+|               USAGE_PLANNING_AUTOSCHEDULE.md
+|               USAGE_TEMPLATES.md
+|               USAGE_USERS.md
+|               USAGE_VEHICLES.md
+|               
 +---lib
 |   |   auth.ts
 |   |   permission-catalog.ts

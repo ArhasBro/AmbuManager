@@ -1,11 +1,9 @@
-# Documentation officielle — Ambulance Manager
+﻿# Documentation officielle - Ambulance Manager (README historique)
 
-Ce dossier contient la documentation officielle du projet **Ambulance Manager**.
+Ce fichier reste a la racine de `docs/` comme point d'entree historique.
+Le point d'entree documentaire officiel courant est `docs/README_DOCS.md`.
 
----
-
-## Sources de vérité
-
+## Sources de verite
 1. `docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
 2. `docs/1-master/DOCUMENT_MAITRE.md`
 3. `docs/1-master/PLAN_DE_DEVELOPPEMENT.md`
@@ -14,51 +12,24 @@ Ce dossier contient la documentation officielle du projet **Ambulance Manager**.
 6. `docs/1-master/RECAP_DISCUSSIONS.md`
 7. `docs/1-master/STRUCTURE_PROJET.md`
 
-Rappel :
-- `DOCUMENT_CADRAGE_FONCTIONNEL.md` = base officielle produit ;
-- `CODE > DOCUMENTATION` en cas de contradiction ;
-- aucune validation implicite sans preuve.
+Rappel:
+- `DOCUMENT_CADRAGE_FONCTIONNEL.md` = base officielle produit
+- `CODE > DOCUMENTATION` en cas de contradiction
+- aucune validation implicite sans preuve
 
----
+## Arborescence courante
+- `docs/1-master/` : documents maitres
+- `docs/2-sessions/` : historique des sessions
+- `docs/3-templates/` : templates
+- `docs/4-archives/` : archives documentaires
 
-## Arborescence actuelle
+## Guides et documents historiques de racine
+Les anciens documents de racine `docs/*.md` non autorises a la racine ont ete deplaces en archives.
+Emplacements principaux:
+- `docs/4-archives/notes-historiques/`
+- `docs/4-archives/a-confirmer/`
+- `docs/4-archives/brouillons/`
 
-- `docs/1-master/` : documents maîtres de référence ;
-- `docs/2-sessions/` : historique des sessions ;
-- `docs/2-sessions/.../SESSION-.../PATCH/` : patchs officiels au plus près de la session ;
-- `docs/3-patches/` : legacy / historique éventuel à migrer si encore présent ;
-- `docs/3-templates/` : templates de session et de clôture ;
-- `docs/*.md` : gouvernance transversale et guides d’usage ALPHA.
-
----
-
-## Guides d’usage produit ALPHA
-
-- `docs/USAGE_USERS.md`
-- `docs/USAGE_VEHICLES.md`
-- `docs/USAGE_TEMPLATES.md`
-- `docs/USAGE_PLANNING_AUTOSCHEDULE.md`
-- `docs/SCENARIOS_MANUELS_ALPHA.md`
-- `docs/QUALITY_TESTS.md`
-
-Ces guides sont volontairement limités au périmètre réellement visible dans le dépôt courant.
-Ils ne remplacent ni le cadrage produit ni les documents de pilotage.
-
----
-
-## Gouvernance documentaire
-
-- Sources autorisées : `docs/SOURCES_AUTORISEES.md`
-- Structure documentaire attendue : `docs/STRUCTURE_DOCS.md`
-- Protocole de session : `docs/PROTOCOLE_SESSION.md`
-- Templates de session :
-  - `docs/3-templates/TEMPLATE_DEBUT_SESSION.md`
-  - `docs/3-templates/TEMPLATE_FIN_SESSION.md`
-
----
-
-## Règle d’usage
-
-- documentation de pilotage interne : pour le projet et les sessions ;
-- documentation d’usage produit : pour la société pilote ALPHA ;
-- documentation de session clôturée : historique à protéger, sauf correction justifiée.
+## Fichier CMD
+- `docs/CMD.md` reste a la racine comme aide operationnelle de commandes.
+- Ce fichier n'est pas un document maitre.
