@@ -5633,7 +5633,6 @@ C:.
 |   |   |   |   |           NO_PATCH.md
 |   |   |   |   |           
 |   |   |   |   +---SESSION-20260425-03_A21_UX-03
-|   |   |   |   |   |   A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0.zip
 |   |   |   |   |   |   EVIDENCES.md
 |   |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   |   MAQUETTES_FONDATRICES_V0.2.md
@@ -5666,7 +5665,6 @@ C:.
 |   |   |   |   |           NO_PATCH.md
 |   |   |   |   |           
 |   |   |   |   +---SESSION-20260425-04_A21_UX-04
-|   |   |   |   |   |   A21-UX-04_MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0.zip
 |   |   |   |   |   |   EVIDENCES.md
 |   |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   |   MAQUETTES_METIER_COMPLEMENTAIRES_V0.2.md
@@ -5701,7 +5699,6 @@ C:.
 |   |   |   |   |           NO_PATCH.md
 |   |   |   |   |           
 |   |   |   |   +---SESSION-20260425-05_A21_UX-05
-|   |   |   |   |   |   A21-UX-05_PAGES_SIMPLES_FINITIONS_IMAGE_V1.0.zip
 |   |   |   |   |   |   A21-UX-05_PAGES_SIMPLES_FINITIONS_V0.1.md
 |   |   |   |   |   |   EVIDENCES.md
 |   |   |   |   |   |   FIN_SESSION.md
@@ -5757,7 +5754,6 @@ C:.
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
-|   |   |   |   |           LIVRABLES__SESSION-20260425-08_A21_UX-08_A_PLAT.zip
 |   |   |   |   |           NO_PATCH.md
 |   |   |   |   |           
 |   |   |   |   \---SESSION-20260425-09_A21_CLOTURE_A21
@@ -5771,7 +5767,6 @@ C:.
 |   |   |   |       |   SESSION.md
 |   |   |   |       |   
 |   |   |   |       \---PATCH
-|   |   |   |               LIVRABLES__SESSION-20260425-09_A21_CLOTURE_A21_A_PLAT.zip
 |   |   |   |               NO_PATCH.md
 |   |   |   |               
 |   |   |   +---BLOC_A22
@@ -5783,7 +5778,6 @@ C:.
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
-|   |   |   |   |           LIVRABLES__SESSION-20260425-10_A22_UIINT-01_A_PLAT.zip
 |   |   |   |   |           README_PATCH.md
 |   |   |   |   |           SESSION-20260425-10_A22_UIINT-01.diff
 |   |   |   |   |           
@@ -5795,14 +5789,12 @@ C:.
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
-|   |   |   |   |           LIVRABLES__SESSION-20260425-11_A22_UIINT-02_A_PLAT.zip
 |   |   |   |   |           README_PATCH.md
 |   |   |   |   |           SESSION-20260425-11_A22_UIINT-02.diff
 |   |   |   |   |           
 |   |   |   |   +---SESSION-20260425-12_A22_UIINT-03
 |   |   |   |   |   |   EVIDENCES.md
 |   |   |   |   |   |   FIN_SESSION.md
-|   |   |   |   |   |   LIVRABLES__SESSION-20260425-12_A22_UIINT-03_A_PLAT.zip
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   RESULTATS.md
 |   |   |   |   |   |   SESSION.md
@@ -5816,7 +5808,6 @@ C:.
 |   |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   SESSION-20260425-13_A22_UIINT-04_DOCUMENTAIRE_FINAL.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
@@ -5829,7 +5820,6 @@ C:.
 |   |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   SESSION-20260425-14_A22_UIINT-05_DOCUMENTAIRE_FINAL.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
@@ -5842,7 +5832,6 @@ C:.
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   README_PATCH.md
 |   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   SESSION-20260425-15_A22_UIINT-06_DOCUMENTAIRE_FINAL.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
@@ -5855,7 +5844,6 @@ C:.
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   README_PATCH.md
 |   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   SESSION-20260425-16_A22_UIINT-07__DOCS_FINAL.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
@@ -5868,7 +5856,6 @@ C:.
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   README_PATCH.md
 |   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   SESSION-20260425-17_A22_UIINT-08__DOCS_FINAL.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
@@ -5883,8 +5870,6 @@ C:.
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   README_PATCH.md
 |   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   SESSION-20260425-18_A22_UIINT-09__DOCS_FINAL.zip
-|   |   |   |   |   |   SESSION-20260425-18_A22_UIINT-09__DOCS_PATCH_PREUVES_QA.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
@@ -5900,7 +5885,6 @@ C:.
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   README_PATCH.md
 |   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   SESSION-20260425-19_A22_UIINT-10__DOCS_FINAL.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
@@ -5921,7 +5905,6 @@ C:.
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   README_PATCH.md
 |   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   SESSION-20260425-20_A22_UIINT-11__DOCS_FINAL.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
@@ -5935,7 +5918,6 @@ C:.
 |   |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   SESSION-20260425-21_A22_UIINT-12__DOCS_FINAL.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
@@ -5949,7 +5931,6 @@ C:.
 |   |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   SESSION-20260425-22_A22_UIINT-13__DOCS_FINAL.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
@@ -5964,7 +5945,6 @@ C:.
 |   |   |   |       |   NOTES.md
 |   |   |   |       |   NO_PATCH.md
 |   |   |   |       |   RESULTATS.md
-|   |   |   |       |   SESSION-20260425-23_A22_CLOTURE_A22__DOCS_FINAL.zip
 |   |   |   |       |   SESSION.md
 |   |   |   |       |   
 |   |   |   |       \---PATCH
@@ -5977,7 +5957,6 @@ C:.
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   README_PATCH.md
 |   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   SESSION-20260503-01_A23_A23-TEST-01__DOCS_FINAL.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
@@ -5989,7 +5968,6 @@ C:.
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   README_PATCH.md
 |   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   SESSION-20260503-02_A23_A23-LOGIN-02__DOCS_FINAL.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
@@ -6002,7 +5980,6 @@ C:.
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   README_PATCH.md
 |   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   SESSION-20260503-03_A23_A23-USERS-03__DOCS_FINAL.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
@@ -6014,19 +5991,16 @@ C:.
 |   |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   SESSION-20260503-04_A23_A23-USERS-04__DOCS_FINAL.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
 |   |   |   |   |           NO_PATCH.md
 |   |   |   |   |           
 |   |   |   |   +---SESSION-20260503-05_A23_A23-UI-05
-|   |   |   |   |   |   CAPTURES.zip
 |   |   |   |   |   |   EVIDENCES.md
 |   |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   SESSION-20260503-05_A23_A23-UI-05__DOCS_FINAL.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   +---CAPTURES
@@ -6050,7 +6024,6 @@ C:.
 |   |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   SESSION-20260503-06_A23_A23-UI-06__DOCS_FINAL.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   +---CAPTURES_APRES
@@ -6077,7 +6050,6 @@ C:.
 |   |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   SESSION-20260503-07_A23_A23-PLAN-07__DOCS_FINAL.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
@@ -6090,7 +6062,6 @@ C:.
 |   |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   SESSION-20260503-08_A23_A23-PLAN-08__DOCS_FINAL.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
@@ -6102,7 +6073,6 @@ C:.
 |   |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   SESSION-20260503-09_A23_A23-ROLES-RH-09__DOCS_FINAL.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
@@ -6113,7 +6083,6 @@ C:.
 |   |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   SESSION-20260503-10_A23_A23-GONOGO-10__DOCS_FINAL.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
@@ -6124,7 +6093,6 @@ C:.
 |   |   |   |       |   FIN_SESSION.md
 |   |   |   |       |   NOTES.md
 |   |   |   |       |   RESULTATS.md
-|   |   |   |       |   SESSION-20260503-11_A23_CLOTURE_A23__DOCS_FINAL.zip
 |   |   |   |       |   SESSION.md
 |   |   |   |       |   
 |   |   |   |       +---CAPTURES_CONNECTEES
