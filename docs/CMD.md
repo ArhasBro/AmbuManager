@@ -521,11 +521,11 @@ La discussion de contrôle avec ChatGPT doit vérifier l’ensemble produit, san
 ============================================================
 10. RÉFÉRENCE DE LA SESSION
 
-- SESSION-20260506-02_A24_A24-UI-02
-- **A24-UI-02 — CORRECTION+COMPLÉTION** — Socle UI partagé, mode clair / mode sombre et icônes.  
-  Périmètre : tokens CSS, fond global, AppShell, Sidebar, Topbar, PageHeader, boutons, cards, badges, tableaux, filtres, drawers, bouton mode clair / mode sombre et icônes génériques.  
-  Livrable attendu : patch code ciblé du socle visuel partagé.  
-  DoD : les pages applicatives partagent une base visuelle cohérente avec `MAQUETTE_DA`, avec mode clair et mode sombre exploitables, sans nouvelle DA.
+- SESSION-20260506-03_A24_A24-UI-03
+- **A24-UI-03 — CORRECTION+COMPLÉTION** — Login et Dashboard.  
+  Périmètre : page login, dashboard, cartes d’accès, cards de synthèse, icônes, hiérarchie visuelle, fond, espacements, mode clair et mode sombre.  
+  Livrable attendu : patch code ciblé Login + Dashboard.  
+  DoD : Login et Dashboard sont proches de `MAQUETTE_DA`, simples, lisibles et fonctionnels.
 
 ------------------------------------
 
@@ -536,16 +536,6 @@ Unblock-File -Path .\create_session.ps1
 .\create_session.ps1 -Stage "1-ALPHA" -Block "A1" -SessionCode "RBAC-02" -Type "CORRECTION" -Title "Remplacement méthodique de DEA par ADE"
 
 #### Sessions
-
-- **A24-UI-01 — AUDIT** — Audit global UI/UX et cadrage des références `MAQUETTE_DA`.  
-  Objectif : officialiser les références UI/UX, vérifier les maquettes disponibles, classer les pages couvertes, auditer les icônes, cadrer le mode sombre, cadrer le responsive minimal et préparer l’ordre de correction.  
-  Livrable attendu : rapport d’audit UI/UX avec matrice page → maquette → route → fichier code, classement des écarts, statut des icônes et recommandations de correction.  
-  DoD : chaque page couverte possède un verdict visuel : conforme / non conforme / incomplet / à confirmer.
-
-- **A24-UI-02 — CORRECTION+COMPLÉTION** — Socle UI partagé, mode clair / mode sombre et icônes.  
-  Périmètre : tokens CSS, fond global, AppShell, Sidebar, Topbar, PageHeader, boutons, cards, badges, tableaux, filtres, drawers, bouton mode clair / mode sombre et icônes génériques.  
-  Livrable attendu : patch code ciblé du socle visuel partagé.  
-  DoD : les pages applicatives partagent une base visuelle cohérente avec `MAQUETTE_DA`, avec mode clair et mode sombre exploitables, sans nouvelle DA.
 
 - **A24-UI-03 — CORRECTION+COMPLÉTION** — Login et Dashboard.  
   Périmètre : page login, dashboard, cartes d’accès, cards de synthèse, icônes, hiérarchie visuelle, fond, espacements, mode clair et mode sombre.  

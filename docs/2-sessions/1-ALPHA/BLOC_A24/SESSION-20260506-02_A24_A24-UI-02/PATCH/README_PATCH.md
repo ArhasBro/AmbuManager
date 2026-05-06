@@ -9,16 +9,25 @@ CORRECTION+COMPLETION
 ## Dossier PATCH
 docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-02_A24_A24-UI-02/PATCH
 
-## Patch officiel attendu
+## Patch principal code
 PATCH__SESSION-20260506-02_A24_A24-UI-02.diff
+
+## Patch documentaire
+PATCH__SESSION-20260506-02_A24_A24-UI-02_DOCS.diff
+
+## Correctif code
+Aucun correctif separé necessaire (`FIX-XX` non cree).
 
 ## Commandes d'application
 
-`ash
+```bash
 git apply --check "docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-02_A24_A24-UI-02/PATCH/PATCH__SESSION-20260506-02_A24_A24-UI-02.diff"
 git apply         "docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-02_A24_A24-UI-02/PATCH/PATCH__SESSION-20260506-02_A24_A24-UI-02.diff"
-`
+```
 
 ## Statut
-- Dossier patch initialise.
-- Patch officiel a produire dans cette session si du code est modifie.
+
+- Patch principal code : produit.
+- Validation terminale : executee (`lint`, `build`).
+- Documentation finale : produite.
+- ZIP documentaire final : produit.

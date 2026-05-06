@@ -1,10 +1,10 @@
 "use client";
 
+import { Ambulance } from "lucide-react";
 import Link from "next/link";
 import { signIn, useSession } from "next-auth/react";
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-
 const DEFAULT_LOGIN_REDIRECT = "/dashboard";
 
 function isSafeInternalPath(value: string | null): value is string {
@@ -123,7 +123,7 @@ function LoginPageContent() {
       <section className="login-page__form-area" aria-label="Formulaire de connexion">
         <article className="login-card">
           <div className="login-card__icon" aria-hidden="true">
-            AM
+            <Ambulance size={26} strokeWidth={2.2} />
           </div>
 
           <h2 className="login-card__title">Connexion</h2>

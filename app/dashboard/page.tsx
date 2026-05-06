@@ -1,4 +1,16 @@
 import { getServerSession } from "next-auth/next";
+import {
+  Ambulance,
+  ArrowRight,
+  Building2,
+  CalendarDays,
+  FileText,
+  GraduationCap,
+  Landmark,
+  ShieldCheck,
+  UsersRound,
+  type LucideIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -24,7 +36,7 @@ type DashboardLink = {
   href: string;
   title: string;
   description: string;
-  iconLabel: string;
+  Icon: LucideIcon;
   tone: DashboardCardTone;
   statusLabel: string;
   statusVariant: StatusBadgeVariant;
@@ -35,6 +47,7 @@ type DashboardMetric = {
   value: number;
   hint: string;
   tone: "neutral" | "info" | "success" | "warning";
+  Icon: LucideIcon;
 };
 
 const ROLE_LABELS: Record<string, string> = {
@@ -57,7 +70,7 @@ function SectionCard({
   title,
   description,
   href,
-  iconLabel,
+  Icon,
   tone,
   statusLabel,
   statusVariant,
@@ -66,7 +79,7 @@ function SectionCard({
     <Link href={href} className="dashboard-link-card">
       <div className="dashboard-link-card__head">
         <span className={`dashboard-link-card__icon dashboard-link-card__icon--${tone}`} aria-hidden="true">
-          {iconLabel}
+          <Icon size={20} strokeWidth={2.2} />
         </span>
         <div className="dashboard-link-card__copy">
           <strong className="dashboard-link-card__title">{title}</strong>
@@ -78,7 +91,7 @@ function SectionCard({
 
       <span className="dashboard-link-card__action">
         Ouvrir
-        <span aria-hidden="true">{" >"}</span>
+        <ArrowRight size={16} strokeWidth={2.2} aria-hidden="true" />
       </span>
     </Link>
   );
@@ -162,24 +175,28 @@ export default async function DashboardPage() {
           value: activeUsersCount,
           hint: "Comptes en activite",
           tone: "info",
+          Icon: UsersRound,
         },
         {
           label: "Vehicules actifs",
           value: activeVehiclesCount,
           hint: "Flotte operationnelle",
           tone: "success",
+          Icon: Ambulance,
         },
         {
           label: "Depots actifs",
           value: activeDepotsCount,
           hint: "Bases en service",
           tone: "neutral",
+          Icon: Landmark,
         },
         {
           label: "Templates actifs",
           value: activeTemplatesCount,
           hint: "Modeles disponibles",
           tone: "warning",
+          Icon: FileText,
         },
       ]
     : [];
@@ -192,7 +209,7 @@ export default async function DashboardPage() {
           description: planningGlobalAllowed
             ? "Consulter le planning de la societe selon vos droits reels."
             : "Acceder a votre planning sans exposer les modules d'administration.",
-          iconLabel: "PL",
+          Icon: CalendarDays,
           tone: "blue",
           statusLabel: "Disponible",
           statusVariant: "success",
@@ -209,7 +226,7 @@ export default async function DashboardPage() {
       description: companyProfileAllowed
         ? "Profil societe et regles metier de la societe courante."
         : "Acces aux regles metier deleguees sur la societe courante.",
-      iconLabel: "SO",
+      Icon: Building2,
       tone: "slate",
       statusLabel: companyProfileAllowed ? "Disponible" : "Selon permissions",
       statusVariant: companyProfileAllowed ? "success" : "warning",
@@ -221,7 +238,7 @@ export default async function DashboardPage() {
       href: "/onboarding",
       title: "Onboarding",
       description: "Parcours manuel guide et imports initiaux simples pour demarrer.",
-      iconLabel: "ON",
+      Icon: GraduationCap,
       tone: "violet",
       statusLabel: "Disponible",
       statusVariant: "success",
@@ -233,7 +250,7 @@ export default async function DashboardPage() {
       href: "/depots",
       title: "Bases / depots",
       description: "Gerer les depots actifs de la societe courante.",
-      iconLabel: "DP",
+      Icon: Landmark,
       tone: "violet",
       statusLabel: "Disponible",
       statusVariant: "success",
@@ -245,7 +262,7 @@ export default async function DashboardPage() {
       href: "/users",
       title: "Utilisateurs",
       description: "Creer, modifier, archiver et administrer les comptes de la societe.",
-      iconLabel: "US",
+      Icon: UsersRound,
       tone: "blue",
       statusLabel: "Disponible",
       statusVariant: "success",
@@ -257,7 +274,7 @@ export default async function DashboardPage() {
       href: "/vehicles",
       title: "Vehicules",
       description: "Consulter et gerer la flotte reellement autorisee.",
-      iconLabel: "VH",
+      Icon: Ambulance,
       tone: "teal",
       statusLabel: "Disponible",
       statusVariant: "success",
@@ -269,7 +286,7 @@ export default async function DashboardPage() {
       href: "/templates",
       title: "Templates",
       description: "Gerer les templates de shifts disponibles dans le depot.",
-      iconLabel: "TP",
+      Icon: FileText,
       tone: "amber",
       statusLabel: "Disponible",
       statusVariant: "success",
@@ -281,7 +298,7 @@ export default async function DashboardPage() {
       href: "/audit",
       title: "Audit",
       description: "Consulter les evenements de securite, support et modifications recentes.",
-      iconLabel: "AU",
+      Icon: ShieldCheck,
       tone: "slate",
       statusLabel: "Disponible",
       statusVariant: "success",
@@ -368,6 +385,7 @@ export default async function DashboardPage() {
                   value={metric.value}
                   hint={metric.hint}
                   tone={metric.tone}
+                  icon={<metric.Icon size={18} strokeWidth={2.1} />}
                 />
               ))}
             </div>

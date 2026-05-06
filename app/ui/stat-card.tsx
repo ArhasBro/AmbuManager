@@ -7,6 +7,7 @@ type StatCardProps = {
   value: ReactNode;
   hint?: ReactNode;
   tone?: StatCardTone;
+  icon?: ReactNode;
   className?: string;
 };
 
@@ -23,13 +24,21 @@ export default function StatCard({
   value,
   hint,
   tone = "neutral",
+  icon,
   className,
 }: StatCardProps) {
   const classes = ["ui-stat-card", TONE_CLASS[tone], className].filter(Boolean).join(" ");
 
   return (
     <article className={classes}>
-      <p className="ui-stat-card__title">{title}</p>
+      <div className="ui-stat-card__head">
+        <p className="ui-stat-card__title">{title}</p>
+        {icon ? (
+          <span className="ui-stat-card__icon" aria-hidden="true">
+            {icon}
+          </span>
+        ) : null}
+      </div>
       <strong className="ui-stat-card__value">{value}</strong>
       {hint ? <p className="ui-stat-card__hint">{hint}</p> : null}
     </article>

@@ -3,7 +3,22 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
-import { ReactNode, useMemo } from "react";
+import {
+  Ambulance,
+  Building2,
+  CalendarDays,
+  FileText,
+  GraduationCap,
+  Landmark,
+  LayoutDashboard,
+  LogOut,
+  MoonStar,
+  ShieldCheck,
+  SunMedium,
+  type LucideIcon,
+  UsersRound,
+} from "lucide-react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 
 export type AppShellNavLink = {
   href: string;
@@ -18,6 +33,20 @@ export type AppShellContext = {
 };
 
 const PUBLIC_ROUTES = new Set(["/login"]);
+
+const THEME_KEY = "ambulance-manager-theme";
+
+const NAV_ICON_BY_ROUTE: Record<string, LucideIcon> = {
+  "/dashboard": LayoutDashboard,
+  "/planning": CalendarDays,
+  "/users": UsersRound,
+  "/vehicles": Ambulance,
+  "/templates": FileText,
+  "/company": Building2,
+  "/depots": Landmark,
+  "/onboarding": GraduationCap,
+  "/audit": ShieldCheck,
+};
 
 function isPublicRoute(pathname: string | null): boolean {
   if (!pathname) return false;
@@ -34,6 +63,15 @@ export default function AppShell({
   context: AppShellContext;
 }) {
   const pathname = usePathname();
+  const [theme, setTheme] = useState<"light" | "dark">(() => {
+    if (typeof window === "undefined") return "light";
+    return window.localStorage.getItem(THEME_KEY) === "dark" ? "dark" : "light";
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    window.localStorage.setItem(THEME_KEY, theme);
+  }, [theme]);
 
   const activeHref = useMemo(() => {
     if (!pathname) return "";
@@ -55,38 +93,20 @@ export default function AppShell({
     <div className="app-shell">
       <aside className="app-shell__sidebar" aria-label="Navigation principale">
         <div className="app-shell__brand">
-          <span className="app-shell__brand-title">Ambulance Manager</span>
-          <span className="app-shell__chip">ALPHA</span>
+          <span className="app-shell__brand-mark" aria-hidden="true">
+            <Ambulance size={18} strokeWidth={2.2} />
+          </span>
+          <div className="app-shell__brand-copy">
+            <span className="app-shell__brand-title">Ambulance Manager</span>
+            <span className="app-shell__chip">ALPHA</span>
+          </div>
         </div>
 
         <nav className="app-shell__nav" aria-label="Navigation des modules">
           {navLinks.length > 0 ? (
             navLinks.map((link) => {
               const isActive = activeHref === link.href;
-              const iconLabel = (() => {
-                switch (link.href) {
-                  case "/dashboard":
-                    return "DB";
-                  case "/planning":
-                    return "PL";
-                  case "/users":
-                    return "US";
-                  case "/vehicles":
-                    return "VH";
-                  case "/templates":
-                    return "TP";
-                  case "/company":
-                    return "SO";
-                  case "/depots":
-                    return "DP";
-                  case "/onboarding":
-                    return "ON";
-                  case "/audit":
-                    return "AU";
-                  default:
-                    return "AM";
-                }
-              })();
+              const NavIcon = NAV_ICON_BY_ROUTE[link.href] ?? Ambulance;
 
               return (
                 <Link
@@ -96,7 +116,7 @@ export default function AppShell({
                   aria-current={isActive ? "page" : undefined}
                 >
                   <span className="app-shell__nav-icon" aria-hidden="true">
-                    {iconLabel}
+                    <NavIcon size={16} strokeWidth={2.2} />
                   </span>
                   <span>{link.label}</span>
                 </Link>
@@ -124,6 +144,16 @@ export default function AppShell({
           </div>
 
           <div className="app-shell__topbar-meta">
+            <button
+              type="button"
+              className="app-shell__theme-toggle"
+              onClick={() => setTheme((currentTheme) => (currentTheme === "light" ? "dark" : "light"))}
+              aria-label={theme === "light" ? "Activer le mode sombre" : "Activer le mode clair"}
+            >
+              {theme === "light" ? <MoonStar size={16} /> : <SunMedium size={16} />}
+              <span>{theme === "light" ? "Mode sombre" : "Mode clair"}</span>
+            </button>
+
             <div className="app-shell__meta-list">
               <span className="app-shell__meta-chip">
                 <strong>Utilisateur</strong>
@@ -141,6 +171,7 @@ export default function AppShell({
                 className="app-shell__logout"
                 onClick={() => signOut({ callbackUrl: "/login" })}
               >
+                <LogOut size={16} aria-hidden="true" />
                 Deconnexion
               </button>
             ) : null}

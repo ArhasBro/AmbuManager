@@ -1636,9 +1636,12 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   NOTES.md
 |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION-20260506-02_A24_A24-UI-02_DOCS.zip
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
+|   |   |   |           PATCH__SESSION-20260506-02_A24_A24-UI-02.diff
+|   |   |   |           PATCH__SESSION-20260506-02_A24_A24-UI-02_DOCS.diff
 |   |   |   |           README_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260506-03_A24_A24-UI-03

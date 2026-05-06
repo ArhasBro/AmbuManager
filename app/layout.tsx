@@ -113,7 +113,7 @@ export default async function RootLayout({
   const { navLinks, context } = await getAppShellData();
 
   return (
-    <html lang="fr">
+    <html lang="fr" data-theme="light" suppressHydrationWarning>
       <body>
         <Providers>
           <AppShell navLinks={navLinks} context={context}>
