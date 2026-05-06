@@ -1628,6 +1628,8 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   
 |   |   |   |   \---PATCH
 |   |   |   |           NO_PATCH.md
+|   |   |   |           NO_PATCH_CODE.md
+|   |   |   |           README_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260506-02_A24_A24-UI-02
 |   |   |   |   |   EVIDENCES.md

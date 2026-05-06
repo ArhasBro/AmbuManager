@@ -15,19 +15,28 @@ Sous-projet : Ambulance Manager
 Maturite : 1-ALPHA  
 Bloc : A24  
 Type : AUDIT  
-Intitule : Audit global UI UX et cadrage des references MAQUETTE_DA
+Intitule : Audit global UI UX et cadrage des references MAQUETTE
 
 ## Objectif de la session
 
-INFORMATION NON FOURNIE - A CONFIRMER
+Realiser un audit global UI/UX du depot reel Ambulance Manager afin d'officialiser les references UI/UX actuelles, verifier les maquettes disponibles, classer les pages couvertes/non couvertes, auditer les icones, cadrer le mode sombre, cadrer le responsive minimal et preparer l'ordre de correction A24-UI-02 a A24-UI-09.
 
 ## Perimetre exact traite
 
-INFORMATION NON FOURNIE - A CONFIRMER
+- Lecture documentaire ciblee (noyau obligatoire + references A24 utiles).
+- Inventaire de `docs/1-master/MAQUETTE/` (maquettes, specs, mappings icones, assets).
+- Audit du code UI reel (`app/`, `app/ui/`, `app/globals.css`, layouts, pages et clients UI).
+- Matrice page -> maquette -> route -> fichiers code.
+- Cadrage mode sombre et responsive minimal.
+- Recommandation d'ordre de correction A24-UI-02 a A24-UI-09.
 
 ## Resultat synthetique de session
 
-INFORMATION NON FOURNIE - A CONFIRMER
+- Audit global produit et formalise.
+- 11 pages applicatives couvertes par maquettes officielles identifiees.
+- Ecart visuel global confirme entre maquettes et rendu reel, avec priorisation.
+- Audit icones confirme : forte presence d'icones generiques textuelles a remplacer.
+- Decision session : `NO_PATCH_CODE` et `PATCH DOCUMENTAIRE`.
 
 ## Dossiers lies
 
