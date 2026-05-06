@@ -1,4 +1,4 @@
-﻿# README_PATCH
+# README_PATCH
 
 ## Session liee
 SESSION-20260506-03_A24_A24-UI-03
@@ -7,18 +7,23 @@ SESSION-20260506-03_A24_A24-UI-03
 CORRECTION+COMPLETION
 
 ## Dossier PATCH
-docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/PATCH
+`docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/PATCH`
 
-## Patch officiel attendu
-PATCH__SESSION-20260506-03_A24_A24-UI-03.diff
+## Fichiers patch
+
+- Patch principal code : `PATCH__SESSION-20260506-03_A24_A24-UI-03.diff`
+- Patch correctif minimal : `PATCH__SESSION-20260506-03_A24_A24-UI-03_FIX-01.diff`
+- Patch documentaire : `PATCH__SESSION-20260506-03_A24_A24-UI-03_DOCS.diff`
 
 ## Commandes d'application
 
-`ash
+```bash
 git apply --check "docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/PATCH/PATCH__SESSION-20260506-03_A24_A24-UI-03.diff"
 git apply         "docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/PATCH/PATCH__SESSION-20260506-03_A24_A24-UI-03.diff"
-`
 
-## Statut
-- Dossier patch initialise.
-- Patch officiel a produire dans cette session si du code est modifie.
+git apply --check "docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/PATCH/PATCH__SESSION-20260506-03_A24_A24-UI-03_FIX-01.diff"
+git apply         "docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/PATCH/PATCH__SESSION-20260506-03_A24_A24-UI-03_FIX-01.diff"
+
+git apply --check "docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/PATCH/PATCH__SESSION-20260506-03_A24_A24-UI-03_DOCS.diff"
+git apply         "docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/PATCH/PATCH__SESSION-20260506-03_A24_A24-UI-03_DOCS.diff"
+```

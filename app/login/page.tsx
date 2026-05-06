@@ -1,6 +1,16 @@
 "use client";
 
-import { Ambulance } from "lucide-react";
+import {
+  Ambulance,
+  CalendarDays,
+  Check,
+  Eye,
+  EyeOff,
+  LockKeyhole,
+  Mail,
+  ShieldCheck,
+  UsersRound,
+} from "lucide-react";
 import Link from "next/link";
 import { signIn, useSession } from "next-auth/react";
 import { Suspense, useEffect, useState } from "react";
@@ -40,14 +50,22 @@ const loginHighlights = [
   {
     title: "Planning intelligent",
     description: "Organisez vos equipes et vos interventions en toute clarte.",
+    Icon: CalendarDays,
   },
   {
     title: "Flotte optimisee",
     description: "Suivez vos vehicules et vos equipements sans perte d'information.",
+    Icon: Ambulance,
+  },
+  {
+    title: "Equipes connectees",
+    description: "Coordonnez les profils, roles et depots avec une vue unifiee.",
+    Icon: UsersRound,
   },
   {
     title: "Conformite et securite",
     description: "Donnees tracees et acces reserves aux utilisateurs autorises.",
+    Icon: ShieldCheck,
   },
 ] as const;
 
@@ -59,6 +77,7 @@ function LoginPageContent() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
@@ -97,12 +116,17 @@ function LoginPageContent() {
     <main className="login-page">
       <section className="login-page__showcase" aria-label="Presentation de la plateforme">
         <div className="login-page__brand">
-          <p className="login-page__brand-title">Ambulance Manager</p>
+          <span className="login-page__brand-icon" aria-hidden="true">
+            <Ambulance size={22} strokeWidth={2.1} />
+          </span>
+          <p className="login-page__brand-title">
+            Ambulance <span>Manager</span>
+          </p>
           <span className="login-page__brand-chip">ALPHA</span>
         </div>
 
         <div className="login-page__intro">
-          <h1 className="login-page__intro-title">Simplifiez la gestion operationnelle de votre societe.</h1>
+          <h1 className="login-page__intro-title">Simplifiez la gestion operationnelle de votre societe de transport sanitaire.</h1>
           <p className="login-page__intro-description">
             Un espace clair et fiable pour piloter equipes, planning et conformite depuis une seule interface.
           </p>
@@ -111,13 +135,23 @@ function LoginPageContent() {
         <ul className="login-page__highlights" aria-label="Points cles">
           {loginHighlights.map((item) => (
             <li key={item.title}>
-              <p className="login-page__highlight-title">{item.title}</p>
-              <p className="login-page__highlight-description">{item.description}</p>
+              <span className="login-page__highlight-icon" aria-hidden="true">
+                <item.Icon size={18} strokeWidth={2.2} />
+              </span>
+              <div>
+                <p className="login-page__highlight-title">{item.title}</p>
+                <p className="login-page__highlight-description">{item.description}</p>
+              </div>
             </li>
           ))}
         </ul>
 
-        <p className="login-page__security-note">Acces reserve aux utilisateurs autorises.</p>
+        <p className="login-page__security-note">
+          <span className="login-page__security-icon" aria-hidden="true">
+            <LockKeyhole size={18} strokeWidth={2.2} />
+          </span>
+          Acces reserve aux utilisateurs autorises.
+        </p>
       </section>
 
       <section className="login-page__form-area" aria-label="Formulaire de connexion">
@@ -132,36 +166,60 @@ function LoginPageContent() {
           <form onSubmit={onSubmit} className="login-form">
             <label className="login-field">
               <span className="login-field__label">Adresse email</span>
-              <input
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                type="email"
-                autoComplete="email"
-                required
-                placeholder="exemple@ambulances.fr"
-              />
+              <span className="login-field__control">
+                <Mail size={17} strokeWidth={2.1} aria-hidden="true" />
+                <input
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  type="email"
+                  autoComplete="email"
+                  required
+                  placeholder="exemple@ambulances.fr"
+                />
+              </span>
             </label>
 
             <label className="login-field">
               <span className="login-field__label">Mot de passe</span>
-              <input
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                type="password"
-                autoComplete="current-password"
-                required
-                placeholder="Votre mot de passe"
-              />
+              <span className="login-field__control">
+                <LockKeyhole size={17} strokeWidth={2.1} aria-hidden="true" />
+                <input
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
+                  required
+                  placeholder="Votre mot de passe"
+                />
+                <button
+                  type="button"
+                  className="login-field__toggle"
+                  onClick={() => setShowPassword((current) => !current)}
+                  aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+                >
+                  {showPassword ? <EyeOff size={17} strokeWidth={2.1} /> : <Eye size={17} strokeWidth={2.1} />}
+                </button>
+              </span>
             </label>
 
             {error ? (
               <p className="login-error" role="alert">
-                {error}
+                <span className="login-error__title">Identifiants invalides</span>
+                <span className="login-error__description">{error}</span>
               </p>
             ) : null}
 
+            <label className="login-checkbox">
+              <input type="checkbox" defaultChecked />
+              <span className="login-checkbox__mark" aria-hidden="true">
+                <Check size={13} strokeWidth={2.6} />
+              </span>
+              <span className="login-checkbox__label">Se souvenir de moi</span>
+            </label>
+
             <button disabled={loading} type="submit" className="login-submit">
-              {loading ? "Connexion..." : "Se connecter"}
+              <LockKeyhole size={17} strokeWidth={2.2} aria-hidden="true" />
+              {loading ? "Connexion..." : "Connexion"}
             </button>
           </form>
 
@@ -170,7 +228,10 @@ function LoginPageContent() {
           </p>
         </article>
 
-        <p className="login-page__bottom-note">Application professionnelle de transport sanitaire</p>
+        <p className="login-page__bottom-note">
+          <ShieldCheck size={14} strokeWidth={2.2} aria-hidden="true" />
+          Application professionnelle de transport sanitaire
+        </p>
       </section>
     </main>
   );

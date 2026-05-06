@@ -7,6 +7,7 @@ import {
   FileText,
   GraduationCap,
   Landmark,
+  Mail,
   ShieldCheck,
   UsersRound,
   type LucideIcon,
@@ -45,7 +46,7 @@ type DashboardLink = {
 type DashboardMetric = {
   label: string;
   value: number;
-  hint: string;
+  total: number;
   tone: "neutral" | "info" | "success" | "warning";
   Icon: LucideIcon;
 };
@@ -90,7 +91,7 @@ function SectionCard({
       <StatusBadge variant={statusVariant}>{statusLabel}</StatusBadge>
 
       <span className="dashboard-link-card__action">
-        Ouvrir
+        <span>Ouvrir</span>
         <ArrowRight size={16} strokeWidth={2.2} aria-hidden="true" />
       </span>
     </Link>
@@ -136,7 +137,7 @@ export default async function DashboardPage() {
   const planningAllowed = companyScopedSession && (planningSelfAllowed || planningGlobalAllowed);
   const nativeAdminMetricsAllowed = Boolean(companyId) && companyProfileAllowed;
 
-  const [activeUsersCount, activeVehiclesCount, activeDepotsCount, activeTemplatesCount] =
+  const [activeUsersCount, totalUsersCount, activeVehiclesCount, totalVehiclesCount, activeDepotsCount, totalDepotsCount, activeTemplatesCount, totalTemplatesCount] =
     nativeAdminMetricsAllowed && companyId
       ? await Promise.all([
           prisma.user.count({
@@ -146,7 +147,24 @@ export default async function DashboardPage() {
               platformRole: null,
             },
           }),
+          prisma.user.count({
+            where: {
+              companyId,
+              platformRole: null,
+            },
+          }),
           prisma.vehicle.count({
+            where: {
+              companyId,
+              isActive: true,
+            },
+          }),
+          prisma.vehicle.count({
+            where: {
+              companyId,
+            },
+          }),
+          prisma.depot.count({
             where: {
               companyId,
               isActive: true,
@@ -155,7 +173,6 @@ export default async function DashboardPage() {
           prisma.depot.count({
             where: {
               companyId,
-              isActive: true,
             },
           }),
           prisma.shiftTemplate.count({
@@ -165,36 +182,42 @@ export default async function DashboardPage() {
               archivedAt: null,
             },
           }),
+          prisma.shiftTemplate.count({
+            where: {
+              companyId,
+              archivedAt: null,
+            },
+          }),
         ])
-      : [0, 0, 0, 0];
+      : [0, 0, 0, 0, 0, 0, 0, 0];
 
   const metrics: DashboardMetric[] = nativeAdminMetricsAllowed
     ? [
         {
           label: "Utilisateurs actifs",
           value: activeUsersCount,
-          hint: "Comptes en activite",
+          total: totalUsersCount,
           tone: "info",
           Icon: UsersRound,
         },
         {
           label: "Vehicules actifs",
           value: activeVehiclesCount,
-          hint: "Flotte operationnelle",
+          total: totalVehiclesCount,
           tone: "success",
           Icon: Ambulance,
         },
         {
           label: "Depots actifs",
           value: activeDepotsCount,
-          hint: "Bases en service",
+          total: totalDepotsCount,
           tone: "neutral",
           Icon: Landmark,
         },
         {
           label: "Templates actifs",
           value: activeTemplatesCount,
-          hint: "Modeles disponibles",
+          total: totalTemplatesCount,
           tone: "warning",
           Icon: FileText,
         },
@@ -248,7 +271,7 @@ export default async function DashboardPage() {
   if (companyScopedSession && depotsAllowed) {
     adminLinks.push({
       href: "/depots",
-      title: "Bases / depots",
+      title: "Depots / bases",
       description: "Gerer les depots actifs de la societe courante.",
       Icon: Landmark,
       tone: "violet",
@@ -260,10 +283,10 @@ export default async function DashboardPage() {
   if (companyScopedSession && usersAllowed) {
     adminLinks.push({
       href: "/users",
-      title: "Utilisateurs",
+      title: "Utilisateurs / RH",
       description: "Creer, modifier, archiver et administrer les comptes de la societe.",
       Icon: UsersRound,
-      tone: "blue",
+      tone: "teal",
       statusLabel: "Disponible",
       statusVariant: "success",
     });
@@ -275,7 +298,7 @@ export default async function DashboardPage() {
       title: "Vehicules",
       description: "Consulter et gerer la flotte reellement autorisee.",
       Icon: Ambulance,
-      tone: "teal",
+      tone: "blue",
       statusLabel: "Disponible",
       statusVariant: "success",
     });
@@ -307,7 +330,15 @@ export default async function DashboardPage() {
 
   const showTerrainSection = terrainDashboardAllowed || terrainLinks.length > 0;
   const showAdminSection = adminDashboardAllowed || adminLinks.length > 0;
-  const visibleModuleCount = terrainLinks.length + adminLinks.length;
+  const moduleLinks = [...terrainLinks, ...adminLinks].sort((a, b) => {
+    const order = ["/planning", "/users", "/vehicles", "/templates", "/company", "/depots", "/onboarding", "/audit"];
+    const rankA = order.indexOf(a.href);
+    const rankB = order.indexOf(b.href);
+    const safeA = rankA === -1 ? Number.MAX_SAFE_INTEGER : rankA;
+    const safeB = rankB === -1 ? Number.MAX_SAFE_INTEGER : rankB;
+    return safeA - safeB;
+  });
+  const visibleModuleCount = moduleLinks.length;
 
   return (
     <div className="page-wrap">
@@ -317,21 +348,32 @@ export default async function DashboardPage() {
       />
 
       <section className="panel dashboard-welcome">
-        <h2 className="dashboard-welcome__title">
-          Connecte en tant que {user.name ?? user.email ?? "Utilisateur"}
-        </h2>
+        <div className="dashboard-profile">
+          <span className="dashboard-profile__avatar" aria-hidden="true">
+            {(user.name ?? user.email ?? "U").slice(0, 2).toUpperCase()}
+          </span>
+          <div className="dashboard-profile__copy">
+            <h2 className="dashboard-welcome__title">
+              Connecte en tant que {user.name ?? user.email ?? "Utilisateur"}
+            </h2>
+            <div className="dashboard-profile__meta">
+              <span>
+                <Mail size={14} strokeWidth={2.2} aria-hidden="true" />
+                {user.email ?? "email non renseigne"}
+              </span>
+              <span>
+                <Building2 size={14} strokeWidth={2.2} aria-hidden="true" />
+                {companyScopedSession ? "Societe rattachee" : "Societe non rattachee"}
+              </span>
+            </div>
+          </div>
+        </div>
+
         <div className="dashboard-welcome__badges">
-          <StatusBadge variant="info">
-            Profil : {getProfileLabel(user.role, user.platformRole)}
-          </StatusBadge>
-          <StatusBadge variant={companyScopedSession ? "success" : "warning"}>
-            Societe : {companyScopedSession ? "rattachee" : "non rattachee"}
-          </StatusBadge>
+          <StatusBadge variant="info">Profil : {getProfileLabel(user.role, user.platformRole)}</StatusBadge>
+          <StatusBadge variant={companyScopedSession ? "success" : "warning"}>Acces : {companyScopedSession ? "normal" : "limite"}</StatusBadge>
           <StatusBadge variant="neutral">Modules visibles : {visibleModuleCount}</StatusBadge>
         </div>
-        <p className="dashboard-welcome__note">
-          Les liens ci-dessous sont filtres pour eviter les entrees qui ne debouchent pas sur un acces reel.
-        </p>
       </section>
 
       {!companyScopedSession ? (
@@ -343,36 +385,12 @@ export default async function DashboardPage() {
         </section>
       ) : null}
 
-      {showTerrainSection ? (
+      {showTerrainSection || showAdminSection ? (
         <section className="panel dashboard-section">
           <header className="dashboard-section__head">
-            <h2 className="dashboard-section__title">Acces terrain</h2>
+            <h2 className="dashboard-section__title">Modules d&apos;acces</h2>
             <p className="dashboard-section__description">
-              Orientation vers les acces operationnels sans exposition des modules d&apos;administration.
-            </p>
-          </header>
-
-          {terrainLinks.length > 0 ? (
-            <div className="dashboard-card-grid">
-              {terrainLinks.map((link) => (
-                <SectionCard key={link.href} {...link} />
-              ))}
-            </div>
-          ) : (
-            <EmptyState
-              title="Aucun module terrain disponible"
-              message="Aucun module terrain supplementaire n'est actuellement exploitable."
-            />
-          )}
-        </section>
-      ) : null}
-
-      {showAdminSection ? (
-        <section className="panel dashboard-section">
-          <header className="dashboard-section__head">
-            <h2 className="dashboard-section__title">Acces administration</h2>
-            <p className="dashboard-section__description">
-              Distribution des acces administratifs selon les permissions reellement consommees.
+              Les cartes ci-dessous respectent les permissions de la session active.
             </p>
           </header>
 
@@ -383,7 +401,7 @@ export default async function DashboardPage() {
                   key={metric.label}
                   title={metric.label}
                   value={metric.value}
-                  hint={metric.hint}
+                  hint={`sur ${metric.total}`}
                   tone={metric.tone}
                   icon={<metric.Icon size={18} strokeWidth={2.1} />}
                 />
@@ -391,16 +409,16 @@ export default async function DashboardPage() {
             </div>
           ) : null}
 
-          {adminLinks.length > 0 ? (
+          {moduleLinks.length > 0 ? (
             <div className="dashboard-card-grid">
-              {adminLinks.map((link) => (
+              {moduleLinks.map((link) => (
                 <SectionCard key={link.href} {...link} />
               ))}
             </div>
           ) : (
             <EmptyState
-              title="Aucun module administratif disponible"
-              message="Aucun module administratif supplementaire n'est reellement accessible."
+              title="Aucun module disponible"
+              message="Aucun module supplementaire n'est reellement accessible."
             />
           )}
         </section>

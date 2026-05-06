@@ -1,0 +1,994 @@
+diff --git a/app/dashboard/page.tsx b/app/dashboard/page.tsx
+index 0803589..d643215 100644
+--- a/app/dashboard/page.tsx
++++ b/app/dashboard/page.tsx
+@@ -7,6 +7,7 @@ import {
+   FileText,
+   GraduationCap,
+   Landmark,
++  Mail,
+   ShieldCheck,
+   UsersRound,
+   type LucideIcon,
+@@ -45,7 +46,7 @@ type DashboardLink = {
+ type DashboardMetric = {
+   label: string;
+   value: number;
+-  hint: string;
++  total: number;
+   tone: "neutral" | "info" | "success" | "warning";
+   Icon: LucideIcon;
+ };
+@@ -90,7 +91,7 @@ function SectionCard({
+       <StatusBadge variant={statusVariant}>{statusLabel}</StatusBadge>
+ 
+       <span className="dashboard-link-card__action">
+-        Ouvrir
++        <span>Ouvrir</span>
+         <ArrowRight size={16} strokeWidth={2.2} aria-hidden="true" />
+       </span>
+     </Link>
+@@ -136,7 +137,7 @@ export default async function DashboardPage() {
+   const planningAllowed = companyScopedSession && (planningSelfAllowed || planningGlobalAllowed);
+   const nativeAdminMetricsAllowed = Boolean(companyId) && companyProfileAllowed;
+ 
+-  const [activeUsersCount, activeVehiclesCount, activeDepotsCount, activeTemplatesCount] =
++  const [activeUsersCount, totalUsersCount, activeVehiclesCount, totalVehiclesCount, activeDepotsCount, totalDepotsCount, activeTemplatesCount, totalTemplatesCount] =
+     nativeAdminMetricsAllowed && companyId
+       ? await Promise.all([
+           prisma.user.count({
+@@ -146,18 +147,34 @@ export default async function DashboardPage() {
+               platformRole: null,
+             },
+           }),
++          prisma.user.count({
++            where: {
++              companyId,
++              platformRole: null,
++            },
++          }),
+           prisma.vehicle.count({
+             where: {
+               companyId,
+               isActive: true,
+             },
+           }),
++          prisma.vehicle.count({
++            where: {
++              companyId,
++            },
++          }),
+           prisma.depot.count({
+             where: {
+               companyId,
+               isActive: true,
+             },
+           }),
++          prisma.depot.count({
++            where: {
++              companyId,
++            },
++          }),
+           prisma.shiftTemplate.count({
+             where: {
+               companyId,
+@@ -165,36 +182,42 @@ export default async function DashboardPage() {
+               archivedAt: null,
+             },
+           }),
++          prisma.shiftTemplate.count({
++            where: {
++              companyId,
++              archivedAt: null,
++            },
++          }),
+         ])
+-      : [0, 0, 0, 0];
++      : [0, 0, 0, 0, 0, 0, 0, 0];
+ 
+   const metrics: DashboardMetric[] = nativeAdminMetricsAllowed
+     ? [
+         {
+           label: "Utilisateurs actifs",
+           value: activeUsersCount,
+-          hint: "Comptes en activite",
++          total: totalUsersCount,
+           tone: "info",
+           Icon: UsersRound,
+         },
+         {
+           label: "Vehicules actifs",
+           value: activeVehiclesCount,
+-          hint: "Flotte operationnelle",
++          total: totalVehiclesCount,
+           tone: "success",
+           Icon: Ambulance,
+         },
+         {
+           label: "Depots actifs",
+           value: activeDepotsCount,
+-          hint: "Bases en service",
++          total: totalDepotsCount,
+           tone: "neutral",
+           Icon: Landmark,
+         },
+         {
+           label: "Templates actifs",
+           value: activeTemplatesCount,
+-          hint: "Modeles disponibles",
++          total: totalTemplatesCount,
+           tone: "warning",
+           Icon: FileText,
+         },
+@@ -248,7 +271,7 @@ export default async function DashboardPage() {
+   if (companyScopedSession && depotsAllowed) {
+     adminLinks.push({
+       href: "/depots",
+-      title: "Bases / depots",
++      title: "Depots / bases",
+       description: "Gerer les depots actifs de la societe courante.",
+       Icon: Landmark,
+       tone: "violet",
+@@ -260,10 +283,10 @@ export default async function DashboardPage() {
+   if (companyScopedSession && usersAllowed) {
+     adminLinks.push({
+       href: "/users",
+-      title: "Utilisateurs",
++      title: "Utilisateurs / RH",
+       description: "Creer, modifier, archiver et administrer les comptes de la societe.",
+       Icon: UsersRound,
+-      tone: "blue",
++      tone: "teal",
+       statusLabel: "Disponible",
+       statusVariant: "success",
+     });
+@@ -275,7 +298,7 @@ export default async function DashboardPage() {
+       title: "Vehicules",
+       description: "Consulter et gerer la flotte reellement autorisee.",
+       Icon: Ambulance,
+-      tone: "teal",
++      tone: "blue",
+       statusLabel: "Disponible",
+       statusVariant: "success",
+     });
+@@ -307,7 +330,15 @@ export default async function DashboardPage() {
+ 
+   const showTerrainSection = terrainDashboardAllowed || terrainLinks.length > 0;
+   const showAdminSection = adminDashboardAllowed || adminLinks.length > 0;
+-  const visibleModuleCount = terrainLinks.length + adminLinks.length;
++  const moduleLinks = [...terrainLinks, ...adminLinks].sort((a, b) => {
++    const order = ["/planning", "/users", "/vehicles", "/templates", "/company", "/depots", "/onboarding", "/audit"];
++    const rankA = order.indexOf(a.href);
++    const rankB = order.indexOf(b.href);
++    const safeA = rankA === -1 ? Number.MAX_SAFE_INTEGER : rankA;
++    const safeB = rankB === -1 ? Number.MAX_SAFE_INTEGER : rankB;
++    return safeA - safeB;
++  });
++  const visibleModuleCount = moduleLinks.length;
+ 
+   return (
+     <div className="page-wrap">
+@@ -317,21 +348,32 @@ export default async function DashboardPage() {
+       />
+ 
+       <section className="panel dashboard-welcome">
+-        <h2 className="dashboard-welcome__title">
+-          Connecte en tant que {user.name ?? user.email ?? "Utilisateur"}
+-        </h2>
++        <div className="dashboard-profile">
++          <span className="dashboard-profile__avatar" aria-hidden="true">
++            {(user.name ?? user.email ?? "U").slice(0, 2).toUpperCase()}
++          </span>
++          <div className="dashboard-profile__copy">
++            <h2 className="dashboard-welcome__title">
++              Connecte en tant que {user.name ?? user.email ?? "Utilisateur"}
++            </h2>
++            <div className="dashboard-profile__meta">
++              <span>
++                <Mail size={14} strokeWidth={2.2} aria-hidden="true" />
++                {user.email ?? "email non renseigne"}
++              </span>
++              <span>
++                <Building2 size={14} strokeWidth={2.2} aria-hidden="true" />
++                {companyScopedSession ? "Societe rattachee" : "Societe non rattachee"}
++              </span>
++            </div>
++          </div>
++        </div>
++
+         <div className="dashboard-welcome__badges">
+-          <StatusBadge variant="info">
+-            Profil : {getProfileLabel(user.role, user.platformRole)}
+-          </StatusBadge>
+-          <StatusBadge variant={companyScopedSession ? "success" : "warning"}>
+-            Societe : {companyScopedSession ? "rattachee" : "non rattachee"}
+-          </StatusBadge>
++          <StatusBadge variant="info">Profil : {getProfileLabel(user.role, user.platformRole)}</StatusBadge>
++          <StatusBadge variant={companyScopedSession ? "success" : "warning"}>Acces : {companyScopedSession ? "normal" : "limite"}</StatusBadge>
+           <StatusBadge variant="neutral">Modules visibles : {visibleModuleCount}</StatusBadge>
+         </div>
+-        <p className="dashboard-welcome__note">
+-          Les liens ci-dessous sont filtres pour eviter les entrees qui ne debouchent pas sur un acces reel.
+-        </p>
+       </section>
+ 
+       {!companyScopedSession ? (
+@@ -343,36 +385,12 @@ export default async function DashboardPage() {
+         </section>
+       ) : null}
+ 
+-      {showTerrainSection ? (
+-        <section className="panel dashboard-section">
+-          <header className="dashboard-section__head">
+-            <h2 className="dashboard-section__title">Acces terrain</h2>
+-            <p className="dashboard-section__description">
+-              Orientation vers les acces operationnels sans exposition des modules d&apos;administration.
+-            </p>
+-          </header>
+-
+-          {terrainLinks.length > 0 ? (
+-            <div className="dashboard-card-grid">
+-              {terrainLinks.map((link) => (
+-                <SectionCard key={link.href} {...link} />
+-              ))}
+-            </div>
+-          ) : (
+-            <EmptyState
+-              title="Aucun module terrain disponible"
+-              message="Aucun module terrain supplementaire n'est actuellement exploitable."
+-            />
+-          )}
+-        </section>
+-      ) : null}
+-
+-      {showAdminSection ? (
++      {showTerrainSection || showAdminSection ? (
+         <section className="panel dashboard-section">
+           <header className="dashboard-section__head">
+-            <h2 className="dashboard-section__title">Acces administration</h2>
++            <h2 className="dashboard-section__title">Modules d&apos;acces</h2>
+             <p className="dashboard-section__description">
+-              Distribution des acces administratifs selon les permissions reellement consommees.
++              Les cartes ci-dessous respectent les permissions de la session active.
+             </p>
+           </header>
+ 
+@@ -383,7 +401,7 @@ export default async function DashboardPage() {
+                   key={metric.label}
+                   title={metric.label}
+                   value={metric.value}
+-                  hint={metric.hint}
++                  hint={`sur ${metric.total}`}
+                   tone={metric.tone}
+                   icon={<metric.Icon size={18} strokeWidth={2.1} />}
+                 />
+@@ -391,16 +409,16 @@ export default async function DashboardPage() {
+             </div>
+           ) : null}
+ 
+-          {adminLinks.length > 0 ? (
++          {moduleLinks.length > 0 ? (
+             <div className="dashboard-card-grid">
+-              {adminLinks.map((link) => (
++              {moduleLinks.map((link) => (
+                 <SectionCard key={link.href} {...link} />
+               ))}
+             </div>
+           ) : (
+             <EmptyState
+-              title="Aucun module administratif disponible"
+-              message="Aucun module administratif supplementaire n'est reellement accessible."
++              title="Aucun module disponible"
++              message="Aucun module supplementaire n'est reellement accessible."
+             />
+           )}
+         </section>
+diff --git a/app/globals.css b/app/globals.css
+index e441e01..b9f14cd 100644
+--- a/app/globals.css
++++ b/app/globals.css
+@@ -1267,12 +1267,64 @@ pre {
+ 
+ .dashboard-welcome {
+   display: grid;
+-  gap: 10px;
++  gap: 14px;
++}
++
++.dashboard-profile {
++  display: flex;
++  align-items: flex-start;
++  gap: 14px;
++  padding: 14px;
++  border-radius: 14px;
++  border: 1px solid var(--ui-border);
++  background: linear-gradient(145deg, #eef4ff 0%, #f8fbff 100%);
++}
++
++.dashboard-profile__avatar {
++  width: 52px;
++  height: 52px;
++  border-radius: 14px;
++  border: 1px solid #a9c9fb;
++  background: #dbeafe;
++  color: #124491;
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  font-weight: 800;
++  letter-spacing: 0.03em;
++  flex-shrink: 0;
++}
++
++.dashboard-profile__copy {
++  min-width: 0;
++  display: grid;
++  gap: 8px;
++}
++
++.dashboard-profile__meta {
++  display: inline-flex;
++  align-items: center;
++  flex-wrap: wrap;
++  gap: 8px;
++}
++
++.dashboard-profile__meta span {
++  display: inline-flex;
++  align-items: center;
++  gap: 6px;
++  min-height: 30px;
++  padding: 0 10px;
++  border-radius: 999px;
++  border: 1px solid var(--ui-border);
++  background: #ffffff;
++  color: var(--ui-text-muted);
++  font-size: 12px;
++  font-weight: 600;
+ }
+ 
+ .dashboard-welcome__title {
+   margin: 0;
+-  font-size: 30px;
++  font-size: 26px;
+   line-height: 1.2;
+   color: #124491;
+ }
+@@ -1336,7 +1388,7 @@ pre {
+   border: 1px solid var(--ui-border);
+   border-radius: 16px;
+   background: var(--ui-surface);
+-  min-height: 186px;
++  min-height: 194px;
+   padding: 16px;
+   color: inherit;
+   text-decoration: none;
+@@ -1360,8 +1412,8 @@ pre {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+-  width: 44px;
+-  height: 44px;
++  width: 50px;
++  height: 50px;
+   border-radius: 12px;
+   border: 1px solid transparent;
+   flex-shrink: 0;
+@@ -1404,7 +1456,7 @@ pre {
+ 
+ .dashboard-link-card__title {
+   margin: 0;
+-  font-size: 19px;
++  font-size: 18px;
+   line-height: 1.2;
+   color: #124491;
+ }
+@@ -1421,13 +1473,69 @@ pre {
+   justify-content: space-between;
+   gap: 8px;
+   border: 1px solid var(--ui-border);
+-  border-radius: 11px;
+-  background: var(--ui-surface-soft);
+-  padding: 8px 12px;
++  border-radius: 12px;
++  background: linear-gradient(180deg, var(--ui-surface-soft) 0%, #ffffff 100%);
++  padding: 9px 12px;
+   color: #124491;
+   font-weight: 700;
+ }
+ 
++:root[data-theme="dark"] .dashboard-profile {
++  background: linear-gradient(145deg, #0f2342 0%, #112948 100%);
++  border-color: #2d476f;
++}
++
++:root[data-theme="dark"] .dashboard-profile__avatar {
++  border-color: #3f608d;
++  background: #1a3a66;
++  color: #d9e8ff;
++}
++
++:root[data-theme="dark"] .dashboard-profile__meta span {
++  border-color: #35527d;
++  background: #142845;
++  color: #bdd0ee;
++}
++
++:root[data-theme="dark"] .dashboard-link-card {
++  background: linear-gradient(180deg, #11213a 0%, #12253f 100%);
++}
++
++:root[data-theme="dark"] .dashboard-link-card__icon--blue {
++  border-color: #355c9a;
++  background: #1a2f50;
++  color: #90b9ff;
++}
++
++:root[data-theme="dark"] .dashboard-link-card__icon--teal {
++  border-color: #2d7070;
++  background: #14383b;
++  color: #7ee0d0;
++}
++
++:root[data-theme="dark"] .dashboard-link-card__icon--violet {
++  border-color: #5d4f93;
++  background: #2a2246;
++  color: #c1b5ff;
++}
++
++:root[data-theme="dark"] .dashboard-link-card__icon--amber {
++  border-color: #836531;
++  background: #3a2b11;
++  color: #ffd992;
++}
++
++:root[data-theme="dark"] .dashboard-link-card__icon--slate {
++  border-color: #536884;
++  background: #1f3048;
++  color: #c8d8f0;
++}
++
++:root[data-theme="dark"] .dashboard-link-card__action {
++  background: linear-gradient(180deg, #172b47 0%, #15263f 100%);
++  color: #dbe9ff;
++}
++
+ .dashboard-debug {
+   display: grid;
+   gap: 8px;
+@@ -1727,6 +1835,19 @@ pre {
+     font-size: 24px;
+   }
+ 
++  .dashboard-profile {
++    align-items: center;
++  }
++
++  .dashboard-profile__meta {
++    display: grid;
++    gap: 8px;
++  }
++
++  .dashboard-profile__meta span {
++    width: fit-content;
++  }
++
+   .dashboard-card-grid {
+     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+   }
+@@ -3017,14 +3138,30 @@ pre {
+   gap: 10px;
+ }
+ 
++.login-page__brand-icon {
++  width: 38px;
++  height: 38px;
++  border-radius: 11px;
++  border: 1px solid rgba(143, 195, 255, 0.65);
++  background: rgba(24, 69, 145, 0.48);
++  color: #8ac3ff;
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++}
++
+ .login-page__brand-title {
+   margin: 0;
+-  font-size: clamp(28px, 4vw, 46px);
++  font-size: clamp(28px, 4vw, 44px);
+   font-weight: 800;
+   letter-spacing: -0.02em;
+   line-height: 1.05;
+ }
+ 
++.login-page__brand-title span {
++  color: #8ac3ff;
++}
++
+ .login-page__brand-chip {
+   display: inline-flex;
+   align-items: center;
+@@ -3067,12 +3204,28 @@ pre {
+ }
+ 
+ .login-page__highlights li {
++  display: flex;
++  align-items: flex-start;
++  gap: 10px;
+   border: 1px solid rgba(148, 163, 184, 0.28);
+   border-radius: 14px;
+   background: rgba(15, 39, 85, 0.5);
+   padding: 12px 14px;
+ }
+ 
++.login-page__highlight-icon {
++  width: 32px;
++  height: 32px;
++  border-radius: 10px;
++  border: 1px solid rgba(125, 211, 252, 0.44);
++  background: rgba(8, 92, 149, 0.42);
++  color: #9ddcff;
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  flex-shrink: 0;
++}
++
+ .login-page__highlight-title {
+   margin: 0;
+   font-size: 15px;
+@@ -3087,43 +3240,68 @@ pre {
+ 
+ .login-page__security-note {
+   margin: 0;
++  display: inline-flex;
++  align-items: center;
++  gap: 10px;
+   padding: 12px 14px;
+   border-radius: 12px;
+   border: 1px solid rgba(125, 211, 252, 0.35);
+   background: rgba(2, 132, 199, 0.2);
+   color: #dbeafe;
++  font-size: 14px;
++  line-height: 1.35;
+   font-weight: 600;
+   max-width: 520px;
+ }
+ 
++.login-page__security-icon {
++  width: 32px;
++  height: 32px;
++  border-radius: 10px;
++  border: 1px solid rgba(152, 214, 255, 0.35);
++  background: rgba(17, 104, 167, 0.4);
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  flex-shrink: 0;
++}
++
+ .login-page__form-area {
+   display: grid;
+   align-content: center;
+   justify-items: center;
+   gap: 18px;
+   padding: clamp(20px, 5vw, 44px);
++  background: radial-gradient(circle at 10% 10%, rgba(125, 166, 238, 0.2), transparent 35%), var(--ui-bg);
+ }
+ 
+ .login-card {
++  position: relative;
+   width: min(100%, 520px);
+   border: 1px solid var(--ui-border);
+-  border-radius: 18px;
++  border-radius: 20px;
+   background: var(--ui-surface);
+   box-shadow: var(--ui-shadow);
+   padding: clamp(20px, 4vw, 34px);
++  padding-top: clamp(28px, 5vw, 42px);
+   display: grid;
+   gap: 14px;
+ }
+ 
+ .login-card__icon {
+-  width: 58px;
+-  height: 58px;
++  position: absolute;
++  top: 0;
++  left: 26px;
++  transform: translateY(-50%);
++  width: 62px;
++  height: 62px;
+   border-radius: 50%;
+   border: 1px solid #bfdbfe;
+-  background: #e9f2ff;
++  background: linear-gradient(180deg, #eff5ff 0%, #dceaff 100%);
+   color: #1f6fe5;
+   display: grid;
+   place-items: center;
++  box-shadow: 0 10px 20px rgba(21, 66, 130, 0.15);
+ }
+ 
+ .login-card__title {
+@@ -3142,7 +3320,7 @@ pre {
+ .login-form {
+   margin-top: 6px;
+   display: grid;
+-  gap: 12px;
++  gap: 13px;
+ }
+ 
+ .login-field {
+@@ -3156,23 +3334,112 @@ pre {
+   color: var(--ui-text-muted);
+ }
+ 
+-.login-field input {
+-  min-height: 42px;
++.login-field__control {
++  display: grid;
++  grid-template-columns: auto minmax(0, 1fr) auto;
++  align-items: center;
++  gap: 8px;
++  min-height: 44px;
++  border: 1px solid var(--ui-border);
++  border-radius: 10px;
++  background: var(--ui-surface);
++  padding: 0 10px;
++  color: #6b82ab;
++}
++
++.login-field__control:focus-within {
++  outline: 2px solid var(--ui-focus);
++  outline-offset: 1px;
++}
++
++.login-field__control input {
++  min-height: 40px;
++  border: 0;
++  background: transparent;
++  padding: 0;
++  outline: none;
++  color: var(--ui-text);
++}
++
++.login-field__toggle {
++  min-height: 28px;
++  min-width: 28px;
++  border: 0;
++  border-radius: 999px;
++  background: transparent;
++  color: #6b82ab;
++  padding: 0;
++}
++
++.login-field__toggle:hover:not(:disabled) {
++  border: 0;
++  transform: none;
++  color: var(--ui-text);
++  background: rgba(37, 99, 235, 0.1);
+ }
+ 
+ .login-error {
+   margin: 0;
++  display: grid;
++  gap: 3px;
+   border: 1px solid var(--ui-danger-border);
+   border-radius: 10px;
+   padding: 10px 12px;
+   background: var(--ui-danger-bg);
+-  color: var(--ui-danger-text);
++  color: #81283a;
+   font-size: 14px;
++}
++
++.login-error__title {
++  font-size: 13px;
++  font-weight: 800;
++  letter-spacing: 0.02em;
++}
++
++.login-error__description {
++  font-size: 13px;
++  color: var(--ui-danger-text);
++}
++
++.login-checkbox {
++  display: inline-flex;
++  align-items: center;
++  gap: 8px;
++}
++
++.login-checkbox input {
++  position: absolute;
++  opacity: 0;
++  width: 1px;
++  height: 1px;
++  pointer-events: none;
++}
++
++.login-checkbox__mark {
++  width: 18px;
++  height: 18px;
++  border-radius: 6px;
++  border: 1px solid var(--ui-primary);
++  background: var(--ui-primary);
++  color: #ffffff;
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  flex-shrink: 0;
++}
++
++.login-checkbox__label {
++  color: var(--ui-text-muted);
++  font-size: 13px;
+   font-weight: 600;
+ }
+ 
+ .login-submit {
+   min-height: 44px;
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  gap: 8px;
+   border-color: var(--ui-primary);
+   background: var(--ui-primary);
+   color: var(--ui-primary-contrast);
+@@ -3198,11 +3465,51 @@ pre {
+ 
+ .login-page__bottom-note {
+   margin: 0;
++  display: inline-flex;
++  align-items: center;
++  gap: 6px;
+   text-align: center;
+   color: var(--ui-text-muted);
+   font-size: 13px;
+ }
+ 
++:root[data-theme="dark"] .login-page {
++  background: linear-gradient(90deg, #08152d 0%, #0a1e3b 48%, #0d1b34 48%, #0e1f3a 100%);
++}
++
++:root[data-theme="dark"] .login-page__form-area {
++  background: radial-gradient(circle at 12% 12%, rgba(66, 105, 185, 0.22), transparent 38%), #0d1b34;
++}
++
++:root[data-theme="dark"] .login-card {
++  border-color: #2f4d79;
++  background: linear-gradient(180deg, #112442 0%, #122946 100%);
++}
++
++:root[data-theme="dark"] .login-card__icon {
++  border-color: #416696;
++  background: linear-gradient(180deg, #1c365d 0%, #183155 100%);
++  color: #8ebfff;
++}
++
++:root[data-theme="dark"] .login-field__control {
++  border-color: #36557f;
++  background: #142946;
++  color: #a8c1e6;
++}
++
++:root[data-theme="dark"] .login-field__control input::placeholder {
++  color: #97abcc;
++}
++
++:root[data-theme="dark"] .login-field__toggle:hover:not(:disabled) {
++  background: rgba(132, 171, 241, 0.16);
++}
++
++:root[data-theme="dark"] .login-card__privacy-note a {
++  color: #8bb7ff;
++}
++
+ .privacy-page {
+   padding: 22px 16px 28px;
+   background: var(--ui-bg);
+@@ -3417,6 +3724,13 @@ pre {
+   .login-card {
+     border-radius: 14px;
+     padding: 16px;
++    padding-top: 30px;
++  }
++
++  .login-card__icon {
++    left: 16px;
++    width: 54px;
++    height: 54px;
+   }
+ 
+   .login-card__title {
+diff --git a/app/login/page.tsx b/app/login/page.tsx
+index 6c471af..050fe4e 100644
+--- a/app/login/page.tsx
++++ b/app/login/page.tsx
+@@ -1,6 +1,16 @@
+ "use client";
+ 
+-import { Ambulance } from "lucide-react";
++import {
++  Ambulance,
++  CalendarDays,
++  Check,
++  Eye,
++  EyeOff,
++  LockKeyhole,
++  Mail,
++  ShieldCheck,
++  UsersRound,
++} from "lucide-react";
+ import Link from "next/link";
+ import { signIn, useSession } from "next-auth/react";
+ import { Suspense, useEffect, useState } from "react";
+@@ -40,14 +50,22 @@ const loginHighlights = [
+   {
+     title: "Planning intelligent",
+     description: "Organisez vos equipes et vos interventions en toute clarte.",
++    Icon: CalendarDays,
+   },
+   {
+     title: "Flotte optimisee",
+     description: "Suivez vos vehicules et vos equipements sans perte d'information.",
++    Icon: Ambulance,
++  },
++  {
++    title: "Equipes connectees",
++    description: "Coordonnez les profils, roles et depots avec une vue unifiee.",
++    Icon: UsersRound,
+   },
+   {
+     title: "Conformite et securite",
+     description: "Donnees tracees et acces reserves aux utilisateurs autorises.",
++    Icon: ShieldCheck,
+   },
+ ] as const;
+ 
+@@ -59,6 +77,7 @@ function LoginPageContent() {
+ 
+   const [email, setEmail] = useState("");
+   const [password, setPassword] = useState("");
++  const [showPassword, setShowPassword] = useState(false);
+   const [error, setError] = useState<string | null>(null);
+   const [loading, setLoading] = useState(false);
+   useEffect(() => {
+@@ -97,12 +116,17 @@ function LoginPageContent() {
+     <main className="login-page">
+       <section className="login-page__showcase" aria-label="Presentation de la plateforme">
+         <div className="login-page__brand">
+-          <p className="login-page__brand-title">Ambulance Manager</p>
++          <span className="login-page__brand-icon" aria-hidden="true">
++            <Ambulance size={22} strokeWidth={2.1} />
++          </span>
++          <p className="login-page__brand-title">
++            Ambulance <span>Manager</span>
++          </p>
+           <span className="login-page__brand-chip">ALPHA</span>
+         </div>
+ 
+         <div className="login-page__intro">
+-          <h1 className="login-page__intro-title">Simplifiez la gestion operationnelle de votre societe.</h1>
++          <h1 className="login-page__intro-title">Simplifiez la gestion operationnelle de votre societe de transport sanitaire.</h1>
+           <p className="login-page__intro-description">
+             Un espace clair et fiable pour piloter equipes, planning et conformite depuis une seule interface.
+           </p>
+@@ -111,13 +135,23 @@ function LoginPageContent() {
+         <ul className="login-page__highlights" aria-label="Points cles">
+           {loginHighlights.map((item) => (
+             <li key={item.title}>
+-              <p className="login-page__highlight-title">{item.title}</p>
+-              <p className="login-page__highlight-description">{item.description}</p>
++              <span className="login-page__highlight-icon" aria-hidden="true">
++                <item.Icon size={18} strokeWidth={2.2} />
++              </span>
++              <div>
++                <p className="login-page__highlight-title">{item.title}</p>
++                <p className="login-page__highlight-description">{item.description}</p>
++              </div>
+             </li>
+           ))}
+         </ul>
+ 
+-        <p className="login-page__security-note">Acces reserve aux utilisateurs autorises.</p>
++        <p className="login-page__security-note">
++          <span className="login-page__security-icon" aria-hidden="true">
++            <LockKeyhole size={18} strokeWidth={2.2} />
++          </span>
++          Acces reserve aux utilisateurs autorises. Vos donnees sont hebergees en France et conformes RGPD.
++        </p>
+       </section>
+ 
+       <section className="login-page__form-area" aria-label="Formulaire de connexion">
+@@ -132,36 +166,60 @@ function LoginPageContent() {
+           <form onSubmit={onSubmit} className="login-form">
+             <label className="login-field">
+               <span className="login-field__label">Adresse email</span>
+-              <input
+-                value={email}
+-                onChange={(e) => setEmail(e.target.value)}
+-                type="email"
+-                autoComplete="email"
+-                required
+-                placeholder="exemple@ambulances.fr"
+-              />
++              <span className="login-field__control">
++                <Mail size={17} strokeWidth={2.1} aria-hidden="true" />
++                <input
++                  value={email}
++                  onChange={(e) => setEmail(e.target.value)}
++                  type="email"
++                  autoComplete="email"
++                  required
++                  placeholder="exemple@ambulances.fr"
++                />
++              </span>
+             </label>
+ 
+             <label className="login-field">
+               <span className="login-field__label">Mot de passe</span>
+-              <input
+-                value={password}
+-                onChange={(e) => setPassword(e.target.value)}
+-                type="password"
+-                autoComplete="current-password"
+-                required
+-                placeholder="Votre mot de passe"
+-              />
++              <span className="login-field__control">
++                <LockKeyhole size={17} strokeWidth={2.1} aria-hidden="true" />
++                <input
++                  value={password}
++                  onChange={(e) => setPassword(e.target.value)}
++                  type={showPassword ? "text" : "password"}
++                  autoComplete="current-password"
++                  required
++                  placeholder="Votre mot de passe"
++                />
++                <button
++                  type="button"
++                  className="login-field__toggle"
++                  onClick={() => setShowPassword((current) => !current)}
++                  aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
++                >
++                  {showPassword ? <EyeOff size={17} strokeWidth={2.1} /> : <Eye size={17} strokeWidth={2.1} />}
++                </button>
++              </span>
+             </label>
+ 
+             {error ? (
+               <p className="login-error" role="alert">
+-                {error}
++                <span className="login-error__title">Identifiants invalides</span>
++                <span className="login-error__description">{error}</span>
+               </p>
+             ) : null}
+ 
++            <label className="login-checkbox">
++              <input type="checkbox" defaultChecked />
++              <span className="login-checkbox__mark" aria-hidden="true">
++                <Check size={13} strokeWidth={2.6} />
++              </span>
++              <span className="login-checkbox__label">Se souvenir de moi</span>
++            </label>
++
+             <button disabled={loading} type="submit" className="login-submit">
+-              {loading ? "Connexion..." : "Se connecter"}
++              <LockKeyhole size={17} strokeWidth={2.2} aria-hidden="true" />
++              {loading ? "Connexion..." : "Connexion"}
+             </button>
+           </form>
+ 
+@@ -170,7 +228,10 @@ function LoginPageContent() {
+           </p>
+         </article>
+ 
+-        <p className="login-page__bottom-note">Application professionnelle de transport sanitaire</p>
++        <p className="login-page__bottom-note">
++          <ShieldCheck size={14} strokeWidth={2.2} aria-hidden="true" />
++          Heberge en France | Conforme RGPD
++        </p>
+       </section>
+     </main>
+   );

@@ -1651,7 +1651,22 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   RESULTATS.md
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
+|   |   |   |   +---CAPTURES_APRES
+|   |   |   |   |       dashboard_dark_after.png
+|   |   |   |   |       dashboard_light_after.png
+|   |   |   |   |       login_dark_after.png
+|   |   |   |   |       login_light_after.png
+|   |   |   |   |       
+|   |   |   |   +---CAPTURES_AVANT
+|   |   |   |   |       dashboard_dark_before.png
+|   |   |   |   |       dashboard_light_before.png
+|   |   |   |   |       login_dark_before.png
+|   |   |   |   |       login_light_before.png
+|   |   |   |   |       
 |   |   |   |   \---PATCH
+|   |   |   |           PATCH__SESSION-20260506-03_A24_A24-UI-03.diff
+|   |   |   |           PATCH__SESSION-20260506-03_A24_A24-UI-03_DOCS.diff
+|   |   |   |           PATCH__SESSION-20260506-03_A24_A24-UI-03_FIX-01.diff
 |   |   |   |           README_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260506-04_A24_A24-UI-04

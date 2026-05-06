@@ -1,0 +1,153 @@
+diff --git a/app/login/page.tsx b/app/login/page.tsx
+index 050fe4e..f723418 100644
+--- a/app/login/page.tsx
++++ b/app/login/page.tsx
+@@ -150,7 +150,7 @@ function LoginPageContent() {
+           <span className="login-page__security-icon" aria-hidden="true">
+             <LockKeyhole size={18} strokeWidth={2.2} />
+           </span>
+-          Acces reserve aux utilisateurs autorises. Vos donnees sont hebergees en France et conformes RGPD.
++          Acces reserve aux utilisateurs autorises.
+         </p>
+       </section>
+ 
+@@ -230,7 +230,7 @@ function LoginPageContent() {
+ 
+         <p className="login-page__bottom-note">
+           <ShieldCheck size={14} strokeWidth={2.2} aria-hidden="true" />
+-          Heberge en France | Conforme RGPD
++          Application professionnelle de transport sanitaire
+         </p>
+       </section>
+     </main>
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/EVIDENCES.md b/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/EVIDENCES.md
+index 84e3f48..4f935de 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/EVIDENCES.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/EVIDENCES.md
+@@ -15,6 +15,10 @@ Lecture complementaire ciblee A24-UI-03 :
+ - `docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-01_A24_A24-UI-01/FIN_SESSION.md`
+ - `docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-02_A24_A24-UI-02/FIN_SESSION.md`
+ 
++Reference `MAQUETTE_DA` utilisee pour Login/Dashboard (inventaire de maquettes consulte pendant la session) :
++- `docs/1-master/MAQUETTE/MAQUETTE_DA/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0/A21-UX-05_PAGES_SIMPLES_FINITIONS_IMAGE_V1.0/1-Login/Login_V1.1.png`
++- `docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/1-Dashboard/Dashboard_V1.png`
++
+ ## Captures avant/apres
+ 
+ Commandes principales executees (Playwright CLI) :
+@@ -108,6 +112,8 @@ error: app/login/page.tsx: patch does not apply
+ Resultat : echec attendu (modifications deja appliquees dans l'arbre courant)  
+ Code retour : `1`
+ 
++Clarification : ce KO sur arbre courant ne signifie pas un patch invalide ; il indique que les changements du patch principal sont deja presents dans l'arbre de travail.
++
+ Verification applicabilite en etat propre :
+ 
+ ```bash
+@@ -126,6 +132,16 @@ exit_code=0
+ Resultat : applicabilite validee sur arbre propre  
+ Code retour : `0`
+ 
++## Correctif minimal FIX-01
++
++Patch correctif :
++`docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/PATCH/PATCH__SESSION-20260506-03_A24_A24-UI-03_FIX-01.diff`
++
++Portee du correctif :
++- conservation de la checkbox `Se souvenir de moi` sans extension de logique d'authentification ;
++- remplacement des formulations Login non prouvees sur hebergement/RGPD par des formulations neutres ;
++- complement documentaire (checkbox future, reference MAQUETTE_DA, clarifications d'applicabilite).
++
+ ## Patch documentaire - format et applicabilite
+ 
+ Patch documentaire :
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/FIN_SESSION.md b/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/FIN_SESSION.md
+index 14bf086..9013ba9 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/FIN_SESSION.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/FIN_SESSION.md
+@@ -3,6 +3,7 @@
+ ## Cloture
+ 
+ Session A24-UI-03 executee sur le perimetre Login + Dashboard, avec patch code cible, captures avant/apres, validations terminales et documentation finale complete.
++Correctif minimal post-controle qualite applique sans rejouer la session complete.
+ 
+ ## Validation
+ 
+@@ -10,12 +11,13 @@ Session A24-UI-03 executee sur le perimetre Login + Dashboard, avec patch code c
+ - `npm run build` : succes
+ - patch principal code : controle format + applicabilite validee sur arbre propre
+ - patch documentaire : controle format + applicabilite validee sur arbre propre
++- patch correctif `FIX-01` : controle format + applicabilite (preuve dans `EVIDENCES.md`)
+ - ZIP documentaire final : genere et contenu verifie
+ 
+ ## Verdict final
+ 
+ - Patch code principal : OUI
+-- Correctif code separe : NON
++- Correctif code separe : OUI (`PATCH__SESSION-20260506-03_A24_A24-UI-03_FIX-01.diff`)
+ - Patch documentaire separe : OUI
+ - Captures avant/apres : OUI
+-- Recommandation vers A24-UI-04 : OUI (sous reserve de validation visuelle utilisateur sur ce lot)
+\ No newline at end of file
++- Recommandation vers A24-UI-04 : OUI (sous reserve de validation visuelle utilisateur sur ce lot)
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/NOTES.md b/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/NOTES.md
+index 84bae3e..b365c26 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/NOTES.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/NOTES.md
+@@ -18,4 +18,5 @@
+ - Pas de refonte metier ; uniquement du realignement visuel.
+ - Conservation des assets generiques existants (pas d'introduction d'assets marque externes absents du depot).
+ - Utilisation de Lucide React pour les icones generiques Login/Dashboard.
+-- Theme clair conserve prioritaire ; mode sombre ajuste uniquement pour Login/Dashboard.
+\ No newline at end of file
++- Theme clair conserve prioritaire ; mode sombre ajuste uniquement pour Login/Dashboard.
++- La checkbox `Se souvenir de moi` est conservee dans l'UI. Son comportement complet n'est pas etendu dans ce correctif minimal et reste a traiter dans une session dediee si necessaire.
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/PATCH/README_PATCH.md b/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/PATCH/README_PATCH.md
+index cb1a862..c1f103f 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/PATCH/README_PATCH.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/PATCH/README_PATCH.md
+@@ -12,6 +12,7 @@ CORRECTION+COMPLETION
+ ## Fichiers patch
+ 
+ - Patch principal code : `PATCH__SESSION-20260506-03_A24_A24-UI-03.diff`
++- Patch correctif minimal : `PATCH__SESSION-20260506-03_A24_A24-UI-03_FIX-01.diff`
+ - Patch documentaire : `PATCH__SESSION-20260506-03_A24_A24-UI-03_DOCS.diff`
+ 
+ ## Commandes d'application
+@@ -20,6 +21,9 @@ CORRECTION+COMPLETION
+ git apply --check "docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/PATCH/PATCH__SESSION-20260506-03_A24_A24-UI-03.diff"
+ git apply         "docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/PATCH/PATCH__SESSION-20260506-03_A24_A24-UI-03.diff"
+ 
++git apply --check "docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/PATCH/PATCH__SESSION-20260506-03_A24_A24-UI-03_FIX-01.diff"
++git apply         "docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/PATCH/PATCH__SESSION-20260506-03_A24_A24-UI-03_FIX-01.diff"
++
+ git apply --check "docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/PATCH/PATCH__SESSION-20260506-03_A24_A24-UI-03_DOCS.diff"
+ git apply         "docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/PATCH/PATCH__SESSION-20260506-03_A24_A24-UI-03_DOCS.diff"
+-```
+\ No newline at end of file
++```
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/RESULTATS.md b/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/RESULTATS.md
+index 91e049d..8a93662 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/RESULTATS.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/RESULTATS.md
+@@ -2,11 +2,12 @@
+ 
+ ## Resultats obtenus
+ 
+-- Login : structure visuelle rapprochee de la maquette (panneau gauche argumentaire, carte de connexion renforcee, icones de champs, checkbox, CTA "Connexion", bloc erreur enrichi, mention trust RGPD).
++- Login : structure visuelle rapprochee de la maquette (panneau gauche argumentaire, carte de connexion renforcee, icones de champs, checkbox, CTA "Connexion", bloc erreur enrichi).
+ - Dashboard : portail visuel simplifie (carte profil connecte, badges contexte, KPIs avec ratio "sur X", grille modules ordonnee, icones harmonisees).
+ - Mode clair : conserve comme base de reference.
+ - Mode sombre : declinaison sobre ajoutee/ajustee pour Login et Dashboard.
+ - Captures AVANT/APRES produites pour Login et Dashboard en clair/sombre.
++- Correctif post-controle : la checkbox `Se souvenir de moi` est maintenue sans extension de logique d'authentification ; traitement fonctionnel complet reporte a une session ulterieure dediee si necessaire.
+ 
+ ## Documents modifies
+ 
+@@ -25,4 +26,4 @@ Documentation :
+ 
+ Captures ajoutees :
+ - `docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/CAPTURES_AVANT/*`
+-- `docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/CAPTURES_APRES/*`
+\ No newline at end of file
++- `docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-03_A24_A24-UI-03/CAPTURES_APRES/*`
