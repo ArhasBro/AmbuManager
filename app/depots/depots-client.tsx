@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import { Ambulance, Archive, Filter, Info, Landmark, Plus, Save, Search, UsersRound } from "lucide-react";
 
 import {
   ActionButton,
@@ -17,6 +18,8 @@ type Depot = {
   name: string;
   address: string | null;
   isActive: boolean;
+  vehicleCount: number;
+  userCount: number;
   createdAt: string;
   updatedAt: string;
 };
@@ -71,6 +74,15 @@ function depotMatchesSearch(depot: Depot, searchInput: string) {
   ].some((value) => value.toLowerCase().includes(query));
 }
 
+function mergeDepotWithCounts(previousDepots: Depot[], nextDepot: Depot) {
+  const previous = previousDepots.find((depot) => depot.id === nextDepot.id);
+  return {
+    ...nextDepot,
+    vehicleCount: previous?.vehicleCount ?? nextDepot.vehicleCount ?? 0,
+    userCount: previous?.userCount ?? nextDepot.userCount ?? 0,
+  };
+}
+
 export default function DepotsClient({
   initialDepots,
 }: {
@@ -89,6 +101,8 @@ export default function DepotsClient({
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
+  const selectedNameRef = useRef<HTMLInputElement | null>(null);
+
   function updateCreateForm(key: keyof DepotForm, value: string) {
     setCreateForm((prev) => ({ ...prev, [key]: value }));
   }
@@ -106,6 +120,10 @@ export default function DepotsClient({
   function resetFilters() {
     setSearchInput("");
     setStatusFilter("");
+  }
+
+  function focusSelectedNameField() {
+    selectedNameRef.current?.focus();
   }
 
   async function handleCreate(event: React.FormEvent<HTMLFormElement>) {
@@ -130,10 +148,16 @@ export default function DepotsClient({
         throw new Error(getApiError(data, "Erreur lors de la creation du depot"));
       }
 
-      setDepots((prev) => sortDepots([data.data, ...prev]));
-      setForms((prev) => ({ ...prev, [data.data.id]: toDepotForm(data.data) }));
+      const createdDepot: Depot = {
+        ...data.data,
+        vehicleCount: 0,
+        userCount: 0,
+      };
+
+      setDepots((prev) => sortDepots([createdDepot, ...prev]));
+      setForms((prev) => ({ ...prev, [createdDepot.id]: toDepotForm(createdDepot) }));
       setCreateForm({ name: "", address: "" });
-      setSelectedDepotId(data.data.id);
+      setSelectedDepotId(createdDepot.id);
       setSuccess("Depot cree.");
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Erreur inconnue");
@@ -166,10 +190,14 @@ export default function DepotsClient({
         throw new Error(getApiError(data, "Erreur lors de la modification du depot"));
       }
 
-      setDepots((prev) =>
-        sortDepots(prev.map((item) => (item.id === id ? data.data : item))),
-      );
-      setForms((prev) => ({ ...prev, [id]: toDepotForm(data.data) }));
+      setDepots((prev) => sortDepots(prev.map((item) => (
+        item.id === id ? mergeDepotWithCounts(prev, data.data) : item
+      ))));
+      setForms((prev) => ({ ...prev, [id]: toDepotForm({
+        ...data.data,
+        vehicleCount: depots.find((item) => item.id === id)?.vehicleCount ?? 0,
+        userCount: depots.find((item) => item.id === id)?.userCount ?? 0,
+      }) }));
       setSuccess("Depot mis a jour.");
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Erreur inconnue");
@@ -197,10 +225,9 @@ export default function DepotsClient({
         throw new Error(getApiError(data, "Erreur lors de l'archivage du depot"));
       }
 
-      setDepots((prev) =>
-        sortDepots(prev.map((item) => (item.id === id ? data.data : item))),
-      );
-      setForms((prev) => ({ ...prev, [id]: toDepotForm(data.data) }));
+      setDepots((prev) => sortDepots(prev.map((item) => (
+        item.id === id ? mergeDepotWithCounts(prev, data.data) : item
+      ))));
       setSuccess("Depot archive.");
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Erreur inconnue");
@@ -212,6 +239,8 @@ export default function DepotsClient({
   const depotStats = useMemo(() => {
     let active = 0;
     let archived = 0;
+    let attachedVehicles = 0;
+    let attachedUsers = 0;
 
     for (const depot of depots) {
       if (depot.isActive) {
@@ -219,12 +248,16 @@ export default function DepotsClient({
       } else {
         archived += 1;
       }
+      attachedVehicles += depot.vehicleCount;
+      attachedUsers += depot.userCount;
     }
 
     return {
       total: depots.length,
       active,
       archived,
+      attachedVehicles,
+      attachedUsers,
     };
   }, [depots]);
 
@@ -249,8 +282,8 @@ export default function DepotsClient({
   const columns: DataTableColumn<Depot>[] = [
     {
       key: "name",
-      header: "Depot",
-      width: "280px",
+      header: "Nom",
+      width: "300px",
       render: (depot) => (
         <div className="depots-cell-main">
           <strong>{depot.name}</strong>
@@ -263,14 +296,26 @@ export default function DepotsClient({
       header: "Statut",
       width: "130px",
       render: (depot) => (
-        <StatusBadge variant={depot.isActive ? "success" : "neutral"}>
+        <StatusBadge variant={depot.isActive ? "success" : "warning"}>
           {depot.isActive ? "Actif" : "Archive"}
         </StatusBadge>
       ),
     },
     {
+      key: "vehicles",
+      header: "Vehicules",
+      width: "120px",
+      render: (depot) => depot.vehicleCount,
+    },
+    {
+      key: "users",
+      header: "Utilisateurs",
+      width: "130px",
+      render: (depot) => depot.userCount,
+    },
+    {
       key: "updatedAt",
-      header: "Mise a jour",
+      header: "Derniere modif.",
       width: "190px",
       render: (depot) => formatDateTime(depot.updatedAt),
     },
@@ -278,7 +323,7 @@ export default function DepotsClient({
       key: "actions",
       header: "Actions",
       align: "right",
-      width: "250px",
+      width: "220px",
       render: (depot) => {
         const isSaving = savingId === depot.id;
         const isArchiving = archivingId === depot.id;
@@ -315,164 +360,212 @@ export default function DepotsClient({
       {error ? <ErrorMessage title="Erreur module depots" message={error} /> : null}
       {success ? <div className="depots-alert depots-alert--success">{success}</div> : null}
 
-      <section className="depots-card">
-        <div className="depots-card__head">
-          <h2 className="depots-card__title">Creer un depot</h2>
-          <p className="depots-card__description">
-            Creation rapide d&apos;un depot avec nom et adresse, sans impact sur la logique metier.
-          </p>
-        </div>
-
-        <form onSubmit={handleCreate} className="depots-form">
-          <div className="depots-form-grid depots-form-grid--create">
-            <label className="depots-field">
-              <span className="depots-field__label">Nom</span>
-              <input
-                value={createForm.name}
-                onChange={(event) => updateCreateForm("name", event.target.value)}
-                disabled={isCreating}
-                required
-              />
-            </label>
-
-            <label className="depots-field">
-              <span className="depots-field__label">Adresse</span>
-              <input
-                value={createForm.address}
-                onChange={(event) => updateCreateForm("address", event.target.value)}
-                disabled={isCreating}
-              />
-            </label>
-
-            <div className="depots-actions depots-actions--end depots-actions--align-end">
-              <ActionButton type="submit" variant="primary" disabled={isCreating}>
-                {isCreating ? "Creation..." : "Creer le depot"}
-              </ActionButton>
+      <div className="depots-layout">
+        <div className="depots-layout__main">
+          <section id="depots-create-form" className="depots-card">
+            <div className="depots-card__head">
+              <h2 className="depots-card__title">Creer un depot</h2>
+              <p className="depots-card__description">
+                Creation rapide d&apos;un depot avec nom et adresse.
+              </p>
             </div>
-          </div>
-        </form>
-      </section>
 
-      <section className="depots-card">
-        <div className="depots-card__head">
-          <h2 className="depots-card__title">Liste des depots</h2>
-          <p className="depots-card__description">
-            Consultation, filtrage simple et archivage visuel des depots de la societe courante.
-          </p>
-        </div>
+            <form onSubmit={handleCreate} className="depots-form">
+              <div className="depots-form-grid depots-form-grid--create">
+                <label className="depots-field">
+                  <span className="depots-field__label">Nom</span>
+                  <input
+                    value={createForm.name}
+                    onChange={(event) => updateCreateForm("name", event.target.value)}
+                    disabled={isCreating}
+                    required
+                  />
+                </label>
 
-        <FilterBar
-          summary={`Total ${depotStats.total} | Actifs ${depotStats.active} | Archives ${depotStats.archived}`}
-          actions={(
-            <ActionButton size="sm" variant="ghost" onClick={resetFilters}>
-              Reinitialiser
-            </ActionButton>
-          )}
-        >
-          <label className="depots-field">
-            <span className="depots-field__label">Recherche</span>
-            <input
-              type="text"
-              value={searchInput}
-              onChange={(event) => setSearchInput(event.target.value)}
-              placeholder="Nom, adresse ou statut"
-            />
-          </label>
+                <label className="depots-field">
+                  <span className="depots-field__label">Adresse</span>
+                  <input
+                    value={createForm.address}
+                    onChange={(event) => updateCreateForm("address", event.target.value)}
+                    disabled={isCreating}
+                  />
+                </label>
 
-          <label className="depots-field">
-            <span className="depots-field__label">Statut</span>
-            <select
-              value={statusFilter}
-              onChange={(event) => setStatusFilter(event.target.value as DepotStatusFilter)}
+                <div className="depots-actions depots-actions--end depots-actions--align-end">
+                  <ActionButton type="submit" variant="primary" disabled={isCreating} leadingIcon={<Plus size={16} />}>
+                    {isCreating ? "Creation..." : "Creer un depot"}
+                  </ActionButton>
+                </div>
+              </div>
+            </form>
+          </section>
+
+          <section className="depots-card">
+            <div className="depots-card__head">
+              <h2 className="depots-card__title">Liste des depots</h2>
+              <p className="depots-card__description">
+                Filtrage, consultation et selection d&apos;un depot pour edition.
+              </p>
+            </div>
+
+            <FilterBar
+              summary={`Depots ${depotStats.total} | Actifs ${depotStats.active} | Archives ${depotStats.archived} | Vehicules ${depotStats.attachedVehicles} | Utilisateurs ${depotStats.attachedUsers}`}
+              actions={(
+                <ActionButton size="sm" variant="ghost" onClick={resetFilters}>
+                  Reinitialiser
+                </ActionButton>
+              )}
             >
-              <option value="">Tous les statuts</option>
-              <option value="ACTIVE">Actif</option>
-              <option value="ARCHIVED">Archive</option>
-            </select>
-          </label>
-        </FilterBar>
-
-        <DataTable
-          columns={columns}
-          rows={filteredDepots}
-          rowKey={(depot) => depot.id}
-          selectedRowKey={selectedDepotId}
-          onRowClick={(depot) => setSelectedDepotId(depot.id)}
-          emptyTitle="Aucun depot"
-          emptyMessage="Aucun depot ne correspond aux filtres selectionnes."
-          caption="Depots de la societe courante"
-          minWidth={980}
-        />
-      </section>
-
-      {selectedDepot && selectedDepotForm ? (
-        <section className="depots-card">
-          <div className="depots-card__head">
-            <h2 className="depots-card__title">Modifier le depot selectionne</h2>
-            <p className="depots-card__description">
-              Edition visuelle des informations de depot et archivage logique si necessaire.
-            </p>
-          </div>
-
-          <div className="depots-selection-card">
-            <strong>{selectedDepot.name}</strong>
-            <div className="depots-inline-status">
-              <StatusBadge variant={selectedDepot.isActive ? "success" : "neutral"}>
-                {selectedDepot.isActive ? "Actif" : "Archive"}
-              </StatusBadge>
-              <StatusBadge variant="neutral">Cree le {formatDateTime(selectedDepot.createdAt)}</StatusBadge>
-              <StatusBadge variant="neutral">Maj le {formatDateTime(selectedDepot.updatedAt)}</StatusBadge>
-            </div>
-          </div>
-
-          <div className="depots-form">
-            <div className="depots-form-grid depots-form-grid--edit">
               <label className="depots-field">
-                <span className="depots-field__label">Nom</span>
-                <input
-                  value={selectedDepotForm.name}
-                  onChange={(event) => updateDepotForm(selectedDepot.id, "name", event.target.value)}
-                  disabled={savingId === selectedDepot.id || archivingId === selectedDepot.id}
-                  required
-                />
+                <span className="depots-field__label">Recherche</span>
+                <div className="depots-input-with-icon">
+                  <Search size={16} aria-hidden="true" />
+                  <input
+                    type="text"
+                    value={searchInput}
+                    onChange={(event) => setSearchInput(event.target.value)}
+                    placeholder="Rechercher un depot..."
+                  />
+                </div>
               </label>
 
               <label className="depots-field">
-                <span className="depots-field__label">Adresse</span>
-                <input
-                  value={selectedDepotForm.address}
-                  onChange={(event) => updateDepotForm(selectedDepot.id, "address", event.target.value)}
-                  disabled={savingId === selectedDepot.id || archivingId === selectedDepot.id}
-                />
+                <span className="depots-field__label">Statut</span>
+                <select
+                  value={statusFilter}
+                  onChange={(event) => setStatusFilter(event.target.value as DepotStatusFilter)}
+                >
+                  <option value="">Tous les statuts</option>
+                  <option value="ACTIVE">Actif</option>
+                  <option value="ARCHIVED">Archive</option>
+                </select>
               </label>
-            </div>
 
-            <div className="depots-actions depots-actions--end">
-              <ActionButton
-                variant="primary"
-                onClick={() => handleSave(selectedDepot.id)}
-                disabled={savingId === selectedDepot.id || archivingId === selectedDepot.id}
-              >
-                {savingId === selectedDepot.id ? "Enregistrement..." : "Enregistrer"}
-              </ActionButton>
-              {selectedDepot.isActive ? (
+              <div className="depots-field depots-field--filter-action">
+                <span className="depots-field__label">Actions</span>
+                <ActionButton size="md" variant="secondary" leadingIcon={<Filter size={16} />} onClick={resetFilters}>
+                  Filtrer
+                </ActionButton>
+              </div>
+            </FilterBar>
+
+            <DataTable
+              columns={columns}
+              rows={filteredDepots}
+              rowKey={(depot) => depot.id}
+              selectedRowKey={selectedDepotId}
+              onRowClick={(depot) => setSelectedDepotId(depot.id)}
+              emptyTitle="Aucun depot"
+              emptyMessage="Aucun depot ne correspond aux filtres selectionnes."
+              caption="Depots de la societe courante"
+              minWidth={1040}
+            />
+          </section>
+        </div>
+
+        <aside className="depots-detail-panel">
+          {selectedDepot && selectedDepotForm ? (
+            <section className="depots-detail-card">
+              <div className="depots-detail-card__head">
+                <h2 className="depots-detail-card__title">{selectedDepot.name}</h2>
+                <StatusBadge variant={selectedDepot.isActive ? "success" : "warning"}>
+                  {selectedDepot.isActive ? "Actif" : "Archive"}
+                </StatusBadge>
+              </div>
+
+              <div className="depots-detail-block">
+                <h3>Identite du depot</h3>
+                <div className="depots-form-grid depots-form-grid--edit">
+                  <label className="depots-field">
+                    <span className="depots-field__label">Nom</span>
+                    <input
+                      ref={selectedNameRef}
+                      value={selectedDepotForm.name}
+                      onChange={(event) => updateDepotForm(selectedDepot.id, "name", event.target.value)}
+                      disabled={savingId === selectedDepot.id || archivingId === selectedDepot.id}
+                      required
+                    />
+                  </label>
+
+                  <label className="depots-field">
+                    <span className="depots-field__label">Adresse</span>
+                    <input
+                      value={selectedDepotForm.address}
+                      onChange={(event) => updateDepotForm(selectedDepot.id, "address", event.target.value)}
+                      disabled={savingId === selectedDepot.id || archivingId === selectedDepot.id}
+                    />
+                  </label>
+                </div>
+              </div>
+
+              <div className="depots-detail-block">
+                <h3>Rattachements</h3>
+                <div className="depots-attachments-list">
+                  <div>
+                    <span className="depots-attachments-icon depots-attachments-icon--teal" aria-hidden="true">
+                      <Ambulance size={16} />
+                    </span>
+                    <div>
+                      <strong>Vehicules rattaches</strong>
+                      <p>{selectedDepot.vehicleCount} vehicules</p>
+                    </div>
+                  </div>
+                  <div>
+                    <span className="depots-attachments-icon depots-attachments-icon--blue" aria-hidden="true">
+                      <UsersRound size={16} />
+                    </span>
+                    <div>
+                      <strong>Utilisateurs rattaches</strong>
+                      <p>{selectedDepot.userCount} utilisateurs</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="depots-detail-note">
+                <Info size={16} aria-hidden="true" />
+                <p>
+                  Derniere modification: {formatDateTime(selectedDepot.updatedAt)}.
+                </p>
+              </div>
+
+              <div className="depots-danger-zone">
+                <h3>Zone danger</h3>
+                <p>
+                  Cette action est irreversible. Les donnees restent conservees, mais le depot devient inactif.
+                </p>
                 <ActionButton
                   variant="danger"
+                  leadingIcon={<Archive size={16} />}
                   onClick={() => handleArchive(selectedDepot.id)}
+                  disabled={!selectedDepot.isActive || savingId === selectedDepot.id || archivingId === selectedDepot.id}
+                >
+                  {archivingId === selectedDepot.id ? "Archivage..." : "Archiver le depot"}
+                </ActionButton>
+              </div>
+
+              <div className="depots-actions depots-actions--between depots-actions--footer">
+                <ActionButton variant="secondary" onClick={focusSelectedNameField} leadingIcon={<Landmark size={16} />}>
+                  Modifier
+                </ActionButton>
+                <ActionButton
+                  variant="primary"
+                  leadingIcon={<Save size={16} />}
+                  onClick={() => handleSave(selectedDepot.id)}
                   disabled={savingId === selectedDepot.id || archivingId === selectedDepot.id}
                 >
-                  {archivingId === selectedDepot.id ? "Archivage..." : "Archiver"}
+                  {savingId === selectedDepot.id ? "Enregistrement..." : "Enregistrer"}
                 </ActionButton>
-              ) : null}
-            </div>
-          </div>
-        </section>
-      ) : (
-        <EmptyState
-          title="Aucun depot selectionne"
-          message="Selectionnez une ligne de la liste pour afficher le formulaire d'edition."
-        />
-      )}
+              </div>
+            </section>
+          ) : (
+            <EmptyState
+              title="Aucun depot selectionne"
+              message="Selectionnez une ligne de la liste pour afficher le panneau de detail."
+            />
+          )}
+        </aside>
+      </div>
     </section>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Building2, Save } from "lucide-react";
 
 import { ActionButton, ErrorMessage } from "@/app/ui";
 
@@ -27,8 +28,10 @@ function getApiError<T>(payload: ApiResponse<T> | null, fallback: string) {
 
 export default function CompanyProfileForm({
   initialProfile,
+  formId = "company-profile-form",
 }: {
   initialProfile: CompanyProfile;
+  formId?: string;
 }) {
   const [form, setForm] = useState<CompanyProfile>(initialProfile);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -37,6 +40,12 @@ export default function CompanyProfileForm({
 
   function updateField<K extends keyof CompanyProfile>(key: K, value: CompanyProfile[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
+  }
+
+  function resetForm() {
+    setForm(initialProfile);
+    setError(null);
+    setSuccess(null);
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -76,16 +85,22 @@ export default function CompanyProfileForm({
   return (
     <section className="company-card">
       <div className="company-card__head">
-        <h2 className="company-card__title">Informations societe</h2>
+        <div className="company-card__title-row">
+          <span className="company-card__title-icon" aria-hidden="true">
+            <Building2 size={16} />
+          </span>
+          <h2 className="company-card__title">Identite societe</h2>
+          <span className="company-chip">Profil societe</span>
+        </div>
         <p className="company-card__description">
-          Mise a jour des informations generales, sans modification de logique metier.
+          Mettez a jour les informations de reference de la societe courante.
         </p>
       </div>
 
       {error ? <ErrorMessage title="Erreur profil societe" message={error} /> : null}
       {success ? <div className="company-alert company-alert--success">{success}</div> : null}
 
-      <form onSubmit={handleSubmit} className="company-form">
+      <form id={formId} onSubmit={handleSubmit} className="company-form">
         <div className="company-form-grid">
           <label className="company-field">
             <span className="company-field__label">Nom societe</span>
@@ -144,7 +159,10 @@ export default function CompanyProfileForm({
         </label>
 
         <div className="company-actions company-actions--end">
-          <ActionButton type="submit" variant="primary" disabled={isSubmitting}>
+          <ActionButton type="button" variant="secondary" disabled={isSubmitting} onClick={resetForm}>
+            Annuler
+          </ActionButton>
+          <ActionButton type="submit" variant="primary" disabled={isSubmitting} leadingIcon={<Save size={16} />}>
             {isSubmitting ? "Enregistrement..." : "Enregistrer"}
           </ActionButton>
         </div>

@@ -1,24 +1,16 @@
 ﻿# README_PATCH
 
-## Session liee
-SESSION-20260506-04_A24_A24-UI-04
+## Patch principal code
 
-## Type
-CORRECTION+COMPLETION
+- `PATCH__SESSION-20260506-04_A24_A24-UI-04.diff`
+  - perimetre : Societe + Depots + harmonisation CSS ciblee ;
+  - format : diff git standard exploitable par `git apply`.
 
-## Dossier PATCH
-docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-04_A24_A24-UI-04/PATCH
+## Patch documentaire
 
-## Patch officiel attendu
-PATCH__SESSION-20260506-04_A24_A24-UI-04.diff
+- `PATCH__SESSION-20260506-04_A24_A24-UI-04_DOCS.diff`
+  - perimetre : documentation de session + captures + README patch.
 
-## Commandes d'application
+## Correctif minimal
 
-`ash
-git apply --check "docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-04_A24_A24-UI-04/PATCH/PATCH__SESSION-20260506-04_A24_A24-UI-04.diff"
-git apply         "docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-04_A24_A24-UI-04/PATCH/PATCH__SESSION-20260506-04_A24_A24-UI-04.diff"
-`
-
-## Statut
-- Dossier patch initialise.
-- Patch officiel a produire dans cette session si du code est modifie.
+- Aucun correctif `_FIX-XX.diff` necessaire.

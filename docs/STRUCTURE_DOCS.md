@@ -1674,9 +1674,24 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   NOTES.md
 |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION-20260506-04_A24_A24-UI-04_DOCS.zip
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
+|   |   |   |   +---CAPTURES_APRES
+|   |   |   |   |       company_dark_after.png
+|   |   |   |   |       company_light_after.png
+|   |   |   |   |       depots_dark_after.png
+|   |   |   |   |       depots_light_after.png
+|   |   |   |   |       
+|   |   |   |   +---CAPTURES_AVANT
+|   |   |   |   |       company_dark_before.png
+|   |   |   |   |       company_light_before.png
+|   |   |   |   |       depots_dark_before.png
+|   |   |   |   |       depots_light_before.png
+|   |   |   |   |       
 |   |   |   |   \---PATCH
+|   |   |   |           PATCH__SESSION-20260506-04_A24_A24-UI-04.diff
+|   |   |   |           PATCH__SESSION-20260506-04_A24_A24-UI-04_DOCS.diff
 |   |   |   |           README_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260506-05_A24_A24-UI-05

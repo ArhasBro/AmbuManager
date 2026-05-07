@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { Settings2 } from "lucide-react";
 
 import { ActionButton, EmptyState, ErrorMessage, StatusBadge } from "@/app/ui";
 import { COMPANY_RULE_MODE_VALUES } from "@/lib/company-rules/catalog";
@@ -49,6 +50,13 @@ function readableValue(parameter: CompanyParameter) {
   if (parameter.normalizedValue !== null) return String(parameter.normalizedValue);
   if (parameter.value) return parameter.value;
   return "Non configure";
+}
+
+function modeVariant(mode: RuleModeValue | null): "neutral" | "info" | "warning" | "danger" {
+  if (mode === "BOTH") return "info";
+  if (mode === "ALERT") return "warning";
+  if (mode === "BLOCK") return "danger";
+  return "neutral";
 }
 
 function initialDraft(parameter: CompanyParameter): DraftState {
@@ -164,7 +172,13 @@ export default function CompanyRulesPanel() {
   return (
     <section className="company-card company-rules-section">
       <div className="company-card__head">
-        <h2 className="company-card__title">Parametres metier</h2>
+        <div className="company-card__title-row">
+          <span className="company-card__title-icon" aria-hidden="true">
+            <Settings2 size={16} />
+          </span>
+          <h2 className="company-card__title">Parametres metier</h2>
+          <span className="company-chip">ALPHA</span>
+        </div>
         <p className="company-card__description">Vue compacte des regles et reglages principaux de la societe.</p>
       </div>
 
@@ -243,10 +257,12 @@ export default function CompanyRulesPanel() {
                                 ))}
                               </select>
                             ) : (
-                              <span>{parameter.mode ?? "OFF"}</span>
+                              <StatusBadge variant={modeVariant(parameter.mode)}>
+                                {parameter.mode ?? "OFF"}
+                              </StatusBadge>
                             )
                           ) : (
-                            <span>OFF</span>
+                            <StatusBadge variant="neutral">OFF</StatusBadge>
                           )}
                         </td>
                         <td>

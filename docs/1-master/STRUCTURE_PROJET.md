@@ -1,5 +1,5 @@
 ﻿Structure du dossier pour le volume Windows
-Le numÚro de sÚrie du volume est 000000F2 123E:4DB7
+Le numÚro de sÚrie du volume est 123E-4DB7
 C:.
 |   .env
 |   .gitignore
@@ -98,6 +98,7 @@ C:.
 |   |   |   react-loadable-manifest.json
 |   |   |   routes-manifest.json
 |   |   |   trace
+|   |   |   _events_42372.json
 |   |   |   
 |   |   +---build
 |   |   |   |   package.json
@@ -1688,362 +1689,275 @@ C:.
 |   |   |   |           00003162.sst
 |   |   |   |           00003163.meta
 |   |   |   |           00003164.meta
-|   |   |   |           00003166.sst
 |   |   |   |           00003168.sst
 |   |   |   |           00003169.meta
-|   |   |   |           00003170.meta
-|   |   |   |           00003172.sst
 |   |   |   |           00003174.sst
 |   |   |   |           00003175.meta
-|   |   |   |           00003176.meta
-|   |   |   |           00003179.sst
 |   |   |   |           00003180.sst
 |   |   |   |           00003181.sst
 |   |   |   |           00003182.sst
 |   |   |   |           00003183.meta
-|   |   |   |           00003184.meta
 |   |   |   |           00003186.meta
 |   |   |   |           00003187.meta
-|   |   |   |           00003188.sst
 |   |   |   |           00003190.sst
 |   |   |   |           00003191.meta
-|   |   |   |           00003192.meta
-|   |   |   |           00003195.sst
 |   |   |   |           00003196.sst
 |   |   |   |           00003197.meta
-|   |   |   |           00003198.meta
-|   |   |   |           00003201.sst
 |   |   |   |           00003202.sst
 |   |   |   |           00003203.meta
-|   |   |   |           00003205.meta
-|   |   |   |           00003207.sst
 |   |   |   |           00003208.sst
 |   |   |   |           00003209.sst
 |   |   |   |           00003210.sst
 |   |   |   |           00003211.meta
 |   |   |   |           00003212.meta
 |   |   |   |           00003213.meta
-|   |   |   |           00003215.meta
-|   |   |   |           00003217.sst
 |   |   |   |           00003218.sst
 |   |   |   |           00003219.sst
 |   |   |   |           00003220.sst
 |   |   |   |           00003221.meta
-|   |   |   |           00003222.meta
 |   |   |   |           00003223.meta
 |   |   |   |           00003225.meta
-|   |   |   |           00003226.sst
 |   |   |   |           00003228.sst
 |   |   |   |           00003229.meta
-|   |   |   |           00003230.meta
-|   |   |   |           00003232.sst
 |   |   |   |           00003234.sst
 |   |   |   |           00003235.meta
-|   |   |   |           00003236.meta
-|   |   |   |           00003239.sst
 |   |   |   |           00003240.sst
 |   |   |   |           00003241.sst
 |   |   |   |           00003242.sst
 |   |   |   |           00003243.meta
 |   |   |   |           00003244.meta
-|   |   |   |           00003245.meta
 |   |   |   |           00003246.meta
-|   |   |   |           00003248.sst
 |   |   |   |           00003250.sst
 |   |   |   |           00003251.meta
-|   |   |   |           00003252.meta
-|   |   |   |           00003255.sst
 |   |   |   |           00003256.sst
 |   |   |   |           00003257.meta
-|   |   |   |           00003258.meta
-|   |   |   |           00003261.sst
 |   |   |   |           00003262.sst
 |   |   |   |           00003263.sst
 |   |   |   |           00003264.sst
 |   |   |   |           00003265.meta
 |   |   |   |           00003266.meta
-|   |   |   |           00003268.meta
 |   |   |   |           00003269.meta
-|   |   |   |           00003274.sst
 |   |   |   |           00003276.sst
 |   |   |   |           00003277.sst
 |   |   |   |           00003278.sst
-|   |   |   |           00003279.meta
 |   |   |   |           00003281.meta
 |   |   |   |           00003282.meta
 |   |   |   |           00003283.meta
-|   |   |   |           00003284.sst
 |   |   |   |           00003286.sst
 |   |   |   |           00003287.sst
 |   |   |   |           00003288.sst
 |   |   |   |           00003289.meta
-|   |   |   |           00003290.meta
 |   |   |   |           00003292.meta
 |   |   |   |           00003293.meta
-|   |   |   |           00003295.sst
 |   |   |   |           00003296.sst
 |   |   |   |           00003297.meta
-|   |   |   |           00003298.meta
-|   |   |   |           00003300.sst
 |   |   |   |           00003302.sst
 |   |   |   |           00003303.meta
-|   |   |   |           00003305.meta
-|   |   |   |           00003307.sst
 |   |   |   |           00003308.sst
 |   |   |   |           00003309.sst
 |   |   |   |           00003310.sst
 |   |   |   |           00003311.meta
 |   |   |   |           00003312.meta
 |   |   |   |           00003313.meta
-|   |   |   |           00003315.meta
-|   |   |   |           00003317.sst
 |   |   |   |           00003318.sst
 |   |   |   |           00003319.meta
-|   |   |   |           00003320.meta
-|   |   |   |           00003323.sst
 |   |   |   |           00003324.sst
 |   |   |   |           00003325.meta
-|   |   |   |           00003326.meta
-|   |   |   |           00003329.sst
 |   |   |   |           00003330.sst
 |   |   |   |           00003331.meta
-|   |   |   |           00003332.meta
-|   |   |   |           00003335.sst
 |   |   |   |           00003336.sst
 |   |   |   |           00003337.meta
-|   |   |   |           00003338.meta
-|   |   |   |           00003341.sst
 |   |   |   |           00003342.sst
 |   |   |   |           00003343.meta
-|   |   |   |           00003344.meta
-|   |   |   |           00003346.sst
 |   |   |   |           00003348.sst
 |   |   |   |           00003349.meta
-|   |   |   |           00003350.meta
-|   |   |   |           00003352.sst
 |   |   |   |           00003354.sst
 |   |   |   |           00003355.meta
-|   |   |   |           00003356.meta
-|   |   |   |           00003359.sst
 |   |   |   |           00003360.sst
 |   |   |   |           00003361.meta
-|   |   |   |           00003362.meta
-|   |   |   |           00003364.sst
 |   |   |   |           00003366.sst
 |   |   |   |           00003367.meta
-|   |   |   |           00003368.meta
-|   |   |   |           00003371.sst
 |   |   |   |           00003372.sst
 |   |   |   |           00003373.meta
-|   |   |   |           00003374.meta
-|   |   |   |           00003376.sst
 |   |   |   |           00003378.sst
 |   |   |   |           00003379.meta
-|   |   |   |           00003380.meta
-|   |   |   |           00003382.sst
 |   |   |   |           00003384.sst
 |   |   |   |           00003385.meta
-|   |   |   |           00003386.meta
-|   |   |   |           00003389.sst
 |   |   |   |           00003390.sst
 |   |   |   |           00003391.meta
-|   |   |   |           00003392.meta
-|   |   |   |           00003395.sst
 |   |   |   |           00003396.sst
-|   |   |   |           00003397.meta
 |   |   |   |           00003398.meta
-|   |   |   |           00003400.sst
 |   |   |   |           00003402.sst
 |   |   |   |           00003403.sst
 |   |   |   |           00003404.sst
 |   |   |   |           00003405.meta
-|   |   |   |           00003406.meta
 |   |   |   |           00003408.meta
 |   |   |   |           00003409.meta
-|   |   |   |           00003411.sst
 |   |   |   |           00003412.sst
 |   |   |   |           00003413.sst
 |   |   |   |           00003414.sst
 |   |   |   |           00003415.meta
 |   |   |   |           00003416.meta
 |   |   |   |           00003417.meta
-|   |   |   |           00003419.meta
-|   |   |   |           00003420.sst
 |   |   |   |           00003422.sst
 |   |   |   |           00003423.meta
-|   |   |   |           00003424.meta
-|   |   |   |           00003426.sst
 |   |   |   |           00003428.sst
 |   |   |   |           00003429.meta
-|   |   |   |           00003430.meta
-|   |   |   |           00003433.sst
 |   |   |   |           00003434.sst
 |   |   |   |           00003435.meta
-|   |   |   |           00003436.meta
-|   |   |   |           00003438.sst
 |   |   |   |           00003440.sst
 |   |   |   |           00003441.meta
-|   |   |   |           00003442.meta
-|   |   |   |           00003445.sst
 |   |   |   |           00003446.sst
 |   |   |   |           00003447.sst
 |   |   |   |           00003448.sst
 |   |   |   |           00003449.meta
-|   |   |   |           00003450.meta
 |   |   |   |           00003452.meta
 |   |   |   |           00003453.meta
-|   |   |   |           00003454.sst
-|   |   |   |           00003455.sst
-|   |   |   |           00003456.sst
-|   |   |   |           00003457.sst
-|   |   |   |           00003458.sst
-|   |   |   |           00003459.meta
-|   |   |   |           00003461.sst
-|   |   |   |           00003462.sst
 |   |   |   |           00003463.sst
 |   |   |   |           00003464.sst
 |   |   |   |           00003465.sst
 |   |   |   |           00003466.meta
-|   |   |   |           00003467.meta
-|   |   |   |           00003468.meta
 |   |   |   |           00003469.meta
 |   |   |   |           00003470.meta
-|   |   |   |           00003471.sst
-|   |   |   |           00003472.sst
 |   |   |   |           00003473.sst
 |   |   |   |           00003474.sst
 |   |   |   |           00003475.sst
 |   |   |   |           00003476.meta
-|   |   |   |           00003477.meta
-|   |   |   |           00003478.meta
 |   |   |   |           00003479.meta
 |   |   |   |           00003480.meta
-|   |   |   |           00003481.sst
-|   |   |   |           00003482.sst
 |   |   |   |           00003483.sst
 |   |   |   |           00003484.meta
-|   |   |   |           00003485.meta
-|   |   |   |           00003486.meta
-|   |   |   |           00003487.sst
-|   |   |   |           00003488.sst
 |   |   |   |           00003489.sst
 |   |   |   |           00003490.meta
-|   |   |   |           00003491.meta
-|   |   |   |           00003492.meta
-|   |   |   |           00003493.sst
-|   |   |   |           00003494.sst
 |   |   |   |           00003495.sst
 |   |   |   |           00003496.meta
-|   |   |   |           00003497.meta
-|   |   |   |           00003498.meta
-|   |   |   |           00003499.sst
-|   |   |   |           00003500.sst
 |   |   |   |           00003501.sst
 |   |   |   |           00003502.meta
-|   |   |   |           00003503.meta
-|   |   |   |           00003504.meta
-|   |   |   |           00003505.sst
-|   |   |   |           00003506.sst
 |   |   |   |           00003507.sst
 |   |   |   |           00003508.meta
-|   |   |   |           00003509.meta
-|   |   |   |           00003510.meta
-|   |   |   |           00003511.sst
-|   |   |   |           00003512.sst
 |   |   |   |           00003513.sst
 |   |   |   |           00003514.meta
-|   |   |   |           00003515.meta
-|   |   |   |           00003516.meta
-|   |   |   |           00003517.sst
-|   |   |   |           00003518.sst
 |   |   |   |           00003519.sst
 |   |   |   |           00003520.sst
 |   |   |   |           00003521.sst
 |   |   |   |           00003522.meta
 |   |   |   |           00003523.meta
-|   |   |   |           00003524.meta
-|   |   |   |           00003525.meta
 |   |   |   |           00003526.meta
-|   |   |   |           00003527.sst
-|   |   |   |           00003528.sst
 |   |   |   |           00003529.sst
 |   |   |   |           00003530.sst
 |   |   |   |           00003531.sst
 |   |   |   |           00003532.meta
 |   |   |   |           00003533.meta
-|   |   |   |           00003534.meta
-|   |   |   |           00003535.meta
 |   |   |   |           00003536.meta
-|   |   |   |           00003537.sst
-|   |   |   |           00003538.sst
 |   |   |   |           00003539.sst
 |   |   |   |           00003540.sst
 |   |   |   |           00003541.sst
 |   |   |   |           00003542.meta
-|   |   |   |           00003543.meta
-|   |   |   |           00003544.meta
 |   |   |   |           00003545.meta
 |   |   |   |           00003546.meta
-|   |   |   |           00003547.sst
-|   |   |   |           00003548.sst
 |   |   |   |           00003549.sst
 |   |   |   |           00003550.meta
-|   |   |   |           00003551.meta
-|   |   |   |           00003552.meta
-|   |   |   |           00003553.sst
-|   |   |   |           00003554.sst
 |   |   |   |           00003555.sst
 |   |   |   |           00003556.sst
 |   |   |   |           00003557.sst
 |   |   |   |           00003558.meta
-|   |   |   |           00003559.meta
-|   |   |   |           00003560.meta
 |   |   |   |           00003561.meta
 |   |   |   |           00003562.meta
-|   |   |   |           00003563.sst
-|   |   |   |           00003564.sst
 |   |   |   |           00003565.sst
 |   |   |   |           00003566.sst
 |   |   |   |           00003567.sst
 |   |   |   |           00003568.meta
 |   |   |   |           00003569.meta
-|   |   |   |           00003570.meta
-|   |   |   |           00003571.meta
 |   |   |   |           00003572.meta
-|   |   |   |           00003573.sst
-|   |   |   |           00003574.sst
 |   |   |   |           00003575.sst
 |   |   |   |           00003576.sst
 |   |   |   |           00003577.sst
 |   |   |   |           00003578.meta
-|   |   |   |           00003579.meta
-|   |   |   |           00003580.meta
 |   |   |   |           00003581.meta
 |   |   |   |           00003582.meta
-|   |   |   |           00003583.sst
-|   |   |   |           00003584.sst
 |   |   |   |           00003585.sst
 |   |   |   |           00003586.meta
-|   |   |   |           00003587.meta
-|   |   |   |           00003588.meta
-|   |   |   |           00003589.sst
-|   |   |   |           00003590.sst
 |   |   |   |           00003591.sst
 |   |   |   |           00003592.meta
-|   |   |   |           00003593.meta
-|   |   |   |           00003594.meta
-|   |   |   |           00003595.sst
-|   |   |   |           00003596.sst
 |   |   |   |           00003597.sst
 |   |   |   |           00003598.meta
-|   |   |   |           00003599.meta
-|   |   |   |           00003600.meta
-|   |   |   |           00003601.sst
-|   |   |   |           00003602.sst
 |   |   |   |           00003603.sst
 |   |   |   |           00003604.meta
-|   |   |   |           00003605.meta
-|   |   |   |           00003606.meta
+|   |   |   |           00003614.sst
+|   |   |   |           00003615.sst
+|   |   |   |           00003616.sst
+|   |   |   |           00003617.meta
+|   |   |   |           00003618.meta
+|   |   |   |           00003619.meta
+|   |   |   |           00003622.sst
+|   |   |   |           00003625.sst
+|   |   |   |           00003626.sst
+|   |   |   |           00003627.meta
+|   |   |   |           00003631.sst
+|   |   |   |           00003632.sst
+|   |   |   |           00003633.sst
+|   |   |   |           00003634.meta
+|   |   |   |           00003637.meta
+|   |   |   |           00003638.meta
+|   |   |   |           00003641.sst
+|   |   |   |           00003642.sst
+|   |   |   |           00003643.sst
+|   |   |   |           00003644.meta
+|   |   |   |           00003647.meta
+|   |   |   |           00003648.meta
+|   |   |   |           00003651.sst
+|   |   |   |           00003652.meta
+|   |   |   |           00003657.sst
+|   |   |   |           00003658.meta
+|   |   |   |           00003661.sst
+|   |   |   |           00003662.sst
+|   |   |   |           00003663.meta
+|   |   |   |           00003664.del
+|   |   |   |           00003671.sst
+|   |   |   |           00003672.sst
+|   |   |   |           00003673.sst
+|   |   |   |           00003674.sst
+|   |   |   |           00003675.meta
+|   |   |   |           00003676.meta
+|   |   |   |           00003677.meta
+|   |   |   |           00003679.meta
+|   |   |   |           00003680.sst
+|   |   |   |           00003681.sst
+|   |   |   |           00003682.sst
+|   |   |   |           00003683.meta
+|   |   |   |           00003684.del
+|   |   |   |           00003685.sst
+|   |   |   |           00003686.sst
+|   |   |   |           00003687.sst
+|   |   |   |           00003688.meta
+|   |   |   |           00003689.meta
+|   |   |   |           00003690.meta
+|   |   |   |           00003691.sst
+|   |   |   |           00003692.sst
+|   |   |   |           00003693.sst
+|   |   |   |           00003694.meta
+|   |   |   |           00003695.meta
+|   |   |   |           00003696.meta
+|   |   |   |           00003697.sst
+|   |   |   |           00003698.sst
+|   |   |   |           00003699.sst
+|   |   |   |           00003700.sst
+|   |   |   |           00003701.sst
+|   |   |   |           00003702.meta
+|   |   |   |           00003703.meta
+|   |   |   |           00003704.meta
+|   |   |   |           00003705.meta
+|   |   |   |           00003706.meta
+|   |   |   |           00003707.sst
+|   |   |   |           00003708.sst
+|   |   |   |           00003709.sst
+|   |   |   |           00003710.sst
+|   |   |   |           00003711.sst
+|   |   |   |           00003712.meta
+|   |   |   |           00003713.meta
+|   |   |   |           00003714.meta
+|   |   |   |           00003715.meta
+|   |   |   |           00003716.meta
 |   |   |   |           CURRENT
 |   |   |   |           LOG
 |   |   |   |           
@@ -2628,6 +2542,8 @@ C:.
 |   |   |   |   |   node_modules_next_f74960b7._.js.map
 |   |   |   |   |   node_modules_openid-client_d15f72b3._.js
 |   |   |   |   |   node_modules_openid-client_d15f72b3._.js.map
+|   |   |   |   |   node_modules_zod_v4_9f23db62._.js
+|   |   |   |   |   node_modules_zod_v4_9f23db62._.js.map
 |   |   |   |   |   node_modules_zod_v4_da12b5b3._.js
 |   |   |   |   |   node_modules_zod_v4_da12b5b3._.js.map
 |   |   |   |   |   [root-of-the-server]__2c652975._.js
@@ -2718,6 +2634,10 @@ C:.
 |   |   |   |           node_modules_3c0889a1._.js.map
 |   |   |   |           node_modules_41ad1da2._.js
 |   |   |   |           node_modules_41ad1da2._.js.map
+|   |   |   |           node_modules_5fdd9b49._.js
+|   |   |   |           node_modules_5fdd9b49._.js.map
+|   |   |   |           node_modules_715db6d8._.js
+|   |   |   |           node_modules_715db6d8._.js.map
 |   |   |   |           node_modules_b73ac7d7._.js
 |   |   |   |           node_modules_b73ac7d7._.js.map
 |   |   |   |           node_modules_e2d1c5df._.js
@@ -2726,6 +2646,10 @@ C:.
 |   |   |   |           node_modules_ee11acdc._.js.map
 |   |   |   |           node_modules_jose_dist_node_cjs_6d3869c7._.js
 |   |   |   |           node_modules_jose_dist_node_cjs_6d3869c7._.js.map
+|   |   |   |           node_modules_lucide-react_dist_esm_icons_10b941fe._.js
+|   |   |   |           node_modules_lucide-react_dist_esm_icons_10b941fe._.js.map
+|   |   |   |           node_modules_lucide-react_dist_esm_icons_d5f40330._.js
+|   |   |   |           node_modules_lucide-react_dist_esm_icons_d5f40330._.js.map
 |   |   |   |           node_modules_next-auth_0305d6f4._.js
 |   |   |   |           node_modules_next-auth_0305d6f4._.js.map
 |   |   |   |           node_modules_next_925641f3._.js
@@ -2768,6 +2692,8 @@ C:.
 |   |   |   |           node_modules_openid-client_5e2b25d2._.js.map
 |   |   |   |           node_modules_zod_v4_34378348._.js
 |   |   |   |           node_modules_zod_v4_34378348._.js.map
+|   |   |   |           node_modules_zod_v4_b66d5c07._.js
+|   |   |   |           node_modules_zod_v4_b66d5c07._.js.map
 |   |   |   |           [externals]_next_dist_c80f7c8f._.js
 |   |   |   |           [externals]_next_dist_c80f7c8f._.js.map
 |   |   |   |           [externals]__e8a2741f._.js
@@ -2786,6 +2712,8 @@ C:.
 |   |   |   |           [root-of-the-server]__272734e3._.js.map
 |   |   |   |           [root-of-the-server]__4e9dd690._.js
 |   |   |   |           [root-of-the-server]__4e9dd690._.js.map
+|   |   |   |           [root-of-the-server]__5445d09d._.js
+|   |   |   |           [root-of-the-server]__5445d09d._.js.map
 |   |   |   |           [root-of-the-server]__60f0131a._.js
 |   |   |   |           [root-of-the-server]__60f0131a._.js.map
 |   |   |   |           [root-of-the-server]__7ea3f2e6._.js
@@ -2873,6 +2801,7 @@ C:.
 |   |   |   |   |   app_82881073._.js
 |   |   |   |   |   app_82881073._.js.map
 |   |   |   |   |   app_audit_page_tsx_1b0ba5a8._.js
+|   |   |   |   |   app_audit_page_tsx_600cde32._.js
 |   |   |   |   |   app_b90b8213._.js
 |   |   |   |   |   app_b90b8213._.js.map
 |   |   |   |   |   app_company_page_tsx_1b0ba5a8._.js
@@ -2882,6 +2811,7 @@ C:.
 |   |   |   |   |   app_dashboard_page_tsx_1b0ba5a8._.js
 |   |   |   |   |   app_dashboard_page_tsx_600cde32._.js
 |   |   |   |   |   app_depots_page_tsx_1b0ba5a8._.js
+|   |   |   |   |   app_depots_page_tsx_600cde32._.js
 |   |   |   |   |   app_favicon_ico_mjs_745fddaf._.js
 |   |   |   |   |   app_globals_71f961d1.css
 |   |   |   |   |   app_globals_71f961d1.css.map
@@ -2892,6 +2822,7 @@ C:.
 |   |   |   |   |   app_login_page_tsx_e96a26ee._.js.map
 |   |   |   |   |   app_onboarding_page_tsx_1b0ba5a8._.js
 |   |   |   |   |   app_planning_page_tsx_1b0ba5a8._.js
+|   |   |   |   |   app_planning_page_tsx_600cde32._.js
 |   |   |   |   |   app_privacy_page_tsx_1b0ba5a8._.js
 |   |   |   |   |   app_templates_page_tsx_1b0ba5a8._.js
 |   |   |   |   |   app_users_page_tsx_1b0ba5a8._.js
@@ -2903,6 +2834,8 @@ C:.
 |   |   |   |   |   node_modules_b198b86e._.js.map
 |   |   |   |   |   node_modules_d33b72d3._.js
 |   |   |   |   |   node_modules_d33b72d3._.js.map
+|   |   |   |   |   node_modules_lucide-react_dist_esm_icons_96dcc2c5._.js
+|   |   |   |   |   node_modules_lucide-react_dist_esm_icons_96dcc2c5._.js.map
 |   |   |   |   |   node_modules_next_dist_be32b49c._.js
 |   |   |   |   |   node_modules_next_dist_be32b49c._.js.map
 |   |   |   |   |   node_modules_next_dist_build_polyfills_polyfill-nomodule.js
@@ -2930,6 +2863,8 @@ C:.
 |   |   |   |   |   [turbopack]_browser_dev_hmr-client_hmr-client_ts_c8c997ce._.js.map
 |   |   |   |   |   _01ca1af2._.js
 |   |   |   |   |   _01ca1af2._.js.map
+|   |   |   |   |   _063d3baf._.js
+|   |   |   |   |   _063d3baf._.js.map
 |   |   |   |   |   _23a915ee._.js.map
 |   |   |   |   |   _3bf2f5b1._.js
 |   |   |   |   |   _3bf2f5b1._.js.map
@@ -4259,10 +4194,10 @@ C:.
 |   |   |           app_06f7ebef._.js.map
 |   |   |           app_797b0307._.js
 |   |   |           app_797b0307._.js.map
-|   |   |           app_8bb86ff2._.js
-|   |   |           app_8bb86ff2._.js.map
 |   |   |           app_b9b1292a._.js
 |   |   |           app_b9b1292a._.js.map
+|   |   |           app_depots_depots-client_tsx_0adc4040._.js
+|   |   |           app_depots_depots-client_tsx_0adc4040._.js.map
 |   |   |           app_login_page_tsx_ccc0019b._.js
 |   |   |           app_login_page_tsx_ccc0019b._.js.map
 |   |   |           app_planning_planning-client_tsx_ec2e83fd._.js
@@ -4275,8 +4210,8 @@ C:.
 |   |   |           app_ui_b1972fd1._.js.map
 |   |   |           app_vehicles_vehicles-client_tsx_94295d31._.js
 |   |   |           app_vehicles_vehicles-client_tsx_94295d31._.js.map
-|   |   |           node_modules_50d6f230._.js
-|   |   |           node_modules_50d6f230._.js.map
+|   |   |           node_modules_077d7da3._.js
+|   |   |           node_modules_077d7da3._.js.map
 |   |   |           node_modules_ea845e5f._.js
 |   |   |           node_modules_ea845e5f._.js.map
 |   |   |           node_modules_next_dist_27457240._.js
@@ -4295,28 +4230,28 @@ C:.
 |   |   |           node_modules_next_dist_esm_build_templates_app-page_b8e1111a.js.map
 |   |   |           node_modules_next_dist_f21d913a._.js
 |   |   |           node_modules_next_dist_f21d913a._.js.map
+|   |   |           [root-of-the-server]__0d586f9d._.js
+|   |   |           [root-of-the-server]__0d586f9d._.js.map
 |   |   |           [root-of-the-server]__0d5ae7ad._.js
 |   |   |           [root-of-the-server]__0d5ae7ad._.js.map
-|   |   |           [root-of-the-server]__153dbcd2._.js
-|   |   |           [root-of-the-server]__153dbcd2._.js.map
+|   |   |           [root-of-the-server]__119604ab._.js
+|   |   |           [root-of-the-server]__119604ab._.js.map
 |   |   |           [root-of-the-server]__1b163f0c._.js
 |   |   |           [root-of-the-server]__1b163f0c._.js.map
+|   |   |           [root-of-the-server]__1bb2834a._.js
+|   |   |           [root-of-the-server]__1bb2834a._.js.map
 |   |   |           [root-of-the-server]__296a25b5._.js
 |   |   |           [root-of-the-server]__296a25b5._.js.map
-|   |   |           [root-of-the-server]__2d47f16a._.js
-|   |   |           [root-of-the-server]__2d47f16a._.js.map
 |   |   |           [root-of-the-server]__36ebbb9f._.js
 |   |   |           [root-of-the-server]__36ebbb9f._.js.map
-|   |   |           [root-of-the-server]__4b1125c8._.js
-|   |   |           [root-of-the-server]__4b1125c8._.js.map
 |   |   |           [root-of-the-server]__4b196863._.js
 |   |   |           [root-of-the-server]__4b196863._.js.map
 |   |   |           [root-of-the-server]__4e4f114d._.js
 |   |   |           [root-of-the-server]__4e4f114d._.js.map
-|   |   |           [root-of-the-server]__5b5783c3._.js
-|   |   |           [root-of-the-server]__5b5783c3._.js.map
-|   |   |           [root-of-the-server]__8740dad5._.js
-|   |   |           [root-of-the-server]__8740dad5._.js.map
+|   |   |           [root-of-the-server]__6a9a3826._.js
+|   |   |           [root-of-the-server]__6a9a3826._.js.map
+|   |   |           [root-of-the-server]__7661fe42._.js
+|   |   |           [root-of-the-server]__7661fe42._.js.map
 |   |   |           [root-of-the-server]__99048386._.js
 |   |   |           [root-of-the-server]__99048386._.js.map
 |   |   |           [root-of-the-server]__a457c799._.js
@@ -4327,8 +4262,6 @@ C:.
 |   |   |           [root-of-the-server]__b2dd6248._.js.map
 |   |   |           [root-of-the-server]__b9356576._.js
 |   |   |           [root-of-the-server]__b9356576._.js.map
-|   |   |           [root-of-the-server]__ba41721b._.js
-|   |   |           [root-of-the-server]__ba41721b._.js.map
 |   |   |           [root-of-the-server]__be041a95._.js
 |   |   |           [root-of-the-server]__be041a95._.js.map
 |   |   |           [root-of-the-server]__c28e3622._.js
@@ -4339,6 +4272,8 @@ C:.
 |   |   |           [root-of-the-server]__e0a07927._.js.map
 |   |   |           [root-of-the-server]__e1b2e646._.js
 |   |   |           [root-of-the-server]__e1b2e646._.js.map
+|   |   |           [root-of-the-server]__fa96eb5c._.js
+|   |   |           [root-of-the-server]__fa96eb5c._.js.map
 |   |   |           [turbopack]_runtime.js
 |   |   |           [turbopack]_runtime.js.map
 |   |   |           _0dac8f4c._.js
@@ -4351,6 +4286,8 @@ C:.
 |   |   |           _2c715f22._.js.map
 |   |   |           _30e06fe7._.js
 |   |   |           _30e06fe7._.js.map
+|   |   |           _33fae268._.js
+|   |   |           _33fae268._.js.map
 |   |   |           _3688c0d3._.js
 |   |   |           _3688c0d3._.js.map
 |   |   |           _5516c59e._.js
@@ -4365,6 +4302,8 @@ C:.
 |   |   |           _72a8d4f5._.js.map
 |   |   |           _74c1132d._.js
 |   |   |           _74c1132d._.js.map
+|   |   |           _7594c383._.js
+|   |   |           _7594c383._.js.map
 |   |   |           _90c0d2c3._.js
 |   |   |           _90c0d2c3._.js.map
 |   |   |           _96556e33._.js
@@ -4373,14 +4312,10 @@ C:.
 |   |   |           _a6c91a63._.js.map
 |   |   |           _a70391a9._.js
 |   |   |           _a70391a9._.js.map
-|   |   |           _a73c5f61._.js
-|   |   |           _a73c5f61._.js.map
 |   |   |           _b2ebc7ca._.js
 |   |   |           _b2ebc7ca._.js.map
 |   |   |           _b8abe047._.js
 |   |   |           _b8abe047._.js.map
-|   |   |           _efd80026._.js
-|   |   |           _efd80026._.js.map
 |   |   |           _next-internal_server_app_audit_page_actions_4244da5a.js
 |   |   |           _next-internal_server_app_audit_page_actions_4244da5a.js.map
 |   |   |           _next-internal_server_app_company_page_actions_ca33e7ac.js
@@ -4418,25 +4353,24 @@ C:.
 |   |           
 |   +---static
 |   |   +---chunks
-|   |   |       160b21c9f8359e62.js
-|   |   |       238b7eafc040c2ec.js
 |   |   |       2abddf04332fa424.js
 |   |   |       4fee5e0abb56af75.js
 |   |   |       6942caab671acd1e.js
 |   |   |       713222a63fe38a7a.js
 |   |   |       7be20650701a57ad.js
 |   |   |       7c94b3ff2cb3d7f4.js
-|   |   |       7e9cdb1f994949e3.css
+|   |   |       80f1018981664571.js
 |   |   |       82abf2d65f5428ae.js
 |   |   |       899b7782e7cb92a1.js
+|   |   |       9fc2078a79801c54.js
 |   |   |       a6dad97d9634a72d.js
 |   |   |       a6dad97d9634a72d.js.map
+|   |   |       aa6323c8a56aec28.css
 |   |   |       af7027598a07baa5.js
-|   |   |       bb39f73d3a8124b0.js
-|   |   |       c11af7fe0e70e525.js
+|   |   |       b79e0f85eca6f17e.js
 |   |   |       d2a49cc12d3efae3.js
 |   |   |       d77e2dc1a543f2f6.js
-|   |   |       f4dcb3df7f27b58d.js
+|   |   |       f83a10f647b41096.js
 |   |   |       f83f209ad42b85e9.js
 |   |   |       fc3339c3f209e8c2.js
 |   |   |       ff1a16fafef87110.js
@@ -4445,7 +4379,7 @@ C:.
 |   |   +---media
 |   |   |       favicon.0b3bf435.ico
 |   |   |       
-|   |   \---vzNhuKl5PWblbItTddl1c
+|   |   \---RQJilueqjK0iuHX3euFmG
 |   |           _buildManifest.js
 |   |           _clientMiddlewareManifest.json
 |   |           _ssgManifest.js
@@ -6317,9 +6251,24 @@ C:.
 |   |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION-20260506-04_A24_A24-UI-04_DOCS.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
+|   |   |   |   |   +---CAPTURES_APRES
+|   |   |   |   |   |       company_dark_after.png
+|   |   |   |   |   |       company_light_after.png
+|   |   |   |   |   |       depots_dark_after.png
+|   |   |   |   |   |       depots_light_after.png
+|   |   |   |   |   |       
+|   |   |   |   |   +---CAPTURES_AVANT
+|   |   |   |   |   |       company_dark_before.png
+|   |   |   |   |   |       company_light_before.png
+|   |   |   |   |   |       depots_dark_before.png
+|   |   |   |   |   |       depots_light_before.png
+|   |   |   |   |   |       
 |   |   |   |   |   \---PATCH
+|   |   |   |   |           PATCH__SESSION-20260506-04_A24_A24-UI-04.diff
+|   |   |   |   |           PATCH__SESSION-20260506-04_A24_A24-UI-04_DOCS.diff
 |   |   |   |   |           README_PATCH.md
 |   |   |   |   |           
 |   |   |   |   +---SESSION-20260506-05_A24_A24-UI-05
@@ -9960,7 +9909,6 @@ C:.
 |   |               \---runtime
 |   |                       hkdf.js
 |   |                       
-|   +---@playwright
 |   +---@prisma
 |   |   +---adapter-pg
 |   |   |   |   LICENSE
