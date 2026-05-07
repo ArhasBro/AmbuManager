@@ -42,8 +42,8 @@ export default async function TemplatesPage() {
   return (
     <div className="page-wrap">
       <PageHeader
-        title="Templates de shifts"
-        description="Base ALPHA: creation, edition, activation, archivage logique, couleur et composition d'equipe."
+        title="Templates"
+        description="Gérez les modèles de shifts, la composition d’équipe, les véhicules requis et les statuts."
       />
 
       <TemplatesClient initialTemplates={serializeDates(templates)} />

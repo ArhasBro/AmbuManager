@@ -696,11 +696,11 @@ La discussion de contrôle avec ChatGPT doit vérifier l’ensemble produit, san
 15. RÉFÉRENCE DE LA SESSION
 ============================================================
 
-- SESSION-20260506-05_A24_A24-UI-05
-- **A24-UI-05 — CORRECTION+COMPLÉTION** — Véhicules et Templates.  
-  Périmètre : pages véhicules, pages templates, tableaux, filtres, badges, formulaires, détails, états visuels, actions principales et secondaires.  
-  Livrable attendu : patch code ciblé Véhicules + Templates.  
-  DoD : les pages référentielles métier sont propres, cohérentes et visuellement proches de `MAQUETTE_DA`.
+- SESSION-20260506-06_A24_A24-UI-06
+- **A24-UI-06 — CORRECTION+COMPLÉTION** — Utilisateurs / RH visuel.  
+  Périmètre : page utilisateurs, liste, filtres, création, édition, fiche utilisateur, badges rôles/statuts et cohérence RH visible.  
+  Livrable attendu : patch code ciblé Users / RH visuel.  
+  DoD : la page Utilisateurs / RH est plus pure, plus lisible, alignée avec `MAQUETTE_DA`, sans ajout de RH avancée.
 
 ------------------------------------
 
@@ -714,10 +714,7 @@ Unblock-File -Path .\create_session.ps1
 
 
 
-- **A24-UI-06 — CORRECTION+COMPLÉTION** — Utilisateurs / RH visuel.  
-  Périmètre : page utilisateurs, liste, filtres, création, édition, fiche utilisateur, badges rôles/statuts et cohérence RH visible.  
-  Livrable attendu : patch code ciblé Users / RH visuel.  
-  DoD : la page Utilisateurs / RH est plus pure, plus lisible, alignée avec `MAQUETTE_DA`, sans ajout de RH avancée.
+
 
 - **A24-UI-07 — CORRECTION+COMPLÉTION** — Audit, Onboarding, Privacy et pages simples.  
   Périmètre : audit, onboarding, privacy, pages simples, sections, cards, tableaux, filtres, textes, états et finitions globales.  

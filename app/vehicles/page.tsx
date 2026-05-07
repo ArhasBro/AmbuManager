@@ -60,8 +60,8 @@ export default async function VehiclesPage() {
   return (
     <div className="page-wrap">
       <PageHeader
-        title="Vehicules"
-        description="Gestion de la flotte active, conformite documentaire et rattachement optionnel a une base."
+        title="Véhicules"
+        description="Gérez votre flotte active, la conformité documentaire et le rattachement aux bases."
       />
 
       <VehiclesClient
