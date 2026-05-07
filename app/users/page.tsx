@@ -1,5 +1,6 @@
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
+import { Archive, CalendarX, GraduationCap, Plus, UsersRound } from "lucide-react";
 
 import { authOptions } from "@/lib/auth";
 import { canGovernCompanyRulesDelegation } from "@/lib/company-rules/governance";
@@ -53,15 +54,43 @@ export default async function UsersPage() {
     <div className="page-wrap">
       <PageHeader
         title="Utilisateurs / RH"
-        description="Gestion des salaries, roles, permissions, rattachements, horaires et absences."
-        actions={<ActionButton variant="primary">+ Creer un utilisateur</ActionButton>}
+        description="Gestion des salariés, rôles, permissions, rattachements, horaires et absences."
+        actions={(
+          <ActionButton variant="primary" leadingIcon={<Plus size={16} />}>
+            Créer un utilisateur
+          </ActionButton>
+        )}
       />
 
       <section className="users-kpi-grid">
-        <StatCard title="Utilisateurs actifs" value={activeUsers} hint="Comptes actifs" tone="info" />
-        <StatCard title="Stagiaires" value={trainees} hint="Actifs" tone="success" />
-        <StatCard title="Absences en cours" value={absencesCount} hint="Dossier RH" tone="warning" />
-        <StatCard title="Comptes archives" value={archivedUsers} hint="Inactifs" tone="neutral" />
+        <StatCard
+          title="Utilisateurs actifs"
+          value={activeUsers}
+          hint="Comptes actifs"
+          tone="info"
+          icon={<UsersRound size={18} />}
+        />
+        <StatCard
+          title="Stagiaires"
+          value={trainees}
+          hint="Actifs"
+          tone="success"
+          icon={<GraduationCap size={18} />}
+        />
+        <StatCard
+          title="Absences en cours"
+          value={absencesCount}
+          hint="Dossier RH"
+          tone="warning"
+          icon={<CalendarX size={18} />}
+        />
+        <StatCard
+          title="Comptes archivés"
+          value={archivedUsers}
+          hint="Inactifs"
+          tone="neutral"
+          icon={<Archive size={18} />}
+        />
       </section>
 
       <section className="users-workspace">
@@ -70,7 +99,7 @@ export default async function UsersPage() {
       </section>
 
       <details className="users-advanced">
-        <summary>Operations avancees (creation, edition, absence, archivage)</summary>
+        <summary>Opérations RH détaillées : création, édition, absences, rattachement, sécurité</summary>
         <div className="users-advanced__content">
           <UserCreationClient canGovernCompanyRules={canGovernCompanyRules} availableDepots={depots} />
           <UserAbsenceClient />

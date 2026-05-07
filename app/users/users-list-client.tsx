@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { MoreVertical, Pencil, RotateCcw, Search } from "lucide-react";
 
 import { ActionButton, DataTable, FilterBar, StatusBadge, type DataTableColumn } from "@/app/ui";
 
@@ -59,8 +60,10 @@ function toUserRow(value: unknown): UserListRow | null {
   const role = typeof record.role === "string" ? record.role : null;
   const depotId = typeof record.depotId === "string" ? record.depotId : null;
   const isTrainee = record.isTrainee === true;
+  const isActive = record.isActive !== false;
   const dailyWorkStartTime = typeof record.dailyWorkStartTime === "string" ? record.dailyWorkStartTime : null;
   const dailyWorkEndTime = typeof record.dailyWorkEndTime === "string" ? record.dailyWorkEndTime : null;
+  const updatedAt = typeof record.updatedAt === "string" ? record.updatedAt : null;
   const depotRecord = typeof record.depot === "object" && record.depot !== null ? (record.depot as Record<string, unknown>) : null;
   const depot = depotRecord
     && typeof depotRecord.id === "string"
@@ -74,7 +77,7 @@ function toUserRow(value: unknown): UserListRow | null {
     : null;
 
   if (!id || !name || !role) return null;
-  return { id, name, firstName, lastName, initials, phone, email, role, depotId, depot, isTrainee, dailyWorkStartTime, dailyWorkEndTime };
+  return { id, name, firstName, lastName, initials, phone, email, role, depotId, depot, isActive, isTrainee, dailyWorkStartTime, dailyWorkEndTime, updatedAt };
 }
 
 function roleStatusVariant(role: string): "neutral" | "info" | "success" | "warning" {
@@ -86,6 +89,25 @@ function roleStatusVariant(role: string): "neutral" | "info" | "success" | "warn
 function depotStatusVariant(user: UserListRow): "neutral" | "success" | "warning" {
   if (!user.depot) return "neutral";
   return user.depot.isActive ? "success" : "warning";
+}
+
+function statusVariant(user: UserListRow): "success" | "warning" {
+  return user.isActive === false ? "warning" : "success";
+}
+
+function initialsLabel(user: UserListRow) {
+  return (user.initials || user.name.slice(0, 2)).toUpperCase();
+}
+
+function formatDateTimeLabel(value?: string | null) {
+  if (!value) return "Non renseignée";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "Non renseignée";
+  return date.toLocaleDateString("fr-FR", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
 }
 
 export default function UsersListClient() {
@@ -218,16 +240,15 @@ export default function UsersListClient() {
   const columns = useMemo<DataTableColumn<UserListRow>[]>(() => ([
     {
       key: "name",
-      header: "Nom",
+      header: "Identité",
       render: (user) => (
-        <>
-          <strong>{user.name}</strong>
-          {(user.firstName || user.lastName) ? (
-            <div className="users-table-cell-subtle">
-              {[user.firstName, user.lastName].filter(Boolean).join(" ")}
-            </div>
-          ) : null}
-        </>
+        <div className="users-table-identity">
+          <span className="users-table-avatar" aria-hidden="true">{initialsLabel(user)}</span>
+          <span>
+            <strong>{user.name}</strong>
+            <span className="users-table-cell-subtle">{user.email || "Email non renseigné"}</span>
+          </span>
+        </div>
       ),
       width: "220px",
     },
@@ -245,17 +266,25 @@ export default function UsersListClient() {
     },
     {
       key: "phone",
-      header: "Telephone",
+      header: "Téléphone",
       render: (user) => user.phone || "-",
       width: "160px",
     },
     {
       key: "role",
-      header: "Role",
+      header: "Rôle",
       render: (user) => (
         <StatusBadge variant={roleStatusVariant(user.role)}>{user.role}</StatusBadge>
       ),
       width: "140px",
+    },
+    {
+      key: "status",
+      header: "Statut",
+      render: (user) => (
+        <StatusBadge variant={statusVariant(user)}>{user.isActive === false ? "Inactif" : "Actif"}</StatusBadge>
+      ),
+      width: "120px",
     },
     {
       key: "rh",
@@ -278,11 +307,39 @@ export default function UsersListClient() {
       ),
       width: "160px",
     },
+    {
+      key: "updatedAt",
+      header: "Dernière modif",
+      render: (user) => formatDateTimeLabel(user.updatedAt),
+      width: "150px",
+    },
+    {
+      key: "actions",
+      header: "Actions",
+      render: (user) => (
+        <div className="users-table-actions">
+          <button type="button" className="users-table-icon-button" title="Sélectionner pour édition" onClick={(event) => { event.stopPropagation(); setSelectedUserId(user.id); }}>
+            <Pencil size={15} />
+          </button>
+          <button type="button" className="users-table-icon-button" title="Actions utilisateur" onClick={(event) => { event.stopPropagation(); setSelectedUserId(user.id); }}>
+            <MoreVertical size={15} />
+          </button>
+        </div>
+      ),
+      width: "110px",
+    },
   ]), []);
 
   useEffect(() => {
     dispatchUsersSelection(selectedUser);
   }, [selectedUser]);
+
+  function resetFilters() {
+    setSearchInput("");
+    setSearch("");
+    setRole("");
+    setPage(1);
+  }
 
   return (
     <section className="users-section">
@@ -290,33 +347,39 @@ export default function UsersListClient() {
         <div className="users-card__head">
           <h2 className="users-card__title">Liste utilisateurs</h2>
           <p className="users-card__description">
-            Recherche simple, filtre role et pagination minimale sur les comptes actifs de la societe.
+            Recherche simple, filtre rôle et pagination minimale sur les comptes actifs de la société.
           </p>
         </div>
 
         <FilterBar
-          summary={`Filtres actifs : ${search ? `recherche "${search}"` : "aucune recherche"}${role ? `, role ${role}` : ", tous les roles"}`}
+          summary={`Filtres actifs : ${search ? `recherche "${search}"` : "aucune recherche"}${role ? `, rôle ${role}` : ", tous les rôles"}`}
+          actions={(
+            <ActionButton size="sm" leadingIcon={<RotateCcw size={14} />} onClick={resetFilters} disabled={loading && !search && !role}>
+              Réinitialiser
+            </ActionButton>
+          )}
         >
           <label className="users-field">
-            <span className="users-field__label">Recherche</span>
+            <span className="users-field__label users-field__label--icon"><Search size={14} /> Recherche</span>
             <input
               type="text"
               value={searchInput}
               onChange={(event) => setSearchInput(event.target.value)}
-              placeholder="Nom, email, initiales ou telephone"
+              placeholder="Nom, email, initiales ou téléphone"
             />
           </label>
 
           <label className="users-field">
-            <span className="users-field__label">Role</span>
+            <span className="users-field__label">Rôle</span>
             <select value={role} onChange={(event) => setRole(event.target.value)}>
               {ROLE_FILTER_OPTIONS.map((value) => (
                 <option key={value || "ALL"} value={value}>
-                  {value || "Tous les roles"}
+                  {value || "Tous les rôles"}
                 </option>
               ))}
             </select>
           </label>
+          <p className="users-filter-note">Les filtres base, statut et stagiaire restent visuellement prévus par la maquette mais ne sont pas étendus côté API dans cette session.</p>
         </FilterBar>
 
         <DataTable
@@ -327,11 +390,11 @@ export default function UsersListClient() {
           error={error}
           loadingLabel="Chargement de la liste utilisateurs..."
           emptyTitle="Aucun utilisateur trouve"
-          emptyMessage="Aucun utilisateur ne correspond a ces criteres."
+          emptyMessage="Aucun utilisateur ne correspond à ces critères."
           selectedRowKey={selectedUserId || null}
           onRowClick={(user) => setSelectedUserId(user.id)}
-          minWidth={980}
-          caption="Liste des comptes actifs de la societe courante"
+          minWidth={1320}
+          caption="Liste des comptes actifs de la société courante"
         />
 
         {!loading && !error ? (

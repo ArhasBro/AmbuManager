@@ -17,17 +17,19 @@ export type UserListRow = {
   role: string;
   depotId: string | null;
   depot: DepotLite | null;
+  isActive?: boolean;
   isTrainee?: boolean;
   dailyWorkStartTime?: string | null;
   dailyWorkEndTime?: string | null;
+  updatedAt?: string | null;
 };
 
 export function dailyScheduleLabel(user: Pick<UserListRow, "dailyWorkStartTime" | "dailyWorkEndTime">) {
-  if (!user.dailyWorkStartTime || !user.dailyWorkEndTime) return "Non renseigne";
+  if (!user.dailyWorkStartTime || !user.dailyWorkEndTime) return "Non renseigné";
   return `${user.dailyWorkStartTime} - ${user.dailyWorkEndTime}`;
 }
 
 export function depotLabel(depot: DepotLite | null) {
   if (!depot) return "Aucune";
-  return depot.isActive ? depot.name : `${depot.name} (archive)`;
+  return depot.isActive ? depot.name : `${depot.name} (archivée)`;
 }

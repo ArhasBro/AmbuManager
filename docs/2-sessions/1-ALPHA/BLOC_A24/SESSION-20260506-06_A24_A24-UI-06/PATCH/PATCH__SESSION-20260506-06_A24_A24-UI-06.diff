@@ -1,0 +1,501 @@
+diff --git a/app/users/page.tsx b/app/users/page.tsx
+index 5594bc3..b24ui06 100644
+--- a/app/users/page.tsx
++++ b/app/users/page.tsx
+@@ -1,11 +1,12 @@
+ import { getServerSession } from "next-auth/next";
+ import { redirect } from "next/navigation";
++import { Archive, CalendarX, GraduationCap, Plus, UsersRound } from "lucide-react";
+ 
+ import { authOptions } from "@/lib/auth";
+ import { canGovernCompanyRulesDelegation } from "@/lib/company-rules/governance";
+ import { canManageUsers } from "@/lib/permissions";
+ import { prisma } from "@/lib/prisma";
+ import { ActionButton, PageHeader, StatCard } from "@/app/ui";
+ 
+ import ResetPasswordClient from "./reset-password-client";
+ import UserCreationClient from "./user-creation-client";
+@@ -55,23 +56,51 @@
+       <PageHeader
+         title="Utilisateurs / RH"
+-        description="Gestion des salaries, roles, permissions, rattachements, horaires et absences."
+-        actions={<ActionButton variant="primary">+ Creer un utilisateur</ActionButton>}
++        description="Gestion des salariés, rôles, permissions, rattachements, horaires et absences."
++        actions={(
++          <ActionButton variant="primary" leadingIcon={<Plus size={16} />}>
++            Créer un utilisateur
++          </ActionButton>
++        )}
+       />
+ 
+       <section className="users-kpi-grid">
+-        <StatCard title="Utilisateurs actifs" value={activeUsers} hint="Comptes actifs" tone="info" />
+-        <StatCard title="Stagiaires" value={trainees} hint="Actifs" tone="success" />
+-        <StatCard title="Absences en cours" value={absencesCount} hint="Dossier RH" tone="warning" />
+-        <StatCard title="Comptes archives" value={archivedUsers} hint="Inactifs" tone="neutral" />
++        <StatCard
++          title="Utilisateurs actifs"
++          value={activeUsers}
++          hint="Comptes actifs"
++          tone="info"
++          icon={<UsersRound size={18} />}
++        />
++        <StatCard
++          title="Stagiaires"
++          value={trainees}
++          hint="Actifs"
++          tone="success"
++          icon={<GraduationCap size={18} />}
++        />
++        <StatCard
++          title="Absences en cours"
++          value={absencesCount}
++          hint="Dossier RH"
++          tone="warning"
++          icon={<CalendarX size={18} />}
++        />
++        <StatCard
++          title="Comptes archivés"
++          value={archivedUsers}
++          hint="Inactifs"
++          tone="neutral"
++          icon={<Archive size={18} />}
++        />
+       </section>
+ 
+       <section className="users-workspace">
+         <UsersListClient />
+         <UsersSidePanelClient />
+       </section>
+ 
+-      <details className="users-advanced">
+-        <summary>Operations avancees (creation, edition, absence, archivage)</summary>
++      <details className="users-advanced">
++        <summary>Opérations RH détaillées : création, édition, absences, rattachement, sécurité</summary>
+         <div className="users-advanced__content">
+           <UserCreationClient canGovernCompanyRules={canGovernCompanyRules} availableDepots={depots} />
+           <UserAbsenceClient />
+diff --git a/app/users/users-client-shared.ts b/app/users/users-client-shared.ts
+index 566415a..b24ui06 100644
+--- a/app/users/users-client-shared.ts
++++ b/app/users/users-client-shared.ts
+@@ -15,17 +15,19 @@
+   role: string;
+   depotId: string | null;
+   depot: DepotLite | null;
++  isActive?: boolean;
+   isTrainee?: boolean;
+   dailyWorkStartTime?: string | null;
+   dailyWorkEndTime?: string | null;
++  updatedAt?: string | null;
+ };
+ 
+ export function dailyScheduleLabel(user: Pick<UserListRow, "dailyWorkStartTime" | "dailyWorkEndTime">) {
+-  if (!user.dailyWorkStartTime || !user.dailyWorkEndTime) return "Non renseigne";
++  if (!user.dailyWorkStartTime || !user.dailyWorkEndTime) return "Non renseigné";
+   return `${user.dailyWorkStartTime} - ${user.dailyWorkEndTime}`;
+ }
+ 
+ export function depotLabel(depot: DepotLite | null) {
+   if (!depot) return "Aucune";
+-  return depot.isActive ? depot.name : `${depot.name} (archive)`;
++  return depot.isActive ? depot.name : `${depot.name} (archivée)`;
+ }
+diff --git a/app/users/users-list-client.tsx b/app/users/users-list-client.tsx
+index d7a5cca..b24ui06 100644
+--- a/app/users/users-list-client.tsx
++++ b/app/users/users-list-client.tsx
+@@ -1,6 +1,7 @@
+ "use client";
+ 
+ import { useEffect, useMemo, useState } from "react";
++import { MoreVertical, Pencil, RotateCcw, Search } from "lucide-react";
+ 
+ import { ActionButton, DataTable, FilterBar, StatusBadge, type DataTableColumn } from "@/app/ui";
+ 
+@@ -74,8 +75,10 @@
+   const role = typeof record.role === "string" ? record.role : null;
+   const depotId = typeof record.depotId === "string" ? record.depotId : null;
+   const isTrainee = record.isTrainee === true;
++  const isActive = record.isActive !== false;
+   const dailyWorkStartTime = typeof record.dailyWorkStartTime === "string" ? record.dailyWorkStartTime : null;
+   const dailyWorkEndTime = typeof record.dailyWorkEndTime === "string" ? record.dailyWorkEndTime : null;
++  const updatedAt = typeof record.updatedAt === "string" ? record.updatedAt : null;
+   const depotRecord = typeof record.depot === "object" && record.depot !== null ? (record.depot as Record<string, unknown>) : null;
+   const depot = depotRecord
+     && typeof depotRecord.id === "string"
+@@ -91,7 +94,7 @@
+     : null;
+ 
+   if (!id || !name || !role) return null;
+-  return { id, name, firstName, lastName, initials, phone, email, role, depotId, depot, isTrainee, dailyWorkStartTime, dailyWorkEndTime };
++  return { id, name, firstName, lastName, initials, phone, email, role, depotId, depot, isActive, isTrainee, dailyWorkStartTime, dailyWorkEndTime, updatedAt };
+ }
+ 
+ function roleStatusVariant(role: string): "neutral" | "info" | "success" | "warning" {
+@@ -106,6 +109,25 @@
+   if (!user.depot) return "neutral";
+   return user.depot.isActive ? "success" : "warning";
+ }
++
++function statusVariant(user: UserListRow): "success" | "warning" {
++  return user.isActive === false ? "warning" : "success";
++}
++
++function initialsLabel(user: UserListRow) {
++  return (user.initials || user.name.slice(0, 2)).toUpperCase();
++}
++
++function formatDateTimeLabel(value?: string | null) {
++  if (!value) return "Non renseignée";
++  const date = new Date(value);
++  if (Number.isNaN(date.getTime())) return "Non renseignée";
++  return date.toLocaleDateString("fr-FR", {
++    day: "2-digit",
++    month: "short",
++    year: "numeric",
++  });
++}
+ 
+ export default function UsersListClient() {
+   const [searchInput, setSearchInput] = useState("");
+@@ -232,15 +253,14 @@
+     {
+       key: "name",
+-      header: "Nom",
++      header: "Identité",
+       render: (user) => (
+-        <>
+-          <strong>{user.name}</strong>
+-          {(user.firstName || user.lastName) ? (
+-            <div className="users-table-cell-subtle">
+-              {[user.firstName, user.lastName].filter(Boolean).join(" ")}
+-            </div>
+-          ) : null}
+-        </>
++        <div className="users-table-identity">
++          <span className="users-table-avatar" aria-hidden="true">{initialsLabel(user)}</span>
++          <span>
++            <strong>{user.name}</strong>
++            <span className="users-table-cell-subtle">{user.email || "Email non renseigné"}</span>
++          </span>
++        </div>
+       ),
+       width: "220px",
+     },
+@@ -247,18 +268,26 @@
+     },
+     {
+       key: "phone",
+-      header: "Telephone",
++      header: "Téléphone",
+       render: (user) => user.phone || "-",
+       width: "160px",
+     },
+     {
+       key: "role",
+-      header: "Role",
++      header: "Rôle",
+       render: (user) => (
+         <StatusBadge variant={roleStatusVariant(user.role)}>{user.role}</StatusBadge>
+       ),
+       width: "140px",
+     },
++    {
++      key: "status",
++      header: "Statut",
++      render: (user) => (
++        <StatusBadge variant={statusVariant(user)}>{user.isActive === false ? "Inactif" : "Actif"}</StatusBadge>
++      ),
++      width: "120px",
++    },
+     {
+       key: "rh",
+       header: "RH",
+@@ -280,6 +301,27 @@
+       ),
+       width: "160px",
+     },
++    {
++      key: "updatedAt",
++      header: "Dernière modif",
++      render: (user) => formatDateTimeLabel(user.updatedAt),
++      width: "150px",
++    },
++    {
++      key: "actions",
++      header: "Actions",
++      render: (user) => (
++        <div className="users-table-actions">
++          <button type="button" className="users-table-icon-button" title="Sélectionner pour édition" onClick={(event) => { event.stopPropagation(); setSelectedUserId(user.id); }}>
++            <Pencil size={15} />
++          </button>
++          <button type="button" className="users-table-icon-button" title="Actions utilisateur" onClick={(event) => { event.stopPropagation(); setSelectedUserId(user.id); }}>
++            <MoreVertical size={15} />
++          </button>
++        </div>
++      ),
++      width: "110px",
++    },
+   ]), []);
+ 
+   useEffect(() => {
+@@ -293,6 +335,13 @@
+     dispatchUsersSelection(selectedUser);
+   }, [selectedUser]);
++
++  function resetFilters() {
++    setSearchInput("");
++    setSearch("");
++    setRole("");
++    setPage(1);
++  }
+ 
+   return (
+     <section className="users-section">
+       <div className="users-card">
+@@ -303,6 +353,6 @@
+           <h2 className="users-card__title">Liste utilisateurs</h2>
+           <p className="users-card__description">
+-            Recherche simple, filtre role et pagination minimale sur les comptes actifs de la societe.
++            Recherche simple, filtre rôle et pagination minimale sur les comptes actifs de la société.
+           </p>
+         </div>
+ 
+@@ -311,23 +361,29 @@
+-          summary={`Filtres actifs : ${search ? `recherche "${search}"` : "aucune recherche"}${role ? `, role ${role}` : ", tous les roles"}`}
++          summary={`Filtres actifs : ${search ? `recherche "${search}"` : "aucune recherche"}${role ? `, rôle ${role}` : ", tous les rôles"}`}
++          actions={(
++            <ActionButton size="sm" leadingIcon={<RotateCcw size={14} />} onClick={resetFilters} disabled={loading && !search && !role}>
++              Réinitialiser
++            </ActionButton>
++          )}
+         >
+           <label className="users-field">
+-            <span className="users-field__label">Recherche</span>
++            <span className="users-field__label users-field__label--icon"><Search size={14} /> Recherche</span>
+             <input
+               type="text"
+               value={searchInput}
+               onChange={(event) => setSearchInput(event.target.value)}
+-              placeholder="Nom, email, initiales ou telephone"
++              placeholder="Nom, email, initiales ou téléphone"
+             />
+           </label>
+ 
+           <label className="users-field">
+-            <span className="users-field__label">Role</span>
++            <span className="users-field__label">Rôle</span>
+             <select value={role} onChange={(event) => setRole(event.target.value)}>
+               {ROLE_FILTER_OPTIONS.map((value) => (
+                 <option key={value || "ALL"} value={value}>
+-                  {value || "Tous les roles"}
++                  {value || "Tous les rôles"}
+                 </option>
+               ))}
+             </select>
+           </label>
++          <p className="users-filter-note">Les filtres base, statut et stagiaire restent visuellement prévus par la maquette mais ne sont pas étendus côté API dans cette session.</p>
+         </FilterBar>
+@@ -336,7 +393,7 @@
+           emptyTitle="Aucun utilisateur trouve"
+-          emptyMessage="Aucun utilisateur ne correspond a ces criteres."
++          emptyMessage="Aucun utilisateur ne correspond à ces critères."
+           selectedRowKey={selectedUserId || null}
+           onRowClick={(user) => setSelectedUserId(user.id)}
+-          minWidth={980}
+-          caption="Liste des comptes actifs de la societe courante"
++          minWidth={1320}
++          caption="Liste des comptes actifs de la société courante"
+         />
+diff --git a/app/users/users-side-panel-client.tsx b/app/users/users-side-panel-client.tsx
+index 14343fb..b24ui06 100644
+--- a/app/users/users-side-panel-client.tsx
++++ b/app/users/users-side-panel-client.tsx
+@@ -1,6 +1,7 @@
+ "use client";
+ 
+ import { useEffect, useMemo, useState } from "react";
++import { CalendarX, KeyRound, ShieldCheck, Trash2 } from "lucide-react";
+ 
+ import { ActionButton, ErrorMessage, StatusBadge } from "@/app/ui";
+ 
+@@ -80,15 +81,15 @@
+   return (
+     <aside className="users-side-panel">
+       <div className="users-side-panel__head">
+-        <h2 className="users-side-panel__title">Panneau utilisateur</h2>
+-        <p className="users-side-panel__description">Selectionnez une ligne du tableau pour afficher le detail RH.</p>
++        <h2 className="users-side-panel__title">Fiche utilisateur</h2>
++        <p className="users-side-panel__description">Sélectionnez une ligne du tableau pour afficher le détail RH visible.</p>
+       </div>
+ 
+       {!selectedUser ? (
+-        <div className="users-selection-card">Aucun utilisateur selectionne.</div>
++        <div className="users-selection-card">Aucun utilisateur sélectionné.</div>
+       ) : (
+         <>
+-          <section className="users-side-card">
++          <section className="users-side-card users-side-card--identity">
+             <div className="users-side-card__identity">
+               <div className="users-side-card__avatar" aria-hidden="true">
+                 {(selectedUser.initials || selectedUser.name.slice(0, 2)).toUpperCase()}
+@@ -106,13 +107,21 @@
+               </StatusBadge>
+             </div>
+ 
+-            <dl className="users-side-card__meta">
+-              <div><dt>Base</dt><dd>{depotLabel(selectedUser.depot)}</dd></div>
+-              <div><dt>Telephone</dt><dd>{selectedUser.phone || "Non renseigne"}</dd></div>
+-              <div><dt>Horaires</dt><dd>{dailyScheduleLabel(selectedUser)}</dd></div>
+-            </dl>
++            <nav className="users-side-tabs" aria-label="Onglets fiche utilisateur">
++              <span>Identité</span>
++              <span>Rôle & permissions</span>
++              <span>RH</span>
++              <strong>Absences</strong>
++              <span>Sécurité</span>
++            </nav>
++
++            <dl className="users-side-card__meta users-summary-grid">
++              <div><dt>Base</dt><dd>{depotLabel(selectedUser.depot)}</dd></div>
++              <div><dt>Téléphone</dt><dd>{selectedUser.phone || "Non renseigné"}</dd></div>
++              <div><dt>Horaires</dt><dd>{dailyScheduleLabel(selectedUser)}</dd></div>
++            </dl>
+           </section>
+ 
+           <section className="users-side-card">
+-            <h3>Absences</h3>
++            <h3 className="users-side-section-title"><CalendarX size={18} /> Absences</h3>
+             <p className="users-table-cell-subtle">{absenceSummary}</p>
+@@ -139,10 +156,17 @@
+           </section>
+ 
+           <section className="users-side-card users-side-card--danger">
+-            <h3>Zone de securite</h3>
++            <h3 className="users-side-section-title"><ShieldCheck size={18} /> Zone de sécurité</h3>
++            <p className="users-table-cell-subtle">
++              Actions sensibles conservées dans la fiche utilisateur, sans ajout de logique RH avancée.
++            </p>
+             <div className="users-side-panel__actions">
+-              <ActionButton size="sm" variant="ghost">Reinitialiser</ActionButton>
+-              <ActionButton size="sm" variant="danger">Archiver</ActionButton>
++              <ActionButton size="sm" variant="ghost" leadingIcon={<KeyRound size={15} />}>
++                Réinitialiser
++              </ActionButton>
++              <ActionButton size="sm" variant="danger" leadingIcon={<Trash2 size={15} />}>
++                Archiver
++              </ActionButton>
+             </div>
+           </section>
+         </>
+diff --git a/app/globals.css b/app/globals.css
+index a73362e..b24ui06 100644
+--- a/app/globals.css
++++ b/app/globals.css
+@@ -701,6 +701,104 @@
+ .users-side-card--danger {
+-  border-color: #fecaca;
++  border-color: var(--ui-danger-border);
++  background: var(--ui-danger-bg);
++  color: var(--ui-danger-text);
+ }
++
++.users-side-card--identity {
++  background: linear-gradient(180deg, color-mix(in srgb, var(--ui-surface-soft), var(--ui-primary) 7%), var(--ui-surface));
++}
++
++.users-side-tabs {
++  display: flex;
++  gap: 8px;
++  flex-wrap: wrap;
++  border-bottom: 1px solid var(--ui-border);
++  padding-bottom: 8px;
++}
++
++.users-side-tabs span,
++.users-side-tabs strong {
++  display: inline-flex;
++  align-items: center;
++  min-height: 28px;
++  padding: 0 9px;
++  border-radius: 999px;
++  font-size: 12px;
++  font-weight: 700;
++  color: var(--ui-text-muted);
++}
++
++.users-side-tabs strong {
++  background: var(--ui-primary);
++  color: var(--ui-primary-contrast);
++}
++
++.users-summary-grid {
++  grid-template-columns: 1fr;
++}
++
++.users-side-section-title {
++  display: inline-flex;
++  align-items: center;
++  gap: 8px;
++}
++
++.users-table-identity {
++  display: flex;
++  align-items: center;
++  gap: 10px;
++  min-width: 0;
++}
++
++.users-table-identity > span:last-child {
++  display: grid;
++  min-width: 0;
++}
++
++.users-table-avatar {
++  width: 34px;
++  height: 34px;
++  border-radius: 999px;
++  border: 1px solid #bfdbfe;
++  background: #e9f2ff;
++  color: #1f6fe5;
++  display: inline-grid;
++  place-items: center;
++  flex: 0 0 auto;
++  font-size: 12px;
++  font-weight: 800;
++}
++
++.users-table-actions {
++  display: inline-flex;
++  align-items: center;
++  gap: 6px;
++}
++
++.users-table-icon-button {
++  width: 32px;
++  height: 32px;
++  padding: 0;
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  border-radius: 10px;
++  color: var(--ui-text-muted);
++}
++
++.users-field__label--icon {
++  display: inline-flex;
++  align-items: center;
++  gap: 6px;
++}
++
++.users-filter-note {
++  margin: 0;
++  align-self: end;
++  color: var(--ui-text-muted);
++  font-size: 12px;
++  line-height: 1.35;
++}
+ 
+ .users-advanced {
+   border: 1px solid var(--ui-border);

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { CalendarX, KeyRound, ShieldCheck, Trash2 } from "lucide-react";
 
 import { ActionButton, ErrorMessage, StatusBadge } from "@/app/ui";
 
@@ -92,15 +93,15 @@ export default function UsersSidePanelClient() {
   return (
     <aside className="users-side-panel">
       <div className="users-side-panel__head">
-        <h2 className="users-side-panel__title">Panneau utilisateur</h2>
-        <p className="users-side-panel__description">Selectionnez une ligne du tableau pour afficher le detail RH.</p>
+        <h2 className="users-side-panel__title">Fiche utilisateur</h2>
+        <p className="users-side-panel__description">Sélectionnez une ligne du tableau pour afficher le détail RH visible.</p>
       </div>
 
       {!selectedUser ? (
-        <div className="users-selection-card">Aucun utilisateur selectionne.</div>
+        <div className="users-selection-card">Aucun utilisateur sélectionné.</div>
       ) : (
         <>
-          <section className="users-side-card">
+          <section className="users-side-card users-side-card--identity">
             <div className="users-side-card__identity">
               <div className="users-side-card__avatar" aria-hidden="true">
                 {(selectedUser.initials || selectedUser.name.slice(0, 2)).toUpperCase()}
@@ -118,15 +119,23 @@ export default function UsersSidePanelClient() {
               </StatusBadge>
             </div>
 
-            <dl className="users-side-card__meta">
+            <nav className="users-side-tabs" aria-label="Onglets fiche utilisateur">
+              <span>Identité</span>
+              <span>Rôle & permissions</span>
+              <span>RH</span>
+              <strong>Absences</strong>
+              <span>Sécurité</span>
+            </nav>
+
+            <dl className="users-side-card__meta users-summary-grid">
               <div><dt>Base</dt><dd>{depotLabel(selectedUser.depot)}</dd></div>
-              <div><dt>Telephone</dt><dd>{selectedUser.phone || "Non renseigne"}</dd></div>
+              <div><dt>Téléphone</dt><dd>{selectedUser.phone || "Non renseigné"}</dd></div>
               <div><dt>Horaires</dt><dd>{dailyScheduleLabel(selectedUser)}</dd></div>
             </dl>
           </section>
 
           <section className="users-side-card">
-            <h3>Absences</h3>
+            <h3 className="users-side-section-title"><CalendarX size={18} /> Absences</h3>
             <p className="users-table-cell-subtle">{absenceSummary}</p>
 
             {loadingAbsences ? <p className="users-table-cell-subtle">Chargement des absences...</p> : null}
@@ -149,10 +158,17 @@ export default function UsersSidePanelClient() {
           </section>
 
           <section className="users-side-card users-side-card--danger">
-            <h3>Zone de securite</h3>
+            <h3 className="users-side-section-title"><ShieldCheck size={18} /> Zone de sécurité</h3>
+            <p className="users-table-cell-subtle">
+              Actions sensibles conservées dans la fiche utilisateur, sans ajout de logique RH avancée.
+            </p>
             <div className="users-side-panel__actions">
-              <ActionButton size="sm" variant="ghost">Reinitialiser</ActionButton>
-              <ActionButton size="sm" variant="danger">Archiver</ActionButton>
+              <ActionButton size="sm" variant="ghost" leadingIcon={<KeyRound size={15} />}>
+                Réinitialiser
+              </ActionButton>
+              <ActionButton size="sm" variant="danger" leadingIcon={<Trash2 size={15} />}>
+                Archiver
+              </ActionButton>
             </div>
           </section>
         </>

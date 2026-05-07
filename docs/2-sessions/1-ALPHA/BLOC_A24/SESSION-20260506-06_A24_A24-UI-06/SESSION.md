@@ -1,35 +1,30 @@
-﻿# SESSION
+# SESSION-20260506-06_A24_A24-UI-06 — Utilisateurs / RH visuel
 
-## ID SESSION
+Stage : 1-ALPHA  
+Bloc : A24 — Réalignement UI/UX global sur MAQUETTE  
+Type : CORRECTION+COMPLÉTION  
+Intitulé : A24-UI-06 — Utilisateurs / RH visuel
 
-SESSION-20260506-06_A24_A24-UI-06
+## Objectif
 
-## Date
+Réaligner visuellement la page `/users` sur la référence A24 `Utilisateurs-RH_V1.png`, sans ajouter de RH avancée, sans modifier Prisma, sans modifier les routes API, sans modifier le RBAC, et sans toucher au planning/autoschedule/matching.
 
-06/05/2026
+## Base de production
 
-## Contexte
+Production assistée réalisée avec lecture GitHub, sans Codex et sans application locale du patch dans le dépôt réel.
 
-Projet : Investissement  
-Sous-projet : Ambulance Manager  
-Maturite : 1-ALPHA  
-Bloc : A24  
-Type : CORRECTION+COMPLETION  
-Intitule : Utilisateurs RH visuel
+GitHub contient au moins la documentation de la session précédente `A24-UI-05`, mais l'égalité exacte entre `main` GitHub et l'état local validé après A24-UI-05 reste à vérifier localement.
 
-## Objectif de la session
+INFORMATION NON FOURNIE — À CONFIRMER
 
-INFORMATION NON FOURNIE - A CONFIRMER
+## Livrable principal
 
-## Perimetre exact traite
+PATCH CODE : `PATCH/PATCH__SESSION-20260506-06_A24_A24-UI-06.diff`
 
-INFORMATION NON FOURNIE - A CONFIRMER
+## Hors périmètre respecté
 
-## Resultat synthetique de session
-
-INFORMATION NON FOURNIE - A CONFIRMER
-
-## Dossiers lies
-
-- Session : docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06
-- PATCH   : docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/PATCH
+- Pas de RH avancée.
+- Pas de rôle PSC1 réel.
+- Pas de paie, primes ou saisie réelle des heures travaillées.
+- Pas de nouvelle logique d'absence.
+- Pas de modification API, Prisma, migration, RBAC, planning, autoschedule ou matching.
