@@ -1,24 +1,22 @@
-﻿# README_PATCH
+# README_PATCH — SESSION-20260506-07_A24_A24-UI-07
 
-## Session liee
-SESSION-20260506-07_A24_A24-UI-07
+## Patch code principal
+`PATCH__SESSION-20260506-07_A24_A24-UI-07.diff`
 
-## Type
-CORRECTION+COMPLETION
+Contenu :
+- `app/layout.tsx`
+- `app/a24-complementary-pages.css`
 
-## Dossier PATCH
-docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-07_A24_A24-UI-07/PATCH
+## Patch documentaire
+`PATCH__SESSION-20260506-07_A24_A24-UI-07_DOCS.diff`
 
-## Patch officiel attendu
-PATCH__SESSION-20260506-07_A24_A24-UI-07.diff
+Contenu :
+- `SESSION.md`
+- `NOTES.md`
+- `EVIDENCES.md`
+- `RESULTATS.md`
+- `FIN_SESSION.md`
+- `PATCH/README_PATCH.md`
 
-## Commandes d'application
-
-`ash
-git apply --check "docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-07_A24_A24-UI-07/PATCH/PATCH__SESSION-20260506-07_A24_A24-UI-07.diff"
-git apply         "docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-07_A24_A24-UI-07/PATCH/PATCH__SESSION-20260506-07_A24_A24-UI-07.diff"
-`
-
-## Statut
-- Dossier patch initialise.
-- Patch officiel a produire dans cette session si du code est modifie.
+## Correctifs
+Aucun correctif `_FIX-XX.diff` produit.

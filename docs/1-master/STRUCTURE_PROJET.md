@@ -1845,7 +1845,6 @@ C:.
 |   |   |   |           00003750.sst
 |   |   |   |           00003751.sst
 |   |   |   |           00003752.meta
-|   |   |   |           00003753.del
 |   |   |   |           00003755.sst
 |   |   |   |           00003756.sst
 |   |   |   |           00003757.sst
@@ -1854,11 +1853,9 @@ C:.
 |   |   |   |           00003761.meta
 |   |   |   |           00003762.meta
 |   |   |   |           00003763.meta
-|   |   |   |           00003764.del
 |   |   |   |           00003765.sst
 |   |   |   |           00003766.sst
 |   |   |   |           00003767.meta
-|   |   |   |           00003768.del
 |   |   |   |           00003769.sst
 |   |   |   |           00003770.sst
 |   |   |   |           00003771.sst
@@ -1869,6 +1866,48 @@ C:.
 |   |   |   |           00003776.meta
 |   |   |   |           00003777.meta
 |   |   |   |           00003778.meta
+|   |   |   |           00003779.sst
+|   |   |   |           00003780.sst
+|   |   |   |           00003781.sst
+|   |   |   |           00003782.sst
+|   |   |   |           00003783.sst
+|   |   |   |           00003784.meta
+|   |   |   |           00003785.meta
+|   |   |   |           00003786.meta
+|   |   |   |           00003787.meta
+|   |   |   |           00003788.meta
+|   |   |   |           00003789.sst
+|   |   |   |           00003790.sst
+|   |   |   |           00003791.sst
+|   |   |   |           00003792.sst
+|   |   |   |           00003793.sst
+|   |   |   |           00003794.meta
+|   |   |   |           00003795.meta
+|   |   |   |           00003796.meta
+|   |   |   |           00003797.meta
+|   |   |   |           00003798.meta
+|   |   |   |           00003799.sst
+|   |   |   |           00003800.sst
+|   |   |   |           00003801.sst
+|   |   |   |           00003802.meta
+|   |   |   |           00003803.meta
+|   |   |   |           00003804.meta
+|   |   |   |           00003805.sst
+|   |   |   |           00003806.sst
+|   |   |   |           00003807.sst
+|   |   |   |           00003808.sst
+|   |   |   |           00003809.sst
+|   |   |   |           00003810.meta
+|   |   |   |           00003811.meta
+|   |   |   |           00003812.meta
+|   |   |   |           00003813.meta
+|   |   |   |           00003814.meta
+|   |   |   |           00003815.sst
+|   |   |   |           00003816.sst
+|   |   |   |           00003817.sst
+|   |   |   |           00003818.meta
+|   |   |   |           00003819.meta
+|   |   |   |           00003820.meta
 |   |   |   |           CURRENT
 |   |   |   |           LOG
 |   |   |   |           
@@ -2555,10 +2594,14 @@ C:.
 |   |   |   |           node_modules_e2d1c5df._.js.map
 |   |   |   |           node_modules_ee11acdc._.js
 |   |   |   |           node_modules_ee11acdc._.js.map
+|   |   |   |           node_modules_f1e8c728._.js
+|   |   |   |           node_modules_f1e8c728._.js.map
 |   |   |   |           node_modules_jose_dist_node_cjs_6d3869c7._.js
 |   |   |   |           node_modules_jose_dist_node_cjs_6d3869c7._.js.map
 |   |   |   |           node_modules_lucide-react_dist_esm_icons_10b941fe._.js
 |   |   |   |           node_modules_lucide-react_dist_esm_icons_10b941fe._.js.map
+|   |   |   |           node_modules_lucide-react_dist_esm_icons_a44323c9._.js
+|   |   |   |           node_modules_lucide-react_dist_esm_icons_a44323c9._.js.map
 |   |   |   |           node_modules_lucide-react_dist_esm_icons_d5f40330._.js
 |   |   |   |           node_modules_lucide-react_dist_esm_icons_d5f40330._.js.map
 |   |   |   |           node_modules_next-auth_0305d6f4._.js
@@ -2717,6 +2760,7 @@ C:.
 |   |   |   |   |   app_a24-vehicles-templates_css_bad6b30c._.single.css.map
 |   |   |   |   |   app_audit_page_tsx_1b0ba5a8._.js
 |   |   |   |   |   app_audit_page_tsx_600cde32._.js
+|   |   |   |   |   app_audit_page_tsx_c7e9f6a5._.js
 |   |   |   |   |   app_b90b8213._.js
 |   |   |   |   |   app_b90b8213._.js.map
 |   |   |   |   |   app_company_page_tsx_1b0ba5a8._.js
@@ -2729,6 +2773,7 @@ C:.
 |   |   |   |   |   app_dashboard_page_tsx_c7e9f6a5._.js
 |   |   |   |   |   app_depots_page_tsx_1b0ba5a8._.js
 |   |   |   |   |   app_depots_page_tsx_600cde32._.js
+|   |   |   |   |   app_depots_page_tsx_c7e9f6a5._.js
 |   |   |   |   |   app_favicon_ico_mjs_745fddaf._.js
 |   |   |   |   |   app_globals_71f961d1.css
 |   |   |   |   |   app_globals_71f961d1.css.map
@@ -2758,6 +2803,8 @@ C:.
 |   |   |   |   |   node_modules_b198b86e._.js.map
 |   |   |   |   |   node_modules_d33b72d3._.js
 |   |   |   |   |   node_modules_d33b72d3._.js.map
+|   |   |   |   |   node_modules_lucide-react_dist_esm_icons_6965fdac._.js
+|   |   |   |   |   node_modules_lucide-react_dist_esm_icons_6965fdac._.js.map
 |   |   |   |   |   node_modules_lucide-react_dist_esm_icons_96dcc2c5._.js
 |   |   |   |   |   node_modules_lucide-react_dist_esm_icons_96dcc2c5._.js.map
 |   |   |   |   |   node_modules_next_dist_be32b49c._.js
@@ -4274,6 +4321,11 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
+|   |   +---BIeihip-CV3PDYFATTC9D
+|   |   |       _buildManifest.js
+|   |   |       _clientMiddlewareManifest.json
+|   |   |       _ssgManifest.js
+|   |   |       
 |   |   +---chunks
 |   |   |       22ca7dbefe10911e.js
 |   |   |       2abddf04332fa424.js
@@ -4291,7 +4343,7 @@ C:.
 |   |   |       a6dad97d9634a72d.js.map
 |   |   |       af7027598a07baa5.js
 |   |   |       b79e0f85eca6f17e.js
-|   |   |       ccd44731c3772a77.css
+|   |   |       c6d5480777f5758c.css
 |   |   |       d77e2dc1a543f2f6.js
 |   |   |       dae53fb98ff73b10.js
 |   |   |       f83f209ad42b85e9.js
@@ -4299,19 +4351,15 @@ C:.
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-7673dbeff453a2b3.js
 |   |   |       
-|   |   +---media
-|   |   |       favicon.0b3bf435.ico
-|   |   |       
-|   |   \---q6y8VN3mmGwV9bNp4gNgk
-|   |           _buildManifest.js
-|   |           _clientMiddlewareManifest.json
-|   |           _ssgManifest.js
+|   |   \---media
+|   |           favicon.0b3bf435.ico
 |   |           
 |   \---types
 |           routes.d.ts
 |           validator.ts
 |           
 +---app
+|   |   a24-complementary-pages.css
 |   |   a24-vehicles-templates.css
 |   |   app-shell.tsx
 |   |   favicon.ico
@@ -6226,6 +6274,7 @@ C:.
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
+|   |   |   |   |           PATCH__SESSION-20260506-07_A24_A24-UI-07.diff
 |   |   |   |   |           README_PATCH.md
 |   |   |   |   |           
 |   |   |   |   +---SESSION-20260506-08_A24_A24-UI-08
