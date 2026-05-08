@@ -100,9 +100,9 @@ function initialsLabel(user: UserListRow) {
 }
 
 function formatDateTimeLabel(value?: string | null) {
-  if (!value) return "Non renseignée";
+  if (!value) return "Non renseignee";
   const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "Non renseignée";
+  if (Number.isNaN(date.getTime())) return "Non renseignee";
   return date.toLocaleDateString("fr-FR", {
     day: "2-digit",
     month: "short",
@@ -114,6 +114,9 @@ export default function UsersListClient() {
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
   const [role, setRole] = useState("");
+  const [depot, setDepot] = useState("");
+  const [status, setStatus] = useState("");
+  const [trainee, setTrainee] = useState("");
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -140,7 +143,7 @@ export default function UsersListClient() {
 
   useEffect(() => {
     setPage(1);
-  }, [role]);
+  }, [depot, role, status, trainee]);
 
   useEffect(() => {
     function handleUsersRefresh() {
@@ -232,21 +235,54 @@ export default function UsersListClient() {
     };
   }, [page, reloadKey, role, search]);
 
+  const depotFilterOptions = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const user of rows) {
+      if (!user.depotId || !user.depot) continue;
+      map.set(user.depotId, user.depot.name);
+    }
+    return [...map.entries()]
+      .sort((a, b) => a[1].localeCompare(b[1], "fr"))
+      .map(([value, label]) => ({ value, label }));
+  }, [rows]);
+
+  const filteredRows = useMemo(() => (
+    rows.filter((user) => {
+      if (depot && user.depotId !== depot) return false;
+      if (status === "ACTIVE" && user.isActive === false) return false;
+      if (status === "INACTIVE" && user.isActive !== false) return false;
+      if (trainee === "YES" && user.isTrainee !== true) return false;
+      if (trainee === "NO" && user.isTrainee === true) return false;
+      return true;
+    })
+  ), [depot, rows, status, trainee]);
+
+  useEffect(() => {
+    if (filteredRows.length === 0) {
+      if (selectedUserId) setSelectedUserId("");
+      return;
+    }
+
+    if (!filteredRows.some((user) => user.id === selectedUserId)) {
+      setSelectedUserId(filteredRows[0].id);
+    }
+  }, [filteredRows, selectedUserId]);
+
   const selectedUser = useMemo(
-    () => rows.find((user) => user.id === selectedUserId) ?? null,
-    [rows, selectedUserId],
+    () => filteredRows.find((user) => user.id === selectedUserId) ?? null,
+    [filteredRows, selectedUserId],
   );
 
   const columns = useMemo<DataTableColumn<UserListRow>[]>(() => ([
     {
       key: "name",
-      header: "Identité",
+      header: "Identite",
       render: (user) => (
         <div className="users-table-identity">
           <span className="users-table-avatar" aria-hidden="true">{initialsLabel(user)}</span>
           <span>
             <strong>{user.name}</strong>
-            <span className="users-table-cell-subtle">{user.email || "Email non renseigné"}</span>
+            <span className="users-table-cell-subtle">{user.email || "Email non renseigne"}</span>
           </span>
         </div>
       ),
@@ -266,13 +302,13 @@ export default function UsersListClient() {
     },
     {
       key: "phone",
-      header: "Téléphone",
+      header: "Telephone",
       render: (user) => user.phone || "-",
       width: "160px",
     },
     {
       key: "role",
-      header: "Rôle",
+      header: "Role",
       render: (user) => (
         <StatusBadge variant={roleStatusVariant(user.role)}>{user.role}</StatusBadge>
       ),
@@ -290,7 +326,7 @@ export default function UsersListClient() {
       key: "rh",
       header: "RH",
       render: (user) => (
-        <div className="users-form">
+        <div className="users-rh-cell">
           <StatusBadge variant={user.isTrainee ? "warning" : "success"}>
             {user.isTrainee ? "Stagiaire" : "Titulaire"}
           </StatusBadge>
@@ -309,7 +345,7 @@ export default function UsersListClient() {
     },
     {
       key: "updatedAt",
-      header: "Dernière modif",
+      header: "Derniere modif",
       render: (user) => formatDateTimeLabel(user.updatedAt),
       width: "150px",
     },
@@ -318,7 +354,7 @@ export default function UsersListClient() {
       header: "Actions",
       render: (user) => (
         <div className="users-table-actions">
-          <button type="button" className="users-table-icon-button" title="Sélectionner pour édition" onClick={(event) => { event.stopPropagation(); setSelectedUserId(user.id); }}>
+          <button type="button" className="users-table-icon-button" title="Selectionner pour edition" onClick={(event) => { event.stopPropagation(); setSelectedUserId(user.id); }}>
             <Pencil size={15} />
           </button>
           <button type="button" className="users-table-icon-button" title="Actions utilisateur" onClick={(event) => { event.stopPropagation(); setSelectedUserId(user.id); }}>
@@ -338,8 +374,24 @@ export default function UsersListClient() {
     setSearchInput("");
     setSearch("");
     setRole("");
+    setDepot("");
+    setStatus("");
+    setTrainee("");
     setPage(1);
   }
+
+  const activeFilterParts: string[] = [];
+  if (search) activeFilterParts.push(`recherche "${search}"`);
+  if (role) activeFilterParts.push(`role ${role}`);
+  if (depot) {
+    const depotLabelMatch = depotFilterOptions.find((option) => option.value === depot)?.label ?? depot;
+    activeFilterParts.push(`base ${depotLabelMatch}`);
+  }
+  if (status) activeFilterParts.push(status === "ACTIVE" ? "statut actif" : "statut inactif");
+  if (trainee) activeFilterParts.push(trainee === "YES" ? "stagiaires" : "hors stagiaires");
+
+  const hasFilter = Boolean(search || role || depot || status || trainee);
+  const summaryLabel = activeFilterParts.length > 0 ? activeFilterParts.join(", ") : "aucun filtre";
 
   return (
     <section className="users-section">
@@ -347,15 +399,15 @@ export default function UsersListClient() {
         <div className="users-card__head">
           <h2 className="users-card__title">Liste utilisateurs</h2>
           <p className="users-card__description">
-            Recherche simple, filtre rôle et pagination minimale sur les comptes actifs de la société.
+            Barre de filtres RH lisible, tableau structure et panneau droit relies a la selection.
           </p>
         </div>
 
         <FilterBar
-          summary={`Filtres actifs : ${search ? `recherche "${search}"` : "aucune recherche"}${role ? `, rôle ${role}` : ", tous les rôles"}`}
+          summary={`Filtres actifs : ${summaryLabel}`}
           actions={(
-            <ActionButton size="sm" leadingIcon={<RotateCcw size={14} />} onClick={resetFilters} disabled={loading && !search && !role}>
-              Réinitialiser
+            <ActionButton size="sm" leadingIcon={<RotateCcw size={14} />} onClick={resetFilters} disabled={!hasFilter || loading}>
+              Reinitialiser
             </ActionButton>
           )}
         >
@@ -365,43 +417,72 @@ export default function UsersListClient() {
               type="text"
               value={searchInput}
               onChange={(event) => setSearchInput(event.target.value)}
-              placeholder="Nom, email, initiales ou téléphone"
+              placeholder="Nom, email, initiales ou telephone"
             />
           </label>
 
           <label className="users-field">
-            <span className="users-field__label">Rôle</span>
+            <span className="users-field__label">Role</span>
             <select value={role} onChange={(event) => setRole(event.target.value)}>
               {ROLE_FILTER_OPTIONS.map((value) => (
                 <option key={value || "ALL"} value={value}>
-                  {value || "Tous les rôles"}
+                  {value || "Tous les roles"}
                 </option>
               ))}
             </select>
           </label>
-          <p className="users-filter-note">Les filtres base, statut et stagiaire restent visuellement prévus par la maquette mais ne sont pas étendus côté API dans cette session.</p>
+
+          <label className="users-field">
+            <span className="users-field__label">Base</span>
+            <select value={depot} onChange={(event) => setDepot(event.target.value)}>
+              <option value="">Toutes les bases</option>
+              {depotFilterOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="users-field">
+            <span className="users-field__label">Statut</span>
+            <select value={status} onChange={(event) => setStatus(event.target.value)}>
+              <option value="">Tous</option>
+              <option value="ACTIVE">Actif</option>
+              <option value="INACTIVE">Inactif</option>
+            </select>
+          </label>
+
+          <label className="users-field">
+            <span className="users-field__label">Stagiaire</span>
+            <select value={trainee} onChange={(event) => setTrainee(event.target.value)}>
+              <option value="">Tous</option>
+              <option value="YES">Oui</option>
+              <option value="NO">Non</option>
+            </select>
+          </label>
         </FilterBar>
 
         <DataTable
           columns={columns}
-          rows={rows}
+          rows={filteredRows}
           rowKey={(user) => user.id}
           loading={loading}
           error={error}
           loadingLabel="Chargement de la liste utilisateurs..."
           emptyTitle="Aucun utilisateur trouve"
-          emptyMessage="Aucun utilisateur ne correspond à ces critères."
+          emptyMessage="Aucun utilisateur ne correspond aux filtres actifs."
           selectedRowKey={selectedUserId || null}
           onRowClick={(user) => setSelectedUserId(user.id)}
           minWidth={1320}
-          caption="Liste des comptes actifs de la société courante"
+          caption="Liste utilisateurs avec filtres role, base, statut et stagiaire"
         />
 
         {!loading && !error ? (
           <>
             <div className="users-pagination">
               <div className="users-table-cell-subtle">
-                {pagination.total} utilisateur{pagination.total > 1 ? "s" : ""} - page {pagination.page} / {pagination.totalPages}
+                {filteredRows.length} affiche{filteredRows.length > 1 ? "s" : ""} sur {pagination.total} utilisateur{pagination.total > 1 ? "s" : ""} - page {pagination.page} / {pagination.totalPages}
               </div>
 
               <div className="users-actions">

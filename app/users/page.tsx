@@ -51,18 +51,18 @@ export default async function UsersPage() {
   const archivedUsers = usersStats.filter((item) => !item.isActive).reduce((sum, item) => sum + item._count._all, 0);
 
   return (
-    <div className="page-wrap">
+    <div className="page-wrap users-page">
       <PageHeader
         title="Utilisateurs / RH"
-        description="Gestion des salariés, rôles, permissions, rattachements, horaires et absences."
+        description="Gestion des salaries, roles, permissions, rattachements, horaires et absences."
         actions={(
           <ActionButton variant="primary" leadingIcon={<Plus size={16} />}>
-            Créer un utilisateur
+            Creer un utilisateur
           </ActionButton>
         )}
       />
 
-      <section className="users-kpi-grid">
+      <section className="users-kpi-grid users-kpi-grid--a24">
         <StatCard
           title="Utilisateurs actifs"
           value={activeUsers}
@@ -85,7 +85,7 @@ export default async function UsersPage() {
           icon={<CalendarX size={18} />}
         />
         <StatCard
-          title="Comptes archivés"
+          title="Comptes archives"
           value={archivedUsers}
           hint="Inactifs"
           tone="neutral"
@@ -98,8 +98,8 @@ export default async function UsersPage() {
         <UsersSidePanelClient />
       </section>
 
-      <details className="users-advanced">
-        <summary>Opérations RH détaillées : création, édition, absences, rattachement, sécurité</summary>
+      <details className="users-advanced" open>
+        <summary>Operations RH detaillees : creation, edition, absences, rattachement, securite</summary>
         <div className="users-advanced__content">
           <UserCreationClient canGovernCompanyRules={canGovernCompanyRules} availableDepots={depots} />
           <UserAbsenceClient />

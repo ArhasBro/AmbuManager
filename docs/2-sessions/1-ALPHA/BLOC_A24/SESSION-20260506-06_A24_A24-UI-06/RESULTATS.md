@@ -1,38 +1,33 @@
-# RESULTATS — SESSION-20260506-06_A24_A24-UI-06
+# RESULTATS - SESSION-20260506-06_A24_A24-UI-06
 
-## Résultat proposé
+## Resultat obtenu
 
-PATCH CODE produit.
+La page Users/RH est realignee visuellement sur le langage A24 dans le perimetre demande, sans extension fonctionnelle hors scope.
 
-## Fichiers modifiés par le patch
+## Changements realises
 
-- `app/users/page.tsx`
-- `app/users/users-client-shared.ts`
-- `app/users/users-list-client.tsx`
-- `app/users/users-side-panel-client.tsx`
-- `app/globals.css`
+1. Structure et hierarchie visuelle Users
+- consolidation de la page `/users` avec section KPI plus proche A24 ;
+- ouverture par defaut de la zone d'operations RH pour rendre creation/edition/absences/securite immediatement visibles.
 
-## Corrections visuelles proposées
+2. Liste utilisateurs et filtres
+- ajout des filtres visuels `base`, `statut`, `stagiaire` (en plus de `recherche`, `role`) ;
+- filtrage local d'affichage pour rester sans refonte API ;
+- amelioration lisibilite tableau (cellules RH, actions, caption, resume pagination).
 
-- Ajout d'icônes Lucide génériques cohérentes avec le mapping A24.
-- Accentuation et correction de libellés visibles.
-- KPI Users/RH renforcés avec icônes.
-- Tableau utilisateurs rapproché de la maquette : identité, statut, dernière modification, actions.
-- Panneau droit rapproché de la fiche utilisateur maquette : avatar, badges, onglets visuels, absences, zone sécurité.
-- Styles CSS ciblés Users/RH pour la lisibilité, le mode clair et la déclinaison sombre via tokens existants.
+3. Fiche utilisateur (panneau droit)
+- badges role/statut/stagiaire explicites ;
+- onglets visuels alignes sur le principe de drawer A24 ;
+- section absences conservee ;
+- zone securite conservee avec actions sensibles distinctes.
 
-## Fonctionnel conservé
+4. Style A24 dedie Users/RH
+- nouveau fichier `app/a24-users-rh.css` ;
+- import global ajoute dans `app/layout.tsx` ;
+- ajustements light/dark sobres, responsive, cards/tables/filtres/drawer.
 
-- Création utilisateur conservée.
-- Édition utilisateur conservée.
-- Absences conservées.
-- Archivage utilisateur conservé.
-- Reset password conservé.
-- Rattachement dépôt conservé.
+## Non realise (hors preuves)
 
-## Limites assumées
-
-- Les filtres base/statut/stagiaire ne sont pas étendus côté API dans cette session.
-- La conformité visuelle finale ne peut pas être déclarée sans captures.
+- Captures avant/apres de la page.
 
 INFORMATION NON FOURNIE — À CONFIRMER

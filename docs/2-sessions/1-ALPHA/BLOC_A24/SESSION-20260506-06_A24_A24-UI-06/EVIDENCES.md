@@ -1,49 +1,165 @@
-# EVIDENCES — SESSION-20260506-06_A24_A24-UI-06
+# EVIDENCES - SESSION-20260506-06_A24_A24-UI-06
 
-## Preuves disponibles dans la discussion
+## Commandes terminales executees
 
-- Lecture GitHub des documents master et A24.
-- Lecture GitHub des fichiers `/users` concernés.
-- Production d'un patch texte UTF-8.
-- Vérification syntaxique du patch par `git apply --stat` hors dépôt réel.
+### 1) Verification patch principal
 
-## Encodage patch
+Commande :
 
-Sorties obtenues sur l'artefact produit :
-
-```txt
-bytes= 18175
-first_line= diff --git a/app/users/page.tsx b/app/users/page.tsx
-utf8_ok= True
-has_bom= False
-has_nul= False
-endswith_lf= True
-file -b --mime-encoding: utf-8
-sha256: f07d5f90f97a8a89eebf4252bd8fef20538428492c1539634587dd3352bd8a50
+```powershell
+git apply --check "C:/Users/arche/ambulance-manager/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/PATCH/PATCH__SESSION-20260506-06_A24_A24-UI-06.diff"
 ```
 
-## Stat patch
+Contexte d'execution : worktree temporaire propre basee sur `HEAD` (`.codex-temp/a24-ui06-check`).
+
+Extrait terminal :
 
 ```txt
-app/users/page.tsx                    |   45 ++++++++++++--
-app/users/users-client-shared.ts      |    6 +-
-app/users/users-list-client.tsx       |  105 ++++++++++++++++++++++++++-------
-app/users/users-side-panel-client.tsx |   42 +++++++++----
-app/globals.css                       |  100 +++++++++++++++++++++++++++++++
-5 files changed, 253 insertions(+), 45 deletions(-)
+(no output)
 ```
 
-## Validations non exécutées ici
+Resultat : OK  
+Code retour : `0`
 
-`git apply --check`, `git apply`, `npm run lint`, `npm run build` n'ont pas été exécutés dans le dépôt réel.
+### 2) Lint
 
-INFORMATION NON FOURNIE — À CONFIRMER
+Commande :
 
-## Captures non fournies
+```powershell
+npm run lint
+```
 
-- `CAPTURES_AVANT/users_light_before.png`
-- `CAPTURES_AVANT/users_dark_before.png`
-- `CAPTURES_APRES/users_light_after.png`
-- `CAPTURES_APRES/users_dark_after.png`
+Extrait terminal :
 
-INFORMATION NON FOURNIE — À CONFIRMER
+```txt
+> ambulance-manager@0.1.0 lint
+> eslint .
+```
+
+Resultat : OK  
+Code retour : `0`
+
+### 3) Build
+
+Commande :
+
+```powershell
+npm run build
+```
+
+Extrait terminal :
+
+```txt
+> ambulance-manager@0.1.0 build
+> next build
+
+Compiled successfully
+Generating static pages ...
+Route (app) ...
+/users
+```
+
+Resultat : OK  
+Code retour : `0`
+
+## Preuves encodage + applicabilite patch principal
+
+Fichier :
+
+- `PATCH/PATCH__SESSION-20260506-06_A24_A24-UI-06.diff`
+
+Mesures :
+
+```txt
+first16=64 69 66 66 20 2D 2D 67 69 74 20 61 2F 61 70 70
+first_line=diff --git a/app/layout.tsx b/app/layout.tsx
+has_bom=False
+has_nul=False
+```
+
+Verification applicabilite :
+
+```txt
+git apply --check => return code 0 (worktree propre)
+```
+
+## Prisma
+
+Prisma non touche dans cette session.  
+`npx prisma validate` et `npx prisma generate` non executes (non requis au regard du perimetre modifie).
+
+## Addendum controle qualite (preuve CSS importee)
+
+### Preuve locale fichier `app/a24-users-rh.css`
+
+Commande :
+
+```powershell
+dir app\a24-users-rh.css
+```
+
+Extrait terminal :
+
+```txt
+-a---- 08/05/2026 11:50 6824 a24-users-rh.css
+```
+
+Commande :
+
+```powershell
+Test-Path app\a24-users-rh.css
+```
+
+Extrait terminal :
+
+```txt
+True
+```
+
+Commande :
+
+```powershell
+Get-Content app\a24-users-rh.css -TotalCount 20
+```
+
+Extrait terminal (debut) :
+
+```txt
+/* A24-UI-06 - realignement visuel cible Utilisateurs / RH */
+.users-page {
+  display: grid;
+```
+
+### Revalidation demandee
+
+Commande :
+
+```powershell
+git apply --check "C:/Users/arche/ambulance-manager/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/PATCH/PATCH__SESSION-20260506-06_A24_A24-UI-06.diff"
+```
+
+Contexte : worktree propre temporaire `.codex-temp/a24-ui06-qc-check`  
+Resultat : `OK`  
+Code retour : `0`
+
+Commande :
+
+```powershell
+npm run lint
+```
+
+Resultat : `OK`  
+Code retour : `0`
+
+Commande :
+
+```powershell
+npm run build
+```
+
+Resultat : `OK`  
+Code retour : `0`
+
+### Correctif
+
+Aucun `_FIX-01.diff` necessaire : le fichier CSS existe bien localement et est utilise.

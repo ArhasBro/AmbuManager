@@ -1,32 +1,32 @@
-# README_PATCH — SESSION-20260506-06_A24_A24-UI-06
+# README_PATCH - SESSION-20260506-06_A24_A24-UI-06
 
 ## Patch principal
 
-`PATCH__SESSION-20260506-06_A24_A24-UI-06.diff`
+- `PATCH__SESSION-20260506-06_A24_A24-UI-06.diff`
 
-## Type
+## Portee
 
-PATCH CODE
+Patch code cible A24-UI-06 (Utilisateurs/RH visuel) :
 
-## Chemin attendu dans le dépôt réel
+- `app/layout.tsx`
+- `app/users/page.tsx`
+- `app/users/users-list-client.tsx`
+- `app/users/users-side-panel-client.tsx`
+- `app/a24-users-rh.css`
 
-`docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/PATCH/PATCH__SESSION-20260506-06_A24_A24-UI-06.diff`
+## Verification patch
 
-## Commandes attendues
+Commande executee :
 
-```bash
-git apply --check "docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/PATCH/PATCH__SESSION-20260506-06_A24_A24-UI-06.diff"
-git apply "docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/PATCH/PATCH__SESSION-20260506-06_A24_A24-UI-06.diff"
-npm run lint
-npm run build
+```powershell
+git apply --check "C:/Users/arche/ambulance-manager/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/PATCH/PATCH__SESSION-20260506-06_A24_A24-UI-06.diff"
 ```
 
-## Encodage
+Resultat : `OK` (code retour `0`) sur worktree propre.
 
-Patch produit en UTF-8, sans BOM, sans caractère nul, avec retour ligne final.
+## Encodage patch
 
-## Statut applicabilité locale
-
-`git apply --check` non exécuté dans le dépôt réel.
-
-INFORMATION NON FOURNIE — À CONFIRMER
+- UTF-8 sans BOM
+- premier octets : `64 69 66 66 ...`
+- premiere ligne : `diff --git ...`
+- aucun caractere nul

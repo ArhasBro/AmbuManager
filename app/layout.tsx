@@ -1,6 +1,7 @@
 import "./globals.css";
 import "./a24-vehicles-templates.css";
 import "./a24-complementary-pages.css";
+import "./a24-users-rh.css";
 import { getServerSession } from "next-auth/next";
 
 import AppShell, { type AppShellContext, type AppShellNavLink } from "./app-shell";

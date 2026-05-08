@@ -375,7 +375,7 @@ Aucun prompt de retour nécessaire.
 
 Session :
 
-- SESSION-20260506-06_A24_A24-UI-06
+- SESSION-20260506-08_A24_A24-UI-08
 
 Stage :
 
@@ -387,51 +387,63 @@ Bloc :
 
 Type :
 
-- CORRECTION+COMPLÉTION
+- AUDIT
 
 Intitulé :
 
-- A24-UI-06 — Utilisateurs / RH visuel
+- A24-UI-08 — Audit préparatoire Planning pour A25
+
+Objectif :
+
+- auditer le planning après application du socle UI A24 ;
+- ne pas corriger profondément le planning ;
+- préparer le futur bloc A25 ;
+- cartographier clairement les écarts UI/UX restants.
 
 Périmètre :
 
-- page Utilisateurs ;
-- liste utilisateurs ;
+- page Planning ;
+- vues planning réellement présentes ;
+- navigation planning ;
+- lisibilité métier ;
+- densité visuelle ;
+- tableaux ou grilles ;
 - filtres ;
-- création utilisateur ;
-- édition utilisateur ;
-- fiche utilisateur ;
-- badges rôles ;
-- badges statuts ;
-- cohérence RH visible ;
+- actions principales et secondaires ;
 - états visuels ;
-- actions principales et secondaires.
+- cohérence avec les références A24 ;
+- écarts à réserver pour A25 ;
+- zones sensibles fonctionnelles ;
+- risques de régression.
 
 Livrable attendu :
 
-- patch code ciblé Users / RH visuel ;
+- rapport préparatoire A25 ;
+- captures avant si techniquement possible ;
+- cartographie claire des écarts UI/UX du planning ;
+- liste des zones sensibles ;
+- liste des risques fonctionnels ;
+- recommandations de découpage pour A25 ;
 - documentation finale ;
 - ZIP documentaire final.
 
 DoD :
 
-- la page Utilisateurs / RH est plus pure, plus lisible et alignée avec les références A24 ;
-- MAQUETTE_DA est utilisée comme référence de direction artistique si elle couvre le sujet ;
-- l’analyse ne doit pas se limiter à MAQUETTE_DA ;
-- aucune RH avancée n’est ajoutée.
+- le planning possède une cartographie claire des écarts UI/UX à traiter en A25 ;
+- les corrections profondes sont exclues ;
+- les risques sont classés clairement ;
+- les recommandations de découpage A25 sont exploitables.
 
 Exclusions :
 
+- pas de patch code sauf demande explicite exceptionnelle ;
+- pas de correction profonde du planning ;
+- pas de nouveau moteur planning ;
+- pas de refonte autoschedule ;
+- pas de refonte matching ;
+- pas de modification RBAC ;
 - pas de RH avancée ;
-- pas de paie ;
-- pas de primes ;
-- pas de saisie réelle des heures travaillées ;
-- pas de modification RBAC profonde ;
-- pas de rôle PSC1 réel ;
-- pas de refonte planning ;
-- pas d’autoschedule ;
-- pas de matching ;
-- pas de fonctionnalité hors périmètre.
+- pas de fonctionnalité métier hors périmètre.
 
 ============================================================
 11. SORTIE ATTENDUE

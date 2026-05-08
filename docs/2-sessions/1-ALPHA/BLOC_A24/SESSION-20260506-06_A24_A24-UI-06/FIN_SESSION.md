@@ -1,27 +1,27 @@
-# FIN_SESSION — SESSION-20260506-06_A24_A24-UI-06
+# FIN_SESSION - SESSION-20260506-06_A24_A24-UI-06
 
-## Verdict de production assistée
+## Statut
 
-PATCH CODE proposé pour application locale.
+Session executee en production locale avec patch code applique dans le depot courant et validations terminales relancees.
 
-## Validations attendues utilisateur
+## Livrables produits
 
-```bash
-git apply --check "docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/PATCH/PATCH__SESSION-20260506-06_A24_A24-UI-06.diff"
-git apply "docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/PATCH/PATCH__SESSION-20260506-06_A24_A24-UI-06.diff"
-npm run lint
-npm run build
-```
+- Patch principal code : `PATCH/PATCH__SESSION-20260506-06_A24_A24-UI-06.diff`
+- Documentation finale : `SESSION.md`, `NOTES.md`, `EVIDENCES.md`, `RESULTATS.md`, `FIN_SESSION.md`
+- Documentation patch : `PATCH/README_PATCH.md`
 
-## Captures attendues
+## Correctifs
 
-- `CAPTURES_AVANT/users_light_before.png`
-- `CAPTURES_AVANT/users_dark_before.png`
-- `CAPTURES_APRES/users_light_after.png`
-- `CAPTURES_APRES/users_dark_after.png`
+Aucun patch correctif `_FIX-XX` necessaire.
 
-## Passage à la suite
+## Risques residuels
 
-Recommandation : ne pas valider définitivement A24-UI-06 avant application locale, validations terminales et captures après correction.
+- Validation visuelle finale non basee sur captures avant/apres jointes.
 
 INFORMATION NON FOURNIE — À CONFIRMER
+
+## Addendum QC
+
+- Point bloquant leve : `app/a24-users-rh.css` existe localement et correspond a l'import de `app/layout.tsx`.
+- Pas de patch `_FIX-01.diff` necessaire.
+- Revalidations executees (`git apply --check`, `lint`, `build`) avec succes.

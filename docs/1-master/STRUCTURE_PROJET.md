@@ -4186,8 +4186,6 @@ C:.
 |   |   |           [root-of-the-server]__a457c799._.js.map
 |   |   |           [root-of-the-server]__ad104e29._.js
 |   |   |           [root-of-the-server]__ad104e29._.js.map
-|   |   |           [root-of-the-server]__b1304b6d._.js
-|   |   |           [root-of-the-server]__b1304b6d._.js.map
 |   |   |           [root-of-the-server]__b2dd6248._.js
 |   |   |           [root-of-the-server]__b2dd6248._.js.map
 |   |   |           [root-of-the-server]__b9356576._.js
@@ -4206,14 +4204,14 @@ C:.
 |   |   |           [root-of-the-server]__e0a07927._.js.map
 |   |   |           [root-of-the-server]__e1b2e646._.js
 |   |   |           [root-of-the-server]__e1b2e646._.js.map
+|   |   |           [root-of-the-server]__e41b7eed._.js
+|   |   |           [root-of-the-server]__e41b7eed._.js.map
 |   |   |           [turbopack]_runtime.js
 |   |   |           [turbopack]_runtime.js.map
 |   |   |           _0dac8f4c._.js
 |   |   |           _0dac8f4c._.js.map
 |   |   |           _190bd073._.js
 |   |   |           _190bd073._.js.map
-|   |   |           _20d31271._.js
-|   |   |           _20d31271._.js.map
 |   |   |           _27f38564._.js
 |   |   |           _27f38564._.js.map
 |   |   |           _2c715f22._.js
@@ -4248,6 +4246,8 @@ C:.
 |   |   |           _b2ebc7ca._.js.map
 |   |   |           _b8abe047._.js
 |   |   |           _b8abe047._.js.map
+|   |   |           _c3f4a3f6._.js
+|   |   |           _c3f4a3f6._.js.map
 |   |   |           _e1bcea2d._.js
 |   |   |           _e1bcea2d._.js.map
 |   |   |           _e5efdec2._.js
@@ -4288,17 +4288,14 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
-|   |   +---cbRhOXtkqp3sgIZetDWeI
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
-|   |   |       
 |   |   +---chunks
-|   |   |       22ca7dbefe10911e.js
+|   |   |       160b48e4bed3762e.js
 |   |   |       2abddf04332fa424.js
 |   |   |       358d6bd68d08fdc9.js
+|   |   |       4ec4a34a20c4d8ad.js
 |   |   |       4fee5e0abb56af75.js
-|   |   |       7412c876b8e83378.js
+|   |   |       52b032db1c1b6cf3.js
+|   |   |       5766d8ab37b5e0c5.css
 |   |   |       7be20650701a57ad.js
 |   |   |       80f1018981664571.js
 |   |   |       82abf2d65f5428ae.js
@@ -4310,15 +4307,18 @@ C:.
 |   |   |       b79e0f85eca6f17e.js
 |   |   |       ceaa3af669abcc0f.js
 |   |   |       d77e2dc1a543f2f6.js
-|   |   |       e24e9107d0ae0896.js
 |   |   |       f83f209ad42b85e9.js
-|   |   |       f973b728c94850d5.css
 |   |   |       fc3339c3f209e8c2.js
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-7673dbeff453a2b3.js
 |   |   |       
-|   |   \---media
-|   |           favicon.0b3bf435.ico
+|   |   +---media
+|   |   |       favicon.0b3bf435.ico
+|   |   |       
+|   |   \---uQDVj3ePew34betD-ljrR
+|   |           _buildManifest.js
+|   |           _clientMiddlewareManifest.json
+|   |           _ssgManifest.js
 |   |           
 |   \---types
 |           routes.d.ts
@@ -4326,6 +4326,7 @@ C:.
 |           
 +---app
 |   |   a24-complementary-pages.css
+|   |   a24-users-rh.css
 |   |   a24-vehicles-templates.css
 |   |   app-shell.tsx
 |   |   favicon.ico
@@ -6225,10 +6226,13 @@ C:.
 |   |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION-20260506-06_A24_A24-UI-06__DOCS_FINAL.zip
+|   |   |   |   |   |   SESSION-20260506-06_A24_A24-UI-06__DOCS_FINAL_MAJ.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
 |   |   |   |   |           PATCH__SESSION-20260506-06_A24_A24-UI-06.diff
+|   |   |   |   |           PATCH__SESSION-20260506-06_A24_A24-UI-06_DOCS.diff
 |   |   |   |   |           README_PATCH.md
 |   |   |   |   |           
 |   |   |   |   +---SESSION-20260506-07_A24_A24-UI-07

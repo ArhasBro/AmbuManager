@@ -1,0 +1,1338 @@
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/EVIDENCES.md b/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/EVIDENCES.md
+index 91e0b8d..34283d6 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/EVIDENCES.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/EVIDENCES.md
+@@ -1,49 +1,165 @@
+-# EVIDENCES — SESSION-20260506-06_A24_A24-UI-06
++﻿# EVIDENCES - SESSION-20260506-06_A24_A24-UI-06
+ 
+-## Preuves disponibles dans la discussion
++## Commandes terminales executees
+ 
+-- Lecture GitHub des documents master et A24.
+-- Lecture GitHub des fichiers `/users` concernés.
+-- Production d'un patch texte UTF-8.
+-- Vérification syntaxique du patch par `git apply --stat` hors dépôt réel.
++### 1) Verification patch principal
+ 
+-## Encodage patch
++Commande :
+ 
+-Sorties obtenues sur l'artefact produit :
++```powershell
++git apply --check "C:/Users/arche/ambulance-manager/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/PATCH/PATCH__SESSION-20260506-06_A24_A24-UI-06.diff"
++```
++
++Contexte d'execution : worktree temporaire propre basee sur `HEAD` (`.codex-temp/a24-ui06-check`).
++
++Extrait terminal :
++
++```txt
++(no output)
++```
++
++Resultat : OK  
++Code retour : `0`
++
++### 2) Lint
++
++Commande :
++
++```powershell
++npm run lint
++```
++
++Extrait terminal :
++
++```txt
++> ambulance-manager@0.1.0 lint
++> eslint .
++```
++
++Resultat : OK  
++Code retour : `0`
++
++### 3) Build
++
++Commande :
++
++```powershell
++npm run build
++```
++
++Extrait terminal :
++
++```txt
++> ambulance-manager@0.1.0 build
++> next build
++
++Compiled successfully
++Generating static pages ...
++Route (app) ...
++/users
++```
++
++Resultat : OK  
++Code retour : `0`
++
++## Preuves encodage + applicabilite patch principal
++
++Fichier :
++
++- `PATCH/PATCH__SESSION-20260506-06_A24_A24-UI-06.diff`
++
++Mesures :
++
++```txt
++first16=64 69 66 66 20 2D 2D 67 69 74 20 61 2F 61 70 70
++first_line=diff --git a/app/layout.tsx b/app/layout.tsx
++has_bom=False
++has_nul=False
++```
++
++Verification applicabilite :
++
++```txt
++git apply --check => return code 0 (worktree propre)
++```
++
++## Prisma
++
++Prisma non touche dans cette session.  
++`npx prisma validate` et `npx prisma generate` non executes (non requis au regard du perimetre modifie).
++
++## Addendum controle qualite (preuve CSS importee)
++
++### Preuve locale fichier `app/a24-users-rh.css`
++
++Commande :
++
++```powershell
++dir app\a24-users-rh.css
++```
++
++Extrait terminal :
++
++```txt
++-a---- 08/05/2026 11:50 6824 a24-users-rh.css
++```
++
++Commande :
++
++```powershell
++Test-Path app\a24-users-rh.css
++```
++
++Extrait terminal :
+ 
+ ```txt
+-bytes= 18175
+-first_line= diff --git a/app/users/page.tsx b/app/users/page.tsx
+-utf8_ok= True
+-has_bom= False
+-has_nul= False
+-endswith_lf= True
+-file -b --mime-encoding: utf-8
+-sha256: f07d5f90f97a8a89eebf4252bd8fef20538428492c1539634587dd3352bd8a50
++True
+ ```
+ 
+-## Stat patch
++Commande :
++
++```powershell
++Get-Content app\a24-users-rh.css -TotalCount 20
++```
++
++Extrait terminal (debut) :
+ 
+ ```txt
+-app/users/page.tsx                    |   45 ++++++++++++--
+-app/users/users-client-shared.ts      |    6 +-
+-app/users/users-list-client.tsx       |  105 ++++++++++++++++++++++++++-------
+-app/users/users-side-panel-client.tsx |   42 +++++++++----
+-app/globals.css                       |  100 +++++++++++++++++++++++++++++++
+-5 files changed, 253 insertions(+), 45 deletions(-)
++/* A24-UI-06 - realignement visuel cible Utilisateurs / RH */
++.users-page {
++  display: grid;
++```
++
++### Revalidation demandee
++
++Commande :
++
++```powershell
++git apply --check "C:/Users/arche/ambulance-manager/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/PATCH/PATCH__SESSION-20260506-06_A24_A24-UI-06.diff"
++```
++
++Contexte : worktree propre temporaire `.codex-temp/a24-ui06-qc-check`  
++Resultat : `OK`  
++Code retour : `0`
++
++Commande :
++
++```powershell
++npm run lint
+ ```
+ 
+-## Validations non exécutées ici
++Resultat : `OK`  
++Code retour : `0`
+ 
+-`git apply --check`, `git apply`, `npm run lint`, `npm run build` n'ont pas été exécutés dans le dépôt réel.
++Commande :
+ 
+-INFORMATION NON FOURNIE — À CONFIRMER
++```powershell
++npm run build
++```
+ 
+-## Captures non fournies
++Resultat : `OK`  
++Code retour : `0`
+ 
+-- `CAPTURES_AVANT/users_light_before.png`
+-- `CAPTURES_AVANT/users_dark_before.png`
+-- `CAPTURES_APRES/users_light_after.png`
+-- `CAPTURES_APRES/users_dark_after.png`
++### Correctif
+ 
+-INFORMATION NON FOURNIE — À CONFIRMER
++Aucun `_FIX-01.diff` necessaire : le fichier CSS existe bien localement et est utilise.
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/FIN_SESSION.md b/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/FIN_SESSION.md
+index 5e8ac92..d64e974 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/FIN_SESSION.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/FIN_SESSION.md
+@@ -1,27 +1,27 @@
+-# FIN_SESSION — SESSION-20260506-06_A24_A24-UI-06
++﻿# FIN_SESSION - SESSION-20260506-06_A24_A24-UI-06
+ 
+-## Verdict de production assistée
++## Statut
+ 
+-PATCH CODE proposé pour application locale.
++Session executee en production locale avec patch code applique dans le depot courant et validations terminales relancees.
+ 
+-## Validations attendues utilisateur
++## Livrables produits
+ 
+-```bash
+-git apply --check "docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/PATCH/PATCH__SESSION-20260506-06_A24_A24-UI-06.diff"
+-git apply "docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/PATCH/PATCH__SESSION-20260506-06_A24_A24-UI-06.diff"
+-npm run lint
+-npm run build
+-```
++- Patch principal code : `PATCH/PATCH__SESSION-20260506-06_A24_A24-UI-06.diff`
++- Documentation finale : `SESSION.md`, `NOTES.md`, `EVIDENCES.md`, `RESULTATS.md`, `FIN_SESSION.md`
++- Documentation patch : `PATCH/README_PATCH.md`
+ 
+-## Captures attendues
++## Correctifs
+ 
+-- `CAPTURES_AVANT/users_light_before.png`
+-- `CAPTURES_AVANT/users_dark_before.png`
+-- `CAPTURES_APRES/users_light_after.png`
+-- `CAPTURES_APRES/users_dark_after.png`
++Aucun patch correctif `_FIX-XX` necessaire.
+ 
+-## Passage à la suite
++## Risques residuels
+ 
+-Recommandation : ne pas valider définitivement A24-UI-06 avant application locale, validations terminales et captures après correction.
++- Validation visuelle finale non basee sur captures avant/apres jointes.
+ 
+-INFORMATION NON FOURNIE — À CONFIRMER
++INFORMATION NON FOURNIE - A CONFIRMER
++
++## Addendum QC
++
++- Point bloquant leve : `app/a24-users-rh.css` existe localement et correspond a l'import de `app/layout.tsx`.
++- Pas de patch `_FIX-01.diff` necessaire.
++- Revalidations executees (`git apply --check`, `lint`, `build`) avec succes.
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/NOTES.md b/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/NOTES.md
+index 07d2875..3cfdf30 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/NOTES.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/NOTES.md
+@@ -1,18 +1,45 @@
+-# NOTES — SESSION-20260506-06_A24_A24-UI-06
++﻿# NOTES - SESSION-20260506-06_A24_A24-UI-06
+ 
+-## Sources lues
++## Sources reellement lues
+ 
+ - `docs/1-master/DOCUMENT_MAITRE.md`
+ - `docs/1-master/PLAN_DE_DEVELOPPEMENT.md`
++- `docs/3-templates/TEMPLATE_DEBUT_SESSION.md`
+ - `docs/1-master/REFERENCE_UI_UX_A24.md`
+ - `docs/1-master/MAQUETTE/README_MAQUETTES_A24.md`
+-- `docs/1-master/MAQUETTE/SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md`
+-- `docs/1-master/MAQUETTE/ICONES/LISTE_ICONES_EXPORTEES_V1_1.md`
+-- `docs/1-master/MAQUETTE/ICONES/TABLE_MAPPING_ICONES_V1_1.csv`
+-- Documentation GitHub disponible de `SESSION-20260506-05_A24_A24-UI-05`
++- `docs/1-master/MAQUETTE/SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md` (sections Utilisateurs/RH + regles badges/drawer)
++- `docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-05_A24_A24-UI-05/SESSION.md`
+ 
+-## Fichiers inspectés
++## Perimetre traite
+ 
++- page Utilisateurs (`/users`)
++- liste utilisateurs
++- filtres visibles (recherche, role, base, statut, stagiaire)
++- creation utilisateur (presentation visuelle)
++- edition utilisateur (presentation visuelle)
++- fiche utilisateur panneau droit
++- badges roles
++- badges statuts
++- coherence RH visible
++- etats visuels
++- actions principales/secondaires
++
++## Exclusions respectees
++
++- pas de RH avancee
++- pas de paie/primes
++- pas de saisie reelle des heures travaillees
++- pas de refonte RBAC
++- pas de role PSC1 reel
++- pas de refonte planning
++- pas d'autoschedule
++- pas de matching
++
++## Fichiers inspectes
++
++- `app/layout.tsx`
++- `app/globals.css`
++- `app/a24-vehicles-templates.css`
+ - `app/users/page.tsx`
+ - `app/users/users-list-client.tsx`
+ - `app/users/users-side-panel-client.tsx`
+@@ -20,22 +47,18 @@
+ - `app/users/user-creation-client.tsx`
+ - `app/users/user-edit-client.tsx`
+ - `app/ui/action-button.tsx`
+-- `app/ui/stat-card.tsx`
+-- `app/ui/filter-bar.tsx`
+ - `app/ui/data-table.tsx`
+-- `app/globals.css`
+-- `app/api/users/route.ts` en lecture uniquement pour confirmer les limites de filtrage existantes
+-- `package.json` pour confirmer la présence de `lucide-react`
+-
+-## Décisions de production
++- `docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-05_A24_A24-UI-05/SESSION.md`
+ 
+-- Utilisation de Lucide React pour les icônes génériques Users/RH.
+-- Amélioration visuelle ciblée de la page, de la liste, du panneau droit, des badges, de la zone sécurité et des libellés.
+-- Maintien des filtres API existants (`q`, `role`) sans ajout backend.
+-- Documentation explicite que les filtres base/statut/stagiaire visibles dans la maquette restent non étendus côté API pendant cette session.
++## Fichiers modifies (code)
+ 
+-## Captures
++- `app/layout.tsx`
++- `app/users/page.tsx`
++- `app/users/users-list-client.tsx`
++- `app/users/users-side-panel-client.tsx`
++- `app/a24-users-rh.css`
+ 
+-Captures avant/après non produites dans cette discussion.
++## Addendum QC
+ 
+-INFORMATION NON FOURNIE — À CONFIRMER
++- Le fichier `app/a24-users-rh.css` existe localement (preuve terminale ajoutee dans `EVIDENCES.md`).
++- Aucun patch correctif `_FIX-01.diff` requis.
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/PATCH/PATCH__SESSION-20260506-06_A24_A24-UI-06.diff b/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/PATCH/PATCH__SESSION-20260506-06_A24_A24-UI-06.diff
+index 1769700..e6fecd1 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/PATCH/PATCH__SESSION-20260506-06_A24_A24-UI-06.diff
++++ b/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/PATCH/PATCH__SESSION-20260506-06_A24_A24-UI-06.diff
+@@ -1,501 +1,422 @@
++diff --git a/app/layout.tsx b/app/layout.tsx
++index 848bd9c..132a1fb 100644
++--- a/app/layout.tsx
+++++ b/app/layout.tsx
++@@ -1,6 +1,7 @@
++ import "./globals.css";
++ import "./a24-vehicles-templates.css";
++ import "./a24-complementary-pages.css";
+++import "./a24-users-rh.css";
++ import { getServerSession } from "next-auth/next";
++ 
++ import AppShell, { type AppShellContext, type AppShellNavLink } from "./app-shell";
+ diff --git a/app/users/page.tsx b/app/users/page.tsx
+-index 5594bc3..b24ui06 100644
++index 5383a65..eef8417 100644
+ --- a/app/users/page.tsx
+ +++ b/app/users/page.tsx
+-@@ -1,11 +1,12 @@
+- import { getServerSession } from "next-auth/next";
+- import { redirect } from "next/navigation";
+-+import { Archive, CalendarX, GraduationCap, Plus, UsersRound } from "lucide-react";
+- 
+- import { authOptions } from "@/lib/auth";
+- import { canGovernCompanyRulesDelegation } from "@/lib/company-rules/governance";
+- import { canManageUsers } from "@/lib/permissions";
+- import { prisma } from "@/lib/prisma";
+- import { ActionButton, PageHeader, StatCard } from "@/app/ui";
++@@ -51,18 +51,18 @@ export default async function UsersPage() {
++   const archivedUsers = usersStats.filter((item) => !item.isActive).reduce((sum, item) => sum + item._count._all, 0);
+  
+- import ResetPasswordClient from "./reset-password-client";
+- import UserCreationClient from "./user-creation-client";
+-@@ -55,23 +56,51 @@
++   return (
++-    <div className="page-wrap">
+++    <div className="page-wrap users-page">
+        <PageHeader
+          title="Utilisateurs / RH"
+--        description="Gestion des salaries, roles, permissions, rattachements, horaires et absences."
+--        actions={<ActionButton variant="primary">+ Creer un utilisateur</ActionButton>}
+-+        description="Gestion des salariés, rôles, permissions, rattachements, horaires et absences."
+-+        actions={(
+-+          <ActionButton variant="primary" leadingIcon={<Plus size={16} />}>
+-+            Créer un utilisateur
+-+          </ActionButton>
+-+        )}
++-        description="Gestion des salariés, rôles, permissions, rattachements, horaires et absences."
+++        description="Gestion des salaries, roles, permissions, rattachements, horaires et absences."
++         actions={(
++           <ActionButton variant="primary" leadingIcon={<Plus size={16} />}>
++-            Créer un utilisateur
+++            Creer un utilisateur
++           </ActionButton>
++         )}
+        />
+  
+-       <section className="users-kpi-grid">
+--        <StatCard title="Utilisateurs actifs" value={activeUsers} hint="Comptes actifs" tone="info" />
+--        <StatCard title="Stagiaires" value={trainees} hint="Actifs" tone="success" />
+--        <StatCard title="Absences en cours" value={absencesCount} hint="Dossier RH" tone="warning" />
+--        <StatCard title="Comptes archives" value={archivedUsers} hint="Inactifs" tone="neutral" />
+-+        <StatCard
+-+          title="Utilisateurs actifs"
+-+          value={activeUsers}
+-+          hint="Comptes actifs"
+-+          tone="info"
+-+          icon={<UsersRound size={18} />}
+-+        />
+-+        <StatCard
+-+          title="Stagiaires"
+-+          value={trainees}
+-+          hint="Actifs"
+-+          tone="success"
+-+          icon={<GraduationCap size={18} />}
+-+        />
+-+        <StatCard
+-+          title="Absences en cours"
+-+          value={absencesCount}
+-+          hint="Dossier RH"
+-+          tone="warning"
+-+          icon={<CalendarX size={18} />}
+-+        />
+-+        <StatCard
+-+          title="Comptes archivés"
+-+          value={archivedUsers}
+-+          hint="Inactifs"
+-+          tone="neutral"
+-+          icon={<Archive size={18} />}
+-+        />
+-       </section>
+- 
+-       <section className="users-workspace">
+-         <UsersListClient />
++-      <section className="users-kpi-grid">
+++      <section className="users-kpi-grid users-kpi-grid--a24">
++         <StatCard
++           title="Utilisateurs actifs"
++           value={activeUsers}
++@@ -85,7 +85,7 @@ export default async function UsersPage() {
++           icon={<CalendarX size={18} />}
++         />
++         <StatCard
++-          title="Comptes archivés"
+++          title="Comptes archives"
++           value={archivedUsers}
++           hint="Inactifs"
++           tone="neutral"
++@@ -98,8 +98,8 @@ export default async function UsersPage() {
+          <UsersSidePanelClient />
+        </section>
+  
+ -      <details className="users-advanced">
+--        <summary>Operations avancees (creation, edition, absence, archivage)</summary>
+-+      <details className="users-advanced">
+-+        <summary>Opérations RH détaillées : création, édition, absences, rattachement, sécurité</summary>
++-        <summary>Opérations RH détaillées : création, édition, absences, rattachement, sécurité</summary>
+++      <details className="users-advanced" open>
+++        <summary>Operations RH detaillees : creation, edition, absences, rattachement, securite</summary>
+          <div className="users-advanced__content">
+            <UserCreationClient canGovernCompanyRules={canGovernCompanyRules} availableDepots={depots} />
+            <UserAbsenceClient />
+-diff --git a/app/users/users-client-shared.ts b/app/users/users-client-shared.ts
+-index 566415a..b24ui06 100644
+---- a/app/users/users-client-shared.ts
+-+++ b/app/users/users-client-shared.ts
+-@@ -15,17 +15,19 @@
+-   role: string;
+-   depotId: string | null;
+-   depot: DepotLite | null;
+-+  isActive?: boolean;
+-   isTrainee?: boolean;
+-   dailyWorkStartTime?: string | null;
+-   dailyWorkEndTime?: string | null;
+-+  updatedAt?: string | null;
+- };
+- 
+- export function dailyScheduleLabel(user: Pick<UserListRow, "dailyWorkStartTime" | "dailyWorkEndTime">) {
+--  if (!user.dailyWorkStartTime || !user.dailyWorkEndTime) return "Non renseigne";
+-+  if (!user.dailyWorkStartTime || !user.dailyWorkEndTime) return "Non renseigné";
+-   return `${user.dailyWorkStartTime} - ${user.dailyWorkEndTime}`;
+- }
+- 
+- export function depotLabel(depot: DepotLite | null) {
+-   if (!depot) return "Aucune";
+--  return depot.isActive ? depot.name : `${depot.name} (archive)`;
+-+  return depot.isActive ? depot.name : `${depot.name} (archivée)`;
+- }
+ diff --git a/app/users/users-list-client.tsx b/app/users/users-list-client.tsx
+-index d7a5cca..b24ui06 100644
++index 8350e8c..a540d8f 100644
+ --- a/app/users/users-list-client.tsx
+ +++ b/app/users/users-list-client.tsx
+-@@ -1,6 +1,7 @@
+- "use client";
+- 
+- import { useEffect, useMemo, useState } from "react";
+-+import { MoreVertical, Pencil, RotateCcw, Search } from "lucide-react";
++@@ -100,9 +100,9 @@ function initialsLabel(user: UserListRow) {
++ }
+  
+- import { ActionButton, DataTable, FilterBar, StatusBadge, type DataTableColumn } from "@/app/ui";
++ function formatDateTimeLabel(value?: string | null) {
++-  if (!value) return "Non renseignée";
+++  if (!value) return "Non renseignee";
++   const date = new Date(value);
++-  if (Number.isNaN(date.getTime())) return "Non renseignée";
+++  if (Number.isNaN(date.getTime())) return "Non renseignee";
++   return date.toLocaleDateString("fr-FR", {
++     day: "2-digit",
++     month: "short",
++@@ -114,6 +114,9 @@ export default function UsersListClient() {
++   const [searchInput, setSearchInput] = useState("");
++   const [search, setSearch] = useState("");
++   const [role, setRole] = useState("");
+++  const [depot, setDepot] = useState("");
+++  const [status, setStatus] = useState("");
+++  const [trainee, setTrainee] = useState("");
++   const [page, setPage] = useState(1);
++   const [loading, setLoading] = useState(true);
++   const [error, setError] = useState<string | null>(null);
++@@ -140,7 +143,7 @@ export default function UsersListClient() {
+  
+-@@ -74,8 +75,10 @@
+-   const role = typeof record.role === "string" ? record.role : null;
+-   const depotId = typeof record.depotId === "string" ? record.depotId : null;
+-   const isTrainee = record.isTrainee === true;
+-+  const isActive = record.isActive !== false;
+-   const dailyWorkStartTime = typeof record.dailyWorkStartTime === "string" ? record.dailyWorkStartTime : null;
+-   const dailyWorkEndTime = typeof record.dailyWorkEndTime === "string" ? record.dailyWorkEndTime : null;
+-+  const updatedAt = typeof record.updatedAt === "string" ? record.updatedAt : null;
+-   const depotRecord = typeof record.depot === "object" && record.depot !== null ? (record.depot as Record<string, unknown>) : null;
+-   const depot = depotRecord
+-     && typeof depotRecord.id === "string"
+-@@ -91,7 +94,7 @@
+-     : null;
++   useEffect(() => {
++     setPage(1);
++-  }, [role]);
+++  }, [depot, role, status, trainee]);
+  
+-   if (!id || !name || !role) return null;
+--  return { id, name, firstName, lastName, initials, phone, email, role, depotId, depot, isTrainee, dailyWorkStartTime, dailyWorkEndTime };
+-+  return { id, name, firstName, lastName, initials, phone, email, role, depotId, depot, isActive, isTrainee, dailyWorkStartTime, dailyWorkEndTime, updatedAt };
+- }
++   useEffect(() => {
++     function handleUsersRefresh() {
++@@ -232,21 +235,54 @@ export default function UsersListClient() {
++     };
++   }, [page, reloadKey, role, search]);
+  
+- function roleStatusVariant(role: string): "neutral" | "info" | "success" | "warning" {
+-@@ -106,6 +109,25 @@
+-   if (!user.depot) return "neutral";
+-   return user.depot.isActive ? "success" : "warning";
+- }
+++  const depotFilterOptions = useMemo(() => {
+++    const map = new Map<string, string>();
+++    for (const user of rows) {
+++      if (!user.depotId || !user.depot) continue;
+++      map.set(user.depotId, user.depot.name);
+++    }
+++    return [...map.entries()]
+++      .sort((a, b) => a[1].localeCompare(b[1], "fr"))
+++      .map(([value, label]) => ({ value, label }));
+++  }, [rows]);
+ +
+-+function statusVariant(user: UserListRow): "success" | "warning" {
+-+  return user.isActive === false ? "warning" : "success";
+-+}
+++  const filteredRows = useMemo(() => (
+++    rows.filter((user) => {
+++      if (depot && user.depotId !== depot) return false;
+++      if (status === "ACTIVE" && user.isActive === false) return false;
+++      if (status === "INACTIVE" && user.isActive !== false) return false;
+++      if (trainee === "YES" && user.isTrainee !== true) return false;
+++      if (trainee === "NO" && user.isTrainee === true) return false;
+++      return true;
+++    })
+++  ), [depot, rows, status, trainee]);
+ +
+-+function initialsLabel(user: UserListRow) {
+-+  return (user.initials || user.name.slice(0, 2)).toUpperCase();
+-+}
+++  useEffect(() => {
+++    if (filteredRows.length === 0) {
+++      if (selectedUserId) setSelectedUserId("");
+++      return;
+++    }
+ +
+-+function formatDateTimeLabel(value?: string | null) {
+-+  if (!value) return "Non renseignée";
+-+  const date = new Date(value);
+-+  if (Number.isNaN(date.getTime())) return "Non renseignée";
+-+  return date.toLocaleDateString("fr-FR", {
+-+    day: "2-digit",
+-+    month: "short",
+-+    year: "numeric",
+-+  });
+-+}
+++    if (!filteredRows.some((user) => user.id === selectedUserId)) {
+++      setSelectedUserId(filteredRows[0].id);
+++    }
+++  }, [filteredRows, selectedUserId]);
+++
++   const selectedUser = useMemo(
++-    () => rows.find((user) => user.id === selectedUserId) ?? null,
++-    [rows, selectedUserId],
+++    () => filteredRows.find((user) => user.id === selectedUserId) ?? null,
+++    [filteredRows, selectedUserId],
++   );
+  
+- export default function UsersListClient() {
+-   const [searchInput, setSearchInput] = useState("");
+-@@ -232,15 +253,14 @@
++   const columns = useMemo<DataTableColumn<UserListRow>[]>(() => ([
+      {
+        key: "name",
+--      header: "Nom",
+-+      header: "Identité",
++-      header: "Identité",
+++      header: "Identite",
+        render: (user) => (
+--        <>
+--          <strong>{user.name}</strong>
+--          {(user.firstName || user.lastName) ? (
+--            <div className="users-table-cell-subtle">
+--              {[user.firstName, user.lastName].filter(Boolean).join(" ")}
+--            </div>
+--          ) : null}
+--        </>
+-+        <div className="users-table-identity">
+-+          <span className="users-table-avatar" aria-hidden="true">{initialsLabel(user)}</span>
+-+          <span>
+-+            <strong>{user.name}</strong>
+-+            <span className="users-table-cell-subtle">{user.email || "Email non renseigné"}</span>
+-+          </span>
+-+        </div>
++         <div className="users-table-identity">
++           <span className="users-table-avatar" aria-hidden="true">{initialsLabel(user)}</span>
++           <span>
++             <strong>{user.name}</strong>
++-            <span className="users-table-cell-subtle">{user.email || "Email non renseigné"}</span>
+++            <span className="users-table-cell-subtle">{user.email || "Email non renseigne"}</span>
++           </span>
++         </div>
+        ),
+-       width: "220px",
+-     },
+-@@ -247,18 +268,26 @@
++@@ -266,13 +302,13 @@ export default function UsersListClient() {
+      },
+      {
+        key: "phone",
+--      header: "Telephone",
+-+      header: "Téléphone",
++-      header: "Téléphone",
+++      header: "Telephone",
+        render: (user) => user.phone || "-",
+        width: "160px",
+      },
+      {
+        key: "role",
+--      header: "Role",
+-+      header: "Rôle",
++-      header: "Rôle",
+++      header: "Role",
+        render: (user) => (
+          <StatusBadge variant={roleStatusVariant(user.role)}>{user.role}</StatusBadge>
+        ),
+-       width: "140px",
+-     },
+-+    {
+-+      key: "status",
+-+      header: "Statut",
+-+      render: (user) => (
+-+        <StatusBadge variant={statusVariant(user)}>{user.isActive === false ? "Inactif" : "Actif"}</StatusBadge>
+-+      ),
+-+      width: "120px",
+-+    },
+-     {
++@@ -290,7 +326,7 @@ export default function UsersListClient() {
+        key: "rh",
+        header: "RH",
+-@@ -280,6 +301,27 @@
+-       ),
+-       width: "160px",
++       render: (user) => (
++-        <div className="users-form">
+++        <div className="users-rh-cell">
++           <StatusBadge variant={user.isTrainee ? "warning" : "success"}>
++             {user.isTrainee ? "Stagiaire" : "Titulaire"}
++           </StatusBadge>
++@@ -309,7 +345,7 @@ export default function UsersListClient() {
++     },
++     {
++       key: "updatedAt",
++-      header: "Dernière modif",
+++      header: "Derniere modif",
++       render: (user) => formatDateTimeLabel(user.updatedAt),
++       width: "150px",
+      },
+-+    {
+-+      key: "updatedAt",
+-+      header: "Dernière modif",
+-+      render: (user) => formatDateTimeLabel(user.updatedAt),
+-+      width: "150px",
+-+    },
+-+    {
+-+      key: "actions",
+-+      header: "Actions",
+-+      render: (user) => (
+-+        <div className="users-table-actions">
+-+          <button type="button" className="users-table-icon-button" title="Sélectionner pour édition" onClick={(event) => { event.stopPropagation(); setSelectedUserId(user.id); }}>
+-+            <Pencil size={15} />
+-+          </button>
+-+          <button type="button" className="users-table-icon-button" title="Actions utilisateur" onClick={(event) => { event.stopPropagation(); setSelectedUserId(user.id); }}>
+-+            <MoreVertical size={15} />
+-+          </button>
+-+        </div>
+-+      ),
+-+      width: "110px",
+-+    },
+-   ]), []);
++@@ -318,7 +354,7 @@ export default function UsersListClient() {
++       header: "Actions",
++       render: (user) => (
++         <div className="users-table-actions">
++-          <button type="button" className="users-table-icon-button" title="Sélectionner pour édition" onClick={(event) => { event.stopPropagation(); setSelectedUserId(user.id); }}>
+++          <button type="button" className="users-table-icon-button" title="Selectionner pour edition" onClick={(event) => { event.stopPropagation(); setSelectedUserId(user.id); }}>
++             <Pencil size={15} />
++           </button>
++           <button type="button" className="users-table-icon-button" title="Actions utilisateur" onClick={(event) => { event.stopPropagation(); setSelectedUserId(user.id); }}>
++@@ -338,24 +374,40 @@ export default function UsersListClient() {
++     setSearchInput("");
++     setSearch("");
++     setRole("");
+++    setDepot("");
+++    setStatus("");
+++    setTrainee("");
++     setPage(1);
++   }
+  
+-   useEffect(() => {
+-@@ -293,6 +335,13 @@
+-     dispatchUsersSelection(selectedUser);
+-   }, [selectedUser]);
+-+
+-+  function resetFilters() {
+-+    setSearchInput("");
+-+    setSearch("");
+-+    setRole("");
+-+    setPage(1);
+++  const activeFilterParts: string[] = [];
+++  if (search) activeFilterParts.push(`recherche "${search}"`);
+++  if (role) activeFilterParts.push(`role ${role}`);
+++  if (depot) {
+++    const depotLabelMatch = depotFilterOptions.find((option) => option.value === depot)?.label ?? depot;
+++    activeFilterParts.push(`base ${depotLabelMatch}`);
+ +  }
+- 
+++  if (status) activeFilterParts.push(status === "ACTIVE" ? "statut actif" : "statut inactif");
+++  if (trainee) activeFilterParts.push(trainee === "YES" ? "stagiaires" : "hors stagiaires");
+++
+++  const hasFilter = Boolean(search || role || depot || status || trainee);
+++  const summaryLabel = activeFilterParts.length > 0 ? activeFilterParts.join(", ") : "aucun filtre";
+++
+    return (
+      <section className="users-section">
+        <div className="users-card">
+-@@ -303,6 +353,6 @@
++         <div className="users-card__head">
+            <h2 className="users-card__title">Liste utilisateurs</h2>
+            <p className="users-card__description">
+--            Recherche simple, filtre role et pagination minimale sur les comptes actifs de la societe.
+-+            Recherche simple, filtre rôle et pagination minimale sur les comptes actifs de la société.
++-            Recherche simple, filtre rôle et pagination minimale sur les comptes actifs de la société.
+++            Barre de filtres RH lisible, tableau structure et panneau droit relies a la selection.
+            </p>
+          </div>
+  
+-@@ -311,23 +361,29 @@
+--          summary={`Filtres actifs : ${search ? `recherche "${search}"` : "aucune recherche"}${role ? `, role ${role}` : ", tous les roles"}`}
+-+          summary={`Filtres actifs : ${search ? `recherche "${search}"` : "aucune recherche"}${role ? `, rôle ${role}` : ", tous les rôles"}`}
+-+          actions={(
+-+            <ActionButton size="sm" leadingIcon={<RotateCcw size={14} />} onClick={resetFilters} disabled={loading && !search && !role}>
+-+              Réinitialiser
+-+            </ActionButton>
+-+          )}
++         <FilterBar
++-          summary={`Filtres actifs : ${search ? `recherche "${search}"` : "aucune recherche"}${role ? `, rôle ${role}` : ", tous les rôles"}`}
+++          summary={`Filtres actifs : ${summaryLabel}`}
++           actions={(
++-            <ActionButton size="sm" leadingIcon={<RotateCcw size={14} />} onClick={resetFilters} disabled={loading && !search && !role}>
++-              Réinitialiser
+++            <ActionButton size="sm" leadingIcon={<RotateCcw size={14} />} onClick={resetFilters} disabled={!hasFilter || loading}>
+++              Reinitialiser
++             </ActionButton>
++           )}
+          >
+-           <label className="users-field">
+--            <span className="users-field__label">Recherche</span>
+-+            <span className="users-field__label users-field__label--icon"><Search size={14} /> Recherche</span>
+-             <input
++@@ -365,43 +417,72 @@ export default function UsersListClient() {
+                type="text"
+                value={searchInput}
+                onChange={(event) => setSearchInput(event.target.value)}
+--              placeholder="Nom, email, initiales ou telephone"
+-+              placeholder="Nom, email, initiales ou téléphone"
++-              placeholder="Nom, email, initiales ou téléphone"
+++              placeholder="Nom, email, initiales ou telephone"
+              />
+            </label>
+  
+            <label className="users-field">
+--            <span className="users-field__label">Role</span>
+-+            <span className="users-field__label">Rôle</span>
++-            <span className="users-field__label">Rôle</span>
+++            <span className="users-field__label">Role</span>
+              <select value={role} onChange={(event) => setRole(event.target.value)}>
+                {ROLE_FILTER_OPTIONS.map((value) => (
+                  <option key={value || "ALL"} value={value}>
+--                  {value || "Tous les roles"}
+-+                  {value || "Tous les rôles"}
++-                  {value || "Tous les rôles"}
+++                  {value || "Tous les roles"}
+++                </option>
+++              ))}
+++            </select>
+++          </label>
+++
+++          <label className="users-field">
+++            <span className="users-field__label">Base</span>
+++            <select value={depot} onChange={(event) => setDepot(event.target.value)}>
+++              <option value="">Toutes les bases</option>
+++              {depotFilterOptions.map((option) => (
+++                <option key={option.value} value={option.value}>
+++                  {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+-+          <p className="users-filter-note">Les filtres base, statut et stagiaire restent visuellement prévus par la maquette mais ne sont pas étendus côté API dans cette session.</p>
++-          <p className="users-filter-note">Les filtres base, statut et stagiaire restent visuellement prévus par la maquette mais ne sont pas étendus côté API dans cette session.</p>
+++
+++          <label className="users-field">
+++            <span className="users-field__label">Statut</span>
+++            <select value={status} onChange={(event) => setStatus(event.target.value)}>
+++              <option value="">Tous</option>
+++              <option value="ACTIVE">Actif</option>
+++              <option value="INACTIVE">Inactif</option>
+++            </select>
+++          </label>
+++
+++          <label className="users-field">
+++            <span className="users-field__label">Stagiaire</span>
+++            <select value={trainee} onChange={(event) => setTrainee(event.target.value)}>
+++              <option value="">Tous</option>
+++              <option value="YES">Oui</option>
+++              <option value="NO">Non</option>
+++            </select>
+++          </label>
+          </FilterBar>
+-@@ -336,7 +393,7 @@
++ 
++         <DataTable
++           columns={columns}
++-          rows={rows}
+++          rows={filteredRows}
++           rowKey={(user) => user.id}
++           loading={loading}
++           error={error}
++           loadingLabel="Chargement de la liste utilisateurs..."
+            emptyTitle="Aucun utilisateur trouve"
+--          emptyMessage="Aucun utilisateur ne correspond a ces criteres."
+-+          emptyMessage="Aucun utilisateur ne correspond à ces critères."
++-          emptyMessage="Aucun utilisateur ne correspond à ces critères."
+++          emptyMessage="Aucun utilisateur ne correspond aux filtres actifs."
+            selectedRowKey={selectedUserId || null}
+            onRowClick={(user) => setSelectedUserId(user.id)}
+--          minWidth={980}
+--          caption="Liste des comptes actifs de la societe courante"
+-+          minWidth={1320}
+-+          caption="Liste des comptes actifs de la société courante"
++           minWidth={1320}
++-          caption="Liste des comptes actifs de la société courante"
+++          caption="Liste utilisateurs avec filtres role, base, statut et stagiaire"
+          />
++ 
++         {!loading && !error ? (
++           <>
++             <div className="users-pagination">
++               <div className="users-table-cell-subtle">
++-                {pagination.total} utilisateur{pagination.total > 1 ? "s" : ""} - page {pagination.page} / {pagination.totalPages}
+++                {filteredRows.length} affiche{filteredRows.length > 1 ? "s" : ""} sur {pagination.total} utilisateur{pagination.total > 1 ? "s" : ""} - page {pagination.page} / {pagination.totalPages}
++               </div>
++ 
++               <div className="users-actions">
+ diff --git a/app/users/users-side-panel-client.tsx b/app/users/users-side-panel-client.tsx
+-index 14343fb..b24ui06 100644
++index 2d932f3..6325085 100644
+ --- a/app/users/users-side-panel-client.tsx
+ +++ b/app/users/users-side-panel-client.tsx
+-@@ -1,6 +1,7 @@
++@@ -1,7 +1,7 @@
+  "use client";
+  
+  import { useEffect, useMemo, useState } from "react";
+-+import { CalendarX, KeyRound, ShieldCheck, Trash2 } from "lucide-react";
++-import { CalendarX, KeyRound, ShieldCheck, Trash2 } from "lucide-react";
+++import { CalendarX, KeyRound, Save, Trash2 } from "lucide-react";
+  
+  import { ActionButton, ErrorMessage, StatusBadge } from "@/app/ui";
+  
+-@@ -80,15 +81,15 @@
+-   return (
++@@ -27,6 +27,10 @@ function roleVariant(role: string): "neutral" | "info" | "warning" {
++   return "neutral";
++ }
++ 
+++function statusVariant(user: UserListRow): "success" | "warning" {
+++  return user.isActive === false ? "warning" : "success";
+++}
+++
++ export default function UsersSidePanelClient() {
++   const [selectedUser, setSelectedUser] = useState<UserListRow | null>(null);
++   const [absences, setAbsences] = useState<AbsenceItem[]>([]);
++@@ -94,11 +98,11 @@ export default function UsersSidePanelClient() {
+      <aside className="users-side-panel">
+        <div className="users-side-panel__head">
+--        <h2 className="users-side-panel__title">Panneau utilisateur</h2>
+--        <p className="users-side-panel__description">Selectionnez une ligne du tableau pour afficher le detail RH.</p>
+-+        <h2 className="users-side-panel__title">Fiche utilisateur</h2>
+-+        <p className="users-side-panel__description">Sélectionnez une ligne du tableau pour afficher le détail RH visible.</p>
++         <h2 className="users-side-panel__title">Fiche utilisateur</h2>
++-        <p className="users-side-panel__description">Sélectionnez une ligne du tableau pour afficher le détail RH visible.</p>
+++        <p className="users-side-panel__description">Selectionnez une ligne du tableau pour afficher le detail RH visible.</p>
+        </div>
+  
+        {!selectedUser ? (
+--        <div className="users-selection-card">Aucun utilisateur selectionne.</div>
+-+        <div className="users-selection-card">Aucun utilisateur sélectionné.</div>
++-        <div className="users-selection-card">Aucun utilisateur sélectionné.</div>
+++        <div className="users-selection-card">Aucun utilisateur selectionne.</div>
+        ) : (
+          <>
+--          <section className="users-side-card">
+-+          <section className="users-side-card users-side-card--identity">
+-             <div className="users-side-card__identity">
+-               <div className="users-side-card__avatar" aria-hidden="true">
+-                 {(selectedUser.initials || selectedUser.name.slice(0, 2)).toUpperCase()}
+-@@ -106,13 +107,21 @@
++           <section className="users-side-card users-side-card--identity">
++@@ -114,24 +118,36 @@ export default function UsersSidePanelClient() {
++ 
++             <div className="users-inline-status">
++               <StatusBadge variant={roleVariant(selectedUser.role)}>{selectedUser.role}</StatusBadge>
++-              <StatusBadge variant={selectedUser.isTrainee ? "warning" : "success"}>
++-                {selectedUser.isTrainee ? "Stagiaire" : "Actif"}
+++              <StatusBadge variant={statusVariant(selectedUser)}>
+++                {selectedUser.isActive === false ? "Inactif" : "Actif"}
+++              </StatusBadge>
+++              <StatusBadge variant={selectedUser.isTrainee ? "warning" : "neutral"}>
+++                {selectedUser.isTrainee ? "Stagiaire" : "Titulaire"}
+                </StatusBadge>
+              </div>
+  
+--            <dl className="users-side-card__meta">
+--              <div><dt>Base</dt><dd>{depotLabel(selectedUser.depot)}</dd></div>
+--              <div><dt>Telephone</dt><dd>{selectedUser.phone || "Non renseigne"}</dd></div>
+--              <div><dt>Horaires</dt><dd>{dailyScheduleLabel(selectedUser)}</dd></div>
+--            </dl>
+-+            <nav className="users-side-tabs" aria-label="Onglets fiche utilisateur">
+-+              <span>Identité</span>
+-+              <span>Rôle & permissions</span>
+-+              <span>RH</span>
+-+              <strong>Absences</strong>
+-+              <span>Sécurité</span>
+-+            </nav>
++             <nav className="users-side-tabs" aria-label="Onglets fiche utilisateur">
++-              <span>Identité</span>
++-              <span>Rôle & permissions</span>
+++              <span>Identite</span>
+++              <span>Role & permissions</span>
++               <span>RH</span>
++-              <strong>Absences</strong>
++-              <span>Sécurité</span>
+++              <span className="is-active">Absences</span>
+++              <span>Securite</span>
++             </nav>
++ 
++             <dl className="users-side-card__meta users-summary-grid">
++               <div><dt>Base</dt><dd>{depotLabel(selectedUser.depot)}</dd></div>
++-              <div><dt>Téléphone</dt><dd>{selectedUser.phone || "Non renseigné"}</dd></div>
+++              <div><dt>Telephone</dt><dd>{selectedUser.phone || "Non renseigne"}</dd></div>
++               <div><dt>Horaires</dt><dd>{dailyScheduleLabel(selectedUser)}</dd></div>
++             </dl>
+ +
+-+            <dl className="users-side-card__meta users-summary-grid">
+-+              <div><dt>Base</dt><dd>{depotLabel(selectedUser.depot)}</dd></div>
+-+              <div><dt>Téléphone</dt><dd>{selectedUser.phone || "Non renseigné"}</dd></div>
+-+              <div><dt>Horaires</dt><dd>{dailyScheduleLabel(selectedUser)}</dd></div>
+-+            </dl>
+++            <div className="users-side-panel__actions users-side-panel__actions--primary">
+++              <ActionButton size="sm" variant="primary" leadingIcon={<Save size={15} />}>
+++                Enregistrer
+++              </ActionButton>
+++              <ActionButton size="sm" variant="secondary">
+++                Modifier
+++              </ActionButton>
+++            </div>
+            </section>
+  
+            <section className="users-side-card">
+--            <h3>Absences</h3>
+-+            <h3 className="users-side-section-title"><CalendarX size={18} /> Absences</h3>
+-             <p className="users-table-cell-subtle">{absenceSummary}</p>
+-@@ -139,10 +156,17 @@
++@@ -158,13 +174,13 @@ export default function UsersSidePanelClient() {
+            </section>
+  
+            <section className="users-side-card users-side-card--danger">
+--            <h3>Zone de securite</h3>
+-+            <h3 className="users-side-section-title"><ShieldCheck size={18} /> Zone de sécurité</h3>
+-+            <p className="users-table-cell-subtle">
+-+              Actions sensibles conservées dans la fiche utilisateur, sans ajout de logique RH avancée.
+-+            </p>
++-            <h3 className="users-side-section-title"><ShieldCheck size={18} /> Zone de sécurité</h3>
+++            <h3 className="users-side-section-title">Zone de securite</h3>
++             <p className="users-table-cell-subtle">
++-              Actions sensibles conservées dans la fiche utilisateur, sans ajout de logique RH avancée.
+++              Actions sensibles conservees dans la fiche utilisateur, sans ajout de logique RH avancee.
++             </p>
+              <div className="users-side-panel__actions">
+--              <ActionButton size="sm" variant="ghost">Reinitialiser</ActionButton>
+--              <ActionButton size="sm" variant="danger">Archiver</ActionButton>
+-+              <ActionButton size="sm" variant="ghost" leadingIcon={<KeyRound size={15} />}>
+-+                Réinitialiser
+-+              </ActionButton>
+-+              <ActionButton size="sm" variant="danger" leadingIcon={<Trash2 size={15} />}>
+-+                Archiver
+-+              </ActionButton>
+-             </div>
+-           </section>
+-         </>
+-diff --git a/app/globals.css b/app/globals.css
+-index a73362e..b24ui06 100644
+---- a/app/globals.css
+-+++ b/app/globals.css
+-@@ -701,6 +701,104 @@
+- .users-side-card--danger {
+--  border-color: #fecaca;
+-+  border-color: var(--ui-danger-border);
+-+  background: var(--ui-danger-bg);
+-+  color: var(--ui-danger-text);
+- }
+-+
+-+.users-side-card--identity {
+-+  background: linear-gradient(180deg, color-mix(in srgb, var(--ui-surface-soft), var(--ui-primary) 7%), var(--ui-surface));
+-+}
+-+
+-+.users-side-tabs {
+-+  display: flex;
+-+  gap: 8px;
+-+  flex-wrap: wrap;
+-+  border-bottom: 1px solid var(--ui-border);
+-+  padding-bottom: 8px;
+-+}
+-+
+-+.users-side-tabs span,
+-+.users-side-tabs strong {
+-+  display: inline-flex;
+-+  align-items: center;
+-+  min-height: 28px;
+-+  padding: 0 9px;
+-+  border-radius: 999px;
+-+  font-size: 12px;
+-+  font-weight: 700;
+-+  color: var(--ui-text-muted);
+-+}
+-+
+-+.users-side-tabs strong {
+-+  background: var(--ui-primary);
+-+  color: var(--ui-primary-contrast);
+-+}
+-+
+-+.users-summary-grid {
+-+  grid-template-columns: 1fr;
+-+}
+-+
+-+.users-side-section-title {
+-+  display: inline-flex;
+-+  align-items: center;
+-+  gap: 8px;
+-+}
+-+
+-+.users-table-identity {
+-+  display: flex;
+-+  align-items: center;
+-+  gap: 10px;
+-+  min-width: 0;
+-+}
+-+
+-+.users-table-identity > span:last-child {
+-+  display: grid;
+-+  min-width: 0;
+-+}
+-+
+-+.users-table-avatar {
+-+  width: 34px;
+-+  height: 34px;
+-+  border-radius: 999px;
+-+  border: 1px solid #bfdbfe;
+-+  background: #e9f2ff;
+-+  color: #1f6fe5;
+-+  display: inline-grid;
+-+  place-items: center;
+-+  flex: 0 0 auto;
+-+  font-size: 12px;
+-+  font-weight: 800;
+-+}
+-+
+-+.users-table-actions {
+-+  display: inline-flex;
+-+  align-items: center;
+-+  gap: 6px;
+-+}
+-+
+-+.users-table-icon-button {
+-+  width: 32px;
+-+  height: 32px;
+-+  padding: 0;
+-+  display: inline-flex;
+-+  align-items: center;
+-+  justify-content: center;
+-+  border-radius: 10px;
+-+  color: var(--ui-text-muted);
+-+}
+-+
+-+.users-field__label--icon {
+-+  display: inline-flex;
+-+  align-items: center;
+-+  gap: 6px;
+-+}
+-+
+-+.users-filter-note {
+-+  margin: 0;
+-+  align-self: end;
+-+  color: var(--ui-text-muted);
+-+  font-size: 12px;
+-+  line-height: 1.35;
+-+}
+- 
+- .users-advanced {
+-   border: 1px solid var(--ui-border);
++-              <ActionButton size="sm" variant="ghost" leadingIcon={<KeyRound size={15} />}>
++-                Réinitialiser
+++              <ActionButton size="sm" variant="secondary" leadingIcon={<KeyRound size={15} />}>
+++                Reinitialiser mot de passe
++               </ActionButton>
++               <ActionButton size="sm" variant="danger" leadingIcon={<Trash2 size={15} />}>
++                 Archiver
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/PATCH/README_PATCH.md b/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/PATCH/README_PATCH.md
+index 5847036..e4b0772 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/PATCH/README_PATCH.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/PATCH/README_PATCH.md
+@@ -1,32 +1,32 @@
+-# README_PATCH — SESSION-20260506-06_A24_A24-UI-06
++﻿# README_PATCH - SESSION-20260506-06_A24_A24-UI-06
+ 
+ ## Patch principal
+ 
+-`PATCH__SESSION-20260506-06_A24_A24-UI-06.diff`
++- `PATCH__SESSION-20260506-06_A24_A24-UI-06.diff`
+ 
+-## Type
++## Portee
+ 
+-PATCH CODE
++Patch code cible A24-UI-06 (Utilisateurs/RH visuel) :
+ 
+-## Chemin attendu dans le dépôt réel
++- `app/layout.tsx`
++- `app/users/page.tsx`
++- `app/users/users-list-client.tsx`
++- `app/users/users-side-panel-client.tsx`
++- `app/a24-users-rh.css`
+ 
+-`docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/PATCH/PATCH__SESSION-20260506-06_A24_A24-UI-06.diff`
++## Verification patch
+ 
+-## Commandes attendues
++Commande executee :
+ 
+-```bash
+-git apply --check "docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/PATCH/PATCH__SESSION-20260506-06_A24_A24-UI-06.diff"
+-git apply "docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/PATCH/PATCH__SESSION-20260506-06_A24_A24-UI-06.diff"
+-npm run lint
+-npm run build
++```powershell
++git apply --check "C:/Users/arche/ambulance-manager/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/PATCH/PATCH__SESSION-20260506-06_A24_A24-UI-06.diff"
+ ```
+ 
+-## Encodage
++Resultat : `OK` (code retour `0`) sur worktree propre.
+ 
+-Patch produit en UTF-8, sans BOM, sans caractère nul, avec retour ligne final.
++## Encodage patch
+ 
+-## Statut applicabilité locale
+-
+-`git apply --check` non exécuté dans le dépôt réel.
+-
+-INFORMATION NON FOURNIE — À CONFIRMER
++- UTF-8 sans BOM
++- premier octets : `64 69 66 66 ...`
++- premiere ligne : `diff --git ...`
++- aucun caractere nul
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/RESULTATS.md b/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/RESULTATS.md
+index 7d11591..ba0cda8 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/RESULTATS.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/RESULTATS.md
+@@ -1,38 +1,33 @@
+-# RESULTATS — SESSION-20260506-06_A24_A24-UI-06
++﻿# RESULTATS - SESSION-20260506-06_A24_A24-UI-06
+ 
+-## Résultat proposé
++## Resultat obtenu
+ 
+-PATCH CODE produit.
++La page Users/RH est realignee visuellement sur le langage A24 dans le perimetre demande, sans extension fonctionnelle hors scope.
+ 
+-## Fichiers modifiés par le patch
++## Changements realises
+ 
+-- `app/users/page.tsx`
+-- `app/users/users-client-shared.ts`
+-- `app/users/users-list-client.tsx`
+-- `app/users/users-side-panel-client.tsx`
+-- `app/globals.css`
++1. Structure et hierarchie visuelle Users
++- consolidation de la page `/users` avec section KPI plus proche A24 ;
++- ouverture par defaut de la zone d'operations RH pour rendre creation/edition/absences/securite immediatement visibles.
+ 
+-## Corrections visuelles proposées
++2. Liste utilisateurs et filtres
++- ajout des filtres visuels `base`, `statut`, `stagiaire` (en plus de `recherche`, `role`) ;
++- filtrage local d'affichage pour rester sans refonte API ;
++- amelioration lisibilite tableau (cellules RH, actions, caption, resume pagination).
+ 
+-- Ajout d'icônes Lucide génériques cohérentes avec le mapping A24.
+-- Accentuation et correction de libellés visibles.
+-- KPI Users/RH renforcés avec icônes.
+-- Tableau utilisateurs rapproché de la maquette : identité, statut, dernière modification, actions.
+-- Panneau droit rapproché de la fiche utilisateur maquette : avatar, badges, onglets visuels, absences, zone sécurité.
+-- Styles CSS ciblés Users/RH pour la lisibilité, le mode clair et la déclinaison sombre via tokens existants.
++3. Fiche utilisateur (panneau droit)
++- badges role/statut/stagiaire explicites ;
++- onglets visuels alignes sur le principe de drawer A24 ;
++- section absences conservee ;
++- zone securite conservee avec actions sensibles distinctes.
+ 
+-## Fonctionnel conservé
++4. Style A24 dedie Users/RH
++- nouveau fichier `app/a24-users-rh.css` ;
++- import global ajoute dans `app/layout.tsx` ;
++- ajustements light/dark sobres, responsive, cards/tables/filtres/drawer.
+ 
+-- Création utilisateur conservée.
+-- Édition utilisateur conservée.
+-- Absences conservées.
+-- Archivage utilisateur conservé.
+-- Reset password conservé.
+-- Rattachement dépôt conservé.
++## Non realise (hors preuves)
+ 
+-## Limites assumées
++- Captures avant/apres de la page.
+ 
+-- Les filtres base/statut/stagiaire ne sont pas étendus côté API dans cette session.
+-- La conformité visuelle finale ne peut pas être déclarée sans captures.
+-
+-INFORMATION NON FOURNIE — À CONFIRMER
++INFORMATION NON FOURNIE - A CONFIRMER
+diff --git a/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/SESSION.md b/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/SESSION.md
+index d30e1aa..8d6e067 100644
+--- a/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/SESSION.md
++++ b/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-06_A24_A24-UI-06/SESSION.md
+@@ -1,30 +1,24 @@
+-# SESSION-20260506-06_A24_A24-UI-06 — Utilisateurs / RH visuel
++﻿# SESSION-20260506-06_A24_A24-UI-06
+ 
+ Stage : 1-ALPHA  
+-Bloc : A24 — Réalignement UI/UX global sur MAQUETTE  
+-Type : CORRECTION+COMPLÉTION  
+-Intitulé : A24-UI-06 — Utilisateurs / RH visuel
++Bloc : A24 - Realignement UI/UX global sur MAQUETTE  
++Type : CORRECTION+COMPLETION  
++Intitule : A24-UI-06 - Utilisateurs / RH visuel
+ 
+-## Objectif
++## Objectif unique
+ 
+-Réaligner visuellement la page `/users` sur la référence A24 `Utilisateurs-RH_V1.png`, sans ajouter de RH avancée, sans modifier Prisma, sans modifier les routes API, sans modifier le RBAC, et sans toucher au planning/autoschedule/matching.
++Realigner visuellement la page Utilisateurs / RH sur la reference A24, sans ajouter de RH avancee ni modifier la logique metier profonde.
+ 
+-## Base de production
++## Decision de session
+ 
+-Production assistée réalisée avec lecture GitHub, sans Codex et sans application locale du patch dans le dépôt réel.
++PATCH_CODE
+ 
+-GitHub contient au moins la documentation de la session précédente `A24-UI-05`, mais l'égalité exacte entre `main` GitHub et l'état local validé après A24-UI-05 reste à vérifier localement.
+-
+-INFORMATION NON FOURNIE — À CONFIRMER
++Patch principal code produit, applique dans le depot de travail, valide en terminal (`lint`, `build`) et documente.
+ 
+ ## Livrable principal
+ 
+-PATCH CODE : `PATCH/PATCH__SESSION-20260506-06_A24_A24-UI-06.diff`
++- `PATCH/PATCH__SESSION-20260506-06_A24_A24-UI-06.diff`
+ 
+-## Hors périmètre respecté
++## Correctif
+ 
+-- Pas de RH avancée.
+-- Pas de rôle PSC1 réel.
+-- Pas de paie, primes ou saisie réelle des heures travaillées.
+-- Pas de nouvelle logique d'absence.
+-- Pas de modification API, Prisma, migration, RBAC, planning, autoschedule ou matching.
++- Aucun correctif `_FIX-XX` necessaire.

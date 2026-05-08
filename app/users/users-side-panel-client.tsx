@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { CalendarX, KeyRound, ShieldCheck, Trash2 } from "lucide-react";
+import { CalendarX, KeyRound, Save, Trash2 } from "lucide-react";
 
 import { ActionButton, ErrorMessage, StatusBadge } from "@/app/ui";
 
@@ -25,6 +25,10 @@ function roleVariant(role: string): "neutral" | "info" | "warning" {
   if (role === "ADMIN" || role === "GERANT") return "info";
   if (role === "BUREAU" || role === "REGULATEUR") return "warning";
   return "neutral";
+}
+
+function statusVariant(user: UserListRow): "success" | "warning" {
+  return user.isActive === false ? "warning" : "success";
 }
 
 export default function UsersSidePanelClient() {
@@ -94,11 +98,11 @@ export default function UsersSidePanelClient() {
     <aside className="users-side-panel">
       <div className="users-side-panel__head">
         <h2 className="users-side-panel__title">Fiche utilisateur</h2>
-        <p className="users-side-panel__description">Sélectionnez une ligne du tableau pour afficher le détail RH visible.</p>
+        <p className="users-side-panel__description">Selectionnez une ligne du tableau pour afficher le detail RH visible.</p>
       </div>
 
       {!selectedUser ? (
-        <div className="users-selection-card">Aucun utilisateur sélectionné.</div>
+        <div className="users-selection-card">Aucun utilisateur selectionne.</div>
       ) : (
         <>
           <section className="users-side-card users-side-card--identity">
@@ -114,24 +118,36 @@ export default function UsersSidePanelClient() {
 
             <div className="users-inline-status">
               <StatusBadge variant={roleVariant(selectedUser.role)}>{selectedUser.role}</StatusBadge>
-              <StatusBadge variant={selectedUser.isTrainee ? "warning" : "success"}>
-                {selectedUser.isTrainee ? "Stagiaire" : "Actif"}
+              <StatusBadge variant={statusVariant(selectedUser)}>
+                {selectedUser.isActive === false ? "Inactif" : "Actif"}
+              </StatusBadge>
+              <StatusBadge variant={selectedUser.isTrainee ? "warning" : "neutral"}>
+                {selectedUser.isTrainee ? "Stagiaire" : "Titulaire"}
               </StatusBadge>
             </div>
 
             <nav className="users-side-tabs" aria-label="Onglets fiche utilisateur">
-              <span>Identité</span>
-              <span>Rôle & permissions</span>
+              <span>Identite</span>
+              <span>Role & permissions</span>
               <span>RH</span>
-              <strong>Absences</strong>
-              <span>Sécurité</span>
+              <span className="is-active">Absences</span>
+              <span>Securite</span>
             </nav>
 
             <dl className="users-side-card__meta users-summary-grid">
               <div><dt>Base</dt><dd>{depotLabel(selectedUser.depot)}</dd></div>
-              <div><dt>Téléphone</dt><dd>{selectedUser.phone || "Non renseigné"}</dd></div>
+              <div><dt>Telephone</dt><dd>{selectedUser.phone || "Non renseigne"}</dd></div>
               <div><dt>Horaires</dt><dd>{dailyScheduleLabel(selectedUser)}</dd></div>
             </dl>
+
+            <div className="users-side-panel__actions users-side-panel__actions--primary">
+              <ActionButton size="sm" variant="primary" leadingIcon={<Save size={15} />}>
+                Enregistrer
+              </ActionButton>
+              <ActionButton size="sm" variant="secondary">
+                Modifier
+              </ActionButton>
+            </div>
           </section>
 
           <section className="users-side-card">
@@ -158,13 +174,13 @@ export default function UsersSidePanelClient() {
           </section>
 
           <section className="users-side-card users-side-card--danger">
-            <h3 className="users-side-section-title"><ShieldCheck size={18} /> Zone de sécurité</h3>
+            <h3 className="users-side-section-title">Zone de securite</h3>
             <p className="users-table-cell-subtle">
-              Actions sensibles conservées dans la fiche utilisateur, sans ajout de logique RH avancée.
+              Actions sensibles conservees dans la fiche utilisateur, sans ajout de logique RH avancee.
             </p>
             <div className="users-side-panel__actions">
-              <ActionButton size="sm" variant="ghost" leadingIcon={<KeyRound size={15} />}>
-                Réinitialiser
+              <ActionButton size="sm" variant="secondary" leadingIcon={<KeyRound size={15} />}>
+                Reinitialiser mot de passe
               </ActionButton>
               <ActionButton size="sm" variant="danger" leadingIcon={<Trash2 size={15} />}>
                 Archiver
