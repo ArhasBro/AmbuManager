@@ -20,541 +20,256 @@ git status
 --------------------------
 Session validée, nous passons à la suite.
 
-Avant de préparer quoi que ce soit, applique strictement les règles suivantes.
+Prépare exactement 2 prompts distincts, prêts à copier/coller :
+
+1. PROMPT DE PRODUCTION
+2. PROMPT DE CONTRÔLE
+
+Ne prépare pas de troisième prompt.
 
 ============================================================
-1. RÈGLE DE LECTURE DOCUMENTAIRE
+1. RÈGLES GÉNÉRALES
 ============================================================
 
-Ne relis pas automatiquement tous les fichiers `.md` de `./docs/1-master` si cela n’est pas nécessaire au périmètre réel de la session.
+La lecture documentaire doit être ciblée.
 
-Relis obligatoirement le noyau documentaire minimal :
+À lire obligatoirement :
 
-- `./docs/1-master/DOCUMENT_MAITRE.md`
-- `./docs/1-master/PLAN_DE_DEVELOPPEMENT.md`
+- ./docs/1-master/DOCUMENT_MAITRE.md
+- ./docs/1-master/PLAN_DE_DEVELOPPEMENT.md
+- ./docs/3-templates/TEMPLATE_DEBUT_SESSION.md s’il existe et s’il sert de base au prompt.
 
-Relis également :
+Lire ensuite uniquement les documents utiles à la session, par exemple :
 
-- `./docs/3-templates/TEMPLATE_DEBUT_SESSION.md` s’il existe et doit servir de base au prompt de production.
-
-Relis ensuite uniquement les documents complémentaires réellement utiles à la session, par exemple selon le besoin :
-
-- `./docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
-- `./docs/1-master/ETAT_GLOBAL_PROJET.md`
-- `./docs/1-master/REGISTRE_DECISIONS.md`
-- `./docs/1-master/RECAP_DISCUSSIONS.md`
-- `./docs/1-master/STRUCTURE_PROJET.md`
-- `./docs/1-master/REFERENCE_UI_UX_A24.md`
-- `./docs/README_DOCS.md`
-- `./docs/1-master/_INDEX_MASTER.md`
-- `./docs/1-master/MAQUETTE/README_MAQUETTES_A24.md`
-- la documentation de la session précédente validée uniquement si elle sert réellement de base à la session en cours ;
-- les documents du bloc concerné dans `./docs/2-sessions/1-ALPHA/BLOC_XX/` uniquement si la session s’appuie dessus.
-
-Pour une session liée au bloc A24 UI/UX, utiliser comme référence principale :
-
-`./docs/1-master/MAQUETTE/`
-
-Règles importantes pour A24 :
-
-- le dossier `./docs/1-master/MAQUETTE/` est la référence UI/UX globale du bloc A24 ;
-- ne pas limiter l’analyse uniquement à `MAQUETTE_DA`, car ce sous-dossier ne contient pas forcément toutes les références utiles ;
-- utiliser `MAQUETTE_DA` comme référence de direction artistique lorsqu’elle couvre le sujet traité ;
-- utiliser aussi les autres sous-dossiers, README, specs, mappings, icônes et maquettes disponibles dans `./docs/1-master/MAQUETTE/` lorsqu’ils sont utiles ;
-- en cas de contradiction entre une référence ancienne et le contenu validé de `./docs/1-master/MAQUETTE/`, le dossier `./docs/1-master/MAQUETTE/` prime ;
-- en cas de contradiction interne entre plusieurs éléments de `./docs/1-master/MAQUETTE/`, la production doit signaler clairement le conflit et écrire exactement :
-  `INFORMATION NON FOURNIE — À CONFIRMER`.
-
-Les documents A21/A22 peuvent être consultés uniquement comme historique ou complément si nécessaire, mais ils ne doivent pas primer sur les références actuelles de `./docs/1-master/MAQUETTE/`.
-
-Ne pas utiliser comme source principale :
-
-- les anciens ZIP ;
-- les anciens prompts ;
-- les anciens brouillons ;
-- `CMD.md` sauf demande explicite ;
-- les documents historiques non utiles au périmètre ;
-- les anciennes références UI/UX si elles contredisent `./docs/1-master/MAQUETTE/`.
-
-La lecture documentaire doit rester ciblée, cohérente et strictement utile à la session.
+- ./docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md
+- ./docs/1-master/ETAT_GLOBAL_PROJET.md
+- ./docs/1-master/REGISTRE_DECISIONS.md
+- ./docs/1-master/RECAP_DISCUSSIONS.md
+- ./docs/1-master/STRUCTURE_PROJET.md
+- ./docs/1-master/REFERENCE_UI_UX_A24.md
+- ./docs/1-master/MAQUETTE/README_MAQUETTES_A24.md
+- la documentation de la session précédente seulement si elle sert réellement de base.
 
 Interdictions :
 
-- aucun élargissement documentaire inutile ;
-- aucun “tout relire” systématique sans nécessité réelle ;
-- aucune conclusion fondée sur une information non prouvée.
+- ne pas tout relire par réflexe ;
+- ne pas élargir le périmètre ;
+- ne pas inventer ;
+- ne pas conclure sans preuve.
 
 Toute information non prouvée doit être notée exactement :
 
-`INFORMATION NON FOURNIE — À CONFIRMER`
+INFORMATION NON FOURNIE — À CONFIRMER
 
 ============================================================
-2. RÈGLE D’UTILISATION DES OUTILS
+2. RÈGLES A24 UI/UX
 ============================================================
 
-Production = Codex dès qu’une session implique :
+Pour le bloc A24, la référence principale est :
 
-- le dépôt réel ;
-- le code ;
-- les fichiers du projet ;
-- les patchs ;
-- les commandes terminal ;
-- les tests ;
-- les validations techniques ;
-- l’inspection réelle du repo ;
-- la comparaison entre routes réelles, fichiers réels et maquettes ;
-- la vérification de captures ou assets présents dans le dépôt.
+./docs/1-master/MAQUETTE/
 
-Production = ChatGPT si la session consiste surtout à :
+Important :
 
-- cadrer ;
-- reformuler ;
-- préparer ;
-- contrôler ;
-- analyser une réponse ;
-- produire un prompt ;
-- produire de la documentation sans accès nécessaire au dépôt réel.
+- ne pas se limiter à MAQUETTE_DA ;
+- MAQUETTE_DA reste une référence de direction artistique si elle couvre le sujet ;
+- utiliser aussi les autres sous-dossiers, README, specs, mappings, icônes et maquettes utiles ;
+- en cas de contradiction, ./docs/1-master/MAQUETTE/ prime sur les anciennes références ;
+- en cas de contradiction interne non résolue, écrire :
+  INFORMATION NON FOURNIE — À CONFIRMER
 
-Pour le bloc A24 :
+Les références A21/A22 peuvent servir d’historique, mais ne doivent pas primer sur les références A24 actuelles.
 
-- les sessions d’audit UI/UX qui demandent de comparer les maquettes au repo réel doivent être orientées Codex ;
-- les sessions de correction UI/UX doivent être orientées Codex ;
-- les sessions de contrôle qualité doivent être orientées ChatGPT.
+A24 vise :
 
-Production = Codex ou ChatGPT produit également :
+- une UI proche des maquettes validées ;
+- une structure plus simple ;
+- une meilleure lisibilité ;
+- des composants cohérents ;
+- des tableaux, filtres, badges et formulaires plus propres ;
+- une compatibilité mode clair / mode sombre ;
+- aucune nouvelle direction artistique inventée.
 
-- la documentation finale de session ;
-- le ZIP documentaire final.
+Le mode clair reste le thème principal.
 
-Contrôle qualité = ChatGPT pour :
+Le mode sombre doit être une déclinaison sobre, lisible et cohérente, pas une simple inversion noir/blanc.
 
-- analyser la réponse de production ;
-- vérifier la conformité méthodologique ;
-- identifier ce qui est conforme et non conforme ;
-- vérifier le patch si un patch existe ;
-- vérifier les validations réellement exécutées ;
-- vérifier la documentation finale ;
-- vérifier le ZIP documentaire ;
-- rédiger un éventuel prompt de retour si nécessaire.
+A24 ne doit pas traiter :
+
+- refonte profonde du planning ;
+- nouveau moteur planning ;
+- autoschedule complet ;
+- matching complet ;
+- refonte RBAC ;
+- RH avancée ;
+- rôle PSC1 réel ;
+- paie, primes, heures travaillées ;
+- RGPD complet ;
+- sécurité avancée ;
+- déploiement ;
+- application mobile.
+
+A24 peut réorganiser visuellement l’information, mais ne doit pas supprimer de donnée métier ni ajouter de fonctionnalité hors périmètre.
+
+============================================================
+3. CHOIX DE L’OUTIL
+============================================================
+
+Production = Codex si la session implique :
+
+- dépôt réel ;
+- code ;
+- fichiers projet ;
+- patchs ;
+- commandes terminal ;
+- tests ;
+- validations techniques ;
+- comparaison entre repo réel et maquettes.
+
+Production = ChatGPT si la session est surtout :
+
+- cadrage ;
+- reformulation ;
+- préparation ;
+- contrôle ;
+- analyse documentaire sans accès nécessaire au dépôt réel.
+
+Pour A24 :
+
+- audit UI/UX avec comparaison repo réel / maquettes → Codex ;
+- correction UI/UX → Codex ;
+- contrôle qualité → ChatGPT.
 
 En cas de doute :
 
-- si la session demande d’inspecter ou modifier le repo réel → Codex ;
-- si la session demande surtout d’évaluer, cadrer, reformuler, contrôler ou vérifier → ChatGPT ;
-- indiquer clairement l’outil recommandé.
+- repo réel ou patch → Codex ;
+- contrôle, cadrage ou vérification → ChatGPT.
 
 ============================================================
-3. RÈGLE IMPÉRATIVE — PATCH-FIRST EN PRODUCTION
+4. RÈGLE PATCH-FIRST
 ============================================================
-
-La discussion de production avec Codex doit travailler en mode patch-first uniquement si un patch est réellement nécessaire.
 
 Si un patch code est nécessaire :
 
-1. Codex doit générer un patch principal unique au format `.diff`, cohérent avec la session.
-2. Ce patch constitue le livrable technique de référence.
-3. Une fois le patch généré, Codex peut l’appliquer au dépôt.
-4. Les validations terminales pertinentes doivent être relancées après application du patch.
-5. Si un correctif ultérieur est nécessaire, il doit être fourni sous forme de patch correctif minimal séparé.
-6. Il est interdit de rejouer tout le patch principal dans un correctif.
-7. Il est interdit de mélanger un correctif code réel dans une réécriture globale du patch principal déjà appliqué.
+1. produire un patch principal unique au format .diff ;
+2. l’appliquer au dépôt ;
+3. relancer les validations utiles ;
+4. produire un correctif séparé minimal si besoin ;
+5. ne jamais rejouer tout le patch principal dans un correctif ;
+6. ne jamais mélanger patch code et documentation finale.
 
-Si la session n’exige pas réellement de modification code :
+Si aucun patch code n’est nécessaire, choisir clairement :
 
-- ne pas forcer artificiellement un patch code ;
-- la décision doit être `NO_PATCH_CODE`, `NO_PATCH` ou `PATCH DOCUMENTAIRE` selon le type réel de session ;
-- la production doit documenter clairement pourquoi aucun patch code n’est nécessaire.
+- NO_PATCH_CODE
+- NO_PATCH
+- PATCH DOCUMENTAIRE
+
+La décision doit être justifiée.
 
 ============================================================
-4. RÈGLE CRITIQUE — FORMAT DES PATCHS `.diff`
+5. FORMAT DES PATCHS
 ============================================================
 
-Tous les patchs `.diff` livrés doivent être directement exploitables par `git apply`.
+Tout patch .diff doit être directement compatible avec git apply.
 
 Format obligatoire :
 
-- texte standard ;
 - UTF-8 sans BOM ou ASCII ;
 - jamais UTF-16 ;
-- jamais fichier encodé avec caractères nuls ;
-- fins de ligne compatibles Git ;
-- première ligne attendue généralement sous la forme `diff --git ...`.
+- pas de caractères nuls ;
+- première ligne de type : diff --git ...
 
-Avant la réponse finale de production, Codex doit vérifier chaque patch `.diff`.
+Preuves attendues :
 
-Contrôles obligatoires à documenter dans `EVIDENCES.md` :
+- premiers octets du patch ;
+- première ligne ;
+- encodage ;
+- résultat de git apply --check.
 
-- contrôle du début de fichier du patch principal ;
-- contrôle du début de fichier du patch documentaire si applicable ;
-- preuve que le fichier commence bien par `diff` ;
-- absence de BOM UTF-16 ;
-- résultat de `git apply --check`.
-
-Exemple de preuve attendue :
-
-Patch principal :
-premiers octets : 100 105 102 102
-première ligne : diff --git ...
-encodage : texte standard / UTF-8 sans BOM ou ASCII
-git apply --check : OK, exit code 0
-
-Patch documentaire :
-premiers octets : 100 105 102 102
-première ligne : diff --git ...
-encodage : texte standard / UTF-8 sans BOM ou ASCII
-git apply --check : OK, exit code 0
-
-Si le dépôt courant contient déjà les modifications appliquées et que `git apply --check` échoue avec `patch does not apply`, Codex doit vérifier l’applicabilité dans un état propre, par exemple :
-
-- worktree propre ;
-- branche temporaire propre ;
-- clone propre ;
-- reset temporaire maîtrisé si autorisé.
-
-Dans ce cas, la production doit expliquer clairement :
-
-- pourquoi `git apply --check` échoue dans l’arbre courant ;
-- où l’applicabilité a été vérifiée ;
-- avec quelles commandes exactes ;
-- avec quels résultats réels.
-
-Il est interdit de livrer un patch `.diff` qui retourne :
+Un patch qui retourne :
 
 No valid patches in input
 
+est interdit.
+
 ============================================================
-5. RÈGLE CRITIQUE — PREUVES TERMINALES
+6. VALIDATIONS TERMINALES
 ============================================================
 
-Les validations terminales ne doivent jamais être seulement résumées par “OK”.
+Les validations ne doivent pas être résumées par “OK”.
 
-Pour chaque commande exigée ou annoncée, la production doit fournir :
+Pour chaque commande, fournir :
 
-- la commande exacte ;
-- un extrait terminal réel ;
-- le résultat ;
-- le code retour si disponible.
+- commande exacte ;
+- extrait terminal réel ;
+- résultat ;
+- code retour si disponible.
 
-Pour une session avec patch code, vérifier au minimum :
+Pour un patch code, vérifier au minimum :
 
 npm run lint
 npm run build
 
-Si Prisma est touché, vérifier aussi :
+Si Prisma est touché :
 
 npx prisma validate
 npx prisma generate
 
-Si un patch `.diff` est livré, vérifier aussi :
+Si un patch .diff est livré :
 
 git apply --check "chemin/du/patch.diff"
 
-Les preuves doivent être intégrées dans :
-
-- la réponse finale de production ;
-- et/ou `EVIDENCES.md`.
-
-Mais `EVIDENCES.md` doit contenir les preuves utiles à la traçabilité finale.
-Il ne suffit pas que les preuves soient uniquement dans le message de conversation.
-
-Une preuve insuffisante doit être notée :
-
-`INFORMATION NON FOURNIE — À CONFIRMER`
+Les preuves doivent apparaître dans la réponse finale et dans EVIDENCES.md.
 
 ============================================================
-6. RÈGLE CRITIQUE — DOCUMENTATION FINALE ET ZIP
+7. DOCUMENTATION ET ZIP
 ============================================================
 
 La production doit générer la documentation finale de session.
 
-Fichiers attendus selon la structure habituelle :
+Fichiers attendus selon le cas :
 
-- `SESSION.md`
-- `NOTES.md`
-- `EVIDENCES.md`
-- `RESULTATS.md`
-- `FIN_SESSION.md`
-- `PATCH/README_PATCH.md`
-- patch principal `.diff` si applicable ;
-- patchs correctifs `_FIX-XX.diff` si applicable ;
-- patch documentaire `.diff` si applicable ;
-- `NO_PATCH.md` si applicable.
-
-Le ZIP documentaire final doit être généré après toutes les modifications finales de documentation et après la régénération éventuelle des patchs.
-
-Le ZIP final doit contenir les versions réellement finales des fichiers.
-
-Avant la réponse finale, Codex doit vérifier le contenu du ZIP et fournir une preuve du type :
-
-ZIP final :
-SESSION-YYYYMMDD-XX_BLOC_SESSION_DOCS.zip
-
-Contenu vérifié :
 - SESSION.md
 - NOTES.md
 - EVIDENCES.md
 - RESULTATS.md
 - FIN_SESSION.md
 - PATCH/README_PATCH.md
-- PATCH/...
+- patch principal .diff si applicable
+- patchs correctifs _FIX-XX.diff si applicable
+- patch documentaire .diff si applicable
+- NO_PATCH.md si applicable
 
-Règles impératives :
+Le ZIP documentaire final doit être généré après les dernières modifications.
 
-- ne pas annoncer un ZIP régénéré sans le joindre ;
-- ne pas conclure sur un ancien ZIP ;
-- ne pas fournir un ZIP qui ne contient pas les patchs corrigés ;
-- ne pas fournir un ZIP dont `EVIDENCES.md` ne contient pas les preuves finales ;
-- ne pas utiliser uniquement des liens locaux Windows comme preuve finale.
+Avant la réponse finale, vérifier son contenu.
 
-Dans la réponse finale de production, utiliser de préférence des chemins relatifs au dépôt, par exemple :
+La réponse finale doit indiquer :
 
-`docs/2-sessions/1-ALPHA/BLOC_A24/...`
+- le ZIP final joint ;
+- son contenu vérifié ;
+- les chemins relatifs au dépôt.
 
-Éviter les liens locaux absolus du type :
-
-`C:/Users/...`
-
-car ils ne sont pas exploitables directement en contrôle qualité.
+Ne pas utiliser un ancien ZIP.
+Ne pas conclure avec un simple chemin local Windows.
 
 ============================================================
-7. RÈGLE SUR LES SESSIONS MULTIPLES
+8. PROMPT DE PRODUCTION À PRODUIRE
 ============================================================
 
-Si une seule session est indiquée, préparer les prompts uniquement pour cette session.
+Le prompt de production doit être adapté à la session indiquée plus bas.
 
-Si plusieurs sessions sont indiquées explicitement, préparer les prompts pour l’ensemble demandé.
+Il doit demander une réponse finale structurée avec :
 
-Dans le cas de plusieurs sessions traitées ensemble :
-
-- garder un périmètre unique et cohérent ;
-- produire un patch principal unique si un patch est réellement nécessaire ;
-- produire une documentation finale unique ;
-- produire un ZIP documentaire final unique ;
-- ne pas mélanger avec des blocs ou sujets non demandés.
-
-============================================================
-8. RÈGLES SPÉCIFIQUES AU BLOC A24 — UI/UX GLOBAL
-============================================================
-
-Le bloc A24 est :
-
-`A24 — Réalignement UI/UX global sur MAQUETTE`
-
-Référence UI/UX principale :
-
-`./docs/1-master/MAQUETTE/`
-
-Le bloc A24 doit viser :
-
-- une interface très proche des maquettes validées ;
-- une structure plus pure et plus simple ;
-- une meilleure lisibilité ;
-- une densité maîtrisée ;
-- des composants cohérents ;
-- des icônes propres ;
-- une navigation claire ;
-- une compatibilité mode clair / mode sombre ;
-- des captures avant/après pour les sessions de correction si techniquement possible ;
-- aucune direction artistique inventée hors des références présentes dans `./docs/1-master/MAQUETTE/`.
-
-Le mode sombre fait partie du périmètre A24.
-
-Il doit être traité en français sous le nom :
-
-`mode sombre`
-
-Le mode sombre doit être une déclinaison sobre des références UI/UX de `./docs/1-master/MAQUETTE/`, et non une inversion automatique noir/blanc.
-
-Le mode sombre doit respecter :
-
-- fond général sombre ;
-- textes clairs ;
-- cartes et panneaux légèrement différenciés du fond ;
-- bordures sobres ;
-- boutons, badges, tableaux et états visuels lisibles ;
-- conservation de l’identité visuelle officielle.
-
-Le mode clair reste le thème principal de référence.
-
-Un bouton visible doit permettre de basculer entre mode clair et mode sombre quand la session le prévoit.
-
-Les icônes doivent être auditées et classées.
-
-Lucide React est autorisé pour les icônes génériques si cela améliore la propreté visuelle et évite les initiales ou pictogrammes approximatifs.
-
-Les assets PNG/SVG doivent être conservés uniquement s’ils sont réellement spécifiques à Ambulance Manager, notamment :
-
-- logo ;
-- marque ;
-- pictogrammes ambulance spécifiques ;
-- éléments visuels impossibles ou non pertinents à recréer via Lucide.
-
-Les icônes génériques doivent être remplacées par des composants propres lorsque c’est pertinent.
-
-A24 ne doit pas traiter :
-
-- refonte planning profonde ;
-- nouveau moteur planning ;
-- autoschedule complet ;
-- matching complet ;
-- règles métier avancées ;
-- refonte RBAC ;
-- rôle PSC1 réel ;
-- RH avancée ;
-- saisie réelle des heures travaillées ;
-- paie ;
-- primes ;
-- suppression physique généralisée ;
-- RGPD complet ;
-- sécurité avancée ;
-- application mobile complète ;
-- préparation société pilote ;
-- déploiement.
-
-A24 peut réorganiser visuellement l’information pour se rapprocher des références UI/UX, mais il ne doit pas :
-
-- supprimer silencieusement une donnée métier ;
-- casser un flux validé ;
-- ajouter une fonctionnalité métier ;
-- transformer un sujet UI/UX en refonte fonctionnelle.
-
-Si une page réelle contient plus d’informations que la maquette ou la référence visuelle, la correction doit privilégier :
-
-- repli ;
-- panneau droit ;
-- drawer ;
-- onglets ;
-- section secondaire ;
-- hiérarchie visuelle plus claire.
-
-============================================================
-9. SECTION SPÉCIFIQUE À LA SESSION DEMANDÉE
-============================================================
-
-Important : cette section doit être adaptée à la session réellement indiquée dans la référence de session.
-
-Ne pas conserver un cadrage spécifique à `A24-UI-01` si la session demandée est `A24-UI-02`, `A24-UI-03`, ou une autre session.
-
-Pour chaque session, le prompt doit reprendre uniquement :
-
-- l’ID exact de session ;
-- le stage ;
-- le bloc ;
-- le type ;
-- l’intitulé ;
-- le périmètre exact ;
-- le livrable attendu ;
-- la DoD attendue ;
-- les exclusions spécifiques ;
-- les fichiers ou zones probablement concernés si connus.
-
-Si la session est une session d’AUDIT :
-
-- ne pas produire de patch code sauf demande explicite exceptionnelle ;
-- produire un verdict formel ;
-- produire une documentation finale ;
-- produire un ZIP documentaire final ;
-- produire `NO_PATCH_CODE` si aucun patch code n’est nécessaire ;
-- produire un patch documentaire uniquement si la documentation est créée ou modifiée.
-
-Si la session est une session de CORRECTION, COMPLÉTION ou CORRECTION+COMPLÉTION :
-
-- produire un patch code uniquement si une modification code est nécessaire ;
-- respecter la règle patch-first ;
-- fournir les validations terminales réellement exécutées ;
-- produire la documentation finale ;
-- produire le ZIP documentaire final ;
-- fournir des captures avant/après si techniquement possible ou noter :
-  `INFORMATION NON FOURNIE — À CONFIRMER`.
-
-Si la session est une session de VALIDATION ou CLOTURE :
-
-- ne pas corriger hors périmètre ;
-- vérifier uniquement ce qui est demandé ;
-- produire un verdict clair ;
-- produire un patch uniquement si un correctif minimal est explicitement nécessaire ;
-- documenter toute absence de preuve.
-
-============================================================
-10. RÈGLE IMPORTANTE POUR LES ZIP EN CONTRÔLE
-============================================================
-
-Si plusieurs ZIP portant le même nom ont été fournis dans la conversation, le contrôle doit analyser exclusivement le ZIP joint au même message que la réponse finale de production à contrôler.
-
-Ignorer tous les anciens ZIP, même s’ils ont exactement le même nom.
-
-Ne jamais conclure sur un ZIP antérieur.
-
-Le contrôle doit explicitement indiquer :
-
-`Je contrôle uniquement le ZIP joint au message de production concerné.`
-
-Si aucun ZIP n’est joint au message final de production, le contrôle doit écrire :
-
-`INFORMATION NON FOURNIE — À CONFIRMER`
-
-et ne doit pas valider le ZIP sur la base d’un ancien fichier.
-
-============================================================
-11. PROMPTS À PRODUIRE
-============================================================
-
-Pour la session indiquée ci-dessous, prépare exactement 2 prompts distincts, prêts à copier/coller en texte :
-
-1. PROMPT DE PRODUCTION
-2. PROMPT DE CONTRÔLE
-
-Ne fais pas de troisième prompt.
-
-Les prompts doivent être :
-
-- propres ;
-- complets ;
-- précis ;
-- directement copiables/collables ;
-- strictement adaptés à la session indiquée ;
-- sans éléments inutiles d’une autre session.
-
-============================================================
-12. PROMPT DE PRODUCTION — CONTRAINTES ATTENDUES
-============================================================
-
-Le prompt de production est destiné à l’outil adapté :
-
-- Codex si la session implique le dépôt réel, le code, les fichiers, les patchs, les commandes ou les validations techniques ;
-- ChatGPT si la session est documentaire, préparatoire, de cadrage ou de contrôle sans besoin d’accès au dépôt réel.
-
-Le prompt de production doit :
-
-- être rédigé avec `./docs/3-templates/TEMPLATE_DEBUT_SESSION.md` si applicable ;
-- s’appuyer uniquement sur les documents réellement utiles à la session ;
-- contenir uniquement les informations concernant la session concernée ;
-- demander d’utiliser le dépôt réel si la session est orientée Codex ;
-- demander d’utiliser les références UI/UX de `./docs/1-master/MAQUETTE/` pour A24 ;
-- rappeler que `MAQUETTE_DA` est une sous-référence importante mais que l’analyse ne doit pas s’y limiter ;
-- respecter strictement les règles du projet ;
-- interdire l’élargissement de périmètre ;
-- interdire l’invention ;
-- interdire les modifications hors session ;
-- interdire le mélange avec d’autres blocs non demandés ;
-- respecter strictement les sources autorisées ;
-- respecter le type de session demandé.
-
-Le prompt de production doit demander une réponse finale structurée contenant au minimum :
-
-1. rappel session ;
+1. rappel de la session ;
 2. sources réellement lues ;
-3. périmètre réellement traité ;
+3. périmètre traité ;
 4. fichiers inspectés ;
 5. fichiers modifiés ;
-6. décision patch :
-   - `PATCH CODE`
-   - `PATCH DOCUMENTAIRE`
-   - `NO_PATCH_CODE`
-   - `NO_PATCH`
-7. patch principal produit si applicable ;
+6. décision patch ;
+7. patch principal si applicable ;
 8. correctifs éventuels ;
-9. validations terminales exécutées avec sorties réelles ;
+9. validations terminales avec preuves réelles ;
 10. preuves d’encodage et d’applicabilité des patchs ;
 11. documentation finale produite ;
 12. contenu vérifié du ZIP final ;
@@ -562,88 +277,79 @@ Le prompt de production doit demander une réponse finale structurée contenant 
 14. risques résiduels ;
 15. recommandation de passage à la suite.
 
-Le prompt de production doit rappeler explicitement :
+Le prompt doit aussi rappeler :
 
-- tous les patchs `.diff` doivent être en UTF-8 sans BOM ou ASCII ;
-- aucun patch UTF-16 n’est accepté ;
-- `git apply --check` doit être prouvé ;
-- `EVIDENCES.md` doit contenir les preuves terminales réelles ;
-- le ZIP doit être régénéré après les dernières modifications ;
-- le ZIP final doit être joint au message final ;
-- les chemins doivent être relatifs au dépôt autant que possible.
+- patchs .diff en UTF-8 sans BOM ou ASCII ;
+- aucun patch UTF-16 ;
+- git apply --check obligatoire si patch ;
+- EVIDENCES.md doit contenir les preuves réelles ;
+- ZIP final régénéré et joint ;
+- chemins relatifs au dépôt autant que possible.
 
 ============================================================
-13. PROMPT DE CONTRÔLE — CONTRAINTES ATTENDUES
+9. PROMPT DE CONTRÔLE À PRODUIRE
 ============================================================
 
 Le prompt de contrôle est destiné à ChatGPT.
 
-Il doit être rédigé pour la discussion de contrôle qualité.
+Il doit demander d’attendre les éléments suivants avant contrôle :
 
-Il doit servir à analyser et évaluer uniquement la réponse issue de la discussion de production.
-
-Il doit attendre que je transmette la réponse finale de production.
+- réponse finale de production ;
+- patch principal si applicable ;
+- patchs correctifs si applicable ;
+- patch documentaire si applicable ;
+- documentation finale ;
+- ZIP documentaire joint au même message que la réponse finale ;
+- preuves terminales.
 
 Le contrôle ne doit pas :
 
 - rejouer la session ;
-- refaire l’audit complet du dépôt ;
-- refaire l’analyse complète du code ;
-- inventer de validations ;
+- refaire l’audit complet ;
+- inventer des validations ;
 - combler les manques par hypothèse ;
-- conclure sur un ancien ZIP.
+- contrôler un ancien ZIP.
 
-Le contrôle doit s’appuyer uniquement sur :
+Si plusieurs ZIP portent le même nom, contrôler uniquement le ZIP joint au message de production concerné.
 
-- la réponse finale de production ;
-- le patch produit si applicable ;
-- les éventuels patchs correctifs minimaux ;
-- le patch documentaire si applicable ;
-- la documentation finale produite ;
-- le ZIP documentaire joint au message de production concerné ;
-- les preuves terminales fournies ;
-- la documentation officielle du projet réellement utile à la session.
+Le contrôle doit écrire :
 
-Si une information n’est pas démontrée, écrire exactement :
+Je contrôle uniquement le ZIP joint au message de production concerné.
 
-`INFORMATION NON FOURNIE — À CONFIRMER`
+Si aucun ZIP n’est joint :
+
+INFORMATION NON FOURNIE — À CONFIRMER
 
 En cas de contradiction :
 
-`RÉPONSE VALIDÉE DE PRODUCTION > BROUILLON / RÉCIT`
+RÉPONSE VALIDÉE DE PRODUCTION > BROUILLON / RÉCIT
 
-Le contrôle doit vérifier notamment :
+Le contrôle doit vérifier :
 
 - respect du périmètre ;
-- respect des sources autorisées ;
-- décision patch correcte ;
-- absence de patch code artificiel ;
-- patch principal présent si attendu ;
-- patchs `.diff` exploitables ;
-- encodage correct des patchs ;
-- absence de patch UTF-16 ;
-- `git apply --check` prouvé ;
-- validations terminales réellement exécutées ;
-- `EVIDENCES.md` suffisamment détaillé ;
-- documentation finale présente ;
-- ZIP documentaire final joint ;
-- contenu du ZIP cohérent ;
-- absence d’élargissement non demandé.
+- sources utilisées ;
+- décision patch ;
+- absence de patch artificiel ;
+- exploitabilité des patchs ;
+- encodage ;
+- git apply --check ;
+- validations réellement prouvées ;
+- contenu de EVIDENCES.md ;
+- documentation finale ;
+- ZIP final ;
+- absence d’élargissement.
 
-Pour les sessions A24, le contrôle doit aussi vérifier :
+Pour A24, vérifier aussi :
 
-- que `./docs/1-master/MAQUETTE/` a bien été utilisé comme référence principale ;
-- que l’analyse ne s’est pas limitée artificiellement à `MAQUETTE_DA` ;
-- que `MAQUETTE_DA` reste bien identifié comme référence de direction artistique lorsqu’elle couvre le sujet ;
-- que les anciennes références A21/A22 n’ont pas primé sur les références actuelles de `./docs/1-master/MAQUETTE/` ;
-- que le mode clair reste le thème principal ;
-- que le mode sombre est cadré ou implémenté selon la session ;
-- que les icônes génériques sont traitées proprement ;
-- que les assets spécifiques Ambulance Manager sont conservés ;
-- qu’aucune fonctionnalité métier hors périmètre n’a été ajoutée ;
-- qu’aucune refonte profonde planning/autoschedule/matching/RBAC/RH n’a été introduite.
+- usage de ./docs/1-master/MAQUETTE/ comme référence principale ;
+- analyse non limitée à MAQUETTE_DA ;
+- respect du mode clair ;
+- traitement cohérent du mode sombre si concerné ;
+- icônes propres ;
+- assets spécifiques conservés ;
+- aucune fonctionnalité métier hors périmètre.
 
-Le contrôle doit produire une sortie structurée avec exactement les sections suivantes :
+Le contrôle doit produire exactement ces sections :
 
 1. Verdict de conformité
 2. Décision patch contrôlée
@@ -661,46 +367,82 @@ Le contrôle doit produire une sortie structurée avec exactement les sections s
 
 Si aucun retour n’est nécessaire, écrire :
 
-`Aucun prompt de retour nécessaire.`
+Aucun prompt de retour nécessaire.
 
 ============================================================
-14. IMPORTANT FINAL
+10. SESSION À TRAITER
 ============================================================
 
-Ne prépare que les 2 prompts demandés :
+Session :
 
-1. un prompt de production ;
-2. un prompt de contrôle.
+- SESSION-20260506-06_A24_A24-UI-06
 
-Ne fais pas de troisième prompt.
+Stage :
 
-Les prompts doivent être directement copiables/collables.
+- 1-ALPHA
 
-Les prompts doivent être rédigés uniquement à partir de la session indiquée ci-dessous.
+Bloc :
 
-Ne pas conserver dans les prompts des consignes propres à une autre session.
+- A24 — Réalignement UI/UX global sur MAQUETTE
 
-La lecture documentaire doit rester ciblée :
+Type :
 
-- noyau minimal obligatoire ;
-- documents complémentaires uniquement si utiles à la session ;
-- aucun “tout relire” systématique sans nécessité réelle.
+- CORRECTION+COMPLÉTION
 
-La production doit travailler en patch-first uniquement si un patch est réellement nécessaire.
+Intitulé :
 
-La documentation finale et le ZIP doivent être produits dans la discussion de production.
+- A24-UI-06 — Utilisateurs / RH visuel
 
-La discussion de contrôle avec ChatGPT doit vérifier l’ensemble produit, sans rejouer la session.
+Périmètre :
+
+- page Utilisateurs ;
+- liste utilisateurs ;
+- filtres ;
+- création utilisateur ;
+- édition utilisateur ;
+- fiche utilisateur ;
+- badges rôles ;
+- badges statuts ;
+- cohérence RH visible ;
+- états visuels ;
+- actions principales et secondaires.
+
+Livrable attendu :
+
+- patch code ciblé Users / RH visuel ;
+- documentation finale ;
+- ZIP documentaire final.
+
+DoD :
+
+- la page Utilisateurs / RH est plus pure, plus lisible et alignée avec les références A24 ;
+- MAQUETTE_DA est utilisée comme référence de direction artistique si elle couvre le sujet ;
+- l’analyse ne doit pas se limiter à MAQUETTE_DA ;
+- aucune RH avancée n’est ajoutée.
+
+Exclusions :
+
+- pas de RH avancée ;
+- pas de paie ;
+- pas de primes ;
+- pas de saisie réelle des heures travaillées ;
+- pas de modification RBAC profonde ;
+- pas de rôle PSC1 réel ;
+- pas de refonte planning ;
+- pas d’autoschedule ;
+- pas de matching ;
+- pas de fonctionnalité hors périmètre.
 
 ============================================================
-15. RÉFÉRENCE DE LA SESSION
+11. SORTIE ATTENDUE
 ============================================================
 
-- SESSION-20260506-08_A24_A24-UI-08
-- **A24-UI-08 — AUDIT** — Audit préparatoire Planning pour A25.  
-  Objectif : auditer le planning après application du socle UI A24, sans correction profonde du planning, afin de préparer le bloc A25.  
-  Livrable attendu : rapport préparatoire A25 avec captures avant, écarts planning, zones sensibles, risques fonctionnels et recommandations de découpage.  
-  DoD : le planning possède une cartographie claire des écarts UI/UX à traiter en A25.
+Réponds uniquement avec :
+
+1. PROMPT DE PRODUCTION
+2. PROMPT DE CONTRÔLE
+
+Les deux prompts doivent être complets, clairs, courts, adaptés à cette session et directement copiables/collables.
 
 ------------------------------------
 
@@ -712,13 +454,25 @@ Unblock-File -Path .\create_session.ps1
 
 #### Sessions
 
+- **A24-UI-05 — CORRECTION+COMPLÉTION** — Véhicules et Templates.  
+  Périmètre : pages véhicules, pages templates, tableaux, filtres, badges, formulaires, détails, états visuels, actions principales et secondaires.  
+  Livrable attendu : patch code ciblé Véhicules + Templates.  
+  DoD : les pages référentielles métier sont propres, cohérentes et visuellement proches de `MAQUETTE_DA`.
 
+- **A24-UI-06 — CORRECTION+COMPLÉTION** — Utilisateurs / RH visuel.  
+  Périmètre : page utilisateurs, liste, filtres, création, édition, fiche utilisateur, badges rôles/statuts et cohérence RH visible.  
+  Livrable attendu : patch code ciblé Users / RH visuel.  
+  DoD : la page Utilisateurs / RH est plus pure, plus lisible, alignée avec `MAQUETTE_DA`, sans ajout de RH avancée.
 
+- **A24-UI-07 — CORRECTION+COMPLÉTION** — Audit, Onboarding, Privacy et pages simples.  
+  Périmètre : audit, onboarding, privacy, pages simples, sections, cards, tableaux, filtres, textes, états et finitions globales.  
+  Livrable attendu : patch code ciblé pages complémentaires.  
+  DoD : les pages complémentaires sont alignées avec la DA officielle et ne créent pas de rupture visuelle.
 
-
-
-
-
+- **A24-UI-08 — AUDIT** — Audit préparatoire Planning pour A25.  
+  Objectif : auditer le planning après application du socle UI A24, sans correction profonde du planning, afin de préparer le bloc A25.  
+  Livrable attendu : rapport préparatoire A25 avec captures avant, écarts planning, zones sensibles, risques fonctionnels et recommandations de découpage.  
+  DoD : le planning possède une cartographie claire des écarts UI/UX à traiter en A25.
 
 - **A24-UI-09 — VALIDATION** — Validation globale UI/UX post-réalignement.  
   À vérifier : cohérence visuelle globale, respect de `MAQUETTE_DA`, mode clair, mode sombre, navigation connectée, captures avant/après, absence de régression fonctionnelle et pages sœurs cohérentes.  

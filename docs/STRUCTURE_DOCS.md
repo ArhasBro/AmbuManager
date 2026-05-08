@@ -1703,7 +1703,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   
 |   |   |   |   \---PATCH
 |   |   |   |           PATCH__SESSION-20260506-05_A24_A24-UI-05.diff
-|   |   |   |           PATCH__SESSION-20260506-05_A24_A24-UI-05_FIX-01.diff
 |   |   |   |           README_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260506-06_A24_A24-UI-06
@@ -1732,11 +1731,22 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   EVIDENCES.md
 |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   NOTES.md
+|   |   |   |   |   RAPPORT_PREPARATOIRE_A25.md
 |   |   |   |   |   RESULTATS.md
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
-|   |   |   |   \---PATCH
-|   |   |   |           NO_PATCH.md
+|   |   |   |   +---CAPTURES
+|   |   |   |   |       CAPTURES_ABSENTES.md
+|   |   |   |   |       
+|   |   |   |   +---PATCH
+|   |   |   |   |       NO_PATCH.md
+|   |   |   |   |       NO_PATCH_CODE.md
+|   |   |   |   |       PATCH__SESSION-20260506-08_A24_A24-UI-08_DOCS.diff
+|   |   |   |   |       README_PATCH.md
+|   |   |   |   |       
+|   |   |   |   \---TERMINAL
+|   |   |   |           PREUVE_PATCH_DOCUMENTAIRE_LOCAL.md
+|   |   |   |           TERMINAL_PREUVES.md
 |   |   |   |           
 |   |   |   +---SESSION-20260506-09_A24_A24-UI-09
 |   |   |   |   |   EVIDENCES.md

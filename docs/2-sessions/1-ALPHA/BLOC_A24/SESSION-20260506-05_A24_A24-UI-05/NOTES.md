@@ -1,40 +1,27 @@
-# NOTES — SESSION-20260506-05_A24_A24-UI-05
+# NOTES - SESSION-20260506-05_A24_A24-UI-05
 
-## Synthèse
+## Decisions UI appliquees
 
-La session a nécessité une correction documentaire et patch après plusieurs erreurs de format `.diff`.
+1. Vehicules
+- passage a une structure principale `liste + panneau detail` proche maquette A24 ;
+- ajout d'une selection de ligne et onglets visuels (`Details`, `Equipements`, `Maintenance`, `Docs`) ;
+- densification du tableau avec colonnes documentaires (assurance, controle technique, carte grise, agrement, conformite).
 
-Le patch principal final appliqué localement ne contenait que :
+2. Templates
+- passage a une structure principale `liste + panneau detail` proche maquette A24 ;
+- ajout d'onglets detail (`Details`, `Equipe`, `Horaires`, `Historique`) ;
+- filters et actions visuelles alignees (filtres avances, export/vue en secondaire visuel, badges statut/traverse minuit).
 
-- `app/a24-vehicles-templates.css`
+3. Socle visuel
+- extension de `app/a24-vehicles-templates.css` pour les layouts a deux colonnes, panneaux details sticky desktop, tabs, cartes de detail et comportement responsive/mobile ;
+- coherence mode clair prioritaire et mode sombre maintenue via variables existantes.
 
-Le correctif minimal `FIX-01` final a ajouté les modifications manquantes :
+## Hors perimetre explicitement respecte
 
-- import de `app/a24-vehicles-templates.css` dans `app/layout.tsx` ;
-- correction du titre et de la description de `app/vehicles/page.tsx` ;
-- correction du titre et de la description de `app/templates/page.tsx`.
+- aucune modification backend/API/Prisma/RBAC ;
+- aucune refonte planning ;
+- aucune extension autoschedule/matching/RH avancee.
 
-## Périmètre non touché
+## Informations non prouvees
 
-- Prisma : non modifié.
-- API : non modifiée.
-- Planning : non modifié.
-- Autoschedule : non modifié.
-- Matching : non modifié.
-- RBAC : non modifié.
-- RH : non modifié.
-- Pages hors Véhicules/Templates : non modifiées hors import global CSS nécessaire dans `app/layout.tsx`.
-
-## Erreurs rencontrées
-
-- Patch principal initial : KO, `corrupt patch at line 481`.
-- Premier `FIX-01` : KO, `corrupt patch at line 25`.
-- Second `FIX-01` : KO, `corrupt patch at line 40`.
-
-## Correction finale
-
-`PATCH/PATCH__SESSION-20260506-05_A24_A24-UI-05_FIX-01.diff` a été appliqué localement sans erreur affichée selon retour utilisateur.
-
-## Limite
-
-Aucune capture avant/après n'a été fournie. La validation visuelle finale reste donc non prouvée.
+- Captures avant/apres de l'application pour cette execution : INFORMATION NON FOURNIE - A CONFIRMER.

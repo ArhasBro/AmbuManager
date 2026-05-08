@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { Ambulance, ClipboardCheck, FileClock, Filter, Plus, Wrench } from "lucide-react";
 
 import { ActionButton, DataTable, ErrorMessage, FilterBar, StatCard, StatusBadge, type DataTableColumn } from "@/app/ui";
 
@@ -37,6 +38,8 @@ type VehicleDocumentStatus = "conforme" | "bientot_expire" | "expire";
 type VehicleStatusFilter = "" | VehicleStatusOption;
 type VehicleTypeFilter = "" | VehicleTypeOption;
 type VehicleDocumentFilter = "" | VehicleDocumentStatus;
+
+type VehicleDetailTab = "DETAILS" | "EQUIPEMENTS" | "MAINTENANCE" | "DOCS";
 
 const VEHICLE_TYPE_OPTIONS: VehicleTypeOption[] = ["AMBULANCE", "VSL", "TAXI"];
 const VEHICLE_STATUS_OPTIONS: VehicleStatusOption[] = ["ACTIVE", "MAINTENANCE", "OUT_OF_SERVICE"];
@@ -90,6 +93,12 @@ function formatDocumentDateLabel(value: string | null) {
   return date.toLocaleDateString("fr-FR");
 }
 
+function formatDateTimeLabel(value: string) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  return date.toLocaleString("fr-FR");
+}
+
 function getVehicleTypeLabel(value: string | null) {
   if (value === "AMBULANCE") return "Ambulance";
   if (value === "VSL") return "VSL";
@@ -98,8 +107,8 @@ function getVehicleTypeLabel(value: string | null) {
 }
 
 function getVehicleStatusLabel(value: string | null) {
-  if (value === "ACTIVE") return "Disponible";
-  if (value === "MAINTENANCE") return "Maintenance";
+  if (value === "ACTIVE") return "En service";
+  if (value === "MAINTENANCE") return "En maintenance";
   if (value === "OUT_OF_SERVICE") return "Hors service";
   return "Statut non renseigne";
 }
@@ -221,6 +230,13 @@ function toSafeDocumentFilter(value: string): VehicleDocumentFilter {
   return "";
 }
 
+const VEHICLE_DETAIL_TABS: Array<{ id: VehicleDetailTab; label: string }> = [
+  { id: "DETAILS", label: "Details" },
+  { id: "EQUIPEMENTS", label: "Equipements" },
+  { id: "MAINTENANCE", label: "Maintenance" },
+  { id: "DOCS", label: "Docs" },
+];
+
 export default function VehiclesClient({
   initialVehicles,
   availableDepots,
@@ -240,6 +256,11 @@ export default function VehiclesClient({
   const [archivingVehicleId, setArchivingVehicleId] = useState<string | null>(null);
   const [savingDepotVehicleId, setSavingDepotVehicleId] = useState<string | null>(null);
   const [editingVehicleId, setEditingVehicleId] = useState<string | null>(null);
+  const [selectedVehicleId, setSelectedVehicleId] = useState<string | null>(initialVehicles[0]?.id ?? null);
+  const [detailTab, setDetailTab] = useState<VehicleDetailTab>("DETAILS");
+  const [showCreateVehicleForm, setShowCreateVehicleForm] = useState(false);
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+
   const [editImmatriculation, setEditImmatriculation] = useState("");
   const [editType, setEditType] = useState<VehicleTypeOption>("AMBULANCE");
   const [editStatus, setEditStatus] = useState<VehicleStatusOption>("ACTIVE");
@@ -253,6 +274,7 @@ export default function VehiclesClient({
   const [statusFilter, setStatusFilter] = useState<VehicleStatusFilter>("");
   const [typeFilter, setTypeFilter] = useState<VehicleTypeFilter>("");
   const [documentFilter, setDocumentFilter] = useState<VehicleDocumentFilter>("");
+  const [depotFilter, setDepotFilter] = useState<string>("");
 
   const depotOptions = useMemo(() => availableDepots, [availableDepots]);
   const displayVehicles = useMemo(() => [...vehicles].sort(compareVehiclesByImmatriculation), [vehicles]);
@@ -279,29 +301,48 @@ export default function VehiclesClient({
       if (!vehicleMatchesQuery(vehicle, searchInput.trim())) return false;
       if (typeFilter && vehicle.type !== typeFilter) return false;
       if (statusFilter && vehicle.status !== statusFilter) return false;
+      if (depotFilter && vehicle.depotId !== depotFilter) return false;
 
       const documentStatus = documentStatusByVehicleId.get(vehicle.id) ?? "conforme";
       if (documentFilter && documentStatus !== documentFilter) return false;
 
       return true;
     });
-  }, [displayVehicles, documentFilter, documentStatusByVehicleId, searchInput, statusFilter, typeFilter]);
+  }, [displayVehicles, depotFilter, documentFilter, documentStatusByVehicleId, searchInput, statusFilter, typeFilter]);
+
+  useEffect(() => {
+    if (filteredVehicles.length === 0) {
+      setSelectedVehicleId(null);
+      return;
+    }
+
+    if (!selectedVehicleId || !filteredVehicles.some((vehicle) => vehicle.id === selectedVehicleId)) {
+      setSelectedVehicleId(filteredVehicles[0].id);
+      setDetailTab("DETAILS");
+    }
+  }, [filteredVehicles, selectedVehicleId]);
+
+  const selectedVehicle = useMemo(
+    () => filteredVehicles.find((vehicle) => vehicle.id === selectedVehicleId) ?? null,
+    [filteredVehicles, selectedVehicleId],
+  );
 
   const vehicleStats = useMemo(() => {
     const counts = {
       total: displayVehicles.length,
-      conformes: 0,
-      bientotExpires: 0,
-      expires: 0,
-      indisponibles: 0,
+      enService: 0,
+      maintenance: 0,
+      horsService: 0,
+      conformiteASurveiller: 0,
     };
 
     for (const vehicle of displayVehicles) {
       const documentStatus = documentStatusByVehicleId.get(vehicle.id) ?? "conforme";
-      if (documentStatus === "conforme") counts.conformes += 1;
-      if (documentStatus === "bientot_expire") counts.bientotExpires += 1;
-      if (documentStatus === "expire") counts.expires += 1;
-      if (vehicle.status === "MAINTENANCE" || vehicle.status === "OUT_OF_SERVICE") counts.indisponibles += 1;
+
+      if (vehicle.status === "ACTIVE") counts.enService += 1;
+      if (vehicle.status === "MAINTENANCE") counts.maintenance += 1;
+      if (vehicle.status === "OUT_OF_SERVICE") counts.horsService += 1;
+      if (documentStatus !== "conforme") counts.conformiteASurveiller += 1;
     }
 
     return counts;
@@ -331,6 +372,7 @@ export default function VehiclesClient({
   function openEditVehicle(vehicle: Vehicle) {
     clearFeedback();
     setEditingVehicleId(vehicle.id);
+    setSelectedVehicleId(vehicle.id);
     setEditImmatriculation(vehicle.immatriculation);
     setEditType(getEditableVehicleType(vehicle.type));
     setEditStatus(getEditableVehicleStatus(vehicle.status));
@@ -366,6 +408,9 @@ export default function VehiclesClient({
         ...prev,
         [data.data.id]: data.data.depotId ?? "",
       }));
+      setSelectedVehicleId(data.data.id);
+      setDetailTab("DETAILS");
+      setShowCreateVehicleForm(false);
       setSuccessMessage(`Vehicule ${data.data.immatriculation} ajoute.`);
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Erreur inconnue");
@@ -484,233 +529,394 @@ export default function VehiclesClient({
     setTypeFilter("");
     setStatusFilter("");
     setDocumentFilter("");
+    setDepotFilter("");
+    setShowAdvancedFilters(false);
   }
 
   const columns: DataTableColumn<Vehicle>[] = [
-      {
-        key: "immatriculation",
-        header: "Vehicule",
-        width: "220px",
-        render: (vehicle) => (
-          <div className="vehicles-cell-main">
-            <strong>{vehicle.immatriculation}</strong>
-            <span className="vehicles-table-cell-subtle">{getVehicleTypeLabel(vehicle.type)}</span>
+    {
+      key: "vehicle",
+      header: "Vehicule",
+      width: "220px",
+      render: (vehicle) => (
+        <div className="vehicles-cell-main">
+          <strong>{vehicle.immatriculation}</strong>
+          <span className="vehicles-table-cell-subtle">{getVehicleTypeLabel(vehicle.type)}</span>
+        </div>
+      ),
+    },
+    {
+      key: "depot",
+      header: "Depot",
+      width: "130px",
+      render: (vehicle) => (
+        <StatusBadge variant={depotStatusVariant(vehicle.depot)}>
+          {vehicle.depot ? getDepotLabel(vehicle.depot) : "Aucune base"}
+        </StatusBadge>
+      ),
+    },
+    {
+      key: "status",
+      header: "Statut",
+      width: "120px",
+      render: (vehicle) => (
+        <StatusBadge variant={vehicleStatusBadgeVariant(vehicle.status)}>{getVehicleStatusLabel(vehicle.status)}</StatusBadge>
+      ),
+    },
+    {
+      key: "insurance",
+      header: "Assurance",
+      width: "120px",
+      render: (vehicle) => formatDocumentDateLabel(vehicle.insuranceExpiresAt),
+    },
+    {
+      key: "technical",
+      header: "Controle technique",
+      width: "150px",
+      render: (vehicle) => formatDocumentDateLabel(vehicle.technicalInspectionExpiresAt),
+    },
+    {
+      key: "registration",
+      header: "Carte grise",
+      width: "120px",
+      render: (vehicle) => (
+        <StatusBadge variant={vehicle.registrationDocumentPresent ? "success" : "danger"}>
+          {vehicle.registrationDocumentPresent ? "OK" : "Manquante"}
+        </StatusBadge>
+      ),
+    },
+    {
+      key: "sanitary",
+      header: "Agrement sanitaire",
+      width: "150px",
+      render: (vehicle) => formatDocumentDateLabel(vehicle.sanitaryApprovalExpiresAt),
+    },
+    {
+      key: "documents",
+      header: "Conformite",
+      width: "130px",
+      render: (vehicle) => {
+        const documentStatus = documentStatusByVehicleId.get(vehicle.id) ?? "conforme";
+        return <StatusBadge variant={documentStatusBadgeVariant(documentStatus)}>{documentStatusLabel(documentStatus)}</StatusBadge>;
+      },
+    },
+    {
+      key: "updatedAt",
+      header: "Derniere modif.",
+      width: "160px",
+      render: (vehicle) => formatDateTimeLabel(vehicle.updatedAt),
+    },
+    {
+      key: "actions",
+      header: "Actions",
+      align: "right",
+      width: "200px",
+      render: (vehicle) => {
+        const isSavingEdit = savingEditVehicleId === vehicle.id;
+        const isArchiving = archivingVehicleId === vehicle.id;
+        const isBusy = isSavingEdit || isArchiving;
+
+        return (
+          <div className="vehicles-actions vehicles-actions--wrap vehicles-actions--end">
+            <ActionButton
+              size="sm"
+              variant="secondary"
+              leadingIcon={<Wrench size={14} />}
+              onClick={() => openEditVehicle(vehicle)}
+              disabled={isBusy}
+            >
+              Modifier
+            </ActionButton>
+
+            <ActionButton
+              size="sm"
+              variant="danger"
+              onClick={() => handleArchiveVehicle(vehicle)}
+              disabled={isBusy}
+            >
+              {isArchiving ? "Archivage..." : "Archiver"}
+            </ActionButton>
           </div>
-        ),
+        );
       },
-      {
-        key: "status",
-        header: "Statut",
-        width: "150px",
-        render: (vehicle) => (
-          <StatusBadge variant={vehicleStatusBadgeVariant(vehicle.status)}>{getVehicleStatusLabel(vehicle.status)}</StatusBadge>
-        ),
-      },
-      {
-        key: "documents",
-        header: "Conformite",
-        width: "170px",
-        render: (vehicle) => {
-          const documentStatus = documentStatusByVehicleId.get(vehicle.id) ?? "conforme";
-          return (
-            <StatusBadge variant={documentStatusBadgeVariant(documentStatus)}>
-              {documentStatusLabel(documentStatus)}
-            </StatusBadge>
-          );
-        },
-      },
-      {
-        key: "depot",
-        header: "Base",
-        width: "340px",
-        render: (vehicle) => {
-          const currentDepot = vehicle.depot;
-          const currentSelection = selectedDepotIds[vehicle.id] ?? "";
-          const options = currentDepot && !depotOptions.some((depot) => depot.id === currentDepot.id)
-            ? [currentDepot, ...depotOptions]
-            : depotOptions;
-          const hasPendingDepotChange = currentSelection !== (vehicle.depotId ?? "");
-          const isSavingDepot = savingDepotVehicleId === vehicle.id;
-          const isArchiving = archivingVehicleId === vehicle.id;
+    },
+  ];
 
-          return (
-            <div className="vehicles-depot-cell">
-              <StatusBadge variant={depotStatusVariant(vehicle.depot)}>
-                {vehicle.depot ? getDepotLabel(vehicle.depot) : "Aucune base"}
-              </StatusBadge>
-
-              <div className="vehicles-depot-editor">
-                <select
-                  value={currentSelection}
-                  onChange={(event) => {
-                    const value = event.target.value;
-                    setSelectedDepotIds((prev) => ({
-                      ...prev,
-                      [vehicle.id]: value,
-                    }));
-                  }}
-                  disabled={isSavingDepot || isArchiving}
-                >
-                  <option value="">Aucune base</option>
-                  {options.map((depot) => (
-                    <option key={depot.id} value={depot.id}>
-                      {getDepotLabel(depot)}
-                    </option>
-                  ))}
-                </select>
-
-                <ActionButton
-                  size="sm"
-                  onClick={() => handleSaveDepot(vehicle.id)}
-                  disabled={isSavingDepot || isArchiving || !hasPendingDepotChange}
-                >
-                  {isSavingDepot ? "Enregistrement..." : "Enregistrer"}
-                </ActionButton>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        key: "actions",
-        header: "Actions",
-        align: "right",
-        width: "230px",
-        render: (vehicle) => {
-          const isSavingEdit = savingEditVehicleId === vehicle.id;
-          const isArchiving = archivingVehicleId === vehicle.id;
-          const isEditing = editingVehicleId === vehicle.id;
-          const isBusy = isSavingEdit || isArchiving;
-
-          return (
-            <div className="vehicles-actions vehicles-actions--wrap vehicles-actions--end">
-              <ActionButton
-                size="sm"
-                variant="secondary"
-                onClick={() => openEditVehicle(vehicle)}
-                disabled={isBusy}
-              >
-                {isEditing ? "Edition en cours" : "Modifier"}
-              </ActionButton>
-
-              <ActionButton
-                size="sm"
-                variant="danger"
-                onClick={() => handleArchiveVehicle(vehicle)}
-                disabled={isBusy}
-              >
-                {isArchiving ? "Archivage..." : "Archiver"}
-              </ActionButton>
-            </div>
-          );
-        },
-      },
-    ];
+  const selectedVehicleDocumentStatus = selectedVehicle
+    ? documentStatusByVehicleId.get(selectedVehicle.id) ?? "conforme"
+    : null;
 
   return (
     <section className="vehicles-section">
       <div className="vehicles-grid-stats">
-        <StatCard title="Vehicules actifs" value={vehicleStats.total} hint="Flotte active de la societe" />
-        <StatCard title="Conformes" value={vehicleStats.conformes} hint="Dossiers a jour" tone="success" />
-        <StatCard title="Bientot expires" value={vehicleStats.bientotExpires} hint={`A moins de ${DOCUMENT_WARNING_WINDOW_DAYS} jours`} tone="warning" />
-        <StatCard title="Indisponibles" value={vehicleStats.indisponibles} hint="Maintenance ou hors service" tone="danger" />
+        <StatCard title="Total vehicules" value={vehicleStats.total} hint="Flotte active" tone="info" icon={<Ambulance size={18} />} />
+        <StatCard title="En service" value={vehicleStats.enService} hint="Vehicules operationnels" tone="success" icon={<ClipboardCheck size={18} />} />
+        <StatCard title="En maintenance" value={vehicleStats.maintenance} hint="Maintenance planifiee" tone="warning" icon={<Wrench size={18} />} />
+        <StatCard title="Hors service" value={vehicleStats.horsService} hint="Indisponibles" tone="danger" icon={<FileClock size={18} />} />
+        <StatCard
+          title="Conformite a surveiller"
+          value={vehicleStats.conformiteASurveiller}
+          hint="Documents expires ou bientot expires"
+          tone="warning"
+          icon={<Filter size={18} />}
+        />
       </div>
 
       {error ? <ErrorMessage title="Erreur module vehicules" message={error} /> : null}
       {successMessage ? <div className="vehicles-alert vehicles-alert--success">{successMessage}</div> : null}
 
-      <section className="vehicles-card">
-        <div className="vehicles-card__head">
-          <h2 className="vehicles-card__title">Ajouter un vehicule</h2>
-          <p className="vehicles-card__description">
-            Creation d&apos;un vehicule actif avec type et statut initial, sans modification de logique metier.
-          </p>
-          {!canCreateVehicle ? (
-            <div className="vehicles-inline-status">
-              <StatusBadge variant="warning">Creation reservee au profil ADMIN</StatusBadge>
+      <div className="vehicles-layout">
+        <div className="vehicles-layout__main">
+          <section className="vehicles-card">
+            <div className="vehicles-card__head">
+              <div>
+                <h2 className="vehicles-card__title">Ajouter un vehicule</h2>
+                <p className="vehicles-card__description">
+                  Creation d&apos;un vehicule actif avec type et statut initial, sans modification de logique metier.
+                </p>
+              </div>
+              <div className="vehicles-inline-status">
+                {!canCreateVehicle ? <StatusBadge variant="warning">Creation reservee au profil ADMIN</StatusBadge> : null}
+                <ActionButton
+                  variant={showCreateVehicleForm ? "secondary" : "primary"}
+                  size="sm"
+                  leadingIcon={<Plus size={16} />}
+                  onClick={() => setShowCreateVehicleForm((prev) => !prev)}
+                  disabled={!canCreateVehicle}
+                >
+                  {showCreateVehicleForm ? "Masquer" : "Ajouter un vehicule"}
+                </ActionButton>
+              </div>
             </div>
-          ) : null}
-        </div>
 
-        {canCreateVehicle ? (
-          <AddVehicleForm onSubmit={handleAddVehicle} disabled={isSubmitting} />
-        ) : (
-          <p className="vehicles-table-cell-subtle">Votre role ne permet pas la creation de vehicules.</p>
-        )}
-      </section>
+            {showCreateVehicleForm ? (
+              <AddVehicleForm onSubmit={handleAddVehicle} disabled={isSubmitting} />
+            ) : (
+              <p className="vehicles-table-cell-subtle">Formulaire replie. Utilisez le bouton &quot;Ajouter un vehicule&quot; pour ouvrir la creation.</p>
+            )}
+          </section>
 
-      <section className="vehicles-card">
-        <div className="vehicles-card__head">
-          <h2 className="vehicles-card__title">Liste des vehicules</h2>
-          <p className="vehicles-card__description">
-            Consultation, filtrage simple, affectation de base, edition et archivage logique des vehicules actifs.
-          </p>
-        </div>
+          <section className="vehicles-card">
+            <div className="vehicles-card__head">
+              <div>
+                <h2 className="vehicles-card__title">Liste des vehicules</h2>
+                <p className="vehicles-card__description">
+                  Consultation, filtrage et suivi documentaire de la flotte. Selectionnez une ligne pour afficher le panneau detail.
+                </p>
+              </div>
+            </div>
 
-        <FilterBar
-          summary={`Filtres actifs : ${searchInput.trim() ? `recherche "${searchInput.trim()}"` : "aucune recherche"}${typeFilter ? `, type ${getVehicleTypeLabel(typeFilter)}` : ""}${statusFilter ? `, statut ${getVehicleStatusLabel(statusFilter)}` : ""}${documentFilter ? `, conformite ${documentStatusLabel(documentFilter)}` : ""}`}
-          actions={(
-            <ActionButton size="sm" variant="ghost" onClick={resetFilters}>
-              Reinitialiser
-            </ActionButton>
-          )}
-        >
-          <label className="vehicles-field">
-            <span className="vehicles-field__label">Recherche</span>
-            <input
-              type="text"
-              value={searchInput}
-              onChange={(event) => setSearchInput(event.target.value)}
-              placeholder="Immatriculation, type, statut ou base"
-            />
-          </label>
-
-          <label className="vehicles-field">
-            <span className="vehicles-field__label">Type</span>
-            <select value={typeFilter} onChange={(event) => setTypeFilter(toSafeTypeFilter(event.target.value))}>
-              <option value="">Tous les types</option>
-              <option value="AMBULANCE">Ambulance</option>
-              <option value="VSL">VSL</option>
-              <option value="TAXI">Taxi</option>
-            </select>
-          </label>
-
-          <label className="vehicles-field">
-            <span className="vehicles-field__label">Statut</span>
-            <select value={statusFilter} onChange={(event) => setStatusFilter(toSafeStatusFilter(event.target.value))}>
-              <option value="">Tous les statuts</option>
-              <option value="ACTIVE">Disponible</option>
-              <option value="MAINTENANCE">Maintenance</option>
-              <option value="OUT_OF_SERVICE">Hors service</option>
-            </select>
-          </label>
-
-          <label className="vehicles-field">
-            <span className="vehicles-field__label">Conformite</span>
-            <select
-              value={documentFilter}
-              onChange={(event) => setDocumentFilter(toSafeDocumentFilter(event.target.value))}
+            <FilterBar
+              summary={`Filtres actifs : ${searchInput.trim() ? `recherche "${searchInput.trim()}"` : "aucune recherche"}${typeFilter ? `, type ${getVehicleTypeLabel(typeFilter)}` : ""}${statusFilter ? `, statut ${getVehicleStatusLabel(statusFilter)}` : ""}${depotFilter ? `, depot ${depotOptions.find((depot) => depot.id === depotFilter)?.name ?? depotFilter}` : ""}${showAdvancedFilters && documentFilter ? `, conformite ${documentStatusLabel(documentFilter)}` : ""}`}
+              actions={(
+                <div className="vehicles-actions vehicles-actions--wrap">
+                  <ActionButton size="sm" variant="secondary" leadingIcon={<Filter size={14} />} onClick={() => setShowAdvancedFilters((prev) => !prev)}>
+                    {showAdvancedFilters ? "Masquer filtres avances" : "Filtres avances"}
+                  </ActionButton>
+                  <ActionButton size="sm" variant="ghost" onClick={resetFilters}>
+                    Reinitialiser
+                  </ActionButton>
+                </div>
+              )}
             >
-              <option value="">Tous les niveaux</option>
-              <option value="conforme">Conforme</option>
-              <option value="bientot_expire">Bientot expire</option>
-              <option value="expire">Expire</option>
-            </select>
-          </label>
-        </FilterBar>
+              <label className="vehicles-field">
+                <span className="vehicles-field__label">Recherche</span>
+                <input
+                  type="text"
+                  value={searchInput}
+                  onChange={(event) => setSearchInput(event.target.value)}
+                  placeholder="Immatriculation, type, statut ou depot"
+                />
+              </label>
 
-        <DataTable
-          columns={columns}
-          rows={filteredVehicles}
-          rowKey={(vehicle) => vehicle.id}
-          loading={false}
-          error={null}
-          emptyTitle="Aucun vehicule trouve"
-          emptyMessage="Aucun vehicule ne correspond aux criteres de recherche."
-          minWidth={1200}
-          caption="Vehicules actifs de la societe courante"
-        />
-      </section>
+              <label className="vehicles-field">
+                <span className="vehicles-field__label">Statut</span>
+                <select value={statusFilter} onChange={(event) => setStatusFilter(toSafeStatusFilter(event.target.value))}>
+                  <option value="">Tous les statuts</option>
+                  <option value="ACTIVE">En service</option>
+                  <option value="MAINTENANCE">Maintenance</option>
+                  <option value="OUT_OF_SERVICE">Hors service</option>
+                </select>
+              </label>
+
+              <label className="vehicles-field">
+                <span className="vehicles-field__label">Type</span>
+                <select value={typeFilter} onChange={(event) => setTypeFilter(toSafeTypeFilter(event.target.value))}>
+                  <option value="">Tous les types</option>
+                  <option value="AMBULANCE">Ambulance</option>
+                  <option value="VSL">VSL</option>
+                  <option value="TAXI">Taxi</option>
+                </select>
+              </label>
+
+              <label className="vehicles-field">
+                <span className="vehicles-field__label">Depot</span>
+                <select value={depotFilter} onChange={(event) => setDepotFilter(event.target.value)}>
+                  <option value="">Tous les depots</option>
+                  {depotOptions.map((depot) => (
+                    <option key={depot.id} value={depot.id}>
+                      {getDepotLabel(depot)}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              {showAdvancedFilters ? (
+                <label className="vehicles-field">
+                  <span className="vehicles-field__label">Conformite</span>
+                  <select
+                    value={documentFilter}
+                    onChange={(event) => setDocumentFilter(toSafeDocumentFilter(event.target.value))}
+                  >
+                    <option value="">Tous les niveaux</option>
+                    <option value="conforme">Conforme</option>
+                    <option value="bientot_expire">Bientot expire</option>
+                    <option value="expire">Expire</option>
+                  </select>
+                </label>
+              ) : null}
+            </FilterBar>
+
+            <DataTable
+              columns={columns}
+              rows={filteredVehicles}
+              rowKey={(vehicle) => vehicle.id}
+              loading={false}
+              error={null}
+              emptyTitle="Aucun vehicule trouve"
+              emptyMessage="Aucun vehicule ne correspond aux criteres de recherche."
+              minWidth={1520}
+              caption="Vehicules actifs de la societe courante"
+              selectedRowKey={selectedVehicleId}
+              onRowClick={(vehicle) => {
+                setSelectedVehicleId(vehicle.id);
+                clearFeedback();
+              }}
+            />
+          </section>
+        </div>
+
+        <aside className="vehicles-detail-panel">
+          {selectedVehicle ? (
+            <>
+              <div className="vehicles-detail-panel__head">
+                <div>
+                  <h3 className="vehicles-detail-panel__title">{selectedVehicle.immatriculation}</h3>
+                  <p className="vehicles-detail-panel__subtitle">{getVehicleTypeLabel(selectedVehicle.type)}</p>
+                </div>
+                <StatusBadge variant={vehicleStatusBadgeVariant(selectedVehicle.status)}>{getVehicleStatusLabel(selectedVehicle.status)}</StatusBadge>
+              </div>
+
+              <nav className="vehicles-detail-tabs" aria-label="Details vehicule">
+                {VEHICLE_DETAIL_TABS.map((tab) => (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    className={`vehicles-detail-tab${detailTab === tab.id ? " is-active" : ""}`}
+                    onClick={() => setDetailTab(tab.id)}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </nav>
+
+              {detailTab === "DETAILS" ? (
+                <div className="vehicles-detail-group">
+                  <h4 className="vehicles-detail-group__title">Informations generales</h4>
+                  <dl className="vehicles-detail-list">
+                    <div><dt>Type</dt><dd>{getVehicleTypeLabel(selectedVehicle.type)}</dd></div>
+                    <div><dt>Depot</dt><dd>{selectedVehicle.depot ? getDepotLabel(selectedVehicle.depot) : "Aucune base"}</dd></div>
+                    <div><dt>Statut</dt><dd>{getVehicleStatusLabel(selectedVehicle.status)}</dd></div>
+                    <div><dt>Conformite</dt><dd>{documentStatusLabel(selectedVehicleDocumentStatus ?? "conforme")}</dd></div>
+                  </dl>
+                </div>
+              ) : null}
+
+              {detailTab === "EQUIPEMENTS" ? (
+                <div className="vehicles-detail-group">
+                  <h4 className="vehicles-detail-group__title">Affectation</h4>
+                  <div className="vehicles-depot-editor">
+                    <select
+                      value={selectedDepotIds[selectedVehicle.id] ?? ""}
+                      onChange={(event) => {
+                        const value = event.target.value;
+                        setSelectedDepotIds((prev) => ({
+                          ...prev,
+                          [selectedVehicle.id]: value,
+                        }));
+                      }}
+                      disabled={savingDepotVehicleId === selectedVehicle.id || archivingVehicleId === selectedVehicle.id}
+                    >
+                      <option value="">Aucune base</option>
+                      {depotOptions.map((depot) => (
+                        <option key={depot.id} value={depot.id}>{getDepotLabel(depot)}</option>
+                      ))}
+                    </select>
+                    <ActionButton
+                      size="sm"
+                      onClick={() => handleSaveDepot(selectedVehicle.id)}
+                      disabled={
+                        savingDepotVehicleId === selectedVehicle.id
+                        || archivingVehicleId === selectedVehicle.id
+                        || (selectedDepotIds[selectedVehicle.id] ?? "") === (selectedVehicle.depotId ?? "")
+                      }
+                    >
+                      {savingDepotVehicleId === selectedVehicle.id ? "Enregistrement..." : "Enregistrer"}
+                    </ActionButton>
+                  </div>
+                  <p className="vehicles-table-cell-subtle">La composition equipement detaillee n&apos;est pas disponible dans ce lot UI.</p>
+                </div>
+              ) : null}
+
+              {detailTab === "MAINTENANCE" ? (
+                <div className="vehicles-detail-group">
+                  <h4 className="vehicles-detail-group__title">Controles & maintenance</h4>
+                  <dl className="vehicles-detail-list">
+                    <div><dt>Assurance</dt><dd>{formatDocumentDateLabel(selectedVehicle.insuranceExpiresAt)}</dd></div>
+                    <div><dt>Controle technique</dt><dd>{formatDocumentDateLabel(selectedVehicle.technicalInspectionExpiresAt)}</dd></div>
+                    <div><dt>Agrement sanitaire</dt><dd>{formatDocumentDateLabel(selectedVehicle.sanitaryApprovalExpiresAt)}</dd></div>
+                  </dl>
+                </div>
+              ) : null}
+
+              {detailTab === "DOCS" ? (
+                <div className="vehicles-detail-group">
+                  <h4 className="vehicles-detail-group__title">Conformite documentaire</h4>
+                  <div className="vehicles-inline-status">
+                    <StatusBadge variant={selectedVehicle.registrationDocumentPresent ? "success" : "danger"}>
+                      Carte grise {selectedVehicle.registrationDocumentPresent ? "OK" : "manquante"}
+                    </StatusBadge>
+                    <StatusBadge variant={documentStatusBadgeVariant(selectedVehicleDocumentStatus ?? "conforme")}>
+                      {documentStatusLabel(selectedVehicleDocumentStatus ?? "conforme")}
+                    </StatusBadge>
+                  </div>
+                </div>
+              ) : null}
+
+              <div className="vehicles-detail-panel__actions">
+                <ActionButton
+                  variant="secondary"
+                  leadingIcon={<Wrench size={14} />}
+                  onClick={() => openEditVehicle(selectedVehicle)}
+                  disabled={archivingVehicleId === selectedVehicle.id || savingEditVehicleId === selectedVehicle.id}
+                >
+                  Modifier
+                </ActionButton>
+                <ActionButton variant="primary" disabled>Voir l&apos;historique</ActionButton>
+                <ActionButton
+                  variant="danger"
+                  onClick={() => handleArchiveVehicle(selectedVehicle)}
+                  disabled={archivingVehicleId === selectedVehicle.id || savingEditVehicleId === selectedVehicle.id}
+                >
+                  {archivingVehicleId === selectedVehicle.id ? "Archivage..." : "Archiver"}
+                </ActionButton>
+              </div>
+            </>
+          ) : (
+            <p className="vehicles-table-cell-subtle">Selectionnez un vehicule dans le tableau pour afficher le detail.</p>
+          )}
+        </aside>
+      </div>
 
       {editingVehicle ? (
         <section className="vehicles-card">
@@ -778,7 +984,7 @@ export default function VehiclesClient({
                   onChange={(event) => setEditStatus(getEditableVehicleStatus(event.target.value))}
                   disabled={savingEditVehicleId === editingVehicle.id || archivingVehicleId === editingVehicle.id}
                 >
-                  <option value="ACTIVE">Disponible</option>
+                  <option value="ACTIVE">En service</option>
                   <option value="MAINTENANCE">Maintenance</option>
                   <option value="OUT_OF_SERVICE">Hors service</option>
                 </select>
@@ -860,4 +1066,3 @@ export default function VehiclesClient({
     </section>
   );
 }
-

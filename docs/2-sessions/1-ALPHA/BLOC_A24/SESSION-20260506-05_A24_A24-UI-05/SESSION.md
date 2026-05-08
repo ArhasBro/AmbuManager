@@ -1,40 +1,46 @@
 # SESSION-20260506-05_A24_A24-UI-05
 
-Stage : 1-ALPHA  
-Bloc : A24 — Réalignement UI/UX global sur MAQUETTE  
-Type : CORRECTION+COMPLÉTION  
-Intitulé : A24-UI-05 — Véhicules et Templates
+Stage : 1-ALPHA
+Bloc : A24 - Realignement UI/UX global sur MAQUETTE
+Type : CORRECTION+COMPLETION
+Intitule : A24-UI-05 - Vehicules et Templates
 
-## Objectif
+## Objectif unique
 
-Réaligner visuellement les pages Véhicules et Templates avec les références A24 issues de `docs/1-master/MAQUETTE/`, sans modification métier, sans modification Prisma, sans modification RBAC et sans ajout fonctionnel hors périmètre.
+Realigner visuellement les pages Vehicules et Templates sur les references UI/UX A24, sans refonte metier.
 
-## Périmètre traité
+## Sources lues
 
-- Page Véhicules.
-- Page Templates.
-- Feuille CSS A24 ciblée Véhicules/Templates.
-- Import CSS dans le layout applicatif.
-- Titre et description des pages Véhicules/Templates.
+- docs/1-master/DOCUMENT_MAITRE.md
+- docs/1-master/PLAN_DE_DEVELOPPEMENT.md
+- docs/3-templates/TEMPLATE_DEBUT_SESSION.md
+- docs/1-master/REFERENCE_UI_UX_A24.md
+- docs/1-master/MAQUETTE/README_MAQUETTES_A24.md
+- docs/1-master/MAQUETTE/SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md (sections Vehicules/Templates)
+- docs/1-master/MAQUETTE/MAQUETTE_DA/.../4-Vehicules/Vehicules_V1.2.png
+- docs/1-master/MAQUETTE/MAQUETTE_DA/.../1-Templates/Templates_V1.1.png
 
-## Livrables code
+## Perimetre traite
 
-- Patch principal corrigé : `PATCH/PATCH__SESSION-20260506-05_A24_A24-UI-05.diff`
-- Correctif minimal final : `PATCH/PATCH__SESSION-20260506-05_A24_A24-UI-05_FIX-01.diff`
+- pages Vehicules (`/vehicles`)
+- pages Templates (`/templates`)
+- tableaux
+- filtres
+- badges
+- formulaires
+- details
+- etats visuels
+- actions principales et secondaires
 
-## Historique réel des patchs
+## Livrable code
 
-1. Premier patch principal initial : KO, `corrupt patch at line 481`.
-2. Patch principal corrigé : appliqué pour la partie CSS.
-3. Premier `FIX-01` : KO, `corrupt patch at line 25`.
-4. Second `FIX-01` : KO, `corrupt patch at line 40`.
-5. `FIX-01` final avec retour ligne final : appliqué OK.
-6. `npm run lint` : OK.
-7. `npm run build` : OK.
-8. Captures avant/après : INFORMATION NON FOURNIE — À CONFIRMER.
+- patch principal unique : PATCH/PATCH__SESSION-20260506-05_A24_A24-UI-05.diff
+- correctif : aucun
 
-## Statut de validation
+## Fichiers code modifies
 
-Validation terminale locale fournie par l'utilisateur : OK pour application du `FIX-01` final, lint et build.
-
-Validation visuelle finale : INFORMATION NON FOURNIE — À CONFIRMER.
+- app/a24-vehicles-templates.css
+- app/vehicles/page.tsx
+- app/vehicles/vehicles-client.tsx
+- app/templates/page.tsx
+- app/templates/templates-client.tsx

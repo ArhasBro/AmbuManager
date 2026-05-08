@@ -60,8 +60,8 @@ export default async function VehiclesPage() {
   return (
     <div className="page-wrap">
       <PageHeader
-        title="Véhicules"
-        description="Gérez votre flotte active, la conformité documentaire et le rattachement aux bases."
+        title="Vehicules"
+        description="Gerez votre flotte active, la conformite documentaire et le rattachement aux depots."
       />
 
       <VehiclesClient
@@ -72,3 +72,4 @@ export default async function VehiclesPage() {
     </div>
   );
 }
+

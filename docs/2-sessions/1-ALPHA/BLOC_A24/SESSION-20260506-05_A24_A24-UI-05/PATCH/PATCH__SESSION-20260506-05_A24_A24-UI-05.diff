@@ -1,456 +1,1700 @@
 diff --git a/app/a24-vehicles-templates.css b/app/a24-vehicles-templates.css
-new file mode 100644
-index 0000000..a456177
---- /dev/null
+index a456177..9bf9b5c 100644
+--- a/app/a24-vehicles-templates.css
 +++ b/app/a24-vehicles-templates.css
-@@ -0,0 +1,450 @@
-+/* A24-UI-05 — réalignement UI/UX ciblé Véhicules + Templates.
-+   Feuille chargée après globals.css pour limiter les retouches code aux pages du périmètre. */
-+
-+.vehicles-section,
-+.templates-section {
+@@ -7,10 +7,24 @@
+   gap: 18px;
+ }
+ 
++.vehicles-layout,
++.templates-layout {
 +  display: grid;
-+  gap: 18px;
++  gap: 16px;
++  grid-template-columns: minmax(0, 1.68fr) minmax(320px, 0.86fr);
++  align-items: start;
 +}
 +
-+.vehicles-grid-stats,
-+.templates-grid-stats {
++.vehicles-layout__main,
++.templates-layout__main {
 +  display: grid;
-+  grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
-+  gap: 12px;
++  gap: 16px;
 +}
 +
-+.vehicles-grid-stats .ui-stat-card,
-+.templates-grid-stats .ui-stat-card {
-+  min-height: 128px;
-+  border-radius: 18px;
-+  padding: 16px;
-+  box-shadow: 0 12px 24px rgba(22, 42, 81, 0.06);
+ .vehicles-grid-stats,
+ .templates-grid-stats {
+   display: grid;
+-  grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
++  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+   gap: 12px;
+ }
+ 
+@@ -252,6 +266,14 @@
+   grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+ }
+ 
++.vehicles-card .ui-filter-bar .vehicles-checkbox,
++.templates-card .ui-filter-bar .templates-checkbox {
++  min-height: 40px;
++  border: 1px dashed var(--ui-border);
++  border-radius: 10px;
++  padding: 0 10px;
 +}
 +
-+.vehicles-grid-stats .ui-stat-card__value,
-+.templates-grid-stats .ui-stat-card__value {
-+  font-size: clamp(27px, 2.4vw, 34px);
-+}
-+
-+.vehicles-card,
-+.templates-card,
-+.vehicles-selection-card,
-+.templates-selection-card {
+ .vehicles-card .ui-filter-bar__summary,
+ .templates-card .ui-filter-bar__summary {
+   font-weight: 650;
+@@ -303,6 +325,138 @@
+     var(--ui-surface-soft);
+ }
+ 
++.vehicles-detail-panel,
++.templates-detail-panel {
++  position: sticky;
++  top: 88px;
 +  border: 1px solid var(--ui-border);
 +  border-radius: 18px;
 +  background:
-+    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0)),
++    linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0)),
 +    var(--ui-surface);
 +  box-shadow: var(--ui-shadow);
-+}
-+
-+.vehicles-card,
-+.templates-card {
-+  display: grid;
-+  gap: 16px;
-+  padding: 18px;
 +  overflow: hidden;
++  display: grid;
++  gap: 12px;
++  padding: 14px;
 +}
 +
-+.vehicles-card__head,
-+.templates-card__head {
++.vehicles-detail-panel__head,
++.templates-detail-panel__head {
 +  display: flex;
 +  align-items: flex-start;
 +  justify-content: space-between;
-+  gap: 12px;
-+  flex-wrap: wrap;
-+  padding-bottom: 2px;
++  gap: 10px;
 +}
 +
-+.vehicles-card__head::before,
-+.templates-card__head::before {
-+  content: "";
-+  width: 42px;
-+  height: 42px;
-+  border-radius: 14px;
-+  border: 1px solid #c9dcff;
-+  background:
-+    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.9), transparent 28%),
-+    linear-gradient(135deg, #eaf3ff, #dcecff);
-+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
-+  flex: 0 0 auto;
-+  order: -1;
-+}
-+
-+.vehicles-card__head::before {
-+  background:
-+    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.88), transparent 28%),
-+    linear-gradient(135deg, #eaf3ff, #def7ff);
-+}
-+
-+.templates-card__head::before {
-+  background:
-+    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.88), transparent 28%),
-+    linear-gradient(135deg, #fff7ed, #eef2ff);
-+}
-+
-+.vehicles-card__title,
-+.templates-card__title {
++.vehicles-detail-panel__title,
++.templates-detail-panel__title {
 +  margin: 0;
 +  color: #124491;
-+  font-size: clamp(18px, 1.8vw, 22px);
-+  line-height: 1.2;
-+  font-weight: 800;
++  font-size: 33px;
++  line-height: 1.1;
 +}
 +
-+.vehicles-card__description,
-+.templates-card__description,
-+.vehicles-table-cell-subtle,
-+.templates-table-cell-subtle,
-+.templates-help-text {
++.vehicles-detail-panel__subtitle,
++.templates-detail-panel__subtitle {
++  margin: 6px 0 0;
 +  color: var(--ui-text-muted);
++  font-weight: 600;
 +}
 +
-+.vehicles-card__description,
-+.templates-card__description {
-+  margin: 4px 0 0;
-+  max-width: 820px;
++.vehicles-detail-tabs,
++.templates-detail-tabs {
++  display: grid;
++  grid-template-columns: repeat(4, minmax(0, 1fr));
++  border-bottom: 1px solid var(--ui-border);
++}
++
++.vehicles-detail-tab,
++.templates-detail-tab {
++  min-height: 42px;
++  border: 0;
++  border-bottom: 2px solid transparent;
++  border-radius: 0;
++  background: transparent;
++  color: var(--ui-text-muted);
 +  font-size: 14px;
++  font-weight: 650;
++  justify-content: flex-start;
++  padding: 0 8px;
 +}
 +
-+.vehicles-alert,
-+.templates-alert {
-+  border-radius: 14px;
-+  padding: 12px 14px;
-+  font-weight: 700;
-+}
-+
-+.vehicles-alert--success,
-+.templates-alert--success {
-+  border: 1px solid var(--ui-success-border);
-+  background: var(--ui-success-bg);
-+  color: var(--ui-success-text);
-+}
-+
-+.vehicles-form,
-+.templates-form {
-+  display: grid;
-+  gap: 14px;
-+}
-+
-+.vehicles-form-grid,
-+.templates-form-grid {
-+  display: grid;
-+  gap: 12px;
-+}
-+
-+.vehicles-form-grid--create {
-+  grid-template-columns: minmax(180px, 1.2fr) minmax(150px, 0.8fr) minmax(150px, 0.8fr) auto;
-+  align-items: end;
-+}
-+
-+.vehicles-form-grid--edit,
-+.templates-form-grid--main {
-+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-+}
-+
-+.templates-form-grid--secondary,
-+.templates-form-grid--time {
-+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-+  align-items: end;
-+}
-+
-+.vehicles-field,
-+.templates-field {
-+  display: grid;
-+  gap: 7px;
-+}
-+
-+.vehicles-field__label,
-+.templates-field__label {
-+  color: var(--ui-text-muted);
-+  font-size: 12px;
-+  font-weight: 800;
-+  letter-spacing: 0.03em;
-+  text-transform: uppercase;
-+}
-+
-+.vehicles-field input,
-+.vehicles-field select,
-+.templates-field input,
-+.templates-field select,
-+.templates-color-field input {
-+  min-height: 40px;
-+  border-radius: 12px;
-+  border-color: var(--ui-border);
-+  background: var(--ui-surface);
-+}
-+
-+.vehicles-field input::placeholder,
-+.templates-field input::placeholder {
-+  color: color-mix(in srgb, var(--ui-text-muted), transparent 10%);
-+}
-+
-+.templates-color-field {
-+  display: grid;
-+  grid-template-columns: 46px minmax(0, 1fr);
-+  gap: 8px;
-+  align-items: center;
-+}
-+
-+.templates-color-field input[type="color"] {
-+  width: 46px;
-+  padding: 4px;
-+}
-+
-+.vehicles-actions,
-+.templates-actions,
-+.vehicles-inline-status,
-+.templates-inline-status {
-+  display: inline-flex;
-+  align-items: center;
-+  gap: 8px;
-+  flex-wrap: wrap;
-+}
-+
-+.vehicles-actions--end,
-+.templates-actions--end {
-+  justify-content: flex-end;
-+}
-+
-+.vehicles-actions--wrap,
-+.templates-actions--wrap {
-+  white-space: normal;
-+}
-+
-+.vehicles-depot-cell,
-+.templates-cell-main,
-+.vehicles-cell-main {
-+  display: grid;
-+  gap: 5px;
-+}
-+
-+.vehicles-cell-main strong,
-+.templates-cell-main strong {
++.vehicles-detail-tab:hover:not(:disabled),
++.templates-detail-tab:hover:not(:disabled) {
++  transform: none;
++  border-color: color-mix(in srgb, var(--ui-primary), #ffffff 70%);
 +  color: var(--ui-text);
 +}
 +
-+.vehicles-depot-editor {
++.vehicles-detail-tab.is-active,
++.templates-detail-tab.is-active {
++  color: var(--ui-primary);
++  border-color: var(--ui-primary);
++}
++
++.vehicles-detail-group,
++.templates-detail-group {
++  border: 1px solid var(--ui-border);
++  border-radius: 14px;
++  background: var(--ui-surface);
++  padding: 12px;
 +  display: grid;
-+  grid-template-columns: minmax(145px, 1fr) auto;
-+  gap: 8px;
-+  align-items: center;
++  gap: 12px;
 +}
 +
-+.vehicles-depot-editor select {
-+  min-width: 0;
-+  height: 34px;
-+  padding: 6px 9px;
-+  border-radius: 10px;
++.vehicles-detail-group__title,
++.templates-detail-group__title {
++  margin: 0;
++  color: #124491;
++  font-size: 20px;
 +}
 +
-+.vehicles-card .ui-filter-bar,
-+.templates-card .ui-filter-bar {
-+  border-radius: 16px;
-+  background:
-+    linear-gradient(180deg, color-mix(in srgb, var(--ui-surface-soft), #ffffff 46%), var(--ui-surface-soft));
-+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
-+}
-+
-+.vehicles-card .ui-filter-bar__controls,
-+.templates-card .ui-filter-bar__controls {
-+  grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
-+}
-+
-+.vehicles-card .ui-filter-bar__summary,
-+.templates-card .ui-filter-bar__summary {
-+  font-weight: 650;
-+}
-+
-+.vehicles-card .ui-data-table__container,
-+.templates-card .ui-data-table__container {
-+  border-radius: 16px;
-+  box-shadow: none;
-+}
-+
-+.vehicles-card .ui-data-table__caption,
-+.templates-card .ui-data-table__caption {
-+  padding: 11px 13px 1px;
-+  color: var(--ui-text-muted);
-+  font-weight: 700;
-+}
-+
-+.vehicles-card .ui-data-table__head-cell,
-+.templates-card .ui-data-table__head-cell {
-+  background: var(--ui-surface-soft);
-+  color: var(--ui-text-muted);
-+  font-size: 11px;
-+}
-+
-+.vehicles-card .ui-data-table__cell,
-+.templates-card .ui-data-table__cell {
-+  font-size: 13px;
-+}
-+
-+.vehicles-card .ui-data-table__row:hover .ui-data-table__cell,
-+.templates-card .ui-data-table__row:hover .ui-data-table__cell {
-+  background: color-mix(in srgb, var(--ui-selected-row), transparent 42%);
-+}
-+
-+.vehicles-card .ui-data-table__row.is-selected .ui-data-table__cell,
-+.templates-card .ui-data-table__row.is-selected .ui-data-table__cell {
-+  background: var(--ui-selected-row);
-+  box-shadow: inset 3px 0 0 var(--ui-primary);
-+}
-+
-+.vehicles-selection-card,
-+.templates-selection-card {
++.vehicles-detail-list,
++.templates-detail-list {
++  margin: 0;
 +  display: grid;
 +  gap: 10px;
-+  padding: 14px;
-+  background:
-+    linear-gradient(135deg, color-mix(in srgb, var(--ui-primary), transparent 90%), transparent 45%),
-+    var(--ui-surface-soft);
 +}
 +
-+.vehicles-selection-card > strong,
-+.templates-selection-card > strong {
-+  color: #124491;
-+  font-size: 13px;
-+  letter-spacing: 0.04em;
-+  text-transform: uppercase;
-+}
-+
-+.vehicles-selection-card span,
-+.templates-selection-card span {
-+  min-width: 0;
-+}
-+
-+.templates-role-grid {
-+  display: flex;
-+  flex-wrap: wrap;
-+  gap: 8px;
-+}
-+
-+.templates-role-chip {
-+  display: inline-flex;
-+  align-items: center;
-+  gap: 7px;
-+  min-height: 32px;
-+  padding: 0 11px;
-+  border: 1px solid var(--ui-border);
-+  border-radius: 999px;
-+  background: var(--ui-surface);
-+  color: var(--ui-text-muted);
-+  font-size: 12px;
-+  font-weight: 750;
-+}
-+
-+.templates-role-chip.is-selected {
-+  border-color: color-mix(in srgb, var(--ui-primary), #ffffff 42%);
-+  background: var(--ui-selected-row);
-+  color: var(--ui-primary);
-+}
-+
-+.templates-role-chip input {
-+  margin: 0;
-+  accent-color: var(--ui-primary);
-+}
-+
-+.templates-checkbox {
-+  display: inline-flex;
-+  align-items: center;
-+  gap: 8px;
-+  color: var(--ui-text);
-+  font-weight: 650;
-+}
-+
-+.templates-checkbox input {
-+  accent-color: var(--ui-primary);
-+}
-+
-+.templates-fieldset {
++.vehicles-detail-list div,
++.templates-detail-list div {
 +  display: grid;
-+  gap: 12px;
-+  border: 1px solid var(--ui-border);
-+  border-radius: 16px;
-+  padding: 14px;
-+  background: var(--ui-surface-soft);
++  grid-template-columns: minmax(110px, 1fr) minmax(0, 1fr);
++  gap: 10px;
 +}
 +
-+.templates-help-text {
-+  margin: 0;
++.vehicles-detail-list dt,
++.templates-detail-list dt {
++  color: var(--ui-text-muted);
 +  font-size: 13px;
 +}
 +
-+:root[data-theme="dark"] .vehicles-card,
-+:root[data-theme="dark"] .templates-card,
-+:root[data-theme="dark"] .vehicles-selection-card,
-+:root[data-theme="dark"] .templates-selection-card {
-+  background:
-+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0)),
-+    var(--ui-surface);
-+  box-shadow: var(--ui-shadow);
++.vehicles-detail-list dd,
++.templates-detail-list dd {
++  margin: 0;
++  color: var(--ui-text);
++  font-weight: 600;
++  word-break: break-word;
 +}
 +
-+:root[data-theme="dark"] .vehicles-card__title,
-+:root[data-theme="dark"] .templates-card__title,
-+:root[data-theme="dark"] .vehicles-selection-card > strong,
-+:root[data-theme="dark"] .templates-selection-card > strong {
-+  color: #dcebff;
++.vehicles-detail-panel__actions,
++.templates-detail-panel__actions {
++  margin-top: auto;
++  display: grid;
++  grid-template-columns: repeat(3, minmax(0, 1fr));
++  gap: 8px;
 +}
 +
-+:root[data-theme="dark"] .vehicles-card__head::before,
-+:root[data-theme="dark"] .templates-card__head::before {
-+  border-color: var(--ui-border-strong);
-+  background:
-+    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.18), transparent 28%),
-+    linear-gradient(135deg, var(--ui-surface-strong), var(--ui-surface-soft));
++.vehicles-detail-panel__actions .ui-action-button,
++.templates-detail-panel__actions .ui-action-button {
++  min-height: 40px;
++  width: 100%;
 +}
 +
-+:root[data-theme="dark"] .vehicles-card .ui-filter-bar,
-+:root[data-theme="dark"] .templates-card .ui-filter-bar,
-+:root[data-theme="dark"] .templates-fieldset {
-+  background: var(--ui-surface-soft);
-+}
-+
-+:root[data-theme="dark"] .vehicles-card .ui-data-table__head-cell,
-+:root[data-theme="dark"] .templates-card .ui-data-table__head-cell {
-+  background: var(--ui-surface-soft);
-+  color: var(--ui-text-muted);
-+}
-+
-+:root[data-theme="dark"] .templates-role-chip {
-+  background: var(--ui-surface);
-+}
-+
-+:root[data-theme="dark"] .templates-role-chip.is-selected {
-+  border-color: var(--ui-primary);
-+  background: color-mix(in srgb, var(--ui-primary), transparent 82%);
-+  color: #dcebff;
-+}
-+
-+@media (max-width: 1180px) {
-+  .vehicles-form-grid--create {
-+    grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
-+  }
-+
-+  .vehicles-actions--end,
-+  .templates-actions--end {
-+    justify-content: flex-start;
-+  }
-+}
-+
-+@media (max-width: 760px) {
-+  .vehicles-card,
-+  .templates-card {
-+    padding: 15px;
-+    border-radius: 16px;
-+  }
-+
-+  .vehicles-card__head,
-+  .templates-card__head {
-+    display: grid;
-+  }
-+
-+  .vehicles-depot-editor,
-+  .templates-color-field {
+ .vehicles-selection-card > strong,
+ .templates-selection-card > strong {
+   color: #124491;
+@@ -421,6 +575,16 @@
+ }
+ 
+ @media (max-width: 1180px) {
++  .vehicles-layout,
++  .templates-layout {
 +    grid-template-columns: 1fr;
 +  }
++
++  .vehicles-detail-panel,
++  .templates-detail-panel {
++    position: static;
++  }
++
+   .vehicles-form-grid--create {
+     grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+   }
+@@ -447,4 +611,19 @@
+   .templates-color-field {
+     grid-template-columns: 1fr;
+   }
++
++  .vehicles-detail-tabs,
++  .templates-detail-tabs {
++    grid-template-columns: repeat(2, minmax(0, 1fr));
++  }
++
++  .vehicles-detail-panel__actions,
++  .templates-detail-panel__actions {
++    grid-template-columns: 1fr;
++  }
++
++  .vehicles-detail-list div,
++  .templates-detail-list div {
++    grid-template-columns: 1fr;
++  }
+ }
+diff --git a/app/templates/page.tsx b/app/templates/page.tsx
+index d214f78..efb437d 100644
+--- a/app/templates/page.tsx
++++ b/app/templates/page.tsx
+@@ -42,11 +42,12 @@ export default async function TemplatesPage() {
+   return (
+     <div className="page-wrap">
+       <PageHeader
+-        title="Templates"
+-        description="Gérez les modèles de shifts, la composition d’équipe, les véhicules requis et les statuts."
++        title="Templates de garde"
++        description="Gerez les modeles de garde et de shift pour organiser vos plannings."
+       />
+ 
+       <TemplatesClient initialTemplates={serializeDates(templates)} />
+     </div>
+   );
+ }
++
+diff --git a/app/templates/templates-client.tsx b/app/templates/templates-client.tsx
+index 3e4846e..d82e135 100644
+--- a/app/templates/templates-client.tsx
++++ b/app/templates/templates-client.tsx
+@@ -1,6 +1,7 @@
+-﻿"use client";
++"use client";
+ 
+-import { useMemo, useState } from "react";
++import { useEffect, useMemo, useState } from "react";
++import { Archive, Ban, CalendarClock, ClipboardList, Copy, Download, Filter, List, PauseCircle, Plus, UsersRound } from "lucide-react";
+ 
+ import {
+   ActionButton,
+@@ -46,6 +47,8 @@ type CategoryOption = "AMBULANCE" | "GARDE" | "VSL" | "TAXI";
+ type RoleOption = "ADMIN" | "GERANT" | "BUREAU" | "ADE" | "AA" | "TAXI" | "REGULATEUR";
+ type VehicleTypeOption = "AMBULANCE" | "VSL" | "TAXI";
+ type TemplateStatusFilter = "" | "ACTIVE" | "INACTIVE" | "ARCHIVED";
++type MidnightFilter = "" | "YES" | "NO";
++type TemplateDetailTab = "DETAILS" | "EQUIPE" | "HORAIRES" | "HISTORIQUE";
+ 
+ type TemplateFormState = {
+   name: string;
+@@ -67,6 +70,13 @@ const ROLE_OPTIONS: RoleOption[] = ["ADE", "AA", "TAXI", "BUREAU", "REGULATEUR",
+ const VEHICLE_TYPE_OPTIONS: VehicleTypeOption[] = ["AMBULANCE", "VSL", "TAXI"];
+ const DEFAULT_COLOR = "#1D4ED8";
+ 
++const TEMPLATE_DETAIL_TABS: Array<{ id: TemplateDetailTab; label: string }> = [
++  { id: "DETAILS", label: "Details" },
++  { id: "EQUIPE", label: "Equipe" },
++  { id: "HORAIRES", label: "Horaires" },
++  { id: "HISTORIQUE", label: "Historique" },
++];
++
+ function compareTemplates(a: Template, b: Template) {
+   const aArchived = a.archivedAt ? 1 : 0;
+   const bArchived = b.archivedAt ? 1 : 0;
+@@ -155,6 +165,17 @@ function getStatusVariant(template: Template): "success" | "warning" | "neutral"
+   return template.isActive ? "success" : "warning";
+ }
+ 
++function getVehicleTypeLabel(value: VehicleTypeOption | null) {
++  if (!value) return "Tous";
++  if (value === "AMBULANCE") return "Ambulance";
++  if (value === "VSL") return "VSL";
++  return "Taxi";
 +}
++
++function getCrossesMidnightLabel(crossesMidnight: boolean) {
++  return crossesMidnight ? "Oui" : "Non";
++}
++
+ function updateFormForCategory(category: CategoryOption, prev: TemplateFormState): TemplateFormState {
+   const preset = getCategoryTemplatePreset(category);
+   return {
+@@ -417,16 +438,20 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
+   const [createForm, setCreateForm] = useState<TemplateFormState>(() => createDefaultForm());
+   const [editingTemplateId, setEditingTemplateId] = useState<string | null>(null);
+   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(initialTemplates[0]?.id ?? null);
++  const [templateDetailTab, setTemplateDetailTab] = useState<TemplateDetailTab>("DETAILS");
+   const [editForm, setEditForm] = useState<TemplateFormState | null>(null);
+   const [error, setError] = useState<string | null>(null);
+   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+   const [isCreating, setIsCreating] = useState(false);
+   const [savingTemplateId, setSavingTemplateId] = useState<string | null>(null);
+   const [archivingTemplateId, setArchivingTemplateId] = useState<string | null>(null);
++  const [showCreateForm, setShowCreateForm] = useState(false);
++  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+ 
+   const [showArchived, setShowArchived] = useState(true);
+   const [searchInput, setSearchInput] = useState("");
+-  const [categoryFilter, setCategoryFilter] = useState<CategoryOption | "">("");
++  const [vehicleTypeFilter, setVehicleTypeFilter] = useState<VehicleTypeOption | "">("");
++  const [crossesMidnightFilter, setCrossesMidnightFilter] = useState<MidnightFilter>("");
+   const [statusFilter, setStatusFilter] = useState<TemplateStatusFilter>("");
+ 
+   const sortedTemplates = useMemo(() => [...templates].sort(compareTemplates), [templates]);
+@@ -438,7 +463,9 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
+   const filteredTemplates = useMemo(() => {
+     return visibleTemplates.filter((template) => {
+       if (!templateMatchesQuery(template, searchInput.trim())) return false;
+-      if (categoryFilter && template.category !== categoryFilter) return false;
++      if (vehicleTypeFilter && template.requiredVehicleType !== vehicleTypeFilter) return false;
++      if (crossesMidnightFilter === "YES" && !template.crossesMidnight) return false;
++      if (crossesMidnightFilter === "NO" && template.crossesMidnight) return false;
+ 
+       if (statusFilter === "ACTIVE" && (template.archivedAt || !template.isActive)) return false;
+       if (statusFilter === "INACTIVE" && (template.archivedAt || template.isActive)) return false;
+@@ -446,7 +473,19 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
+ 
+       return true;
+     });
+-  }, [categoryFilter, searchInput, statusFilter, visibleTemplates]);
++  }, [crossesMidnightFilter, searchInput, statusFilter, vehicleTypeFilter, visibleTemplates]);
++
++  useEffect(() => {
++    if (filteredTemplates.length === 0) {
++      setSelectedTemplateId(null);
++      return;
++    }
++
++    if (!selectedTemplateId || !filteredTemplates.some((template) => template.id === selectedTemplateId)) {
++      setSelectedTemplateId(filteredTemplates[0].id);
++      setTemplateDetailTab("DETAILS");
++    }
++  }, [filteredTemplates, selectedTemplateId]);
+ 
+   const templateStats = useMemo(() => {
+     const counts = {
+@@ -454,6 +493,7 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
+       active: 0,
+       inactive: 0,
+       archived: 0,
++      categories: new Set<CategoryOption>(),
+     };
+ 
+     for (const template of sortedTemplates) {
+@@ -464,14 +504,21 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
+       } else {
+         counts.inactive += 1;
+       }
++      counts.categories.add(template.category);
+     }
+ 
+-    return counts;
++    return {
++      total: counts.total,
++      active: counts.active,
++      inactive: counts.inactive,
++      archived: counts.archived,
++      categoryCount: counts.categories.size,
++    };
+   }, [sortedTemplates]);
+ 
+   const selectedTemplate = useMemo(
+-    () => sortedTemplates.find((template) => template.id === selectedTemplateId) ?? null,
+-    [selectedTemplateId, sortedTemplates],
++    () => filteredTemplates.find((template) => template.id === selectedTemplateId) ?? null,
++    [selectedTemplateId, filteredTemplates],
+   );
+ 
+   function clearFeedback() {
+@@ -481,8 +528,10 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
+ 
+   function resetFilters() {
+     setSearchInput("");
+-    setCategoryFilter("");
++    setVehicleTypeFilter("");
++    setCrossesMidnightFilter("");
+     setStatusFilter("");
++    setShowAdvancedFilters(false);
+   }
+ 
+   async function handleCreate() {
+@@ -511,6 +560,7 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
+       setTemplates((prev) => [...prev, payload.data]);
+       setCreateForm(createDefaultForm());
+       setSelectedTemplateId(payload.data.id);
++      setShowCreateForm(false);
+       setSuccessMessage("Template cree.");
+     } finally {
+       setIsCreating(false);
+@@ -529,6 +579,15 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
+     setEditForm(null);
+   }
+ 
++  function prepareDuplicate(template: Template) {
++    setCreateForm({
++      ...formFromTemplate(template),
++      name: `${template.name} (copie)`,
++    });
++    setShowCreateForm(true);
++    setSuccessMessage("Template pre-rempli pour duplication.");
++  }
++
+   async function handleSave(templateId: string) {
+     if (!editForm) return;
+     if (editForm.name.trim().length === 0) {
+@@ -613,66 +672,74 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
+   const columns: DataTableColumn<Template>[] = [
+     {
+       key: "name",
+-      header: "Template",
+-      width: "280px",
++      header: "Nom du template",
++      width: "260px",
+       render: (template) => (
+         <div className="templates-cell-main">
+           <strong>{template.name}</strong>
+           <span className="templates-table-cell-subtle">
+-            Couleur {normalizeTemplateColor(template.color) ?? DEFAULT_COLOR} • {template.requiredVehicleType ?? "Vehicule libre"}
++            {template.category} • {normalizeTemplateColor(template.color) ?? DEFAULT_COLOR}
+           </span>
+         </div>
+       ),
+     },
+     {
+-      key: "category",
+-      header: "Categorie",
++      key: "vehicle",
++      header: "Type vehicule",
++      width: "130px",
++      render: (template) => <StatusBadge variant="info">{getVehicleTypeLabel(template.requiredVehicleType)}</StatusBadge>,
++    },
++    {
++      key: "time",
++      header: "Horaire",
++      width: "140px",
++      render: (template) => getTimeLabel(template),
++    },
++    {
++      key: "crossesMidnight",
++      header: "Traverse minuit",
+       width: "120px",
+-      render: (template) => <StatusBadge variant="info">{template.category}</StatusBadge>,
++      render: (template) => (
++        <StatusBadge variant={template.crossesMidnight ? "danger" : "success"}>
++          {getCrossesMidnightLabel(template.crossesMidnight)}
++        </StatusBadge>
++      ),
+     },
+     {
+-      key: "staff",
+-      header: "Composition",
+-      width: "300px",
+-      render: (template) => {
+-        const staffCount = resolveTemplateMinStaffCount(template.minStaffCount, template.category);
+-        const firstSlotRoles = getAllowedRolesForFirstSlot(template);
+-        const secondSlotRoles = getAllowedRolesForSecondSlot(template);
+-
+-        return (
+-          <div className="templates-cell-main">
+-            <span>{staffCount} personne(s)</span>
+-            <span className="templates-table-cell-subtle">
+-              Slot 1: {firstSlotRoles.join(", ") || "libre"}
+-              {staffCount === 2 ? ` | Slot 2: ${secondSlotRoles.join(", ") || "libre"}` : ""}
+-            </span>
+-          </div>
+-        );
+-      },
++      key: "staffCount",
++      header: "Nb personnes",
++      width: "110px",
++      render: (template) => String(resolveTemplateMinStaffCount(template.minStaffCount, template.category)),
+     },
+     {
+-      key: "time",
+-      header: "Horaires",
+-      width: "170px",
+-      render: (template) => getTimeLabel(template),
++      key: "requiredRole",
++      header: "Role slot 1",
++      width: "120px",
++      render: (template) => template.requiredRole ?? "Aucun",
+     },
+     {
+-      key: "status",
+-      header: "Statut",
+-      width: "130px",
+-      render: (template) => <StatusBadge variant={getStatusVariant(template)}>{getStatusLabel(template)}</StatusBadge>,
++      key: "secondaryRoles",
++      header: "Roles autorises",
++      width: "170px",
++      render: (template) => template.secondaryAllowedRoles.join(", ") || "Aucun",
+     },
+     {
+       key: "updatedAt",
+-      header: "Mise a jour",
+-      width: "180px",
++      header: "Derniere modif.",
++      width: "170px",
+       render: (template) => formatDateTime(template.updatedAt),
+     },
++    {
++      key: "usage",
++      header: "Utilise",
++      width: "90px",
++      render: () => "-",
++    },
+     {
+       key: "actions",
+       header: "Actions",
+       align: "right",
+-      width: "280px",
++      width: "230px",
+       render: (template) => {
+         const isSaving = savingTemplateId === template.id;
+         const isArchiving = archivingTemplateId === template.id;
+@@ -721,129 +788,272 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
+   return (
+     <section className="templates-section">
+       <div className="templates-grid-stats">
+-        <StatCard title="Total templates" value={templateStats.total} hint="Catalogue global de la societe" />
+-        <StatCard title="Actifs" value={templateStats.active} hint="Disponibles a la generation" tone="success" />
+-        <StatCard title="Desactives" value={templateStats.inactive} hint="Conserves sans activation" tone="warning" />
+-        <StatCard title="Archives" value={templateStats.archived} hint="Historique non modifiable" tone="neutral" />
++        <StatCard title="Total templates" value={templateStats.total} hint="Catalogue de la societe" tone="info" icon={<ClipboardList size={18} />} />
++        <StatCard title="Actifs" value={templateStats.active} hint="Disponibles a la generation" tone="success" icon={<CalendarClock size={18} />} />
++        <StatCard title="Desactives" value={templateStats.inactive} hint="Conserves sans activation" tone="warning" icon={<PauseCircle size={18} />} />
++        <StatCard title="Archives" value={templateStats.archived} hint="Historique non modifiable" tone="neutral" icon={<Archive size={18} />} />
++        <StatCard title="Types de garde" value={templateStats.categoryCount} hint="Categories configurees" tone="info" icon={<UsersRound size={18} />} />
+       </div>
+ 
+       {error ? <ErrorMessage title="Erreur module templates" message={error} /> : null}
+       {successMessage ? <div className="templates-alert templates-alert--success">{successMessage}</div> : null}
+ 
+-      <section className="templates-card">
+-        <div className="templates-card__head">
+-          <h2 className="templates-card__title">Creer un template</h2>
+-          <p className="templates-card__description">
+-            Les presets de categorie pre-remplissent la composition minimale la plus courante. Vous pouvez ensuite ajuster le detail.
+-          </p>
+-        </div>
+-
+-        <TemplateFormFields
+-          form={createForm}
+-          disabled={isCreating}
+-          onChange={(updater) => setCreateForm((prev) => updater(prev))}
+-        />
++      <div className="templates-layout">
++        <div className="templates-layout__main">
++          <section className="templates-card">
++            <div className="templates-card__head">
++              <div>
++                <h2 className="templates-card__title">Creer un template</h2>
++                <p className="templates-card__description">
++                  Les presets de categorie pre-remplissent la composition minimale la plus courante. Vous pouvez ensuite ajuster le detail.
++                </p>
++              </div>
++              <ActionButton
++                variant={showCreateForm ? "secondary" : "primary"}
++                size="sm"
++                leadingIcon={<Plus size={16} />}
++                onClick={() => setShowCreateForm((prev) => !prev)}
++              >
++                {showCreateForm ? "Masquer" : "Nouveau template"}
++              </ActionButton>
++            </div>
+ 
+-        <div className="templates-actions templates-actions--end">
+-          <ActionButton variant="primary" onClick={handleCreate} disabled={isCreating}>
+-            {isCreating ? "Creation..." : "Creer le template"}
+-          </ActionButton>
+-        </div>
+-      </section>
++            {showCreateForm ? (
++              <>
++                <TemplateFormFields
++                  form={createForm}
++                  disabled={isCreating}
++                  onChange={(updater) => setCreateForm((prev) => updater(prev))}
++                />
+ 
+-      <section className="templates-card">
+-        <div className="templates-card__head">
+-          <h2 className="templates-card__title">Liste des templates</h2>
+-          <p className="templates-card__description">
+-            Consultation, filtrage simple, activation, edition et archivage logique des templates de shifts.
+-          </p>
+-        </div>
++                <div className="templates-actions templates-actions--end">
++                  <ActionButton variant="primary" onClick={handleCreate} disabled={isCreating}>
++                    {isCreating ? "Creation..." : "Creer le template"}
++                  </ActionButton>
++                </div>
++              </>
++            ) : (
++              <p className="templates-table-cell-subtle">Formulaire replie. Utilisez &quot;Nouveau template&quot; pour preparer la creation.</p>
++            )}
++          </section>
++
++          <section className="templates-card">
++            <div className="templates-card__head">
++              <div>
++                <h2 className="templates-card__title">Liste des templates</h2>
++                <p className="templates-card__description">
++                  Consultation, filtrage, activation, edition et archivage logique des templates de shifts.
++                </p>
++              </div>
++            </div>
+ 
+-        <FilterBar
+-          summary={`Filtres actifs : ${searchInput.trim() ? `recherche "${searchInput.trim()}"` : "aucune recherche"}${categoryFilter ? `, categorie ${categoryFilter}` : ""}${statusFilter ? `, statut ${statusFilter}` : ""}${showArchived ? ", archives visibles" : ", archives masquees"}`}
+-          actions={(
+-            <div className="templates-actions">
+-              <label className="templates-checkbox">
++            <FilterBar
++              summary={`Filtres actifs : ${searchInput.trim() ? `recherche "${searchInput.trim()}"` : "aucune recherche"}${vehicleTypeFilter ? `, type vehicule ${vehicleTypeFilter}` : ""}${crossesMidnightFilter ? `, traverse minuit ${crossesMidnightFilter === "YES" ? "oui" : "non"}` : ""}${showAdvancedFilters && statusFilter ? `, statut ${statusFilter}` : ""}${showArchived ? ", archives visibles" : ", archives masquees"}`}
++              actions={(
++                <div className="templates-actions templates-actions--wrap">
++                  <ActionButton size="sm" variant="secondary" leadingIcon={<Filter size={14} />} onClick={() => setShowAdvancedFilters((prev) => !prev)}>
++                    {showAdvancedFilters ? "Masquer filtres avances" : "Filtres avances"}
++                  </ActionButton>
++                  <ActionButton size="sm" variant="secondary" leadingIcon={<Download size={14} />} disabled>
++                    Export
++                  </ActionButton>
++                  <ActionButton size="sm" variant="secondary" leadingIcon={<List size={14} />} disabled>
++                    Vue
++                  </ActionButton>
++                  <ActionButton size="sm" variant="ghost" onClick={resetFilters}>
++                    Reinitialiser
++                  </ActionButton>
++                </div>
++              )}
++            >
++              <label className="templates-field">
++                <span className="templates-field__label">Recherche</span>
+                 <input
+-                  type="checkbox"
+-                  checked={showArchived}
+-                  onChange={(event) => setShowArchived(event.target.checked)}
++                  type="text"
++                  value={searchInput}
++                  onChange={(event) => setSearchInput(event.target.value)}
++                  placeholder="Nom, role, vehicule ou statut"
+                 />
+-                <span>Afficher les archives</span>
+               </label>
+-              <ActionButton size="sm" variant="ghost" onClick={resetFilters}>
+-                Reinitialiser
+-              </ActionButton>
+-            </div>
+-          )}
+-        >
+-          <label className="templates-field">
+-            <span className="templates-field__label">Recherche</span>
+-            <input
+-              type="text"
+-              value={searchInput}
+-              onChange={(event) => setSearchInput(event.target.value)}
+-              placeholder="Nom, categorie, role, vehicule ou statut"
+-            />
+-          </label>
+ 
+-          <label className="templates-field">
+-            <span className="templates-field__label">Categorie</span>
+-            <select
+-              value={categoryFilter}
+-              onChange={(event) => setCategoryFilter(event.target.value as CategoryOption | "")}
+-            >
+-              <option value="">Toutes les categories</option>
+-              {CATEGORY_OPTIONS.map((category) => (
+-                <option key={category} value={category}>
+-                  {category}
+-                </option>
+-              ))}
+-            </select>
+-          </label>
++              <label className="templates-field">
++                <span className="templates-field__label">Type vehicule</span>
++                <select
++                  value={vehicleTypeFilter}
++                  onChange={(event) => setVehicleTypeFilter(event.target.value as VehicleTypeOption | "")}
++                >
++                  <option value="">Tous</option>
++                  {VEHICLE_TYPE_OPTIONS.map((category) => (
++                    <option key={category} value={category}>
++                      {category}
++                    </option>
++                  ))}
++                </select>
++              </label>
+ 
+-          <label className="templates-field">
+-            <span className="templates-field__label">Statut</span>
+-            <select
+-              value={statusFilter}
+-              onChange={(event) => setStatusFilter(event.target.value as TemplateStatusFilter)}
+-            >
+-              <option value="">Tous les statuts</option>
+-              <option value="ACTIVE">Actif</option>
+-              <option value="INACTIVE">Desactive</option>
+-              <option value="ARCHIVED">Archive</option>
+-            </select>
+-          </label>
+-        </FilterBar>
+-
+-        <DataTable
+-          columns={columns}
+-          rows={filteredTemplates}
+-          rowKey={(template) => template.id}
+-          loading={false}
+-          error={null}
+-          emptyTitle="Aucun template trouve"
+-          emptyMessage="Aucun template ne correspond aux criteres selectionnes."
+-          selectedRowKey={selectedTemplateId}
+-          onRowClick={(template) => setSelectedTemplateId(template.id)}
+-          minWidth={1460}
+-          caption="Templates de shifts de la societe courante"
+-        />
+-      </section>
++              <label className="templates-field">
++                <span className="templates-field__label">Traverse minuit</span>
++                <select
++                  value={crossesMidnightFilter}
++                  onChange={(event) => setCrossesMidnightFilter(event.target.value as MidnightFilter)}
++                >
++                  <option value="">Tous</option>
++                  <option value="NO">Non</option>
++                  <option value="YES">Oui</option>
++                </select>
++              </label>
+ 
+-      {selectedTemplate ? (
+-        <section className="templates-selection-card">
+-          <strong>Selection actuelle</strong>
+-          <span>
+-            <strong>{selectedTemplate.name}</strong>
+-          </span>
+-          <div className="templates-inline-status">
+-            <StatusBadge variant="info">{selectedTemplate.category}</StatusBadge>
+-            <StatusBadge variant={getStatusVariant(selectedTemplate)}>{getStatusLabel(selectedTemplate)}</StatusBadge>
+-            <StatusBadge variant="neutral">{getTimeLabel(selectedTemplate)}</StatusBadge>
+-          </div>
+-        </section>
+-      ) : null}
++              {showAdvancedFilters ? (
++                <>
++                  <label className="templates-field">
++                    <span className="templates-field__label">Statut</span>
++                    <select
++                      value={statusFilter}
++                      onChange={(event) => setStatusFilter(event.target.value as TemplateStatusFilter)}
++                    >
++                      <option value="">Tous les statuts</option>
++                      <option value="ACTIVE">Actif</option>
++                      <option value="INACTIVE">Desactive</option>
++                      <option value="ARCHIVED">Archive</option>
++                    </select>
++                  </label>
++                  <label className="templates-checkbox">
++                    <input
++                      type="checkbox"
++                      checked={showArchived}
++                      onChange={(event) => setShowArchived(event.target.checked)}
++                    />
++                    <span>Afficher les archives</span>
++                  </label>
++                </>
++              ) : null}
++            </FilterBar>
++
++            <DataTable
++              columns={columns}
++              rows={filteredTemplates}
++              rowKey={(template) => template.id}
++              loading={false}
++              error={null}
++              emptyTitle="Aucun template trouve"
++              emptyMessage="Aucun template ne correspond aux criteres selectionnes."
++              selectedRowKey={selectedTemplateId}
++              onRowClick={(template) => setSelectedTemplateId(template.id)}
++              minWidth={1700}
++              caption="Templates de shifts de la societe courante"
++            />
++          </section>
++        </div>
++
++        <aside className="templates-detail-panel">
++          {selectedTemplate ? (
++            <>
++              <div className="templates-detail-panel__head">
++                <div>
++                  <h3 className="templates-detail-panel__title">{selectedTemplate.name}</h3>
++                  <p className="templates-detail-panel__subtitle">{selectedTemplate.category}</p>
++                </div>
++                <StatusBadge variant={getStatusVariant(selectedTemplate)}>{getStatusLabel(selectedTemplate)}</StatusBadge>
++              </div>
++
++              <nav className="templates-detail-tabs" aria-label="Details template">
++                {TEMPLATE_DETAIL_TABS.map((tab) => (
++                  <button
++                    key={tab.id}
++                    type="button"
++                    className={`templates-detail-tab${templateDetailTab === tab.id ? " is-active" : ""}`}
++                    onClick={() => setTemplateDetailTab(tab.id)}
++                  >
++                    {tab.label}
++                  </button>
++                ))}
++              </nav>
++
++              {templateDetailTab === "DETAILS" ? (
++                <div className="templates-detail-group">
++                  <h4 className="templates-detail-group__title">Informations generales</h4>
++                  <dl className="templates-detail-list">
++                    <div><dt>Nom</dt><dd>{selectedTemplate.name}</dd></div>
++                    <div><dt>Type vehicule</dt><dd>{getVehicleTypeLabel(selectedTemplate.requiredVehicleType)}</dd></div>
++                    <div><dt>Couleur</dt><dd>{normalizeTemplateColor(selectedTemplate.color) ?? DEFAULT_COLOR}</dd></div>
++                    <div><dt>Actif</dt><dd>{selectedTemplate.isActive ? "Oui" : "Non"}</dd></div>
++                  </dl>
++                </div>
++              ) : null}
++
++              {templateDetailTab === "EQUIPE" ? (
++                <div className="templates-detail-group">
++                  <h4 className="templates-detail-group__title">Equipe requise</h4>
++                  <dl className="templates-detail-list">
++                    <div><dt>Nombre de personnes</dt><dd>{resolveTemplateMinStaffCount(selectedTemplate.minStaffCount, selectedTemplate.category)}</dd></div>
++                    <div><dt>Role obligatoire</dt><dd>{selectedTemplate.requiredRole ?? "Aucun"}</dd></div>
++                    <div><dt>Roles autorises</dt><dd>{selectedTemplate.secondaryAllowedRoles.join(", ") || "Aucun"}</dd></div>
++                  </dl>
++                </div>
++              ) : null}
++
++              {templateDetailTab === "HORAIRES" ? (
++                <div className="templates-detail-group">
++                  <h4 className="templates-detail-group__title">Horaires</h4>
++                  <dl className="templates-detail-list">
++                    <div><dt>Heure debut</dt><dd>{selectedTemplate.startTime ?? "-"}</dd></div>
++                    <div><dt>Heure fin</dt><dd>{selectedTemplate.endTime ?? "-"}</dd></div>
++                    <div><dt>Traverse minuit</dt><dd>{getCrossesMidnightLabel(selectedTemplate.crossesMidnight)}</dd></div>
++                  </dl>
++                </div>
++              ) : null}
++
++              {templateDetailTab === "HISTORIQUE" ? (
++                <div className="templates-detail-group">
++                  <h4 className="templates-detail-group__title">Utilisation</h4>
++                  <dl className="templates-detail-list">
++                    <div><dt>Cree le</dt><dd>{formatDateTime(selectedTemplate.createdAt)}</dd></div>
++                    <div><dt>Derniere mise a jour</dt><dd>{formatDateTime(selectedTemplate.updatedAt)}</dd></div>
++                    <div><dt>Archive le</dt><dd>{selectedTemplate.archivedAt ? formatDateTime(selectedTemplate.archivedAt) : "Non archive"}</dd></div>
++                  </dl>
++                </div>
++              ) : null}
++
++              <div className="templates-detail-panel__actions">
++                {!selectedTemplate.archivedAt ? (
++                  <ActionButton
++                    variant="secondary"
++                    onClick={() => openEdit(selectedTemplate)}
++                    disabled={savingTemplateId === selectedTemplate.id || archivingTemplateId === selectedTemplate.id}
++                  >
++                    Modifier
++                  </ActionButton>
++                ) : null}
++                {!selectedTemplate.archivedAt ? (
++                  <ActionButton
++                    variant="secondary"
++                    leadingIcon={<Copy size={14} />}
++                    onClick={() => prepareDuplicate(selectedTemplate)}
++                    disabled={savingTemplateId === selectedTemplate.id || archivingTemplateId === selectedTemplate.id}
++                  >
++                    Dupliquer
++                  </ActionButton>
++                ) : null}
++                {!selectedTemplate.archivedAt ? (
++                  <ActionButton
++                    variant="danger"
++                    onClick={() => handleArchive(selectedTemplate.id)}
++                    disabled={savingTemplateId === selectedTemplate.id || archivingTemplateId === selectedTemplate.id}
++                  >
++                    {archivingTemplateId === selectedTemplate.id ? "Archivage..." : "Archiver"}
++                  </ActionButton>
++                ) : (
++                  <ActionButton variant="secondary" leadingIcon={<Ban size={14} />} disabled>
++                    Template archive
++                  </ActionButton>
++                )}
++              </div>
++            </>
++          ) : (
++            <p className="templates-table-cell-subtle">Selectionnez un template dans le tableau pour afficher le detail.</p>
++          )}
++        </aside>
++      </div>
+ 
+       {editingTemplateId && editForm ? (
+         <section className="templates-card">
+diff --git a/app/vehicles/page.tsx b/app/vehicles/page.tsx
+index 7b0a5ec..332660a 100644
+--- a/app/vehicles/page.tsx
++++ b/app/vehicles/page.tsx
+@@ -60,8 +60,8 @@ export default async function VehiclesPage() {
+   return (
+     <div className="page-wrap">
+       <PageHeader
+-        title="Véhicules"
+-        description="Gérez votre flotte active, la conformité documentaire et le rattachement aux bases."
++        title="Vehicules"
++        description="Gerez votre flotte active, la conformite documentaire et le rattachement aux depots."
+       />
+ 
+       <VehiclesClient
+@@ -72,3 +72,4 @@ export default async function VehiclesPage() {
+     </div>
+   );
+ }
++
+diff --git a/app/vehicles/vehicles-client.tsx b/app/vehicles/vehicles-client.tsx
+index a97e3c1..e619bb5 100644
+--- a/app/vehicles/vehicles-client.tsx
++++ b/app/vehicles/vehicles-client.tsx
+@@ -1,6 +1,7 @@
+ "use client";
+ 
+-import { useMemo, useState } from "react";
++import { useEffect, useMemo, useState } from "react";
++import { Ambulance, ClipboardCheck, FileClock, Filter, Plus, Wrench } from "lucide-react";
+ 
+ import { ActionButton, DataTable, ErrorMessage, FilterBar, StatCard, StatusBadge, type DataTableColumn } from "@/app/ui";
+ 
+@@ -38,6 +39,8 @@ type VehicleStatusFilter = "" | VehicleStatusOption;
+ type VehicleTypeFilter = "" | VehicleTypeOption;
+ type VehicleDocumentFilter = "" | VehicleDocumentStatus;
+ 
++type VehicleDetailTab = "DETAILS" | "EQUIPEMENTS" | "MAINTENANCE" | "DOCS";
++
+ const VEHICLE_TYPE_OPTIONS: VehicleTypeOption[] = ["AMBULANCE", "VSL", "TAXI"];
+ const VEHICLE_STATUS_OPTIONS: VehicleStatusOption[] = ["ACTIVE", "MAINTENANCE", "OUT_OF_SERVICE"];
+ const DOCUMENT_WARNING_WINDOW_DAYS = 30;
+@@ -90,6 +93,12 @@ function formatDocumentDateLabel(value: string | null) {
+   return date.toLocaleDateString("fr-FR");
+ }
+ 
++function formatDateTimeLabel(value: string) {
++  const date = new Date(value);
++  if (Number.isNaN(date.getTime())) return value;
++  return date.toLocaleString("fr-FR");
++}
++
+ function getVehicleTypeLabel(value: string | null) {
+   if (value === "AMBULANCE") return "Ambulance";
+   if (value === "VSL") return "VSL";
+@@ -98,8 +107,8 @@ function getVehicleTypeLabel(value: string | null) {
+ }
+ 
+ function getVehicleStatusLabel(value: string | null) {
+-  if (value === "ACTIVE") return "Disponible";
+-  if (value === "MAINTENANCE") return "Maintenance";
++  if (value === "ACTIVE") return "En service";
++  if (value === "MAINTENANCE") return "En maintenance";
+   if (value === "OUT_OF_SERVICE") return "Hors service";
+   return "Statut non renseigne";
+ }
+@@ -221,6 +230,13 @@ function toSafeDocumentFilter(value: string): VehicleDocumentFilter {
+   return "";
+ }
+ 
++const VEHICLE_DETAIL_TABS: Array<{ id: VehicleDetailTab; label: string }> = [
++  { id: "DETAILS", label: "Details" },
++  { id: "EQUIPEMENTS", label: "Equipements" },
++  { id: "MAINTENANCE", label: "Maintenance" },
++  { id: "DOCS", label: "Docs" },
++];
++
+ export default function VehiclesClient({
+   initialVehicles,
+   availableDepots,
+@@ -240,6 +256,11 @@ export default function VehiclesClient({
+   const [archivingVehicleId, setArchivingVehicleId] = useState<string | null>(null);
+   const [savingDepotVehicleId, setSavingDepotVehicleId] = useState<string | null>(null);
+   const [editingVehicleId, setEditingVehicleId] = useState<string | null>(null);
++  const [selectedVehicleId, setSelectedVehicleId] = useState<string | null>(initialVehicles[0]?.id ?? null);
++  const [detailTab, setDetailTab] = useState<VehicleDetailTab>("DETAILS");
++  const [showCreateVehicleForm, setShowCreateVehicleForm] = useState(false);
++  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
++
+   const [editImmatriculation, setEditImmatriculation] = useState("");
+   const [editType, setEditType] = useState<VehicleTypeOption>("AMBULANCE");
+   const [editStatus, setEditStatus] = useState<VehicleStatusOption>("ACTIVE");
+@@ -253,6 +274,7 @@ export default function VehiclesClient({
+   const [statusFilter, setStatusFilter] = useState<VehicleStatusFilter>("");
+   const [typeFilter, setTypeFilter] = useState<VehicleTypeFilter>("");
+   const [documentFilter, setDocumentFilter] = useState<VehicleDocumentFilter>("");
++  const [depotFilter, setDepotFilter] = useState<string>("");
+ 
+   const depotOptions = useMemo(() => availableDepots, [availableDepots]);
+   const displayVehicles = useMemo(() => [...vehicles].sort(compareVehiclesByImmatriculation), [vehicles]);
+@@ -279,29 +301,48 @@ export default function VehiclesClient({
+       if (!vehicleMatchesQuery(vehicle, searchInput.trim())) return false;
+       if (typeFilter && vehicle.type !== typeFilter) return false;
+       if (statusFilter && vehicle.status !== statusFilter) return false;
++      if (depotFilter && vehicle.depotId !== depotFilter) return false;
+ 
+       const documentStatus = documentStatusByVehicleId.get(vehicle.id) ?? "conforme";
+       if (documentFilter && documentStatus !== documentFilter) return false;
+ 
+       return true;
+     });
+-  }, [displayVehicles, documentFilter, documentStatusByVehicleId, searchInput, statusFilter, typeFilter]);
++  }, [displayVehicles, depotFilter, documentFilter, documentStatusByVehicleId, searchInput, statusFilter, typeFilter]);
++
++  useEffect(() => {
++    if (filteredVehicles.length === 0) {
++      setSelectedVehicleId(null);
++      return;
++    }
++
++    if (!selectedVehicleId || !filteredVehicles.some((vehicle) => vehicle.id === selectedVehicleId)) {
++      setSelectedVehicleId(filteredVehicles[0].id);
++      setDetailTab("DETAILS");
++    }
++  }, [filteredVehicles, selectedVehicleId]);
++
++  const selectedVehicle = useMemo(
++    () => filteredVehicles.find((vehicle) => vehicle.id === selectedVehicleId) ?? null,
++    [filteredVehicles, selectedVehicleId],
++  );
+ 
+   const vehicleStats = useMemo(() => {
+     const counts = {
+       total: displayVehicles.length,
+-      conformes: 0,
+-      bientotExpires: 0,
+-      expires: 0,
+-      indisponibles: 0,
++      enService: 0,
++      maintenance: 0,
++      horsService: 0,
++      conformiteASurveiller: 0,
+     };
+ 
+     for (const vehicle of displayVehicles) {
+       const documentStatus = documentStatusByVehicleId.get(vehicle.id) ?? "conforme";
+-      if (documentStatus === "conforme") counts.conformes += 1;
+-      if (documentStatus === "bientot_expire") counts.bientotExpires += 1;
+-      if (documentStatus === "expire") counts.expires += 1;
+-      if (vehicle.status === "MAINTENANCE" || vehicle.status === "OUT_OF_SERVICE") counts.indisponibles += 1;
++
++      if (vehicle.status === "ACTIVE") counts.enService += 1;
++      if (vehicle.status === "MAINTENANCE") counts.maintenance += 1;
++      if (vehicle.status === "OUT_OF_SERVICE") counts.horsService += 1;
++      if (documentStatus !== "conforme") counts.conformiteASurveiller += 1;
+     }
+ 
+     return counts;
+@@ -331,6 +372,7 @@ export default function VehiclesClient({
+   function openEditVehicle(vehicle: Vehicle) {
+     clearFeedback();
+     setEditingVehicleId(vehicle.id);
++    setSelectedVehicleId(vehicle.id);
+     setEditImmatriculation(vehicle.immatriculation);
+     setEditType(getEditableVehicleType(vehicle.type));
+     setEditStatus(getEditableVehicleStatus(vehicle.status));
+@@ -366,6 +408,9 @@ export default function VehiclesClient({
+         ...prev,
+         [data.data.id]: data.data.depotId ?? "",
+       }));
++      setSelectedVehicleId(data.data.id);
++      setDetailTab("DETAILS");
++      setShowCreateVehicleForm(false);
+       setSuccessMessage(`Vehicule ${data.data.immatriculation} ajoute.`);
+     } catch (e: unknown) {
+       setError(e instanceof Error ? e.message : "Erreur inconnue");
+@@ -484,233 +529,394 @@ export default function VehiclesClient({
+     setTypeFilter("");
+     setStatusFilter("");
+     setDocumentFilter("");
++    setDepotFilter("");
++    setShowAdvancedFilters(false);
+   }
+ 
+   const columns: DataTableColumn<Vehicle>[] = [
+-      {
+-        key: "immatriculation",
+-        header: "Vehicule",
+-        width: "220px",
+-        render: (vehicle) => (
+-          <div className="vehicles-cell-main">
+-            <strong>{vehicle.immatriculation}</strong>
+-            <span className="vehicles-table-cell-subtle">{getVehicleTypeLabel(vehicle.type)}</span>
+-          </div>
+-        ),
+-      },
+-      {
+-        key: "status",
+-        header: "Statut",
+-        width: "150px",
+-        render: (vehicle) => (
+-          <StatusBadge variant={vehicleStatusBadgeVariant(vehicle.status)}>{getVehicleStatusLabel(vehicle.status)}</StatusBadge>
+-        ),
++    {
++      key: "vehicle",
++      header: "Vehicule",
++      width: "220px",
++      render: (vehicle) => (
++        <div className="vehicles-cell-main">
++          <strong>{vehicle.immatriculation}</strong>
++          <span className="vehicles-table-cell-subtle">{getVehicleTypeLabel(vehicle.type)}</span>
++        </div>
++      ),
++    },
++    {
++      key: "depot",
++      header: "Depot",
++      width: "130px",
++      render: (vehicle) => (
++        <StatusBadge variant={depotStatusVariant(vehicle.depot)}>
++          {vehicle.depot ? getDepotLabel(vehicle.depot) : "Aucune base"}
++        </StatusBadge>
++      ),
++    },
++    {
++      key: "status",
++      header: "Statut",
++      width: "120px",
++      render: (vehicle) => (
++        <StatusBadge variant={vehicleStatusBadgeVariant(vehicle.status)}>{getVehicleStatusLabel(vehicle.status)}</StatusBadge>
++      ),
++    },
++    {
++      key: "insurance",
++      header: "Assurance",
++      width: "120px",
++      render: (vehicle) => formatDocumentDateLabel(vehicle.insuranceExpiresAt),
++    },
++    {
++      key: "technical",
++      header: "Controle technique",
++      width: "150px",
++      render: (vehicle) => formatDocumentDateLabel(vehicle.technicalInspectionExpiresAt),
++    },
++    {
++      key: "registration",
++      header: "Carte grise",
++      width: "120px",
++      render: (vehicle) => (
++        <StatusBadge variant={vehicle.registrationDocumentPresent ? "success" : "danger"}>
++          {vehicle.registrationDocumentPresent ? "OK" : "Manquante"}
++        </StatusBadge>
++      ),
++    },
++    {
++      key: "sanitary",
++      header: "Agrement sanitaire",
++      width: "150px",
++      render: (vehicle) => formatDocumentDateLabel(vehicle.sanitaryApprovalExpiresAt),
++    },
++    {
++      key: "documents",
++      header: "Conformite",
++      width: "130px",
++      render: (vehicle) => {
++        const documentStatus = documentStatusByVehicleId.get(vehicle.id) ?? "conforme";
++        return <StatusBadge variant={documentStatusBadgeVariant(documentStatus)}>{documentStatusLabel(documentStatus)}</StatusBadge>;
+       },
+-      {
+-        key: "documents",
+-        header: "Conformite",
+-        width: "170px",
+-        render: (vehicle) => {
+-          const documentStatus = documentStatusByVehicleId.get(vehicle.id) ?? "conforme";
+-          return (
+-            <StatusBadge variant={documentStatusBadgeVariant(documentStatus)}>
+-              {documentStatusLabel(documentStatus)}
+-            </StatusBadge>
+-          );
+-        },
++    },
++    {
++      key: "updatedAt",
++      header: "Derniere modif.",
++      width: "160px",
++      render: (vehicle) => formatDateTimeLabel(vehicle.updatedAt),
++    },
++    {
++      key: "actions",
++      header: "Actions",
++      align: "right",
++      width: "200px",
++      render: (vehicle) => {
++        const isSavingEdit = savingEditVehicleId === vehicle.id;
++        const isArchiving = archivingVehicleId === vehicle.id;
++        const isBusy = isSavingEdit || isArchiving;
++
++        return (
++          <div className="vehicles-actions vehicles-actions--wrap vehicles-actions--end">
++            <ActionButton
++              size="sm"
++              variant="secondary"
++              leadingIcon={<Wrench size={14} />}
++              onClick={() => openEditVehicle(vehicle)}
++              disabled={isBusy}
++            >
++              Modifier
++            </ActionButton>
++
++            <ActionButton
++              size="sm"
++              variant="danger"
++              onClick={() => handleArchiveVehicle(vehicle)}
++              disabled={isBusy}
++            >
++              {isArchiving ? "Archivage..." : "Archiver"}
++            </ActionButton>
++          </div>
++        );
+       },
+-      {
+-        key: "depot",
+-        header: "Base",
+-        width: "340px",
+-        render: (vehicle) => {
+-          const currentDepot = vehicle.depot;
+-          const currentSelection = selectedDepotIds[vehicle.id] ?? "";
+-          const options = currentDepot && !depotOptions.some((depot) => depot.id === currentDepot.id)
+-            ? [currentDepot, ...depotOptions]
+-            : depotOptions;
+-          const hasPendingDepotChange = currentSelection !== (vehicle.depotId ?? "");
+-          const isSavingDepot = savingDepotVehicleId === vehicle.id;
+-          const isArchiving = archivingVehicleId === vehicle.id;
+-
+-          return (
+-            <div className="vehicles-depot-cell">
+-              <StatusBadge variant={depotStatusVariant(vehicle.depot)}>
+-                {vehicle.depot ? getDepotLabel(vehicle.depot) : "Aucune base"}
+-              </StatusBadge>
++    },
++  ];
+ 
+-              <div className="vehicles-depot-editor">
+-                <select
+-                  value={currentSelection}
+-                  onChange={(event) => {
+-                    const value = event.target.value;
+-                    setSelectedDepotIds((prev) => ({
+-                      ...prev,
+-                      [vehicle.id]: value,
+-                    }));
+-                  }}
+-                  disabled={isSavingDepot || isArchiving}
+-                >
+-                  <option value="">Aucune base</option>
+-                  {options.map((depot) => (
+-                    <option key={depot.id} value={depot.id}>
+-                      {getDepotLabel(depot)}
+-                    </option>
+-                  ))}
+-                </select>
++  const selectedVehicleDocumentStatus = selectedVehicle
++    ? documentStatusByVehicleId.get(selectedVehicle.id) ?? "conforme"
++    : null;
++
++  return (
++    <section className="vehicles-section">
++      <div className="vehicles-grid-stats">
++        <StatCard title="Total vehicules" value={vehicleStats.total} hint="Flotte active" tone="info" icon={<Ambulance size={18} />} />
++        <StatCard title="En service" value={vehicleStats.enService} hint="Vehicules operationnels" tone="success" icon={<ClipboardCheck size={18} />} />
++        <StatCard title="En maintenance" value={vehicleStats.maintenance} hint="Maintenance planifiee" tone="warning" icon={<Wrench size={18} />} />
++        <StatCard title="Hors service" value={vehicleStats.horsService} hint="Indisponibles" tone="danger" icon={<FileClock size={18} />} />
++        <StatCard
++          title="Conformite a surveiller"
++          value={vehicleStats.conformiteASurveiller}
++          hint="Documents expires ou bientot expires"
++          tone="warning"
++          icon={<Filter size={18} />}
++        />
++      </div>
++
++      {error ? <ErrorMessage title="Erreur module vehicules" message={error} /> : null}
++      {successMessage ? <div className="vehicles-alert vehicles-alert--success">{successMessage}</div> : null}
+ 
++      <div className="vehicles-layout">
++        <div className="vehicles-layout__main">
++          <section className="vehicles-card">
++            <div className="vehicles-card__head">
++              <div>
++                <h2 className="vehicles-card__title">Ajouter un vehicule</h2>
++                <p className="vehicles-card__description">
++                  Creation d&apos;un vehicule actif avec type et statut initial, sans modification de logique metier.
++                </p>
++              </div>
++              <div className="vehicles-inline-status">
++                {!canCreateVehicle ? <StatusBadge variant="warning">Creation reservee au profil ADMIN</StatusBadge> : null}
+                 <ActionButton
++                  variant={showCreateVehicleForm ? "secondary" : "primary"}
+                   size="sm"
+-                  onClick={() => handleSaveDepot(vehicle.id)}
+-                  disabled={isSavingDepot || isArchiving || !hasPendingDepotChange}
++                  leadingIcon={<Plus size={16} />}
++                  onClick={() => setShowCreateVehicleForm((prev) => !prev)}
++                  disabled={!canCreateVehicle}
+                 >
+-                  {isSavingDepot ? "Enregistrement..." : "Enregistrer"}
++                  {showCreateVehicleForm ? "Masquer" : "Ajouter un vehicule"}
+                 </ActionButton>
+               </div>
+             </div>
+-          );
+-        },
+-      },
+-      {
+-        key: "actions",
+-        header: "Actions",
+-        align: "right",
+-        width: "230px",
+-        render: (vehicle) => {
+-          const isSavingEdit = savingEditVehicleId === vehicle.id;
+-          const isArchiving = archivingVehicleId === vehicle.id;
+-          const isEditing = editingVehicleId === vehicle.id;
+-          const isBusy = isSavingEdit || isArchiving;
+-
+-          return (
+-            <div className="vehicles-actions vehicles-actions--wrap vehicles-actions--end">
+-              <ActionButton
+-                size="sm"
+-                variant="secondary"
+-                onClick={() => openEditVehicle(vehicle)}
+-                disabled={isBusy}
+-              >
+-                {isEditing ? "Edition en cours" : "Modifier"}
+-              </ActionButton>
+ 
+-              <ActionButton
+-                size="sm"
+-                variant="danger"
+-                onClick={() => handleArchiveVehicle(vehicle)}
+-                disabled={isBusy}
+-              >
+-                {isArchiving ? "Archivage..." : "Archiver"}
+-              </ActionButton>
++            {showCreateVehicleForm ? (
++              <AddVehicleForm onSubmit={handleAddVehicle} disabled={isSubmitting} />
++            ) : (
++              <p className="vehicles-table-cell-subtle">Formulaire replie. Utilisez le bouton &quot;Ajouter un vehicule&quot; pour ouvrir la creation.</p>
++            )}
++          </section>
++
++          <section className="vehicles-card">
++            <div className="vehicles-card__head">
++              <div>
++                <h2 className="vehicles-card__title">Liste des vehicules</h2>
++                <p className="vehicles-card__description">
++                  Consultation, filtrage et suivi documentaire de la flotte. Selectionnez une ligne pour afficher le panneau detail.
++                </p>
++              </div>
+             </div>
+-          );
+-        },
+-      },
+-    ];
+ 
+-  return (
+-    <section className="vehicles-section">
+-      <div className="vehicles-grid-stats">
+-        <StatCard title="Vehicules actifs" value={vehicleStats.total} hint="Flotte active de la societe" />
+-        <StatCard title="Conformes" value={vehicleStats.conformes} hint="Dossiers a jour" tone="success" />
+-        <StatCard title="Bientot expires" value={vehicleStats.bientotExpires} hint={`A moins de ${DOCUMENT_WARNING_WINDOW_DAYS} jours`} tone="warning" />
+-        <StatCard title="Indisponibles" value={vehicleStats.indisponibles} hint="Maintenance ou hors service" tone="danger" />
+-      </div>
++            <FilterBar
++              summary={`Filtres actifs : ${searchInput.trim() ? `recherche "${searchInput.trim()}"` : "aucune recherche"}${typeFilter ? `, type ${getVehicleTypeLabel(typeFilter)}` : ""}${statusFilter ? `, statut ${getVehicleStatusLabel(statusFilter)}` : ""}${depotFilter ? `, depot ${depotOptions.find((depot) => depot.id === depotFilter)?.name ?? depotFilter}` : ""}${showAdvancedFilters && documentFilter ? `, conformite ${documentStatusLabel(documentFilter)}` : ""}`}
++              actions={(
++                <div className="vehicles-actions vehicles-actions--wrap">
++                  <ActionButton size="sm" variant="secondary" leadingIcon={<Filter size={14} />} onClick={() => setShowAdvancedFilters((prev) => !prev)}>
++                    {showAdvancedFilters ? "Masquer filtres avances" : "Filtres avances"}
++                  </ActionButton>
++                  <ActionButton size="sm" variant="ghost" onClick={resetFilters}>
++                    Reinitialiser
++                  </ActionButton>
++                </div>
++              )}
++            >
++              <label className="vehicles-field">
++                <span className="vehicles-field__label">Recherche</span>
++                <input
++                  type="text"
++                  value={searchInput}
++                  onChange={(event) => setSearchInput(event.target.value)}
++                  placeholder="Immatriculation, type, statut ou depot"
++                />
++              </label>
+ 
+-      {error ? <ErrorMessage title="Erreur module vehicules" message={error} /> : null}
+-      {successMessage ? <div className="vehicles-alert vehicles-alert--success">{successMessage}</div> : null}
++              <label className="vehicles-field">
++                <span className="vehicles-field__label">Statut</span>
++                <select value={statusFilter} onChange={(event) => setStatusFilter(toSafeStatusFilter(event.target.value))}>
++                  <option value="">Tous les statuts</option>
++                  <option value="ACTIVE">En service</option>
++                  <option value="MAINTENANCE">Maintenance</option>
++                  <option value="OUT_OF_SERVICE">Hors service</option>
++                </select>
++              </label>
+ 
+-      <section className="vehicles-card">
+-        <div className="vehicles-card__head">
+-          <h2 className="vehicles-card__title">Ajouter un vehicule</h2>
+-          <p className="vehicles-card__description">
+-            Creation d&apos;un vehicule actif avec type et statut initial, sans modification de logique metier.
+-          </p>
+-          {!canCreateVehicle ? (
+-            <div className="vehicles-inline-status">
+-              <StatusBadge variant="warning">Creation reservee au profil ADMIN</StatusBadge>
+-            </div>
+-          ) : null}
+-        </div>
++              <label className="vehicles-field">
++                <span className="vehicles-field__label">Type</span>
++                <select value={typeFilter} onChange={(event) => setTypeFilter(toSafeTypeFilter(event.target.value))}>
++                  <option value="">Tous les types</option>
++                  <option value="AMBULANCE">Ambulance</option>
++                  <option value="VSL">VSL</option>
++                  <option value="TAXI">Taxi</option>
++                </select>
++              </label>
+ 
+-        {canCreateVehicle ? (
+-          <AddVehicleForm onSubmit={handleAddVehicle} disabled={isSubmitting} />
+-        ) : (
+-          <p className="vehicles-table-cell-subtle">Votre role ne permet pas la creation de vehicules.</p>
+-        )}
+-      </section>
+-
+-      <section className="vehicles-card">
+-        <div className="vehicles-card__head">
+-          <h2 className="vehicles-card__title">Liste des vehicules</h2>
+-          <p className="vehicles-card__description">
+-            Consultation, filtrage simple, affectation de base, edition et archivage logique des vehicules actifs.
+-          </p>
++              <label className="vehicles-field">
++                <span className="vehicles-field__label">Depot</span>
++                <select value={depotFilter} onChange={(event) => setDepotFilter(event.target.value)}>
++                  <option value="">Tous les depots</option>
++                  {depotOptions.map((depot) => (
++                    <option key={depot.id} value={depot.id}>
++                      {getDepotLabel(depot)}
++                    </option>
++                  ))}
++                </select>
++              </label>
++
++              {showAdvancedFilters ? (
++                <label className="vehicles-field">
++                  <span className="vehicles-field__label">Conformite</span>
++                  <select
++                    value={documentFilter}
++                    onChange={(event) => setDocumentFilter(toSafeDocumentFilter(event.target.value))}
++                  >
++                    <option value="">Tous les niveaux</option>
++                    <option value="conforme">Conforme</option>
++                    <option value="bientot_expire">Bientot expire</option>
++                    <option value="expire">Expire</option>
++                  </select>
++                </label>
++              ) : null}
++            </FilterBar>
++
++            <DataTable
++              columns={columns}
++              rows={filteredVehicles}
++              rowKey={(vehicle) => vehicle.id}
++              loading={false}
++              error={null}
++              emptyTitle="Aucun vehicule trouve"
++              emptyMessage="Aucun vehicule ne correspond aux criteres de recherche."
++              minWidth={1520}
++              caption="Vehicules actifs de la societe courante"
++              selectedRowKey={selectedVehicleId}
++              onRowClick={(vehicle) => {
++                setSelectedVehicleId(vehicle.id);
++                clearFeedback();
++              }}
++            />
++          </section>
+         </div>
+ 
+-        <FilterBar
+-          summary={`Filtres actifs : ${searchInput.trim() ? `recherche "${searchInput.trim()}"` : "aucune recherche"}${typeFilter ? `, type ${getVehicleTypeLabel(typeFilter)}` : ""}${statusFilter ? `, statut ${getVehicleStatusLabel(statusFilter)}` : ""}${documentFilter ? `, conformite ${documentStatusLabel(documentFilter)}` : ""}`}
+-          actions={(
+-            <ActionButton size="sm" variant="ghost" onClick={resetFilters}>
+-              Reinitialiser
+-            </ActionButton>
++        <aside className="vehicles-detail-panel">
++          {selectedVehicle ? (
++            <>
++              <div className="vehicles-detail-panel__head">
++                <div>
++                  <h3 className="vehicles-detail-panel__title">{selectedVehicle.immatriculation}</h3>
++                  <p className="vehicles-detail-panel__subtitle">{getVehicleTypeLabel(selectedVehicle.type)}</p>
++                </div>
++                <StatusBadge variant={vehicleStatusBadgeVariant(selectedVehicle.status)}>{getVehicleStatusLabel(selectedVehicle.status)}</StatusBadge>
++              </div>
++
++              <nav className="vehicles-detail-tabs" aria-label="Details vehicule">
++                {VEHICLE_DETAIL_TABS.map((tab) => (
++                  <button
++                    key={tab.id}
++                    type="button"
++                    className={`vehicles-detail-tab${detailTab === tab.id ? " is-active" : ""}`}
++                    onClick={() => setDetailTab(tab.id)}
++                  >
++                    {tab.label}
++                  </button>
++                ))}
++              </nav>
++
++              {detailTab === "DETAILS" ? (
++                <div className="vehicles-detail-group">
++                  <h4 className="vehicles-detail-group__title">Informations generales</h4>
++                  <dl className="vehicles-detail-list">
++                    <div><dt>Type</dt><dd>{getVehicleTypeLabel(selectedVehicle.type)}</dd></div>
++                    <div><dt>Depot</dt><dd>{selectedVehicle.depot ? getDepotLabel(selectedVehicle.depot) : "Aucune base"}</dd></div>
++                    <div><dt>Statut</dt><dd>{getVehicleStatusLabel(selectedVehicle.status)}</dd></div>
++                    <div><dt>Conformite</dt><dd>{documentStatusLabel(selectedVehicleDocumentStatus ?? "conforme")}</dd></div>
++                  </dl>
++                </div>
++              ) : null}
++
++              {detailTab === "EQUIPEMENTS" ? (
++                <div className="vehicles-detail-group">
++                  <h4 className="vehicles-detail-group__title">Affectation</h4>
++                  <div className="vehicles-depot-editor">
++                    <select
++                      value={selectedDepotIds[selectedVehicle.id] ?? ""}
++                      onChange={(event) => {
++                        const value = event.target.value;
++                        setSelectedDepotIds((prev) => ({
++                          ...prev,
++                          [selectedVehicle.id]: value,
++                        }));
++                      }}
++                      disabled={savingDepotVehicleId === selectedVehicle.id || archivingVehicleId === selectedVehicle.id}
++                    >
++                      <option value="">Aucune base</option>
++                      {depotOptions.map((depot) => (
++                        <option key={depot.id} value={depot.id}>{getDepotLabel(depot)}</option>
++                      ))}
++                    </select>
++                    <ActionButton
++                      size="sm"
++                      onClick={() => handleSaveDepot(selectedVehicle.id)}
++                      disabled={
++                        savingDepotVehicleId === selectedVehicle.id
++                        || archivingVehicleId === selectedVehicle.id
++                        || (selectedDepotIds[selectedVehicle.id] ?? "") === (selectedVehicle.depotId ?? "")
++                      }
++                    >
++                      {savingDepotVehicleId === selectedVehicle.id ? "Enregistrement..." : "Enregistrer"}
++                    </ActionButton>
++                  </div>
++                  <p className="vehicles-table-cell-subtle">La composition equipement detaillee n&apos;est pas disponible dans ce lot UI.</p>
++                </div>
++              ) : null}
++
++              {detailTab === "MAINTENANCE" ? (
++                <div className="vehicles-detail-group">
++                  <h4 className="vehicles-detail-group__title">Controles & maintenance</h4>
++                  <dl className="vehicles-detail-list">
++                    <div><dt>Assurance</dt><dd>{formatDocumentDateLabel(selectedVehicle.insuranceExpiresAt)}</dd></div>
++                    <div><dt>Controle technique</dt><dd>{formatDocumentDateLabel(selectedVehicle.technicalInspectionExpiresAt)}</dd></div>
++                    <div><dt>Agrement sanitaire</dt><dd>{formatDocumentDateLabel(selectedVehicle.sanitaryApprovalExpiresAt)}</dd></div>
++                  </dl>
++                </div>
++              ) : null}
++
++              {detailTab === "DOCS" ? (
++                <div className="vehicles-detail-group">
++                  <h4 className="vehicles-detail-group__title">Conformite documentaire</h4>
++                  <div className="vehicles-inline-status">
++                    <StatusBadge variant={selectedVehicle.registrationDocumentPresent ? "success" : "danger"}>
++                      Carte grise {selectedVehicle.registrationDocumentPresent ? "OK" : "manquante"}
++                    </StatusBadge>
++                    <StatusBadge variant={documentStatusBadgeVariant(selectedVehicleDocumentStatus ?? "conforme")}>
++                      {documentStatusLabel(selectedVehicleDocumentStatus ?? "conforme")}
++                    </StatusBadge>
++                  </div>
++                </div>
++              ) : null}
++
++              <div className="vehicles-detail-panel__actions">
++                <ActionButton
++                  variant="secondary"
++                  leadingIcon={<Wrench size={14} />}
++                  onClick={() => openEditVehicle(selectedVehicle)}
++                  disabled={archivingVehicleId === selectedVehicle.id || savingEditVehicleId === selectedVehicle.id}
++                >
++                  Modifier
++                </ActionButton>
++                <ActionButton variant="primary" disabled>Voir l&apos;historique</ActionButton>
++                <ActionButton
++                  variant="danger"
++                  onClick={() => handleArchiveVehicle(selectedVehicle)}
++                  disabled={archivingVehicleId === selectedVehicle.id || savingEditVehicleId === selectedVehicle.id}
++                >
++                  {archivingVehicleId === selectedVehicle.id ? "Archivage..." : "Archiver"}
++                </ActionButton>
++              </div>
++            </>
++          ) : (
++            <p className="vehicles-table-cell-subtle">Selectionnez un vehicule dans le tableau pour afficher le detail.</p>
+           )}
+-        >
+-          <label className="vehicles-field">
+-            <span className="vehicles-field__label">Recherche</span>
+-            <input
+-              type="text"
+-              value={searchInput}
+-              onChange={(event) => setSearchInput(event.target.value)}
+-              placeholder="Immatriculation, type, statut ou base"
+-            />
+-          </label>
+-
+-          <label className="vehicles-field">
+-            <span className="vehicles-field__label">Type</span>
+-            <select value={typeFilter} onChange={(event) => setTypeFilter(toSafeTypeFilter(event.target.value))}>
+-              <option value="">Tous les types</option>
+-              <option value="AMBULANCE">Ambulance</option>
+-              <option value="VSL">VSL</option>
+-              <option value="TAXI">Taxi</option>
+-            </select>
+-          </label>
+-
+-          <label className="vehicles-field">
+-            <span className="vehicles-field__label">Statut</span>
+-            <select value={statusFilter} onChange={(event) => setStatusFilter(toSafeStatusFilter(event.target.value))}>
+-              <option value="">Tous les statuts</option>
+-              <option value="ACTIVE">Disponible</option>
+-              <option value="MAINTENANCE">Maintenance</option>
+-              <option value="OUT_OF_SERVICE">Hors service</option>
+-            </select>
+-          </label>
+-
+-          <label className="vehicles-field">
+-            <span className="vehicles-field__label">Conformite</span>
+-            <select
+-              value={documentFilter}
+-              onChange={(event) => setDocumentFilter(toSafeDocumentFilter(event.target.value))}
+-            >
+-              <option value="">Tous les niveaux</option>
+-              <option value="conforme">Conforme</option>
+-              <option value="bientot_expire">Bientot expire</option>
+-              <option value="expire">Expire</option>
+-            </select>
+-          </label>
+-        </FilterBar>
+-
+-        <DataTable
+-          columns={columns}
+-          rows={filteredVehicles}
+-          rowKey={(vehicle) => vehicle.id}
+-          loading={false}
+-          error={null}
+-          emptyTitle="Aucun vehicule trouve"
+-          emptyMessage="Aucun vehicule ne correspond aux criteres de recherche."
+-          minWidth={1200}
+-          caption="Vehicules actifs de la societe courante"
+-        />
+-      </section>
++        </aside>
++      </div>
+ 
+       {editingVehicle ? (
+         <section className="vehicles-card">
+@@ -778,7 +984,7 @@ export default function VehiclesClient({
+                   onChange={(event) => setEditStatus(getEditableVehicleStatus(event.target.value))}
+                   disabled={savingEditVehicleId === editingVehicle.id || archivingVehicleId === editingVehicle.id}
+                 >
+-                  <option value="ACTIVE">Disponible</option>
++                  <option value="ACTIVE">En service</option>
+                   <option value="MAINTENANCE">Maintenance</option>
+                   <option value="OUT_OF_SERVICE">Hors service</option>
+                 </select>
+@@ -860,4 +1066,3 @@ export default function VehiclesClient({
+     </section>
+   );
+ }
+-

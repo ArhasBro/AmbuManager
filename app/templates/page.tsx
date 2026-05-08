@@ -42,11 +42,12 @@ export default async function TemplatesPage() {
   return (
     <div className="page-wrap">
       <PageHeader
-        title="Templates"
-        description="Gérez les modèles de shifts, la composition d’équipe, les véhicules requis et les statuts."
+        title="Templates de garde"
+        description="Gerez les modeles de garde et de shift pour organiser vos plannings."
       />
 
       <TemplatesClient initialTemplates={serializeDates(templates)} />
     </div>
   );
 }
+
