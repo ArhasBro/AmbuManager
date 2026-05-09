@@ -1,14 +1,18 @@
-﻿# FIN_SESSION
+# FIN_SESSION
 
-## ClÃ´ture
+## Cloture
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+Session A24-UI-09 cloturee en mode VALIDATION, sans patch code.
 
 ## Validation
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+- preuves terminales executees et journalisees (serveur local, captures, git status, encodage, zip) ;
+- rapport global A24 produit ;
+- residuels classes en bloquants / non bloquants.
 
 ## Verdict final
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
-
+- Session A24-UI-09 : VALIDE
+- Patch code : NON
+- `NO_PATCH_CODE` : OUI
+- Recommendation de passage suite : OUI, vers A25 (planning UI/UX)

@@ -1,10 +1,10 @@
-﻿# NO_PATCH
+# NO_PATCH
 
 Session : SESSION-20260506-09_A24_A24-UI-09
 
 Type : VALIDATION
 
 Raison :
-- Session documentaire de type VALIDATION.
-- Aucun patch officiel a produire pour cette session.
-- Le dossier PATCH reste present dans la session pour centraliser la documentation et les patchs.
+- session de validation documentaire et visuelle ;
+- aucun patch code necessaire dans ce lot ;
+- decision formalisée dans `NO_PATCH_CODE.md`.

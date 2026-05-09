@@ -375,7 +375,7 @@ Aucun prompt de retour nécessaire.
 
 Session :
 
-- SESSION-20260506-09_A24_A24-UI-09
+- SESSION-20260506-10_A24_CLOTURE_A24
 
 Stage :
 
@@ -387,56 +387,71 @@ Bloc :
 
 Type :
 
-- VALIDATION
+- AUDIT+CORRECTION+COMPLÉTION+VALIDATION
 
 Intitulé :
 
-- A24-UI-09 — Validation globale UI/UX post-réalignement
+- CLOTURE_A24 — Clôture finale du bloc A24
 
 Objectif :
 
-- vérifier la cohérence globale du réalignement UI/UX A24 ;
-- valider les pages traitées dans le bloc A24 ;
-- identifier les résiduels éventuels ;
-- classer les résiduels en bloquants ou non bloquants.
+- contrôler définitivement le bloc A24 ;
+- vérifier que les sessions A24 sont cohérentes entre elles ;
+- vérifier que les patchs, preuves, captures, documentations et ZIP sont présents et exploitables ;
+- décider si le bloc A24 est clôturable définitivement.
 
-À vérifier :
+Périmètre :
 
-- cohérence visuelle globale ;
-- respect des références A24 ;
+- sessions A24 réellement produites ;
+- patchs principaux ;
+- patchs correctifs ;
+- patchs documentaires ;
+- décisions NO_PATCH ou NO_PATCH_CODE ;
+- preuves terminales ;
+- captures disponibles ;
+- documentation finale ;
+- ZIP documentaires ;
+- cohérence globale UI/UX ;
+- respect des références de ./docs/1-master/MAQUETTE/ ;
 - usage correct de MAQUETTE_DA comme référence de direction artistique si elle couvre le sujet ;
-- analyse non limitée à MAQUETTE_DA ;
 - mode clair ;
 - mode sombre ;
-- navigation connectée ;
-- pages sœurs cohérentes ;
-- captures avant/après si disponibles ;
-- absence de régression fonctionnelle visible ;
-- cohérence des tableaux ;
-- cohérence des filtres ;
-- cohérence des badges ;
-- cohérence des formulaires ;
-- cohérence des états vides, erreurs et chargements.
+- navigation ;
+- pages sœurs ;
+- résiduels bloquants et non bloquants.
 
 Livrable attendu :
 
-- rapport de validation UI/UX ;
-- preuves terminales réellement exécutées ;
-- captures disponibles ;
-- classement des résiduels ;
-- documentation finale ;
-- ZIP documentaire final.
+- contrôle final du bloc UI/UX global ;
+- vérification des patchs ;
+- vérification des preuves ;
+- vérification des captures ;
+- vérification de la documentation finale ;
+- vérification des ZIP documentaires ;
+- verdict final de clôture.
+
+Verdict attendu :
+
+- BLOC A24 CLÔTURABLE DÉFINITIVEMENT : OUI
+
+ou
+
+- BLOC A24 CLÔTURABLE DÉFINITIVEMENT : NON
 
 DoD :
 
-- toutes les pages A24 sont validées ;
-- ou les résiduels sont classés explicitement en bloquants / non bloquants ;
-- la recommandation de passage à la suite est claire.
+- le bloc A24 possède un verdict final clair ;
+- les preuves nécessaires sont identifiées ;
+- les manques sont signalés avec :
+  INFORMATION NON FOURNIE — À CONFIRMER
+- les résiduels sont classés ;
+- le passage au bloc suivant est autorisé ou refusé explicitement.
 
 Exclusions :
 
-- pas de correction hors périmètre ;
-- pas de refonte profonde du planning ;
+- pas de reprise complète du bloc ;
+- pas de refonte UI/UX hors A24 ;
+- pas de correction profonde du planning ;
 - pas de nouveau moteur planning ;
 - pas d’autoschedule ;
 - pas de matching ;

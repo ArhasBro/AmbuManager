@@ -1732,7 +1732,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   NOTES.md
 |   |   |   |   |   RAPPORT_PREPARATOIRE_A25.md
 |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   SESSION-20260506-08_A24_A24-UI-08_DOCS.zip
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   +---CAPTURES_AVANT
@@ -1747,11 +1746,43 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   EVIDENCES.md
 |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   NOTES.md
+|   |   |   |   |   RAPPORT_VALIDATION_UI_UX_A24.md
 |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION-20260506-09_A24_A24-UI-09_DOCS_FINAL.zip
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
+|   |   |   |   +---CAPTURES
+|   |   |   |   |   |   login_dark_ui09.png
+|   |   |   |   |   |   login_light_ui09.png
+|   |   |   |   |   |   
+|   |   |   |   |   +---DARK
+|   |   |   |   |   |       audit_dark_ui09.png
+|   |   |   |   |   |       company_dark_ui09.png
+|   |   |   |   |   |       dashboard_dark_ui09.png
+|   |   |   |   |   |       depots_dark_ui09.png
+|   |   |   |   |   |       onboarding_dark_ui09.png
+|   |   |   |   |   |       planning_dark_ui09.png
+|   |   |   |   |   |       privacy_dark_ui09.png
+|   |   |   |   |   |       templates_dark_ui09.png
+|   |   |   |   |   |       users_dark_ui09.png
+|   |   |   |   |   |       vehicles_dark_ui09.png
+|   |   |   |   |   |       
+|   |   |   |   |   \---LIGHT
+|   |   |   |   |           audit_light_ui09.png
+|   |   |   |   |           company_light_ui09.png
+|   |   |   |   |           dashboard_light_ui09.png
+|   |   |   |   |           depots_light_ui09.png
+|   |   |   |   |           onboarding_light_ui09.png
+|   |   |   |   |           planning_light_ui09.png
+|   |   |   |   |           privacy_light_ui09.png
+|   |   |   |   |           templates_light_ui09.png
+|   |   |   |   |           users_light_ui09.png
+|   |   |   |   |           vehicles_light_ui09.png
+|   |   |   |   |           
 |   |   |   |   \---PATCH
 |   |   |   |           NO_PATCH.md
+|   |   |   |           NO_PATCH_CODE.md
+|   |   |   |           README_PATCH.md
 |   |   |   |           
 |   |   |   \---SESSION-20260506-10_A24_CLOTURE_A24
 |   |   |       |   EVIDENCES.md
