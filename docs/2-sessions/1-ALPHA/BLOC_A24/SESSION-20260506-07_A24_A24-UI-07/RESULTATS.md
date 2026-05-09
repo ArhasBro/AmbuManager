@@ -1,14 +1,22 @@
-# RESULTATS — SESSION-20260506-07_A24_A24-UI-07
+# RESULTATS - SESSION-20260506-07_A24_A24-UI-07
 
-## Résultat code proposé
-Patch principal produit : `PATCH/PATCH__SESSION-20260506-07_A24_A24-UI-07.diff`.
+## Resultat code
+Patch principal produit et applique : `PATCH/PATCH__SESSION-20260506-07_A24_A24-UI-07.diff`
 
-Le patch propose :
-- l'import d'une feuille CSS A24 complémentaire ;
-- une feuille ciblée pour Audit, Onboarding et Privacy ;
-- des cards et tableaux plus proches de la DA A24 ;
-- une meilleure cohérence mode clair / mode sombre ;
-- aucun changement fonctionnel métier.
+Fichiers code modifies :
+- `app/a24-complementary-pages.css`
+- `app/audit/audit-client.tsx`
+- `app/onboarding/page.tsx`
+- `app/onboarding/onboarding-client.tsx`
+- `app/privacy/page.tsx`
 
-## Statut visuel
-PARTIEL — sans captures avant/après, aucune conformité visuelle complète ne peut être déclarée.
+## Impact perimetre
+- Audit : structure visuelle rapprochee de la maquette (KPI, filtres, table detail, panneau lateral).
+- Onboarding : structure en 3 colonnes proche de la maquette (progression, import, aide import).
+- Privacy : page simple enrichie et ordonnee (sommaire + sections numerotees).
+
+## Statut DoD session
+- pages complementaires alignees sur la direction artistique A24 : OUI (niveau code) ;
+- coherence avec pages soeurs A24 : OUI ;
+- absence de rupture visuelle intentionnelle : OUI ;
+- validations terminales exigees (`lint`, `build`) : OUI.

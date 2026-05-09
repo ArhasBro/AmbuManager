@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { type CSSProperties, useMemo, useState } from "react";
 
 import { ActionButton, ErrorMessage, StatusBadge } from "@/app/ui";
 
@@ -64,12 +64,6 @@ type StepStatus = {
 
 const DOMAIN_OPTIONS: Array<{ value: ImportDomain; label: string; help: string; columns: string[] }> = [
   {
-    value: "depots",
-    label: "Bases / depots",
-    help: "Ajout simple de depots. Colonnes minimales : nom, adresse.",
-    columns: ["nom", "adresse"],
-  },
-  {
     value: "users",
     label: "Utilisateurs",
     help: "Ajout simple d'utilisateurs. Colonnes minimales : email, nom, role, motDePasseInitial.",
@@ -88,8 +82,14 @@ const DOMAIN_OPTIONS: Array<{ value: ImportDomain; label: string; help: string; 
     columns: ["nom", "categorie", "requiredRole", "secondaryAllowedRoles", "minStaffCount", "requiredVehicleType", "isActive", "isTimeDefined", "startTime", "endTime", "crossesMidnight", "color"],
   },
   {
+    value: "depots",
+    label: "Depots",
+    help: "Ajout simple de depots. Colonnes minimales : nom, adresse.",
+    columns: ["nom", "adresse"],
+  },
+  {
     value: "user-absences",
-    label: "Indisponibilites utilisateurs",
+    label: "Absences utilisateurs",
     help: "Ajout simple d'indisponibilites. Colonnes minimales : userEmail, startAt, endAt.",
     columns: ["userEmail", "reason", "startAt", "endAt"],
   },
@@ -117,7 +117,7 @@ function renderValue(value: unknown) {
 }
 
 export default function OnboardingClient({ checklist, links }: { checklist: Checklist; links: Links }) {
-  const [domain, setDomain] = useState<ImportDomain>("depots");
+  const [domain, setDomain] = useState<ImportDomain>("users");
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [committing, setCommitting] = useState(false);
@@ -126,6 +126,55 @@ export default function OnboardingClient({ checklist, links }: { checklist: Chec
   const [error, setError] = useState<string | null>(null);
 
   const selectedDomain = useMemo(() => DOMAIN_OPTIONS.find((option) => option.value === domain) ?? DOMAIN_OPTIONS[0], [domain]);
+
+  const onboardingSteps = useMemo(
+    () => [
+      {
+        href: links.company,
+        title: "Profil societe",
+        description: "Renseigner l'identite complete de la societe.",
+        status: getStepStatus(checklist.profileComplete),
+        done: checklist.profileComplete,
+        countLabel: "1 / 1",
+      },
+      {
+        href: links.depots,
+        title: "Bases / depots",
+        description: "Creer les depots utilises au demarrage.",
+        status: getStepStatus(checklist.depotsCount > 0, checklist.depotsCount),
+        done: checklist.depotsCount > 0,
+        countLabel: `${checklist.depotsCount}`,
+      },
+      {
+        href: links.users,
+        title: "Utilisateurs",
+        description: "Creer les comptes et rattachements necessaires.",
+        status: getStepStatus(checklist.usersCount > 0, checklist.usersCount),
+        done: checklist.usersCount > 0,
+        countLabel: `${checklist.usersCount}`,
+      },
+      {
+        href: links.vehicles,
+        title: "Vehicules",
+        description: "Renseigner la flotte active et son statut.",
+        status: getStepStatus(checklist.vehiclesCount > 0, checklist.vehiclesCount),
+        done: checklist.vehiclesCount > 0,
+        countLabel: `${checklist.vehiclesCount}`,
+      },
+      {
+        href: links.templates,
+        title: "Templates",
+        description: "Configurer les modeles de shifts de depart.",
+        status: getStepStatus(checklist.templatesCount > 0, checklist.templatesCount),
+        done: checklist.templatesCount > 0,
+        countLabel: `${checklist.templatesCount}`,
+      },
+    ],
+    [checklist, links.company, links.depots, links.templates, links.users, links.vehicles],
+  );
+
+  const completedImportSteps = onboardingSteps.filter((step) => step.done).length;
+  const completionPct = Math.round((completedImportSteps / onboardingSteps.length) * 100);
 
   async function previewImport() {
     if (!file) return;
@@ -181,53 +230,76 @@ export default function OnboardingClient({ checklist, links }: { checklist: Chec
   }
 
   return (
-    <section className="onboarding-layout">
-      <section className="panel onboarding-card">
+    <section className="onboarding-layout onboarding-layout--triple">
+      <section className="panel onboarding-card onboarding-card--timeline">
         <div className="onboarding-card__head">
-          <h2 className="onboarding-card__title">Parcours manuel recommande</h2>
-          <p className="onboarding-card__description">
-            Une societe pilote peut etre configuree sans import. L&apos;objectif est de rendre l&apos;ordre logique visible depuis l&apos;UI reelle.
-          </p>
+          <h2 className="onboarding-card__title">Progression de l&apos;onboarding</h2>
+          <p className="onboarding-card__description">Preparer les donnees de demarrage avant la premiere exploitation reelle.</p>
         </div>
 
+        <div className="onboarding-progress">
+          <div className="onboarding-progress__bar">
+            <span style={{ width: `${completionPct}%` }} />
+          </div>
+          <strong>{completionPct}%</strong>
+        </div>
+
+        <p className="onboarding-card__description">{completedImportSteps} etapes sur {onboardingSteps.length} completees</p>
+
         <div className="onboarding-steps">
-          <StepRow href={links.company} title="1. Profil societe" description="Renseigner le profil complet de la societe." status={getStepStatus(checklist.profileComplete)} />
-          <StepRow href={links.depots} title="2. Bases / depots" description="Creer les depots actifs utilises au demarrage." status={getStepStatus(checklist.depotsCount > 0, checklist.depotsCount)} />
-          <StepRow href={links.users} title="3. Utilisateurs" description="Creer les comptes, roles et rattachements depots necessaires." status={getStepStatus(checklist.usersCount > 0, checklist.usersCount)} />
-          <StepRow href={links.vehicles} title="4. Vehicules" description="Creer la flotte active et les rattachements bases." status={getStepStatus(checklist.vehiclesCount > 0, checklist.vehiclesCount)} />
-          <StepRow href={links.templates} title="5. Templates" description="Creer les modeles de shifts utiles a la societe pilote." status={getStepStatus(checklist.templatesCount > 0, checklist.templatesCount)} />
-          <StepRow href={links.users} title="6. Indisponibilites utilisateurs" description="Saisir les absences depuis le module utilisateurs." status={getStepStatus(checklist.absencesCount > 0, checklist.absencesCount)} />
+          {onboardingSteps.map((step, index) => (
+            <Link href={step.href} className="onboarding-step" key={step.title}>
+              <div className="onboarding-step__top">
+                <strong>{index + 1}. {step.title}</strong>
+                <StatusBadge variant={step.status.variant}>{step.status.label}</StatusBadge>
+              </div>
+              <p className="onboarding-step__description">{step.description}</p>
+              <div className="onboarding-step__meta">
+                <span>{step.countLabel}</span>
+                <span className="onboarding-step__action">{step.done ? "Ouvrir" : "Configurer"}</span>
+              </div>
+            </Link>
+          ))}
         </div>
       </section>
 
-      <section className="panel onboarding-card">
+      <section className="panel onboarding-card onboarding-card--import">
         <div className="onboarding-card__head">
-          <h2 className="onboarding-card__title">Imports initiaux simples ALPHA</h2>
-          <p className="onboarding-card__description">
-            Ajout uniquement. Aucun import destructeur, aucune mise a jour automatique des existants, apercu obligatoire avant validation manuelle.
-          </p>
+          <h2 className="onboarding-card__title">Import initial</h2>
+          <p className="onboarding-card__description">Apercu obligatoire avant validation. Aucun import destructeur.</p>
         </div>
 
-        <div className="onboarding-import-form">
-          <label className="onboarding-field">
-            <span className="onboarding-field__label">Domaine</span>
-            <select
-              value={domain}
-              onChange={(event) => {
-                setDomain(event.target.value as ImportDomain);
+        <ol className="onboarding-import-steps" aria-label="Etapes import">
+          <li className="is-active"><span>1</span><small>Type d&apos;import</small></li>
+          <li className={file ? "is-active" : ""}><span>2</span><small>Fichier</small></li>
+          <li className={preview ? "is-active" : ""}><span>3</span><small>Apercu</small></li>
+          <li className={preview?.invalidRows ? "is-warning" : preview ? "is-active" : ""}><span>4</span><small>Erreurs</small></li>
+          <li className={commitResult ? "is-active" : ""}><span>5</span><small>Validation</small></li>
+        </ol>
+
+        <div className="onboarding-domain-tabs" role="tablist" aria-label="Type import">
+          {DOMAIN_OPTIONS.map((option) => (
+            <button
+              key={option.value}
+              type="button"
+              className={`onboarding-domain-tab${domain === option.value ? " is-active" : ""}`}
+              onClick={() => {
+                setDomain(option.value);
                 setPreview(null);
                 setCommitResult(null);
                 setError(null);
               }}
             >
-              {DOMAIN_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>{option.label}</option>
-              ))}
-            </select>
-          </label>
+              {option.label}
+            </button>
+          ))}
+        </div>
 
-          <label className="onboarding-field">
-            <span className="onboarding-field__label">Fichier CSV ou XLSX</span>
+        <div className="onboarding-upload-zone">
+          <p className="onboarding-upload-zone__title">Glissez-deposez votre fichier ici</p>
+          <p className="onboarding-upload-zone__text">Formats acceptes : CSV, XLSX (max. 10 Mo)</p>
+          <label className="onboarding-upload-zone__picker">
+            <span>Cliquez pour parcourir</span>
             <input
               type="file"
               accept=".csv,.xlsx"
@@ -241,6 +313,13 @@ export default function OnboardingClient({ checklist, links }: { checklist: Chec
           </label>
         </div>
 
+        {file ? (
+          <div className="onboarding-file-chip">
+            <strong>{file.name}</strong>
+            <span>{Math.round(file.size / 1024)} Ko</span>
+          </div>
+        ) : null}
+
         <section className="panel-soft onboarding-hint">
           <strong>{selectedDomain.label}</strong>
           <p>{selectedDomain.help}</p>
@@ -249,10 +328,13 @@ export default function OnboardingClient({ checklist, links }: { checklist: Chec
 
         <div className="onboarding-actions">
           <ActionButton type="button" variant="secondary" disabled={!file || loading} onClick={() => void previewImport()}>
-            {loading ? "Preparation..." : "Apercu avant import"}
+            {loading ? "Analyse en cours..." : "Analyser le fichier"}
+          </ActionButton>
+          <ActionButton type="button" variant="ghost" disabled={loading}>
+            Telecharger un modele
           </ActionButton>
           <ActionButton type="button" variant="primary" disabled={!preview || preview.rows.length === 0 || committing} onClick={() => void commitImport()}>
-            {committing ? "Import en cours..." : "Valider l'import"}
+            {committing ? "Validation..." : "Valider l'import"}
           </ActionButton>
         </div>
 
@@ -274,7 +356,7 @@ export default function OnboardingClient({ checklist, links }: { checklist: Chec
             ) : null}
 
             <section className="onboarding-block">
-              <h3 className="onboarding-block__title">Apercu des lignes pretes</h3>
+              <h3 className="onboarding-block__title">Apercu import ({preview.previewRows.length} lignes)</h3>
               {preview.previewRows.length === 0 ? (
                 <div className="panel-soft onboarding-empty">Aucune ligne prete a importer.</div>
               ) : (
@@ -296,19 +378,27 @@ export default function OnboardingClient({ checklist, links }: { checklist: Chec
               )}
             </section>
 
-            <section className="onboarding-block">
-              <h3 className="onboarding-block__title">Rapport d&apos;erreurs</h3>
-              {preview.errors.length === 0 ? (
-                <div className="status-success onboarding-feedback">Aucune erreur bloquante detectee dans l&apos;apercu.</div>
-              ) : (
-                <div className="onboarding-errors">
-                  {preview.errors.map((item, index) => (
-                    <div key={`${item.rowNumber}-${index}`} className="onboarding-errors__item">
-                      Ligne {item.rowNumber}{item.field ? ` • ${item.field}` : ""} - {item.message}
-                    </div>
-                  ))}
-                </div>
-              )}
+            <section className="onboarding-grid-feedback">
+              <section className="onboarding-block onboarding-block--danger">
+                <h3 className="onboarding-block__title">Erreurs detectees ({preview.errors.length})</h3>
+                {preview.errors.length === 0 ? (
+                  <div className="status-success onboarding-feedback">Aucune erreur bloquante detectee dans l&apos;apercu.</div>
+                ) : (
+                  <div className="onboarding-errors">
+                    {preview.errors.map((item, index) => (
+                      <div key={`${item.rowNumber}-${index}`} className="onboarding-errors__item">
+                        Ligne {item.rowNumber}{item.field ? ` - ${item.field}` : ""} - {item.message}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </section>
+
+              <section className="onboarding-block onboarding-block--success">
+                <h3 className="onboarding-block__title">Pret a importer</h3>
+                <p>{preview.validRows} lignes valides sur {preview.totalRows}</p>
+                <p>{preview.invalidRows} erreurs a corriger</p>
+              </section>
             </section>
           </section>
         ) : null}
@@ -333,7 +423,7 @@ export default function OnboardingClient({ checklist, links }: { checklist: Chec
               <div className="onboarding-errors">
                 {commitResult.errors.map((item, index) => (
                   <div key={`${item.rowNumber}-${index}`} className="onboarding-errors__item">
-                    Ligne {item.rowNumber}{item.field ? ` • ${item.field}` : ""} - {item.message}
+                    Ligne {item.rowNumber}{item.field ? ` - ${item.field}` : ""} - {item.message}
                   </div>
                 ))}
               </div>
@@ -343,21 +433,56 @@ export default function OnboardingClient({ checklist, links }: { checklist: Chec
           </section>
         ) : null}
       </section>
+
+      <aside className="panel onboarding-card onboarding-card--assist">
+        <div className="onboarding-card__head">
+          <h2 className="onboarding-card__title">Aide import</h2>
+          <p className="onboarding-card__description">Conseils de preparation avant validation finale.</p>
+        </div>
+
+        <section className="onboarding-assist-progress">
+          <div className="onboarding-progress-ring" style={{ "--completion": `${completionPct}%` } as CSSProperties}>
+            <span>{completionPct}%</span>
+          </div>
+          <div>
+            <strong>{completedImportSteps} etapes terminees sur {onboardingSteps.length}</strong>
+            <p>Continuez pour finaliser la preparation de votre societe.</p>
+          </div>
+        </section>
+
+        <section className="onboarding-assist-block">
+          <h3>Etape selectionnee</h3>
+          <StatusBadge variant="info">{selectedDomain.label}</StatusBadge>
+        </section>
+
+        <section className="onboarding-assist-block">
+          <h3>Conseils de preparation</h3>
+          <ul>
+            <li>Verifier que les bases/depots sont crees et actifs.</li>
+            <li>Chaque utilisateur doit avoir un email unique.</li>
+            <li>Les roles doivent correspondre au referentiel.</li>
+            <li>Les depots doivent exister et etre actifs.</li>
+          </ul>
+        </section>
+
+        <section className="onboarding-assist-block">
+          <h3>Ordre recommande</h3>
+          <ol>
+            <li>Societe</li>
+            <li>Depots</li>
+            <li>Utilisateurs</li>
+            <li>Vehicules</li>
+            <li>Templates</li>
+          </ol>
+        </section>
+
+        <div className="onboarding-assist-actions">
+          <ActionButton type="button" variant="secondary">Voir le guide</ActionButton>
+          <ActionButton type="button" variant="primary" disabled={!preview}>
+            Continuer
+          </ActionButton>
+        </div>
+      </aside>
     </section>
   );
 }
-
-function StepRow({ href, title, description, status }: { href: string; title: string; description: string; status: StepStatus }) {
-  return (
-    <Link href={href} className="onboarding-step">
-      <div className="onboarding-step__top">
-        <strong>{title}</strong>
-        <StatusBadge variant={status.variant}>{status.label}</StatusBadge>
-      </div>
-      <p className="onboarding-step__description">{description}</p>
-      <span className="onboarding-step__action">Ouvrir</span>
-    </Link>
-  );
-}
-
-

@@ -1,90 +1,96 @@
-# EVIDENCES — SESSION-20260506-07_A24_A24-UI-07
+# EVIDENCES - SESSION-20260506-07_A24_A24-UI-07
 
-## Sources réellement lues
-- `docs/1-master/DOCUMENT_MAITRE.md` — fourni dans la conversation.
-- `docs/1-master/PLAN_DE_DEVELOPPEMENT.md` — fourni dans la conversation.
-- `docs/1-master/REFERENCE_UI_UX_A24.md` — GitHub `main`.
-- `docs/1-master/MAQUETTE/README_MAQUETTES_A24.md` — GitHub `main`.
-- `docs/1-master/MAQUETTE/SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md` — GitHub `main`, partie transversale visible via outil.
-- `app/layout.tsx` — GitHub `main`.
-- `app/audit/page.tsx` — GitHub `main`.
-- `app/audit/audit-client.tsx` — GitHub `main`.
-- `app/onboarding/page.tsx` — GitHub `main`.
-- `app/onboarding/onboarding-client.tsx` — GitHub `main`.
-- `app/privacy/page.tsx` — GitHub `main`.
-- `app/a24-vehicles-templates.css` — GitHub `main`, continuité A24.
-
-## Fichiers inspectés
-- `app/layout.tsx`
-- `app/audit/page.tsx`
+## Sources reellement lues
+- `docs/1-master/DOCUMENT_MAITRE.md`
+- `docs/1-master/PLAN_DE_DEVELOPPEMENT.md`
+- `docs/3-templates/TEMPLATE_DEBUT_SESSION.md`
+- `docs/1-master/REFERENCE_UI_UX_A24.md`
+- `docs/1-master/MAQUETTE/README_MAQUETTES_A24.md`
+- `docs/1-master/MAQUETTE/SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md`
+- `docs/1-master/MAQUETTE/MAQUETTE_DA/.../Audit_V1.0.png`
+- `docs/1-master/MAQUETTE/MAQUETTE_DA/.../Onboarding_V1.2.png`
+- `docs/1-master/MAQUETTE/MAQUETTE_DA/.../Privacy_V1.0.png`
 - `app/audit/audit-client.tsx`
 - `app/onboarding/page.tsx`
 - `app/onboarding/onboarding-client.tsx`
 - `app/privacy/page.tsx`
-- `app/a24-vehicles-templates.css`
-
-## Fichiers modifiés proposés
-- `app/layout.tsx`
 - `app/a24-complementary-pages.css`
 
-## Patch principal — preuves d'encodage
-- premiers octets : `100 105 102 102`
-- première ligne : `diff --git a/app/a24-complementary-pages.css b/app/a24-complementary-pages.css`
-- encodage : UTF-8 sans BOM
-- caractères nuls : non
-- retour ligne final : oui
+## Validations terminales - preuves reelles
 
-## Patch documentaire — preuves d'encodage
-- premiers octets : `100 105 102 102`
-- première ligne : `diff --git a/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-07_A24_A24-UI-07/EVIDENCES.md b/docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-07_A24_A24-UI-07/EVIDENCES.md`
-- encodage : UTF-8 sans BOM
-- caractères nuls : non
-- retour ligne final : oui
-
-## Validations terminales
-Les validations ci-dessous ont été exécutées dans une reproduction partielle de l'état GitHub `main`, pas dans le dépôt local réel.
-
+### 1) Applicabilite patch principal
+Commande :
 ```bash
 git apply --check "docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-07_A24_A24-UI-07/PATCH/PATCH__SESSION-20260506-07_A24_A24-UI-07.diff"
 ```
-
-Résultat : OK, exit code 0.
-
-```bash
-git apply --check "docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-07_A24_A24-UI-07/PATCH/PATCH__SESSION-20260506-07_A24_A24-UI-07_DOCS.diff"
+Extrait terminal :
+```txt
+(sans sortie)
 ```
+Resultat : succes  
+Code retour : `0`
 
-Résultat : OK, exit code 0.
-
-## Commandes non exécutées dans le dépôt réel
+### 2) Lint
+Commande :
 ```bash
-git apply --check "docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-07_A24_A24-UI-07/PATCH/PATCH__SESSION-20260506-07_A24_A24-UI-07.diff"
-git apply "docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-07_A24_A24-UI-07/PATCH/PATCH__SESSION-20260506-07_A24_A24-UI-07.diff"
 npm run lint
+```
+Extrait terminal :
+```txt
+> ambulance-manager@0.1.0 lint
+> eslint .
+```
+Resultat : succes  
+Code retour : `0`
+
+### 3) Build
+Commande :
+```bash
 npm run build
 ```
+Extrait terminal :
+```txt
+> ambulance-manager@0.1.0 build
+> next build
 
-Statut : INFORMATION NON FOURNIE — À CONFIRMER.
+Compiled successfully
+Generating static pages ... (29/29)
+```
+Resultat : succes  
+Code retour : `0`
 
-## Captures
-Captures avant/après non produites : INFORMATION NON FOURNIE — À CONFIRMER.
+## Preuves d'encodage et d'integrite du patch principal
+Fichier :
+`docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-07_A24_A24-UI-07/PATCH/PATCH__SESSION-20260506-07_A24_A24-UI-07.diff`
 
-## Risques résiduels
-- Le patch est basé sur GitHub `main`.
-- Conformité visuelle complète non déclarable sans captures.
-- Conflit possible sur `app/layout.tsx` si une session locale non poussée a déjà ajouté des imports CSS.
-
-
-## Validation patch documentaire corrigée
-
-Commande exécutée dans une reproduction documentaire locale :
-
-```bash
-git apply --check "docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-07_A24_A24-UI-07/PATCH/PATCH__SESSION-20260506-07_A24_A24-UI-07_DOCS.diff"
+Commande de controle (octets/ligne/BOM/null) :
+```powershell
+FIRST24=64 69 66 66 20 2D 2D 67 69 74 20 61 2F 61 70 70 2F 61 32 34 2D 63 6F 6D
+FIRST_LINE=diff --git a/app/a24-complementary-pages.css b/app/a24-complementary-pages.css
+HAS_BOM=False
+HAS_NULL=False
+BYTE_COUNT=57640
+UTF8_VALID=True
 ```
 
-Sortie réelle :
+Conclusion :
+- premiere ligne valide `diff --git ...` ;
+- encodage UTF-8 sans BOM ;
+- aucun caractere nul ;
+- patch compatible `git apply --check`.
 
+## Validations Prisma
+Prisma non touche dans ce patch.  
+`npx prisma validate` : non lance (hors perimetre)  
+`npx prisma generate` : non lance (hors perimetre)
+
+## Encodage UTF-8 sans BOM - documentation finale
+Controle execute :
 ```txt
-exit code: 0
+docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-07_A24_A24-UI-07/SESSION.md|BOM=False|NULL=False|UTF8_VALID=True
+docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-07_A24_A24-UI-07/NOTES.md|BOM=False|NULL=False|UTF8_VALID=True
+docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-07_A24_A24-UI-07/EVIDENCES.md|BOM=False|NULL=False|UTF8_VALID=True
+docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-07_A24_A24-UI-07/RESULTATS.md|BOM=False|NULL=False|UTF8_VALID=True
+docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-07_A24_A24-UI-07/FIN_SESSION.md|BOM=False|NULL=False|UTF8_VALID=True
+docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-07_A24_A24-UI-07/PATCH/README_PATCH.md|BOM=False|NULL=False|UTF8_VALID=True
 ```

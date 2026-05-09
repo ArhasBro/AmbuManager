@@ -1636,7 +1636,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   NOTES.md
 |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   SESSION-20260506-02_A24_A24-UI-02_DOCS.zip
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
@@ -1674,7 +1673,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   NOTES.md
 |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   SESSION-20260506-04_A24_A24-UI-04_DOCS.zip
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   +---CAPTURES_APRES
@@ -1710,8 +1708,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   NOTES.md
 |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   SESSION-20260506-06_A24_A24-UI-06__DOCS_FINAL.zip
-|   |   |   |   |   SESSION-20260506-06_A24_A24-UI-06__DOCS_FINAL_MAJ.zip
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
@@ -1724,6 +1720,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   NOTES.md
 |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION-20260506-07_A24_A24-UI-07_DOCS_FINAL.zip
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
