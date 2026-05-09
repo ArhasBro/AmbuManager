@@ -375,7 +375,7 @@ Aucun prompt de retour nécessaire.
 
 Session :
 
-- SESSION-20260506-08_A24_A24-UI-08
+- SESSION-20260506-09_A24_A24-UI-09
 
 Stage :
 
@@ -387,61 +387,60 @@ Bloc :
 
 Type :
 
-- AUDIT
+- VALIDATION
 
 Intitulé :
 
-- A24-UI-08 — Audit préparatoire Planning pour A25
+- A24-UI-09 — Validation globale UI/UX post-réalignement
 
 Objectif :
 
-- auditer le planning après application du socle UI A24 ;
-- ne pas corriger profondément le planning ;
-- préparer le futur bloc A25 ;
-- cartographier clairement les écarts UI/UX restants.
+- vérifier la cohérence globale du réalignement UI/UX A24 ;
+- valider les pages traitées dans le bloc A24 ;
+- identifier les résiduels éventuels ;
+- classer les résiduels en bloquants ou non bloquants.
 
-Périmètre :
+À vérifier :
 
-- page Planning ;
-- vues planning réellement présentes ;
-- navigation planning ;
-- lisibilité métier ;
-- densité visuelle ;
-- tableaux ou grilles ;
-- filtres ;
-- actions principales et secondaires ;
-- états visuels ;
-- cohérence avec les références A24 ;
-- écarts à réserver pour A25 ;
-- zones sensibles fonctionnelles ;
-- risques de régression.
+- cohérence visuelle globale ;
+- respect des références A24 ;
+- usage correct de MAQUETTE_DA comme référence de direction artistique si elle couvre le sujet ;
+- analyse non limitée à MAQUETTE_DA ;
+- mode clair ;
+- mode sombre ;
+- navigation connectée ;
+- pages sœurs cohérentes ;
+- captures avant/après si disponibles ;
+- absence de régression fonctionnelle visible ;
+- cohérence des tableaux ;
+- cohérence des filtres ;
+- cohérence des badges ;
+- cohérence des formulaires ;
+- cohérence des états vides, erreurs et chargements.
 
 Livrable attendu :
 
-- rapport préparatoire A25 ;
-- captures avant si techniquement possible ;
-- cartographie claire des écarts UI/UX du planning ;
-- liste des zones sensibles ;
-- liste des risques fonctionnels ;
-- recommandations de découpage pour A25 ;
+- rapport de validation UI/UX ;
+- preuves terminales réellement exécutées ;
+- captures disponibles ;
+- classement des résiduels ;
 - documentation finale ;
 - ZIP documentaire final.
 
 DoD :
 
-- le planning possède une cartographie claire des écarts UI/UX à traiter en A25 ;
-- les corrections profondes sont exclues ;
-- les risques sont classés clairement ;
-- les recommandations de découpage A25 sont exploitables.
+- toutes les pages A24 sont validées ;
+- ou les résiduels sont classés explicitement en bloquants / non bloquants ;
+- la recommandation de passage à la suite est claire.
 
 Exclusions :
 
-- pas de patch code sauf demande explicite exceptionnelle ;
-- pas de correction profonde du planning ;
+- pas de correction hors périmètre ;
+- pas de refonte profonde du planning ;
 - pas de nouveau moteur planning ;
-- pas de refonte autoschedule ;
-- pas de refonte matching ;
-- pas de modification RBAC ;
+- pas d’autoschedule ;
+- pas de matching ;
+- pas de refonte RBAC ;
 - pas de RH avancée ;
 - pas de fonctionnalité métier hors périmètre.
 

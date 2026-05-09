@@ -1,42 +1,32 @@
 # RESULTATS
 
-## Résultats obtenus
+## Synthese
 
-Audit préparatoire A25 produit.
+Audit preparatoire Planning A25 produit avec preuves reelles de capture avant sur `/planning` en mode clair/sombre.
 
-Livrables :
-- `RAPPORT_PREPARATOIRE_A25.md`
+## Verdict
+
+NON CONFORME (UI/UX) vis-a-vis de `Planning_V1.2.png`.
+
+## Livrables produits
+
+- `SESSION.md`
+- `NOTES.md`
 - `EVIDENCES.md`
 - `RESULTATS.md`
 - `FIN_SESSION.md`
-- `NOTES.md`
-- `SESSION.md`
+- `RAPPORT_PREPARATOIRE_A25.md`
 - `PATCH/README_PATCH.md`
 - `PATCH/NO_PATCH_CODE.md`
-- `PATCH/PATCH__SESSION-20260506-08_A24_A24-UI-08_DOCS.diff`
+- `CAPTURES_AVANT/planning_light_before.png`
+- `CAPTURES_AVANT/planning_dark_before.png`
 
-## Verdict d’audit
+## Decision patch
 
-**INCOMPLET**
+- Patch code : NON
+- NO_PATCH_CODE : OUI
 
-Justification :
-- cartographie statique exploitable ;
-- absence de captures réelles ;
-- absence de terminal réel ;
-- absence de preuve d’état local post-A24.
+## Points restants
 
-## Décision patch
-
-- PATCH CODE : non
-- NO_PATCH_CODE : oui
-- PATCH DOCUMENTAIRE : oui, produit localement
-
-## Documents modifiés
-
-Documentation de session uniquement.
-
-Aucun fichier code modifié.
-
-## Recommandation
-
-Passage à A25 recommandé, mais A25 doit commencer par une session courte d’audit visuel réel avec captures clair/sombre et validation du périmètre exact avant correction.
+- captures interactives des vues manuel `day/week/month` a produire en A25
+- statut exact a conserver : INFORMATION NON FOURNIE — À CONFIRMER

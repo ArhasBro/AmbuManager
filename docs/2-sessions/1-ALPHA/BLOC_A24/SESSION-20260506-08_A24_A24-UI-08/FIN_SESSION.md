@@ -1,31 +1,21 @@
 # FIN_SESSION
 
-## Clôture
+## Cloture
 
-Session documentaire d’audit préparatoire terminée dans les limites de l’environnement disponible.
+Session AUDIT A24-UI-08 realisee dans le perimetre impose, sans correction profonde du planning.
 
-## Validation
+## Controle final
 
-Production acceptable comme audit préparatoire statique : **OUI**.  
-Production complète au sens Codex local avec captures et terminal réel : **NON**.
+- cartographie des ecarts UI/UX planning : OUI
+- zones sensibles fonctionnelles : OUI
+- risques classes : OUI
+- recommandations de decoupage A25 : OUI
+- patch code : NON (decision NO_PATCH_CODE)
 
-Raison :
-- captures non produites ;
-- `git status --short`, `npm run lint`, `npm run build` non exécutés dans le dépôt réel ;
-- état local utilisateur non prouvé.
+## Verdict session
 
-## Verdict final
+Le planning est NON CONFORME en UI/UX par rapport a la maquette de reference.
 
-Verdict d’audit : **INCOMPLET**.
+## Condition de passage suite
 
-Passage à A25 recommandé : **OUI**, sous condition que la première session A25 produise les captures réelles et confirme l’état local.
-
-## Conditions éventuelles
-
-Avant correction A25 :
-1. appliquer ou contrôler le patch documentaire si souhaité ;
-2. exécuter `git status --short`;
-3. exécuter `npm run lint`;
-4. exécuter `npm run build`;
-5. produire les captures `/planning` clair/sombre ;
-6. confirmer que le dépôt local contient bien les sessions A24 précédentes.
+Passage vers A25 recommande avec demarrage par captures interactives `day/week/month` et stabilisation visuelle incrementalement, sans refonte metier lourde.

@@ -1778,7 +1778,6 @@ C:.
 |   |   |   |           00003837.sst
 |   |   |   |           00003838.sst
 |   |   |   |           00003839.meta
-|   |   |   |           00003840.del
 |   |   |   |           00003841.sst
 |   |   |   |           00003843.sst
 |   |   |   |           00003844.sst
@@ -1795,44 +1794,30 @@ C:.
 |   |   |   |           00003857.meta
 |   |   |   |           00003859.meta
 |   |   |   |           00003860.meta
-|   |   |   |           00003861.sst
-|   |   |   |           00003862.sst
-|   |   |   |           00003863.sst
-|   |   |   |           00003864.sst
-|   |   |   |           00003865.sst
-|   |   |   |           00003866.meta
-|   |   |   |           00003867.del
-|   |   |   |           00003868.sst
 |   |   |   |           00003869.sst
 |   |   |   |           00003870.sst
 |   |   |   |           00003871.sst
 |   |   |   |           00003872.sst
 |   |   |   |           00003873.meta
 |   |   |   |           00003874.meta
-|   |   |   |           00003875.meta
 |   |   |   |           00003876.meta
 |   |   |   |           00003877.meta
-|   |   |   |           00003878.sst
 |   |   |   |           00003879.sst
 |   |   |   |           00003880.sst
 |   |   |   |           00003881.sst
 |   |   |   |           00003882.sst
 |   |   |   |           00003883.meta
 |   |   |   |           00003884.meta
-|   |   |   |           00003885.meta
 |   |   |   |           00003886.meta
 |   |   |   |           00003887.meta
-|   |   |   |           00003888.sst
 |   |   |   |           00003889.sst
 |   |   |   |           00003890.sst
 |   |   |   |           00003891.sst
 |   |   |   |           00003892.sst
 |   |   |   |           00003893.meta
 |   |   |   |           00003894.meta
-|   |   |   |           00003895.meta
 |   |   |   |           00003896.meta
 |   |   |   |           00003897.meta
-|   |   |   |           00003898.sst
 |   |   |   |           00003899.sst
 |   |   |   |           00003900.sst
 |   |   |   |           00003901.sst
@@ -1840,28 +1825,106 @@ C:.
 |   |   |   |           00003903.meta
 |   |   |   |           00003904.meta
 |   |   |   |           00003905.meta
-|   |   |   |           00003906.meta
 |   |   |   |           00003907.meta
-|   |   |   |           00003908.sst
 |   |   |   |           00003909.sst
 |   |   |   |           00003910.sst
 |   |   |   |           00003911.sst
 |   |   |   |           00003912.sst
 |   |   |   |           00003913.meta
 |   |   |   |           00003914.meta
-|   |   |   |           00003915.meta
 |   |   |   |           00003916.meta
 |   |   |   |           00003917.meta
-|   |   |   |           00003918.sst
 |   |   |   |           00003919.sst
 |   |   |   |           00003920.sst
 |   |   |   |           00003921.sst
 |   |   |   |           00003922.sst
 |   |   |   |           00003923.meta
 |   |   |   |           00003924.meta
-|   |   |   |           00003925.meta
 |   |   |   |           00003926.meta
 |   |   |   |           00003927.meta
+|   |   |   |           00003929.sst
+|   |   |   |           00003930.sst
+|   |   |   |           00003931.meta
+|   |   |   |           00003933.meta
+|   |   |   |           00003935.sst
+|   |   |   |           00003936.sst
+|   |   |   |           00003937.meta
+|   |   |   |           00003939.meta
+|   |   |   |           00003941.sst
+|   |   |   |           00003942.sst
+|   |   |   |           00003943.sst
+|   |   |   |           00003944.sst
+|   |   |   |           00003945.meta
+|   |   |   |           00003946.meta
+|   |   |   |           00003947.meta
+|   |   |   |           00003948.meta
+|   |   |   |           00003950.sst
+|   |   |   |           00003951.sst
+|   |   |   |           00003952.sst
+|   |   |   |           00003953.sst
+|   |   |   |           00003954.sst
+|   |   |   |           00003955.meta
+|   |   |   |           00003956.del
+|   |   |   |           00003957.sst
+|   |   |   |           00003958.sst
+|   |   |   |           00003959.sst
+|   |   |   |           00003960.meta
+|   |   |   |           00003961.meta
+|   |   |   |           00003962.meta
+|   |   |   |           00003963.sst
+|   |   |   |           00003964.sst
+|   |   |   |           00003965.sst
+|   |   |   |           00003966.sst
+|   |   |   |           00003967.sst
+|   |   |   |           00003968.meta
+|   |   |   |           00003969.meta
+|   |   |   |           00003970.meta
+|   |   |   |           00003971.meta
+|   |   |   |           00003972.meta
+|   |   |   |           00003973.sst
+|   |   |   |           00003974.sst
+|   |   |   |           00003975.sst
+|   |   |   |           00003976.meta
+|   |   |   |           00003977.meta
+|   |   |   |           00003978.meta
+|   |   |   |           00003979.sst
+|   |   |   |           00003980.sst
+|   |   |   |           00003981.sst
+|   |   |   |           00003982.sst
+|   |   |   |           00003983.sst
+|   |   |   |           00003984.meta
+|   |   |   |           00003985.meta
+|   |   |   |           00003986.meta
+|   |   |   |           00003987.meta
+|   |   |   |           00003988.meta
+|   |   |   |           00003989.sst
+|   |   |   |           00003990.sst
+|   |   |   |           00003991.sst
+|   |   |   |           00003992.meta
+|   |   |   |           00003993.meta
+|   |   |   |           00003994.meta
+|   |   |   |           00003995.sst
+|   |   |   |           00003996.sst
+|   |   |   |           00003997.sst
+|   |   |   |           00003998.meta
+|   |   |   |           00003999.meta
+|   |   |   |           00004000.meta
+|   |   |   |           00004001.sst
+|   |   |   |           00004002.sst
+|   |   |   |           00004003.sst
+|   |   |   |           00004004.meta
+|   |   |   |           00004005.meta
+|   |   |   |           00004006.meta
+|   |   |   |           00004007.sst
+|   |   |   |           00004008.sst
+|   |   |   |           00004009.sst
+|   |   |   |           00004010.sst
+|   |   |   |           00004011.sst
+|   |   |   |           00004012.meta
+|   |   |   |           00004013.meta
+|   |   |   |           00004014.meta
+|   |   |   |           00004015.meta
+|   |   |   |           00004016.meta
 |   |   |   |           CURRENT
 |   |   |   |           LOG
 |   |   |   |           
@@ -2702,6 +2765,8 @@ C:.
 |   |   +---static
 |   |   |   +---chunks
 |   |   |   |   |   app-pages-internals.js
+|   |   |   |   |   app_3c022bb8._.css
+|   |   |   |   |   app_3c022bb8._.css.map
 |   |   |   |   |   app_5502277c._.css
 |   |   |   |   |   app_5502277c._.css.map
 |   |   |   |   |   app_644b3c6c._.js
@@ -2714,6 +2779,8 @@ C:.
 |   |   |   |   |   app_8ded1308._.css.map
 |   |   |   |   |   app_a24-complementary-pages_css_bad6b30c._.single.css
 |   |   |   |   |   app_a24-complementary-pages_css_bad6b30c._.single.css.map
+|   |   |   |   |   app_a24-users-rh_css_bad6b30c._.single.css
+|   |   |   |   |   app_a24-users-rh_css_bad6b30c._.single.css.map
 |   |   |   |   |   app_a24-vehicles-templates_css_bad6b30c._.single.css
 |   |   |   |   |   app_a24-vehicles-templates_css_bad6b30c._.single.css.map
 |   |   |   |   |   app_audit_page_tsx_1b0ba5a8._.js
@@ -2742,6 +2809,7 @@ C:.
 |   |   |   |   |   app_globals_css_bad6b30c._.single.css
 |   |   |   |   |   app_globals_css_bad6b30c._.single.css.map
 |   |   |   |   |   app_layout_tsx_1cf6b850._.js
+|   |   |   |   |   app_login_page_tsx_060e85dd._.js
 |   |   |   |   |   app_login_page_tsx_1b0ba5a8._.js
 |   |   |   |   |   app_login_page_tsx_600cde32._.js
 |   |   |   |   |   app_login_page_tsx_e96a26ee._.js
@@ -2749,6 +2817,7 @@ C:.
 |   |   |   |   |   app_onboarding_page_tsx_1b0ba5a8._.js
 |   |   |   |   |   app_onboarding_page_tsx_adbd74de._.js
 |   |   |   |   |   app_onboarding_page_tsx_c7e9f6a5._.js
+|   |   |   |   |   app_planning_page_tsx_060e85dd._.js
 |   |   |   |   |   app_planning_page_tsx_1b0ba5a8._.js
 |   |   |   |   |   app_planning_page_tsx_600cde32._.js
 |   |   |   |   |   app_planning_page_tsx_adbd74de._.js
@@ -6240,7 +6309,6 @@ C:.
 |   |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   SESSION-20260506-07_A24_A24-UI-07_DOCS_FINAL.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
@@ -6253,20 +6321,16 @@ C:.
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   RAPPORT_PREPARATOIRE_A25.md
 |   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION-20260506-08_A24_A24-UI-08_DOCS.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
-|   |   |   |   |   +---CAPTURES
-|   |   |   |   |   |       CAPTURES_ABSENTES.md
+|   |   |   |   |   +---CAPTURES_AVANT
+|   |   |   |   |   |       planning_dark_before.png
+|   |   |   |   |   |       planning_light_before.png
 |   |   |   |   |   |       
-|   |   |   |   |   +---PATCH
-|   |   |   |   |   |       NO_PATCH.md
-|   |   |   |   |   |       NO_PATCH_CODE.md
-|   |   |   |   |   |       PATCH__SESSION-20260506-08_A24_A24-UI-08_DOCS.diff
-|   |   |   |   |   |       README_PATCH.md
-|   |   |   |   |   |       
-|   |   |   |   |   \---TERMINAL
-|   |   |   |   |           PREUVE_PATCH_DOCUMENTAIRE_LOCAL.md
-|   |   |   |   |           TERMINAL_PREUVES.md
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           NO_PATCH_CODE.md
+|   |   |   |   |           README_PATCH.md
 |   |   |   |   |           
 |   |   |   |   +---SESSION-20260506-09_A24_A24-UI-09
 |   |   |   |   |   |   EVIDENCES.md

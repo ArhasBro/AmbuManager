@@ -1,31 +1,28 @@
 # NOTES
 
-Notes de travail de la session.
+## Methode
 
----
+1. Lecture obligatoire : `DOCUMENT_MAITRE.md`, `PLAN_DE_DEVELOPPEMENT.md`.
+2. Lecture ciblee A24 : `REFERENCE_UI_UX_A24.md`, `README_MAQUETTES_A24.md`, `SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md`.
+3. Lecture ciblee sessions precedentes utile :
+   - `SESSION-20260506-01_A24_A24-UI-01/RESULTATS.md`
+   - `SESSION-20260506-07_A24_A24-UI-07/FIN_SESSION.md`
+4. Inspection code planning :
+   - `app/planning/page.tsx`
+   - `app/planning/planning-client.tsx`
+   - `app/planning/manual-planning-panel.tsx`
+   - `app/globals.css`
+5. Production de captures reelles `/planning` (clair/sombre) via Playwright.
+6. Cartographie des ecarts UI/UX et preparation du decoupage A25.
+7. Decision patch : `NO_PATCH_CODE`.
 
-## Méthode / observations
+## Observations principales
 
-Méthode appliquée :
-1. Lecture du noyau documentaire minimal.
-2. Lecture des références UI/UX A24 utiles au planning.
-3. Lecture statique des fichiers planning réellement disponibles sur GitHub.
-4. Cartographie des écarts par rapport à la cible `Planning_V1.2`.
-5. Production d’un rapport préparatoire A25.
-6. Décision `NO_PATCH_CODE`.
+- Le planning actuel expose une surface fonctionnelle riche (legacy semaine + manuel + autoschedule/matching) dans un meme ecran.
+- La maquette `Planning_V1.2` attend une structure plus maitrisee : filtres, tabs metier, matrice personnel, drawer detail, barre bulk basse.
+- L'ecart principal est structurel/ergonomique, pas l'absence de fonctionnalites.
 
-## Observation documentaire
+## Limites assumees
 
-Le dossier de session existait déjà sur GitHub avec des fichiers squelettes. Plusieurs fichiers contenaient :
-- placeholders `INFORMATION NON FOURNIE`;
-- caractères mojibake visibles ;
-- marque BOM visible au début de fichiers.
-
-Le présent patch documentaire vise à remplacer ces squelettes par une documentation finale propre en UTF-8 sans BOM dans les fichiers générés localement.
-
-## Limite importante
-
-L’environnement disponible ici n’est pas le dépôt Windows réel de l’utilisateur. Les commandes terminales et captures ne doivent donc pas être considérées comme exécutées localement.
-
-Toute preuve manquante est indiquée exactement :
-`INFORMATION NON FOURNIE — À CONFIRMER`
+- Captures interactives des vues manuel `day/week/month` non produites automatiquement dans cette session.
+- Etat visuel de ces vues en capture : INFORMATION NON FOURNIE — À CONFIRMER.

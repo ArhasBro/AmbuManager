@@ -6,48 +6,49 @@ SESSION-20260506-08_A24_A24-UI-08
 
 ## Date
 
-06/05/2026
+2026-05-09
 
 ## Contexte
 
-Projet : Investissement  
-Sous-projet : Ambulance Manager  
-Maturité : 1-ALPHA  
-Bloc : A24 — Réalignement UI/UX global sur MAQUETTE  
-Type : AUDIT  
-Intitulé : A24-UI-08 — Audit préparatoire Planning pour A25
+Projet : Investissement
+Sous-projet : Ambulance Manager
+Stage : 1-ALPHA
+Bloc : A24 - Realignement UI/UX global sur MAQUETTE
+Type : AUDIT
+Intitule : A24-UI-08 - Audit preparatoire Planning pour A25
 
-## Objectif de la session
+## Objectif unique
 
-Auditer le planning après application du socle UI A24, sans correction profonde du planning, afin de préparer le bloc A25.
+Auditer la page Planning apres socle UI A24, sans correction profonde du planning, pour preparer A25.
 
-## Périmètre exact traité
+## Perimetre traite
 
-Périmètre traité en lecture distante GitHub :
-- route `/planning`;
-- fichiers planning principaux ;
-- documentation UI/UX A24 ;
-- spécification `Planning_V1.2`;
-- documents squelettes de session.
+- page `/planning`
+- vues planning presentes dans le code
+- navigation planning
+- lisibilite metier
+- densite visuelle
+- grilles/tableaux
+- filtres
+- actions principales/secondaires
+- etats visuels
+- coherence avec references A24
+- ecarts a reserver pour A25
+- zones sensibles fonctionnelles
+- risques de regression
 
-Périmètre non exécuté :
-- rendu navigateur réel ;
-- captures réelles ;
-- validations terminales dans le dépôt Windows local.
+## Exclusions appliquees
 
-## Résultat synthétique de session
+- aucun patch code planning
+- aucune refonte moteur planning/autoschedule/matching
+- aucune modification RBAC/Prisma/API metier
 
-Audit préparatoire produit avec cartographie exploitable des écarts UI/UX, zones sensibles, risques fonctionnels et découpage recommandé pour A25.
+## Verdict audit
 
-Verdict d’audit : **INCOMPLET**.
+NON CONFORME (sur le plan UI/UX vis-a-vis de `Planning_V1.2.png`) avec cartographie exploitable pour A25.
 
-Raison :
-- lecture statique exploitable ;
-- absence de captures et terminal réel ;
-- divergence structurelle probable entre planning actuel et cible `Planning_V1.2`.
-
-## Dossiers liés
+## Dossiers session
 
 - Session : `docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-08_A24_A24-UI-08`
-- PATCH : `docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-08_A24_A24-UI-08/PATCH`
-- Captures : `docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-08_A24_A24-UI-08/CAPTURES`
+- Patch : `docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-08_A24_A24-UI-08/PATCH`
+- Captures avant : `docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-08_A24_A24-UI-08/CAPTURES_AVANT`

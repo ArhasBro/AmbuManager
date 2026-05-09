@@ -1,114 +1,240 @@
 # EVIDENCES
 
-Éléments factuels utilisés pendant la session.
+## 1. Sources lues
 
----
-
-## Preuves réellement obtenues
-
-### Lecture documentaire
-
-Sources lues :
 - `docs/1-master/DOCUMENT_MAITRE.md`
 - `docs/1-master/PLAN_DE_DEVELOPPEMENT.md`
+- `docs/3-templates/TEMPLATE_DEBUT_SESSION.md`
 - `docs/1-master/REFERENCE_UI_UX_A24.md`
 - `docs/1-master/MAQUETTE/README_MAQUETTES_A24.md`
 - `docs/1-master/MAQUETTE/SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md`
+- `docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-01_A24_A24-UI-01/RESULTATS.md`
+- `docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-07_A24_A24-UI-07/FIN_SESSION.md`
 
-Constats :
-- le projet impose multi-tenant strict, RBAC, conventions API, documentation et preuve ;
-- le plan impose 1 session = 1 livrable, et un verdict formel pour toute session AUDIT ;
-- A24 exclut le planning profond et prépare A25 ;
-- la maquette planning officielle référencée est `Planning_V1.2.png`.
+## 2. Fichiers code inspectes
 
-### Lecture code
-
-Fichiers inspectés :
 - `app/planning/page.tsx`
 - `app/planning/planning-client.tsx`
 - `app/planning/manual-planning-panel.tsx`
+- `app/app-shell.tsx`
 - `app/globals.css`
 - `package.json`
 
-Constats statiques :
-- `/planning` existe ;
-- `page.tsx` charge session, permissions, dépôts, utilisateurs, puis rend `PlanningClient`;
-- `planning-client.tsx` contient des états pour semaine, visibilité, bulk assign, autoschedule, publication, matching et qualité ;
-- `manual-planning-panel.tsx` contient les vues `day`, `week`, `month`, création/modification/annulation et exports ;
-- `globals.css` contient les tokens A24 clair/sombre et les composants UI partagés ;
-- `package.json` contient les scripts `lint` et `build`.
+## 3. Commandes executees avec preuves reelles
+
+### Commande
+`try { (Invoke-WebRequest -UseBasicParsing 'http://localhost:3000/login' -TimeoutSec 5).StatusCode } catch { $_.Exception.Message; exit 1 }`
+
+Extrait terminal reel :
+`Impossible de se connecter au serveur distant`
+
+Resultat : echec (serveur non demarre)
+Code retour : `1`
 
 ---
 
-## Captures produites
+### Commande
+`Start-Process ... 'npm run dev > .codex-temp\\a24-ui08-devserver.out.log ...'`
 
-Aucune capture produite.
+Extrait terminal reel :
+- `> ambulance-manager@0.1.0 dev`
+- `> next dev`
+- `Local: http://localhost:3000`
+- `Ready in 2.2s`
 
-## Captures absentes
-
-- `/planning` mode clair : INFORMATION NON FOURNIE — À CONFIRMER
-- `/planning` mode sombre : INFORMATION NON FOURNIE — À CONFIRMER
-- vues jour/semaine/mois : INFORMATION NON FOURNIE — À CONFIRMER
-- état vide : INFORMATION NON FOURNIE — À CONFIRMER
-- état avec données : INFORMATION NON FOURNIE — À CONFIRMER
-- drawer/modal/panneau : INFORMATION NON FOURNIE — À CONFIRMER
-
-Raison :
-l’environnement disponible ne permet pas de lancer le dépôt réel avec navigateur, base locale et session authentifiée.
+Resultat : succes (serveur demarre)
+Code retour : `0`
 
 ---
 
-## Validations exécutées
+### Commande
+`node .codex-temp/a24-ui08-auth-storage.mjs` (premier essai)
 
-Validation réellement exécutée ici :
-- applicabilité du patch documentaire dans une reconstruction locale temporaire des fichiers squelettes GitHub.
+Extrait terminal reel :
+- `Error: ENOENT: no such file or directory ... CAPTURES_AVANT/storage-auth-light.json`
 
-Commande :
-```bash
-git apply --check docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-20260506-08_A24_A24-UI-08/PATCH/PATCH__SESSION-20260506-08_A24_A24-UI-08_DOCS.diff
-```
-
-Résultat :
-- OK dans reconstruction locale temporaire.
-
-Important :
-- cette preuve n’est pas une preuve d’applicabilité dans le dépôt Windows réel de l’utilisateur si l’état local diffère de GitHub `main`.
+Resultat : echec (dossier manquant)
+Code retour : `1`
 
 ---
 
-## Validations non exécutées
+### Commande
+`New-Item -ItemType Directory -Force .../CAPTURES_AVANT ; node .codex-temp/a24-ui08-auth-storage.mjs`
 
-Commandes demandées mais non exécutées dans le dépôt réel :
+Extrait terminal reel :
+`AUTH_STORAGE_OK`
 
-```bash
-git status --short
-npm run lint
-npm run build
-```
+Resultat : succes
+Code retour : `0`
 
-Résultat :
+---
+
+### Commande
+`npx playwright screenshot --device="Desktop Chrome" --wait-for-timeout=2500 --full-page --load-storage=".../storage-auth-light.json" "http://localhost:3000/planning" ".../planning_light_before.png"`
+
+Extrait terminal reel :
+- `Navigating to http://localhost:3000/planning`
+- `Capturing screenshot into .../planning_light_before.png`
+
+Resultat : succes
+Code retour : `0`
+
+---
+
+### Commande
+`npx playwright screenshot --device="Desktop Chrome" --wait-for-timeout=2500 --full-page --load-storage=".../storage-auth-dark.json" "http://localhost:3000/planning" ".../planning_dark_before.png"`
+
+Extrait terminal reel :
+- `Navigating to http://localhost:3000/planning`
+- `Capturing screenshot into .../planning_dark_before.png`
+
+Resultat : succes
+Code retour : `0`
+
+---
+
+### Commande
+`npx playwright test .codex-temp/a24-ui08-captures.spec.ts --project=chromium --workers=1 --reporter=line`
+
+Extrait terminal reel :
+`Project(s) "chromium" not found. Available projects: ""`
+
+Resultat : echec
+Code retour : `1`
+
+---
+
+### Commande
+`npx playwright test .codex-temp/a24-ui08-captures.spec.ts --workers=1 --reporter=line`
+
+Extrait terminal reel :
+`Cannot find module '@playwright/test'`
+
+Resultat : echec
+Code retour : `1`
+
+---
+
+### Commande
+`npx --yes --package playwright node .codex-temp/a24-ui08-capture-views.cjs`
+
+Extrait terminal reel :
+`Cannot find module 'playwright'`
+
+Resultat : echec
+Code retour : `1`
+
+---
+
+### Commande
+`try { (Invoke-WebRequest -UseBasicParsing 'http://localhost:3000/login' -TimeoutSec 4).StatusCode; 'SERVER_UP' } catch { 'SERVER_DOWN' }`
+
+Extrait terminal reel (avant arret):
+- `200`
+- `SERVER_UP`
+
+Resultat : serveur actif
+Code retour : `0`
+
+---
+
+### Commande
+`netstat -ano | Select-String ':3000' ... taskkill /PID <id> /F`
+
+Extrait terminal reel :
+`KILLED_PIDS=25140`
+
+Resultat : succes (processus local coupe)
+Code retour : `0`
+
+---
+
+### Commande
+`try { (Invoke-WebRequest -UseBasicParsing 'http://localhost:3000/login' -TimeoutSec 4).StatusCode; 'SERVER_UP' } catch { 'SERVER_DOWN' }`
+
+Extrait terminal reel (apres arret):
+`SERVER_DOWN`
+
+Resultat : serveur arrete
+Code retour : `0`
+
+---
+
+### Commande
+`git status --short`
+
+Extrait terminal reel :
+- `M docs/2-sessions/.../SESSION-20260506-08_A24_A24-UI-08/...`
+- `?? docs/2-sessions/.../CAPTURES_AVANT/`
+- modifications hors session deja presentes : `docs/CMD.md`, `test-results/.last-run.json`
+
+Resultat : succes
+Code retour : `0`
+
+---
+
+### Commande
+`Compress-Archive -Path <session/*> -DestinationPath <SESSION-..._DOCS.zip>`
+
+Extrait terminal reel :
+`ZIP_CREATED=docs\2-sessions\1-ALPHA\BLOC_A24\SESSION-20260506-08_A24_A24-UI-08\SESSION-20260506-08_A24_A24-UI-08_DOCS.zip`
+
+Resultat : succes
+Code retour : `0`
+
+---
+
+### Commande
+`[System.IO.Compression.ZipFile]::OpenRead(...).Entries`
+
+Extrait terminal reel :
+- `CAPTURES_AVANT\planning_dark_before.png`
+- `CAPTURES_AVANT\planning_light_before.png`
+- `PATCH\NO_PATCH_CODE.md`
+- `PATCH\README_PATCH.md`
+- `EVIDENCES.md`
+- `FIN_SESSION.md`
+- `NOTES.md`
+- `RAPPORT_PREPARATOIRE_A25.md`
+- `RESULTATS.md`
+- `SESSION.md`
+
+Resultat : succes
+Code retour : `0`
+
+## 4. Captures produites
+
+- `CAPTURES_AVANT/planning_light_before.png`
+- `CAPTURES_AVANT/planning_dark_before.png`
+
+Captures non produites dans cette session :
+- vues manuel `day/week/month` en interaction
+- etat vide force
+- etat drawer detail cellule maquette-like
+
+Statut exact a reporter :
 INFORMATION NON FOURNIE — À CONFIRMER
 
-Raison :
-pas d’accès au dépôt Windows local réel ni à son environnement Node/Prisma/base.
+## 5. Preuves encodage
 
----
+Commande executee :
+`ReadAllBytes + controle BOM/NULL`
 
-## Informations non fournies
+Extrait terminal reel :
+- `SESSION.md|BOM=False|NULL=False`
+- `NOTES.md|BOM=False|NULL=False`
+- `EVIDENCES.md|BOM=False|NULL=False`
+- `RESULTATS.md|BOM=False|NULL=False`
+- `FIN_SESSION.md|BOM=False|NULL=False`
+- `RAPPORT_PREPARATOIRE_A25.md|BOM=False|NULL=False`
+- `PATCH/README_PATCH.md|BOM=False|NULL=False`
+- `PATCH/NO_PATCH_CODE.md|BOM=False|NULL=False`
 
-- état local réel après application des sessions A24-UI-05/06/07 ;
-- captures réelles ;
-- logs `npm run lint`;
-- logs `npm run build`;
-- preuve de navigation `/planning` authentifiée ;
-- preuve de mode sombre sur planning ;
-- preuve d’état avec données.
+Resultat : succes
+Code retour : `0`
 
----
+## 6. Decision patch
 
-## Risques résiduels
-
-- divergence entre GitHub `main` et le dépôt local ;
-- patch documentaire à contrôler avec `git apply --check` dans le dépôt réel ;
-- captures à produire impérativement au début d’A25 ;
-- possible écart entre analyse statique et rendu réel.
+- Session AUDIT
+- Decision : `NO_PATCH_CODE`
+- Aucun fichier applicatif modifie (`app/**`, `lib/**`, `prisma/**`)

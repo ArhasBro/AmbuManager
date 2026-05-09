@@ -1,23 +1,19 @@
 # NO_PATCH_CODE
 
-Session : `SESSION-20260506-08_A24_A24-UI-08`  
+Session : `SESSION-20260506-08_A24_A24-UI-08`
 Type : `AUDIT`
 
-## Décision
+## Decision
 
 `NO_PATCH_CODE`
 
 ## Justification
 
-Aucun patch code n’est produit.
+- session explicitement de type AUDIT
+- objectif de cartographie preparatoire A25
+- correction profonde planning exclue
+- aucun changement metier/API/BDD autorise
 
-Raisons :
-- la session demandée est un audit préparatoire ;
-- le planning profond est explicitement reporté à A25 ;
-- l’objectif est de cartographier les écarts UI/UX, zones sensibles et risques ;
-- aucune correction de planning ne doit être faite dans cette session ;
-- aucune modification backend, Prisma, RBAC, API, autoschedule ou matching n’est autorisée.
+## Consequence
 
-## Corrections à traiter
-
-Les corrections UI/UX planning doivent être traitées en A25, après captures réelles et validation du périmètre exact.
+Toutes corrections UI/UX profondes sont reservees au bloc A25.
