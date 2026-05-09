@@ -1748,7 +1748,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   NOTES.md
 |   |   |   |   |   RAPPORT_VALIDATION_UI_UX_A24.md
 |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   SESSION-20260506-09_A24_A24-UI-09_DOCS_FINAL.zip
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   +---CAPTURES
@@ -1789,9 +1788,13 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |       |   FIN_SESSION.md
 |   |   |       |   NOTES.md
 |   |   |       |   RESULTATS.md
+|   |   |       |   SESSION-20260506-10_A24_CLOTURE_A24_DOCS_FINAL.zip
 |   |   |       |   SESSION.md
 |   |   |       |   
 |   |   |       \---PATCH
+|   |   |               NO_PATCH.md
+|   |   |               NO_PATCH_CODE.md
+|   |   |               PATCH__SESSION-20260506-10_A24_CLOTURE_A24_DOCS.diff
 |   |   |               README_PATCH.md
 |   |   |               
 |   |   +---BLOC_A3

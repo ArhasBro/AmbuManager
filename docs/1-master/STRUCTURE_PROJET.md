@@ -1,5 +1,5 @@
 ﻿Structure du dossier pour le volume Windows
-Le numÚro de sÚrie du volume est 123E-4DB7
+Le numÚro de sÚrie du volume est 000000C7 123E:4DB7
 C:.
 |   .env
 |   .gitignore
@@ -1936,7 +1936,6 @@ C:.
 |   |   |   |           00004149.sst
 |   |   |   |           00004150.sst
 |   |   |   |           00004151.meta
-|   |   |   |           00004152.del
 |   |   |   |           00004153.sst
 |   |   |   |           00004154.sst
 |   |   |   |           00004155.sst
@@ -2065,6 +2064,76 @@ C:.
 |   |   |   |           00004278.meta
 |   |   |   |           00004279.meta
 |   |   |   |           00004280.meta
+|   |   |   |           00004281.sst
+|   |   |   |           00004282.sst
+|   |   |   |           00004283.sst
+|   |   |   |           00004284.sst
+|   |   |   |           00004285.sst
+|   |   |   |           00004286.meta
+|   |   |   |           00004287.meta
+|   |   |   |           00004288.meta
+|   |   |   |           00004289.meta
+|   |   |   |           00004290.meta
+|   |   |   |           00004291.sst
+|   |   |   |           00004292.sst
+|   |   |   |           00004293.sst
+|   |   |   |           00004294.meta
+|   |   |   |           00004295.meta
+|   |   |   |           00004296.meta
+|   |   |   |           00004297.sst
+|   |   |   |           00004298.sst
+|   |   |   |           00004299.sst
+|   |   |   |           00004300.meta
+|   |   |   |           00004301.meta
+|   |   |   |           00004302.meta
+|   |   |   |           00004303.sst
+|   |   |   |           00004304.sst
+|   |   |   |           00004305.sst
+|   |   |   |           00004306.meta
+|   |   |   |           00004307.meta
+|   |   |   |           00004308.meta
+|   |   |   |           00004309.sst
+|   |   |   |           00004310.sst
+|   |   |   |           00004311.sst
+|   |   |   |           00004312.meta
+|   |   |   |           00004313.meta
+|   |   |   |           00004314.meta
+|   |   |   |           00004315.sst
+|   |   |   |           00004316.sst
+|   |   |   |           00004317.sst
+|   |   |   |           00004318.meta
+|   |   |   |           00004319.meta
+|   |   |   |           00004320.meta
+|   |   |   |           00004321.sst
+|   |   |   |           00004322.sst
+|   |   |   |           00004323.sst
+|   |   |   |           00004324.meta
+|   |   |   |           00004325.meta
+|   |   |   |           00004326.meta
+|   |   |   |           00004327.sst
+|   |   |   |           00004328.sst
+|   |   |   |           00004329.sst
+|   |   |   |           00004330.meta
+|   |   |   |           00004331.meta
+|   |   |   |           00004332.meta
+|   |   |   |           00004333.sst
+|   |   |   |           00004334.sst
+|   |   |   |           00004335.sst
+|   |   |   |           00004336.meta
+|   |   |   |           00004337.meta
+|   |   |   |           00004338.meta
+|   |   |   |           00004339.sst
+|   |   |   |           00004340.sst
+|   |   |   |           00004341.sst
+|   |   |   |           00004342.meta
+|   |   |   |           00004343.meta
+|   |   |   |           00004344.meta
+|   |   |   |           00004345.sst
+|   |   |   |           00004346.sst
+|   |   |   |           00004347.sst
+|   |   |   |           00004348.meta
+|   |   |   |           00004349.meta
+|   |   |   |           00004350.meta
 |   |   |   |           CURRENT
 |   |   |   |           LOG
 |   |   |   |           
@@ -4550,13 +4619,13 @@ C:.
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-7673dbeff453a2b3.js
 |   |   |       
-|   |   +---media
-|   |   |       favicon.0b3bf435.ico
+|   |   +---Fq1rHu5dFDIC_wjxFATOL
+|   |   |       _buildManifest.js
+|   |   |       _clientMiddlewareManifest.json
+|   |   |       _ssgManifest.js
 |   |   |       
-|   |   \---vlig5-9FSk2_kXgekqouG
-|   |           _buildManifest.js
-|   |           _clientMiddlewareManifest.json
-|   |           _ssgManifest.js
+|   |   \---media
+|   |           favicon.0b3bf435.ico
 |   |           
 |   \---types
 |           routes.d.ts
@@ -6502,7 +6571,6 @@ C:.
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   RAPPORT_VALIDATION_UI_UX_A24.md
 |   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   SESSION-20260506-09_A24_A24-UI-09_DOCS_FINAL.zip
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   +---CAPTURES
@@ -6543,9 +6611,13 @@ C:.
 |   |   |   |       |   FIN_SESSION.md
 |   |   |   |       |   NOTES.md
 |   |   |   |       |   RESULTATS.md
+|   |   |   |       |   SESSION-20260506-10_A24_CLOTURE_A24_DOCS_FINAL.zip
 |   |   |   |       |   SESSION.md
 |   |   |   |       |   
 |   |   |   |       \---PATCH
+|   |   |   |               NO_PATCH.md
+|   |   |   |               NO_PATCH_CODE.md
+|   |   |   |               PATCH__SESSION-20260506-10_A24_CLOTURE_A24_DOCS.diff
 |   |   |   |               README_PATCH.md
 |   |   |   |               
 |   |   |   +---BLOC_A3
