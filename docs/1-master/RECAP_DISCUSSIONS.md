@@ -143,3 +143,30 @@ docs/1-master/MAQUETTE/MAQUETTE_DA
 5. Après A26, décider entre :
    - relancer un bloc de développement ;
    - ou lancer une nouvelle campagne de tests.
+
+## 6. Recadrage A25 Planning — 10/05/2026
+### Métadonnées
+- Date : 10/05/2026
+- Source : retour manuel utilisateur après contrôle A25 et analyse des images Planning
+- Statut de source : **DÉCISION UTILISATEUR + RECADRAGE DOCUMENTAIRE A25**
+
+### Constat
+- Les corrections A25 partielles peuvent être techniquement propres sans produire une page réellement fidèle à la maquette.
+- Le retour manuel utilisateur indique que le rendu doit être recadré au niveau de la page complète, pas au niveau de zones isolées.
+- Le bloc A25 doit être traité comme une refonte globale de la page Planning.
+
+### Décision
+- Le document `docs/1-master/REFERENCE_UI_UX_A25_PLANNING.md` est réécrit pour devenir la référence opérationnelle du bloc A25.
+- Les images `Planning_V1.2.png` et `Planning_V1.2_INFO_DETAIL.png` deviennent les références visuelles concrètes à reproduire au plus proche.
+- La cible est une reproduction très fidèle de la maquette visible, environ 99 % lorsque le code et les données réelles le permettent.
+- La validation technique d'un patch ne suffit plus : la validation visuelle manuelle par Nathan est obligatoire avant clôture A25.
+
+### Conséquence opérationnelle
+La suite de A25 doit être pilotée dans cet ordre :
+1. recadrage visuel global et documentation A25 ;
+2. refonte globale de la structure Planning ;
+3. reproduction de la matrice salariés × semaines ;
+4. reproduction du panneau détail cellule et de la barre basse d'actions groupées ;
+5. validation visuelle globale ;
+6. clôture A25 uniquement si la page Planning est jugée suffisamment fidèle à la maquette.
+

@@ -93,7 +93,6 @@ C:.
 |   +---dev
 |   |   |   build-manifest.json
 |   |   |   fallback-build-manifest.json
-|   |   |   lock
 |   |   |   package.json
 |   |   |   prerender-manifest.json
 |   |   |   routes-manifest.json
@@ -244,93 +243,53 @@ C:.
 |   |   |               00000252.meta
 |   |   |               00000253.meta
 |   |   |               00000254.meta
-|   |   |               00000257.sst
-|   |   |               00000258.sst
-|   |   |               00000259.meta
-|   |   |               00000262.sst
 |   |   |               00000263.sst
 |   |   |               00000264.meta
-|   |   |               00000266.meta
-|   |   |               00000267.sst
 |   |   |               00000269.sst
 |   |   |               00000270.sst
 |   |   |               00000271.sst
 |   |   |               00000272.meta
-|   |   |               00000274.meta
 |   |   |               00000275.meta
 |   |   |               00000276.meta
-|   |   |               00000277.sst
 |   |   |               00000279.sst
 |   |   |               00000280.meta
-|   |   |               00000282.meta
-|   |   |               00000283.sst
 |   |   |               00000285.sst
 |   |   |               00000286.meta
-|   |   |               00000288.meta
-|   |   |               00000289.sst
 |   |   |               00000291.sst
 |   |   |               00000292.meta
-|   |   |               00000294.meta
-|   |   |               00000296.sst
 |   |   |               00000297.sst
 |   |   |               00000298.meta
-|   |   |               00000300.meta
-|   |   |               00000301.sst
 |   |   |               00000303.sst
 |   |   |               00000304.meta
-|   |   |               00000306.meta
-|   |   |               00000307.sst
 |   |   |               00000309.sst
 |   |   |               00000310.meta
-|   |   |               00000312.meta
-|   |   |               00000314.sst
 |   |   |               00000315.sst
 |   |   |               00000316.meta
-|   |   |               00000318.meta
-|   |   |               00000320.sst
 |   |   |               00000321.sst
 |   |   |               00000322.meta
-|   |   |               00000324.meta
-|   |   |               00000326.sst
 |   |   |               00000327.sst
 |   |   |               00000329.meta
-|   |   |               00000330.meta
-|   |   |               00000332.sst
 |   |   |               00000333.sst
 |   |   |               00000334.meta
-|   |   |               00000336.meta
-|   |   |               00000338.sst
 |   |   |               00000339.sst
 |   |   |               00000341.meta
-|   |   |               00000342.meta
-|   |   |               00000344.sst
 |   |   |               00000345.sst
 |   |   |               00000346.meta
-|   |   |               00000348.meta
-|   |   |               00000350.sst
 |   |   |               00000351.sst
 |   |   |               00000352.meta
-|   |   |               00000354.meta
-|   |   |               00000356.sst
 |   |   |               00000357.sst
 |   |   |               00000358.meta
-|   |   |               00000360.meta
-|   |   |               00000361.sst
 |   |   |               00000363.sst
 |   |   |               00000364.meta
-|   |   |               00000366.meta
-|   |   |               00000367.sst
 |   |   |               00000369.sst
 |   |   |               00000370.sst
 |   |   |               00000371.sst
 |   |   |               00000372.meta
 |   |   |               00000373.meta
-|   |   |               00000374.meta
 |   |   |               00000375.meta
 |   |   |               00000377.sst
 |   |   |               00000378.sst
 |   |   |               00000379.meta
-|   |   |               00000381.sst
 |   |   |               00000382.sst
 |   |   |               00000383.sst
 |   |   |               00000384.sst
@@ -338,71 +297,51 @@ C:.
 |   |   |               00000386.meta
 |   |   |               00000387.meta
 |   |   |               00000388.meta
-|   |   |               00000389.meta
 |   |   |               00000390.meta
-|   |   |               00000391.sst
 |   |   |               00000392.sst
 |   |   |               00000393.sst
 |   |   |               00000394.meta
-|   |   |               00000395.meta
 |   |   |               00000396.meta
-|   |   |               00000397.sst
 |   |   |               00000398.sst
 |   |   |               00000399.sst
 |   |   |               00000400.sst
 |   |   |               00000401.sst
 |   |   |               00000402.meta
 |   |   |               00000403.meta
-|   |   |               00000404.meta
 |   |   |               00000405.meta
 |   |   |               00000406.meta
-|   |   |               00000407.sst
 |   |   |               00000408.sst
 |   |   |               00000409.sst
 |   |   |               00000410.meta
 |   |   |               00000411.meta
-|   |   |               00000412.meta
-|   |   |               00000413.sst
 |   |   |               00000414.sst
 |   |   |               00000415.sst
 |   |   |               00000416.meta
-|   |   |               00000417.meta
 |   |   |               00000418.meta
 |   |   |               00000419.sst
-|   |   |               00000420.sst
 |   |   |               00000421.sst
 |   |   |               00000422.sst
 |   |   |               00000423.sst
 |   |   |               00000424.meta
 |   |   |               00000425.meta
 |   |   |               00000426.meta
-|   |   |               00000427.meta
 |   |   |               00000428.meta
 |   |   |               00000429.sst
-|   |   |               00000430.sst
 |   |   |               00000431.sst
 |   |   |               00000432.meta
 |   |   |               00000433.meta
-|   |   |               00000434.meta
 |   |   |               00000435.sst
-|   |   |               00000436.sst
 |   |   |               00000437.sst
 |   |   |               00000438.meta
 |   |   |               00000439.meta
-|   |   |               00000440.meta
 |   |   |               00000441.sst
-|   |   |               00000442.sst
 |   |   |               00000443.sst
 |   |   |               00000444.meta
 |   |   |               00000445.meta
-|   |   |               00000446.meta
-|   |   |               00000447.sst
 |   |   |               00000448.sst
 |   |   |               00000449.sst
 |   |   |               00000450.meta
-|   |   |               00000451.meta
 |   |   |               00000452.meta
-|   |   |               00000453.sst
 |   |   |               00000454.sst
 |   |   |               00000455.sst
 |   |   |               00000456.sst
@@ -410,30 +349,57 @@ C:.
 |   |   |               00000458.meta
 |   |   |               00000459.meta
 |   |   |               00000460.meta
-|   |   |               00000461.meta
 |   |   |               00000462.meta
-|   |   |               00000463.sst
 |   |   |               00000464.sst
 |   |   |               00000465.sst
 |   |   |               00000466.meta
 |   |   |               00000467.meta
-|   |   |               00000468.meta
 |   |   |               00000469.sst
-|   |   |               00000470.sst
 |   |   |               00000471.sst
 |   |   |               00000472.sst
 |   |   |               00000473.sst
 |   |   |               00000474.meta
 |   |   |               00000475.meta
 |   |   |               00000476.meta
-|   |   |               00000477.meta
 |   |   |               00000478.meta
-|   |   |               00000479.sst
 |   |   |               00000480.sst
 |   |   |               00000481.sst
 |   |   |               00000482.meta
-|   |   |               00000483.meta
 |   |   |               00000484.meta
+|   |   |               00000485.sst
+|   |   |               00000487.sst
+|   |   |               00000488.meta
+|   |   |               00000489.meta
+|   |   |               00000492.sst
+|   |   |               00000493.sst
+|   |   |               00000494.meta
+|   |   |               00000495.meta
+|   |   |               00000501.sst
+|   |   |               00000502.sst
+|   |   |               00000503.sst
+|   |   |               00000504.sst
+|   |   |               00000505.meta
+|   |   |               00000506.meta
+|   |   |               00000507.meta
+|   |   |               00000509.meta
+|   |   |               00000510.sst
+|   |   |               00000511.sst
+|   |   |               00000512.sst
+|   |   |               00000513.meta
+|   |   |               00000514.del
+|   |   |               00000515.sst
+|   |   |               00000516.sst
+|   |   |               00000517.sst
+|   |   |               00000518.sst
+|   |   |               00000519.sst
+|   |   |               00000520.sst
+|   |   |               00000521.sst
+|   |   |               00000522.sst
+|   |   |               00000523.meta
+|   |   |               00000524.meta
+|   |   |               00000525.meta
+|   |   |               00000526.meta
+|   |   |               00000527.meta
 |   |   |               CURRENT
 |   |   |               LOG
 |   |   |               
@@ -641,6 +607,16 @@ C:.
 |   |   |   |   |   page_client-reference-manifest.js
 |   |   |   |   |   
 |   |   |   |   +---api
+|   |   |   |   |   +---audit
+|   |   |   |   |   |   |   route.js
+|   |   |   |   |   |   |   route.js.map
+|   |   |   |   |   |   |   route_client-reference-manifest.js
+|   |   |   |   |   |   |   
+|   |   |   |   |   |   \---route
+|   |   |   |   |   |           app-paths-manifest.json
+|   |   |   |   |   |           build-manifest.json
+|   |   |   |   |   |           server-reference-manifest.json
+|   |   |   |   |   |           
 |   |   |   |   |   +---auth
 |   |   |   |   |   |   \---[...nextauth]
 |   |   |   |   |   |       |   route.js
@@ -689,11 +665,31 @@ C:.
 |   |   |   |   |   |   |   route.js.map
 |   |   |   |   |   |   |   route_client-reference-manifest.js
 |   |   |   |   |   |   |   
-|   |   |   |   |   |   \---route
-|   |   |   |   |   |           app-paths-manifest.json
-|   |   |   |   |   |           build-manifest.json
-|   |   |   |   |   |           server-reference-manifest.json
-|   |   |   |   |   |           
+|   |   |   |   |   |   +---route
+|   |   |   |   |   |   |       app-paths-manifest.json
+|   |   |   |   |   |   |       build-manifest.json
+|   |   |   |   |   |   |       server-reference-manifest.json
+|   |   |   |   |   |   |       
+|   |   |   |   |   |   \---[id]
+|   |   |   |   |   |       |   route.js
+|   |   |   |   |   |       |   route.js.map
+|   |   |   |   |   |       |   route_client-reference-manifest.js
+|   |   |   |   |   |       |   
+|   |   |   |   |   |       +---absences
+|   |   |   |   |   |       |   |   route.js
+|   |   |   |   |   |       |   |   route.js.map
+|   |   |   |   |   |       |   |   route_client-reference-manifest.js
+|   |   |   |   |   |       |   |   
+|   |   |   |   |   |       |   \---route
+|   |   |   |   |   |       |           app-paths-manifest.json
+|   |   |   |   |   |       |           build-manifest.json
+|   |   |   |   |   |       |           server-reference-manifest.json
+|   |   |   |   |   |       |           
+|   |   |   |   |   |       \---route
+|   |   |   |   |   |               app-paths-manifest.json
+|   |   |   |   |   |               build-manifest.json
+|   |   |   |   |   |               server-reference-manifest.json
+|   |   |   |   |   |               
 |   |   |   |   |   \---vehicles
 |   |   |   |   |       |   route.js
 |   |   |   |   |       |   route.js.map
@@ -704,7 +700,43 @@ C:.
 |   |   |   |   |               build-manifest.json
 |   |   |   |   |               server-reference-manifest.json
 |   |   |   |   |               
+|   |   |   |   +---audit
+|   |   |   |   |   |   page.js
+|   |   |   |   |   |   page.js.map
+|   |   |   |   |   |   page_client-reference-manifest.js
+|   |   |   |   |   |   
+|   |   |   |   |   \---page
+|   |   |   |   |           app-paths-manifest.json
+|   |   |   |   |           build-manifest.json
+|   |   |   |   |           next-font-manifest.json
+|   |   |   |   |           react-loadable-manifest.json
+|   |   |   |   |           server-reference-manifest.json
+|   |   |   |   |           
+|   |   |   |   +---company
+|   |   |   |   |   |   page.js
+|   |   |   |   |   |   page.js.map
+|   |   |   |   |   |   page_client-reference-manifest.js
+|   |   |   |   |   |   
+|   |   |   |   |   \---page
+|   |   |   |   |           app-paths-manifest.json
+|   |   |   |   |           build-manifest.json
+|   |   |   |   |           next-font-manifest.json
+|   |   |   |   |           react-loadable-manifest.json
+|   |   |   |   |           server-reference-manifest.json
+|   |   |   |   |           
 |   |   |   |   +---dashboard
+|   |   |   |   |   |   page.js
+|   |   |   |   |   |   page.js.map
+|   |   |   |   |   |   page_client-reference-manifest.js
+|   |   |   |   |   |   
+|   |   |   |   |   \---page
+|   |   |   |   |           app-paths-manifest.json
+|   |   |   |   |           build-manifest.json
+|   |   |   |   |           next-font-manifest.json
+|   |   |   |   |           react-loadable-manifest.json
+|   |   |   |   |           server-reference-manifest.json
+|   |   |   |   |           
+|   |   |   |   +---depots
 |   |   |   |   |   |   page.js
 |   |   |   |   |   |   page.js.map
 |   |   |   |   |   |   page_client-reference-manifest.js
@@ -728,6 +760,18 @@ C:.
 |   |   |   |   |           react-loadable-manifest.json
 |   |   |   |   |           server-reference-manifest.json
 |   |   |   |   |           
+|   |   |   |   +---onboarding
+|   |   |   |   |   |   page.js
+|   |   |   |   |   |   page.js.map
+|   |   |   |   |   |   page_client-reference-manifest.js
+|   |   |   |   |   |   
+|   |   |   |   |   \---page
+|   |   |   |   |           app-paths-manifest.json
+|   |   |   |   |           build-manifest.json
+|   |   |   |   |           next-font-manifest.json
+|   |   |   |   |           react-loadable-manifest.json
+|   |   |   |   |           server-reference-manifest.json
+|   |   |   |   |           
 |   |   |   |   +---page
 |   |   |   |   |       app-paths-manifest.json
 |   |   |   |   |       build-manifest.json
@@ -735,7 +779,43 @@ C:.
 |   |   |   |   |       react-loadable-manifest.json
 |   |   |   |   |       server-reference-manifest.json
 |   |   |   |   |       
-|   |   |   |   \---planning
+|   |   |   |   +---planning
+|   |   |   |   |   |   page.js
+|   |   |   |   |   |   page.js.map
+|   |   |   |   |   |   page_client-reference-manifest.js
+|   |   |   |   |   |   
+|   |   |   |   |   \---page
+|   |   |   |   |           app-paths-manifest.json
+|   |   |   |   |           build-manifest.json
+|   |   |   |   |           next-font-manifest.json
+|   |   |   |   |           react-loadable-manifest.json
+|   |   |   |   |           server-reference-manifest.json
+|   |   |   |   |           
+|   |   |   |   +---templates
+|   |   |   |   |   |   page.js
+|   |   |   |   |   |   page.js.map
+|   |   |   |   |   |   page_client-reference-manifest.js
+|   |   |   |   |   |   
+|   |   |   |   |   \---page
+|   |   |   |   |           app-paths-manifest.json
+|   |   |   |   |           build-manifest.json
+|   |   |   |   |           next-font-manifest.json
+|   |   |   |   |           react-loadable-manifest.json
+|   |   |   |   |           server-reference-manifest.json
+|   |   |   |   |           
+|   |   |   |   +---users
+|   |   |   |   |   |   page.js
+|   |   |   |   |   |   page.js.map
+|   |   |   |   |   |   page_client-reference-manifest.js
+|   |   |   |   |   |   
+|   |   |   |   |   \---page
+|   |   |   |   |           app-paths-manifest.json
+|   |   |   |   |           build-manifest.json
+|   |   |   |   |           next-font-manifest.json
+|   |   |   |   |           react-loadable-manifest.json
+|   |   |   |   |           server-reference-manifest.json
+|   |   |   |   |           
+|   |   |   |   \---vehicles
 |   |   |   |       |   page.js
 |   |   |   |       |   page.js.map
 |   |   |   |       |   page_client-reference-manifest.js
@@ -760,8 +840,14 @@ C:.
 |   |   |   |   |   node_modules_next-auth_1810886e._.js.map
 |   |   |   |   |   node_modules_next-auth_72b3a499._.js
 |   |   |   |   |   node_modules_next-auth_72b3a499._.js.map
+|   |   |   |   |   node_modules_next_21f81598._.js
+|   |   |   |   |   node_modules_next_21f81598._.js.map
 |   |   |   |   |   node_modules_next_240bb1a7._.js
 |   |   |   |   |   node_modules_next_240bb1a7._.js.map
+|   |   |   |   |   node_modules_next_3ec75972._.js
+|   |   |   |   |   node_modules_next_3ec75972._.js.map
+|   |   |   |   |   node_modules_next_79741a44._.js
+|   |   |   |   |   node_modules_next_79741a44._.js.map
 |   |   |   |   |   node_modules_next_961d13b2._.js
 |   |   |   |   |   node_modules_next_961d13b2._.js.map
 |   |   |   |   |   node_modules_next_96da75da._.js
@@ -782,10 +868,16 @@ C:.
 |   |   |   |   |   node_modules_zod_v4_da12b5b3._.js.map
 |   |   |   |   |   [root-of-the-server]__3220e87f._.js
 |   |   |   |   |   [root-of-the-server]__3220e87f._.js.map
+|   |   |   |   |   [root-of-the-server]__3302dbde._.js
+|   |   |   |   |   [root-of-the-server]__3302dbde._.js.map
+|   |   |   |   |   [root-of-the-server]__47886e4b._.js
+|   |   |   |   |   [root-of-the-server]__47886e4b._.js.map
 |   |   |   |   |   [root-of-the-server]__55612d18._.js
 |   |   |   |   |   [root-of-the-server]__55612d18._.js.map
 |   |   |   |   |   [root-of-the-server]__630153a1._.js
 |   |   |   |   |   [root-of-the-server]__630153a1._.js.map
+|   |   |   |   |   [root-of-the-server]__6be53bc1._.js
+|   |   |   |   |   [root-of-the-server]__6be53bc1._.js.map
 |   |   |   |   |   [root-of-the-server]__6e8be590._.js
 |   |   |   |   |   [root-of-the-server]__6e8be590._.js.map
 |   |   |   |   |   [root-of-the-server]__ab4ee520._.js
@@ -798,8 +890,12 @@ C:.
 |   |   |   |   |   [root-of-the-server]__c22f5984._.js.map
 |   |   |   |   |   [root-of-the-server]__d8b70549._.js
 |   |   |   |   |   [root-of-the-server]__d8b70549._.js.map
+|   |   |   |   |   [root-of-the-server]__e925035b._.js
+|   |   |   |   |   [root-of-the-server]__e925035b._.js.map
 |   |   |   |   |   [turbopack]_runtime.js
 |   |   |   |   |   [turbopack]_runtime.js.map
+|   |   |   |   |   _next-internal_server_app_api_audit_route_actions_9d92fa80.js
+|   |   |   |   |   _next-internal_server_app_api_audit_route_actions_9d92fa80.js.map
 |   |   |   |   |   _next-internal_server_app_api_auth_[___nextauth]_route_actions_1c865db8.js
 |   |   |   |   |   _next-internal_server_app_api_auth_[___nextauth]_route_actions_1c865db8.js.map
 |   |   |   |   |   _next-internal_server_app_api_company_rules_route_actions_774d72f1.js
@@ -810,24 +906,52 @@ C:.
 |   |   |   |   |   _next-internal_server_app_api_templates_route_actions_a59f4640.js.map
 |   |   |   |   |   _next-internal_server_app_api_users_route_actions_4b9121e3.js
 |   |   |   |   |   _next-internal_server_app_api_users_route_actions_4b9121e3.js.map
+|   |   |   |   |   _next-internal_server_app_api_users_[id]_absences_route_actions_719d36bc.js
+|   |   |   |   |   _next-internal_server_app_api_users_[id]_absences_route_actions_719d36bc.js.map
+|   |   |   |   |   _next-internal_server_app_api_users_[id]_route_actions_e7269cbb.js
+|   |   |   |   |   _next-internal_server_app_api_users_[id]_route_actions_e7269cbb.js.map
 |   |   |   |   |   _next-internal_server_app_api_vehicles_route_actions_7bc5da8c.js
 |   |   |   |   |   _next-internal_server_app_api_vehicles_route_actions_7bc5da8c.js.map
 |   |   |   |   |   
 |   |   |   |   \---ssr
+|   |   |   |           app_1c03696c._.js
+|   |   |   |           app_1c03696c._.js.map
+|   |   |   |           app_58fd6bdc._.js
+|   |   |   |           app_58fd6bdc._.js.map
+|   |   |   |           app_b6107514._.js
+|   |   |   |           app_b6107514._.js.map
 |   |   |   |           app_b9b1292a._.js
 |   |   |   |           app_b9b1292a._.js.map
+|   |   |   |           app_ee570970._.js
+|   |   |   |           app_ee570970._.js.map
 |   |   |   |           node_modules_186c80ea._.js
 |   |   |   |           node_modules_186c80ea._.js.map
 |   |   |   |           node_modules_3c0889a1._.js
 |   |   |   |           node_modules_3c0889a1._.js.map
 |   |   |   |           node_modules_41ad1da2._.js
 |   |   |   |           node_modules_41ad1da2._.js.map
+|   |   |   |           node_modules_5fdd9b49._.js
+|   |   |   |           node_modules_5fdd9b49._.js.map
+|   |   |   |           node_modules_715db6d8._.js
+|   |   |   |           node_modules_715db6d8._.js.map
 |   |   |   |           node_modules_bb185932._.js
 |   |   |   |           node_modules_bb185932._.js.map
 |   |   |   |           node_modules_e2d1c5df._.js
 |   |   |   |           node_modules_e2d1c5df._.js.map
+|   |   |   |           node_modules_f1e8c728._.js
+|   |   |   |           node_modules_f1e8c728._.js.map
 |   |   |   |           node_modules_jose_dist_node_cjs_6d3869c7._.js
 |   |   |   |           node_modules_jose_dist_node_cjs_6d3869c7._.js.map
+|   |   |   |           node_modules_lucide-react_dist_esm_icons_10b941fe._.js
+|   |   |   |           node_modules_lucide-react_dist_esm_icons_10b941fe._.js.map
+|   |   |   |           node_modules_lucide-react_dist_esm_icons_13b2ce56._.js
+|   |   |   |           node_modules_lucide-react_dist_esm_icons_13b2ce56._.js.map
+|   |   |   |           node_modules_lucide-react_dist_esm_icons_6b69c879._.js
+|   |   |   |           node_modules_lucide-react_dist_esm_icons_6b69c879._.js.map
+|   |   |   |           node_modules_lucide-react_dist_esm_icons_8f2c317e._.js
+|   |   |   |           node_modules_lucide-react_dist_esm_icons_8f2c317e._.js.map
+|   |   |   |           node_modules_lucide-react_dist_esm_icons_d5f40330._.js
+|   |   |   |           node_modules_lucide-react_dist_esm_icons_d5f40330._.js.map
 |   |   |   |           node_modules_next-auth_0305d6f4._.js
 |   |   |   |           node_modules_next-auth_0305d6f4._.js.map
 |   |   |   |           node_modules_next_925641f3._.js
@@ -838,6 +962,10 @@ C:.
 |   |   |   |           node_modules_next_dist_3e1f69b5._.js.map
 |   |   |   |           node_modules_next_dist_6c3f6d39._.js
 |   |   |   |           node_modules_next_dist_6c3f6d39._.js.map
+|   |   |   |           node_modules_next_dist_aaa37639._.js
+|   |   |   |           node_modules_next_dist_aaa37639._.js.map
+|   |   |   |           node_modules_next_dist_ae10447f._.js
+|   |   |   |           node_modules_next_dist_ae10447f._.js.map
 |   |   |   |           node_modules_next_dist_bf3829b6._.js
 |   |   |   |           node_modules_next_dist_bf3829b6._.js.map
 |   |   |   |           node_modules_next_dist_client_components_9774470f._.js
@@ -848,6 +976,10 @@ C:.
 |   |   |   |           node_modules_next_dist_client_components_builtin_global-error_ece394eb.js.map
 |   |   |   |           node_modules_next_dist_client_components_builtin_unauthorized_15817684.js
 |   |   |   |           node_modules_next_dist_client_components_builtin_unauthorized_15817684.js.map
+|   |   |   |           node_modules_next_dist_eaca5907._.js
+|   |   |   |           node_modules_next_dist_eaca5907._.js.map
+|   |   |   |           node_modules_next_dist_f49f8f56._.js
+|   |   |   |           node_modules_next_dist_f49f8f56._.js.map
 |   |   |   |           node_modules_next_f71b9665._.js
 |   |   |   |           node_modules_next_f71b9665._.js.map
 |   |   |   |           node_modules_openid-client_5e2b25d2._.js
@@ -864,12 +996,20 @@ C:.
 |   |   |   |           [externals]__e6a4d965._.js.map
 |   |   |   |           [externals]__e8a2741f._.js
 |   |   |   |           [externals]__e8a2741f._.js.map
+|   |   |   |           [root-of-the-server]__0fa4c12b._.js
+|   |   |   |           [root-of-the-server]__0fa4c12b._.js.map
 |   |   |   |           [root-of-the-server]__1222724e._.js
 |   |   |   |           [root-of-the-server]__1222724e._.js.map
+|   |   |   |           [root-of-the-server]__19eafee2._.js
+|   |   |   |           [root-of-the-server]__19eafee2._.js.map
 |   |   |   |           [root-of-the-server]__1a81b948._.js
 |   |   |   |           [root-of-the-server]__1a81b948._.js.map
+|   |   |   |           [root-of-the-server]__272734e3._.js
+|   |   |   |           [root-of-the-server]__272734e3._.js.map
 |   |   |   |           [root-of-the-server]__4e9dd690._.js
 |   |   |   |           [root-of-the-server]__4e9dd690._.js.map
+|   |   |   |           [root-of-the-server]__5445d09d._.js
+|   |   |   |           [root-of-the-server]__5445d09d._.js.map
 |   |   |   |           [root-of-the-server]__60f0131a._.js
 |   |   |   |           [root-of-the-server]__60f0131a._.js.map
 |   |   |   |           [root-of-the-server]__70a73b34._.js
@@ -880,24 +1020,50 @@ C:.
 |   |   |   |           [root-of-the-server]__a8ab9a0d._.js.map
 |   |   |   |           [root-of-the-server]__c29fa969._.js
 |   |   |   |           [root-of-the-server]__c29fa969._.js.map
+|   |   |   |           [root-of-the-server]__c8cfc074._.js
+|   |   |   |           [root-of-the-server]__c8cfc074._.js.map
 |   |   |   |           [root-of-the-server]__ce22594b._.js
 |   |   |   |           [root-of-the-server]__ce22594b._.js.map
+|   |   |   |           [root-of-the-server]__d808aafb._.js
+|   |   |   |           [root-of-the-server]__d808aafb._.js.map
+|   |   |   |           [root-of-the-server]__e9851ce1._.js
+|   |   |   |           [root-of-the-server]__e9851ce1._.js.map
 |   |   |   |           [turbopack]_runtime.js
 |   |   |   |           [turbopack]_runtime.js.map
+|   |   |   |           _892a4b54._.js
+|   |   |   |           _892a4b54._.js.map
 |   |   |   |           _92f7ec3e._.js
 |   |   |   |           _92f7ec3e._.js.map
 |   |   |   |           _b05d05e3._.js
 |   |   |   |           _b05d05e3._.js.map
+|   |   |   |           _cfe437a5._.js
+|   |   |   |           _cfe437a5._.js.map
 |   |   |   |           _d119320a._.js
 |   |   |   |           _d119320a._.js.map
+|   |   |   |           _fd220cc4._.js
+|   |   |   |           _fd220cc4._.js.map
+|   |   |   |           _next-internal_server_app_audit_page_actions_4244da5a.js
+|   |   |   |           _next-internal_server_app_audit_page_actions_4244da5a.js.map
+|   |   |   |           _next-internal_server_app_company_page_actions_ca33e7ac.js
+|   |   |   |           _next-internal_server_app_company_page_actions_ca33e7ac.js.map
 |   |   |   |           _next-internal_server_app_dashboard_page_actions_7f01ccec.js
 |   |   |   |           _next-internal_server_app_dashboard_page_actions_7f01ccec.js.map
+|   |   |   |           _next-internal_server_app_depots_page_actions_4ef2fb4b.js
+|   |   |   |           _next-internal_server_app_depots_page_actions_4ef2fb4b.js.map
 |   |   |   |           _next-internal_server_app_login_page_actions_0e9aafc0.js
 |   |   |   |           _next-internal_server_app_login_page_actions_0e9aafc0.js.map
+|   |   |   |           _next-internal_server_app_onboarding_page_actions_99465896.js
+|   |   |   |           _next-internal_server_app_onboarding_page_actions_99465896.js.map
 |   |   |   |           _next-internal_server_app_page_actions_39d4fc33.js
 |   |   |   |           _next-internal_server_app_page_actions_39d4fc33.js.map
 |   |   |   |           _next-internal_server_app_planning_page_actions_09255cef.js
 |   |   |   |           _next-internal_server_app_planning_page_actions_09255cef.js.map
+|   |   |   |           _next-internal_server_app_templates_page_actions_871a2c2f.js
+|   |   |   |           _next-internal_server_app_templates_page_actions_871a2c2f.js.map
+|   |   |   |           _next-internal_server_app_users_page_actions_0d09aa8d.js
+|   |   |   |           _next-internal_server_app_users_page_actions_0d09aa8d.js.map
+|   |   |   |           _next-internal_server_app_vehicles_page_actions_11f14ce8.js
+|   |   |   |           _next-internal_server_app_vehicles_page_actions_11f14ce8.js.map
 |   |   |   |           
 |   |   |   +---middleware
 |   |   |   |       middleware-manifest.json
@@ -933,6 +1099,8 @@ C:.
 |   |   |   +---chunks
 |   |   |   |   |   app_3c022bb8._.css
 |   |   |   |   |   app_3c022bb8._.css.map
+|   |   |   |   |   app_644b3c6c._.js
+|   |   |   |   |   app_644b3c6c._.js.map
 |   |   |   |   |   app_82881073._.js
 |   |   |   |   |   app_82881073._.js.map
 |   |   |   |   |   app_a24-complementary-pages_css_bad6b30c._.single.css
@@ -941,19 +1109,38 @@ C:.
 |   |   |   |   |   app_a24-users-rh_css_bad6b30c._.single.css.map
 |   |   |   |   |   app_a24-vehicles-templates_css_bad6b30c._.single.css
 |   |   |   |   |   app_a24-vehicles-templates_css_bad6b30c._.single.css.map
+|   |   |   |   |   app_audit_page_tsx_060e85dd._.js
+|   |   |   |   |   app_b90b8213._.js
+|   |   |   |   |   app_b90b8213._.js.map
+|   |   |   |   |   app_company_page_tsx_060e85dd._.js
+|   |   |   |   |   app_d4a86ba9._.js
+|   |   |   |   |   app_d4a86ba9._.js.map
 |   |   |   |   |   app_dashboard_page_tsx_060e85dd._.js
+|   |   |   |   |   app_depots_page_tsx_060e85dd._.js
 |   |   |   |   |   app_favicon_ico_mjs_745fddaf._.js
 |   |   |   |   |   app_globals_css_bad6b30c._.single.css
 |   |   |   |   |   app_globals_css_bad6b30c._.single.css.map
 |   |   |   |   |   app_layout_tsx_1cf6b850._.js
 |   |   |   |   |   app_login_page_tsx_060e85dd._.js
+|   |   |   |   |   app_onboarding_page_tsx_060e85dd._.js
 |   |   |   |   |   app_planning_page_tsx_060e85dd._.js
+|   |   |   |   |   app_templates_page_tsx_060e85dd._.js
+|   |   |   |   |   app_users_page_tsx_060e85dd._.js
+|   |   |   |   |   app_vehicles_page_tsx_060e85dd._.js
 |   |   |   |   |   node_modules_7f09fef0._.js
 |   |   |   |   |   node_modules_7f09fef0._.js.map
 |   |   |   |   |   node_modules_@swc_helpers_cjs_d80fb378._.js
 |   |   |   |   |   node_modules_@swc_helpers_cjs_d80fb378._.js.map
 |   |   |   |   |   node_modules_b198b86e._.js
 |   |   |   |   |   node_modules_b198b86e._.js.map
+|   |   |   |   |   node_modules_lucide-react_dist_esm_icons_4046207e._.js
+|   |   |   |   |   node_modules_lucide-react_dist_esm_icons_4046207e._.js.map
+|   |   |   |   |   node_modules_lucide-react_dist_esm_icons_841c4230._.js
+|   |   |   |   |   node_modules_lucide-react_dist_esm_icons_841c4230._.js.map
+|   |   |   |   |   node_modules_lucide-react_dist_esm_icons_96dcc2c5._.js
+|   |   |   |   |   node_modules_lucide-react_dist_esm_icons_96dcc2c5._.js.map
+|   |   |   |   |   node_modules_lucide-react_dist_esm_icons_9b299136._.js
+|   |   |   |   |   node_modules_lucide-react_dist_esm_icons_9b299136._.js.map
 |   |   |   |   |   node_modules_next_app_72f3d36f.js
 |   |   |   |   |   node_modules_next_app_72f3d36f.js.map
 |   |   |   |   |   node_modules_next_dist_a183fb77._.js
@@ -1009,11 +1196,19 @@ C:.
 |   |   |   |   |   [turbopack]_browser_dev_hmr-client_hmr-client_ts_c7192189._.js
 |   |   |   |   |   [turbopack]_browser_dev_hmr-client_hmr-client_ts_c8c997ce._.js
 |   |   |   |   |   [turbopack]_browser_dev_hmr-client_hmr-client_ts_c8c997ce._.js.map
+|   |   |   |   |   _01ca1af2._.js
+|   |   |   |   |   _01ca1af2._.js.map
+|   |   |   |   |   _063d3baf._.js
+|   |   |   |   |   _063d3baf._.js.map
 |   |   |   |   |   _23a915ee._.js.map
 |   |   |   |   |   _3bf2f5b1._.js
 |   |   |   |   |   _3bf2f5b1._.js.map
+|   |   |   |   |   _88b4b4ed._.js
+|   |   |   |   |   _88b4b4ed._.js.map
 |   |   |   |   |   _89b98d23._.js
 |   |   |   |   |   _89b98d23._.js.map
+|   |   |   |   |   _983c5811._.js
+|   |   |   |   |   _983c5811._.js.map
 |   |   |   |   |   _a0ff3932._.js
 |   |   |   |   |   _f2bb0728._.js
 |   |   |   |   |   _f2bb0728._.js.map
@@ -4299,37 +4494,17 @@ C:.
 |   |   |   |   |           PATCH__SESSION-20260510-04_A25_A25-PLAN-UI-04.diff
 |   |   |   |   |           README_PATCH.md
 |   |   |   |   |           
-|   |   |   |   +---SESSION-20260510-05_A25_A25-PLAN-UI-05
-|   |   |   |   |   |   BUILD_OUTPUT.txt
-|   |   |   |   |   |   EVIDENCES.md
-|   |   |   |   |   |   FIN_SESSION.md
-|   |   |   |   |   |   LINT_OUTPUT.txt
-|   |   |   |   |   |   NOTES.md
-|   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   SESSION.md
-|   |   |   |   |   |   
-|   |   |   |   |   \---PATCH
-|   |   |   |   |           PATCH__SESSION-20260510-05_A25_A25-PLAN-UI-05.diff
-|   |   |   |   |           README_PATCH.md
-|   |   |   |   |           
-|   |   |   |   +---SESSION-20260510-06_A25_A25-PLAN-UI-06
-|   |   |   |   |   |   EVIDENCES.md
-|   |   |   |   |   |   FIN_SESSION.md
-|   |   |   |   |   |   NOTES.md
-|   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   SESSION.md
-|   |   |   |   |   |   
-|   |   |   |   |   \---PATCH
-|   |   |   |   |           NO_PATCH.md
-|   |   |   |   |           
-|   |   |   |   \---SESSION-20260510-07_A25_CLOTURE_A25
+|   |   |   |   \---SESSION-20260510-05_A25_A25-PLAN-UI-05
+|   |   |   |       |   BUILD_OUTPUT.txt
 |   |   |   |       |   EVIDENCES.md
 |   |   |   |       |   FIN_SESSION.md
+|   |   |   |       |   LINT_OUTPUT.txt
 |   |   |   |       |   NOTES.md
 |   |   |   |       |   RESULTATS.md
 |   |   |   |       |   SESSION.md
 |   |   |   |       |   
 |   |   |   |       \---PATCH
+|   |   |   |               PATCH__SESSION-20260510-05_A25_A25-PLAN-UI-05.diff
 |   |   |   |               README_PATCH.md
 |   |   |   |               
 |   |   |   +---BLOC_A3

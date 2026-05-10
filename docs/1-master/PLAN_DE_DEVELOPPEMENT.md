@@ -1218,133 +1218,162 @@ Si une page réelle contient plus d’informations que la maquette, la correctio
 ### BLOC A25 — Planning UI/UX & ergonomie métier
 
 **Objectif du bloc**  
-Reprendre le planning comme sujet UI/UX principal et dédié, afin d’améliorer sa lisibilité, sa structure visuelle et son ergonomie métier, sans transformer ce bloc en refonte fonctionnelle avancée.
+Refondre la page Planning comme un écran central complet du produit, avec une priorité explicite de fidélité visuelle aux images officielles `Planning_V1.2.png` et `Planning_V1.2_INFO_DETAIL.png`.
 
-Le planning est un écran central du produit Ambulance Manager.  
-Il ne doit pas être traité comme une simple page secondaire du réalignement UI/UX global A24.
+Le bloc A25 ne vise plus de simples ajustements locaux du planning.  
+Il doit produire une page Planning globalement cohérente, structurée et suffisamment proche de la maquette visible pour servir de base d'exploitation métier.
+
+Objectif de fidélité visuelle : se rapprocher autant que possible de la maquette officielle, avec une cible d'environ **99 % de reproduction de ce qui est visible**, dans la limite du code réel, des données disponibles et sans création d'une logique métier lourde.
+
+Le planning reste un écran central du produit Ambulance Manager.  
+Il ne doit pas être traité comme une page secondaire ni comme une accumulation verticale de modules.
 
 Le bloc A25 intervient après :
 - le réalignement UI/UX global A24 ;
-- l’application du socle visuel commun ;
-- l’intégration de la direction artistique officielle `MAQUETTE_DA`.
+- l'application du socle visuel commun ;
+- l'intégration de la direction artistique officielle `MAQUETTE_DA` ;
+- le constat manuel que les corrections A25 partielles ne suffisent pas si l'écran final ne ressemble pas à la maquette.
 
-**Référence UI/UX officielle**  
+**Références UI/UX officielles**  
 La direction artistique officielle reste exclusivement :
 
 `docs/1-master/MAQUETTE/MAQUETTE_DA`
 
-La référence Planning détaillée du bloc A25 est :
+La référence Planning détaillée et prioritaire du bloc A25 est :
 
 `docs/1-master/REFERENCE_UI_UX_A25_PLANNING.md`
 
-L’image Planning détaillée de référence est :
+Les images Planning à reproduire sont situées dans :
 
-`docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2_INFO_DETAIL.png`
+`docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning`
 
-Le planning doit être réaligné avec cette direction artistique, sans inventer une nouvelle DA.
+Images principales :
+- `Planning_V1.2.png` ;
+- `Planning_V1.2_INFO_DETAIL.png`.
+
+Ces images ne sont pas de simples inspirations : elles constituent la cible visuelle concrète du bloc A25.
 
 **Principe directeur**  
-Le bloc A25 doit rendre le planning :
-- plus pur ;
-- plus simple ;
-- plus lisible ;
-- plus exploitable métier ;
-- plus cohérent avec le reste de l’application ;
-- compatible avec le mode clair et le mode sombre ;
-- sans casser les fonctionnalités stabilisées.
+Le bloc A25 doit faire converger la page Planning vers une structure de type :
+- shell A24 conservé ;
+- header Planning sobre ;
+- toolbar horizontale filtres / vue / exports ;
+- onglets internes fins ;
+- matrice principale `salariés × semaines` ;
+- panneau droit `Détail de la cellule` ;
+- barre basse d'actions groupées ;
+- badges doux et compacts ;
+- états visuels propres ;
+- mode clair et mode sombre cohérents.
+
+La logique de lecture attendue est :
+
+```txt
+lecture globale → sélection cellule → détail latéral → action contextuelle
+```
 
 **Périmètre**  
-Le bloc A25 peut traiter :
-- vue jour ;
-- vue semaine ;
-- vue mois ;
-- navigation planning ;
+Le bloc A25 peut traiter, uniquement pour se rapprocher de la maquette Planning :
+- structure globale de la page Planning ;
 - header planning ;
-- filtres ;
-- toolbar ;
-- onglets internes du planning ;
-- cellules de planning ;
-- cards de shifts / missions si réellement présentes dans le repo ;
-- badges ;
-- états visuels ;
-- horaires ;
-- équipes ;
-- véhicules ;
-- panneaux de détail ;
-- panneaux d’affectation ;
-- actions principales et secondaires ;
-- actions groupées ;
-- densité métier ;
-- lisibilité terrain ;
+- filtres période / dépôt / rôle / utilisateur ;
+- toggle `Personnel / Vue dépôt` ;
+- exports PDF / Excel / CSV / impression ;
+- onglets internes `Planning manuel`, `Affectations`, `Autoschedule`, `Matching`, `Historique`, `Exports` ;
+- matrice principale salariés / rôle / base / statut / semaines ;
+- cellules sélectionnables ;
+- badges de shift / repos / congé / garde ;
+- informations secondaires visibles dans les cellules ;
+- panneau droit de détail cellule ;
+- absences et conflits visibles dans le panneau droit si les données existent ;
+- actions `Voir détail`, `Modifier`, `Ajouter shift` si présentes ;
+- barre basse de sélection multiple ;
+- actions groupées d'affectation employé 1 / employé 2 / véhicule / base ;
+- action `Vider` / `Vider la sélection sans suppression` selon signification réelle ;
+- états vides, chargement et erreur ;
+- compatibilité mode clair / mode sombre ;
 - responsive minimal sans refonte mobile complète.
 
 **Exclusions**  
 Le bloc A25 ne doit pas traiter :
-- refonte fonctionnelle complète du planning ;
 - nouveau moteur planning ;
-- autoschedule complet ;
-- matching complet ;
-- règles métier avancées ;
+- nouvelle logique métier d'affectation ;
+- refonte autoschedule ;
+- refonte matching ;
 - refonte RBAC ;
+- refonte permissions ;
+- refonte Prisma lourde ;
+- refonte API lourde ;
 - RH avancée ;
 - saisie réelle des heures travaillées ;
 - paie ;
 - primes ;
 - suppression physique généralisée ;
 - application mobile complète ;
-- préparation société pilote.
+- préparation société pilote ;
+- nouvelle direction artistique.
 
-Le bloc A25 peut améliorer l’ergonomie et la présentation d’un flux existant, mais il ne doit pas créer une nouvelle logique métier lourde.
+Toute donnée non visible dans la maquette ou non prouvée dans le code doit être indiquée ainsi :
+
+```txt
+INFORMATION NON FOURNIE — À CONFIRMER
+```
+
+**Règle de validation visuelle**  
+Une session A25 ne doit pas être déclarée validée visuellement uniquement parce que le patch est propre, applicable, linté et buildé.
+
+La validation A25 exige aussi une comparaison visuelle avec la maquette Planning et un retour manuel utilisateur favorable.
+
+Si le rendu réel ne ressemble pas suffisamment à `Planning_V1.2`, la session doit rester techniquement propre mais visuellement non validée.
 
 #### Sessions
 
-- **A25-PLAN-UI-01 — AUDIT** — Audit UI/UX complet du planning.  
-  Objectif : comparer le planning réel avec `MAQUETTE_DA`, `Planning_V1.2_INFO_DETAIL.png` et `REFERENCE_UI_UX_A25_PLANNING.md`, identifier les écarts visuels, ergonomiques et de densité, puis décider précisément ce qui doit être corrigé dans A25.  
-  Livrable attendu : rapport d’audit planning avec captures avant, matrice des écarts, risques de régression et ordre de correction recommandé.  
-  DoD : chaque zone du planning possède un verdict : conforme / non conforme / incomplet / à confirmer.
+Les sessions A25 déjà produites avant ce recadrage peuvent rester comme historique technique partiel, mais elles ne suffisent pas à clôturer A25 si la page finale ne correspond pas à la maquette.
 
-- **A25-PLAN-UI-02 — CORRECTION+COMPLÉTION** — Réalignement de la structure générale du planning.  
-  Périmètre : header planning, navigation, filtres, toolbar, onglets internes, fond, cards globales, structure générale et cohérence avec le socle A24.  
-  Livrable attendu : patch code ciblé structure planning.  
-  DoD : le planning possède une structure visuelle claire, cohérente avec `MAQUETTE_DA` et `REFERENCE_UI_UX_A25_PLANNING.md`, sans changement fonctionnel lourd.
+La fin du bloc A25 est recadrée ainsi :
 
-- **A25-PLAN-UI-03 — CORRECTION+COMPLÉTION** — Réalignement des vues jour et semaine.  
-  Périmètre : grilles, lignes horaires si présentes, cellules, cards de shifts / missions si réellement présentes dans le repo, badges, équipes, véhicules, actions visibles, densité et lisibilité métier.  
-  Livrable attendu : patch code ciblé vues jour / semaine.  
-  DoD : les vues jour et semaine sont lisibles, exploitables et visuellement cohérentes avec la DA officielle.
+- **A25-PLAN-UI-06 — AUDIT+CADRAGE** — Recadrage visuel global Planning.  
+  Objectif : officialiser la cible Planning à partir de `Planning_V1.2.png`, `Planning_V1.2_INFO_DETAIL.png` et `REFERENCE_UI_UX_A25_PLANNING.md`, puis classer les écarts restants entre le rendu réel et la maquette.  
+  Livrable attendu : documentation A25 mise à jour et matrice de conformité visuelle ligne par ligne.  
+  DoD : la cible visuelle complète est explicite, exploitable par Codex et validée comme référence de correction.
 
-- **A25-PLAN-UI-04 — CORRECTION+COMPLÉTION** — Réalignement de la vue mois.  
-  Périmètre : structure mensuelle, cellules, indicateurs, résumé des shifts / missions si réellement présentes dans le repo, états visuels, navigation mensuelle et densité.  
-  Livrable attendu : patch code ciblé vue mois.  
-  DoD : la vue mois devient lisible et cohérente sans devenir une refonte fonctionnelle avancée.
+- **A25-PLAN-UI-07 — CORRECTION+COMPLÉTION** — Refonte globale de la structure Planning alignée maquette.  
+  Périmètre : layout global, header, toolbar filtres/vue/exports, onglets internes, workspace principal, répartition matrice + panneau droit, barre basse d'actions, espacements et alignements.  
+  Livrable attendu : patch code ciblé structure globale Planning.  
+  DoD : la page Planning ressemble structurellement à la maquette, avant même les finitions fines.
 
-- **A25-PLAN-UI-05 — CORRECTION+COMPLÉTION** — Réalignement des panneaux d’action et d’affectation.  
-  Périmètre : drawer, panneau droit, détail cellule, détail shift / mission si réellement présent dans le repo, affectation personnel, affectation véhicule, affectation base, modification, annulation, actions principales, actions secondaires et actions groupées.  
-  Livrable attendu : patch code ciblé panneaux / actions planning.  
-  DoD : les actions planning sont plus claires, mieux hiérarchisées et plus proches de l’ergonomie attendue, sans nouvelle logique métier lourde.
+- **A25-PLAN-UI-08 — CORRECTION+COMPLÉTION** — Matrice salariés × semaines, cellules et badges.  
+  Périmètre : table/matrice, colonnes salarié/rôle/base/statut/semaines, lignes salariés, cellules, sélection cellule, badges shift/repos/congé/garde, couleurs douces, densité et lisibilité.  
+  Livrable attendu : patch code ciblé matrice planning.  
+  DoD : la zone violette de la maquette est reproduite de manière fidèle et exploitable, sans hardcoder des données non disponibles.
 
-- **A25-PLAN-UI-06 — VALIDATION** — Validation globale du planning UI/UX.  
-  À vérifier : vues jour / semaine / mois, lisibilité, cohérence avec `MAQUETTE_DA`, cohérence avec `Planning_V1.2_INFO_DETAIL.png`, cohérence avec `REFERENCE_UI_UX_A25_PLANNING.md`, mode clair, mode sombre, navigation connectée, absence de régression fonctionnelle, captures avant / après.  
-  Livrable attendu : rapport de validation planning avec preuves terminales et captures.  
-  DoD : le planning est validé ou les résiduels sont classés explicitement bloquants / non bloquants.
+- **A25-PLAN-UI-09 — CORRECTION+COMPLÉTION** — Panneau détail cellule et actions groupées.  
+  Périmètre : panneau droit `Détail de la cellule`, détail salarié, période, affectations, absences, conflits/alertes, actions, barre basse de sélection multiple et actions d'affectation.  
+  Livrable attendu : patch code ciblé panneau droit et barre basse.  
+  DoD : les zones verte et basse de la maquette sont reproduites fidèlement, avec actions hiérarchisées et sans nouvelle logique métier lourde.
 
-- **CLOTURE_A25 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc A25.  
-  Livrable attendu : contrôle final du bloc Planning UI/UX, vérification des patchs, preuves, captures, documentation finale et ZIP documentaire.  
+- **A25-PLAN-UI-10 — VALIDATION** — Validation visuelle globale Planning.  
+  À vérifier : fidélité à `Planning_V1.2.png`, fidélité à `Planning_V1.2_INFO_DETAIL.png`, cohérence avec `REFERENCE_UI_UX_A25_PLANNING.md`, mode clair, mode sombre, actions, non-régression fonctionnelle, captures ou contrôle visuel manuel documenté.  
+  Livrable attendu : rapport de validation visuelle et technique Planning.  
+  DoD : Nathan valide manuellement que la page Planning est suffisamment fidèle à la maquette et exploitable métier, ou les écarts restants sont classés explicitement bloquants / non bloquants.
+
+- **CLOTURE_A25 — VALIDATION** — Clôture finale du bloc A25.  
+  Livrable attendu : contrôle final du bloc Planning UI/UX, vérification des patchs, preuves, documentation finale, conformité à la référence A25 et verdict de clôture.  
   Verdict attendu :
   - `BLOC A25 CLÔTURABLE DÉFINITIVEMENT : OUI`
   - ou
   - `BLOC A25 CLÔTURABLE DÉFINITIVEMENT : NON`
 
 #### Résultat attendu
-- planning visuellement réaligné avec `MAQUETTE_DA` ;
-- planning cadré par `REFERENCE_UI_UX_A25_PLANNING.md` ;
-- planning comparé à `Planning_V1.2_INFO_DETAIL.png` ;
-- vues jour / semaine / mois plus lisibles ;
-- actions planning mieux hiérarchisées ;
-- affectation plus compréhensible visuellement ;
+- page Planning refondue comme écran central complet ;
+- proximité visuelle forte avec `Planning_V1.2.png` et `Planning_V1.2_INFO_DETAIL.png` ;
+- structure en matrice salariés × semaines si compatible avec les données réelles ;
+- toolbar, onglets, matrice, panneau droit et barre basse cohérents ;
 - densité métier maîtrisée ;
+- actions hiérarchisées ;
 - cohérence avec le socle UI A24 ;
 - compatibilité mode clair / mode sombre ;
+- documentation A25 suffisamment précise pour guider Codex sans interprétation libre excessive ;
 - aucune refonte fonctionnelle lourde ;
 - aucune extension hors périmètre planning UI/UX.
 

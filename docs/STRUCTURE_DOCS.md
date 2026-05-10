@@ -1856,37 +1856,17 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |           PATCH__SESSION-20260510-04_A25_A25-PLAN-UI-04.diff
 |   |   |   |           README_PATCH.md
 |   |   |   |           
-|   |   |   +---SESSION-20260510-05_A25_A25-PLAN-UI-05
-|   |   |   |   |   BUILD_OUTPUT.txt
-|   |   |   |   |   EVIDENCES.md
-|   |   |   |   |   FIN_SESSION.md
-|   |   |   |   |   LINT_OUTPUT.txt
-|   |   |   |   |   NOTES.md
-|   |   |   |   |   RESULTATS.md
-|   |   |   |   |   SESSION.md
-|   |   |   |   |   
-|   |   |   |   \---PATCH
-|   |   |   |           PATCH__SESSION-20260510-05_A25_A25-PLAN-UI-05.diff
-|   |   |   |           README_PATCH.md
-|   |   |   |           
-|   |   |   +---SESSION-20260510-06_A25_A25-PLAN-UI-06
-|   |   |   |   |   EVIDENCES.md
-|   |   |   |   |   FIN_SESSION.md
-|   |   |   |   |   NOTES.md
-|   |   |   |   |   RESULTATS.md
-|   |   |   |   |   SESSION.md
-|   |   |   |   |   
-|   |   |   |   \---PATCH
-|   |   |   |           NO_PATCH.md
-|   |   |   |           
-|   |   |   \---SESSION-20260510-07_A25_CLOTURE_A25
+|   |   |   \---SESSION-20260510-05_A25_A25-PLAN-UI-05
+|   |   |       |   BUILD_OUTPUT.txt
 |   |   |       |   EVIDENCES.md
 |   |   |       |   FIN_SESSION.md
+|   |   |       |   LINT_OUTPUT.txt
 |   |   |       |   NOTES.md
 |   |   |       |   RESULTATS.md
 |   |   |       |   SESSION.md
 |   |   |       |   
 |   |   |       \---PATCH
+|   |   |               PATCH__SESSION-20260510-05_A25_A25-PLAN-UI-05.diff
 |   |   |               README_PATCH.md
 |   |   |               
 |   |   +---BLOC_A3

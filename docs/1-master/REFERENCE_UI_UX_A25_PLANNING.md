@@ -1,1243 +1,2217 @@
 # Ambulance Manager — RÉFÉRENCE UI/UX A25 PLANNING
 
-Version : V1.0.0 (MASTER)  
+Version : V2.0.0 — RÉÉCRITURE COMPLÈTE MAQUETTE 99 %  
 Date : 10/05/2026  
-Bloc concerné : `A25 — Planning UI/UX & ergonomie métier`
+Bloc concerné : `A25 — Planning UI/UX & ergonomie métier`  
+Document cible à déposer dans le repo : `docs/1-master/REFERENCE_UI_UX_A25_PLANNING.md`
 
-## Sommaire
+---
 
-- [1. Objet du document](#1-objet-du-document)
-- [2. Périmètre du bloc A25](#2-périmètre-du-bloc-a25)
-- [3. Exclusions du bloc A25](#3-exclusions-du-bloc-a25)
-- [4. Références visuelles officielles](#4-références-visuelles-officielles)
-- [5. Principes UI/UX attendus](#5-principes-uiux-attendus)
-- [6. Analyse attendue de la maquette Planning](#6-analyse-attendue-de-la-maquette-planning)
-- [7. Critères de conformité A25](#7-critères-de-conformité-a25)
-- [8. Points à vérifier dans le repo](#8-points-à-vérifier-dans-le-repo)
-- [9. Recommandations de découpage A25](#9-recommandations-de-découpage-a25)
-- [10. Limites à respecter](#10-limites-à-respecter)
+## 0. Statut du document
 
-## 1. Objet du document
+Ce document remplace intégralement la version précédente de `REFERENCE_UI_UX_A25_PLANNING.md`.
 
-Ce document sert de référence UI/UX officielle pour le bloc :
+Il a été réécrit à partir :
+
+- des images de référence Planning fournies ;
+- de la version existante du document `REFERENCE_UI_UX_A25_PLANNING.md` ;
+- du cadrage A25 validé oralement : le bloc A25 doit viser une refonte globale de la page Planning, proche à environ 99 % de la maquette visible.
+
+Ce document ne doit pas être lu comme une inspiration générale. Il doit être utilisé comme une spécification visuelle et ergonomique de reproduction.
+
+Objectif principal : permettre à Codex de reconstruire ensuite la page Planning de manière fidèle, structurée et vérifiable.
+
+---
+
+## 1. Règle d’autorité A25
+
+### 1.1 Références visuelles officielles
+
+Les références officielles du Planning A25 sont les images situées dans :
 
 ```txt
-A25 — Planning UI/UX & ergonomie métier
+docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning
 ```
 
-Il complète le plan de développement et doit guider toutes les sessions A25.
+Images principales analysées :
 
-Son objectif est de cadrer précisément la refonte UI/UX du planning afin de produire une page :
+```txt
+Planning_V1.2.png
+Planning_V1.2_INFO_DETAIL.png
+```
 
-- plus lisible ;
-- plus structurée ;
-- plus fidèle à la maquette officielle ;
-- plus exploitable en contexte métier ambulance / transport sanitaire ;
-- cohérente avec le socle visuel A24 ;
-- compatible avec le repo réel ;
-- sans dérive vers une refonte fonctionnelle lourde.
+`Planning_V1.2.png` est la référence visuelle propre.
 
-Le planning est un écran central d’Ambulance Manager.  
-Il ne doit pas être traité comme une simple page secondaire du réalignement UI/UX global A24.
+`Planning_V1.2_INFO_DETAIL.png` est la même référence avec encadrements d’analyse :
 
-A25 doit prolonger A24, pas créer une nouvelle direction artistique.
+- rouge : zone globale de contenu Planning ;
+- bleu : filtres, bascule de vue et exports ;
+- orange : onglets internes ;
+- violet : grille principale et barre d’actions groupées ;
+- vert : panneau latéral droit de détail cellule.
 
-## 2. Périmètre du bloc A25
+### 1.2 Règle d’autorité visuelle
 
-Le bloc A25 peut traiter les éléments UI/UX et ergonomiques suivants, dans la limite de l’existant réel du repo.
+```txt
+Images Planning_V1.2 > anciennes captures > descriptions textuelles anciennes
+```
 
-### Vues planning
+Le document présent doit guider l’intégration, mais en cas de contradiction visuelle, l’image de référence prévaut.
 
-Sont incluses :
+### 1.3 Règle d’autorité fonctionnelle
 
-- vue jour ;
-- vue semaine ;
-- vue mois ;
-- navigation planning ;
-- bascule ou organisation des vues existantes ;
-- lisibilité des périodes ;
-- cohérence entre les vues ;
-- hiérarchie visuelle des informations temporelles.
+```txt
+CODE réel du repo > documentation produit > hypothèses
+```
 
-### Structure générale de page
+La maquette fixe le rendu cible. Le code réel fixe ce qui existe fonctionnellement.
 
-Sont inclus :
+Conséquence :
 
-- header planning ;
-- titre ;
-- sous-titre ;
-- action principale ;
-- structure générale de la page ;
-- organisation des zones ;
-- alignement avec le shell A24 ;
-- fond ;
-- cartes globales ;
-- bordures ;
-- espacements ;
-- densité générale.
+- il faut reproduire la maquette visuellement ;
+- il ne faut pas inventer une fonctionnalité métier non présente ;
+- les données visibles dans la maquette peuvent être remplacées par les données réelles du repo ;
+- aucune API, Prisma, RBAC, autoschedule ou matching ne doit être refondu sans nécessité explicite.
 
-### Filtres, toolbar et navigation interne
+### 1.4 Phrase obligatoire en cas d’incertitude
 
-Sont inclus :
-
-- filtres de période ;
-- filtres de dépôt / base ;
-- filtres de rôle ;
-- filtres utilisateur ;
-- toolbar ;
-- actions d’export visibles ;
-- impression ;
-- onglets internes du planning ;
-- séparation claire entre filtres métier, vues et actions.
-
-### Grilles, cellules et cards
-
-Sont inclus :
-
-- cellules de planning ;
-- colonnes ;
-- lignes ;
-- lignes horaires si présentes dans le repo ;
-- cards de shifts ;
-- cards de missions si elles existent réellement dans le repo ;
-- badges ;
-- états visuels ;
-- informations secondaires ;
-- horaires ;
-- équipes ;
-- véhicules ;
-- statut salarié ;
-- statut planning ;
-- absence ;
-- repos ;
-- congé ;
-- garde ;
-- conflit ;
-- alerte.
-
-### Panneaux et actions contextuelles
-
-Sont inclus :
-
-- panneaux de détail ;
-- panneaux d’affectation ;
-- drawer ;
-- panneau droit ;
-- détail shift / cellule ;
-- affectation personnel ;
-- affectation véhicule ;
-- affectation base ;
-- modification ;
-- annulation métier ;
-- actions principales ;
-- actions secondaires ;
-- actions groupées ;
-- sélection multiple si elle existe ou est déjà prévue dans l’existant.
-
-### Lisibilité et exploitation métier
-
-Sont inclus :
-
-- densité métier ;
-- lisibilité terrain ;
-- hiérarchie des informations ;
-- réduction de la charge cognitive ;
-- lecture rapide des shifts ;
-- lecture rapide des équipes ;
-- lecture rapide des véhicules ;
-- lecture rapide des horaires ;
-- distinction des statuts ;
-- cohérence des couleurs ;
-- cohérence des badges ;
-- cohérence mode clair ;
-- cohérence mode sombre ;
-- responsive minimal sans refonte mobile complète.
-
-## 3. Exclusions du bloc A25
-
-Le bloc A25 ne doit pas traiter :
-
-- refonte fonctionnelle complète du planning ;
-- nouveau moteur planning ;
-- nouveau modèle métier planning ;
-- autoschedule complet ;
-- matching complet ;
-- règles métier avancées ;
-- refonte RBAC ;
-- refonte permissions ;
-- refonte Prisma lourde ;
-- refonte API lourde ;
-- RH avancée ;
-- saisie réelle des heures travaillées ;
-- paie ;
-- primes ;
-- suppression physique généralisée ;
-- application mobile complète ;
-- préparation société pilote ;
-- refonte complète des workflows métier ;
-- nouvelle direction artistique.
-
-A25 peut améliorer l’ergonomie et la présentation d’un flux existant.
-
-A25 ne doit pas créer une nouvelle logique métier lourde.
-
-Toute donnée non disponible dans le repo doit être indiquée comme :
+Si une information n’est pas visible dans les images ou non confirmée dans le code, écrire exactement :
 
 ```txt
 INFORMATION NON FOURNIE — À CONFIRMER
 ```
 
-## 4. Références visuelles officielles
+---
 
-La direction artistique officielle pour A25 reste exclusivement :
+## 2. Changement de cadrage important pour A25
 
-```txt
-docs/1-master/MAQUETTE/MAQUETTE_DA
-```
+La page Planning ne doit plus être traitée comme une addition de zones corrigées séparément.
 
-La référence Planning détaillée du bloc A25 est :
+La cible visible est une page complète, unifiée, structurée autour de :
 
-```txt
-docs/1-master/REFERENCE_UI_UX_A25_PLANNING.md
-```
+- un header Planning sobre ;
+- une barre de filtres horizontale ;
+- des actions d’export secondaires ;
+- des onglets internes fins ;
+- une grande matrice Planning centrale ;
+- un panneau droit fixe de détail de cellule ;
+- une barre basse d’actions groupées ;
+- une hiérarchie métier claire : lecture globale → sélection → détail → action.
 
-L’image Planning détaillée de référence est :
+Le Planning A25 doit donc être évalué sur la fidélité globale à la maquette, pas uniquement sur la qualité technique d’un patch isolé.
 
-```txt
-docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2_INFO_DETAIL.png
-```
+---
 
-Cette image sert de base d’analyse visuelle principale pour A25.
+## 3. Ce que l’ancien document contenait déjà et ce qui est renforcé ici
 
-Elle contient plusieurs zones encadrées :
+### 3.1 Déjà présent dans la version précédente
 
-- encadré rouge : zone globale de la page Planning ;
-- encadré bleu : filtres, vue et exports ;
-- encadré orange : onglets internes du Planning ;
-- encadré violet : grille principale, cellules et actions groupées ;
-- encadré vert : panneau latéral de détail de cellule.
+L’ancien document contenait déjà :
 
-Règle d’autorité visuelle :
+- l’objectif général A25 ;
+- le périmètre UI/UX Planning ;
+- les exclusions fonctionnelles ;
+- la référence à `MAQUETTE_DA` ;
+- le principe `Visible / Déduction raisonnable / À vérifier dans le repo` ;
+- des sections sur header, filtres, toolbar, onglets, grille, panneaux, badges et actions ;
+- une recommandation de découpage A25.
 
-```txt
-MAQUETTE_DA > anciennes captures / anciennes descriptions
-```
+### 3.2 Limite de la version précédente
 
-Règle d’autorité fonctionnelle :
+La version précédente restait trop générale. Elle disait quoi regarder, mais pas assez précisément comment reproduire la page.
 
-```txt
-CODE > DOCUMENTATION
-```
+Elle ne donnait pas suffisamment :
 
-Conséquence : la maquette guide la cible UI/UX, mais l’intégration réelle doit rester compatible avec le code existant.
+- les coordonnées visuelles approximatives ;
+- les proportions réelles ;
+- les largeurs / hauteurs ;
+- les espacements ;
+- le rythme vertical ;
+- les détails précis des cellules ;
+- la logique de table salarié × semaines ;
+- la structure complète du panneau droit ;
+- la forme exacte de la barre d’actions groupées ;
+- les contraintes de reproduction proche à 99 %.
 
-## 5. Principes UI/UX attendus
+### 3.3 Renforcement apporté par cette V2
 
-Le bloc A25 doit rendre le planning :
+Cette version réécrit le document comme une spécification quasi exécutable :
 
-- plus pur ;
-- plus simple ;
-- plus lisible ;
-- plus exploitable métier ;
-- plus cohérent avec le reste de l’application ;
-- plus proche de `MAQUETTE_DA` ;
-- compatible avec le mode clair ;
-- compatible avec le mode sombre ;
-- sans casser les fonctionnalités stabilisées.
+- analyse pixel-level approximative ;
+- description détaillée des zones ;
+- dimensions et espacements approximatifs ;
+- couleurs visibles ou déductibles ;
+- composants React recommandés ;
+- classes CSS recommandées ;
+- critères de conformité visuelle ;
+- découpage Codex réaliste pour reconstruire la page.
 
-### Principes visuels
+---
 
-Le planning doit conserver l’esprit A24 :
+## 4. Lecture générale de la maquette
 
-- fond clair très sobre ;
-- cartes blanches ;
-- bordures fines ;
-- arrondis doux ;
-- bleu primaire pour les actions principales ;
-- textes foncés bien hiérarchisés ;
-- badges doux ;
-- densité métier maîtrisée ;
-- pictogrammes sobres ;
-- absence de surcharge décorative.
+### 4.1 Format de référence
 
-Le mode sombre doit être une déclinaison sobre de la même direction artistique, pas une nouvelle DA.
-
-### Principes d’ergonomie métier
-
-Le planning doit aider à lire rapidement :
-
-- qui travaille ;
-- quand ;
-- sur quel type de shift ;
-- avec quelle équipe ;
-- avec quel véhicule si l’information existe ;
-- sur quelle base / dépôt ;
-- avec quel statut ;
-- avec quelle alerte éventuelle ;
-- avec quelle action disponible.
-
-Le planning doit éviter de tout afficher au même niveau.
-
-La logique attendue est :
+Les images fournies ont une dimension d’environ :
 
 ```txt
-lecture globale → sélection → détail → action
+Largeur : 1586 px
+Hauteur : 992 px
 ```
 
-### Principes de densité
+La maquette est une vue desktop large. Aucune maquette mobile équivalente n’est visible.
 
-Le planning doit rester dense, car c’est un écran métier.
-
-Mais cette densité doit être organisée :
-
-- informations principales visibles dans la grille ;
-- informations secondaires dans les badges ou sous-libellés ;
-- détails complets dans un panneau latéral ou drawer ;
-- actions groupées dans une zone dédiée ;
-- alertes clairement distinguées.
-
-## 6. Analyse attendue de la maquette Planning
-
-Chaque session A25 doit distinguer clairement :
+Responsive mobile :
 
 ```txt
-Visible dans la maquette
-Déduction raisonnable
-À vérifier dans le repo
+INFORMATION NON FOURNIE — À CONFIRMER
 ```
 
-Aucune fonctionnalité non visible ou non vérifiée ne doit être présentée comme acquise.
+### 4.2 Nature exacte de la page Planning visible
 
-### 6.1 Header planning
+La maquette ne représente pas une grille calendrier classique jour par jour.
 
-#### Visible dans la maquette
+Elle représente une matrice synthétique :
 
-La page affiche :
+```txt
+Lignes = salariés
+Colonnes fixes = salarié / rôle / base / statut
+Colonnes temporelles = semaine 1 / semaine 2 / semaine 3 / semaine 4
+Panneau droit = détail de la cellule sélectionnée
+Barre basse = actions groupées sur une sélection multiple
+```
 
-- titre `Planning` ;
-- sous-titre `Vue globale des shifts, absences et affectations du personnel` ;
-- bouton principal `+ Ajouter un shift`.
+C’est le point le plus important pour la suite du bloc A25.
 
-Le bouton principal est bleu et placé dans la zone haute, avec une hiérarchie claire.
+Si le code reconstruit une page composée de grandes cards de shifts empilées ou d’un calendrier semaine classique, le rendu ne correspondra pas à la maquette.
 
-#### Déduction raisonnable
+### 4.3 Organisation macro
 
-Le header sert à poser le contexte et à donner accès à l’action principale.
+La page complète est organisée ainsi :
 
-L’action `Ajouter un shift` correspond probablement au flux d’ajout manuel d’un shift.
+```txt
+┌─────────────────────────┬──────────────────────────────────────────────┐
+│ Sidebar gauche          │ Topbar globale                               │
+│                         ├──────────────────────────────────────────────┤
+│ Navigation              │ Zone Planning                                │
+│                         │                                              │
+│                         │ Header Planning                              │
+│                         │ Filtres / vue / exports                      │
+│                         │ Onglets internes                             │
+│                         │ Grille salariés × semaines     Panneau droit │
+│                         │ Barre basse actions groupées                 │
+└─────────────────────────┴──────────────────────────────────────────────┘
+```
 
-#### À vérifier dans le repo
+---
 
-- existence du header planning actuel ;
-- emplacement actuel du bouton d’ajout ;
-- route ou modal utilisée pour ajouter un shift ;
-- permissions nécessaires pour afficher l’action ;
-- cohérence avec les composants A24 existants.
+## 5. Coordonnées et proportions générales
 
-### 6.2 Navigation temporelle
+Les coordonnées ci-dessous sont approximatives, basées sur l’image 1586 × 992.
 
-#### Visible dans la maquette
+Elles servent à guider l’intégration, pas à imposer une reproduction CSS au pixel strict.
 
-La période visible est `Mai 2024`.
+### 5.1 Shell global
 
-La grille affiche des semaines :
+| Zone | X approx. | Y approx. | Largeur approx. | Hauteur approx. | Commentaire |
+|---|---:|---:|---:|---:|---|
+| Sidebar | 0 | 0 | 262 px | 992 px | Navigation gauche existante |
+| Topbar | 262 px | 0 | 1324 px | 61–64 px | Barre supérieure globale |
+| Contenu Planning | 262 px | 61 px | 1317 px | 927 px | Encadré rouge dans l’image annotée |
 
-- `Semaine 1` ;
-- `Semaine 2` ;
-- `Semaine 3` ;
-- `Semaine 4`.
+### 5.2 Zones internes Planning
 
-Chaque semaine possède une plage de dates.
+| Zone | X approx. | Y approx. | Largeur approx. | Hauteur approx. | Couleur d’encadrement |
+|---|---:|---:|---:|---:|---|
+| Page Planning globale | 262 | 61 | 1317 | 927 | rouge |
+| Filtres / vue / exports | 289 | 170 | 1255 | 79 | bleu |
+| Onglets internes | 279 | 271 | 695 | 50 | orange |
+| Grille + barre bulk | 276 | 322 | 971 | 658 | violet |
+| Panneau détail droit | 1248 | 267 | 320 | 713 | vert |
 
-#### Déduction raisonnable
+### 5.3 Marges principales
 
-La maquette présente une lecture mensuelle structurée par semaines.
+| Élément | Valeur cible approximative |
+|---|---:|
+| Padding gauche de contenu après sidebar | 32 px |
+| Padding droit global | 24–32 px |
+| Espace topbar → titre | 24 px |
+| Titre → sous-titre | 8 px |
+| Sous-titre → toolbar | 24–28 px |
+| Toolbar → onglets | 20–24 px |
+| Onglets → grille | 8–12 px |
+| Grille → panneau droit | 16 px |
 
-La période sélectionnée pilote probablement toutes les colonnes de la grille.
+---
 
-#### À vérifier dans le repo
+## 6. Direction artistique globale
 
-- type réel de navigation actuelle ;
-- vue jour existante ;
-- vue semaine existante ;
-- vue mois existante ;
-- navigation mensuelle ;
-- gestion des mois à cinq semaines ;
-- cohérence des dates ;
-- conservation des filtres lors du changement de période.
+### 6.1 Ambiance générale visible
 
-### 6.3 Filtres
+La maquette est :
 
-#### Visible dans la maquette
+- blanche ;
+- légère ;
+- sobre ;
+- très propre ;
+- professionnelle ;
+- dense mais respirante ;
+- proche d’un SaaS métier santé / transport ;
+- non décorative ;
+- non “dashboard coloré”.
 
-Les filtres visibles sont :
+La page doit éviter :
 
-- `Période` ;
-- `Dépôt` ;
-- `Rôle` ;
-- `Utilisateur`.
+- les ombres lourdes ;
+- les fonds gris marqués ;
+- les bordures sombres ;
+- les gros boutons partout ;
+- les cartes épaisses ;
+- les contrastes agressifs ;
+- les couleurs saturées hors bleu primaire.
 
-Chaque filtre est présenté dans un bloc clair avec icône, libellé, valeur et chevron.
+### 6.2 Palette visible ou déductible
 
-#### Déduction raisonnable
+Les couleurs ci-dessous sont approximatives. Elles doivent être harmonisées avec les tokens existants A24 si présents.
 
-Les filtres servent à réduire la charge cognitive et à adapter le planning au besoin métier.
+| Usage | Couleur approximative | Commentaire |
+|---|---|---|
+| Fond général | `#FEFEFE` / `#F8FAFC` | Blanc très légèrement froid |
+| Surface carte | `#FFFFFF` | Table, toolbar, panneau droit |
+| Texte principal | `#071F44` | Bleu nuit très foncé |
+| Texte secondaire | `#64748B` / `#6B7890` | Gris bleuté |
+| Texte tertiaire | `#94A3B8` | Métadonnées, dates |
+| Bordure fine | `#E8EEF7` / `#EDF1F7` | Très discrète |
+| Bleu primaire | `#0A66FD` / `#1674FE` | Bouton principal, actif, sélection |
+| Bleu doux | `#EAF3FF` / `#EDF6FF` | Badges Ambulance, nav active |
+| Vert doux | `#EAF8F0` / `#EAF7F6` | Actif, VSL, absence OK |
+| Orange doux | `#FFF0DE` / `#FCE6CC` | Taxi, Congé |
+| Violet doux | `#F1E8FB` / `#EDE1F7` | Garde, week-end |
+| Gris doux | `#F3F5F8` | Repos |
+| Rouge doux | `#FEECEC` / `#FFF1F1` | Vider / danger discret |
+| Rouge texte | `#DC2626` / `#EF4444` | Icône et libellé danger |
 
-Le filtre dépôt permet probablement de limiter la vue à une base.
+### 6.3 Bordures
 
-Le filtre rôle permet probablement de limiter la vue à un type de personnel.
+La maquette utilise presque uniquement des bordures fines :
 
-Le filtre utilisateur permet probablement d’isoler un salarié.
+```css
+border: 1px solid #e8eef7;
+```
 
-#### À vérifier dans le repo
+Les bordures ne doivent pas créer un effet tableau Excel dur.
 
-- filtres déjà existants ;
-- filtres côté client ou côté API ;
-- données disponibles pour dépôt, rôle et utilisateur ;
-- comportement quand aucun résultat n’est disponible ;
-- persistance des filtres ;
-- cohérence avec les permissions planning.
+### 6.4 Arrondis
 
-### 6.4 Toolbar et exports
+Arrondis observés :
 
-#### Visible dans la maquette
+| Élément | Radius approximatif |
+|---|---:|
+| Bouton principal | 6–8 px |
+| Filter card | 8 px |
+| Export button | 8 px |
+| Table container | 8–10 px |
+| Cellule sélectionnée | 6 px |
+| Panneau droit | 10–12 px |
+| Pills / badges | 4–6 px |
+| Avatar rond | 999 px |
 
-La toolbar contient :
+### 6.5 Ombres
 
-- `Export PDF` ;
-- `Excel` ;
-- `CSV` ;
-- `Imprimer`.
+La maquette ne montre pas d’ombre forte.
 
-Ces actions sont séparées visuellement des filtres.
+Ombre acceptable :
 
-#### Déduction raisonnable
+```css
+box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+```
 
-Les exports s’appliquent probablement à la période et aux filtres actifs.
+Mais la plupart des surfaces peuvent se contenter de bordures fines.
 
-Ils sont secondaires par rapport à l’action principale `Ajouter un shift`.
+### 6.6 Typographie apparente
 
-#### À vérifier dans le repo
+Police exacte :
 
-- existence réelle des exports PDF ;
-- existence réelle des exports Excel ;
-- existence réelle des exports CSV ;
-- existence réelle de l’impression ;
-- permissions associées ;
-- données exportées ;
-- cohérence des exports avec les filtres actifs.
+```txt
+INFORMATION NON FOURNIE — À CONFIRMER
+```
 
-### 6.5 Onglets internes du Planning
+Style déductible : police sans-serif moderne, proche Inter / system UI.
 
-#### Visible dans la maquette
+Échelle typographique cible :
 
-Les onglets visibles sont :
+| Usage | Taille approx. | Poids | Couleur |
+|---|---:|---:|---|
+| Titre page `Planning` | 30–32 px | 700–800 | Bleu nuit |
+| Sous-titre page | 14 px | 400–500 | Gris bleuté |
+| Label filtre | 12 px | 500 | Gris bleuté |
+| Valeur filtre | 13–14 px | 500–600 | Bleu nuit |
+| Onglet | 14 px | 500–600 | Gris / bleu actif |
+| Header table | 12–13 px | 700 | Bleu nuit |
+| Nom salarié | 13–14 px | 700 | Bleu nuit |
+| Cellule secondaire | 12–13 px | 500 | Gris bleuté |
+| Badge shift | 12 px | 600 | Couleur type |
+| Panneau droit titre | 16 px | 700 | Bleu nuit |
+| Section panneau | 14 px | 700 | Bleu nuit |
+| Action bouton | 13–14 px | 600 | Variable |
 
-- `Planning manuel` ;
-- `Affectations` ;
-- `Autoschedule` ;
-- `Matching` ;
-- `Historique` ;
-- `Exports`.
+---
 
-L’onglet `Planning manuel` est actif.
+## 7. Sidebar gauche visible
 
-#### Déduction raisonnable
+La sidebar appartient au shell global mais conditionne la cohérence visuelle.
 
-La page Planning est structurée en sous-espaces.
+### 7.1 Visible dans l’image
 
-Les onglets permettent d’éviter de mélanger toutes les fonctions dans une seule zone.
+La sidebar contient :
 
-#### À vérifier dans le repo
+- logo ambulance ;
+- texte `Ambulance Manager` ;
+- badge `ALPHA` ;
+- navigation :
+  - Tableau de bord ;
+  - Planning ;
+  - Utilisateurs / RH ;
+  - Véhicules ;
+  - Templates ;
+  - Société ;
+  - Dépôts ;
+  - Onboarding ;
+  - Audit ;
+- bloc `Thème` ;
+- bloc utilisateur `Nathan A. / Admin`.
 
-- existence réelle des onglets ;
-- route ou état interne utilisé ;
-- contenu réel de chaque onglet ;
-- permissions par onglet ;
-- doublons éventuels avec d’autres pages ;
-- état réel d’Autoschedule et Matching ;
-- nécessité de masquer, désactiver ou réaligner certains onglets.
+L’item `Planning` est actif :
 
-### 6.6 Grille planning
+- fond bleu très pâle ;
+- icône bleue ;
+- texte bleu ;
+- radius doux ;
+- hauteur environ 48 px.
 
-#### Visible dans la maquette
+### 7.2 À reproduire côté page Planning
 
-La grille principale affiche des lignes salariés et des colonnes temporelles.
+La page Planning ne doit pas recréer la sidebar.
 
-Colonnes visibles :
+Mais elle doit respecter la même direction :
 
-- sélection ;
+- blancs propres ;
+- bleu actif identique ;
+- radius modérés ;
+- pictogrammes fins ;
+- aucune rupture de style.
+
+---
+
+## 8. Topbar visible
+
+### 8.1 Visible dans l’image
+
+Topbar horizontale, hauteur environ 60–64 px.
+
+À droite :
+
+- sélecteur société `SC Ambulances` ;
+- bouton thème soleil ;
+- bloc utilisateur `Nathan A. / Admin` ;
+- action `Déconnexion`.
+
+### 8.2 Interaction avec la page Planning
+
+Le contenu Planning commence sous cette topbar, avec un espace blanc propre.
+
+Le titre ne doit pas coller à la topbar.
+
+---
+
+## 9. Header Planning
+
+### 9.1 Visible dans l’image
+
+Le header contient :
+
+```txt
+Planning
+Vue globale des shifts, absences et affectations du personnel
+```
+
+À droite ou légèrement centré horizontalement dans la zone haute :
+
+```txt
++ Ajouter un shift
+```
+
+### 9.2 Coordonnées approximatives
+
+| Élément | X approx. | Y approx. | Taille approx. |
+|---|---:|---:|---:|
+| Titre `Planning` | 296 px | 86 px | 32 px |
+| Sous-titre | 296 px | 134 px | 14 px |
+| Bouton `Ajouter un shift` | 1010 px | 121 px | 145 × 40 px |
+
+### 9.3 Style du titre
+
+```css
+font-size: 32px;
+line-height: 1.15;
+font-weight: 700 / 800;
+color: #071f44;
+letter-spacing: -0.02em;
+```
+
+### 9.4 Style du sous-titre
+
+```css
+font-size: 14px;
+line-height: 1.45;
+font-weight: 400 / 500;
+color: #65758e;
+```
+
+### 9.5 Bouton principal
+
+Le bouton est visuellement très prioritaire.
+
+Cible :
+
+```css
+height: 40px;
+padding: 0 18px;
+border-radius: 7px;
+background: #0a66fd;
+color: white;
+font-size: 13px;
+font-weight: 600;
+display: inline-flex;
+align-items: center;
+gap: 10px;
+```
+
+Icône : `+`, fine, alignée verticalement.
+
+### 9.6 À ne pas faire
+
+- Ne pas placer plusieurs boutons principaux dans le header.
+- Ne pas transformer le bouton en gros bloc pleine largeur.
+- Ne pas mettre les exports au même niveau visuel que l’ajout de shift.
+
+---
+
+## 10. Barre filtres / vue / exports
+
+### 10.1 Zone visible
+
+Cette zone correspond à l’encadré bleu de l’image annotée.
+
+Elle est horizontale et se décompose en trois sous-zones :
+
+```txt
+[Filtres métier] [Bascule Personnel / Vue dépôt]          [Exports]
+```
+
+Elle ne doit pas devenir une pile verticale en desktop.
+
+### 10.2 Dimensions approximatives
+
+| Sous-zone | X approx. | Y approx. | Largeur approx. | Hauteur approx. |
+|---|---:|---:|---:|---:|
+| Barre complète | 289 | 170 | 1255 | 79 |
+| Filtres | 296 | 176 | 480 | 64 |
+| Toggle vue | 790 | 176 | 168 | 48 |
+| Exports | 1010 | 178 | 520 | 44 |
+
+### 10.3 Filtres visibles
+
+Filtres :
+
+```txt
+Période     Mai 2024
+Dépôt       Tous
+Rôle        Tous
+Utilisateur Tous
+```
+
+Chaque filtre est une carte blanche compacte.
+
+Cible approximative :
+
+```css
+height: 64px;
+min-width: 120px;
+padding: 12px 14px;
+border: 1px solid #e8eef7;
+border-radius: 8px;
+background: #fff;
+display: flex;
+flex-direction: column;
+justify-content: center;
+gap: 8px;
+```
+
+Structure interne :
+
+```txt
+Label gris petit
+[icône] Valeur [chevron]
+```
+
+Le label est en haut, plus petit.
+La valeur est en bas, avec icône à gauche et chevron à droite.
+
+### 10.4 Icônes filtres
+
+Icônes visibles ou déductibles :
+
+| Filtre | Icône visible/déductible |
+|---|---|
+| Période | calendrier |
+| Dépôt | bâtiment / dépôt |
+| Rôle | utilisateur / personne |
+| Utilisateur | utilisateur |
+
+Les icônes sont fines, gris bleuté, taille environ 16 px.
+
+### 10.5 Toggle Personnel / Vue dépôt
+
+Visible :
+
+```txt
+[Personnel] [Vue dépôt]
+```
+
+`Personnel` est actif.
+
+Cible :
+
+```css
+height: 48px;
+padding: 6px;
+border: 1px solid #e8eef7;
+border-radius: 8px;
+background: #f8fafc;
+display: flex;
+gap: 4px;
+```
+
+Option active :
+
+```css
+background: #ffffff;
+color: #1674fe;
+border: 1px solid #eaf3ff;
+box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+```
+
+Option inactive :
+
+```css
+background: transparent;
+color: #65758e;
+```
+
+### 10.6 Exports
+
+Actions visibles :
+
+```txt
+Export PDF
+Excel
+CSV
+Imprimer
+```
+
+Elles sont secondaires. Elles ne doivent pas concurrencer `Ajouter un shift`.
+
+Chaque action ressemble à un bouton blanc bordé :
+
+```css
+height: 44px;
+padding: 0 16px;
+border-radius: 7px;
+border: 1px solid #e8eef7;
+background: #fff;
+font-size: 13px;
+font-weight: 600;
+color: #1e2b4a;
+display: inline-flex;
+align-items: center;
+gap: 10px;
+```
+
+Largeurs approximatives :
+
+| Bouton | Largeur approx. |
+|---|---:|
+| Export PDF | 130 px |
+| Excel | 105 px |
+| CSV | 95 px |
+| Imprimer | 130 px |
+
+Icônes :
+
+| Action | Couleur icône visible |
+|---|---|
+| Export PDF | rouge |
+| Excel | vert |
+| CSV | gris/bleu |
+| Imprimer | gris/bleu |
+
+### 10.7 À ne pas faire
+
+- Ne pas afficher les exports comme boutons bleus.
+- Ne pas placer les exports sous la grille en desktop.
+- Ne pas mélanger filtres et exports sans séparation visuelle.
+- Ne pas rendre les filtres trop hauts.
+
+---
+
+## 11. Onglets internes Planning
+
+### 11.1 Visible dans l’image
+
+Onglets visibles :
+
+```txt
+Planning manuel
+Affectations
+Autoschedule
+Matching
+Historique
+Exports
+```
+
+L’onglet actif est `Planning manuel`.
+
+### 11.2 Dimensions et position
+
+| Élément | X approx. | Y approx. | Largeur approx. | Hauteur approx. |
+|---|---:|---:|---:|---:|
+| Zone onglets | 279 | 271 | 695 | 50 |
+| Ligne underline actif | 295 | 314 | 140 | 2–3 |
+
+### 11.3 Style cible
+
+La zone onglets est légère. Elle ne ressemble pas à des boutons cards.
+
+```css
+height: 48px;
+display: flex;
+align-items: flex-end;
+gap: 34px;
+border-bottom: 1px solid #edf1f7;
+```
+
+Onglet :
+
+```css
+height: 48px;
+display: inline-flex;
+align-items: center;
+font-size: 14px;
+font-weight: 500 / 600;
+color: #65758e;
+position: relative;
+```
+
+Onglet actif :
+
+```css
+color: #1674fe;
+```
+
+Underline actif :
+
+```css
+position: absolute;
+left: 0;
+right: 0;
+bottom: 0;
+height: 2px;
+background: #1674fe;
+border-radius: 999px;
+```
+
+### 11.4 Comportement attendu
+
+La maquette montre un seul contenu principal : `Planning manuel`.
+
+Les autres onglets existent visuellement mais leur contenu n’est pas visible.
+
+À vérifier dans le repo :
+
+- si les onglets affichent actuellement toutes les sections empilées ;
+- si les onglets changent réellement de contenu ;
+- si certains onglets doivent rester désactivés ;
+- si les onglets doivent être masqués selon permission.
+
+Toute logique non visible :
+
+```txt
+INFORMATION NON FOURNIE — À CONFIRMER
+```
+
+---
+
+## 12. Workspace principal
+
+### 12.1 Organisation cible
+
+Le cœur de la page est un layout à deux colonnes :
+
+```txt
+┌──────────────────────────────────────────────────┬──────────────────────┐
+│ Grille planning salariés × semaines              │ Panneau détail droit │
+│ + barre basse actions groupées                    │                      │
+└──────────────────────────────────────────────────┴──────────────────────┘
+```
+
+La grille occupe la majorité de la largeur.
+Le panneau droit est fixe, étroit, lisible.
+
+### 12.2 Dimensions approximatives
+
+| Zone | X approx. | Y approx. | Largeur approx. | Hauteur approx. |
+|---|---:|---:|---:|---:|
+| Grille + bulk | 276 | 322 | 971 | 658 |
+| Panneau droit | 1248 | 267 | 320 | 713 |
+| Gap grille / panneau | 12–16 | — | — | — |
+
+Important : le panneau droit commence plus haut que la table, à peu près aligné avec les onglets, tandis que la table commence sous les onglets.
+
+### 12.3 Implication de code
+
+Structure recommandée :
+
+```tsx
+<section className="planning-workspace">
+  <div className="planning-main-column">
+    <PlanningMatrix />
+    <PlanningBulkActionBar />
+  </div>
+  <PlanningCellDetailPanel />
+</section>
+```
+
+CSS cible :
+
+```css
+.planning-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 16px;
+  align-items: start;
+}
+```
+
+---
+
+## 13. Grille principale Planning
+
+### 13.1 Nature exacte
+
+La grille principale est une table métier.
+
+Elle n’est pas :
+
+- une liste de cards ;
+- une grille horaire jour ;
+- une vue calendrier 7 colonnes ;
+- une succession verticale de sections.
+
+Elle est :
+
+```txt
+une matrice salariés × semaines
+```
+
+### 13.2 Colonnes visibles
+
+Colonnes dans l’ordre :
+
+```txt
+Sélection
+Salarié
+Rôle
+Base
+Statut
+Semaine 1
+Semaine 2
+Semaine 3
+Semaine 4
+```
+
+### 13.3 Largeurs approximatives
+
+| Colonne | Largeur approx. | Commentaire |
+|---|---:|---|
+| Sélection | 44–48 px | Checkbox |
+| Salarié | 130–140 px | Avatar + nom |
+| Rôle | 105–115 px | Libellé métier |
+| Base | 95–105 px | Dépôt / siège |
+| Statut | 80–90 px | Badge |
+| Semaine 1 | 120–130 px | Badge planning |
+| Semaine 2 | 120–130 px | Badge planning |
+| Semaine 3 | 120–130 px | Badge planning |
+| Semaine 4 | 120–130 px | Badge planning |
+
+### 13.4 Table container
+
+Style :
+
+```css
+background: #ffffff;
+border: 1px solid #edf1f7;
+border-radius: 8px;
+overflow: hidden;
+```
+
+La table n’a pas d’ombre forte.
+
+### 13.5 Header table
+
+Hauteur approximative : 60–64 px.
+
+Style :
+
+```css
+background: #ffffff;
+border-bottom: 1px solid #edf1f7;
+font-size: 12px;
+font-weight: 700;
+color: #1e2b4a;
+```
+
+Les titres des semaines sont centrés.
+
+Chaque semaine possède deux lignes :
+
+```txt
+Semaine 1
+(29 avr. - 5 mai)
+```
+
+La ligne de dates est plus petite et plus claire.
+
+### 13.6 Lignes salariés
+
+Hauteur approximative : 64–66 px.
+
+Les lignes sont séparées par des bordures très fines.
+
+```css
+border-bottom: 1px solid #f0f3f8;
+```
+
+Les lignes alternées ne sont pas fortement colorées. Le fond reste blanc.
+
+### 13.7 Vertical separators
+
+Des séparateurs très légers existent entre les colonnes.
+
+Ils doivent rester subtils :
+
+```css
+border-left: 1px solid #f3f6fa;
+```
+
+À éviter : un tableau avec bordures grises épaisses.
+
+---
+
+## 14. Colonne sélection
+
+### 14.1 Visible
+
+La première colonne contient :
+
+- une checkbox dans le header ;
+- une checkbox par ligne ;
+- les deux premières lignes sont cochées ;
+- les autres lignes sont décochées.
+
+### 14.2 Style checkbox cochée
+
+```css
+width: 16px;
+height: 16px;
+border-radius: 4px;
+background: #1674fe;
+color: white;
+```
+
+### 14.3 Style checkbox non cochée
+
+```css
+width: 16px;
+height: 16px;
+border-radius: 4px;
+background: white;
+border: 1px solid #e5eaf3;
+```
+
+### 14.4 Comportement visible
+
+La sélection multiple est reliée à la barre basse `3 shifts sélectionnés`.
+
+Le nombre visible ne correspond pas seulement aux lignes cochées de l’image. Il indique le nombre de shifts sélectionnés, pas nécessairement le nombre de salariés.
+
+À vérifier dans le repo :
+
+- sélection par shift ;
+- sélection par cellule ;
+- sélection par ligne ;
+- cohérence du compteur.
+
+---
+
+## 15. Colonne salarié
+
+### 15.1 Visible
+
+Chaque salarié affiche :
+
+- avatar rond avec initiales ;
+- nom sur deux lignes si besoin.
+
+Exemples visibles :
+
+```txt
+NA Nathan Archenoul
+MB Marie Bernard
+LP Lucas Petit
+SC Sophie Chevalier
+AD Alexandre Dubois
+LM Laura Moreau
+JF Julien Faure
+CH Camille Henry
+```
+
+### 15.2 Avatar
+
+```css
+width: 32px;
+height: 32px;
+border-radius: 999px;
+background: #f1f5f9;
+color: #64748b;
+font-size: 12px;
+font-weight: 700;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+```
+
+### 15.3 Nom salarié
+
+```css
+font-size: 13px;
+font-weight: 700;
+line-height: 1.35;
+color: #1e2b4a;
+```
+
+Le nom peut passer sur deux lignes. La ligne doit rester stable et ne pas casser la hauteur.
+
+---
+
+## 16. Colonne rôle
+
+### 16.1 Visible
+
+Rôles visibles :
+
+```txt
+Ambulancier
+Ambulancière
+Assistante planification
+```
+
+### 16.2 Style
+
+```css
+font-size: 12px;
+font-weight: 500;
+line-height: 1.4;
+color: #64748b;
+```
+
+Le rôle peut passer sur deux lignes, exemple `Assistante planification`.
+
+---
+
+## 17. Colonne base
+
+### 17.1 Visible
+
+Bases visibles :
+
+```txt
+Dépôt Nord
+Dépôt Centre
+Dépôt Sud
+Siège
+```
+
+### 17.2 Style
+
+Même style que rôle :
+
+```css
+font-size: 12px;
+font-weight: 500;
+color: #64748b;
+```
+
+---
+
+## 18. Colonne statut
+
+### 18.1 Visible
+
+Statuts visibles :
+
+```txt
+Actif
+En congé
+```
+
+### 18.2 Badge Actif
+
+```css
+display: inline-flex;
+align-items: center;
+gap: 6px;
+height: 22px;
+padding: 0 9px;
+border-radius: 999px;
+background: #eaf8f0;
+color: #16804a;
+font-size: 12px;
+font-weight: 600;
+```
+
+Le badge contient un petit point vert.
+
+### 18.3 Badge En congé
+
+```css
+height: 22px;
+padding: 0 9px;
+border-radius: 999px;
+background: #eaf3ff;
+color: #1674fe;
+font-size: 12px;
+font-weight: 600;
+```
+
+---
+
+## 19. Colonnes semaines
+
+### 19.1 Semaines visibles
+
+```txt
+Semaine 1  (29 avr. - 5 mai)
+Semaine 2  (6 - 12 mai)
+Semaine 3  (13 - 19 mai)
+Semaine 4  (20 - 26 mai)
+```
+
+### 19.2 Style header semaine
+
+Titre :
+
+```css
+font-size: 12px;
+font-weight: 700;
+color: #1e2b4a;
+text-align: center;
+```
+
+Dates :
+
+```css
+font-size: 12px;
+font-weight: 500;
+color: #7c8aa3;
+text-align: center;
+margin-top: 4px;
+```
+
+### 19.3 Cellule semaine
+
+Chaque cellule est centrée horizontalement.
+
+Elle peut contenir :
+
+- un badge principal ;
+- un sous-libellé sous le badge ;
+- une bordure de sélection.
+
+Cellule normale :
+
+```css
+padding: 12px 14px;
+vertical-align: middle;
+text-align: center;
+```
+
+---
+
+## 20. Badges / pills planning
+
+### 20.1 Style commun
+
+Les cellules n’affichent pas de grandes cards. Elles affichent des badges compacts.
+
+```css
+min-width: 94px;
+height: 24px;
+padding: 0 12px;
+border-radius: 5px;
+font-size: 12px;
+font-weight: 700;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+```
+
+### 20.2 Variantes visibles
+
+| Type visible | Fond approximatif | Texte approximatif | Commentaire |
+|---|---|---|---|
+| Ambulance | `#E8F2FF` | `#1674FE` | Bleu doux |
+| VSL | `#EAF7F6` | `#0F8B8D` | Vert/bleu très doux |
+| Taxi | `#FFF0DE` | `#D97706` | Orange doux |
+| Garde A | `#F1E8FB` | `#7C3AED` | Violet doux |
+| Garde Nord | `#F1E8FB` | `#7C3AED` | Violet doux |
+| Garde Nuit | `#F1E8FB` | `#7C3AED` | Violet doux |
+| Repos | `#F3F5F8` | `#475569` | Gris doux |
+| Congé | `#FFF0DE` | `#EA580C` | Orange doux |
+
+### 20.3 Sous-libellés visibles
+
+Sous certains badges :
+
+```txt
+Samedi
+Dimanche
+JF 08/05
+```
+
+Style :
+
+```css
+margin-top: 6px;
+font-size: 11px;
+font-weight: 500;
+color: #7c8aa3;
+line-height: 1.2;
+```
+
+### 20.4 Cellule sélectionnée
+
+La cellule sélectionnée est :
+
+```txt
+Nathan Archenoul / Semaine 3 / Ambulance / Samedi
+```
+
+Elle est entourée par une bordure bleue.
+
+Style cible :
+
+```css
+border: 1.5px solid #1674fe;
+border-radius: 6px;
+background: #ffffff;
+box-shadow: 0 0 0 1px rgba(22, 116, 254, 0.04);
+```
+
+La sélection doit rester sobre.
+Elle ne doit pas remplir toute la cellule en bleu.
+
+---
+
+## 21. Données visibles dans la grille
+
+### 21.1 Lignes visibles
+
+| Salarié | Rôle | Base | Statut | S1 | S2 | S3 | S4 |
+|---|---|---|---|---|---|---|---|
+| Nathan Archenoul | Ambulancier | Dépôt Nord | Actif | Ambulance | Ambulance | Ambulance + Samedi | Garde Nord |
+| Marie Bernard | Ambulancière | Dépôt Centre | Actif | Taxi | VSL | Garde A | VSL |
+| Lucas Petit | Ambulancier | Dépôt Sud | Actif | VSL | Ambulance | VSL | Ambulance + Dimanche |
+| Sophie Chevalier | Ambulancière | Dépôt Nord | Actif | Taxi | Repos + Dimanche | Taxi + Samedi | Repos |
+| Alexandre Dubois | Ambulancier | Dépôt Centre | Actif | Ambulance | VSL | Ambulance + Samedi | Ambulance |
+| Laura Moreau | Assistante planification | Siège | Actif | Repos | Repos | Repos | Repos |
+| Julien Faure | Ambulancier | Dépôt Sud | En congé | Congé | Congé + JF 08/05 | Congé | Congé |
+| Camille Henry | Ambulancière | Dépôt Nord | Actif | VSL | Garde Nuit | VSL + Samedi | Taxi + Dimanche |
+
+Ces données sont visibles dans la maquette, mais ne doivent pas être hardcodées si le repo dispose de données réelles.
+
+---
+
+## 22. Panneau droit — Détail de la cellule
+
+### 22.1 Position et dimensions
+
+Le panneau droit correspond à l’encadré vert.
+
+| Élément | Valeur approx. |
+|---|---:|
+| X | 1248 px |
+| Y | 267 px |
+| Largeur | 320 px |
+| Hauteur | 713 px |
+
+Style général :
+
+```css
+background: #ffffff;
+border: 1px solid #e8eef7;
+border-radius: 10px / 12px;
+padding: 18px 20px;
+box-shadow: 0 12px 32px rgba(15, 23, 42, 0.04);
+```
+
+### 22.2 Rôle du panneau
+
+Le panneau affiche le détail de la cellule sélectionnée dans la grille.
+
+Il doit permettre de garder la grille compacte tout en montrant :
+
 - salarié ;
 - rôle ;
-- base ;
 - statut ;
-- semaine 1 ;
-- semaine 2 ;
-- semaine 3 ;
-- semaine 4.
-
-#### Déduction raisonnable
-
-La grille est pensée comme une matrice personnel / semaines.
-
-Elle permet une lecture rapide par salarié, rôle, base et période.
-
-#### À vérifier dans le repo
-
-- structure actuelle de la grille ;
-- présence d’une vue personnel ;
-- présence d’une vue dépôt ;
-- données disponibles pour rôle, base et statut ;
-- logique actuelle des colonnes ;
-- différence entre vue semaine réelle et vue mensuelle par semaines ;
-- performance avec beaucoup de salariés.
-
-### 6.7 Colonnes
-
-#### Visible dans la maquette
-
-Les colonnes identitaires sont à gauche :
-
-- salarié ;
-- rôle ;
-- base ;
-- statut.
-
-Les colonnes temporelles sont à droite :
-
-- semaine 1 ;
-- semaine 2 ;
-- semaine 3 ;
-- semaine 4.
-
-#### Déduction raisonnable
-
-Cette structure permet de conserver le contexte RH pendant la lecture temporelle.
-
-#### À vérifier dans le repo
-
-- possibilité technique de figer ou conserver lisibles les colonnes identitaires ;
-- largeur disponible ;
-- comportement responsive ;
-- gestion des noms longs ;
-- gestion des bases longues ;
-- gestion de rôles multiples si existants.
-
-### 6.8 Lignes horaires
-
-#### Visible dans la maquette
-
-Les lignes horaires ne sont pas visibles dans la grille principale de l’image `Planning_V1.2_INFO_DETAIL.png`.
-
-Les horaires apparaissent dans le panneau latéral de détail.
-
-#### Déduction raisonnable
-
-La maquette privilégie une grille synthétique, puis affiche les horaires précis dans le détail.
-
-#### À vérifier dans le repo
-
-- existence de lignes horaires en vue jour ;
-- existence de lignes horaires en vue semaine ;
-- besoin réel d’afficher les horaires directement dans la grille ;
-- risque de surcharge visuelle ;
-- cohérence avec la maquette.
-
-### 6.9 Cards de shifts / missions
-
-#### Visible dans la maquette
-
-Les cellules affichent des badges plutôt que de grandes cards détaillées.
-
-Badges visibles :
-
-- `Ambulance` ;
-- `VSL` ;
-- `Taxi` ;
-- `Garde A` ;
-- `Garde Nord` ;
-- `Garde Nuit` ;
-- `Repos` ;
-- `Congé`.
-
-Des informations secondaires apparaissent sous certains badges :
-
-- `Samedi` ;
-- `Dimanche` ;
-- `JF 08/05`.
-
-#### Déduction raisonnable
-
-La grille principale affiche un résumé.
-
-Le détail complet est déporté dans le panneau latéral.
-
-Le mot `mission` ne doit être utilisé que si une notion de mission existe réellement dans le repo.
-
-#### À vérifier dans le repo
-
-- modèles existants : shift, mission, affectation ;
-- données affichables dans les cellules ;
-- présence ou absence de courses patient ;
-- templates de shifts ;
-- couleurs de templates ;
-- gestion des shifts multiples dans une même cellule ;
-- affichage des week-ends et jours fériés.
-
-### 6.10 Badges et statuts
-
-#### Visible dans la maquette
-
-Badges visibles :
-
-- statut `Actif` ;
-- statut `En congé` ;
-- shift `Ambulance` ;
-- shift `VSL` ;
-- shift `Taxi` ;
-- shift `Garde` ;
-- état `Repos` ;
-- état `Congé`.
-
-Les couleurs sont douces :
-
-- bleu clair ;
-- vert clair ;
-- orange clair ;
-- violet clair ;
-- gris clair.
-
-#### Déduction raisonnable
-
-Les badges servent à distinguer rapidement les types de planning sans surcharger la page.
-
-#### À vérifier dans le repo
-
-- types de shifts existants ;
-- statuts existants ;
-- absences existantes ;
-- congés existants ;
-- repos existants ;
-- source des couleurs ;
-- accessibilité des contrastes ;
-- cohérence en mode sombre.
-
-### 6.11 Informations métier visibles
-
-#### Visible dans la maquette
-
-Informations visibles :
-
-- nom salarié ;
-- rôle ;
-- base ;
-- statut ;
-- type de shift ;
 - semaine ;
-- dates ;
-- jour spécifique ;
-- week-end ;
-- jour férié ;
-- absences ;
-- conflits / alertes.
-
-#### Déduction raisonnable
-
-La maquette cherche à prioriser les informations nécessaires à l’exploitation quotidienne.
-
-#### À vérifier dans le repo
-
-- données réellement disponibles ;
-- origine des absences ;
-- origine des conflits ;
-- origine des alertes ;
-- calcul des week-ends ;
-- calcul des jours fériés ;
-- cohérence avec les règles métier existantes.
-
-### 6.12 Panneau de détail
-
-#### Visible dans la maquette
-
-Un panneau droit affiche :
-
-- titre `Détail de la cellule` ;
-- bouton de fermeture ;
-- avatar initiales ;
-- nom salarié ;
-- rôle ;
-- statut ;
-- période ;
-- liste des affectations ;
-- horaires ;
+- plage de dates ;
+- affectations ;
 - absences ;
 - conflits / alertes ;
 - actions.
 
-#### Déduction raisonnable
+### 22.3 Header panneau
 
-Le panneau détail sert à afficher le contenu précis d’une cellule sélectionnée sans quitter la grille.
+Visible :
 
-Il permet de garder la grille compacte.
+```txt
+Détail de la cellule                       X
+```
 
-#### À vérifier dans le repo
+Style :
 
-- existence d’un panneau droit ;
-- existence d’un drawer ;
-- données disponibles pour le détail ;
-- relation entre cellule sélectionnée et panneau ;
-- actions disponibles ;
-- cohérence du nombre d’affectations ;
-- état vide ;
-- état erreur.
+```css
+font-size: 16px;
+font-weight: 700;
+color: #071f44;
+```
 
-### 6.13 Panneaux d’affectation
+Bouton fermer :
 
-#### Visible dans la maquette
+```css
+width: 28px;
+height: 28px;
+color: #94a3b8;
+background: transparent;
+border: 0;
+```
 
-La maquette montre des actions liées à l’affectation :
+### 22.4 Bloc identité salarié
 
-- `Affecter employé 1` ;
-- `Affecter employé 2` ;
-- `Affecter véhicule` ;
-- `Affecter base`.
+Visible :
 
-Elle ne montre pas le contenu détaillé d’un panneau d’affectation ouvert.
+```txt
+[NA] Nathan Archenoul        [• Actif]
+     Ambulancier
+```
 
-#### Déduction raisonnable
+Structure :
 
-La refonte A25 doit clarifier l’accès aux affectations existantes, mais ne doit pas inventer une nouvelle mécanique d’affectation.
+```txt
+Avatar initiales + nom/rôle + badge statut à droite
+```
 
-#### À vérifier dans le repo
+Le bloc est séparé du reste par une bordure basse fine.
 
-- flux actuel d’affectation ;
+Avatar : même style que dans la grille, taille environ 32 px.
+
+Nom :
+
+```css
+font-size: 13px;
+font-weight: 700;
+color: #1e2b4a;
+```
+
+Rôle :
+
+```css
+font-size: 12px;
+color: #64748b;
+```
+
+### 22.5 Bloc semaine
+
+Visible :
+
+```txt
+Semaine 3
+13 - 19 mai 2024
+```
+
+Style :
+
+```css
+.section-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #071f44;
+}
+.section-subtitle {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 4px;
+}
+```
+
+### 22.6 Bloc affectations
+
+Visible :
+
+```txt
+Affectations (5)
+```
+
+Puis une card interne listant plusieurs journées.
+
+L’image affiche :
+
+```txt
+Lun. 13 mai    Ambulance      07h - 19h
+Mar. 14 mai    Ambulance      07h - 19h
+Mer. 15 mai    Ambulance      15h - 23h
+Jeu. 16 mai    Ambulance      07h - 19h
+Ven. 17 mai    Ambulance      07h - 19h
+Sam. 18 mai    Ambulance      07h - 19h
+               Samedi (travail week-end)
+```
+
+Remarque : le titre indique `Affectations (5)` alors que six lignes journalières semblent visibles. Ne pas corriger arbitrairement en code sans comprendre la donnée réelle.
+
+À vérifier :
+
+```txt
+INFORMATION NON FOURNIE — À CONFIRMER
+```
+
+### 22.7 Style card affectations
+
+```css
+background: #ffffff;
+border: 1px solid #edf1f7;
+border-radius: 8px;
+padding: 8px 10px;
+```
+
+Chaque ligne :
+
+```css
+display: grid;
+grid-template-columns: 88px 1fr auto;
+align-items: center;
+gap: 8px;
+min-height: 28px;
+font-size: 12px;
+```
+
+Jour/date : gris.
+Type : bleu, semi-bold.
+Horaire : gris bleuté, aligné à droite.
+
+### 22.8 Tag week-end
+
+Visible :
+
+```txt
+Samedi (travail week-end)
+```
+
+Style :
+
+```css
+background: #f1e8fb;
+color: #7c3aed;
+border-radius: 999px;
+padding: 3px 8px;
+font-size: 11px;
+font-weight: 600;
+```
+
+### 22.9 Bloc absences
+
+Visible :
+
+```txt
+Absences 0
+Aucune absence
+```
+
+Le `0` est un petit badge vert pâle.
+
+Style section :
+
+```css
+margin-top: 16px;
+```
+
+`Aucune absence` : texte petit, gris.
+
+### 22.10 Bloc conflits / alertes
+
+Visible :
+
+```txt
+Conflits / alertes 0
+Aucun conflit détecté.
+```
+
+Le message est dans un bloc vert très pâle.
+
+```css
+background: #eaf8f0;
+color: #16804a;
+border: 1px solid rgba(22, 128, 74, 0.10);
+border-radius: 6px;
+padding: 10px 12px;
+font-size: 12px;
+font-weight: 500;
+```
+
+### 22.11 Bloc actions
+
+Visible :
+
+```txt
+Actions
+[ Voir détail      > ]
+[ Modifier         > ]
+[ + Ajouter shift  ]
+```
+
+Les deux premières actions sont secondaires.
+La dernière est principale.
+
+Action secondaire :
+
+```css
+height: 36px;
+border: 1px solid #edf1f7;
+border-radius: 7px;
+background: #ffffff;
+color: #475569;
+font-size: 13px;
+font-weight: 600;
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 0 12px;
+```
+
+Action primaire :
+
+```css
+height: 40px;
+border-radius: 7px;
+background: #1674fe;
+color: white;
+font-size: 13px;
+font-weight: 700;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 8px;
+```
+
+---
+
+## 23. Barre basse de sélection multiple
+
+### 23.1 Position
+
+La barre basse est située sous la table, dans la colonne principale, pas dans le panneau droit.
+
+Dimensions approximatives :
+
+| Élément | X approx. | Y approx. | Largeur approx. | Hauteur approx. |
+|---|---:|---:|---:|---:|
+| Barre bulk | 276 | 923 | 971 | 57 |
+
+### 23.2 Contenu visible
+
+```txt
+3 shifts sélectionnés
+Affecter employé 1
+Affecter employé 2
+Affecter véhicule
+Affecter base
+Vider
+```
+
+### 23.3 Style général
+
+```css
+height: 56px;
+display: grid;
+grid-template-columns: 160px repeat(4, 1fr) 96px;
+gap: 0;
+background: #ffffff;
+border: 1px solid #edf1f7;
+border-radius: 8px;
+overflow: hidden;
+```
+
+Chaque segment :
+
+```css
+border-left: 1px solid #edf1f7;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 8px;
+font-size: 13px;
+font-weight: 600;
+color: #65758e;
+```
+
+Le premier segment n’a pas de border-left.
+
+### 23.4 Résumé sélection
+
+```txt
+3 shifts sélectionnés
+```
+
+Style :
+
+```css
+font-size: 13px;
+font-weight: 700;
+color: #1e2b4a;
+justify-content: flex-start;
+padding-left: 16px;
+```
+
+Petit check visible à droite du texte.
+
+### 23.5 Actions d’affectation groupée
+
+Actions visibles :
+
+- affecter employé 1 ;
+- affecter employé 2 ;
+- affecter véhicule ;
+- affecter base.
+
+Elles sont secondaires : fond blanc, texte gris/bleuté, icône fine.
+
+### 23.6 Action `Vider`
+
+Visible :
+
+```txt
+Vider
+```
+
+Style :
+
+```css
+background: #fff1f1;
+color: #ef4444;
+```
+
+Icône corbeille rouge.
+
+Attention : pour éviter l’ambiguïté métier, le code peut utiliser :
+
+```txt
+Texte visible : Vider
+aria-label / title : Vider la sélection sans suppression
+infobulle ou helper discret : sans suppression
+```
+
+Ne pas transformer visuellement `Vider` en grosse action destructive dominante.
+
+---
+
+## 24. États visuels visibles et non visibles
+
+### 24.1 États visibles
+
+Visibles dans la maquette :
+
+- état actif salarié ;
+- état en congé ;
+- shifts typés ;
+- repos ;
+- congé ;
+- garde ;
+- cellule sélectionnée ;
+- sélection multiple ;
+- absence vide ;
+- conflit vide ;
+- action principale ;
+- actions secondaires ;
+- action danger discrète.
+
+### 24.2 États non visibles
+
+Non visibles dans les images :
+
+- chargement initial ;
+- erreur API ;
+- aucun salarié ;
+- aucun shift ;
+- aucun résultat filtre ;
+- permission refusée ;
+- formulaire ajout shift ;
+- formulaire modification ;
+- drawer d’affectation ouvert ;
+- modal annulation ;
+- vue jour ;
+- vue mois détaillée ;
+- mode sombre ;
+- responsive mobile.
+
+Pour ces éléments :
+
+```txt
+INFORMATION NON FOURNIE — À CONFIRMER
+```
+
+A25 peut les harmoniser si le repo les contient, mais ne doit pas inventer une maquette absente.
+
+---
+
+## 25. Mode sombre
+
+### 25.1 Visible dans les images
+
+Le mode sombre n’est pas visible dans les deux images Planning fournies.
+
+Donc :
+
+```txt
+INFORMATION NON FOURNIE — À CONFIRMER
+```
+
+### 25.2 Déduction raisonnable
+
+Le mode sombre doit rester cohérent avec le socle A24.
+
+Il ne doit pas être une inversion brutale.
+
+Déclinaison raisonnable :
+
+```css
+[data-theme="dark"] {
+  --planning-bg: #0f172a;
+  --planning-surface: #111827;
+  --planning-surface-soft: #162033;
+  --planning-border: #24324a;
+  --planning-text: #e5edf8;
+  --planning-muted: #94a3b8;
+  --planning-primary: #3b82f6;
+  --planning-primary-soft: rgba(59, 130, 246, 0.16);
+}
+```
+
+Badges en dark mode : utiliser des fonds translucides plutôt que des aplats clairs trop criards.
+
+---
+
+## 26. Tokens CSS recommandés
+
+Codex doit éviter de disperser les valeurs dans tout le fichier.
+
+Tokens recommandés :
+
+```css
+:root {
+  --planning-bg: #f8fafc;
+  --planning-surface: #ffffff;
+  --planning-surface-soft: #f9fbfe;
+  --planning-border: #e8eef7;
+  --planning-border-soft: #f0f3f8;
+  --planning-text: #071f44;
+  --planning-text-soft: #1e2b4a;
+  --planning-muted: #64748b;
+  --planning-muted-soft: #94a3b8;
+  --planning-primary: #1674fe;
+  --planning-primary-strong: #0a66fd;
+  --planning-primary-soft: #eaf3ff;
+  --planning-success-soft: #eaf8f0;
+  --planning-success-text: #16804a;
+  --planning-warning-soft: #fff0de;
+  --planning-warning-text: #d97706;
+  --planning-purple-soft: #f1e8fb;
+  --planning-purple-text: #7c3aed;
+  --planning-neutral-soft: #f3f5f8;
+  --planning-danger-soft: #fff1f1;
+  --planning-danger-text: #ef4444;
+  --planning-radius-sm: 5px;
+  --planning-radius-md: 8px;
+  --planning-radius-lg: 12px;
+}
+```
+
+---
+
+## 27. Structure React recommandée
+
+Pour atteindre la maquette, éviter un composant géant difficile à maintenir.
+
+Structure cible :
+
+```tsx
+<PlanningPage>
+  <PlanningPageHeader />
+  <PlanningToolbar />
+  <PlanningTabs />
+  <PlanningWorkspace>
+    <PlanningMainColumn>
+      <PlanningMatrix />
+      <PlanningBulkActionBar />
+    </PlanningMainColumn>
+    <PlanningCellDetailPanel />
+  </PlanningWorkspace>
+</PlanningPage>
+```
+
+Sous-composants recommandés :
+
+```txt
+PlanningPageHeader
+PlanningToolbar
+PlanningFilterCard
+PlanningViewToggle
+PlanningExportActions
+PlanningTabs
+PlanningMatrix
+PlanningMatrixHeader
+PlanningEmployeeRow
+PlanningEmployeeCell
+PlanningStatusBadge
+PlanningShiftPill
+PlanningCellDetailPanel
+PlanningDetailAssignments
+PlanningDetailEmptyState
+PlanningDetailActions
+PlanningBulkActionBar
+PlanningBulkActionButton
+```
+
+Si le code réel impose une structure différente, adapter sans perdre le rendu.
+
+---
+
+## 28. Classes CSS recommandées
+
+```txt
+planning-page
+planning-page__header
+planning-page__title
+planning-page__subtitle
+planning-page__primary-action
+
+planning-toolbar
+planning-toolbar__filters
+planning-filter-card
+planning-filter-card__label
+planning-filter-card__value
+planning-view-toggle
+planning-view-toggle__option
+planning-view-toggle__option--active
+planning-export-actions
+planning-export-button
+
+planning-tabs
+planning-tab
+planning-tab--active
+
+planning-workspace
+planning-main-column
+planning-matrix-card
+planning-matrix
+planning-matrix__head
+planning-matrix__row
+planning-matrix__cell
+planning-matrix__cell--selected
+planning-matrix__week-label
+planning-matrix__week-dates
+
+planning-person
+planning-person__avatar
+planning-person__name
+planning-person__meta
+planning-status-badge
+planning-status-badge--active
+planning-status-badge--leave
+
+planning-shift-pill
+planning-shift-pill--ambulance
+planning-shift-pill--vsl
+planning-shift-pill--taxi
+planning-shift-pill--garde
+planning-shift-pill--repos
+planning-shift-pill--conge
+planning-shift-subtext
+
+planning-detail-panel
+planning-detail-panel__header
+planning-detail-panel__close
+planning-detail-panel__person
+planning-detail-panel__section
+planning-detail-panel__section-title
+planning-detail-panel__assignments
+planning-detail-panel__assignment-row
+planning-detail-panel__empty
+planning-detail-panel__success
+planning-detail-panel__actions
+planning-detail-action
+planning-detail-action--secondary
+planning-detail-action--primary
+
+planning-bulk-bar
+planning-bulk-bar__summary
+planning-bulk-bar__action
+planning-bulk-bar__action--danger
+```
+
+---
+
+## 29. Ce que Codex doit absolument éviter
+
+### 29.1 Éviter une fausse refonte
+
+Ne pas se contenter de :
+
+- changer quelques couleurs ;
+- arrondir deux boutons ;
+- ajouter des borders ;
+- modifier seulement les panneaux ;
+- déplacer une action sans refaire la structure.
+
+A25 vise une page entière proche de la maquette.
+
+### 29.2 Éviter une mauvaise structure
+
+Ne pas produire :
+
+- une page verticale trop longue ;
+- toutes les sections affichées les unes sous les autres ;
+- une grille jour/semaine si la maquette demande une matrice personnel × semaines ;
+- des cards de shifts trop grosses dans la grille ;
+- un panneau droit transformé en modal plein écran ;
+- une barre d’actions groupées intégrée dans le panneau droit.
+
+### 29.3 Éviter les inventions métier
+
+Ne pas créer :
+
+- nouveau moteur planning ;
+- nouveau modèle d’affectation ;
+- nouvelle API lourde ;
+- nouveau RBAC ;
+- nouveau Prisma ;
+- nouvelles règles autoschedule ;
+- nouvelles règles matching ;
+- suppression physique généralisée.
+
+---
+
+## 30. Critères de conformité visuelle 99 %
+
+Une correction A25 est conforme visuellement si :
+
+1. Le header ressemble à l’image : titre, sous-titre, bouton principal bleu.
+2. Les filtres sont alignés horizontalement en petites cartes blanches.
+3. Le toggle `Personnel / Vue dépôt` est compact et intégré.
+4. Les exports sont des boutons secondaires blancs, à droite.
+5. Les onglets sont fins, avec underline bleu pour l’actif.
+6. La grille principale est une matrice salariés × semaines.
+7. Les colonnes visibles correspondent à la maquette.
+8. Les lignes salariés utilisent avatar + nom + rôle + base + statut.
+9. Les cellules semaines affichent des pills compactes, pas des grandes cards.
+10. Les couleurs de pills restent douces.
+11. La cellule sélectionnée a une bordure bleue sobre.
+12. Le panneau droit est fixe, blanc, arrondi, étroit.
+13. Le panneau droit affiche l’identité, la semaine, les affectations, absences, conflits et actions.
+14. Les actions du panneau respectent la hiérarchie secondaire / primaire.
+15. La barre basse d’actions groupées est horizontale, sous la grille.
+16. L’action `Vider` est rouge douce, non dominante.
+17. Les espacements sont proches de la maquette.
+18. Les bordures sont fines.
+19. Les ombres sont absentes ou très discrètes.
+20. La page n’introduit pas de nouvelle direction artistique.
+
+---
+
+## 31. Critères fonctionnels à ne pas casser
+
+Même si la priorité est visuelle, les sessions A25 ne doivent pas casser :
+
+- auth ;
+- session utilisateur ;
+- multi-tenant ;
+- permissions planning ;
+- ajout shift ;
+- modification shift ;
+- annulation métier ;
 - affectation employé 1 ;
 - affectation employé 2 ;
 - affectation véhicule ;
 - affectation base ;
-- contraintes existantes ;
-- permissions ;
-- erreurs possibles ;
-- comportement après affectation.
-
-### 6.14 Actions principales
-
-#### Visible dans la maquette
-
-Action principale visible :
-
-- `+ Ajouter un shift`.
-
-Elle existe dans le header et dans le panneau détail.
-
-#### Déduction raisonnable
-
-L’ajout depuis le header est probablement global.
-
-L’ajout depuis le panneau détail est probablement contextualisé à la cellule sélectionnée.
-
-#### À vérifier dans le repo
-
-- différence entre ajout global et ajout contextualisé ;
-- permissions ;
-- modal ou route utilisée ;
-- préremplissage éventuel ;
-- validation des données ;
-- traçabilité après publication.
-
-### 6.15 Actions secondaires
-
-#### Visible dans la maquette
-
-Actions secondaires visibles :
-
-- `Voir détail` ;
-- `Modifier` ;
-- `Affecter employé 1` ;
-- `Affecter employé 2` ;
-- `Affecter véhicule` ;
-- `Affecter base` ;
-- `Vider`.
-
-#### Déduction raisonnable
-
-Les actions secondaires doivent rester accessibles mais moins dominantes que l’action principale.
-
-L’action `Vider` doit être traitée avec prudence car elle peut être destructive ou assimilée à une désaffectation.
-
-#### À vérifier dans le repo
-
-- signification exacte de `Vider` ;
-- action de suppression, annulation ou désaffectation ;
-- confirmations existantes ;
-- traçabilité ;
-- droits nécessaires ;
-- non-régression sur les flux stabilisés.
-
-### 6.16 États vides
-
-#### Visible dans la maquette
-
-Le panneau détail affiche :
-
-- `Aucune absence` ;
-- `Aucun conflit détecté`.
-
-#### Déduction raisonnable
-
-Les états vides doivent être explicites et rassurants.
-
-#### À vérifier dans le repo
-
-- état sans shift ;
-- état sans salarié ;
-- état sans véhicule ;
-- état sans base ;
-- état sans résultat après filtre ;
-- état sans permission ;
-- affichage clair sans casser la grille.
-
-### 6.17 États de chargement
-
-#### Visible dans la maquette
-
-Aucun état de chargement n’est visible.
-
-#### Déduction raisonnable
-
-A25 doit conserver ou améliorer les états de chargement existants sans inventer un nouveau système complexe.
-
-#### À vérifier dans le repo
-
-- chargement initial planning ;
-- chargement filtres ;
-- chargement après changement de période ;
-- chargement panneau détail ;
-- chargement action d’affectation ;
-- skeleton ou spinner existant.
-
-### 6.18 États d’erreur
-
-#### Visible dans la maquette
-
-Aucun état d’erreur n’est visible.
-
-#### Déduction raisonnable
-
-Les erreurs doivent rester cohérentes avec le socle UI A24.
-
-#### À vérifier dans le repo
-
-- erreurs API ;
-- erreurs permission ;
-- erreurs d’affectation ;
-- erreurs d’export ;
-- erreurs de modification ;
-- erreurs d’annulation ;
-- affichage des messages ;
-- cohérence avec les conventions API.
-
-### 6.19 Responsive minimal
-
-#### Visible dans la maquette
-
-La maquette visible est desktop.
-
-#### Déduction raisonnable
-
-Le desktop est prioritaire pour A25.
-
-Le responsive minimal doit éviter les grosses cassures, mais ne doit pas devenir une refonte mobile complète.
-
-#### À vérifier dans le repo
-
-- comportement sur largeur intermédiaire ;
-- débordement horizontal ;
-- scroll table ;
-- lisibilité du panneau droit ;
-- comportement des filtres ;
-- accessibilité de la toolbar ;
-- limites sur mobile.
-
-## 7. Critères de conformité A25
-
-Une session A25 peut être considérée conforme uniquement si les critères suivants sont contrôlés.
-
-### Conformité visuelle
-
-- la page reste alignée avec `MAQUETTE_DA` ;
-- aucune nouvelle direction artistique n’est introduite ;
-- le planning est visuellement plus proche de `Planning_V1.2_INFO_DETAIL.png` ;
-- la structure générale est plus claire ;
-- les espacements sont cohérents ;
-- les bordures sont sobres ;
-- les arrondis sont cohérents ;
-- les badges sont lisibles ;
-- les icônes sont cohérentes.
-
-### Lisibilité des vues
-
-- la vue jour est lisible si elle existe ;
-- la vue semaine est lisible si elle existe ;
-- la vue mois est lisible si elle existe ;
-- la navigation entre périodes est compréhensible ;
-- les colonnes et lignes sont lisibles ;
-- les horaires sont lisibles ;
-- les informations secondaires ne saturent pas la grille.
-
-### Cohérence header / filtres / toolbar
-
-- le header est clair ;
-- l’action principale est identifiable ;
-- les filtres sont regroupés ;
-- les exports sont séparés ;
-- les onglets sont lisibles ;
-- les états actifs sont visibles.
-
-### Clarté des cards et cellules
-
-- les shifts sont distinguables ;
-- les absences sont distinguables ;
-- les repos sont distinguables ;
-- les congés sont distinguables ;
-- les week-ends ou jours fériés sont signalés si disponibles ;
-- les couleurs restent douces et cohérentes ;
-- les cellules sélectionnées sont visibles.
-
-### Distinction équipes / véhicules
-
-- les équipes sont lisibles si la donnée existe ;
-- les véhicules sont lisibles si la donnée existe ;
-- l’absence de donnée véhicule ne doit pas être masquée par une fausse information ;
-- toute information manquante doit être indiquée comme à confirmer.
-
-### Panneaux de détail / affectation
-
-- le panneau de détail est lisible ;
-- le panneau d’affectation est clair si présent ;
-- les actions sont hiérarchisées ;
-- les informations dangereuses sont confirmées ou clairement signalées ;
-- la logique existante n’est pas remplacée par une nouvelle logique lourde.
-
-### Mode clair / mode sombre
-
-- le mode clair est lisible ;
-- le mode sombre est lisible ;
-- les contrastes sont suffisants ;
-- les badges restent compréhensibles ;
-- les bordures restent visibles ;
-- le planning reste cohérent avec le socle A24.
-
-### Non-régression
-
-- pas de régression sur les permissions planning ;
-- pas de régression sur l’ajout de shift ;
-- pas de régression sur la modification ;
-- pas de régression sur l’annulation métier ;
-- pas de régression sur les exports ;
-- pas de régression sur l’autoschedule existant ;
-- pas de régression sur le matching existant ;
-- pas de changement Prisma / API / RBAC lourd sans justification explicite.
-
-## 8. Points à vérifier dans le repo
-
-Les sessions A25 devront comparer la maquette avec le repo réel sur les points suivants.
-
-### Structure actuelle de la page planning
-
-À vérifier :
-
-- route planning ;
-- composant principal ;
-- composants enfants ;
-- structure client / serveur ;
-- état actuel jour / semaine / mois ;
-- structure des onglets ;
-- position des filtres ;
-- position des exports ;
-- position des actions.
-
-### Composants planning existants
-
-À vérifier :
-
-- grille planning ;
-- cards shifts ;
-- badges ;
-- drawer ;
-- panneau droit ;
-- modales ;
-- filtres ;
-- toolbar ;
-- exports ;
-- sélection multiple ;
-- actions bulk ;
-- états vides ;
-- états chargement ;
-- états erreur.
-
-### Composants UI hérités du socle A24
-
-À vérifier :
-
-- PageHeader ;
-- boutons ;
-- cards ;
-- badges ;
-- table ;
-- filter bar ;
-- drawer ;
-- empty state ;
-- error state ;
-- tokens clair/sombre ;
-- icônes génériques ;
-- composants partagés réutilisables.
-
-### Données réellement disponibles
-
-À vérifier :
-
-- salariés ;
-- rôles ;
-- bases / dépôts ;
-- statuts ;
-- shifts ;
-- templates ;
-- affectations ;
-- véhicules ;
-- absences ;
-- indisponibilités ;
-- conflits ;
-- alertes ;
-- historique ;
-- exports ;
-- permissions.
-
-### Vues jour / semaine / mois existantes
-
-À vérifier :
-
-- vue jour réellement disponible ;
-- vue semaine réellement disponible ;
-- vue mois réellement disponible ;
-- comportement interactif ;
-- navigation ;
-- cohérence visuelle ;
-- limitations connues ;
-- responsive.
-
-### Filtres existants
-
-À vérifier :
-
-- période ;
-- dépôt ;
-- rôle ;
-- utilisateur ;
-- vue personnel ;
-- vue dépôt ;
-- filtres côté client ;
-- filtres côté serveur ;
-- interactions avec exports ;
-- interactions avec permissions.
-
-### Actions existantes
-
-À vérifier :
-
-- ajouter shift ;
-- voir détail ;
-- modifier ;
-- annuler ;
-- vider ;
-- affecter employé 1 ;
-- affecter employé 2 ;
-- affecter véhicule ;
-- affecter base ;
-- exporter PDF ;
-- exporter Excel ;
-- exporter CSV ;
-- imprimer.
-
-### Panneaux existants
-
-À vérifier :
-
-- panneau détail cellule ;
-- panneau détail shift ;
-- drawer d’affectation ;
-- modal d’ajout ;
-- modal de modification ;
-- panneau erreurs ;
-- panneau historique ;
-- panneau autoschedule ;
-- panneau matching.
-
-### Dépendances fonctionnelles sensibles
-
-À protéger :
-
-- permissions planning ;
-- session utilisateur ;
-- multi-tenant ;
-- cloisonnement société ;
-- affectations existantes ;
+- sélection multiple si présente ;
+- exports PDF / Excel / CSV / impression si présents ;
 - autoschedule existant ;
 - matching existant ;
-- exports existants ;
-- audit / historique ;
-- validation serveur ;
-- conventions API.
+- historique existant ;
+- audit existant.
 
-### Risques de régression
-
-Risques principaux :
-
-- rupture des permissions ;
-- affichage d’actions non autorisées ;
-- perte d’une action existante ;
-- perte d’un export ;
-- perte de lisibilité ;
-- surcharge visuelle ;
-- mode sombre illisible ;
-- confusion entre absence, congé et repos ;
-- confusion entre shift et mission ;
-- incohérence entre maquette et données réelles ;
-- faux affichage de véhicules ou équipes non disponibles ;
-- modification fonctionnelle involontaire.
-
-### Écarts entre maquette et implémentation réelle
-
-Tout écart doit être classé :
+Toute action non disponible dans le repo mais visible dans la maquette doit être classée :
 
 ```txt
-CONFORME
-NON CONFORME
-INCOMPLET
 INFORMATION NON FOURNIE — À CONFIRMER
 ```
 
-## 9. Recommandations de découpage A25
+---
 
-Le découpage recommandé du bloc A25 est le suivant.
+## 32. Plan Codex recommandé pour la suite A25
 
-### A25-PLAN-UI-01 — AUDIT
+Le bloc A25 ne doit pas repartir en micro-corrections.
 
-Objectif :
+La suite doit être découpée en sessions centrées sur la reproduction complète.
 
-- auditer le planning réel ;
-- comparer avec `MAQUETTE_DA` ;
-- comparer avec `REFERENCE_UI_UX_A25_PLANNING.md` ;
-- produire des captures avant ;
-- cartographier les écarts ;
-- classer les risques.
+### A25-PLAN-UI-06 — CADRAGE DOCUMENTAIRE GLOBAL
 
-### A25-PLAN-UI-02 — CORRECTION+COMPLÉTION
+Type : `AUDIT+CADRAGE`
 
 Objectif :
 
-- réaligner la structure générale ;
-- header ;
-- filtres ;
-- toolbar ;
-- onglets ;
-- cartes globales ;
-- organisation générale ;
-- cohérence avec le socle A24.
+- intégrer ce document comme référence officielle ;
+- vérifier que les images sont bien présentes dans `MAQUETTE_DA` ;
+- lister les écarts majeurs du repo actuel avec cette cible ;
+- produire aucun patch UI lourd.
 
-### A25-PLAN-UI-03 — CORRECTION+COMPLÉTION
-
-Objectif :
-
-- réaligner les vues jour et semaine ;
-- grilles ;
-- lignes horaires si présentes ;
-- cellules ;
-- cards ;
-- badges ;
-- équipes ;
-- véhicules ;
-- horaires ;
-- lisibilité métier.
-
-### A25-PLAN-UI-04 — CORRECTION+COMPLÉTION
-
-Objectif :
-
-- réaligner la vue mois ;
-- structure mensuelle ;
-- cellules ;
-- indicateurs ;
-- résumés ;
-- navigation ;
-- densité.
-
-### A25-PLAN-UI-05 — CORRECTION+COMPLÉTION
-
-Objectif :
-
-- réaligner les panneaux d’action ;
-- panneau droit ;
-- drawer ;
-- détail cellule ;
-- affectations ;
-- modification ;
-- annulation ;
-- actions groupées.
-
-### A25-PLAN-UI-06 — VALIDATION
-
-Objectif :
-
-- valider globalement le planning UI/UX ;
-- contrôler les vues jour / semaine / mois ;
-- contrôler le mode clair ;
-- contrôler le mode sombre ;
-- contrôler la non-régression ;
-- produire les captures après.
-
-### CLOTURE_A25 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION
-
-Objectif :
-
-- vérifier tout le bloc ;
-- vérifier les patchs ;
-- vérifier les preuves ;
-- vérifier la documentation ;
-- vérifier les captures ;
-- rendre le verdict de clôture définitive.
-
-## 10. Limites à respecter
-
-A25 est une refonte UI/UX et ergonomie métier.
-
-A25 n’est pas une refonte fonctionnelle lourde.
-
-A25 ne doit pas inventer un nouveau planning.
-
-A25 doit améliorer l’existant de façon réaliste.
-
-A25 doit rester compatible avec le repo réel.
-
-A25 doit s’appuyer sur :
+Livrable :
 
 ```txt
-docs/1-master/MAQUETTE/MAQUETTE_DA
 docs/1-master/REFERENCE_UI_UX_A25_PLANNING.md
-docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2_INFO_DETAIL.png
 ```
 
-Toute session A25 doit appliquer les règles suivantes :
+DoD :
 
 ```txt
-Ne pas créer une nouvelle DA.
-Ne pas ajouter de fonctionnalité métier lourde.
-Ne pas refaire le moteur planning.
-Ne pas refaire autoschedule.
-Ne pas refaire matching.
-Ne pas modifier RBAC sans nécessité stricte.
-Ne pas modifier Prisma sans nécessité stricte.
-Ne pas masquer une donnée métier existante.
-Ne pas afficher une donnée non disponible comme si elle était réelle.
-Toute information non prouvée : INFORMATION NON FOURNIE — À CONFIRMER.
+La cible Planning 99 % maquette est documentée et exploitable par Codex.
 ```
+
+### A25-PLAN-UI-07 — STRUCTURE GLOBALE PAGE PLANNING
+
+Type : `CORRECTION+COMPLÉTION`
+
+Objectif :
+
+- reconstruire le layout global ;
+- header ;
+- toolbar filtres / vue / exports ;
+- onglets ;
+- workspace deux colonnes ;
+- préparation table + panneau.
+
+DoD :
+
+```txt
+La page possède la structure globale visible dans Planning_V1.2.
+```
+
+### A25-PLAN-UI-08 — MATRICE SALARIÉS × SEMAINES
+
+Type : `CORRECTION+COMPLÉTION`
+
+Objectif :
+
+- reconstruire la grille principale ;
+- colonnes ;
+- lignes ;
+- avatars ;
+- badges statuts ;
+- pills shifts ;
+- sélection cellule.
+
+DoD :
+
+```txt
+La grille centrale ressemble à la matrice de la maquette.
+```
+
+### A25-PLAN-UI-09 — PANNEAU DROIT ET BARRE BULK
+
+Type : `CORRECTION+COMPLÉTION`
+
+Objectif :
+
+- reproduire le panneau détail cellule ;
+- reproduire les sections affectations / absences / alertes / actions ;
+- reproduire la barre basse de sélection multiple.
+
+DoD :
+
+```txt
+Le panneau droit et la barre bulk ressemblent à la maquette.
+```
+
+### A25-PLAN-UI-10 — FINITIONS VISUELLES ET MODE SOMBRE
+
+Type : `CORRECTION+COMPLÉTION`
+
+Objectif :
+
+- harmoniser les tokens ;
+- régler les espacements ;
+- vérifier contrastes ;
+- traiter mode sombre dans la limite de ce qui existe ;
+- éviter les régressions.
+
+DoD :
+
+```txt
+La page est visuellement homogène, lisible, et cohérente en clair/sombre.
+```
+
+### A25-PLAN-UI-11 — VALIDATION VISUELLE GLOBALE
+
+Type : `VALIDATION`
+
+Objectif :
+
+- comparer capture après avec Planning_V1.2 ;
+- vérifier la fidélité visuelle ;
+- vérifier que Nathan valide le rendu ;
+- vérifier lint/build ;
+- vérifier absence de dérive métier.
+
+DoD :
+
+```txt
+La page Planning est validée visuellement comme suffisamment fidèle à la maquette.
+```
+
+### CLOTURE_A25
+
+Type : `VALIDATION`
+
+Objectif :
+
+- vérifier patchs ;
+- vérifier docs ;
+- vérifier preuves ;
+- vérifier validation visuelle ;
+- rendre le verdict final.
+
+Verdict obligatoire :
+
+```txt
+BLOC A25 CLÔTURABLE DÉFINITIVEMENT : OUI
+```
+
+ou
+
+```txt
+BLOC A25 CLÔTURABLE DÉFINITIVEMENT : NON
+```
+
+---
+
+## 33. Checklist de contrôle visuel manuel final
+
+À utiliser après intégration code.
+
+### Header
+
+- [ ] Le titre `Planning` a la bonne taille et le bon poids.
+- [ ] Le sous-titre est gris bleuté, discret.
+- [ ] `Ajouter un shift` est le seul bouton principal du header.
+- [ ] Le bouton est bleu, compact, aligné comme la maquette.
+
+### Filtres / exports
+
+- [ ] Les filtres sont en ligne.
+- [ ] Chaque filtre est une petite carte blanche.
+- [ ] Les labels et valeurs sont hiérarchisés.
+- [ ] Le toggle `Personnel / Vue dépôt` ressemble à la maquette.
+- [ ] Les exports sont à droite.
+- [ ] Les exports sont secondaires, blancs, bordés.
+
+### Onglets
+
+- [ ] Les onglets sont fins, horizontaux.
+- [ ] `Planning manuel` est actif avec underline bleu.
+- [ ] Les onglets ne sont pas de gros boutons.
+
+### Grille
+
+- [ ] La grille est une matrice salariés × semaines.
+- [ ] Les colonnes correspondent à la maquette.
+- [ ] Les lignes ont une hauteur proche.
+- [ ] Les bordures sont fines.
+- [ ] Les avatars sont ronds et sobres.
+- [ ] Les statuts sont en badges doux.
+- [ ] Les pills de shifts sont compactes.
+- [ ] Les couleurs des pills sont douces.
+- [ ] La cellule sélectionnée a une bordure bleue sobre.
+
+### Panneau droit
+
+- [ ] Le panneau est à droite, blanc, arrondi.
+- [ ] Le panneau n’est pas une modale.
+- [ ] Le header `Détail de la cellule` est propre.
+- [ ] L’identité salarié est claire.
+- [ ] La semaine sélectionnée est visible.
+- [ ] Les affectations sont dans une card interne.
+- [ ] Les absences et conflits sont lisibles.
+- [ ] Les actions sont hiérarchisées.
+
+### Barre bulk
+
+- [ ] La barre est sous la grille.
+- [ ] Elle est horizontale.
+- [ ] `3 shifts sélectionnés` est à gauche.
+- [ ] Les affectations groupées sont secondaires.
+- [ ] `Vider` est rouge doux, non dominant.
+
+### Fidélité globale
+
+- [ ] La page ressemble clairement à `Planning_V1.2.png`.
+- [ ] La page ne ressemble plus à une ancienne page corrigée par morceaux.
+- [ ] La densité est professionnelle.
+- [ ] Les espacements sont réguliers.
+- [ ] Les bordures et arrondis sont cohérents.
+- [ ] Le rendu est aligné avec `MAQUETTE_DA`.
+
+---
+
+## 34. Verdict d’usage du document
+
+Ce document est la référence visuelle officielle du bloc A25 pour la page Planning.
+
+Il doit être utilisé avant toute nouvelle session de correction UI du Planning.
+
+Toute session A25 restante doit pouvoir répondre à cette question :
+
+```txt
+Le patch rapproche-t-il réellement la page Planning de Planning_V1.2.png ?
+```
+
+Si la réponse est non, la session ne doit pas être validée visuellement.
+

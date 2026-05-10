@@ -1,7 +1,7 @@
 # Ambulance Manager — ETAT_GLOBAL_PROJET
 
-Version : V1.8.0 (MASTER)  
-Date : 04/05/2026
+Version : V1.9.0 (MASTER)  
+Date : 10/05/2026
 
 ## Sommaire
 - [1. Rôle](#1-rôle)
@@ -134,7 +134,7 @@ La suite officielle immédiatement validée dans `PLAN_DE_DEVELOPPEMENT.md` est 
    Objectif : réaligner l’application sur la direction artistique officielle, avec interface pure, simple, lisible, mode clair/sombre, icônes propres, captures avant/après et exclusion du planning profond.
 
 2. **A25 — Planning UI/UX & ergonomie métier**  
-   Objectif : traiter le planning comme bloc dédié, en travaillant la lisibilité, les vues jour/semaine/mois, l’ergonomie d’affectation et la cohérence avec le socle A24.
+   Objectif : refondre la page Planning comme écran central complet, avec une priorité de fidélité visuelle à `Planning_V1.2.png`, `Planning_V1.2_INFO_DETAIL.png` et `REFERENCE_UI_UX_A25_PLANNING.md`, sans refonte fonctionnelle lourde.
 
 3. **A26 — Stabilisation / non-régression post UI/UX**  
    Objectif : vérifier et corriger uniquement les régressions prouvées après A24 et A25.
@@ -145,11 +145,25 @@ La direction artistique officielle pour A24, A25 et A26 est exclusivement :
 docs/1-master/MAQUETTE/MAQUETTE_DA
 ```
 
+
+### 6.8 Recadrage A25 Planning au 10/05/2026
+
+Le bloc A25 est recadré après constat manuel que des corrections techniques partielles peuvent rester insuffisantes si la page Planning finale ne ressemble pas à la maquette officielle.
+
+Décision officielle :
+- `docs/1-master/REFERENCE_UI_UX_A25_PLANNING.md` devient la référence détaillée prioritaire pour A25 ;
+- les images `Planning_V1.2.png` et `Planning_V1.2_INFO_DETAIL.png` sont la cible visuelle concrète ;
+- A25 doit viser une reproduction aussi fidèle que possible de la maquette visible, avec une cible d'environ 99 % sur les éléments visibles ;
+- la validation technique d'un patch ne vaut pas validation visuelle ;
+- la clôture A25 exige un retour manuel utilisateur favorable sur la fidélité visuelle.
+
+Conséquence : la fin de A25 doit être pilotée comme une refonte globale de la page Planning, et non comme une suite de micro-corrections isolées.
+
 ## 7. Points à confirmer
 - niveau réel de proximité atteint par A24 avec `MAQUETTE_DA` après captures avant/après ;
 - qualité finale des icônes génériques et spécifiques après audit A24 ;
 - comportement exact du mode sombre après intégration A24 ;
-- résiduels éventuels du planning à traiter en A25 après audit A24 ;
+- validation visuelle finale du Planning A25 par comparaison avec `Planning_V1.2.png` / `Planning_V1.2_INFO_DETAIL.png` ;
 - régressions éventuelles post UI/UX à traiter en A26 ;
 - décision après A26 : relancer un bloc de développement ou ouvrir une nouvelle campagne de tests.
 

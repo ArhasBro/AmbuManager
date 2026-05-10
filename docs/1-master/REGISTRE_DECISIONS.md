@@ -136,11 +136,33 @@ Les autres éléments du dossier `docs/1-master/MAQUETTE/` peuvent servir de sup
 - Le fichier `docs/1-master/REFERENCE_UI_UX_A24.md` est créé comme document de référence pour l’exécution A24.
 - Ce fichier doit être lu pour les sessions A24 et peut servir de référence complémentaire pour A25 et A26.
 
+### 3.2.10 Recadrage A25 Planning — fidélité maquette
+
+Décision validée au 10/05/2026 : le bloc A25 ne doit plus être jugé uniquement sur des corrections locales ou sur la propreté technique des patchs.
+
+A25 doit viser une refonte globale de la page Planning en se rapprochant le plus possible des images officielles :
+
+```txt
+docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2.png
+docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2_INFO_DETAIL.png
+```
+
+La référence documentaire officielle du bloc A25 est :
+
+```txt
+docs/1-master/REFERENCE_UI_UX_A25_PLANNING.md
+```
+
+Cette référence doit décrire précisément la structure attendue : header, toolbar filtres/vue/exports, onglets, matrice salariés × semaines, panneau droit de détail cellule, barre basse d'actions groupées, badges, états visuels et compatibilité clair/sombre.
+
+La validation A25 exige une conformité visuelle globale. Un patch peut être techniquement valide mais non validé visuellement si le rendu ne correspond pas suffisamment à la maquette.
+
+
 ## 4. Décisions en attente
 - niveau réel de conformité atteint par A24 après comparaison avant/après ;
 - arbitrages concrets d’icônes après audit A24 ;
 - éventuels résiduels visuels à reporter hors A24 ;
-- périmètre exact des corrections planning A25 après audit préparatoire A24 ;
+- conformité visuelle finale du Planning A25 avec `Planning_V1.2.png` et `Planning_V1.2_INFO_DETAIL.png` ;
 - régressions éventuelles à corriger en A26 ;
 - décision après A26 : relancer un bloc de développement ou ouvrir une nouvelle campagne de tests.
 
@@ -155,6 +177,7 @@ Les points suivants sont explicitement sortis des décisions en attente pour l�
 - `docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md` reste figé tant qu’aucun arbitrage explicite produit n’est demandé.
 - `docs/1-master/PLAN_DE_DEVELOPPEMENT.md` reste le plan officiel unique.
 - `docs/1-master/REFERENCE_UI_UX_A24.md` devient la référence documentaire d’exécution pour A24.
+- `docs/1-master/REFERENCE_UI_UX_A25_PLANNING.md` devient la référence documentaire d’exécution pour A25 Planning.
 - Les documents maîtres doivent utiliser la structure réelle :
   - `docs/1-master/*`
   - `docs/1-master/MAQUETTE/*`
