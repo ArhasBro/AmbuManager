@@ -29,7 +29,16 @@ type Shift = {
   } | null;
 };
 
-type UserLite = { id: string; name: string; email?: string };
+type UserLite = {
+  id: string;
+  name: string;
+  email?: string;
+  phone?: string | null;
+  role?: string | null;
+  depotId?: string | null;
+  depot?: { id: string; name: string; isActive: boolean } | null;
+  isActive?: boolean;
+};
 type VehicleLite = { id: string; immatriculation: string; type: string };
 type DepotLite = { id: string; name: string; isActive: boolean };
 
@@ -66,6 +75,7 @@ type BulkAssignFormState = {
   vehicleId: string;
   depotId: string;
 };
+type MatrixShiftKind = "shift" | "repos" | "conge" | "garde";
 
 const BULK_ASSIGN_NO_CHANGE = "__NO_CHANGE__";
 const BULK_ASSIGN_CLEAR = "__CLEAR__";
@@ -474,6 +484,38 @@ function getDepotLabel(depot: DepotLite) {
   return depot.isActive ? depot.name : `${depot.name} (inactive)`;
 }
 
+function weekKeyFromDate(date: Date) {
+  return formatDate(startOfWeekMonday(date));
+}
+
+function userInitials(name: string) {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "??";
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return `${parts[0][0] ?? ""}${parts[1][0] ?? ""}`.toUpperCase();
+}
+
+function classifyShiftKind(shift: Shift): MatrixShiftKind {
+  const category = String(shift.template?.category ?? "").toUpperCase();
+  if (category.includes("GARDE")) return "garde";
+  if (category.includes("CONGE")) return "conge";
+  return "shift";
+}
+
+function weekRangeLabel(weekStartDate: Date) {
+  const weekEndDate = addDays(weekStartDate, 6);
+  const from = weekStartDate.toLocaleDateString("fr-FR", { day: "2-digit", month: "short" });
+  const to = weekEndDate.toLocaleDateString("fr-FR", { day: "2-digit", month: "short" });
+  return `${from} - ${to}`;
+}
+
+function weekendLabelFromIso(iso: string) {
+  const day = new Date(iso).getDay();
+  if (day === 6) return "Samedi";
+  if (day === 0) return "Dimanche";
+  return null;
+}
+
 function shiftHasUser(shift: Shift, userId: string | null | undefined) {
   if (!userId) return false;
   return shift.user?.id === userId || shift.user2?.id === userId;
@@ -613,9 +655,10 @@ export default function PlanningClient({
   const [runMatchQuality, setRunMatchQuality] = useState<PlanningQuality | null>(null);
   const [runMatchingVariant, setRunMatchingVariant] = useState<MatchingVariantDefinition | null>(null);
   const [selectedMatchingVariant, setSelectedMatchingVariant] = useState<MatchingVariantKey>("VARIANT_1");
-  const [showLegacyPlanning, setShowLegacyPlanning] = useState(true);
+  const [showLegacyPlanning, setShowLegacyPlanning] = useState(false);
   const [activeTab, setActiveTab] = useState<PlanningInternalTab>("manual");
   const [isManualAdvancedOpen, setIsManualAdvancedOpen] = useState(false);
+  const [selectedMatrixCellKey, setSelectedMatrixCellKey] = useState<string | null>(null);
 
   // ✅ verrou : le preview est lié à un runId précis
   const [matchPreviewRunId, setMatchPreviewRunId] = useState<string | null>(null);
@@ -723,6 +766,77 @@ export default function PlanningClient({
     }
     return map;
   }, [visibleItems, weekDays]);
+
+  const matrixWeeks = useMemo(
+    () =>
+      Array.from({ length: 4 }, (_, index) => {
+        const start = addDays(weekStart, index * 7);
+        return {
+          key: weekKeyFromDate(start),
+          label: `Semaine ${index + 1}`,
+          rangeLabel: weekRangeLabel(start),
+        };
+      }),
+    [weekStart]
+  );
+
+  const matrixRows = useMemo(() => {
+    const usersById = new Map<string, UserLite>();
+    for (const user of userOptions) usersById.set(user.id, user);
+    for (const shift of visibleItems) {
+      if (shift.user?.id) usersById.set(shift.user.id, { id: shift.user.id, name: shift.user.name, email: shift.user.email });
+      if (shift.user2?.id) usersById.set(shift.user2.id, { id: shift.user2.id, name: shift.user2.name, email: shift.user2.email });
+    }
+
+    return Array.from(usersById.values())
+      .map((user) => {
+        const shifts = visibleItems.filter((shift) => shiftHasUser(shift, user.id));
+        const shiftsByWeek = new Map<string, Shift[]>();
+        for (const week of matrixWeeks) shiftsByWeek.set(week.key, []);
+        for (const shift of shifts) {
+          const weekKey = weekKeyFromDate(new Date(shift.startAt));
+          if (shiftsByWeek.has(weekKey)) shiftsByWeek.get(weekKey)?.push(shift);
+        }
+        for (const [key, list] of shiftsByWeek.entries()) {
+          list.sort((a, b) => new Date(a.startAt).getTime() - new Date(b.startAt).getTime());
+          shiftsByWeek.set(key, list);
+        }
+        const userRecord = userOptions.find((candidate) => candidate.id === user.id);
+        const roleLabel = userRecord?.role?.trim() ? userRecord.role : "Rôle non renseigné";
+        const baseLabel = userRecord?.depot?.name?.trim() ? userRecord.depot.name : "Base non renseignée";
+        const statusLabel =
+          typeof userRecord?.isActive === "boolean"
+            ? userRecord.isActive
+              ? "Actif"
+              : "Inactif"
+            : "Statut non renseigné";
+        return {
+          user: {
+            ...user,
+            phone: userRecord?.phone ?? user.phone ?? null,
+            role: userRecord?.role ?? user.role ?? null,
+            depot: userRecord?.depot ?? user.depot ?? null,
+            isActive: userRecord?.isActive ?? user.isActive,
+          },
+          shiftsByWeek,
+          roleLabel,
+          baseLabel,
+          statusLabel,
+        };
+      })
+      .sort((a, b) => a.user.name.localeCompare(b.user.name, "fr"));
+  }, [matrixWeeks, userOptions, visibleItems]);
+
+  const selectedMatrixCell = useMemo(() => {
+    if (!selectedMatrixCellKey) return null;
+    const [userId, weekKey] = selectedMatrixCellKey.split("|");
+    const row = matrixRows.find((entry) => entry.user.id === userId);
+    if (!row) return null;
+    return {
+      user: row.user,
+      shifts: row.shiftsByWeek.get(weekKey) ?? [],
+    };
+  }, [matrixRows, selectedMatrixCellKey]);
 
   const selectedShiftIdSet = useMemo(() => new Set(selectedShiftIds), [selectedShiftIds]);
 
@@ -851,8 +965,19 @@ export default function PlanningClient({
             const id = getString(x.id);
             const name = getString(x.name);
             const email = getOptionalString(x.email);
+            const phone = getOptionalString(x.phone) ?? null;
+            const role = getOptionalString(x.role) ?? null;
+            const depotId = getOptionalString(x.depotId) ?? null;
+            const depot = isRecord(x.depot)
+              ? {
+                  id: getString(x.depot.id),
+                  name: getString(x.depot.name),
+                  isActive: Boolean(x.depot.isActive),
+                }
+              : null;
+            const isActive = typeof x.isActive === "boolean" ? x.isActive : undefined;
             if (!id || !name) return null;
-            return { id, name, email };
+            return { id, name, email, phone, role, depotId, depot, isActive };
           })
           .filter((x): x is UserLite => Boolean(x));
 
@@ -1779,6 +1904,101 @@ export default function PlanningClient({
 
       <section className="planning-workspace">
         <div className="planning-workspace__main">
+      {activeTab === "manual" && (
+        <section className="planning-matrix-card">
+          <div className="planning-matrix">
+            <div className="planning-matrix__head">
+              <div className="planning-matrix__hcell">Selection</div>
+              <div className="planning-matrix__hcell">Salarie</div>
+              <div className="planning-matrix__hcell">Role</div>
+              <div className="planning-matrix__hcell">Base</div>
+              <div className="planning-matrix__hcell">Statut</div>
+              {matrixWeeks.map((week) => (
+                <div key={week.key} className="planning-matrix__hcell planning-matrix__hcell--week">
+                  <div>{week.label}</div>
+                  <small>{week.rangeLabel}</small>
+                </div>
+              ))}
+            </div>
+            <div className="planning-matrix__body">
+              {matrixRows.length === 0 && (
+                <div className="planning-matrix__empty">Aucun element a afficher</div>
+              )}
+              {matrixRows.map((row) => (
+                <div key={row.user.id} className="planning-matrix__row">
+                  <div className="planning-matrix__cell planning-matrix__cell--selection">
+                    <input
+                      type="checkbox"
+                      checked={selectedShiftIds.some((shiftId) =>
+                        matrixWeeks.some((week) => (row.shiftsByWeek.get(week.key) ?? []).some((shift) => shift.id === shiftId))
+                      )}
+                      onChange={() => {
+                        const rowShiftIds = matrixWeeks.flatMap((week) => (row.shiftsByWeek.get(week.key) ?? []).map((shift) => shift.id));
+                        const allSelected = rowShiftIds.length > 0 && rowShiftIds.every((shiftId) => selectedShiftIdSet.has(shiftId));
+                        if (allSelected) {
+                          setSelectedShiftIds((current) => current.filter((id) => !rowShiftIds.includes(id)));
+                        } else {
+                          setSelectedShiftIds((current) => Array.from(new Set([...current, ...rowShiftIds])));
+                        }
+                      }}
+                    />
+                  </div>
+                  <div className="planning-matrix__cell planning-matrix__cell--employee">
+                    <div className="planning-matrix__avatar">{userInitials(row.user.name)}</div>
+                    <div>
+                      <div className="planning-matrix__employee-name">{row.user.name}</div>
+                      <div className="planning-matrix__employee-sub">{row.user.phone?.trim() ? row.user.phone : "Téléphone non renseigné"}</div>
+                    </div>
+                  </div>
+                  <div className="planning-matrix__cell">{row.roleLabel}</div>
+                  <div className="planning-matrix__cell">{row.baseLabel}</div>
+                  <div className="planning-matrix__cell">
+                    <span className={`planning-matrix__status ${row.statusLabel === "Actif" ? "is-active" : ""}`}>{row.statusLabel}</span>
+                  </div>
+                  {matrixWeeks.map((week) => {
+                    const shifts = row.shiftsByWeek.get(week.key) ?? [];
+                    const cellKey = `${row.user.id}|${week.key}`;
+                    const selected = selectedMatrixCellKey === cellKey;
+                    const mainShift = shifts[0] ?? null;
+                    const weekendLabel = mainShift ? weekendLabelFromIso(mainShift.startAt) : null;
+                    return (
+                      <button
+                        key={cellKey}
+                        type="button"
+                        className={`planning-matrix__cell planning-matrix__cell--week${selected ? " is-selected" : ""}`}
+                        onClick={() => setSelectedMatrixCellKey(cellKey)}
+                      >
+                        {shifts.length === 0 ? (
+                          <span className="planning-shift-pill planning-shift-pill--repos">Repos</span>
+                        ) : (
+                          <div className="planning-matrix__pills">
+                            {mainShift && (() => {
+                              const kind = classifyShiftKind(mainShift);
+                              const className =
+                                kind === "garde"
+                                  ? "planning-shift-pill--garde"
+                                  : kind === "conge"
+                                    ? "planning-shift-pill--conge"
+                                    : "planning-shift-pill--shift";
+                              return (
+                                <span className={`planning-shift-pill ${className}`}>
+                                  {(mainShift.template?.name ?? "Shift").slice(0, 18)}
+                                </span>
+                              );
+                            })()}
+                            {weekendLabel ? <span className="planning-matrix__note">{weekendLabel}</span> : null}
+                            {shifts.length > 1 ? <span className="planning-matrix__more">+{shifts.length - 1} autres</span> : null}
+                          </div>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
       <section className="planning-legacy" style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 12, display: "grid", gap: 8 }}>
         <div className="planning-legacy__head" style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
           <div>
@@ -2528,6 +2748,12 @@ export default function PlanningClient({
               {activeTab === "exports" && "Exports"}
             </div>
             <div className="planning-side-panel__meta">{title}</div>
+            {activeTab === "manual" && selectedMatrixCell && (
+              <div className="planning-side-panel__meta">
+                <div><strong>{selectedMatrixCell.user.name}</strong></div>
+                <div>{selectedMatrixCell.shifts.length} shift(s) sur la cellule selectionnee</div>
+              </div>
+            )}
             <div className="planning-side-panel__actions">
               <ActionButton size="sm" onClick={openManualPlanning}>Voir détail</ActionButton>
               {activeTab === "exports" && canExportPlanning && (

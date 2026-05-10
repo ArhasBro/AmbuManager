@@ -1,5 +1,5 @@
 ﻿Structure du dossier pour le volume Windows
-Le numÚro de sÚrie du volume est 000000D0 123E:4DB7
+Le numÚro de sÚrie du volume est 123E-4DB7
 C:.
 |   .env
 |   .gitignore
@@ -253,194 +253,466 @@ C:.
 |   |   |               00000372.meta
 |   |   |               00000373.meta
 |   |   |               00000375.meta
-|   |   |               00000377.sst
-|   |   |               00000378.sst
-|   |   |               00000379.meta
-|   |   |               00000382.sst
 |   |   |               00000383.sst
 |   |   |               00000384.sst
 |   |   |               00000385.sst
 |   |   |               00000386.meta
 |   |   |               00000387.meta
 |   |   |               00000388.meta
-|   |   |               00000390.meta
-|   |   |               00000392.sst
 |   |   |               00000393.sst
 |   |   |               00000394.meta
-|   |   |               00000396.meta
-|   |   |               00000398.sst
 |   |   |               00000399.sst
 |   |   |               00000400.sst
 |   |   |               00000401.sst
 |   |   |               00000402.meta
 |   |   |               00000403.meta
-|   |   |               00000405.meta
 |   |   |               00000406.meta
-|   |   |               00000408.sst
 |   |   |               00000409.sst
 |   |   |               00000410.meta
-|   |   |               00000411.meta
-|   |   |               00000414.sst
 |   |   |               00000415.sst
 |   |   |               00000416.meta
-|   |   |               00000418.meta
-|   |   |               00000419.sst
 |   |   |               00000421.sst
 |   |   |               00000422.sst
 |   |   |               00000423.sst
 |   |   |               00000424.meta
-|   |   |               00000425.meta
 |   |   |               00000426.meta
 |   |   |               00000428.meta
-|   |   |               00000429.sst
 |   |   |               00000431.sst
 |   |   |               00000432.meta
-|   |   |               00000433.meta
-|   |   |               00000435.sst
 |   |   |               00000437.sst
 |   |   |               00000438.meta
-|   |   |               00000439.meta
-|   |   |               00000441.sst
 |   |   |               00000443.sst
 |   |   |               00000444.meta
-|   |   |               00000445.meta
-|   |   |               00000448.sst
 |   |   |               00000449.sst
 |   |   |               00000450.meta
-|   |   |               00000452.meta
-|   |   |               00000454.sst
 |   |   |               00000455.sst
 |   |   |               00000456.sst
 |   |   |               00000457.sst
 |   |   |               00000458.meta
 |   |   |               00000459.meta
-|   |   |               00000460.meta
 |   |   |               00000462.meta
-|   |   |               00000464.sst
 |   |   |               00000465.sst
 |   |   |               00000466.meta
-|   |   |               00000467.meta
-|   |   |               00000469.sst
 |   |   |               00000471.sst
 |   |   |               00000472.sst
 |   |   |               00000473.sst
 |   |   |               00000474.meta
 |   |   |               00000475.meta
 |   |   |               00000476.meta
-|   |   |               00000478.meta
-|   |   |               00000480.sst
 |   |   |               00000481.sst
 |   |   |               00000482.meta
-|   |   |               00000484.meta
-|   |   |               00000485.sst
 |   |   |               00000487.sst
 |   |   |               00000488.meta
-|   |   |               00000489.meta
-|   |   |               00000492.sst
 |   |   |               00000493.sst
 |   |   |               00000494.meta
-|   |   |               00000495.meta
-|   |   |               00000501.sst
 |   |   |               00000502.sst
 |   |   |               00000503.sst
 |   |   |               00000504.sst
 |   |   |               00000505.meta
 |   |   |               00000506.meta
 |   |   |               00000507.meta
-|   |   |               00000509.meta
-|   |   |               00000519.sst
 |   |   |               00000520.sst
 |   |   |               00000521.sst
 |   |   |               00000522.sst
 |   |   |               00000523.meta
 |   |   |               00000524.meta
 |   |   |               00000525.meta
-|   |   |               00000527.meta
-|   |   |               00000529.sst
 |   |   |               00000530.sst
 |   |   |               00000531.sst
 |   |   |               00000532.sst
 |   |   |               00000533.meta
 |   |   |               00000534.meta
 |   |   |               00000535.meta
-|   |   |               00000537.meta
-|   |   |               00000539.sst
 |   |   |               00000540.sst
 |   |   |               00000541.meta
-|   |   |               00000542.meta
 |   |   |               00000544.sst
 |   |   |               00000545.sst
 |   |   |               00000546.sst
 |   |   |               00000547.meta
-|   |   |               00000548.del
 |   |   |               00000549.sst
-|   |   |               00000550.sst
 |   |   |               00000551.sst
 |   |   |               00000552.sst
 |   |   |               00000553.sst
 |   |   |               00000554.meta
 |   |   |               00000555.meta
-|   |   |               00000556.meta
 |   |   |               00000557.meta
 |   |   |               00000558.meta
-|   |   |               00000559.sst
 |   |   |               00000560.sst
 |   |   |               00000561.sst
 |   |   |               00000562.meta
-|   |   |               00000563.meta
 |   |   |               00000564.meta
-|   |   |               00000565.sst
 |   |   |               00000566.sst
 |   |   |               00000567.sst
 |   |   |               00000568.meta
-|   |   |               00000569.meta
 |   |   |               00000570.meta
 |   |   |               00000571.sst
-|   |   |               00000572.sst
 |   |   |               00000573.sst
 |   |   |               00000574.meta
 |   |   |               00000575.meta
-|   |   |               00000576.meta
-|   |   |               00000577.sst
 |   |   |               00000578.sst
 |   |   |               00000579.sst
 |   |   |               00000580.meta
-|   |   |               00000581.meta
 |   |   |               00000582.meta
-|   |   |               00000583.sst
 |   |   |               00000584.sst
 |   |   |               00000585.sst
 |   |   |               00000586.meta
-|   |   |               00000587.meta
 |   |   |               00000588.meta
-|   |   |               00000589.sst
 |   |   |               00000590.sst
 |   |   |               00000591.sst
 |   |   |               00000592.meta
-|   |   |               00000593.meta
 |   |   |               00000594.meta
-|   |   |               00000595.sst
 |   |   |               00000596.sst
 |   |   |               00000597.sst
 |   |   |               00000598.sst
 |   |   |               00000599.sst
 |   |   |               00000600.meta
-|   |   |               00000601.meta
 |   |   |               00000602.meta
 |   |   |               00000603.meta
 |   |   |               00000604.meta
 |   |   |               00000605.sst
-|   |   |               00000606.sst
 |   |   |               00000607.sst
 |   |   |               00000608.meta
-|   |   |               00000609.meta
 |   |   |               00000610.meta
 |   |   |               00000611.sst
-|   |   |               00000612.sst
 |   |   |               00000613.sst
 |   |   |               00000614.meta
-|   |   |               00000615.meta
 |   |   |               00000616.meta
+|   |   |               00000617.sst
+|   |   |               00000619.sst
+|   |   |               00000620.meta
+|   |   |               00000621.meta
+|   |   |               00000623.sst
+|   |   |               00000625.sst
+|   |   |               00000626.sst
+|   |   |               00000627.sst
+|   |   |               00000628.meta
+|   |   |               00000629.meta
+|   |   |               00000631.meta
+|   |   |               00000632.meta
+|   |   |               00000634.sst
+|   |   |               00000635.sst
+|   |   |               00000636.meta
+|   |   |               00000638.meta
+|   |   |               00000640.sst
+|   |   |               00000641.sst
+|   |   |               00000642.meta
+|   |   |               00000644.meta
+|   |   |               00000645.sst
+|   |   |               00000647.sst
+|   |   |               00000648.sst
+|   |   |               00000649.sst
+|   |   |               00000650.meta
+|   |   |               00000651.meta
+|   |   |               00000652.meta
+|   |   |               00000653.meta
+|   |   |               00000656.sst
+|   |   |               00000657.sst
+|   |   |               00000658.sst
+|   |   |               00000659.sst
+|   |   |               00000660.meta
+|   |   |               00000662.meta
+|   |   |               00000663.meta
+|   |   |               00000664.meta
+|   |   |               00000666.sst
+|   |   |               00000667.sst
+|   |   |               00000668.meta
+|   |   |               00000670.meta
+|   |   |               00000672.sst
+|   |   |               00000673.sst
+|   |   |               00000674.meta
+|   |   |               00000675.meta
+|   |   |               00000677.sst
+|   |   |               00000679.sst
+|   |   |               00000680.meta
+|   |   |               00000682.meta
+|   |   |               00000683.sst
+|   |   |               00000685.sst
+|   |   |               00000686.meta
+|   |   |               00000688.meta
+|   |   |               00000689.sst
+|   |   |               00000690.sst
+|   |   |               00000691.meta
+|   |   |               00000692.del
+|   |   |               00000693.sst
+|   |   |               00000694.sst
+|   |   |               00000695.sst
+|   |   |               00000696.meta
+|   |   |               00000697.meta
+|   |   |               00000698.meta
+|   |   |               00000699.sst
+|   |   |               00000700.sst
+|   |   |               00000701.sst
+|   |   |               00000702.meta
+|   |   |               00000703.meta
+|   |   |               00000704.meta
+|   |   |               00000705.sst
+|   |   |               00000706.sst
+|   |   |               00000707.sst
+|   |   |               00000708.sst
+|   |   |               00000709.sst
+|   |   |               00000710.meta
+|   |   |               00000711.meta
+|   |   |               00000712.meta
+|   |   |               00000713.meta
+|   |   |               00000714.meta
+|   |   |               00000715.sst
+|   |   |               00000716.sst
+|   |   |               00000717.sst
+|   |   |               00000718.meta
+|   |   |               00000719.meta
+|   |   |               00000720.meta
+|   |   |               00000721.sst
+|   |   |               00000722.sst
+|   |   |               00000723.sst
+|   |   |               00000724.meta
+|   |   |               00000725.meta
+|   |   |               00000726.meta
+|   |   |               00000727.sst
+|   |   |               00000728.sst
+|   |   |               00000729.sst
+|   |   |               00000730.meta
+|   |   |               00000731.meta
+|   |   |               00000732.meta
+|   |   |               00000733.sst
+|   |   |               00000734.sst
+|   |   |               00000735.sst
+|   |   |               00000736.meta
+|   |   |               00000737.meta
+|   |   |               00000738.meta
+|   |   |               00000739.sst
+|   |   |               00000740.sst
+|   |   |               00000741.sst
+|   |   |               00000742.meta
+|   |   |               00000743.meta
+|   |   |               00000744.meta
+|   |   |               00000745.sst
+|   |   |               00000746.sst
+|   |   |               00000747.sst
+|   |   |               00000748.meta
+|   |   |               00000749.meta
+|   |   |               00000750.meta
+|   |   |               00000751.sst
+|   |   |               00000752.sst
+|   |   |               00000753.sst
+|   |   |               00000754.meta
+|   |   |               00000755.meta
+|   |   |               00000756.meta
+|   |   |               00000757.sst
+|   |   |               00000758.sst
+|   |   |               00000759.sst
+|   |   |               00000760.meta
+|   |   |               00000761.meta
+|   |   |               00000762.meta
+|   |   |               00000763.sst
+|   |   |               00000764.sst
+|   |   |               00000765.sst
+|   |   |               00000766.meta
+|   |   |               00000767.meta
+|   |   |               00000768.meta
+|   |   |               00000769.sst
+|   |   |               00000770.sst
+|   |   |               00000771.sst
+|   |   |               00000772.meta
+|   |   |               00000773.meta
+|   |   |               00000774.meta
+|   |   |               00000775.sst
+|   |   |               00000776.sst
+|   |   |               00000777.sst
+|   |   |               00000778.meta
+|   |   |               00000779.meta
+|   |   |               00000780.meta
+|   |   |               00000781.sst
+|   |   |               00000782.sst
+|   |   |               00000783.sst
+|   |   |               00000784.meta
+|   |   |               00000785.meta
+|   |   |               00000786.meta
+|   |   |               00000787.sst
+|   |   |               00000788.sst
+|   |   |               00000789.sst
+|   |   |               00000790.meta
+|   |   |               00000791.meta
+|   |   |               00000792.meta
+|   |   |               00000793.sst
+|   |   |               00000794.sst
+|   |   |               00000795.sst
+|   |   |               00000796.meta
+|   |   |               00000797.meta
+|   |   |               00000798.meta
+|   |   |               00000799.sst
+|   |   |               00000800.sst
+|   |   |               00000801.sst
+|   |   |               00000802.meta
+|   |   |               00000803.meta
+|   |   |               00000804.meta
+|   |   |               00000805.sst
+|   |   |               00000806.sst
+|   |   |               00000807.sst
+|   |   |               00000808.meta
+|   |   |               00000809.meta
+|   |   |               00000810.meta
+|   |   |               00000811.sst
+|   |   |               00000812.sst
+|   |   |               00000813.sst
+|   |   |               00000814.meta
+|   |   |               00000815.meta
+|   |   |               00000816.meta
+|   |   |               00000817.sst
+|   |   |               00000818.sst
+|   |   |               00000819.sst
+|   |   |               00000820.meta
+|   |   |               00000821.meta
+|   |   |               00000822.meta
+|   |   |               00000823.sst
+|   |   |               00000824.sst
+|   |   |               00000825.sst
+|   |   |               00000826.meta
+|   |   |               00000827.meta
+|   |   |               00000828.meta
+|   |   |               00000829.sst
+|   |   |               00000830.sst
+|   |   |               00000831.sst
+|   |   |               00000832.meta
+|   |   |               00000833.meta
+|   |   |               00000834.meta
+|   |   |               00000835.sst
+|   |   |               00000836.sst
+|   |   |               00000837.sst
+|   |   |               00000838.meta
+|   |   |               00000839.meta
+|   |   |               00000840.meta
+|   |   |               00000841.sst
+|   |   |               00000842.sst
+|   |   |               00000843.sst
+|   |   |               00000844.meta
+|   |   |               00000845.meta
+|   |   |               00000846.meta
+|   |   |               00000847.sst
+|   |   |               00000848.sst
+|   |   |               00000849.sst
+|   |   |               00000850.meta
+|   |   |               00000851.meta
+|   |   |               00000852.meta
+|   |   |               00000853.sst
+|   |   |               00000854.sst
+|   |   |               00000855.sst
+|   |   |               00000856.meta
+|   |   |               00000857.meta
+|   |   |               00000858.meta
+|   |   |               00000859.sst
+|   |   |               00000860.sst
+|   |   |               00000861.sst
+|   |   |               00000862.meta
+|   |   |               00000863.meta
+|   |   |               00000864.meta
+|   |   |               00000865.sst
+|   |   |               00000866.sst
+|   |   |               00000867.sst
+|   |   |               00000868.meta
+|   |   |               00000869.meta
+|   |   |               00000870.meta
+|   |   |               00000871.sst
+|   |   |               00000872.sst
+|   |   |               00000873.sst
+|   |   |               00000874.meta
+|   |   |               00000875.meta
+|   |   |               00000876.meta
+|   |   |               00000877.sst
+|   |   |               00000878.sst
+|   |   |               00000879.sst
+|   |   |               00000880.sst
+|   |   |               00000881.sst
+|   |   |               00000882.meta
+|   |   |               00000883.meta
+|   |   |               00000884.meta
+|   |   |               00000885.meta
+|   |   |               00000886.meta
+|   |   |               00000887.sst
+|   |   |               00000888.sst
+|   |   |               00000889.sst
+|   |   |               00000890.meta
+|   |   |               00000891.meta
+|   |   |               00000892.meta
+|   |   |               00000893.sst
+|   |   |               00000894.sst
+|   |   |               00000895.sst
+|   |   |               00000896.meta
+|   |   |               00000897.meta
+|   |   |               00000898.meta
+|   |   |               00000899.sst
+|   |   |               00000900.sst
+|   |   |               00000901.sst
+|   |   |               00000902.meta
+|   |   |               00000903.meta
+|   |   |               00000904.meta
+|   |   |               00000905.sst
+|   |   |               00000906.sst
+|   |   |               00000907.sst
+|   |   |               00000908.meta
+|   |   |               00000909.meta
+|   |   |               00000910.meta
+|   |   |               00000911.sst
+|   |   |               00000912.sst
+|   |   |               00000913.sst
+|   |   |               00000914.meta
+|   |   |               00000915.meta
+|   |   |               00000916.meta
+|   |   |               00000917.sst
+|   |   |               00000918.sst
+|   |   |               00000919.sst
+|   |   |               00000920.sst
+|   |   |               00000921.sst
+|   |   |               00000922.meta
+|   |   |               00000923.meta
+|   |   |               00000924.meta
+|   |   |               00000925.meta
+|   |   |               00000926.meta
+|   |   |               00000927.sst
+|   |   |               00000928.sst
+|   |   |               00000929.sst
+|   |   |               00000930.meta
+|   |   |               00000931.meta
+|   |   |               00000932.meta
+|   |   |               00000933.sst
+|   |   |               00000934.sst
+|   |   |               00000935.sst
+|   |   |               00000936.meta
+|   |   |               00000937.meta
+|   |   |               00000938.meta
+|   |   |               00000939.sst
+|   |   |               00000940.sst
+|   |   |               00000941.sst
+|   |   |               00000942.sst
+|   |   |               00000943.sst
+|   |   |               00000944.meta
+|   |   |               00000945.meta
+|   |   |               00000946.meta
+|   |   |               00000947.meta
+|   |   |               00000948.meta
+|   |   |               00000949.sst
+|   |   |               00000950.sst
+|   |   |               00000951.sst
+|   |   |               00000952.meta
+|   |   |               00000953.meta
+|   |   |               00000954.meta
+|   |   |               00000955.sst
+|   |   |               00000956.sst
+|   |   |               00000957.sst
+|   |   |               00000958.meta
+|   |   |               00000959.meta
+|   |   |               00000960.meta
+|   |   |               00000961.sst
+|   |   |               00000962.sst
+|   |   |               00000963.sst
+|   |   |               00000964.meta
+|   |   |               00000965.meta
+|   |   |               00000966.meta
+|   |   |               00000967.sst
+|   |   |               00000968.sst
+|   |   |               00000969.sst
+|   |   |               00000970.meta
+|   |   |               00000971.meta
+|   |   |               00000972.meta
 |   |   |               CURRENT
 |   |   |               LOG
 |   |   |               
@@ -726,6 +998,16 @@ C:.
 |   |   |   |   |   |       |           build-manifest.json
 |   |   |   |   |   |       |           server-reference-manifest.json
 |   |   |   |   |   |       |           
+|   |   |   |   |   |       +---depot
+|   |   |   |   |   |       |   |   route.js
+|   |   |   |   |   |       |   |   route.js.map
+|   |   |   |   |   |       |   |   route_client-reference-manifest.js
+|   |   |   |   |   |       |   |   
+|   |   |   |   |   |       |   \---route
+|   |   |   |   |   |       |           app-paths-manifest.json
+|   |   |   |   |   |       |           build-manifest.json
+|   |   |   |   |   |       |           server-reference-manifest.json
+|   |   |   |   |   |       |           
 |   |   |   |   |   |       \---route
 |   |   |   |   |   |               app-paths-manifest.json
 |   |   |   |   |   |               build-manifest.json
@@ -893,6 +1175,8 @@ C:.
 |   |   |   |   |   node_modules_next_961d13b2._.js.map
 |   |   |   |   |   node_modules_next_96da75da._.js
 |   |   |   |   |   node_modules_next_96da75da._.js.map
+|   |   |   |   |   node_modules_next_c2173d48._.js
+|   |   |   |   |   node_modules_next_c2173d48._.js.map
 |   |   |   |   |   node_modules_next_c31bb4d4._.js
 |   |   |   |   |   node_modules_next_c31bb4d4._.js.map
 |   |   |   |   |   node_modules_next_dist_7841df42._.js
@@ -911,6 +1195,8 @@ C:.
 |   |   |   |   |   [root-of-the-server]__3220e87f._.js.map
 |   |   |   |   |   [root-of-the-server]__3302dbde._.js
 |   |   |   |   |   [root-of-the-server]__3302dbde._.js.map
+|   |   |   |   |   [root-of-the-server]__4354e60b._.js
+|   |   |   |   |   [root-of-the-server]__4354e60b._.js.map
 |   |   |   |   |   [root-of-the-server]__47886e4b._.js
 |   |   |   |   |   [root-of-the-server]__47886e4b._.js.map
 |   |   |   |   |   [root-of-the-server]__55612d18._.js
@@ -949,6 +1235,8 @@ C:.
 |   |   |   |   |   _next-internal_server_app_api_users_route_actions_4b9121e3.js.map
 |   |   |   |   |   _next-internal_server_app_api_users_[id]_absences_route_actions_719d36bc.js
 |   |   |   |   |   _next-internal_server_app_api_users_[id]_absences_route_actions_719d36bc.js.map
+|   |   |   |   |   _next-internal_server_app_api_users_[id]_depot_route_actions_75bb32be.js
+|   |   |   |   |   _next-internal_server_app_api_users_[id]_depot_route_actions_75bb32be.js.map
 |   |   |   |   |   _next-internal_server_app_api_users_[id]_route_actions_e7269cbb.js
 |   |   |   |   |   _next-internal_server_app_api_users_[id]_route_actions_e7269cbb.js.map
 |   |   |   |   |   _next-internal_server_app_api_vehicles_route_actions_7bc5da8c.js
@@ -2451,12 +2739,8 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
-|   |   +---0s3pDMX5fpXukMeif2Xh1
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
-|   |   |       
 |   |   +---chunks
+|   |   |       13542ea8b9d3692f.js
 |   |   |       160b48e4bed3762e.js
 |   |   |       358d6bd68d08fdc9.js
 |   |   |       3f9fb6a10f713873.js
@@ -2472,16 +2756,20 @@ C:.
 |   |   |       af7027598a07baa5.js
 |   |   |       b79e0f85eca6f17e.js
 |   |   |       c39c052a804dfeea.js
-|   |   |       c7a52c442d16b5c8.js
+|   |   |       c3c69cae5d7b9bac.css
 |   |   |       ceaa3af669abcc0f.js
-|   |   |       e79b1b313e153113.css
 |   |   |       edcc1a569f9e1199.js
 |   |   |       fc3339c3f209e8c2.js
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-7673dbeff453a2b3.js
 |   |   |       
-|   |   \---media
-|   |           favicon.0b3bf435.ico
+|   |   +---media
+|   |   |       favicon.0b3bf435.ico
+|   |   |       
+|   |   \---V9LLMKOlU1Tq0JzPIolK-
+|   |           _buildManifest.js
+|   |           _clientMiddlewareManifest.json
+|   |           _ssgManifest.js
 |   |           
 |   \---types
 |           routes.d.ts
@@ -5312,13 +5600,18 @@ C:.
 |   |   |   |   |           README_PATCH.md
 |   |   |   |   |           
 |   |   |   |   +---SESSION-20260510-08_A25_A25-PLAN-UI-08
+|   |   |   |   |   |   APPLY_CHECK_OUTPUT.txt
+|   |   |   |   |   |   BUILD_OUTPUT.txt
 |   |   |   |   |   |   EVIDENCES.md
 |   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   LINT_OUTPUT.txt
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   RESULTATS.md
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
+|   |   |   |   |           PATCH__SESSION-20260510-08_A25_A25-PLAN-UI-08.diff
+|   |   |   |   |           PATCH__SESSION-20260510-08_A25_A25-PLAN-UI-08_FIX-01.diff
 |   |   |   |   |           README_PATCH.md
 |   |   |   |   |           
 |   |   |   |   +---SESSION-20260510-09_A25_A25-PLAN-UI-09

@@ -2633,13 +2633,18 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |           README_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260510-08_A25_A25-PLAN-UI-08
+|   |   |   |   |   APPLY_CHECK_OUTPUT.txt
+|   |   |   |   |   BUILD_OUTPUT.txt
 |   |   |   |   |   EVIDENCES.md
 |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   LINT_OUTPUT.txt
 |   |   |   |   |   NOTES.md
 |   |   |   |   |   RESULTATS.md
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
+|   |   |   |           PATCH__SESSION-20260510-08_A25_A25-PLAN-UI-08.diff
+|   |   |   |           PATCH__SESSION-20260510-08_A25_A25-PLAN-UI-08_FIX-01.diff
 |   |   |   |           README_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260510-09_A25_A25-PLAN-UI-09
