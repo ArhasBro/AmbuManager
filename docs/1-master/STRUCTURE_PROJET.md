@@ -93,6 +93,7 @@ C:.
 |   +---dev
 |   |   |   build-manifest.json
 |   |   |   fallback-build-manifest.json
+|   |   |   lock
 |   |   |   package.json
 |   |   |   prerender-manifest.json
 |   |   |   routes-manifest.json
@@ -361,6 +362,78 @@ C:.
 |   |   |               00000410.meta
 |   |   |               00000411.meta
 |   |   |               00000412.meta
+|   |   |               00000413.sst
+|   |   |               00000414.sst
+|   |   |               00000415.sst
+|   |   |               00000416.meta
+|   |   |               00000417.meta
+|   |   |               00000418.meta
+|   |   |               00000419.sst
+|   |   |               00000420.sst
+|   |   |               00000421.sst
+|   |   |               00000422.sst
+|   |   |               00000423.sst
+|   |   |               00000424.meta
+|   |   |               00000425.meta
+|   |   |               00000426.meta
+|   |   |               00000427.meta
+|   |   |               00000428.meta
+|   |   |               00000429.sst
+|   |   |               00000430.sst
+|   |   |               00000431.sst
+|   |   |               00000432.meta
+|   |   |               00000433.meta
+|   |   |               00000434.meta
+|   |   |               00000435.sst
+|   |   |               00000436.sst
+|   |   |               00000437.sst
+|   |   |               00000438.meta
+|   |   |               00000439.meta
+|   |   |               00000440.meta
+|   |   |               00000441.sst
+|   |   |               00000442.sst
+|   |   |               00000443.sst
+|   |   |               00000444.meta
+|   |   |               00000445.meta
+|   |   |               00000446.meta
+|   |   |               00000447.sst
+|   |   |               00000448.sst
+|   |   |               00000449.sst
+|   |   |               00000450.meta
+|   |   |               00000451.meta
+|   |   |               00000452.meta
+|   |   |               00000453.sst
+|   |   |               00000454.sst
+|   |   |               00000455.sst
+|   |   |               00000456.sst
+|   |   |               00000457.sst
+|   |   |               00000458.meta
+|   |   |               00000459.meta
+|   |   |               00000460.meta
+|   |   |               00000461.meta
+|   |   |               00000462.meta
+|   |   |               00000463.sst
+|   |   |               00000464.sst
+|   |   |               00000465.sst
+|   |   |               00000466.meta
+|   |   |               00000467.meta
+|   |   |               00000468.meta
+|   |   |               00000469.sst
+|   |   |               00000470.sst
+|   |   |               00000471.sst
+|   |   |               00000472.sst
+|   |   |               00000473.sst
+|   |   |               00000474.meta
+|   |   |               00000475.meta
+|   |   |               00000476.meta
+|   |   |               00000477.meta
+|   |   |               00000478.meta
+|   |   |               00000479.sst
+|   |   |               00000480.sst
+|   |   |               00000481.sst
+|   |   |               00000482.meta
+|   |   |               00000483.meta
+|   |   |               00000484.meta
 |   |   |               CURRENT
 |   |   |               LOG
 |   |   |               
@@ -813,6 +886,8 @@ C:.
 |   |   |   |           [turbopack]_runtime.js.map
 |   |   |   |           _92f7ec3e._.js
 |   |   |   |           _92f7ec3e._.js.map
+|   |   |   |           _b05d05e3._.js
+|   |   |   |           _b05d05e3._.js.map
 |   |   |   |           _d119320a._.js
 |   |   |   |           _d119320a._.js.map
 |   |   |   |           _next-internal_server_app_dashboard_page_actions_7f01ccec.js
@@ -937,6 +1012,8 @@ C:.
 |   |   |   |   |   _23a915ee._.js.map
 |   |   |   |   |   _3bf2f5b1._.js
 |   |   |   |   |   _3bf2f5b1._.js.map
+|   |   |   |   |   _89b98d23._.js
+|   |   |   |   |   _89b98d23._.js.map
 |   |   |   |   |   _a0ff3932._.js
 |   |   |   |   |   _f2bb0728._.js
 |   |   |   |   |   _f2bb0728._.js.map
@@ -2074,6 +2151,8 @@ C:.
 |   |   |           _33fae268._.js.map
 |   |   |           _3688c0d3._.js
 |   |   |           _3688c0d3._.js.map
+|   |   |           _455b14b3._.js
+|   |   |           _455b14b3._.js.map
 |   |   |           _5516c59e._.js
 |   |   |           _5516c59e._.js.map
 |   |   |           _5c5d5a9d._.js
@@ -2082,8 +2161,6 @@ C:.
 |   |   |           _6139f1ce._.js.map
 |   |   |           _68c20203._.js
 |   |   |           _68c20203._.js.map
-|   |   |           _72a8d4f5._.js
-|   |   |           _72a8d4f5._.js.map
 |   |   |           _74c1132d._.js
 |   |   |           _74c1132d._.js.map
 |   |   |           _90c0d2c3._.js
@@ -2138,14 +2215,10 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
-|   |   +---5K4OfwInh4EpT9ETTv2Le
-|   |   |       _buildManifest.js
-|   |   |       _clientMiddlewareManifest.json
-|   |   |       _ssgManifest.js
-|   |   |       
 |   |   +---chunks
 |   |   |       160b48e4bed3762e.js
 |   |   |       358d6bd68d08fdc9.js
+|   |   |       3f9fb6a10f713873.js
 |   |   |       4ec4a34a20c4d8ad.js
 |   |   |       4fee5e0abb56af75.js
 |   |   |       52b032db1c1b6cf3.js
@@ -2154,21 +2227,25 @@ C:.
 |   |   |       899b7782e7cb92a1.js
 |   |   |       a6dad97d9634a72d.js
 |   |   |       a6dad97d9634a72d.js.map
+|   |   |       ac3850b319062a85.css
 |   |   |       ae00227645aabe16.js
 |   |   |       af7027598a07baa5.js
 |   |   |       b79e0f85eca6f17e.js
-|   |   |       bee9d72d39ccc14a.js
 |   |   |       c39c052a804dfeea.js
 |   |   |       ceaa3af669abcc0f.js
-|   |   |       e796cb4c006f8e83.css
+|   |   |       e1e8a423d092d497.js
 |   |   |       edcc1a569f9e1199.js
-|   |   |       f83f209ad42b85e9.js
 |   |   |       fc3339c3f209e8c2.js
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-7673dbeff453a2b3.js
 |   |   |       
-|   |   \---media
-|   |           favicon.0b3bf435.ico
+|   |   +---media
+|   |   |       favicon.0b3bf435.ico
+|   |   |       
+|   |   \---Su90U56B1uL7McPqA2Tsj
+|   |           _buildManifest.js
+|   |           _clientMiddlewareManifest.json
+|   |           _ssgManifest.js
 |   |           
 |   \---types
 |           routes.d.ts
@@ -4167,7 +4244,6 @@ C:.
 |   |   |   |               
 |   |   |   +---BLOC_A25
 |   |   |   |   |   PROMPTS_A25_PRODUCTION_CONTROLE.md
-|   |   |   |   |   SESSION-20260510-04_A25_A25-PLAN-UI-04_V1.zip
 |   |   |   |   |   
 |   |   |   |   +---SESSION-20260510-01_A25_A25-PLAN-UI-01
 |   |   |   |   |   |   EVIDENCES.md
@@ -4224,13 +4300,16 @@ C:.
 |   |   |   |   |           README_PATCH.md
 |   |   |   |   |           
 |   |   |   |   +---SESSION-20260510-05_A25_A25-PLAN-UI-05
+|   |   |   |   |   |   BUILD_OUTPUT.txt
 |   |   |   |   |   |   EVIDENCES.md
 |   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   LINT_OUTPUT.txt
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   RESULTATS.md
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
+|   |   |   |   |           PATCH__SESSION-20260510-05_A25_A25-PLAN-UI-05.diff
 |   |   |   |   |           README_PATCH.md
 |   |   |   |   |           
 |   |   |   |   +---SESSION-20260510-06_A25_A25-PLAN-UI-06

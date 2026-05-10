@@ -1,0 +1,75 @@
+
+> ambulance-manager@0.1.0 build
+> next build
+
+▲ Next.js 16.1.6 (Turbopack)
+- Environments: .env
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 14.1s
+  Running TypeScript ...
+  Collecting page data using 15 workers ...
+  Generating static pages using 15 workers (0/29) ...
+  Generating static pages using 15 workers (7/29) 
+  Generating static pages using 15 workers (14/29) 
+  Generating static pages using 15 workers (21/29) 
+✓ Generating static pages using 15 workers (29/29) in 2.5s
+  Finalizing page optimization ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /api/audit
+├ ƒ /api/auth/[...nextauth]
+├ ƒ /api/company/profile
+├ ƒ /api/company/rules
+├ ƒ /api/depots
+├ ƒ /api/depots/[id]
+├ ƒ /api/depots/[id]/archive
+├ ƒ /api/health/prisma
+├ ƒ /api/imports
+├ ƒ /api/planning/autoschedule/day
+├ ƒ /api/planning/autoschedule/runs
+├ ƒ /api/planning/autoschedule/runs/[id]
+├ ƒ /api/planning/autoschedule/runs/[id]/cancel
+├ ƒ /api/planning/autoschedule/runs/[id]/match
+├ ƒ /api/planning/autoschedule/runs/[id]/match/apply
+├ ƒ /api/planning/autoschedule/runs/[id]/match/preview
+├ ƒ /api/planning/autoschedule/runs/[id]/publish
+├ ƒ /api/planning/autoschedule/week
+├ ƒ /api/planning/exports
+├ ƒ /api/planning/shifts
+├ ƒ /api/planning/shifts/[id]
+├ ƒ /api/planning/shifts/[id]/assign
+├ ƒ /api/planning/shifts/[id]/cancel
+├ ƒ /api/templates
+├ ƒ /api/templates/[id]
+├ ƒ /api/templates/[id]/archive
+├ ƒ /api/users
+├ ƒ /api/users/[id]
+├ ƒ /api/users/[id]/absences
+├ ƒ /api/users/[id]/absences/[absenceId]
+├ ƒ /api/users/[id]/archive
+├ ƒ /api/users/[id]/depot
+├ ƒ /api/users/[id]/reset-password
+├ ƒ /api/vehicles
+├ ƒ /api/vehicles/[id]
+├ ƒ /api/vehicles/[id]/archive
+├ ƒ /api/vehicles/[id]/depot
+├ ƒ /audit
+├ ƒ /company
+├ ƒ /dashboard
+├ ƒ /depots
+├ ƒ /login
+├ ƒ /onboarding
+├ ƒ /planning
+├ ƒ /privacy
+├ ƒ /templates
+├ ƒ /users
+└ ƒ /vehicles
+
+
+ƒ Proxy (Middleware)
+
+ƒ  (Dynamic)  server-rendered on demand
+

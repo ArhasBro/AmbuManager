@@ -1,4 +1,4 @@
-﻿# SESSION
+# SESSION
 
 ## ID SESSION
 
@@ -19,15 +19,17 @@ Intitule : Panneaux actions et affectations
 
 ## Objectif de la session
 
-INFORMATION NON FOURNIE - A CONFIRMER
+Realigner les panneaux d'action et d'affectation du planning pour rendre les actions plus claires, hierarchisees et coherentes avec la DA A24/A25, sans nouvelle logique metier lourde.
 
 ## Perimetre exact traite
 
-INFORMATION NON FOURNIE - A CONFIRMER
+- Packaging documentaire de SESSION-20260510-05_A25_A25-PLAN-UI-05.
+- Correction des preuves/encodage/README patch/resultats/checklist visuelle.
+- Aucun changement de logique metier.
 
 ## Resultat synthetique de session
 
-INFORMATION NON FOURNIE - A CONFIRMER
+Patch documentaire V2 corrige et preuves terminales harmonisees.
 
 ## Dossiers lies
 

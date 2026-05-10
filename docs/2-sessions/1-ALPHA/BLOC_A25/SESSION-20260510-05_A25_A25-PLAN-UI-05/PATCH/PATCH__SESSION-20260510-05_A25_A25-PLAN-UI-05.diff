@@ -1,0 +1,233 @@
+diff --git a/app/globals.css b/app/globals.css
+index 0c8cec6..1c5c436 100644
+--- a/app/globals.css
++++ b/app/globals.css
+@@ -1800,6 +1800,84 @@ pre {
+   background: var(--ui-surface);
+ }
+ 
++.planning-affectations-panel {
++  background: linear-gradient(180deg, color-mix(in srgb, var(--ui-surface-soft), #ffffff 45%) 0%, var(--ui-surface) 100%);
++}
++
++.planning-affectations-panel__actions-main,
++.planning-affectations-panel__actions-grouped {
++  display: inline-flex;
++  gap: 8px;
++  flex-wrap: wrap;
++}
++
++.planning-affectations-panel__feedback {
++  border: 1px solid var(--ui-border);
++  border-radius: 10px;
++  background: var(--ui-surface-soft);
++  color: var(--ui-text-muted);
++  padding: 8px 10px;
++}
++
++.planning-action-primary {
++  border-color: var(--ui-primary);
++  background: var(--ui-primary);
++  color: var(--ui-primary-contrast);
++  font-weight: 700;
++}
++
++.planning-action-primary:hover:not(:disabled) {
++  border-color: #1a5bc0;
++  background: #1a5bc0;
++}
++
++.planning-action-secondary {
++  border-color: var(--ui-border);
++  background: var(--ui-surface);
++  color: var(--ui-text);
++}
++
++.planning-action-secondary:hover:not(:disabled) {
++  border-color: var(--ui-border-strong);
++  background: var(--ui-surface-soft);
++}
++
++.planning-action-danger {
++  border-color: var(--ui-danger-border);
++  background: var(--ui-danger-bg);
++  color: var(--ui-danger-text);
++  font-weight: 700;
++}
++
++.planning-action-danger:hover:not(:disabled) {
++  border-color: #fca5a5;
++  background: #fee2e2;
++}
++
++.planning-shift-card__assignments {
++  border: 1px solid var(--ui-border);
++  border-radius: 10px;
++  background: color-mix(in srgb, var(--ui-surface-soft), #ffffff 35%);
++  padding: 8px;
++}
++
++.planning-shift-card__assignments-title {
++  margin: 0;
++  font-size: 12px;
++  font-weight: 800;
++  color: #1b4c9f;
++  letter-spacing: 0.02em;
++  text-transform: uppercase;
++}
++
++.planning-shift-card__feedback {
++  border: 1px solid var(--ui-border);
++  border-radius: 8px;
++  background: var(--ui-surface);
++  color: var(--ui-text-muted);
++  padding: 6px 8px;
++}
++
+ .planning-manual {
+   background: linear-gradient(180deg, rgba(29, 78, 216, 0.05) 0%, var(--ui-surface) 220px);
+ }
+diff --git a/app/planning/planning-client.tsx b/app/planning/planning-client.tsx
+index d4eeda5..13cf410 100644
+--- a/app/planning/planning-client.tsx
++++ b/app/planning/planning-client.tsx
+@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
+ 
+ import { COMPANY_PARAMETER_KEYS, parsePlanningViewModeValue, serializePlanningViewModeValue, type PlanningViewModeValue } from "@/lib/company-rules/catalog";
+ import { normalizeTemplateColor, resolveTemplateMinStaffCount } from "@/lib/templates/template-rules";
+-import { ActionButton, StatusBadge } from "@/app/ui";
++import { ActionButton, ErrorMessage, StatusBadge } from "@/app/ui";
+ 
+ import ManualPlanningPanel from "./manual-planning-panel";
+ 
+@@ -2088,7 +2088,7 @@ export default function PlanningClient({
+       </div>
+ 
+       {canEditPlanning && (
+-        <div id="planning-affectations-zone" style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 10, display: "grid", gap: 10 }}>
++        <div id="planning-affectations-zone" className="planning-affectations-panel" style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 10, display: "grid", gap: 10 }}>
+           <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
+             <div>
+               <div style={{ fontWeight: 800 }}>Selection multiple</div>
+@@ -2096,20 +2096,21 @@ export default function PlanningClient({
+                 {selectedShiftIds.length} shift(s) selectionne(s) sur {visibleItems.length} visible(s)
+               </div>
+             </div>
+-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+-              <button onClick={toggleVisibleSelection} disabled={visibleItems.length === 0 || bulkAssignLoading}>
++            <div className="planning-affectations-panel__actions-main" style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
++              <button className="planning-action-secondary" onClick={toggleVisibleSelection} disabled={visibleItems.length === 0 || bulkAssignLoading}>
+                 {visibleItems.length > 0 && visibleItems.every((shift) => selectedShiftIdSet.has(shift.id))
+                   ? "Tout retirer"
+                   : "Tout selectionner"}
+               </button>
+               <button
++                className="planning-action-danger"
+                 onClick={() => {
+                   setSelectedShiftIds([]);
+                   setBulkAssignMsg(null);
+                 }}
+                 disabled={selectedShiftIds.length === 0 || bulkAssignLoading}
+               >
+-                Vider la selection
++                Vider la selection (sans suppression)
+               </button>
+             </div>
+           </div>
+@@ -2160,11 +2161,12 @@ export default function PlanningClient({
+             L&apos;affectation lot applique seulement les champs selectionnes. Le slot Employe 2 est ignore sur les shifts mono-agent.
+           </div>
+ 
+-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+-            <button onClick={applyBulkAssign} disabled={bulkAssignLoading || selectedShiftIds.length === 0 || !bulkHasChanges}>
++          <div className="planning-affectations-panel__actions-grouped" style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
++            <button className="planning-action-primary" onClick={applyBulkAssign} disabled={bulkAssignLoading || selectedShiftIds.length === 0 || !bulkHasChanges}>
+               {bulkAssignLoading ? "Application en lot..." : "Affecter la selection"}
+             </button>
+             <button
++              className="planning-action-secondary"
+               onClick={() => {
+                 setBulkAssignForm(createBulkAssignFormState());
+                 setBulkAssignMsg(null);
+@@ -2175,7 +2177,7 @@ export default function PlanningClient({
+             </button>
+           </div>
+ 
+-          {bulkAssignMsg && <div style={{ fontSize: 12, opacity: 0.92 }}>{bulkAssignMsg}</div>}
++          {bulkAssignMsg && <div className="planning-affectations-panel__feedback" style={{ fontSize: 12, opacity: 0.92 }}>{bulkAssignMsg}</div>}
+         </div>
+       )}
+ 
+@@ -2380,7 +2382,7 @@ export default function PlanningClient({
+       )}
+ 
+       {loading && <div>Chargement…</div>}
+-      {error && <div style={{ color: "var(--ui-danger-text)" }}>Erreur : {error}</div>}
++      {error && <ErrorMessage title="Erreur planning" message={error} />}
+ 
+       {!loading && !error && (
+         <div className="planning-legacy__week-grid" style={{ display: "grid", gridTemplateColumns: "repeat(7, minmax(160px, 1fr))", gap: 10 }}>
+@@ -2426,6 +2428,7 @@ export default function PlanningClient({
+ 
+                 {canEditPlanning && dayShifts.length > 0 && (
+                   <button
++                    className="planning-action-secondary"
+                     onClick={() => toggleDaySelection(dayShifts)}
+                     disabled={bulkAssignLoading}
+                     style={{
+@@ -2543,7 +2546,7 @@ function ShiftCardSimple({
+   const accentColor = normalizeTemplateColor(s.template?.color) ?? "#1D4ED8";
+ 
+   return (
+-    <div style={{ border: `1px solid ${accentColor}`, borderLeft: `10px solid ${accentColor}`, borderRadius: 10, padding: 10, display: "grid", gap: 8 }}>
++    <div className="planning-shift-card" style={{ border: `1px solid ${accentColor}`, borderLeft: `10px solid ${accentColor}`, borderRadius: 10, padding: 10, display: "grid", gap: 8 }}>
+       <div style={{ fontWeight: 800 }}>
+         {timeHM(s.startAt)} → {timeHM(s.endAt)}
+       </div>
+@@ -2560,7 +2563,8 @@ function ShiftCardSimple({
+       </div>
+ 
+       {editable && (
+-        <div style={{ display: "grid", gap: 6 }}>
++        <div className="planning-shift-card__assignments" style={{ display: "grid", gap: 6 }}>
++          <div className="planning-shift-card__assignments-title">Affectations</div>
+           <div style={{ display: "grid", gap: 4 }}>
+             <label style={{ fontSize: 12, opacity: 0.75 }}>{two ? "Employé 1" : "Employé"}</label>
+             <select
+@@ -2639,7 +2643,7 @@ function ShiftCardSimple({
+             </select>
+           </div>
+ 
+-          {msg && <div style={{ fontSize: 12, opacity: 0.9 }}>{msg}</div>}
++          {msg && <div className="planning-shift-card__feedback" style={{ fontSize: 12, opacity: 0.9 }}>{msg}</div>}
+         </div>
+       )}
+     </div>
+@@ -2677,7 +2681,7 @@ function ShiftCardAmbulance({
+         : `1px solid ${accentColor}`;
+ 
+   return (
+-    <div style={{ border: borderStyle, borderLeft: `10px solid ${accentColor}`, borderRadius: 12, padding: 10, display: "grid", gap: 8 }}>
++    <div className="planning-shift-card" style={{ border: borderStyle, borderLeft: `10px solid ${accentColor}`, borderRadius: 12, padding: 10, display: "grid", gap: 8 }}>
+       <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
+         <div style={{ fontWeight: 900 }}>
+           {timeHM(s.startAt)} → {timeHM(s.endAt)}
+@@ -2712,7 +2716,8 @@ function ShiftCardAmbulance({
+       </div>
+ 
+       {editable && (
+-        <div style={{ display: "grid", gap: 6, marginTop: 4 }}>
++        <div className="planning-shift-card__assignments" style={{ display: "grid", gap: 6, marginTop: 4 }}>
++          <div className="planning-shift-card__assignments-title">Affectations</div>
+           <div style={{ display: "grid", gap: 4 }}>
+             <label style={{ fontSize: 12, opacity: 0.75 }}>{two ? "Employé 1" : "Employé"}</label>
+             <select
+@@ -2791,7 +2796,7 @@ function ShiftCardAmbulance({
+             </select>
+           </div>
+ 
+-          {msg && <div style={{ fontSize: 12, opacity: 0.9 }}>{msg}</div>}
++          {msg && <div className="planning-shift-card__feedback" style={{ fontSize: 12, opacity: 0.9 }}>{msg}</div>}
+         </div>
+       )}
+     </div>
