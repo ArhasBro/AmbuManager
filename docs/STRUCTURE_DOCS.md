@@ -2544,7 +2544,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |                   README_PATCH.md
 |   |   |                   
 |   |   +---BLOC_A25
-|   |   |   |   PROMPTS_A25_06_A_CLOTURE_PRODUCTION_CONTROLE.md
+|   |   |   |   PROMPTS_A25_06_A_CLOTURE_PRODUCTION_CONTROLE_V1_1.md
 |   |   |   |   
 |   |   |   +---ARCHIVE
 |   |   |   |   +---SESSION-20260510-01_A25_A25-PLAN-UI-01

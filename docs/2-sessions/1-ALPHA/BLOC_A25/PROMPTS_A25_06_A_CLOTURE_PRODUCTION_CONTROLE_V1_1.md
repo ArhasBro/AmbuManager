@@ -1,6 +1,6 @@
 # Ambulance Manager — Prompts A25-06 à CLOTURE_A25
 
-Version : V1.0 — recadrage Planning maquette
+Version : V1.1 — recadrage Planning maquette + hiérarchie stricte des références
 Date : 10/05/2026
 
 ## Note de cadrage
@@ -13,6 +13,8 @@ Ce document prépare exactement deux prompts par session :
 Le dossier `ARCHIVE` du ZIP `BLOC_A25` est volontairement ignoré, car il contient les anciennes sessions A25 obsolètes.
 
 Règle nouvelle importante : la production Codex se fait en deux phases. Codex travaille d’abord le code ou l’audit technique, puis attend l’autorisation explicite `AUTORISÉ : DOCUMENTATION` avant de rédiger les fichiers documentaires de session.
+
+Règle de priorité A25 ajoutée en V1.1 : les images Planning officielles priment sur toute documentation textuelle en cas de contradiction visuelle. La documentation générale `docs/1-master/MAQUETTE` reste un contexte de direction artistique, mais ne doit jamais contredire `Planning_V1.2.png`, `Planning_V1.2_INFO_DETAIL.png` ou `REFERENCE_UI_UX_A25_PLANNING.md`.
 
 ---
 
@@ -78,18 +80,47 @@ RÈGLES TECHNIQUES
 - Ne pas modifier Prisma, API, RBAC, autoschedule, matching ou logique métier lourde sauf nécessité bloquante explicitement justifiée.
 - La fidélité visuelle à la maquette prime sur les micro-corrections locales.
 
-RÉFÉRENCES OBLIGATOIRES
+RÉFÉRENCES OBLIGATOIRES ET LIMITÉES
 - `docs/1-master/DOCUMENT_MAITRE.md`
 - `docs/1-master/PLAN_DE_DEVELOPPEMENT.md`
 - `docs/1-master/REFERENCE_UI_UX_A25_PLANNING.md`
-- `docs/1-master/MAQUETTE/MAQUETTE_DA`
-- `docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2.png`
-- `docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2_INFO_DETAIL.png`
+- images Planning officielles :
+  - `docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2.png`
+  - `docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2_INFO_DETAIL.png`
+- documentation générale MAQUETTE uniquement si nécessaire et uniquement comme contexte DA :
+  - `docs/1-master/MAQUETTE/README_MAQUETTES_A24.md`
+  - `docs/1-master/MAQUETTE/SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md`
 
-RÈGLE D’AUTORITÉ
-- `MAQUETTE_DA` et les images Planning officielles guident la cible visuelle.
-- `CODE > DOCUMENTATION` pour la logique fonctionnelle réelle.
-- Toute information manquante : `INFORMATION NON FOURNIE — À CONFIRMER`.
+Ne pas lire tout le dossier `docs/1-master/MAQUETTE` par défaut.
+Ne lire dans la documentation MAQUETTE générale que les sections utiles au Planning ou à la DA commune.
+
+RÈGLE D’AUTORITÉ DES RÉFÉRENCES
+Pour A25, la cible visuelle prioritaire est la reproduction la plus fidèle possible des images Planning officielles.
+
+Hiérarchie en cas de contradiction visuelle :
+1. Images Planning officielles `Planning_V1.2.png` et `Planning_V1.2_INFO_DETAIL.png`.
+2. `docs/1-master/REFERENCE_UI_UX_A25_PLANNING.md`.
+3. `docs/1-master/MAQUETTE/SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md`, uniquement comme contexte DA.
+4. `docs/1-master/MAQUETTE/README_MAQUETTES_A24.md`, uniquement comme contexte DA.
+5. Anciennes sessions, anciennes captures, anciens prompts.
+
+Hiérarchie en cas de contradiction fonctionnelle :
+- `CODE existant > documentation`.
+
+La documentation générale du dossier `MAQUETTE` ne doit jamais annuler ou affaiblir :
+- les images Planning officielles ;
+- le document A25 recadré ;
+- l’objectif de reproduction fidèle à environ 99 % ;
+- la règle d’absence de captures Codex.
+
+RÈGLE ANTI-CONTRADICTION MAQUETTE
+Si une consigne trouvée dans `docs/1-master/MAQUETTE` contredit les images Planning officielles, `REFERENCE_UI_UX_A25_PLANNING.md`, l’absence de captures Codex ou l’objectif de reproduction à environ 99 %, ne pas l’appliquer automatiquement.
+Écrire exactement :
+`CONTRADICTION DOCUMENTAIRE — À CONFIRMER`
+Puis appliquer par défaut la référence la plus prioritaire :
+`Images Planning officielles > REFERENCE_UI_UX_A25_PLANNING.md`.
+
+Toute information manquante : `INFORMATION NON FOURNIE — À CONFIRMER`.
 
 
 ============================================================
@@ -225,6 +256,13 @@ Tu dois vérifier que Codex :
 Si une information manque, écrire exactement :
 `INFORMATION NON FOURNIE — À CONFIRMER`
 
+RÈGLE D’AUTORITÉ À CONTRÔLER
+- Vérifier que Codex a donné la priorité visuelle aux images Planning officielles `Planning_V1.2.png` et `Planning_V1.2_INFO_DETAIL.png`.
+- Vérifier que la documentation générale `docs/1-master/MAQUETTE` n’a pas été utilisée pour contredire les images Planning officielles ou `REFERENCE_UI_UX_A25_PLANNING.md`.
+- En cas de contradiction visuelle non résolue, le contrôle doit écrire : `CONTRADICTION DOCUMENTAIRE — À CONFIRMER`.
+- Règle visuelle : `Images Planning officielles > REFERENCE_UI_UX_A25_PLANNING.md > SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md > README_MAQUETTES_A24.md > anciennes sessions / anciennes captures / anciens prompts`.
+- Règle fonctionnelle : `CODE existant > documentation`.
+
 
 ============================================================
 ÉLÉMENTS À ATTENDRE AVANT CONTRÔLE
@@ -358,18 +396,47 @@ RÈGLES TECHNIQUES
 - Ne pas modifier Prisma, API, RBAC, autoschedule, matching ou logique métier lourde sauf nécessité bloquante explicitement justifiée.
 - La fidélité visuelle à la maquette prime sur les micro-corrections locales.
 
-RÉFÉRENCES OBLIGATOIRES
+RÉFÉRENCES OBLIGATOIRES ET LIMITÉES
 - `docs/1-master/DOCUMENT_MAITRE.md`
 - `docs/1-master/PLAN_DE_DEVELOPPEMENT.md`
 - `docs/1-master/REFERENCE_UI_UX_A25_PLANNING.md`
-- `docs/1-master/MAQUETTE/MAQUETTE_DA`
-- `docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2.png`
-- `docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2_INFO_DETAIL.png`
+- images Planning officielles :
+  - `docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2.png`
+  - `docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2_INFO_DETAIL.png`
+- documentation générale MAQUETTE uniquement si nécessaire et uniquement comme contexte DA :
+  - `docs/1-master/MAQUETTE/README_MAQUETTES_A24.md`
+  - `docs/1-master/MAQUETTE/SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md`
 
-RÈGLE D’AUTORITÉ
-- `MAQUETTE_DA` et les images Planning officielles guident la cible visuelle.
-- `CODE > DOCUMENTATION` pour la logique fonctionnelle réelle.
-- Toute information manquante : `INFORMATION NON FOURNIE — À CONFIRMER`.
+Ne pas lire tout le dossier `docs/1-master/MAQUETTE` par défaut.
+Ne lire dans la documentation MAQUETTE générale que les sections utiles au Planning ou à la DA commune.
+
+RÈGLE D’AUTORITÉ DES RÉFÉRENCES
+Pour A25, la cible visuelle prioritaire est la reproduction la plus fidèle possible des images Planning officielles.
+
+Hiérarchie en cas de contradiction visuelle :
+1. Images Planning officielles `Planning_V1.2.png` et `Planning_V1.2_INFO_DETAIL.png`.
+2. `docs/1-master/REFERENCE_UI_UX_A25_PLANNING.md`.
+3. `docs/1-master/MAQUETTE/SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md`, uniquement comme contexte DA.
+4. `docs/1-master/MAQUETTE/README_MAQUETTES_A24.md`, uniquement comme contexte DA.
+5. Anciennes sessions, anciennes captures, anciens prompts.
+
+Hiérarchie en cas de contradiction fonctionnelle :
+- `CODE existant > documentation`.
+
+La documentation générale du dossier `MAQUETTE` ne doit jamais annuler ou affaiblir :
+- les images Planning officielles ;
+- le document A25 recadré ;
+- l’objectif de reproduction fidèle à environ 99 % ;
+- la règle d’absence de captures Codex.
+
+RÈGLE ANTI-CONTRADICTION MAQUETTE
+Si une consigne trouvée dans `docs/1-master/MAQUETTE` contredit les images Planning officielles, `REFERENCE_UI_UX_A25_PLANNING.md`, l’absence de captures Codex ou l’objectif de reproduction à environ 99 %, ne pas l’appliquer automatiquement.
+Écrire exactement :
+`CONTRADICTION DOCUMENTAIRE — À CONFIRMER`
+Puis appliquer par défaut la référence la plus prioritaire :
+`Images Planning officielles > REFERENCE_UI_UX_A25_PLANNING.md`.
+
+Toute information manquante : `INFORMATION NON FOURNIE — À CONFIRMER`.
 
 
 ============================================================
@@ -509,6 +576,13 @@ Tu dois vérifier que Codex :
 Si une information manque, écrire exactement :
 `INFORMATION NON FOURNIE — À CONFIRMER`
 
+RÈGLE D’AUTORITÉ À CONTRÔLER
+- Vérifier que Codex a donné la priorité visuelle aux images Planning officielles `Planning_V1.2.png` et `Planning_V1.2_INFO_DETAIL.png`.
+- Vérifier que la documentation générale `docs/1-master/MAQUETTE` n’a pas été utilisée pour contredire les images Planning officielles ou `REFERENCE_UI_UX_A25_PLANNING.md`.
+- En cas de contradiction visuelle non résolue, le contrôle doit écrire : `CONTRADICTION DOCUMENTAIRE — À CONFIRMER`.
+- Règle visuelle : `Images Planning officielles > REFERENCE_UI_UX_A25_PLANNING.md > SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md > README_MAQUETTES_A24.md > anciennes sessions / anciennes captures / anciens prompts`.
+- Règle fonctionnelle : `CODE existant > documentation`.
+
 
 ============================================================
 ÉLÉMENTS À ATTENDRE AVANT CONTRÔLE
@@ -646,18 +720,47 @@ RÈGLES TECHNIQUES
 - Ne pas modifier Prisma, API, RBAC, autoschedule, matching ou logique métier lourde sauf nécessité bloquante explicitement justifiée.
 - La fidélité visuelle à la maquette prime sur les micro-corrections locales.
 
-RÉFÉRENCES OBLIGATOIRES
+RÉFÉRENCES OBLIGATOIRES ET LIMITÉES
 - `docs/1-master/DOCUMENT_MAITRE.md`
 - `docs/1-master/PLAN_DE_DEVELOPPEMENT.md`
 - `docs/1-master/REFERENCE_UI_UX_A25_PLANNING.md`
-- `docs/1-master/MAQUETTE/MAQUETTE_DA`
-- `docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2.png`
-- `docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2_INFO_DETAIL.png`
+- images Planning officielles :
+  - `docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2.png`
+  - `docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2_INFO_DETAIL.png`
+- documentation générale MAQUETTE uniquement si nécessaire et uniquement comme contexte DA :
+  - `docs/1-master/MAQUETTE/README_MAQUETTES_A24.md`
+  - `docs/1-master/MAQUETTE/SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md`
 
-RÈGLE D’AUTORITÉ
-- `MAQUETTE_DA` et les images Planning officielles guident la cible visuelle.
-- `CODE > DOCUMENTATION` pour la logique fonctionnelle réelle.
-- Toute information manquante : `INFORMATION NON FOURNIE — À CONFIRMER`.
+Ne pas lire tout le dossier `docs/1-master/MAQUETTE` par défaut.
+Ne lire dans la documentation MAQUETTE générale que les sections utiles au Planning ou à la DA commune.
+
+RÈGLE D’AUTORITÉ DES RÉFÉRENCES
+Pour A25, la cible visuelle prioritaire est la reproduction la plus fidèle possible des images Planning officielles.
+
+Hiérarchie en cas de contradiction visuelle :
+1. Images Planning officielles `Planning_V1.2.png` et `Planning_V1.2_INFO_DETAIL.png`.
+2. `docs/1-master/REFERENCE_UI_UX_A25_PLANNING.md`.
+3. `docs/1-master/MAQUETTE/SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md`, uniquement comme contexte DA.
+4. `docs/1-master/MAQUETTE/README_MAQUETTES_A24.md`, uniquement comme contexte DA.
+5. Anciennes sessions, anciennes captures, anciens prompts.
+
+Hiérarchie en cas de contradiction fonctionnelle :
+- `CODE existant > documentation`.
+
+La documentation générale du dossier `MAQUETTE` ne doit jamais annuler ou affaiblir :
+- les images Planning officielles ;
+- le document A25 recadré ;
+- l’objectif de reproduction fidèle à environ 99 % ;
+- la règle d’absence de captures Codex.
+
+RÈGLE ANTI-CONTRADICTION MAQUETTE
+Si une consigne trouvée dans `docs/1-master/MAQUETTE` contredit les images Planning officielles, `REFERENCE_UI_UX_A25_PLANNING.md`, l’absence de captures Codex ou l’objectif de reproduction à environ 99 %, ne pas l’appliquer automatiquement.
+Écrire exactement :
+`CONTRADICTION DOCUMENTAIRE — À CONFIRMER`
+Puis appliquer par défaut la référence la plus prioritaire :
+`Images Planning officielles > REFERENCE_UI_UX_A25_PLANNING.md`.
+
+Toute information manquante : `INFORMATION NON FOURNIE — À CONFIRMER`.
 
 
 ============================================================
@@ -798,6 +901,13 @@ Tu dois vérifier que Codex :
 Si une information manque, écrire exactement :
 `INFORMATION NON FOURNIE — À CONFIRMER`
 
+RÈGLE D’AUTORITÉ À CONTRÔLER
+- Vérifier que Codex a donné la priorité visuelle aux images Planning officielles `Planning_V1.2.png` et `Planning_V1.2_INFO_DETAIL.png`.
+- Vérifier que la documentation générale `docs/1-master/MAQUETTE` n’a pas été utilisée pour contredire les images Planning officielles ou `REFERENCE_UI_UX_A25_PLANNING.md`.
+- En cas de contradiction visuelle non résolue, le contrôle doit écrire : `CONTRADICTION DOCUMENTAIRE — À CONFIRMER`.
+- Règle visuelle : `Images Planning officielles > REFERENCE_UI_UX_A25_PLANNING.md > SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md > README_MAQUETTES_A24.md > anciennes sessions / anciennes captures / anciens prompts`.
+- Règle fonctionnelle : `CODE existant > documentation`.
+
 
 ============================================================
 ÉLÉMENTS À ATTENDRE AVANT CONTRÔLE
@@ -937,18 +1047,47 @@ RÈGLES TECHNIQUES
 - Ne pas modifier Prisma, API, RBAC, autoschedule, matching ou logique métier lourde sauf nécessité bloquante explicitement justifiée.
 - La fidélité visuelle à la maquette prime sur les micro-corrections locales.
 
-RÉFÉRENCES OBLIGATOIRES
+RÉFÉRENCES OBLIGATOIRES ET LIMITÉES
 - `docs/1-master/DOCUMENT_MAITRE.md`
 - `docs/1-master/PLAN_DE_DEVELOPPEMENT.md`
 - `docs/1-master/REFERENCE_UI_UX_A25_PLANNING.md`
-- `docs/1-master/MAQUETTE/MAQUETTE_DA`
-- `docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2.png`
-- `docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2_INFO_DETAIL.png`
+- images Planning officielles :
+  - `docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2.png`
+  - `docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2_INFO_DETAIL.png`
+- documentation générale MAQUETTE uniquement si nécessaire et uniquement comme contexte DA :
+  - `docs/1-master/MAQUETTE/README_MAQUETTES_A24.md`
+  - `docs/1-master/MAQUETTE/SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md`
 
-RÈGLE D’AUTORITÉ
-- `MAQUETTE_DA` et les images Planning officielles guident la cible visuelle.
-- `CODE > DOCUMENTATION` pour la logique fonctionnelle réelle.
-- Toute information manquante : `INFORMATION NON FOURNIE — À CONFIRMER`.
+Ne pas lire tout le dossier `docs/1-master/MAQUETTE` par défaut.
+Ne lire dans la documentation MAQUETTE générale que les sections utiles au Planning ou à la DA commune.
+
+RÈGLE D’AUTORITÉ DES RÉFÉRENCES
+Pour A25, la cible visuelle prioritaire est la reproduction la plus fidèle possible des images Planning officielles.
+
+Hiérarchie en cas de contradiction visuelle :
+1. Images Planning officielles `Planning_V1.2.png` et `Planning_V1.2_INFO_DETAIL.png`.
+2. `docs/1-master/REFERENCE_UI_UX_A25_PLANNING.md`.
+3. `docs/1-master/MAQUETTE/SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md`, uniquement comme contexte DA.
+4. `docs/1-master/MAQUETTE/README_MAQUETTES_A24.md`, uniquement comme contexte DA.
+5. Anciennes sessions, anciennes captures, anciens prompts.
+
+Hiérarchie en cas de contradiction fonctionnelle :
+- `CODE existant > documentation`.
+
+La documentation générale du dossier `MAQUETTE` ne doit jamais annuler ou affaiblir :
+- les images Planning officielles ;
+- le document A25 recadré ;
+- l’objectif de reproduction fidèle à environ 99 % ;
+- la règle d’absence de captures Codex.
+
+RÈGLE ANTI-CONTRADICTION MAQUETTE
+Si une consigne trouvée dans `docs/1-master/MAQUETTE` contredit les images Planning officielles, `REFERENCE_UI_UX_A25_PLANNING.md`, l’absence de captures Codex ou l’objectif de reproduction à environ 99 %, ne pas l’appliquer automatiquement.
+Écrire exactement :
+`CONTRADICTION DOCUMENTAIRE — À CONFIRMER`
+Puis appliquer par défaut la référence la plus prioritaire :
+`Images Planning officielles > REFERENCE_UI_UX_A25_PLANNING.md`.
+
+Toute information manquante : `INFORMATION NON FOURNIE — À CONFIRMER`.
 
 
 ============================================================
@@ -1092,6 +1231,13 @@ Tu dois vérifier que Codex :
 Si une information manque, écrire exactement :
 `INFORMATION NON FOURNIE — À CONFIRMER`
 
+RÈGLE D’AUTORITÉ À CONTRÔLER
+- Vérifier que Codex a donné la priorité visuelle aux images Planning officielles `Planning_V1.2.png` et `Planning_V1.2_INFO_DETAIL.png`.
+- Vérifier que la documentation générale `docs/1-master/MAQUETTE` n’a pas été utilisée pour contredire les images Planning officielles ou `REFERENCE_UI_UX_A25_PLANNING.md`.
+- En cas de contradiction visuelle non résolue, le contrôle doit écrire : `CONTRADICTION DOCUMENTAIRE — À CONFIRMER`.
+- Règle visuelle : `Images Planning officielles > REFERENCE_UI_UX_A25_PLANNING.md > SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md > README_MAQUETTES_A24.md > anciennes sessions / anciennes captures / anciens prompts`.
+- Règle fonctionnelle : `CODE existant > documentation`.
+
 
 ============================================================
 ÉLÉMENTS À ATTENDRE AVANT CONTRÔLE
@@ -1232,18 +1378,47 @@ RÈGLES TECHNIQUES
 - Ne pas modifier Prisma, API, RBAC, autoschedule, matching ou logique métier lourde sauf nécessité bloquante explicitement justifiée.
 - La fidélité visuelle à la maquette prime sur les micro-corrections locales.
 
-RÉFÉRENCES OBLIGATOIRES
+RÉFÉRENCES OBLIGATOIRES ET LIMITÉES
 - `docs/1-master/DOCUMENT_MAITRE.md`
 - `docs/1-master/PLAN_DE_DEVELOPPEMENT.md`
 - `docs/1-master/REFERENCE_UI_UX_A25_PLANNING.md`
-- `docs/1-master/MAQUETTE/MAQUETTE_DA`
-- `docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2.png`
-- `docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2_INFO_DETAIL.png`
+- images Planning officielles :
+  - `docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2.png`
+  - `docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2_INFO_DETAIL.png`
+- documentation générale MAQUETTE uniquement si nécessaire et uniquement comme contexte DA :
+  - `docs/1-master/MAQUETTE/README_MAQUETTES_A24.md`
+  - `docs/1-master/MAQUETTE/SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md`
 
-RÈGLE D’AUTORITÉ
-- `MAQUETTE_DA` et les images Planning officielles guident la cible visuelle.
-- `CODE > DOCUMENTATION` pour la logique fonctionnelle réelle.
-- Toute information manquante : `INFORMATION NON FOURNIE — À CONFIRMER`.
+Ne pas lire tout le dossier `docs/1-master/MAQUETTE` par défaut.
+Ne lire dans la documentation MAQUETTE générale que les sections utiles au Planning ou à la DA commune.
+
+RÈGLE D’AUTORITÉ DES RÉFÉRENCES
+Pour A25, la cible visuelle prioritaire est la reproduction la plus fidèle possible des images Planning officielles.
+
+Hiérarchie en cas de contradiction visuelle :
+1. Images Planning officielles `Planning_V1.2.png` et `Planning_V1.2_INFO_DETAIL.png`.
+2. `docs/1-master/REFERENCE_UI_UX_A25_PLANNING.md`.
+3. `docs/1-master/MAQUETTE/SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md`, uniquement comme contexte DA.
+4. `docs/1-master/MAQUETTE/README_MAQUETTES_A24.md`, uniquement comme contexte DA.
+5. Anciennes sessions, anciennes captures, anciens prompts.
+
+Hiérarchie en cas de contradiction fonctionnelle :
+- `CODE existant > documentation`.
+
+La documentation générale du dossier `MAQUETTE` ne doit jamais annuler ou affaiblir :
+- les images Planning officielles ;
+- le document A25 recadré ;
+- l’objectif de reproduction fidèle à environ 99 % ;
+- la règle d’absence de captures Codex.
+
+RÈGLE ANTI-CONTRADICTION MAQUETTE
+Si une consigne trouvée dans `docs/1-master/MAQUETTE` contredit les images Planning officielles, `REFERENCE_UI_UX_A25_PLANNING.md`, l’absence de captures Codex ou l’objectif de reproduction à environ 99 %, ne pas l’appliquer automatiquement.
+Écrire exactement :
+`CONTRADICTION DOCUMENTAIRE — À CONFIRMER`
+Puis appliquer par défaut la référence la plus prioritaire :
+`Images Planning officielles > REFERENCE_UI_UX_A25_PLANNING.md`.
+
+Toute information manquante : `INFORMATION NON FOURNIE — À CONFIRMER`.
 
 
 ============================================================
@@ -1387,6 +1562,13 @@ Tu dois vérifier que Codex :
 Si une information manque, écrire exactement :
 `INFORMATION NON FOURNIE — À CONFIRMER`
 
+RÈGLE D’AUTORITÉ À CONTRÔLER
+- Vérifier que Codex a donné la priorité visuelle aux images Planning officielles `Planning_V1.2.png` et `Planning_V1.2_INFO_DETAIL.png`.
+- Vérifier que la documentation générale `docs/1-master/MAQUETTE` n’a pas été utilisée pour contredire les images Planning officielles ou `REFERENCE_UI_UX_A25_PLANNING.md`.
+- En cas de contradiction visuelle non résolue, le contrôle doit écrire : `CONTRADICTION DOCUMENTAIRE — À CONFIRMER`.
+- Règle visuelle : `Images Planning officielles > REFERENCE_UI_UX_A25_PLANNING.md > SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md > README_MAQUETTES_A24.md > anciennes sessions / anciennes captures / anciens prompts`.
+- Règle fonctionnelle : `CODE existant > documentation`.
+
 
 ============================================================
 ÉLÉMENTS À ATTENDRE AVANT CONTRÔLE
@@ -1520,18 +1702,47 @@ RÈGLES TECHNIQUES
 - Ne pas modifier Prisma, API, RBAC, autoschedule, matching ou logique métier lourde sauf nécessité bloquante explicitement justifiée.
 - La fidélité visuelle à la maquette prime sur les micro-corrections locales.
 
-RÉFÉRENCES OBLIGATOIRES
+RÉFÉRENCES OBLIGATOIRES ET LIMITÉES
 - `docs/1-master/DOCUMENT_MAITRE.md`
 - `docs/1-master/PLAN_DE_DEVELOPPEMENT.md`
 - `docs/1-master/REFERENCE_UI_UX_A25_PLANNING.md`
-- `docs/1-master/MAQUETTE/MAQUETTE_DA`
-- `docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2.png`
-- `docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2_INFO_DETAIL.png`
+- images Planning officielles :
+  - `docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2.png`
+  - `docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2_INFO_DETAIL.png`
+- documentation générale MAQUETTE uniquement si nécessaire et uniquement comme contexte DA :
+  - `docs/1-master/MAQUETTE/README_MAQUETTES_A24.md`
+  - `docs/1-master/MAQUETTE/SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md`
 
-RÈGLE D’AUTORITÉ
-- `MAQUETTE_DA` et les images Planning officielles guident la cible visuelle.
-- `CODE > DOCUMENTATION` pour la logique fonctionnelle réelle.
-- Toute information manquante : `INFORMATION NON FOURNIE — À CONFIRMER`.
+Ne pas lire tout le dossier `docs/1-master/MAQUETTE` par défaut.
+Ne lire dans la documentation MAQUETTE générale que les sections utiles au Planning ou à la DA commune.
+
+RÈGLE D’AUTORITÉ DES RÉFÉRENCES
+Pour A25, la cible visuelle prioritaire est la reproduction la plus fidèle possible des images Planning officielles.
+
+Hiérarchie en cas de contradiction visuelle :
+1. Images Planning officielles `Planning_V1.2.png` et `Planning_V1.2_INFO_DETAIL.png`.
+2. `docs/1-master/REFERENCE_UI_UX_A25_PLANNING.md`.
+3. `docs/1-master/MAQUETTE/SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md`, uniquement comme contexte DA.
+4. `docs/1-master/MAQUETTE/README_MAQUETTES_A24.md`, uniquement comme contexte DA.
+5. Anciennes sessions, anciennes captures, anciens prompts.
+
+Hiérarchie en cas de contradiction fonctionnelle :
+- `CODE existant > documentation`.
+
+La documentation générale du dossier `MAQUETTE` ne doit jamais annuler ou affaiblir :
+- les images Planning officielles ;
+- le document A25 recadré ;
+- l’objectif de reproduction fidèle à environ 99 % ;
+- la règle d’absence de captures Codex.
+
+RÈGLE ANTI-CONTRADICTION MAQUETTE
+Si une consigne trouvée dans `docs/1-master/MAQUETTE` contredit les images Planning officielles, `REFERENCE_UI_UX_A25_PLANNING.md`, l’absence de captures Codex ou l’objectif de reproduction à environ 99 %, ne pas l’appliquer automatiquement.
+Écrire exactement :
+`CONTRADICTION DOCUMENTAIRE — À CONFIRMER`
+Puis appliquer par défaut la référence la plus prioritaire :
+`Images Planning officielles > REFERENCE_UI_UX_A25_PLANNING.md`.
+
+Toute information manquante : `INFORMATION NON FOURNIE — À CONFIRMER`.
 
 
 ============================================================
@@ -1669,6 +1880,13 @@ Tu dois vérifier que Codex :
 
 Si une information manque, écrire exactement :
 `INFORMATION NON FOURNIE — À CONFIRMER`
+
+RÈGLE D’AUTORITÉ À CONTRÔLER
+- Vérifier que Codex a donné la priorité visuelle aux images Planning officielles `Planning_V1.2.png` et `Planning_V1.2_INFO_DETAIL.png`.
+- Vérifier que la documentation générale `docs/1-master/MAQUETTE` n’a pas été utilisée pour contredire les images Planning officielles ou `REFERENCE_UI_UX_A25_PLANNING.md`.
+- En cas de contradiction visuelle non résolue, le contrôle doit écrire : `CONTRADICTION DOCUMENTAIRE — À CONFIRMER`.
+- Règle visuelle : `Images Planning officielles > REFERENCE_UI_UX_A25_PLANNING.md > SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md > README_MAQUETTES_A24.md > anciennes sessions / anciennes captures / anciens prompts`.
+- Règle fonctionnelle : `CODE existant > documentation`.
 
 
 ============================================================
