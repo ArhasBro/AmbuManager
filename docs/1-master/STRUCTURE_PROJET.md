@@ -1,5 +1,5 @@
 ﻿Structure du dossier pour le volume Windows
-Le numÚro de sÚrie du volume est 0000005E 123E:4DB7
+Le numÚro de sÚrie du volume est 123E-4DB7
 C:.
 |   .env
 |   .gitignore
@@ -16,40 +16,6 @@ C:.
 |   README.md
 |   tsconfig.json
 |   
-+---.codex-temp
-|   |   a23-login02-cookies.txt
-|   |   a23-plan07-audit.mjs
-|   |   a23-plan08-validate.mjs
-|   |   capture-after.spec.ts
-|   |   dashboard-auth-test.png
-|   |   
-|   +---a23-login02
-|   |       page.modified.tsx
-|   |       page.original.tsx
-|   |       
-|   +---before-ui03
-|   +---comparisons
-|   |       audit_compare.png
-|   |       company_compare.png
-|   |       dashboard_compare.png
-|   |       depots_compare.png
-|   |       login_compare.png
-|   |       onboarding_compare.png
-|   |       planning_compare.png
-|   |       privacy_compare.png
-|   |       templates_compare.png
-|   |       users_compare.png
-|   |       vehicles_compare.png
-|   |       
-|   \---comparisons-after
-|           audit_3up.png
-|           dashboard_3up.png
-|           login_3up.png
-|           planning_3up.png
-|           privacy_3up.png
-|           templates_3up.png
-|           users_3up.png
-|           
 +---.next
 |   |   app-path-routes-manifest.json
 |   |   build-manifest.json
