@@ -80,6 +80,8 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   README.md
 |   |   
 |   +---1-ALPHA
+|   |   |   BLOC_A25.zip
+|   |   |   
 |   |   +---1-VALIDE
 |   |   |   +---BLOC_A1
 |   |   |   |   +---1-AUTH
@@ -2542,6 +2544,8 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |                   README_PATCH.md
 |   |   |                   
 |   |   +---BLOC_A25
+|   |   |   |   PROMPTS_A25_06_A_CLOTURE_PRODUCTION_CONTROLE.md
+|   |   |   |   
 |   |   |   +---ARCHIVE
 |   |   |   |   +---SESSION-20260510-01_A25_A25-PLAN-UI-01
 |   |   |   |   |   |   EVIDENCES.md

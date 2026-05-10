@@ -145,7 +145,6 @@ Aucun passage au bloc suivant sans ce verdict explicite.
 - `README_PATCH.md` si patch réel
 - `NO_PATCH.md` si applicable
 - documentation finale de session
-- ZIP documentaire final
 
 ### Contrôle avec ChatGPT
 - analyse de la réponse de production uniquement
