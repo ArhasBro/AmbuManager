@@ -4903,6 +4903,8 @@ C:.
 |   |   |   README.md
 |   |   |   
 |   |   +---1-ALPHA
+|   |   |   |   BLOC_A25.zip
+|   |   |   |   
 |   |   |   +---BLOC_A1
 |   |   |   |   +---1-AUTH
 |   |   |   |   |   +---SESSION-20260310-01_A1_AUTH-01
@@ -6623,6 +6625,8 @@ C:.
 |   |   |   |               README_PATCH.md
 |   |   |   |               
 |   |   |   +---BLOC_A25
+|   |   |   |   |   PROMPTS_A25_PRODUCTION_CONTROLE.md
+|   |   |   |   |   
 |   |   |   |   +---SESSION-20260510-01_A25_A25-PLAN-UI-01
 |   |   |   |   |   |   EVIDENCES.md
 |   |   |   |   |   |   FIN_SESSION.md
