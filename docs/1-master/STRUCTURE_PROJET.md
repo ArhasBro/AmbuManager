@@ -1,5 +1,5 @@
 ﻿Structure du dossier pour le volume Windows
-Le numÚro de sÚrie du volume est 000000C7 123E:4DB7
+Le numÚro de sÚrie du volume est 123E-4DB7
 C:.
 |   .env
 |   .gitignore
@@ -4837,6 +4837,7 @@ C:.
 |   |   |   PLAN_DE_DEVELOPPEMENT.md
 |   |   |   RECAP_DISCUSSIONS.md
 |   |   |   REFERENCE_UI_UX_A24.md
+|   |   |   REFERENCE_UI_UX_A25_PLANNING.md
 |   |   |   REGISTRE_DECISIONS.md
 |   |   |   RGPD_BASE_MINIMALE.md
 |   |   |   STRUCTURE_PROJET.md
@@ -4882,6 +4883,7 @@ C:.
 |   |           |       |       
 |   |           |       +---2-Planning
 |   |           |       |       Planning_V1.2.png
+|   |           |       |       Planning_V1.2_INFO_DETAIL.png
 |   |           |       |       
 |   |           |       +---3-Utilisateurs-RH
 |   |           |       |       Utilisateurs-RH_V1.png
@@ -6618,6 +6620,77 @@ C:.
 |   |   |   |               NO_PATCH.md
 |   |   |   |               NO_PATCH_CODE.md
 |   |   |   |               PATCH__SESSION-20260506-10_A24_CLOTURE_A24_DOCS.diff
+|   |   |   |               README_PATCH.md
+|   |   |   |               
+|   |   |   +---BLOC_A25
+|   |   |   |   +---SESSION-20260510-01_A25_A25-PLAN-UI-01
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           NO_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260510-02_A25_A25-PLAN-UI-02
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           README_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260510-03_A25_A25-PLAN-UI-03
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           README_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260510-04_A25_A25-PLAN-UI-04
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           README_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260510-05_A25_A25-PLAN-UI-05
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           README_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260510-06_A25_A25-PLAN-UI-06
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           NO_PATCH.md
+|   |   |   |   |           
+|   |   |   |   \---SESSION-20260510-07_A25_CLOTURE_A25
+|   |   |   |       |   EVIDENCES.md
+|   |   |   |       |   FIN_SESSION.md
+|   |   |   |       |   NOTES.md
+|   |   |   |       |   RESULTATS.md
+|   |   |   |       |   SESSION.md
+|   |   |   |       |   
+|   |   |   |       \---PATCH
 |   |   |   |               README_PATCH.md
 |   |   |   |               
 |   |   |   +---BLOC_A3
