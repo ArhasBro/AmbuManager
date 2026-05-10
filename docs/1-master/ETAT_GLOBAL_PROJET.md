@@ -154,6 +154,7 @@ Décision officielle :
 - `docs/1-master/REFERENCE_UI_UX_A25_PLANNING.md` devient la référence détaillée prioritaire pour A25 ;
 - les images `Planning_V1.2.png` et `Planning_V1.2_INFO_DETAIL.png` sont la cible visuelle concrète ;
 - A25 doit viser une reproduction aussi fidèle que possible de la maquette visible, avec une cible d'environ 99 % sur les éléments visibles ;
+- l’encadré orange de la maquette est une navigation active : il pilote l’encadré violet et le panneau vert selon l’onglet actif ;
 - la validation technique d'un patch ne vaut pas validation visuelle ;
 - la clôture A25 exige un retour manuel utilisateur favorable sur la fidélité visuelle.
 

@@ -46,9 +46,11 @@ Planning_V1.2_INFO_DETAIL.png
 
 - rouge : zone globale de contenu Planning ;
 - bleu : filtres, bascule de vue et exports ;
-- orange : onglets internes ;
-- violet : grille principale et barre d’actions groupées ;
-- vert : panneau latéral droit de détail cellule.
+- orange : onglets internes de navigation ;
+- violet : contenu principal piloté par l’onglet actif ;
+- vert : panneau latéral droit contextuel, lui aussi piloté par l’onglet actif.
+
+Point de cadrage majeur : l’encadré orange n’est pas un simple élément décoratif ou une navigation secondaire passive. Il contrôle le contenu affiché dans l’encadré violet et les informations affichées dans l’encadré vert. Dans l’image fournie, l’onglet actif est `Planning manuel`, donc l’encadré violet montre la matrice planning et l’encadré vert montre le détail de cellule correspondant. Les contenus des autres onglets ne sont pas visibles dans l’image.
 
 ### 1.2 Règle d’autorité visuelle
 
@@ -93,9 +95,11 @@ La cible visible est une page complète, unifiée, structurée autour de :
 - une barre de filtres horizontale ;
 - des actions d’export secondaires ;
 - des onglets internes fins ;
-- une grande matrice Planning centrale ;
-- un panneau droit fixe de détail de cellule ;
-- une barre basse d’actions groupées ;
+- une grande zone de contenu centrale pilotée par l’onglet actif ;
+- pour l’onglet `Planning manuel`, une matrice Planning centrale ;
+- un panneau droit fixe contextuel piloté par l’onglet actif ;
+- pour l’onglet `Planning manuel`, un détail de cellule ;
+- une barre basse d’actions groupées lorsqu’une sélection multiple existe dans l’onglet actif ;
 - une hiérarchie métier claire : lecture globale → sélection → détail → action.
 
 Le Planning A25 doit donc être évalué sur la fidélité globale à la maquette, pas uniquement sur la qualité technique d’un patch isolé.
@@ -737,7 +741,55 @@ La maquette montre un seul contenu principal : `Planning manuel`.
 
 Les autres onglets existent visuellement mais leur contenu n’est pas visible.
 
-À vérifier dans le repo :
+Point important ajouté après clarification utilisateur : la zone d’onglets orange pilote les deux zones situées sous elle.
+
+Conséquence directe :
+
+```txt
+Onglet actif orange → contenu principal violet + panneau contextuel vert
+```
+
+Pour l’image visible :
+
+```txt
+Planning manuel actif → matrice salariés × semaines + détail de cellule sélectionnée
+```
+
+Les autres onglets doivent donc être compris comme des états de contenu différents, et non comme des sections empilées dans une même longue page verticale.
+
+### 11.5 Synchronisation onglet / contenu / panneau
+
+Règle UI/UX obligatoire :
+
+- changer d’onglet doit modifier le contenu de l’encadré violet ;
+- changer d’onglet doit aussi modifier, vider ou adapter le panneau vert ;
+- le panneau vert ne doit pas afficher un détail de cellule `Planning manuel` si l’utilisateur consulte un autre onglet ;
+- la sélection courante doit être propre à l’onglet ou explicitement réinitialisée au changement d’onglet ;
+- il ne faut pas afficher simultanément les contenus de tous les onglets sous forme de sections verticales.
+
+Comportement visible uniquement pour `Planning manuel` :
+
+```txt
+Onglet : Planning manuel
+Zone violette : matrice planning salariés × semaines
+Zone verte : détail de la cellule sélectionnée
+Barre basse : actions groupées sur la sélection multiple
+```
+
+Comportement des autres onglets :
+
+```txt
+Affectations : INFORMATION NON FOURNIE — À CONFIRMER
+Autoschedule : INFORMATION NON FOURNIE — À CONFIRMER
+Matching : INFORMATION NON FOURNIE — À CONFIRMER
+Historique : INFORMATION NON FOURNIE — À CONFIRMER
+Exports : INFORMATION NON FOURNIE — À CONFIRMER
+```
+
+Ces contenus ne doivent pas être inventés à partir de la maquette. Codex doit seulement prévoir une architecture permettant au contenu violet et au panneau vert de changer selon l’onglet actif, sans créer de nouvelles fonctionnalités métier lourdes.
+
+### 11.6 À vérifier dans le repo
+
 
 - si les onglets affichent actuellement toutes les sections empilées ;
 - si les onglets changent réellement de contenu ;
@@ -756,7 +808,9 @@ INFORMATION NON FOURNIE — À CONFIRMER
 
 ### 12.1 Organisation cible
 
-Le cœur de la page est un layout à deux colonnes :
+Le workspace principal correspond aux zones violette et verte. Il est directement dépendant de l’onglet actif dans la zone orange.
+
+Le cœur de la page est un layout à deux colonnes lorsque l’onglet `Planning manuel` est actif :
 
 ```txt
 ┌──────────────────────────────────────────────────┬──────────────────────┐
@@ -1277,9 +1331,11 @@ box-shadow: 0 12px 32px rgba(15, 23, 42, 0.04);
 
 ### 22.2 Rôle du panneau
 
-Le panneau affiche le détail de la cellule sélectionnée dans la grille.
+Le panneau affiche le détail de la cellule sélectionnée dans la grille uniquement lorsque l’onglet actif est `Planning manuel`.
 
-Il doit permettre de garder la grille compacte tout en montrant :
+Clarification importante : ce panneau est contextuel à l’onglet actif. Il ne doit pas être considéré comme un panneau fixe affichant toujours un détail de cellule quelle que soit la navigation. Si l’utilisateur change d’onglet, le panneau doit changer de contenu, se vider ou afficher un état adapté.
+
+Pour `Planning manuel`, il doit permettre de garder la grille compacte tout en montrant :
 
 - salarié ;
 - rôle ;
@@ -2155,6 +2211,10 @@ BLOC A25 CLÔTURABLE DÉFINITIVEMENT : NON
 
 ### Onglets
 
+- [ ] Les onglets pilotent réellement la zone principale violette.
+- [ ] Les onglets pilotent aussi le panneau contextuel vert.
+- [ ] Les contenus des onglets ne sont pas empilés verticalement.
+- [ ] Le panneau droit ne conserve pas un détail de cellule obsolète après changement d’onglet.
 - [ ] Les onglets sont fins, horizontaux.
 - [ ] `Planning manuel` est actif avec underline bleu.
 - [ ] Les onglets ne sont pas de gros boutons.

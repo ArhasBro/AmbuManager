@@ -155,6 +155,9 @@ docs/1-master/REFERENCE_UI_UX_A25_PLANNING.md
 
 Cette référence doit décrire précisément la structure attendue : header, toolbar filtres/vue/exports, onglets, matrice salariés × semaines, panneau droit de détail cellule, barre basse d'actions groupées, badges, états visuels et compatibilité clair/sombre.
 
+
+Décision complémentaire : dans `Planning_V1.2_INFO_DETAIL.png`, l’encadré orange correspond à une navigation par onglets qui pilote à la fois l’encadré violet et l’encadré vert. Le contenu violet et le panneau vert doivent donc changer ensemble selon l’onglet actif. Pour l’image visible, `Planning manuel` affiche la matrice salariés × semaines et le détail de cellule. Les contenus des autres onglets sont `INFORMATION NON FOURNIE — À CONFIRMER` et ne doivent pas être inventés.
+
 La validation A25 exige une conformité visuelle globale. Un patch peut être techniquement valide mais non validé visuellement si le rendu ne correspond pas suffisamment à la maquette.
 
 

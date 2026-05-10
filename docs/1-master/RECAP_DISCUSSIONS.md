@@ -158,6 +158,8 @@ docs/1-master/MAQUETTE/MAQUETTE_DA
 ### Décision
 - Le document `docs/1-master/REFERENCE_UI_UX_A25_PLANNING.md` est réécrit pour devenir la référence opérationnelle du bloc A25.
 - Les images `Planning_V1.2.png` et `Planning_V1.2_INFO_DETAIL.png` deviennent les références visuelles concrètes à reproduire au plus proche.
+
+Clarification ajoutée : l’encadré orange de la maquette Planning n’est pas seulement une ligne d’onglets décorative. Il pilote le contenu de l’encadré violet et les informations du panneau vert. Le mode visible `Planning manuel` doit donc être traité comme un état actif : matrice Planning + détail cellule. Les autres onglets ne doivent pas être inventés si leur contenu n’est pas visible.
 - La cible est une reproduction très fidèle de la maquette visible, environ 99 % lorsque le code et les données réelles le permettent.
 - La validation technique d'un patch ne suffit plus : la validation visuelle manuelle par Nathan est obligatoire avant clôture A25.
 
