@@ -6,5 +6,10 @@ Type : AUDIT
 
 Raison :
 - Session documentaire de type AUDIT.
-- Aucun patch officiel a produire pour cette session.
-- Le dossier PATCH reste present dans la session pour centraliser la documentation et les patchs.
+- Aucun patch code applicatif produit pendant la session.
+- Le dossier PATCH reste present pour gouvernance documentaire.
+
+Details de production session :
+- Captures avant produites (clair/sombre/jour/semaine/mois).
+- Rapport d'audit complet produit.
+- Documentation de session completee.

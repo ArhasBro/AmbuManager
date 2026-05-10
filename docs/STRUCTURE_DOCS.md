@@ -1808,9 +1808,18 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   EVIDENCES.md
 |   |   |   |   |   FIN_SESSION.md
 |   |   |   |   |   NOTES.md
+|   |   |   |   |   RAPPORT_AUDIT_A25_PLANNING.md
 |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   SESSION-20260510-01_A25_A25-PLAN-UI-01_DOCS_FINAL_V2.zip
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
+|   |   |   |   +---CAPTURES_AVANT
+|   |   |   |   |       planning_dark_before.png
+|   |   |   |   |       planning_light_before.png
+|   |   |   |   |       planning_manual_day_before.png
+|   |   |   |   |       planning_manual_month_before.png
+|   |   |   |   |       planning_manual_week_before.png
+|   |   |   |   |       
 |   |   |   |   \---PATCH
 |   |   |   |           NO_PATCH.md
 |   |   |   |           

@@ -24,6 +24,12 @@ Règles communes à tout le bloc A25 :
 - `CODE > DOCUMENTATION` en cas de contradiction fonctionnelle.
 - `MAQUETTE_DA > anciennes captures / anciennes descriptions` pour la direction artistique.
 - Toute information non prouvée doit être écrite exactement : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Le contrôle qualité ne doit commencer qu’après réception explicite du retour complet de production et du ZIP documentaire final versionné ciblé de la session.
+- Les ZIPs documentaires transmis pour contrôle doivent être versionnés clairement : `_DOCS_FINAL_V1.zip`, puis `_DOCS_FINAL_V2.zip`, `_DOCS_FINAL_V3.zip`, etc. en cas de correction.
+- Après validation d’une session, le ZIP documentaire ne devient pas une source officielle durable : il sert uniquement au transfert vers ChatGPT pour contrôle ; la source officielle reste la documentation déposée dans le repo.
+- Côté production, Codex peut installer ou mettre à jour via PowerShell les dépendances, plugins, navigateurs ou outils nécessaires à la production, aux captures, aux vérifications et aux tests, à condition de documenter les commandes et résultats dans les preuves de session.
+- Si aucun patch code n’est produit, `PATCH/NO_PATCH.md` doit préciser qu’il s’agit d’une absence de patch code applicatif, et non d’une absence de livrable documentaire.
+- Lorsqu’un rapport ou contrôle demande une matrice par zone, chaque zone demandée doit disposer de sa propre ligne et d’un verdict individuel parmi : `conforme`, `non conforme`, `incomplet`, `à confirmer`.
 
 ---
 
@@ -72,6 +78,11 @@ Tu ne dois pas prétendre avoir exécuté une commande, produit une capture ou v
 
 Si une information manque, écrire exactement :
 INFORMATION NON FOURNIE — À CONFIRMER
+
+Si nécessaire pour produire, capturer, vérifier ou tester la session, Codex peut installer ou mettre à jour via PowerShell les dépendances, plugins, navigateurs ou outils utiles.
+Exemples : `npm ci`, `npm install`, `npx prisma generate`, `npx playwright install`, installation ou mise à jour d’un navigateur de test.
+Toute commande d’installation ou de mise à jour doit être documentée dans `EVIDENCES.md` avec la commande exécutée, le résultat obtenu et l’impact éventuel sur la session.
+Ces opérations ne doivent pas devenir une modification fonctionnelle du produit.
 
 ============================================================
 LECTURE DOCUMENTAIRE OBLIGATOIRE
@@ -169,6 +180,45 @@ TRAVAIL ATTENDU
    - Risque fonctionnel ;
    - Verdict : conforme / non conforme / incomplet / à confirmer.
 
+Le rapport doit aussi contenir une section dédiée :
+
+`## Verdict détaillé par zone demandée`
+
+Avec exactement le tableau suivant :
+
+| Zone | Couverture | Verdict | Commentaire |
+|---|---|---|---|
+
+Cette matrice doit contenir une ligne pour chacune des zones suivantes :
+- header planning ;
+- navigation temporelle ;
+- filtres ;
+- toolbar ;
+- exports ;
+- onglets internes ;
+- vue jour ;
+- vue semaine ;
+- vue mois ;
+- grille ;
+- cellules ;
+- badges ;
+- horaires ;
+- équipes ;
+- véhicules ;
+- panneau détail ;
+- panneau affectation ;
+- actions groupées ;
+- mode clair ;
+- mode sombre ;
+- responsive minimal ;
+- risques de régression.
+
+Un verdict global ne suffit pas.
+Un verdict par grande zone maquette ne suffit pas.
+Chaque zone listée doit avoir son verdict individuel parmi : conforme / non conforme / incomplet / à confirmer.
+Si une zone n’est pas suffisamment prouvée, écrire exactement :
+INFORMATION NON FOURNIE — À CONFIRMER
+
 5. Produire des captures avant si possible :
    - planning principal en mode clair ;
    - planning principal en mode sombre ;
@@ -196,15 +246,16 @@ Dans le dossier réel de session :
 - RESULTATS.md mis à jour ;
 - FIN_SESSION.md mis à jour ;
 - un rapport d’audit dédié, par exemple : RAPPORT_AUDIT_A25_PLANNING.md ;
-- PATCH/NO_PATCH.md complété si aucun patch code n’est produit ;
+- PATCH/NO_PATCH.md complété si aucun patch code applicatif n’est produit, en précisant que les livrables documentaires restent attendus ;
 - patch documentaire final si la gouvernance du projet l’exige ;
-- ZIP documentaire final contenant les fichiers de session et le dossier PATCH.
+- ZIP documentaire final versionné contenant les fichiers de session et le dossier PATCH (`_DOCS_FINAL_V1.zip`, puis `_DOCS_FINAL_V2.zip`, `_DOCS_FINAL_V3.zip` en cas de correction).
 
 Le rapport doit contenir :
 - références lues ;
 - fichiers planning inspectés ;
 - captures produites ou manquantes ;
 - matrice des écarts ;
+- verdict détaillé par zone demandée, avec une ligne par zone et un verdict individuel ;
 - risques de régression ;
 - priorisation A25 ;
 - recommandations pour A25-PLAN-UI-02 à A25-PLAN-UI-05 ;
@@ -219,13 +270,13 @@ La session est terminée uniquement si :
 - le planning réel est comparé à `MAQUETTE_DA` ;
 - le planning réel est comparé à `Planning_V1.2_INFO_DETAIL.png` ;
 - le planning réel est comparé à `REFERENCE_UI_UX_A25_PLANNING.md` ;
-- chaque zone du planning possède un verdict ;
+- chaque zone du planning possède un verdict individuel parmi conforme / non conforme / incomplet / à confirmer ;
 - les risques de régression sont listés ;
 - les captures avant sont produites ou explicitement marquées manquantes ;
 - aucun code applicatif n’est modifié ;
-- le fichier PATCH/NO_PATCH.md est complété si aucun patch code n’est produit ;
+- le fichier PATCH/NO_PATCH.md est complété si aucun patch code applicatif n’est produit, en précisant que les livrables documentaires restent attendus ;
 - la documentation finale de session est prête ;
-- le ZIP documentaire final est prêt.
+- le ZIP documentaire final versionné est prêt.
 
 ============================================================
 RÉPONSE FINALE ATTENDUE
@@ -241,7 +292,7 @@ Répondre avec :
 6. Livrables produits
 7. Patchs produits ou NO_PATCH
 8. Preuves terminales réellement exécutées
-9. ZIP documentaire final
+9. ZIP documentaire final versionné
 10. Verdict final
 
 Ne pas inventer de validation.
@@ -268,11 +319,17 @@ Tu dois attendre avant tout contrôle :
 - la réponse finale de production ;
 - le rapport d’audit A25 Planning ;
 - les fichiers documentaires de session ;
-- le fichier PATCH/NO_PATCH.md si aucun patch code n’a été produit ;
+- le fichier PATCH/NO_PATCH.md si aucun patch code applicatif n’a été produit ;
 - le patch documentaire si applicable ;
-- le ZIP documentaire final ;
+- le ZIP documentaire final versionné ;
 - les captures produites si elles existent ;
 - les preuves terminales si elles existent.
+
+Règle d’attente avant contrôle :
+- ne pas démarrer le contrôle à la réception de fichiers isolés, d’un ZIP intermédiaire ou d’un ZIP de dépôt complet ;
+- attendre le retour complet de production et le ZIP documentaire final versionné explicitement désigné pour la session en cours ;
+- si plusieurs ZIPs existent dans la conversation, contrôler uniquement la version ciblée par l’utilisateur (`V1`, `V2`, `V3`, etc.) ;
+- ignorer les anciens ZIPs et les ZIPs non ciblés.
 
 Si un élément manque, écrire exactement :
 INFORMATION NON FOURNIE — À CONFIRMER
@@ -287,8 +344,10 @@ Tu ne dois pas :
 - inventer des preuves ;
 - combler les manques par hypothèse ;
 - contrôler un ancien ZIP ;
+- contrôler un ZIP de dépôt complet ou non explicitement désigné comme ZIP documentaire final versionné de la session ;
 - supposer qu’une capture existe si elle n’est pas fournie ;
-- supposer qu’un patch a été appliqué sans preuve.
+- supposer qu’un patch a été appliqué sans preuve ;
+- utiliser un ZIP déjà validé comme source officielle durable au lieu de la documentation du repo.
 
 Tu dois contrôler uniquement ce qui est fourni.
 
@@ -327,15 +386,22 @@ Vérifier que l’audit couvre :
 - responsive minimal ;
 - risques de régression.
 
-Vérifier que chaque zone possède un verdict :
+Vérifier que chaque zone possède un verdict individuel :
 - conforme ;
 - non conforme ;
 - incomplet ;
 - à confirmer.
 
+Un verdict global ne suffit pas.
+Un verdict par grande zone maquette ne suffit pas.
+Chaque zone listée doit avoir sa propre ligne dans une matrice détaillée.
+Si une preuve manque, la ligne concernée doit écrire exactement :
+INFORMATION NON FOURNIE — À CONFIRMER
+
 Vérifier que la production ne corrige pas le code applicatif.
 
-Vérifier que le fichier PATCH/NO_PATCH.md existe et est cohérent si aucun patch code n’est produit.
+Vérifier que le fichier PATCH/NO_PATCH.md existe et est cohérent si aucun patch code applicatif n’est produit.
+Le fichier NO_PATCH doit clarifier l’absence de patch code applicatif, sans laisser entendre qu’aucun livrable documentaire n’est attendu.
 
 Vérifier que les limites A25 sont respectées :
 - pas de nouveau moteur planning ;
@@ -505,6 +571,10 @@ TRAVAIL ATTENDU
 VALIDATIONS TERMINALES ATTENDUES
 ============================================================
 
+Avant ces validations, si l’environnement l’exige, Codex peut installer ou mettre à jour via PowerShell les dépendances, plugins, navigateurs ou outils nécessaires aux captures, vérifications et tests.
+Toute commande utile doit être documentée dans `EVIDENCES.md` avec son résultat.
+Ces opérations ne doivent pas devenir une modification fonctionnelle du produit.
+
 Exécuter réellement, si l’environnement le permet :
 
 - npm run lint
@@ -532,7 +602,7 @@ La session est terminée uniquement si :
 - le patch code est ciblé ;
 - les validations terminales sont exécutées ou les limites sont documentées ;
 - les fichiers documentaires sont finalisés ;
-- le ZIP documentaire final est produit.
+- le ZIP documentaire final versionné est produit.
 
 ============================================================
 RÉPONSE FINALE ATTENDUE
@@ -548,7 +618,7 @@ Répondre avec :
 6. Patch produit
 7. Validations terminales
 8. Documentation mise à jour
-9. ZIP documentaire final
+9. ZIP documentaire final versionné
 10. Verdict final
 ```
 
@@ -577,7 +647,13 @@ Tu dois attendre avant tout contrôle :
 - les fichiers documentaires de session ;
 - les captures avant / après si produites ;
 - les preuves terminales ;
-- le ZIP documentaire final.
+- le ZIP documentaire final versionné.
+
+Règle d’attente avant contrôle :
+- ne pas démarrer le contrôle à la réception de fichiers isolés, d’un ZIP intermédiaire ou d’un ZIP de dépôt complet ;
+- attendre le retour complet de production et le ZIP documentaire final versionné explicitement désigné pour la session en cours ;
+- si plusieurs ZIPs existent dans la conversation, contrôler uniquement la version ciblée par l’utilisateur (`V1`, `V2`, `V3`, etc.) ;
+- ignorer les anciens ZIPs et les ZIPs non ciblés.
 
 Si un élément manque, écrire exactement :
 INFORMATION NON FOURNIE — À CONFIRMER
@@ -592,7 +668,9 @@ Tu ne dois pas :
 - inventer des validations ;
 - supposer que le patch s’applique sans preuve ;
 - contrôler un ancien ZIP ;
-- combler les manques par hypothèse.
+- contrôler un ZIP de dépôt complet ou non explicitement désigné comme ZIP documentaire final versionné de la session ;
+- combler les manques par hypothèse ;
+- utiliser un ZIP déjà validé comme source officielle durable au lieu de la documentation du repo.
 
 Tu dois contrôler uniquement ce qui est fourni.
 
@@ -783,6 +861,10 @@ TRAVAIL ATTENDU
 VALIDATIONS TERMINALES ATTENDUES
 ============================================================
 
+Avant ces validations, si l’environnement l’exige, Codex peut installer ou mettre à jour via PowerShell les dépendances, plugins, navigateurs ou outils nécessaires aux captures, vérifications et tests.
+Toute commande utile doit être documentée dans `EVIDENCES.md` avec son résultat.
+Ces opérations ne doivent pas devenir une modification fonctionnelle du produit.
+
 Exécuter réellement, si l’environnement le permet :
 
 - npm run lint
@@ -824,7 +906,7 @@ Répondre avec :
 6. Patch produit
 7. Validations terminales
 8. Documentation mise à jour
-9. ZIP documentaire final
+9. ZIP documentaire final versionné
 10. Verdict final
 ```
 
@@ -853,7 +935,13 @@ Tu dois attendre avant tout contrôle :
 - les fichiers documentaires de session ;
 - les captures avant / après si produites ;
 - les preuves terminales ;
-- le ZIP documentaire final.
+- le ZIP documentaire final versionné.
+
+Règle d’attente avant contrôle :
+- ne pas démarrer le contrôle à la réception de fichiers isolés, d’un ZIP intermédiaire ou d’un ZIP de dépôt complet ;
+- attendre le retour complet de production et le ZIP documentaire final versionné explicitement désigné pour la session en cours ;
+- si plusieurs ZIPs existent dans la conversation, contrôler uniquement la version ciblée par l’utilisateur (`V1`, `V2`, `V3`, etc.) ;
+- ignorer les anciens ZIPs et les ZIPs non ciblés.
 
 Si un élément manque, écrire exactement :
 INFORMATION NON FOURNIE — À CONFIRMER
@@ -1038,6 +1126,10 @@ TRAVAIL ATTENDU
 VALIDATIONS TERMINALES ATTENDUES
 ============================================================
 
+Avant ces validations, si l’environnement l’exige, Codex peut installer ou mettre à jour via PowerShell les dépendances, plugins, navigateurs ou outils nécessaires aux captures, vérifications et tests.
+Toute commande utile doit être documentée dans `EVIDENCES.md` avec son résultat.
+Ces opérations ne doivent pas devenir une modification fonctionnelle du produit.
+
 Exécuter réellement, si l’environnement le permet :
 
 - npm run lint
@@ -1078,7 +1170,7 @@ Répondre avec :
 6. Patch produit
 7. Validations terminales
 8. Documentation mise à jour
-9. ZIP documentaire final
+9. ZIP documentaire final versionné
 10. Verdict final
 ```
 
@@ -1107,7 +1199,13 @@ Tu dois attendre avant tout contrôle :
 - les fichiers documentaires de session ;
 - les captures avant / après si produites ;
 - les preuves terminales ;
-- le ZIP documentaire final.
+- le ZIP documentaire final versionné.
+
+Règle d’attente avant contrôle :
+- ne pas démarrer le contrôle à la réception de fichiers isolés, d’un ZIP intermédiaire ou d’un ZIP de dépôt complet ;
+- attendre le retour complet de production et le ZIP documentaire final versionné explicitement désigné pour la session en cours ;
+- si plusieurs ZIPs existent dans la conversation, contrôler uniquement la version ciblée par l’utilisateur (`V1`, `V2`, `V3`, etc.) ;
+- ignorer les anciens ZIPs et les ZIPs non ciblés.
 
 Si un élément manque, écrire exactement :
 INFORMATION NON FOURNIE — À CONFIRMER
@@ -1301,6 +1399,10 @@ TRAVAIL ATTENDU
 VALIDATIONS TERMINALES ATTENDUES
 ============================================================
 
+Avant ces validations, si l’environnement l’exige, Codex peut installer ou mettre à jour via PowerShell les dépendances, plugins, navigateurs ou outils nécessaires aux captures, vérifications et tests.
+Toute commande utile doit être documentée dans `EVIDENCES.md` avec son résultat.
+Ces opérations ne doivent pas devenir une modification fonctionnelle du produit.
+
 Exécuter réellement, si l’environnement le permet :
 
 - npm run lint
@@ -1341,7 +1443,7 @@ Répondre avec :
 6. Patch produit
 7. Validations terminales
 8. Documentation mise à jour
-9. ZIP documentaire final
+9. ZIP documentaire final versionné
 10. Verdict final
 ```
 
@@ -1370,7 +1472,13 @@ Tu dois attendre avant tout contrôle :
 - les fichiers documentaires de session ;
 - les captures avant / après si produites ;
 - les preuves terminales ;
-- le ZIP documentaire final.
+- le ZIP documentaire final versionné.
+
+Règle d’attente avant contrôle :
+- ne pas démarrer le contrôle à la réception de fichiers isolés, d’un ZIP intermédiaire ou d’un ZIP de dépôt complet ;
+- attendre le retour complet de production et le ZIP documentaire final versionné explicitement désigné pour la session en cours ;
+- si plusieurs ZIPs existent dans la conversation, contrôler uniquement la version ciblée par l’utilisateur (`V1`, `V2`, `V3`, etc.) ;
+- ignorer les anciens ZIPs et les ZIPs non ciblés.
 
 Si un élément manque, écrire exactement :
 INFORMATION NON FOURNIE — À CONFIRMER
@@ -1547,13 +1655,17 @@ TRAVAIL ATTENDU
 
 6. Ne pas corriger le code dans cette session.
 
-7. Compléter PATCH/NO_PATCH.md si aucun patch code n’est produit.
+7. Compléter PATCH/NO_PATCH.md si aucun patch code applicatif n’est produit, en précisant que les livrables documentaires restent attendus.
 
 8. Produire un rapport de validation global.
 
 ============================================================
 VALIDATIONS TERMINALES ATTENDUES
 ============================================================
+
+Avant ces validations, si l’environnement l’exige, Codex peut installer ou mettre à jour via PowerShell les dépendances, plugins, navigateurs ou outils nécessaires aux captures, vérifications et tests.
+Toute commande utile doit être documentée dans `EVIDENCES.md` avec son résultat.
+Ces opérations ne doivent pas devenir une modification fonctionnelle du produit.
 
 Exécuter réellement, si l’environnement le permet :
 
@@ -1627,10 +1739,16 @@ Tu dois attendre avant tout contrôle :
 - la réponse finale de production ;
 - le rapport de validation globale ;
 - les fichiers documentaires de session ;
-- PATCH/NO_PATCH.md si aucun patch code n’a été produit ;
+- PATCH/NO_PATCH.md si aucun patch code applicatif n’a été produit ;
 - les captures après si produites ;
 - les preuves terminales ;
-- le ZIP documentaire final.
+- le ZIP documentaire final versionné.
+
+Règle d’attente avant contrôle :
+- ne pas démarrer le contrôle à la réception de fichiers isolés, d’un ZIP intermédiaire ou d’un ZIP de dépôt complet ;
+- attendre le retour complet de production et le ZIP documentaire final versionné explicitement désigné pour la session en cours ;
+- si plusieurs ZIPs existent dans la conversation, contrôler uniquement la version ciblée par l’utilisateur (`V1`, `V2`, `V3`, etc.) ;
+- ignorer les anciens ZIPs et les ZIPs non ciblés.
 
 Si un élément manque, écrire exactement :
 INFORMATION NON FOURNIE — À CONFIRMER
@@ -1790,7 +1908,7 @@ TRAVAIL ATTENDU
    - RESULTATS.md ;
    - FIN_SESSION.md ;
    - PATCH/README_PATCH.md ou PATCH/NO_PATCH.md ;
-   - ZIP documentaire final si attendu.
+   - ZIP documentaire final versionné si attendu.
 
 2. Vérifier que les patchs code sont présents, ciblés et documentés pour les sessions de correction.
 
@@ -1808,7 +1926,7 @@ TRAVAIL ATTENDU
 
 9. Finaliser la documentation de session de clôture.
 
-10. Produire le ZIP documentaire final de clôture.
+10. Produire le ZIP documentaire final de clôture versionné.
 
 ============================================================
 VALIDATIONS TERMINALES ATTENDUES
@@ -1840,7 +1958,7 @@ La clôture est terminée uniquement si :
 - les captures sont listées ;
 - les résiduels sont classés ;
 - le verdict de clôture est explicite ;
-- le ZIP documentaire final de clôture est produit.
+- le ZIP documentaire final de clôture versionné est produit.
 
 ============================================================
 RÉPONSE FINALE ATTENDUE
@@ -1856,7 +1974,7 @@ Répondre avec :
 6. Résiduels bloquants
 7. Résiduels non bloquants
 8. Documentation finale produite
-9. ZIP documentaire final
+9. ZIP documentaire final versionné
 10. Verdict final obligatoire
 
 Verdict final obligatoire :
@@ -1890,12 +2008,18 @@ Tu dois attendre avant tout contrôle :
 - le rapport de clôture A25 ;
 - les fichiers documentaires de clôture ;
 - le patch final minimal si applicable ;
-- le fichier PATCH/NO_PATCH.md si aucun patch code n’a été produit ;
+- le fichier PATCH/NO_PATCH.md si aucun patch code applicatif n’a été produit ;
 - la liste des sessions A25 contrôlées ;
 - les patchs A25 référencés ;
 - les captures référencées ;
 - les preuves terminales ;
-- le ZIP documentaire final de clôture.
+- le ZIP documentaire final de clôture versionné.
+
+Règle d’attente avant contrôle :
+- ne pas démarrer le contrôle à la réception de fichiers isolés, d’un ZIP intermédiaire ou d’un ZIP de dépôt complet ;
+- attendre le retour complet de production et le ZIP documentaire final versionné explicitement désigné pour la session en cours ;
+- si plusieurs ZIPs existent dans la conversation, contrôler uniquement la version ciblée par l’utilisateur (`V1`, `V2`, `V3`, etc.) ;
+- ignorer les anciens ZIPs et les ZIPs non ciblés.
 
 Si un élément manque, écrire exactement :
 INFORMATION NON FOURNIE — À CONFIRMER
@@ -1911,7 +2035,9 @@ Tu ne dois pas :
 - supposer qu’un patch existe sans l’avoir reçu ;
 - supposer qu’une capture existe sans l’avoir reçue ;
 - contrôler un ancien ZIP ;
-- combler les manques par hypothèse.
+- contrôler un ZIP de dépôt complet ou non explicitement désigné comme ZIP documentaire final versionné de la session ;
+- combler les manques par hypothèse ;
+- utiliser un ZIP déjà validé comme source officielle durable au lieu de la documentation du repo.
 
 Tu dois contrôler uniquement ce qui est fourni dans la production de clôture.
 
