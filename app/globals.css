@@ -1832,6 +1832,11 @@ pre {
   border-radius: 12px;
   background: var(--ui-surface-soft);
   padding: 12px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, max-content));
+  gap: 8px;
+  align-items: center;
+  justify-content: start;
 }
 
 .planning-manual__toolbar-actions {
@@ -1922,6 +1927,18 @@ pre {
 .planning-manual-shift {
   background: var(--ui-surface);
   box-shadow: var(--ui-shadow);
+}
+
+.planning-manual__list {
+  display: grid;
+  gap: 10px;
+}
+
+.planning-manual-shift__meta {
+  margin-top: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
 .planning-manual-shift__edit {
@@ -2088,6 +2105,10 @@ pre {
 
   .planning-manual__month-grid {
     grid-template-columns: repeat(2, minmax(120px, 1fr));
+  }
+
+  .planning-manual__toolbar {
+    grid-template-columns: 1fr;
   }
 
   .planning-structure__summary {

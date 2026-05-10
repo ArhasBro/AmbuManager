@@ -80,8 +80,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   README.md
 |   |   
 |   +---1-ALPHA
-|   |   |   BLOC_A25.zip
-|   |   |   
 |   |   +---BLOC_A1
 |   |   |   +---1-AUTH
 |   |   |   |   +---SESSION-20260310-01_A1_AUTH-01
@@ -1843,6 +1841,8 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
+|   |   |   |           PATCH__SESSION-20260510-03_A25_A25-PLAN-UI-03.diff
+|   |   |   |           PATCH__SESSION-20260510-03_A25_A25-PLAN-UI-03_DOCS_FIX-01.diff
 |   |   |   |           README_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260510-04_A25_A25-PLAN-UI-04

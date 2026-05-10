@@ -1,0 +1,144 @@
+diff --git a/app/globals.css b/app/globals.css
+index bbcdb00..eebd278 100644
+--- a/app/globals.css
++++ b/app/globals.css
+@@ -1832,6 +1832,11 @@ pre {
+   border-radius: 12px;
+   background: var(--ui-surface-soft);
+   padding: 12px;
++  display: grid;
++  grid-template-columns: repeat(auto-fit, minmax(140px, max-content));
++  gap: 8px;
++  align-items: center;
++  justify-content: start;
+ }
+ 
+ .planning-manual__toolbar-actions {
+@@ -1924,6 +1929,18 @@ pre {
+   box-shadow: var(--ui-shadow);
+ }
+ 
++.planning-manual__list {
++  display: grid;
++  gap: 10px;
++}
++
++.planning-manual-shift__meta {
++  margin-top: 6px;
++  display: flex;
++  flex-wrap: wrap;
++  gap: 6px;
++}
++
+ .planning-manual-shift__edit {
+   background: var(--ui-surface-soft);
+ }
+@@ -2090,6 +2107,10 @@ pre {
+     grid-template-columns: repeat(2, minmax(120px, 1fr));
+   }
+ 
++  .planning-manual__toolbar {
++    grid-template-columns: 1fr;
++  }
++
+   .planning-structure__summary {
+     width: 100%;
+   }
+diff --git a/app/planning/manual-planning-panel.tsx b/app/planning/manual-planning-panel.tsx
+index 41b2e6a..dd1193d 100644
+--- a/app/planning/manual-planning-panel.tsx
++++ b/app/planning/manual-planning-panel.tsx
+@@ -501,7 +501,7 @@ export default function ManualPlanningPanel({
+       {loading && <div className="planning-manual__loading">Chargement du planning manuel...</div>}
+ 
+       {!loading && viewMode !== "month" && (
+-        <div className="planning-manual__list" style={{ display: "grid", gap: 10 }}>
++        <div className="planning-manual__list">
+           {items.length === 0 ? <EmptyState title="Aucun shift sur cette periode" message="Ajustez la vue ou creez un shift publie pour cette plage." /> : items.map((shift) => (
+             <ShiftCard
+               key={shift.id}
+@@ -543,7 +543,7 @@ export default function ManualPlanningPanel({
+                       <div key={shift.id} className="planning-manual__day-item" style={{ borderLeft: `6px solid ${shift.template?.color ?? "#2563eb"}`, paddingLeft: 8, fontSize: 12 }}>
+                         <div className="planning-manual__day-item-time" style={{ fontWeight: 700 }}>{timeHM(shift.startAt)}-{timeHM(shift.endAt)}</div>
+                         <div className="planning-manual__day-item-template">{shift.template?.name ?? "Sans template"}</div>
+-                        <div className="planning-manual__day-item-user" style={{ opacity: 0.8 }}>{shift.user?.name ?? "Non affecte"}</div>
++                        {shift.user?.name ? <div className="planning-manual__day-item-user" style={{ opacity: 0.8 }}>{shift.user.name}</div> : null}
+                         {shift.isCancelled ? <StatusBadge variant="danger">Annule</StatusBadge> : null}
+                       </div>
+                     ))}
+@@ -607,8 +607,19 @@ function ShiftCard({
+         <div>
+           <div style={{ fontWeight: 800 }}>{shift.template?.name ?? "Sans template"} — {shift.template?.category ?? "N/A"}</div>
+           <div>{dateLabel(shift.startAt)} • {timeHM(shift.startAt)} → {timeHM(shift.endAt)}</div>
+-          <div style={{ opacity: 0.8 }}>Dépôt : {shift.depot?.name ?? "Aucun"} • Véhicule : {shift.vehicle?.immatriculation ?? "Aucun"}</div>
+-          <div style={{ opacity: 0.8 }}>Agents : {shift.user?.name ?? "—"}{shift.user2?.name ? ` / ${shift.user2.name}` : ""}</div>
++          <div className="planning-manual-shift__meta">
++            <StatusBadge variant="info">{timeHM(shift.startAt)}-{timeHM(shift.endAt)}</StatusBadge>
++            {shift.template?.category ? <StatusBadge variant="neutral">{shift.template.category}</StatusBadge> : null}
++            {shift.isCancelled ? <StatusBadge variant="danger">Annule</StatusBadge> : <StatusBadge variant="success">Actif</StatusBadge>}
++          </div>
++          {shift.depot?.name ? <div style={{ opacity: 0.8 }}>Dépôt : {shift.depot.name}</div> : null}
++          {shift.vehicle?.immatriculation ? <div style={{ opacity: 0.8 }}>Véhicule : {shift.vehicle.immatriculation}</div> : null}
++          {(shift.user?.name || shift.user2?.name) ? (
++            <div style={{ opacity: 0.8 }}>
++              Équipe : {shift.user?.name ?? ""}
++              {shift.user2?.name ? ` / ${shift.user2.name}` : ""}
++            </div>
++          ) : null}
+           {shift.notes && <div style={{ opacity: 0.85 }}>Notes : {shift.notes}</div>}
+           {shift.isCancelled && <div style={{ color: "var(--ui-danger-text)", fontWeight: 700 }}>Annulé — {shift.cancellationReason ?? "sans motif"}</div>}
+         </div>
+diff --git a/app/planning/planning-client.tsx b/app/planning/planning-client.tsx
+index 98e4dfc..d4eeda5 100644
+--- a/app/planning/planning-client.tsx
++++ b/app/planning/planning-client.tsx
+@@ -2535,8 +2535,10 @@ function ShiftCardSimple({
+ }) {
+   const cat = String(s.template?.category ?? "").toUpperCase();
+   const two = requiresTwoEmployees(cat, s.template?.minStaffCount);
+-
+-  const usersSummary = two ? `${s.user?.name ?? "—"} / ${s.user2?.name ?? "—"}` : `${s.user?.name ?? "—"}`;
++  const usersSummary =
++    two
++      ? [s.user?.name, s.user2?.name].filter((value): value is string => Boolean(value)).join(" / ")
++      : (s.user?.name ?? "");
+ 
+   const accentColor = normalizeTemplateColor(s.template?.color) ?? "#1D4ED8";
+ 
+@@ -2546,8 +2548,10 @@ function ShiftCardSimple({
+         {timeHM(s.startAt)} → {timeHM(s.endAt)}
+       </div>
+ 
+-      <div style={{ opacity: 0.9 }}>
+-        {usersSummary} • {s.vehicle?.immatriculation ?? "—"} • {s.depot ? getDepotLabel(s.depot) : "Aucune base"}
++      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
++        {usersSummary ? <StatusBadge variant="info">Équipe: {usersSummary}</StatusBadge> : null}
++        {s.vehicle?.immatriculation ? <StatusBadge variant="neutral">Véhicule: {s.vehicle.immatriculation}</StatusBadge> : null}
++        {s.depot ? <StatusBadge variant="neutral">Base: {getDepotLabel(s.depot)}</StatusBadge> : null}
+       </div>
+ 
+       <div style={{ opacity: 0.7 }}>
+@@ -2695,16 +2699,16 @@ function ShiftCardAmbulance({
+       <div style={{ display: "grid", gap: 4 }}>
+         {two ? (
+           <>
+-            <Row label="Employé 1" value={s.user?.name ?? "—"} />
+-            <Row label="Employé 2" value={s.user2?.name ?? "—"} />
++            {s.user?.name ? <Row label="Employé 1" value={s.user.name} /> : null}
++            {s.user2?.name ? <Row label="Employé 2" value={s.user2.name} /> : null}
+           </>
+         ) : (
+-          <Row label="Employé" value={s.user?.name ?? "—"} />
++          s.user?.name ? <Row label="Employé" value={s.user.name} /> : null
+         )}
+-        <Row label="Véhicule" value={s.vehicle?.immatriculation ?? "—"} />
+-        <Row label="Type véhicule requis" value={s.template?.requiredVehicleType ?? "—"} />
+-        <Row label="Base" value={s.depot ? getDepotLabel(s.depot) : "Aucune"} />
+-        <Row label="Mission" value={s.template?.name ?? "—"} />
++        {s.vehicle?.immatriculation ? <Row label="Véhicule" value={s.vehicle.immatriculation} /> : null}
++        {s.template?.requiredVehicleType ? <Row label="Type véhicule requis" value={s.template.requiredVehicleType} /> : null}
++        {s.depot ? <Row label="Base" value={getDepotLabel(s.depot)} /> : null}
++        {s.template?.name ? <Row label="Mission" value={s.template.name} /> : null}
+       </div>
+ 
+       {editable && (

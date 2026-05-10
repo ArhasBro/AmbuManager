@@ -2535,8 +2535,10 @@ function ShiftCardSimple({
 }) {
   const cat = String(s.template?.category ?? "").toUpperCase();
   const two = requiresTwoEmployees(cat, s.template?.minStaffCount);
-
-  const usersSummary = two ? `${s.user?.name ?? "—"} / ${s.user2?.name ?? "—"}` : `${s.user?.name ?? "—"}`;
+  const usersSummary =
+    two
+      ? [s.user?.name, s.user2?.name].filter((value): value is string => Boolean(value)).join(" / ")
+      : (s.user?.name ?? "");
 
   const accentColor = normalizeTemplateColor(s.template?.color) ?? "#1D4ED8";
 
@@ -2546,8 +2548,10 @@ function ShiftCardSimple({
         {timeHM(s.startAt)} → {timeHM(s.endAt)}
       </div>
 
-      <div style={{ opacity: 0.9 }}>
-        {usersSummary} • {s.vehicle?.immatriculation ?? "—"} • {s.depot ? getDepotLabel(s.depot) : "Aucune base"}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+        {usersSummary ? <StatusBadge variant="info">Équipe: {usersSummary}</StatusBadge> : null}
+        {s.vehicle?.immatriculation ? <StatusBadge variant="neutral">Véhicule: {s.vehicle.immatriculation}</StatusBadge> : null}
+        {s.depot ? <StatusBadge variant="neutral">Base: {getDepotLabel(s.depot)}</StatusBadge> : null}
       </div>
 
       <div style={{ opacity: 0.7 }}>
@@ -2695,16 +2699,16 @@ function ShiftCardAmbulance({
       <div style={{ display: "grid", gap: 4 }}>
         {two ? (
           <>
-            <Row label="Employé 1" value={s.user?.name ?? "—"} />
-            <Row label="Employé 2" value={s.user2?.name ?? "—"} />
+            {s.user?.name ? <Row label="Employé 1" value={s.user.name} /> : null}
+            {s.user2?.name ? <Row label="Employé 2" value={s.user2.name} /> : null}
           </>
         ) : (
-          <Row label="Employé" value={s.user?.name ?? "—"} />
+          s.user?.name ? <Row label="Employé" value={s.user.name} /> : null
         )}
-        <Row label="Véhicule" value={s.vehicle?.immatriculation ?? "—"} />
-        <Row label="Type véhicule requis" value={s.template?.requiredVehicleType ?? "—"} />
-        <Row label="Base" value={s.depot ? getDepotLabel(s.depot) : "Aucune"} />
-        <Row label="Mission" value={s.template?.name ?? "—"} />
+        {s.vehicle?.immatriculation ? <Row label="Véhicule" value={s.vehicle.immatriculation} /> : null}
+        {s.template?.requiredVehicleType ? <Row label="Type véhicule requis" value={s.template.requiredVehicleType} /> : null}
+        {s.depot ? <Row label="Base" value={getDepotLabel(s.depot)} /> : null}
+        {s.template?.name ? <Row label="Mission" value={s.template.name} /> : null}
       </div>
 
       {editable && (

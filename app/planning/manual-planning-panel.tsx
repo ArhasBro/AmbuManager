@@ -501,7 +501,7 @@ export default function ManualPlanningPanel({
       {loading && <div className="planning-manual__loading">Chargement du planning manuel...</div>}
 
       {!loading && viewMode !== "month" && (
-        <div className="planning-manual__list" style={{ display: "grid", gap: 10 }}>
+        <div className="planning-manual__list">
           {items.length === 0 ? <EmptyState title="Aucun shift sur cette periode" message="Ajustez la vue ou creez un shift publie pour cette plage." /> : items.map((shift) => (
             <ShiftCard
               key={shift.id}
@@ -543,7 +543,7 @@ export default function ManualPlanningPanel({
                       <div key={shift.id} className="planning-manual__day-item" style={{ borderLeft: `6px solid ${shift.template?.color ?? "#2563eb"}`, paddingLeft: 8, fontSize: 12 }}>
                         <div className="planning-manual__day-item-time" style={{ fontWeight: 700 }}>{timeHM(shift.startAt)}-{timeHM(shift.endAt)}</div>
                         <div className="planning-manual__day-item-template">{shift.template?.name ?? "Sans template"}</div>
-                        <div className="planning-manual__day-item-user" style={{ opacity: 0.8 }}>{shift.user?.name ?? "Non affecte"}</div>
+                        {shift.user?.name ? <div className="planning-manual__day-item-user" style={{ opacity: 0.8 }}>{shift.user.name}</div> : null}
                         {shift.isCancelled ? <StatusBadge variant="danger">Annule</StatusBadge> : null}
                       </div>
                     ))}
@@ -607,8 +607,19 @@ function ShiftCard({
         <div>
           <div style={{ fontWeight: 800 }}>{shift.template?.name ?? "Sans template"} — {shift.template?.category ?? "N/A"}</div>
           <div>{dateLabel(shift.startAt)} • {timeHM(shift.startAt)} → {timeHM(shift.endAt)}</div>
-          <div style={{ opacity: 0.8 }}>Dépôt : {shift.depot?.name ?? "Aucun"} • Véhicule : {shift.vehicle?.immatriculation ?? "Aucun"}</div>
-          <div style={{ opacity: 0.8 }}>Agents : {shift.user?.name ?? "—"}{shift.user2?.name ? ` / ${shift.user2.name}` : ""}</div>
+          <div className="planning-manual-shift__meta">
+            <StatusBadge variant="info">{timeHM(shift.startAt)}-{timeHM(shift.endAt)}</StatusBadge>
+            {shift.template?.category ? <StatusBadge variant="neutral">{shift.template.category}</StatusBadge> : null}
+            {shift.isCancelled ? <StatusBadge variant="danger">Annule</StatusBadge> : <StatusBadge variant="success">Actif</StatusBadge>}
+          </div>
+          {shift.depot?.name ? <div style={{ opacity: 0.8 }}>Dépôt : {shift.depot.name}</div> : null}
+          {shift.vehicle?.immatriculation ? <div style={{ opacity: 0.8 }}>Véhicule : {shift.vehicle.immatriculation}</div> : null}
+          {(shift.user?.name || shift.user2?.name) ? (
+            <div style={{ opacity: 0.8 }}>
+              Équipe : {shift.user?.name ?? ""}
+              {shift.user2?.name ? ` / ${shift.user2.name}` : ""}
+            </div>
+          ) : null}
           {shift.notes && <div style={{ opacity: 0.85 }}>Notes : {shift.notes}</div>}
           {shift.isCancelled && <div style={{ color: "var(--ui-danger-text)", fontWeight: 700 }}>Annulé — {shift.cancellationReason ?? "sans motif"}</div>}
         </div>
