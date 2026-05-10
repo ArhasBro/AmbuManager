@@ -2543,7 +2543,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |                   
 |   |   +---BLOC_A25
 |   |   |   |   PROMPTS_A25_06_A_CLOTURE_PRODUCTION_CONTROLE_V1_2.md
-|   |   |   |   SESSION-20260510-06_A25_A25-PLAN-UI-06.zip
+|   |   |   |   SESSION-20260510-07_A25_A25-PLAN-UI-07.zip
 |   |   |   |   
 |   |   |   +---ARCHIVE
 |   |   |   |   +---SESSION-20260510-01_A25_A25-PLAN-UI-01
@@ -2629,6 +2629,8 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
+|   |   |   |           PATCH__SESSION-20260510-07_A25_A25-PLAN-UI-07.diff
+|   |   |   |           PATCH__SESSION-20260510-07_A25_A25-PLAN-UI-07_FIX-01.diff
 |   |   |   |           README_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260510-08_A25_A25-PLAN-UI-08

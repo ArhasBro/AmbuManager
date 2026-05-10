@@ -1673,15 +1673,13 @@ export default function PlanningClient({
     return new Map((matchQuality?.shiftScores ?? []).map((item) => [item.shiftId, item]));
   }, [matchQuality]);
 
-  const focusPlanningZone = useCallback((tab: PlanningInternalTab, targetId: string) => {
+  const focusPlanningZone = useCallback((tab: PlanningInternalTab) => {
     setActiveTab(tab);
-    const target = document.getElementById(targetId);
-    if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
   }, []);
 
   const openManualPlanning = useCallback(() => {
     setIsManualAdvancedOpen(true);
-    focusPlanningZone("manual", "planning-manual-advanced");
+    focusPlanningZone("manual");
     window.setTimeout(() => {
       const editor = document.getElementById("planning-manual-editor-anchor");
       if (editor) editor.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -1733,21 +1731,21 @@ export default function PlanningClient({
           <button
             type="button"
             className={`planning-tab${activeTab === "manual" ? " is-active" : ""}`}
-            onClick={() => focusPlanningZone("manual", "planning-manual-zone")}
+            onClick={() => focusPlanningZone("manual")}
           >
             Planning manuel
           </button>
           <button
             type="button"
             className={`planning-tab${activeTab === "affectations" ? " is-active" : ""}`}
-            onClick={() => focusPlanningZone("affectations", "planning-affectations-zone")}
+            onClick={() => focusPlanningZone("affectations")}
           >
             Affectations
           </button>
           <button
             type="button"
             className={`planning-tab${activeTab === "autoschedule" ? " is-active" : ""}`}
-            onClick={() => focusPlanningZone("autoschedule", "planning-toolbar-zone")}
+            onClick={() => focusPlanningZone("autoschedule")}
             disabled={!canAutoSchedule}
           >
             Autoschedule
@@ -1755,7 +1753,7 @@ export default function PlanningClient({
           <button
             type="button"
             className={`planning-tab${activeTab === "matching" ? " is-active" : ""}`}
-            onClick={() => focusPlanningZone("matching", "planning-matching-zone")}
+            onClick={() => focusPlanningZone("matching")}
             disabled={!canAutoSchedule}
           >
             Matching
@@ -1763,7 +1761,7 @@ export default function PlanningClient({
           <button
             type="button"
             className={`planning-tab${activeTab === "history" ? " is-active" : ""}`}
-            onClick={() => focusPlanningZone("history", "planning-history-zone")}
+            onClick={() => focusPlanningZone("history")}
             disabled={!canViewAudit}
           >
             Historique
@@ -1771,7 +1769,7 @@ export default function PlanningClient({
           <button
             type="button"
             className={`planning-tab${activeTab === "exports" ? " is-active" : ""}`}
-            onClick={() => focusPlanningZone("exports", "planning-exports-zone")}
+            onClick={() => focusPlanningZone("exports")}
             disabled={!canExportPlanning}
           >
             Exports
@@ -1779,6 +1777,8 @@ export default function PlanningClient({
         </nav>
       </section>
 
+      <section className="planning-workspace">
+        <div className="planning-workspace__main">
       <section className="planning-legacy" style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 12, display: "grid", gap: 8 }}>
         <div className="planning-legacy__head" style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
           <div>
@@ -2087,7 +2087,7 @@ export default function PlanningClient({
             : `Visibilite personnelle active : planning de ${selectedUser.name} (${visibleItems.length} shift(s)).`}
       </div>
 
-      {canEditPlanning && (
+      {canEditPlanning && activeTab === "affectations" && (
         <div id="planning-affectations-zone" className="planning-affectations-panel" style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 10, display: "grid", gap: 10 }}>
           <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
             <div>
@@ -2186,7 +2186,7 @@ export default function PlanningClient({
       {dayGenMsg && <div style={{ opacity: 0.9 }}>{dayGenMsg}</div>}
       {matchMsg && <div style={{ opacity: 0.9 }}>{matchMsg}</div>}
 
-      {lastRunId && (
+      {lastRunId && activeTab === "history" && (
         <div id="planning-history-zone" style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 10, marginTop: 8 }}>
           <div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: "baseline" }}>
             <div style={{ fontWeight: 900 }}>Historique du run courant</div>
@@ -2279,7 +2279,7 @@ export default function PlanningClient({
       {pubMsg && <div style={{ opacity: 0.9 }}>{pubMsg}</div>}
       {cancelMsg && <div style={{ opacity: 0.9 }}>{cancelMsg}</div>}
 
-      {(matchPreview || matchApplied) && (
+      {(matchPreview || matchApplied) && activeTab === "matching" && (
         <div id="planning-matching-zone" style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 10 }}>
           <div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: "baseline" }}>
             <div style={{ fontWeight: 900 }}>Auto-affectation autoschedule</div>
@@ -2384,7 +2384,7 @@ export default function PlanningClient({
       {loading && <div>Chargement…</div>}
       {error && <ErrorMessage title="Erreur planning" message={error} />}
 
-      {!loading && !error && (
+      {!loading && !error && activeTab === "manual" && (
         <div className="planning-legacy__week-grid" style={{ display: "grid", gridTemplateColumns: "repeat(7, minmax(160px, 1fr))", gap: 10 }}>
           {weekDays.map((d) => {
             const key = formatDate(d);
@@ -2496,23 +2496,47 @@ export default function PlanningClient({
         </>
       )}
 
-      <details
-        id="planning-manual-advanced"
-        className="planning-manual-advanced"
-        open={isManualAdvancedOpen}
-        onToggle={(event) => setIsManualAdvancedOpen(event.currentTarget.open)}
-      >
-        <summary>Planning manuel detaille (creation, edition, annulation)</summary>
-        <ManualPlanningPanel
-          availableDepots={availableDepots}
-          availableUsers={availableUsers}
-          currentUser={currentUser}
-          canViewGlobal={canViewGlobal}
-          canEditPlanning={canEditPlanning}
-          canViewAudit={canViewAudit}
-          canExportPlanning={canExportPlanning}
-        />
-      </details>
+      {activeTab === "manual" && (
+        <details
+          id="planning-manual-advanced"
+          className="planning-manual-advanced"
+          open={isManualAdvancedOpen}
+          onToggle={(event) => setIsManualAdvancedOpen(event.currentTarget.open)}
+        >
+          <summary>Planning manuel detaille (creation, edition, annulation)</summary>
+          <ManualPlanningPanel
+            availableDepots={availableDepots}
+            availableUsers={availableUsers}
+            currentUser={currentUser}
+            canViewGlobal={canViewGlobal}
+            canEditPlanning={canEditPlanning}
+            canViewAudit={canViewAudit}
+            canExportPlanning={canExportPlanning}
+          />
+        </details>
+      )}
+        </div>
+        <aside className="planning-workspace__side">
+          <div className="planning-side-panel">
+            <div className="planning-side-panel__title">Détail de la zone active</div>
+            <div className="planning-side-panel__value">
+              {activeTab === "manual" && "Planning manuel"}
+              {activeTab === "affectations" && "Affectations"}
+              {activeTab === "autoschedule" && "Autoschedule"}
+              {activeTab === "matching" && "Matching"}
+              {activeTab === "history" && "Historique"}
+              {activeTab === "exports" && "Exports"}
+            </div>
+            <div className="planning-side-panel__meta">{title}</div>
+            <div className="planning-side-panel__actions">
+              <ActionButton size="sm" onClick={openManualPlanning}>Voir détail</ActionButton>
+              {activeTab === "exports" && canExportPlanning && (
+                <ActionButton size="sm" onClick={() => triggerPlanningExport("pdf")}>Export PDF</ActionButton>
+              )}
+            </div>
+          </div>
+        </aside>
+      </section>
     </section>
   );
 }

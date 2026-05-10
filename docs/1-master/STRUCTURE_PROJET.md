@@ -1,5 +1,5 @@
 ﻿Structure du dossier pour le volume Windows
-Le numÚro de sÚrie du volume est 000000F9 123E:4DB7
+Le numÚro de sÚrie du volume est 000000AB 123E:4DB7
 C:.
 |   .env
 |   .gitignore
@@ -348,15 +348,6 @@ C:.
 |   |   |               00000506.meta
 |   |   |               00000507.meta
 |   |   |               00000509.meta
-|   |   |               00000510.sst
-|   |   |               00000511.sst
-|   |   |               00000512.sst
-|   |   |               00000513.meta
-|   |   |               00000514.del
-|   |   |               00000515.sst
-|   |   |               00000516.sst
-|   |   |               00000517.sst
-|   |   |               00000518.sst
 |   |   |               00000519.sst
 |   |   |               00000520.sst
 |   |   |               00000521.sst
@@ -364,8 +355,92 @@ C:.
 |   |   |               00000523.meta
 |   |   |               00000524.meta
 |   |   |               00000525.meta
-|   |   |               00000526.meta
 |   |   |               00000527.meta
+|   |   |               00000529.sst
+|   |   |               00000530.sst
+|   |   |               00000531.sst
+|   |   |               00000532.sst
+|   |   |               00000533.meta
+|   |   |               00000534.meta
+|   |   |               00000535.meta
+|   |   |               00000537.meta
+|   |   |               00000539.sst
+|   |   |               00000540.sst
+|   |   |               00000541.meta
+|   |   |               00000542.meta
+|   |   |               00000544.sst
+|   |   |               00000545.sst
+|   |   |               00000546.sst
+|   |   |               00000547.meta
+|   |   |               00000548.del
+|   |   |               00000549.sst
+|   |   |               00000550.sst
+|   |   |               00000551.sst
+|   |   |               00000552.sst
+|   |   |               00000553.sst
+|   |   |               00000554.meta
+|   |   |               00000555.meta
+|   |   |               00000556.meta
+|   |   |               00000557.meta
+|   |   |               00000558.meta
+|   |   |               00000559.sst
+|   |   |               00000560.sst
+|   |   |               00000561.sst
+|   |   |               00000562.meta
+|   |   |               00000563.meta
+|   |   |               00000564.meta
+|   |   |               00000565.sst
+|   |   |               00000566.sst
+|   |   |               00000567.sst
+|   |   |               00000568.meta
+|   |   |               00000569.meta
+|   |   |               00000570.meta
+|   |   |               00000571.sst
+|   |   |               00000572.sst
+|   |   |               00000573.sst
+|   |   |               00000574.meta
+|   |   |               00000575.meta
+|   |   |               00000576.meta
+|   |   |               00000577.sst
+|   |   |               00000578.sst
+|   |   |               00000579.sst
+|   |   |               00000580.meta
+|   |   |               00000581.meta
+|   |   |               00000582.meta
+|   |   |               00000583.sst
+|   |   |               00000584.sst
+|   |   |               00000585.sst
+|   |   |               00000586.meta
+|   |   |               00000587.meta
+|   |   |               00000588.meta
+|   |   |               00000589.sst
+|   |   |               00000590.sst
+|   |   |               00000591.sst
+|   |   |               00000592.meta
+|   |   |               00000593.meta
+|   |   |               00000594.meta
+|   |   |               00000595.sst
+|   |   |               00000596.sst
+|   |   |               00000597.sst
+|   |   |               00000598.sst
+|   |   |               00000599.sst
+|   |   |               00000600.meta
+|   |   |               00000601.meta
+|   |   |               00000602.meta
+|   |   |               00000603.meta
+|   |   |               00000604.meta
+|   |   |               00000605.sst
+|   |   |               00000606.sst
+|   |   |               00000607.sst
+|   |   |               00000608.meta
+|   |   |               00000609.meta
+|   |   |               00000610.meta
+|   |   |               00000611.sst
+|   |   |               00000612.sst
+|   |   |               00000613.sst
+|   |   |               00000614.meta
+|   |   |               00000615.meta
+|   |   |               00000616.meta
 |   |   |               CURRENT
 |   |   |               LOG
 |   |   |               
@@ -2376,6 +2451,11 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
+|   |   +---0s3pDMX5fpXukMeif2Xh1
+|   |   |       _buildManifest.js
+|   |   |       _clientMiddlewareManifest.json
+|   |   |       _ssgManifest.js
+|   |   |       
 |   |   +---chunks
 |   |   |       160b48e4bed3762e.js
 |   |   |       358d6bd68d08fdc9.js
@@ -2388,25 +2468,20 @@ C:.
 |   |   |       899b7782e7cb92a1.js
 |   |   |       a6dad97d9634a72d.js
 |   |   |       a6dad97d9634a72d.js.map
-|   |   |       ac3850b319062a85.css
 |   |   |       ae00227645aabe16.js
 |   |   |       af7027598a07baa5.js
 |   |   |       b79e0f85eca6f17e.js
 |   |   |       c39c052a804dfeea.js
+|   |   |       c7a52c442d16b5c8.js
 |   |   |       ceaa3af669abcc0f.js
-|   |   |       e1e8a423d092d497.js
+|   |   |       e79b1b313e153113.css
 |   |   |       edcc1a569f9e1199.js
 |   |   |       fc3339c3f209e8c2.js
 |   |   |       ff1a16fafef87110.js
 |   |   |       turbopack-7673dbeff453a2b3.js
 |   |   |       
-|   |   +---media
-|   |   |       favicon.0b3bf435.ico
-|   |   |       
-|   |   \---Su90U56B1uL7McPqA2Tsj
-|   |           _buildManifest.js
-|   |           _clientMiddlewareManifest.json
-|   |           _ssgManifest.js
+|   |   \---media
+|   |           favicon.0b3bf435.ico
 |   |           
 |   \---types
 |           routes.d.ts
@@ -5147,7 +5222,7 @@ C:.
 |   |   |   |                   
 |   |   |   +---BLOC_A25
 |   |   |   |   |   PROMPTS_A25_06_A_CLOTURE_PRODUCTION_CONTROLE_V1_2.md
-|   |   |   |   |   SESSION-20260510-06_A25_A25-PLAN-UI-06.zip
+|   |   |   |   |   SESSION-20260510-07_A25_A25-PLAN-UI-07.zip
 |   |   |   |   |   
 |   |   |   |   +---ARCHIVE
 |   |   |   |   |   +---SESSION-20260510-01_A25_A25-PLAN-UI-01
@@ -5233,6 +5308,8 @@ C:.
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
+|   |   |   |   |           PATCH__SESSION-20260510-07_A25_A25-PLAN-UI-07.diff
+|   |   |   |   |           PATCH__SESSION-20260510-07_A25_A25-PLAN-UI-07_FIX-01.diff
 |   |   |   |   |           README_PATCH.md
 |   |   |   |   |           
 |   |   |   |   +---SESSION-20260510-08_A25_A25-PLAN-UI-08
