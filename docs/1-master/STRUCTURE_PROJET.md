@@ -1,5 +1,5 @@
 ﻿Structure du dossier pour le volume Windows
-Le numÚro de sÚrie du volume est 000000EB 123E:4DB7
+Le numÚro de sÚrie du volume est 0000005E 123E:4DB7
 C:.
 |   .env
 |   .gitignore
@@ -2718,8 +2718,6 @@ C:.
 |   |   |   README.md
 |   |   |   
 |   |   +---1-ALPHA
-|   |   |   |   BLOC_A25.zip
-|   |   |   |   
 |   |   |   +---1-VALIDE
 |   |   |   |   +---BLOC_A1
 |   |   |   |   |   +---1-AUTH
@@ -5182,7 +5180,7 @@ C:.
 |   |   |   |                   README_PATCH.md
 |   |   |   |                   
 |   |   |   +---BLOC_A25
-|   |   |   |   |   PROMPTS_A25_06_A_CLOTURE_PRODUCTION_CONTROLE_V1_1.md
+|   |   |   |   |   PROMPTS_A25_06_A_CLOTURE_PRODUCTION_CONTROLE_V1_2.md
 |   |   |   |   |   
 |   |   |   |   +---ARCHIVE
 |   |   |   |   |   +---SESSION-20260510-01_A25_A25-PLAN-UI-01
@@ -5191,7 +5189,6 @@ C:.
 |   |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   |   RAPPORT_AUDIT_A25_PLANNING.md
 |   |   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   |   SESSION-20260510-01_A25_A25-PLAN-UI-01_DOCS_FINAL_V2.zip
 |   |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   |   
 |   |   |   |   |   |   +---CAPTURES_AVANT
@@ -5211,7 +5208,6 @@ C:.
 |   |   |   |   |   |   |   RESULTATS.md
 |   |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   |   
-|   |   |   |   |   |   +---CAPTURES_APRES
 |   |   |   |   |   |   \---PATCH
 |   |   |   |   |   |           PATCH__SESSION-20260510-02_A25_A25-PLAN-UI-02.diff
 |   |   |   |   |   |           README_PATCH.md
@@ -5300,9 +5296,19 @@ C:.
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
+|   |   |   |   |           README_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260510-11_A25_A25-PLAN-UI-11
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
 |   |   |   |   |           NO_PATCH.md
 |   |   |   |   |           
-|   |   |   |   \---SESSION-20260510-11_A25_CLOTURE_A25
+|   |   |   |   \---SESSION-20260510-12_A25_CLOTURE_A25
 |   |   |   |       |   EVIDENCES.md
 |   |   |   |       |   FIN_SESSION.md
 |   |   |   |       |   NOTES.md

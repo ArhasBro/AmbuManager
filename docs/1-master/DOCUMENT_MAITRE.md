@@ -166,3 +166,11 @@ Règle :
 - `DOCUMENT_CADRAGE_FONCTIONNEL.md` = base officielle produit ;
 - `PLAN_DE_DEVELOPPEMENT.md` reste le plan officiel unique ;
 - le passage à la suite de l’ALPHA s’effectue désormais par consolidation du socle, puis reprise des priorités fonctionnelles.
+
+### 10.1 Référence opérationnelle A25 Planning
+Le détail d’exécution UI/UX du bloc `A25 — Planning UI/UX & ergonomie métier` est porté par :
+
+`docs/1-master/REFERENCE_UI_UX_A25_PLANNING.md`
+
+Ce document constitue la référence opérationnelle du réalignement visuel Planning, en complément du plan de développement et des images Planning officielles conservées dans `docs/1-master/MAQUETTE/MAQUETTE_DA`.
+

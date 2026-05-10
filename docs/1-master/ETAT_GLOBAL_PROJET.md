@@ -131,7 +131,7 @@ Le verdict société pilote reste à traiter dans la logique de suite du projet.
 La suite officielle immédiatement validée dans `PLAN_DE_DEVELOPPEMENT.md` est :
 
 1. **A24 — Réalignement UI/UX global sur `MAQUETTE_DA`**  
-   Objectif : réaligner l’application sur la direction artistique officielle, avec interface pure, simple, lisible, mode clair/sombre, icônes propres, captures avant/après et exclusion du planning profond.
+   Objectif : réaligner l’application sur la direction artistique officielle, avec interface pure, simple, lisible, mode clair/sombre, icônes propres, captures ciblées aux étapes majeures et exclusion du planning profond.
 
 2. **A25 — Planning UI/UX & ergonomie métier**  
    Objectif : refondre la page Planning comme écran central complet, avec une priorité de fidélité visuelle à `Planning_V1.2.png`, `Planning_V1.2_INFO_DETAIL.png` et `REFERENCE_UI_UX_A25_PLANNING.md`, sans refonte fonctionnelle lourde.
@@ -155,7 +155,11 @@ Décision officielle :
 - les images `Planning_V1.2.png` et `Planning_V1.2_INFO_DETAIL.png` sont la cible visuelle concrète ;
 - A25 doit viser une reproduction aussi fidèle que possible de la maquette visible, avec une cible d'environ 99 % sur les éléments visibles ;
 - l’encadré orange de la maquette est une navigation active : il pilote l’encadré violet et le panneau vert selon l’onglet actif ;
+- la fin du bloc A25 est recadrée en sessions A25-PLAN-UI-06 à A25-PLAN-UI-11, puis `CLOTURE_A25` ;
+- `A25-PLAN-UI-10` porte les finitions visuelles, états, mode sombre et responsive minimal ;
+- `A25-PLAN-UI-11` porte la validation visuelle globale ;
 - la validation technique d'un patch ne vaut pas validation visuelle ;
+- les captures A25 ne sont pas obligatoires à chaque session : capture avant et capture après peuvent être réalisées manuellement par Nathan aux étapes majeures ;
 - la clôture A25 exige un retour manuel utilisateur favorable sur la fidélité visuelle.
 
 Conséquence : la fin de A25 doit être pilotée comme une refonte globale de la page Planning, et non comme une suite de micro-corrections isolées.
@@ -171,7 +175,7 @@ Conséquence : la fin de A25 doit être pilotée comme une refonte globale de la
 Ne sont plus des points à confirmer pour l’ouverture A24 :
 - l’ordre A24 / A25 / A26 ;
 - la priorité de `MAQUETTE_DA` ;
-- le principe des captures avant/après ;
+- le principe de captures ciblées aux étapes majeures ;
 - l’intégration du mode sombre dans A24 ;
 - l’autorisation de Lucide React pour les icônes génériques.
 
@@ -189,7 +193,7 @@ Priorités A24 :
 - traiter les icônes génériques via Lucide React ou équivalent ;
 - conserver uniquement les assets réellement spécifiques et propres ;
 - réaligner Login, Dashboard, Société, Dépôts, Véhicules, Templates, Utilisateurs/RH, Audit, Onboarding, Privacy et pages simples ;
-- produire des captures avant/après ;
+- produire ou collecter des captures seulement aux étapes majeures lorsque cela apporte une preuve utile ;
 - auditer le planning pour préparer A25 sans le traiter profondément dans A24.
 
 Le passage à A25 n’est autorisé qu’après clôture explicite de A24.

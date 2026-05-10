@@ -1,24 +1,31 @@
-﻿# README_PATCH
+# README_PATCH
 
-## Session liee
+## Session liée
+
 SESSION-20260510-07_A25_A25-PLAN-UI-07
 
 ## Type
-CORRECTION+COMPLETION
+
+CORRECTION+COMPLÉTION
 
 ## Dossier PATCH
-docs/2-sessions/1-ALPHA/BLOC_A25/SESSION-20260510-07_A25_A25-PLAN-UI-07/PATCH
+
+`docs/2-sessions/1-ALPHA/BLOC_A25/SESSION-20260510-07_A25_A25-PLAN-UI-07/PATCH`
 
 ## Patch officiel attendu
-PATCH__SESSION-20260510-07_A25_A25-PLAN-UI-07.diff
 
-## Commandes d'application
+`PATCH__SESSION-20260510-07_A25_A25-PLAN-UI-07.diff`
 
-`ash
+## Commandes d’application
+
+```bash
 git apply --check "docs/2-sessions/1-ALPHA/BLOC_A25/SESSION-20260510-07_A25_A25-PLAN-UI-07/PATCH/PATCH__SESSION-20260510-07_A25_A25-PLAN-UI-07.diff"
-git apply         "docs/2-sessions/1-ALPHA/BLOC_A25/SESSION-20260510-07_A25_A25-PLAN-UI-07/PATCH/PATCH__SESSION-20260510-07_A25_A25-PLAN-UI-07.diff"
-`
+git apply "docs/2-sessions/1-ALPHA/BLOC_A25/SESSION-20260510-07_A25_A25-PLAN-UI-07/PATCH/PATCH__SESSION-20260510-07_A25_A25-PLAN-UI-07.diff"
+```
 
 ## Statut
-- Dossier patch initialise.
-- Patch officiel a produire dans cette session si du code est modifie.
+
+- Dossier patch initialisé.
+- Patch officiel à produire uniquement si du code applicatif est modifié pendant la session.
+- Le patch final devra être UTF-8 sans BOM et commencer directement par `diff --git`.
+- Une preuve réelle `git apply --check` devra être fournie.

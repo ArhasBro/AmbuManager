@@ -2,7 +2,7 @@
 
 ## ID SESSION
 
-SESSION-20260510-07_A25_A25-PLAN-UI-07
+SESSION-20260510-12_A25_CLOTURE_A25
 
 ## Date
 
@@ -14,8 +14,8 @@ Projet : Investissement
 Sous-projet : Ambulance Manager  
 Maturité : 1-ALPHA  
 Bloc : A25  
-Type : CORRECTION+COMPLÉTION  
-Intitulé : Structure globale, header, filtres, exports et onglets
+Type : VALIDATION  
+Intitulé : Clôture finale du bloc A25
 
 ## Objectif de la session
 
@@ -31,5 +31,5 @@ INFORMATION NON FOURNIE — À CONFIRMER
 
 ## Dossiers liés
 
-- Session : docs/2-sessions/1-ALPHA/BLOC_A25/SESSION-20260510-07_A25_A25-PLAN-UI-07
-- PATCH : docs/2-sessions/1-ALPHA/BLOC_A25/SESSION-20260510-07_A25_A25-PLAN-UI-07/PATCH
+- Session : docs/2-sessions/1-ALPHA/BLOC_A25/SESSION-20260510-12_A25_CLOTURE_A25
+- PATCH : docs/2-sessions/1-ALPHA/BLOC_A25/SESSION-20260510-12_A25_CLOTURE_A25/PATCH

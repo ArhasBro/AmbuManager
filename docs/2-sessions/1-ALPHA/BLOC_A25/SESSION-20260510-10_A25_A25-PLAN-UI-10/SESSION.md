@@ -1,4 +1,4 @@
-﻿# SESSION
+# SESSION
 
 ## ID SESSION
 
@@ -12,24 +12,24 @@ SESSION-20260510-10_A25_A25-PLAN-UI-10
 
 Projet : Investissement  
 Sous-projet : Ambulance Manager  
-Maturite : 1-ALPHA  
+Maturité : 1-ALPHA  
 Bloc : A25  
-Type : VALIDATION  
-Intitule : Validation visuelle globale Planning
+Type : CORRECTION+COMPLÉTION  
+Intitulé : Finitions visuelles, états, mode sombre et responsive minimal
 
 ## Objectif de la session
 
-INFORMATION NON FOURNIE - A CONFIRMER
+INFORMATION NON FOURNIE — À CONFIRMER
 
-## Perimetre exact traite
+## Périmètre exact traité
 
-INFORMATION NON FOURNIE - A CONFIRMER
+INFORMATION NON FOURNIE — À CONFIRMER
 
-## Resultat synthetique de session
+## Résultat synthétique de session
 
-INFORMATION NON FOURNIE - A CONFIRMER
+INFORMATION NON FOURNIE — À CONFIRMER
 
-## Dossiers lies
+## Dossiers liés
 
 - Session : docs/2-sessions/1-ALPHA/BLOC_A25/SESSION-20260510-10_A25_A25-PLAN-UI-10
-- PATCH   : docs/2-sessions/1-ALPHA/BLOC_A25/SESSION-20260510-10_A25_A25-PLAN-UI-10/PATCH
+- PATCH : docs/2-sessions/1-ALPHA/BLOC_A25/SESSION-20260510-10_A25_A25-PLAN-UI-10/PATCH

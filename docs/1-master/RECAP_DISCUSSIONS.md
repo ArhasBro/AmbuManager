@@ -131,14 +131,14 @@ docs/1-master/MAQUETTE/MAQUETTE_DA
 - Le bloc A24 doit viser une interface pure, simple, lisible et très proche des maquettes.
 - Le mode sombre est intégré dans A24 comme déclinaison sobre de `MAQUETTE_DA`, avec bouton clair/sombre visible.
 - Lucide React est autorisé pour les icônes génériques, sous réserve d’un audit qualité des icônes.
-- Les captures avant/après sont obligatoires pour éviter de reproduire les écarts UI/UX déjà constatés.
+- Les captures restent utiles aux étapes majeures. Pour A25 recadré, elles ne sont pas obligatoires à chaque session : une capture avant peut être réalisée manuellement lors de A25-PLAN-UI-06 et une capture après lors de A25-PLAN-UI-11 ou `CLOTURE_A25`.
 - Le planning est reconnu comme un sujet majeur et ne doit pas être noyé dans A24 : il est traité dans A25.
 - A26 sert de filet de sécurité après A24 et A25 pour corriger uniquement les régressions prouvées.
 
 ### Suites recommandées
 1. Ouvrir `A24-UI-01 — AUDIT` avec lecture du noyau documentaire minimal et de `REFERENCE_UI_UX_A24.md`.
 2. Ne pas lancer de correction globale UI sans audit A24 préalable.
-3. Préparer les captures avant pour les pages concernées.
+3. Préparer les captures avant uniquement pour les étapes majeures ou les pages concernées, de préférence manuellement par Nathan lorsque cela apporte une preuve utile.
 4. Traiter A24 globalement, puis A25 planning, puis A26 stabilisation.
 5. Après A26, décider entre :
    - relancer un bloc de développement ;

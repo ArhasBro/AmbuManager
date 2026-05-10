@@ -1,8 +1,8 @@
 # NO_PATCH
 
-Session : SESSION-20260510-06_A25_A25-PLAN-UI-06
+Session : SESSION-20260510-12_A25_CLOTURE_A25
 
-Type : AUDIT+CADRAGE
+Type : VALIDATION
 
 Raison :
 - Aucun patch code applicatif n’est attendu par défaut pour cette session.

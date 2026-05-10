@@ -1,4 +1,4 @@
-﻿# SESSION
+# SESSION
 
 ## ID SESSION
 
@@ -12,24 +12,24 @@ SESSION-20260510-09_A25_A25-PLAN-UI-09
 
 Projet : Investissement  
 Sous-projet : Ambulance Manager  
-Maturite : 1-ALPHA  
+Maturité : 1-ALPHA  
 Bloc : A25  
-Type : CORRECTION+COMPLETION  
-Intitule : Panneau droit actions et affectations
+Type : CORRECTION+COMPLÉTION  
+Intitulé : Panneau droit contextuel et actions groupées
 
 ## Objectif de la session
 
-INFORMATION NON FOURNIE - A CONFIRMER
+INFORMATION NON FOURNIE — À CONFIRMER
 
-## Perimetre exact traite
+## Périmètre exact traité
 
-INFORMATION NON FOURNIE - A CONFIRMER
+INFORMATION NON FOURNIE — À CONFIRMER
 
-## Resultat synthetique de session
+## Résultat synthétique de session
 
-INFORMATION NON FOURNIE - A CONFIRMER
+INFORMATION NON FOURNIE — À CONFIRMER
 
-## Dossiers lies
+## Dossiers liés
 
 - Session : docs/2-sessions/1-ALPHA/BLOC_A25/SESSION-20260510-09_A25_A25-PLAN-UI-09
-- PATCH   : docs/2-sessions/1-ALPHA/BLOC_A25/SESSION-20260510-09_A25_A25-PLAN-UI-09/PATCH
+- PATCH : docs/2-sessions/1-ALPHA/BLOC_A25/SESSION-20260510-09_A25_A25-PLAN-UI-09/PATCH

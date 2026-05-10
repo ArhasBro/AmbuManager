@@ -2047,132 +2047,187 @@ INFORMATION NON FOURNIE — À CONFIRMER
 
 Le bloc A25 ne doit pas repartir en micro-corrections.
 
-La suite doit être découpée en sessions centrées sur la reproduction complète.
+Les sessions restantes doivent couvrir l’intégralité de ce document, pas uniquement quelques zones isolées. Si un point de ce document n’est pas traité dans une session de correction, il doit être contrôlé en validation et classé explicitement.
 
-### A25-PLAN-UI-06 — CADRAGE DOCUMENTAIRE GLOBAL
+### 32.1 Règle d’autorité du découpage
+
+```txt
+REFERENCE_UI_UX_A25_PLANNING.md définit la cible à couvrir.
+Le découpage des sessions doit permettre de réaliser cette cible.
+Si le découpage ne couvre pas la référence A25, le découpage doit être ajusté.
+```
+
+### 32.2 Règle captures / vérification visuelle
+
+Les captures ne sont pas obligatoires à chaque session A25.
+
+Règle retenue :
+
+```txt
+- A25-PLAN-UI-06 : capture avant recommandée, réalisée manuellement par Nathan si utile.
+- A25-PLAN-UI-07 à A25-PLAN-UI-10 : pas de capture Codex obligatoire ; documentation structurée + checklist visuelle manuelle.
+- A25-PLAN-UI-11 ou CLOTURE_A25 : capture après recommandée, réalisée manuellement par Nathan si utile.
+```
+
+Codex ne doit pas produire de captures automatiquement. Les vérifications visuelles sont réalisées manuellement par Nathan, sauf demande explicite contraire.
+
+### 32.3 Règle `INFORMATION NON FOURNIE` côté UI
+
+La formule suivante est réservée à la documentation, aux rapports, aux prompts et aux contrôles qualité :
+
+```txt
+INFORMATION NON FOURNIE — À CONFIRMER
+```
+
+Elle ne doit jamais être affichée telle quelle dans l’interface utilisateur finale.
+
+Côté interface, si un contenu n’est pas disponible, utiliser un libellé métier sobre, par exemple :
+
+```txt
+Aucun élément à afficher
+Contenu non disponible
+Donnée non renseignée
+Configuration à compléter
+```
+
+### A25-PLAN-UI-06 — AUDIT+CADRAGE — Cohérence et faisabilité maquette Planning
 
 Type : `AUDIT+CADRAGE`
 
 Objectif :
 
-- intégrer ce document comme référence officielle ;
-- vérifier que les images sont bien présentes dans `MAQUETTE_DA` ;
-- lister les écarts majeurs du repo actuel avec cette cible ;
-- produire aucun patch UI lourd.
+- vérifier la cohérence entre `PLAN_DE_DEVELOPPEMENT.md`, `DOCUMENT_MAITRE.md`, ce document, les images Planning officielles, les prompts A25 et le code réel ;
+- confirmer que les images `Planning_V1.2.png` et `Planning_V1.2_INFO_DETAIL.png` sont bien les références visuelles prioritaires ;
+- produire une matrice de faisabilité code pour la reproduction de la maquette ;
+- identifier les écarts entre le code actuel et la cible maquette ;
+- préparer les corrections A25-PLAN-UI-07 à A25-PLAN-UI-10.
 
 Livrable :
 
 ```txt
-docs/1-master/REFERENCE_UI_UX_A25_PLANNING.md
+Rapport d’audit/cadrage A25-PLAN-UI-06 + matrice de faisabilité code + checklist visuelle manuelle.
 ```
 
 DoD :
 
 ```txt
-La cible Planning 99 % maquette est documentée et exploitable par Codex.
+La cible Planning 99 % maquette est cohérente, les risques d’intégration sont identifiés, et Codex dispose d’un plan clair pour les corrections suivantes.
 ```
 
-### A25-PLAN-UI-07 — STRUCTURE GLOBALE PAGE PLANNING
+### A25-PLAN-UI-07 — STRUCTURE GLOBALE, HEADER, FILTRES, EXPORTS ET ONGLETS
 
 Type : `CORRECTION+COMPLÉTION`
 
 Objectif :
 
-- reconstruire le layout global ;
-- header ;
-- toolbar filtres / vue / exports ;
-- onglets ;
-- workspace deux colonnes ;
-- préparation table + panneau.
+- reconstruire le layout global visible dans la maquette ;
+- traiter le header Planning ;
+- traiter la toolbar filtres / vue / exports ;
+- traiter l’encadré orange comme une vraie navigation d’onglets ;
+- préparer le workspace deux colonnes : encadré violet + encadré vert ;
+- éviter le double header Planning ;
+- faire en sorte que l’onglet actif pilote ensemble le contenu principal et le panneau contextuel.
 
 DoD :
 
 ```txt
-La page possède la structure globale visible dans Planning_V1.2.
+La page possède la structure globale visible dans Planning_V1.2 et les onglets pilotent correctement les zones violet/vert sans empilement vertical incohérent.
 ```
 
-### A25-PLAN-UI-08 — MATRICE SALARIÉS × SEMAINES
+### A25-PLAN-UI-08 — MATRICE SALARIÉS × SEMAINES, CELLULES ET BADGES
 
 Type : `CORRECTION+COMPLÉTION`
 
 Objectif :
 
 - reconstruire la grille principale ;
-- colonnes ;
-- lignes ;
-- avatars ;
-- badges statuts ;
-- pills shifts ;
-- sélection cellule.
+- traiter les colonnes salarié / rôle / base / statut / semaines ;
+- traiter les lignes salariés ;
+- traiter les avatars ;
+- traiter les badges statuts ;
+- traiter les pills shifts / repos / congé / garde ;
+- traiter la sélection cellule ;
+- respecter les données réellement disponibles dans le code.
 
 DoD :
 
 ```txt
-La grille centrale ressemble à la matrice de la maquette.
+La zone violette de la maquette ressemble à une matrice salariés × semaines fidèle, exploitable et non fictive.
 ```
 
-### A25-PLAN-UI-09 — PANNEAU DROIT ET BARRE BULK
+### A25-PLAN-UI-09 — PANNEAU DROIT CONTEXTUEL ET ACTIONS GROUPÉES
 
 Type : `CORRECTION+COMPLÉTION`
 
 Objectif :
 
-- reproduire le panneau détail cellule ;
-- reproduire les sections affectations / absences / alertes / actions ;
-- reproduire la barre basse de sélection multiple.
+- reproduire le panneau droit `Détail de la cellule` ;
+- traiter les sections salarié, période, affectations, absences, conflits/alertes et actions ;
+- reproduire la barre basse de sélection multiple ;
+- traiter les actions d’affectation employé 1 / employé 2 / véhicule / base ;
+- clarifier l’action `Vider` sans créer une nouvelle logique métier ;
+- garantir que le panneau vert reste cohérent avec l’onglet actif.
 
 DoD :
 
 ```txt
-Le panneau droit et la barre bulk ressemblent à la maquette.
+Le panneau droit et la barre basse ressemblent à la maquette, avec actions hiérarchisées et sans nouvelle logique métier lourde.
 ```
 
-### A25-PLAN-UI-10 — FINITIONS VISUELLES ET MODE SOMBRE
+### A25-PLAN-UI-10 — FINITIONS VISUELLES, ÉTATS, MODE SOMBRE ET RESPONSIVE MINIMAL
 
 Type : `CORRECTION+COMPLÉTION`
 
 Objectif :
 
 - harmoniser les tokens ;
-- régler les espacements ;
-- vérifier contrastes ;
-- traiter mode sombre dans la limite de ce qui existe ;
-- éviter les régressions.
+- corriger les espacements, bordures, arrondis, couleurs et contrastes ;
+- traiter les états vides, chargement et erreur ;
+- vérifier le mode clair ;
+- traiter le mode sombre dans la limite du socle existant ;
+- traiter le responsive minimal sans refonte mobile complète ;
+- corriger les incohérences visuelles restantes après A25-07 à A25-09.
 
 DoD :
 
 ```txt
-La page est visuellement homogène, lisible, et cohérente en clair/sombre.
+La page Planning est visuellement homogène, lisible, cohérente en clair/sombre, et suffisamment finie pour entrer en validation globale.
 ```
 
-### A25-PLAN-UI-11 — VALIDATION VISUELLE GLOBALE
+### A25-PLAN-UI-11 — VALIDATION VISUELLE GLOBALE PLANNING
 
 Type : `VALIDATION`
 
 Objectif :
 
-- comparer capture après avec Planning_V1.2 ;
-- vérifier la fidélité visuelle ;
-- vérifier que Nathan valide le rendu ;
+- contrôler la fidélité à `Planning_V1.2.png` ;
+- contrôler la fidélité à `Planning_V1.2_INFO_DETAIL.png` ;
+- vérifier que tout le contenu de `REFERENCE_UI_UX_A25_PLANNING.md` a été couvert ou classé ;
+- vérifier le retour visuel manuel de Nathan ;
 - vérifier lint/build ;
-- vérifier absence de dérive métier.
+- vérifier l’absence de dérive métier ;
+- classer les résiduels bloquants / non bloquants / à confirmer.
+
+La capture après peut être fournie manuellement par Nathan si utile. Elle n’est pas produite automatiquement par Codex.
 
 DoD :
 
 ```txt
-La page Planning est validée visuellement comme suffisamment fidèle à la maquette.
+La page Planning est validée visuellement comme suffisamment fidèle à la maquette, ou les écarts restants sont classés et empêchent explicitement la clôture.
 ```
 
-### CLOTURE_A25
+### CLOTURE_A25 — CLÔTURE FINALE DU BLOC A25
 
 Type : `VALIDATION`
 
 Objectif :
 
+- vérifier les sessions A25-PLAN-UI-06 à A25-PLAN-UI-11 ;
 - vérifier patchs ;
 - vérifier docs ;
 - vérifier preuves ;
-- vérifier validation visuelle ;
+- vérifier retour visuel manuel ;
+- vérifier absence de contradiction documentaire restante ;
 - rendre le verdict final.
 
 Verdict obligatoire :
@@ -2186,92 +2241,3 @@ ou
 ```txt
 BLOC A25 CLÔTURABLE DÉFINITIVEMENT : NON
 ```
-
----
-
-## 33. Checklist de contrôle visuel manuel final
-
-À utiliser après intégration code.
-
-### Header
-
-- [ ] Le titre `Planning` a la bonne taille et le bon poids.
-- [ ] Le sous-titre est gris bleuté, discret.
-- [ ] `Ajouter un shift` est le seul bouton principal du header.
-- [ ] Le bouton est bleu, compact, aligné comme la maquette.
-
-### Filtres / exports
-
-- [ ] Les filtres sont en ligne.
-- [ ] Chaque filtre est une petite carte blanche.
-- [ ] Les labels et valeurs sont hiérarchisés.
-- [ ] Le toggle `Personnel / Vue dépôt` ressemble à la maquette.
-- [ ] Les exports sont à droite.
-- [ ] Les exports sont secondaires, blancs, bordés.
-
-### Onglets
-
-- [ ] Les onglets pilotent réellement la zone principale violette.
-- [ ] Les onglets pilotent aussi le panneau contextuel vert.
-- [ ] Les contenus des onglets ne sont pas empilés verticalement.
-- [ ] Le panneau droit ne conserve pas un détail de cellule obsolète après changement d’onglet.
-- [ ] Les onglets sont fins, horizontaux.
-- [ ] `Planning manuel` est actif avec underline bleu.
-- [ ] Les onglets ne sont pas de gros boutons.
-
-### Grille
-
-- [ ] La grille est une matrice salariés × semaines.
-- [ ] Les colonnes correspondent à la maquette.
-- [ ] Les lignes ont une hauteur proche.
-- [ ] Les bordures sont fines.
-- [ ] Les avatars sont ronds et sobres.
-- [ ] Les statuts sont en badges doux.
-- [ ] Les pills de shifts sont compactes.
-- [ ] Les couleurs des pills sont douces.
-- [ ] La cellule sélectionnée a une bordure bleue sobre.
-
-### Panneau droit
-
-- [ ] Le panneau est à droite, blanc, arrondi.
-- [ ] Le panneau n’est pas une modale.
-- [ ] Le header `Détail de la cellule` est propre.
-- [ ] L’identité salarié est claire.
-- [ ] La semaine sélectionnée est visible.
-- [ ] Les affectations sont dans une card interne.
-- [ ] Les absences et conflits sont lisibles.
-- [ ] Les actions sont hiérarchisées.
-
-### Barre bulk
-
-- [ ] La barre est sous la grille.
-- [ ] Elle est horizontale.
-- [ ] `3 shifts sélectionnés` est à gauche.
-- [ ] Les affectations groupées sont secondaires.
-- [ ] `Vider` est rouge doux, non dominant.
-
-### Fidélité globale
-
-- [ ] La page ressemble clairement à `Planning_V1.2.png`.
-- [ ] La page ne ressemble plus à une ancienne page corrigée par morceaux.
-- [ ] La densité est professionnelle.
-- [ ] Les espacements sont réguliers.
-- [ ] Les bordures et arrondis sont cohérents.
-- [ ] Le rendu est aligné avec `MAQUETTE_DA`.
-
----
-
-## 34. Verdict d’usage du document
-
-Ce document est la référence visuelle officielle du bloc A25 pour la page Planning.
-
-Il doit être utilisé avant toute nouvelle session de correction UI du Planning.
-
-Toute session A25 restante doit pouvoir répondre à cette question :
-
-```txt
-Le patch rapproche-t-il réellement la page Planning de Planning_V1.2.png ?
-```
-
-Si la réponse est non, la session ne doit pas être validée visuellement.
-

@@ -1332,37 +1332,48 @@ Les sessions A25 déjà produites avant ce recadrage peuvent rester comme histor
 
 La fin du bloc A25 est recadrée ainsi :
 
-- **A25-PLAN-UI-06 — AUDIT+CADRAGE** — Recadrage visuel global Planning.  
-  Objectif : officialiser la cible Planning à partir de `Planning_V1.2.png`, `Planning_V1.2_INFO_DETAIL.png` et `REFERENCE_UI_UX_A25_PLANNING.md`, puis classer les écarts restants entre le rendu réel et la maquette.  
-  Livrable attendu : documentation A25 mise à jour et matrice de conformité visuelle ligne par ligne.  
-  DoD : la cible visuelle complète est explicite, exploitable par Codex et validée comme référence de correction.
+- **A25-PLAN-UI-06 — AUDIT+CADRAGE** — Cohérence et faisabilité maquette Planning.  
+  Objectif : contrôler la cohérence entre le plan, le document maître, `REFERENCE_UI_UX_A25_PLANNING.md`, les images Planning officielles, les prompts A25 et le code réel, puis produire une matrice de faisabilité code.  
+  Livrable attendu : rapport d’audit/cadrage, matrice de cohérence documentaire, matrice de faisabilité code, cartographie des écarts et checklist visuelle manuelle.  
+  DoD : la cible visuelle complète est exploitable, les risques sont classés, et les corrections A25-07 à A25-10 peuvent être lancées sans contradiction majeure.
 
-- **A25-PLAN-UI-07 — CORRECTION+COMPLÉTION** — Refonte globale de la structure Planning alignée maquette.  
-  Périmètre : layout global, header, toolbar filtres/vue/exports, onglets internes, workspace principal, répartition matrice + panneau droit, barre basse d'actions, espacements et alignements.  
+- **A25-PLAN-UI-07 — CORRECTION+COMPLÉTION** — Structure globale, header, filtres, exports et onglets.  
+  Périmètre : layout global, header Planning, toolbar filtres/vue/exports, onglets internes, workspace principal, répartition matrice + panneau droit, suppression du risque de double header, pilotage conjoint encadré violet / encadré vert par l’onglet actif.  
   Livrable attendu : patch code ciblé structure globale Planning.  
-  DoD : la page Planning ressemble structurellement à la maquette, avant même les finitions fines.
+  DoD : la page Planning ressemble structurellement à la maquette et les onglets pilotent bien le contenu principal et le panneau contextuel.
 
 - **A25-PLAN-UI-08 — CORRECTION+COMPLÉTION** — Matrice salariés × semaines, cellules et badges.  
-  Périmètre : table/matrice, colonnes salarié/rôle/base/statut/semaines, lignes salariés, cellules, sélection cellule, badges shift/repos/congé/garde, couleurs douces, densité et lisibilité.  
+  Périmètre : table/matrice, colonnes salarié/rôle/base/statut/semaines, lignes salariés, avatars, cellules, sélection cellule, badges shift/repos/congé/garde, couleurs douces, densité et lisibilité.  
   Livrable attendu : patch code ciblé matrice planning.  
   DoD : la zone violette de la maquette est reproduite de manière fidèle et exploitable, sans hardcoder des données non disponibles.
 
-- **A25-PLAN-UI-09 — CORRECTION+COMPLÉTION** — Panneau détail cellule et actions groupées.  
+- **A25-PLAN-UI-09 — CORRECTION+COMPLÉTION** — Panneau droit contextuel et actions groupées.  
   Périmètre : panneau droit `Détail de la cellule`, détail salarié, période, affectations, absences, conflits/alertes, actions, barre basse de sélection multiple et actions d'affectation.  
   Livrable attendu : patch code ciblé panneau droit et barre basse.  
   DoD : les zones verte et basse de la maquette sont reproduites fidèlement, avec actions hiérarchisées et sans nouvelle logique métier lourde.
 
-- **A25-PLAN-UI-10 — VALIDATION** — Validation visuelle globale Planning.  
-  À vérifier : fidélité à `Planning_V1.2.png`, fidélité à `Planning_V1.2_INFO_DETAIL.png`, cohérence avec `REFERENCE_UI_UX_A25_PLANNING.md`, mode clair, mode sombre, actions, non-régression fonctionnelle, captures ou contrôle visuel manuel documenté.  
+- **A25-PLAN-UI-10 — CORRECTION+COMPLÉTION** — Finitions visuelles, états, mode sombre et responsive minimal.  
+  Périmètre : tokens, espacements, bordures, arrondis, couleurs, contrastes, états vides/chargement/erreur, mode clair, mode sombre et responsive minimal, sans refonte mobile complète.  
+  Livrable attendu : patch code ciblé finitions globales Planning.  
+  DoD : la page Planning est homogène, lisible, cohérente en clair/sombre et prête pour validation visuelle globale.
+
+- **A25-PLAN-UI-11 — VALIDATION** — Validation visuelle globale Planning.  
+  À vérifier : fidélité à `Planning_V1.2.png`, fidélité à `Planning_V1.2_INFO_DETAIL.png`, couverture complète de `REFERENCE_UI_UX_A25_PLANNING.md`, mode clair, mode sombre, actions, non-régression fonctionnelle, retour visuel manuel Nathan, capture après manuelle si fournie.  
   Livrable attendu : rapport de validation visuelle et technique Planning.  
-  DoD : Nathan valide manuellement que la page Planning est suffisamment fidèle à la maquette et exploitable métier, ou les écarts restants sont classés explicitement bloquants / non bloquants.
+  DoD : Nathan valide manuellement que la page Planning est suffisamment fidèle à la maquette et exploitable métier, ou les écarts restants sont classés explicitement bloquants / non bloquants / à confirmer.
 
 - **CLOTURE_A25 — VALIDATION** — Clôture finale du bloc A25.  
-  Livrable attendu : contrôle final du bloc Planning UI/UX, vérification des patchs, preuves, documentation finale, conformité à la référence A25 et verdict de clôture.  
+  Livrable attendu : contrôle final du bloc Planning UI/UX, vérification des patchs, preuves, documentation finale, conformité à la référence A25, retour visuel manuel et verdict de clôture.  
   Verdict attendu :
   - `BLOC A25 CLÔTURABLE DÉFINITIVEMENT : OUI`
   - ou
   - `BLOC A25 CLÔTURABLE DÉFINITIVEMENT : NON`
+
+**Règle A25 — captures et vérification visuelle**  
+Les captures ne sont pas obligatoires à chaque session A25. Pour A25 recadré, Codex ne doit pas produire de captures automatiquement. Une capture avant peut être réalisée manuellement par Nathan lors de A25-PLAN-UI-06, et une capture après peut être réalisée manuellement lors de A25-PLAN-UI-11 ou `CLOTURE_A25`. Pour les sessions de correction intermédiaires, une documentation structurée et une checklist de vérification visuelle manuelle suffisent.
+
+**Règle A25 — phrase documentaire interdite dans l’UI**  
+La formule `INFORMATION NON FOURNIE — À CONFIRMER` est réservée aux documents, prompts, rapports et contrôles qualité. Elle ne doit pas être affichée dans l’interface utilisateur finale.
 
 #### Résultat attendu
 - page Planning refondue comme écran central complet ;

@@ -128,9 +128,13 @@ Les autres éléments du dossier `docs/1-master/MAQUETTE/` peuvent servir de sup
 - La vraie adaptation mobile est reportée après l’ALPHA.
 
 ### 3.2.8 Captures et preuves visuelles
-- Les sessions A24 et A25 doivent produire des captures avant/après.
-- Les captures servent à vérifier que l’intégration ne s’éloigne pas à nouveau des maquettes.
-- Une page ne peut pas être déclarée conforme si la comparaison visuelle n’est pas démontrée.
+- Les captures restent utiles pour les étapes majeures de comparaison visuelle.
+- Pour A25 recadré, les captures ne sont pas obligatoires à chaque session.
+- Codex ne doit pas produire de captures automatiquement afin d’éviter une consommation inutile de crédits.
+- Une capture avant peut être réalisée manuellement par Nathan au moment de l’audit/cadrage A25-PLAN-UI-06.
+- Une capture après peut être réalisée manuellement par Nathan au moment de A25-PLAN-UI-11 ou de `CLOTURE_A25`.
+- Pour les sessions intermédiaires, une documentation structurée et une checklist de vérification visuelle manuelle suffisent.
+- Une page ne peut pas être déclarée conforme si la comparaison visuelle ou le retour manuel utilisateur n’est pas démontré.
 
 ### 3.2.9 Documentation de référence A24
 - Le fichier `docs/1-master/REFERENCE_UI_UX_A24.md` est créé comme document de référence pour l’exécution A24.
@@ -156,7 +160,11 @@ docs/1-master/REFERENCE_UI_UX_A25_PLANNING.md
 Cette référence doit décrire précisément la structure attendue : header, toolbar filtres/vue/exports, onglets, matrice salariés × semaines, panneau droit de détail cellule, barre basse d'actions groupées, badges, états visuels et compatibilité clair/sombre.
 
 
-Décision complémentaire : dans `Planning_V1.2_INFO_DETAIL.png`, l’encadré orange correspond à une navigation par onglets qui pilote à la fois l’encadré violet et l’encadré vert. Le contenu violet et le panneau vert doivent donc changer ensemble selon l’onglet actif. Pour l’image visible, `Planning manuel` affiche la matrice salariés × semaines et le détail de cellule. Les contenus des autres onglets sont `INFORMATION NON FOURNIE — À CONFIRMER` et ne doivent pas être inventés.
+Décision complémentaire : dans `Planning_V1.2_INFO_DETAIL.png`, l’encadré orange correspond à une navigation par onglets qui pilote à la fois l’encadré violet et l’encadré vert. Le contenu violet et le panneau vert doivent donc changer ensemble selon l’onglet actif. Pour l’image visible, `Planning manuel` affiche la matrice salariés × semaines et le détail de cellule. Les contenus des autres onglets ne doivent pas être inventés si leur contenu n’est pas visible ou prouvé par le code.
+
+Décision complémentaire : la formule `INFORMATION NON FOURNIE — À CONFIRMER` est réservée à la documentation, aux rapports, aux prompts et aux contrôles qualité. Elle ne doit jamais être affichée telle quelle dans l’interface utilisateur finale. Côté interface, utiliser un libellé métier sobre comme `Aucun élément à afficher`, `Contenu non disponible`, `Donnée non renseignée` ou `Configuration à compléter`.
+
+Décision complémentaire : la fin de A25 est recadrée en sessions `A25-PLAN-UI-06` à `A25-PLAN-UI-11`, puis `CLOTURE_A25`. `A25-PLAN-UI-10` devient une session de finitions visuelles, états, mode sombre et responsive minimal. `A25-PLAN-UI-11` porte la validation visuelle globale.
 
 La validation A25 exige une conformité visuelle globale. Un patch peut être techniquement valide mais non validé visuellement si le rendu ne correspond pas suffisamment à la maquette.
 
@@ -174,7 +182,7 @@ Les points suivants sont explicitement sortis des décisions en attente pour l�
 - priorité de `MAQUETTE_DA` ;
 - intégration du mode sombre dans A24 ;
 - autorisation de Lucide React pour les icônes génériques ;
-- obligation de captures avant/après.
+- règle de captures ciblées sur les étapes majeures, avec vérifications visuelles manuelles par Nathan pour A25 recadré.
 
 ## 5. Gouvernance documentaire
 - `docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md` reste figé tant qu’aucun arbitrage explicite produit n’est demandé.

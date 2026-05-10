@@ -1,10 +1,13 @@
-﻿# EVIDENCES
+# EVIDENCES
 
-Ã‰lÃ©ments factuels utilisÃ©s pendant la session.
+Éléments factuels utilisés pendant la session.
 
 ---
 
-## Sources utilisÃ©es
+## Sources utilisées
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+INFORMATION NON FOURNIE — À CONFIRMER
 
+## Preuves terminales
+
+INFORMATION NON FOURNIE — À CONFIRMER

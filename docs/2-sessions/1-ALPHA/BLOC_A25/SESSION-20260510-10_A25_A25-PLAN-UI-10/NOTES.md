@@ -1,10 +1,9 @@
-﻿# NOTES
+# NOTES
 
 Notes de travail de la session.
 
 ---
 
-## MÃ©thode / observations
+## Méthode / observations
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
-
+INFORMATION NON FOURNIE — À CONFIRMER
