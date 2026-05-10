@@ -88,6 +88,10 @@ function startOfWeekMonday(date: Date) {
   return addDays(date, -diff);
 }
 
+function isSameDay(a: Date, b: Date) {
+  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+}
+
 function parseJsonSafe(text: string) {
   try {
     return text ? JSON.parse(text) : null;
@@ -262,6 +266,8 @@ export default function ManualPlanningPanel({
     const start = startOfWeekMonday(first);
     return Array.from({ length: 42 }, (_, i) => addDays(start, i));
   }, [cursorDate, viewMode]);
+
+  const monthWeekDayHeaders = useMemo(() => ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"], []);
 
   const selectedCreateTemplate = useMemo(
     () => templates.find((template) => template.id === createForm.templateId) ?? null,
@@ -529,14 +535,28 @@ export default function ManualPlanningPanel({
       )}
 
       {!loading && viewMode === "month" && (
-        <div className="planning-manual__month-grid" style={{ display: "grid", gridTemplateColumns: "repeat(7, minmax(120px, 1fr))", gap: 8 }}>
+        <div className="planning-manual__month-grid">
+          {monthWeekDayHeaders.map((label) => (
+            <div key={label} className="planning-manual__month-weekday">{label}</div>
+          ))}
           {monthDays.map((day) => {
             const key = formatDate(day);
             const dayItems = groupedByDay.get(key) ?? [];
             const isCurrentMonth = day.getMonth() === cursorDate.getMonth();
+            const isToday = isSameDay(day, new Date());
+            const isWeekend = day.getDay() === 0 || day.getDay() === 6;
+            const cancelledCount = dayItems.filter((shift) => shift.isCancelled).length;
             return (
-              <div key={key} className={`planning-manual__day-card${isCurrentMonth ? "" : " is-muted"}`} style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 8, minHeight: 120, opacity: isCurrentMonth ? 1 : 0.55 }}>
-                <div className="planning-manual__day-title" style={{ fontWeight: 700, marginBottom: 6 }}>{day.toLocaleDateString("fr-FR", { weekday: "short", day: "2-digit" })}</div>
+              <div
+                key={key}
+                className={`planning-manual__day-card${isCurrentMonth ? "" : " is-muted"}${isToday ? " is-today" : ""}${isWeekend ? " is-weekend" : ""}`}
+              >
+                <div className="planning-manual__day-head">
+                  <div className="planning-manual__day-title">{day.toLocaleDateString("fr-FR", { weekday: "short", day: "2-digit" })}</div>
+                  <StatusBadge variant={dayItems.length > 0 ? "info" : "neutral"}>
+                    {dayItems.length} shift{dayItems.length > 1 ? "s" : ""}
+                  </StatusBadge>
+                </div>
                 {dayItems.length === 0 ? <div className="planning-manual__day-empty" style={{ opacity: 0.6, fontSize: 12 }}>Aucun shift</div> : (
                   <div className="planning-manual__day-list" style={{ display: "grid", gap: 6 }}>
                     {dayItems.slice(0, 4).map((shift) => (
@@ -548,6 +568,11 @@ export default function ManualPlanningPanel({
                       </div>
                     ))}
                     {dayItems.length > 4 && <div className="planning-manual__day-more" style={{ fontSize: 12, opacity: 0.7 }}>+ {dayItems.length - 4} autre(s)</div>}
+                    {cancelledCount > 0 && (
+                      <div className="planning-manual__day-cancelled-note">
+                        {cancelledCount} annule{cancelledCount > 1 ? "s" : ""}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

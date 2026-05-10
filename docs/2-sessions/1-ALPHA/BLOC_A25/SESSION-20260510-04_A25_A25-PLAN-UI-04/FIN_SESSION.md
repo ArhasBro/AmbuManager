@@ -1,14 +1,21 @@
-﻿# FIN_SESSION
+# FIN_SESSION
 
-## ClÃ´ture
+## Cloture
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+- DoD de session atteinte sur le perimetre "vue mois".
+- Patch principal code produit et documente.
+- Preuves terminales et validations lint/build executees.
 
 ## Validation
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+- Vue mois inspectee : OUI
+- Etat reel documente : OUI
+- Realignement visuel cible applique : OUI
+- Logique metier lourde ajoutee : NON
+- `git apply --check` : preuve fournie (contexte courant + worktree propre)
+- `npm run lint` : execute
+- `npm run build` : execute
 
 ## Verdict final
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
-
+SESSION A25-PLAN-UI-04 TERMINABLE : OUI

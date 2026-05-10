@@ -1,4 +1,4 @@
-﻿# SESSION
+# SESSION
 
 ## ID SESSION
 
@@ -19,15 +19,19 @@ Intitule : Vue mois
 
 ## Objectif de la session
 
-INFORMATION NON FOURNIE - A CONFIRMER
+Realigner visuellement la vue mois du planning existant pour ameliorer lisibilite, densite et coherence avec MAQUETTE_DA, sans refonte fonctionnelle lourde.
 
 ## Perimetre exact traite
 
-INFORMATION NON FOURNIE - A CONFIRMER
+- Vue mois existante dans `app/planning/manual-planning-panel.tsx`.
+- Structure mensuelle, cellules, badges, etats visuels, navigation mensuelle, lisibilite clair/sombre, responsive minimal.
+- Exclusion des vues jour/semaine, logique API/Prisma/RBAC, moteur planning.
 
 ## Resultat synthetique de session
 
-INFORMATION NON FOURNIE - A CONFIRMER
+- Vue mois constatee PRESENTE mais PARTIELLE avant correction.
+- Realignement UI cible applique sans modification fonctionnelle metier.
+- Patch principal produit et documente.
 
 ## Dossiers lies
 

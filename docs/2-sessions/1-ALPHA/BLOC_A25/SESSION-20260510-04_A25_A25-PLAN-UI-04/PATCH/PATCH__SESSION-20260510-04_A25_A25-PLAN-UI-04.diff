@@ -1,0 +1,158 @@
+diff --git a/app/globals.css b/app/globals.css
+index eebd278..0c8cec6 100644
+--- a/app/globals.css
++++ b/app/globals.css
+@@ -1888,7 +1888,23 @@ pre {
+   grid-template-columns: repeat(7, minmax(120px, 1fr));
+ }
+ 
++.planning-manual__month-weekday {
++  border: 1px solid var(--ui-border);
++  border-radius: 10px;
++  background: var(--ui-surface-soft);
++  color: var(--ui-text-muted);
++  font-size: 12px;
++  font-weight: 700;
++  text-transform: uppercase;
++  text-align: center;
++  padding: 6px 8px;
++}
++
+ .planning-manual__day-card {
++  border: 1px solid var(--ui-border);
++  border-radius: 10px;
++  padding: 8px;
++  min-height: 140px;
+   background: var(--ui-surface);
+   transition: border-color 0.15s ease, box-shadow 0.15s ease;
+ }
+@@ -1902,8 +1918,26 @@ pre {
+   opacity: 0.62;
+ }
+ 
++.planning-manual__day-card.is-weekend {
++  background: var(--ui-surface-soft);
++}
++
++.planning-manual__day-card.is-today {
++  border-color: color-mix(in srgb, var(--ui-primary), #ffffff 30%);
++  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ui-primary), transparent 78%), var(--ui-shadow);
++}
++
++.planning-manual__day-head {
++  display: flex;
++  align-items: center;
++  justify-content: space-between;
++  gap: 8px;
++  margin-bottom: 6px;
++}
++
+ .planning-manual__day-title {
+   color: #1e3a8a;
++  font-weight: 700;
+ }
+ 
+ .planning-manual__day-empty {
+@@ -1924,6 +1958,12 @@ pre {
+   color: var(--ui-text-muted);
+ }
+ 
++.planning-manual__day-cancelled-note {
++  font-size: 11px;
++  color: var(--ui-danger-text);
++  font-weight: 600;
++}
++
+ .planning-manual-shift {
+   background: var(--ui-surface);
+   box-shadow: var(--ui-shadow);
+@@ -2013,6 +2053,10 @@ pre {
+     grid-template-columns: repeat(4, minmax(120px, 1fr));
+   }
+ 
++  .planning-manual__month-weekday:nth-child(n + 5) {
++    display: none;
++  }
++
+   .planning-structure__header-actions {
+     width: 100%;
+   }
+@@ -2107,6 +2151,10 @@ pre {
+     grid-template-columns: repeat(2, minmax(120px, 1fr));
+   }
+ 
++  .planning-manual__month-weekday:nth-child(n + 3) {
++    display: none;
++  }
++
+   .planning-manual__toolbar {
+     grid-template-columns: 1fr;
+   }
+diff --git a/app/planning/manual-planning-panel.tsx b/app/planning/manual-planning-panel.tsx
+index dd1193d..5fc45cf 100644
+--- a/app/planning/manual-planning-panel.tsx
++++ b/app/planning/manual-planning-panel.tsx
+@@ -88,6 +88,10 @@ function startOfWeekMonday(date: Date) {
+   return addDays(date, -diff);
+ }
+ 
++function isSameDay(a: Date, b: Date) {
++  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
++}
++
+ function parseJsonSafe(text: string) {
+   try {
+     return text ? JSON.parse(text) : null;
+@@ -263,6 +267,8 @@ export default function ManualPlanningPanel({
+     return Array.from({ length: 42 }, (_, i) => addDays(start, i));
+   }, [cursorDate, viewMode]);
+ 
++  const monthWeekDayHeaders = useMemo(() => ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"], []);
++
+   const selectedCreateTemplate = useMemo(
+     () => templates.find((template) => template.id === createForm.templateId) ?? null,
+     [createForm.templateId, templates]
+@@ -529,14 +535,28 @@ export default function ManualPlanningPanel({
+       )}
+ 
+       {!loading && viewMode === "month" && (
+-        <div className="planning-manual__month-grid" style={{ display: "grid", gridTemplateColumns: "repeat(7, minmax(120px, 1fr))", gap: 8 }}>
++        <div className="planning-manual__month-grid">
++          {monthWeekDayHeaders.map((label) => (
++            <div key={label} className="planning-manual__month-weekday">{label}</div>
++          ))}
+           {monthDays.map((day) => {
+             const key = formatDate(day);
+             const dayItems = groupedByDay.get(key) ?? [];
+             const isCurrentMonth = day.getMonth() === cursorDate.getMonth();
++            const isToday = isSameDay(day, new Date());
++            const isWeekend = day.getDay() === 0 || day.getDay() === 6;
++            const cancelledCount = dayItems.filter((shift) => shift.isCancelled).length;
+             return (
+-              <div key={key} className={`planning-manual__day-card${isCurrentMonth ? "" : " is-muted"}`} style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 8, minHeight: 120, opacity: isCurrentMonth ? 1 : 0.55 }}>
+-                <div className="planning-manual__day-title" style={{ fontWeight: 700, marginBottom: 6 }}>{day.toLocaleDateString("fr-FR", { weekday: "short", day: "2-digit" })}</div>
++              <div
++                key={key}
++                className={`planning-manual__day-card${isCurrentMonth ? "" : " is-muted"}${isToday ? " is-today" : ""}${isWeekend ? " is-weekend" : ""}`}
++              >
++                <div className="planning-manual__day-head">
++                  <div className="planning-manual__day-title">{day.toLocaleDateString("fr-FR", { weekday: "short", day: "2-digit" })}</div>
++                  <StatusBadge variant={dayItems.length > 0 ? "info" : "neutral"}>
++                    {dayItems.length} shift{dayItems.length > 1 ? "s" : ""}
++                  </StatusBadge>
++                </div>
+                 {dayItems.length === 0 ? <div className="planning-manual__day-empty" style={{ opacity: 0.6, fontSize: 12 }}>Aucun shift</div> : (
+                   <div className="planning-manual__day-list" style={{ display: "grid", gap: 6 }}>
+                     {dayItems.slice(0, 4).map((shift) => (
+@@ -548,6 +568,11 @@ export default function ManualPlanningPanel({
+                       </div>
+                     ))}
+                     {dayItems.length > 4 && <div className="planning-manual__day-more" style={{ fontSize: 12, opacity: 0.7 }}>+ {dayItems.length - 4} autre(s)</div>}
++                    {cancelledCount > 0 && (
++                      <div className="planning-manual__day-cancelled-note">
++                        {cancelledCount} annule{cancelledCount > 1 ? "s" : ""}
++                      </div>
++                    )}
+                   </div>
+                 )}
+               </div>

@@ -1888,7 +1888,23 @@ pre {
   grid-template-columns: repeat(7, minmax(120px, 1fr));
 }
 
+.planning-manual__month-weekday {
+  border: 1px solid var(--ui-border);
+  border-radius: 10px;
+  background: var(--ui-surface-soft);
+  color: var(--ui-text-muted);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 6px 8px;
+}
+
 .planning-manual__day-card {
+  border: 1px solid var(--ui-border);
+  border-radius: 10px;
+  padding: 8px;
+  min-height: 140px;
   background: var(--ui-surface);
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
@@ -1902,8 +1918,26 @@ pre {
   opacity: 0.62;
 }
 
+.planning-manual__day-card.is-weekend {
+  background: var(--ui-surface-soft);
+}
+
+.planning-manual__day-card.is-today {
+  border-color: color-mix(in srgb, var(--ui-primary), #ffffff 30%);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ui-primary), transparent 78%), var(--ui-shadow);
+}
+
+.planning-manual__day-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
 .planning-manual__day-title {
   color: #1e3a8a;
+  font-weight: 700;
 }
 
 .planning-manual__day-empty {
@@ -1922,6 +1956,12 @@ pre {
 .planning-manual__day-item-user,
 .planning-manual__day-more {
   color: var(--ui-text-muted);
+}
+
+.planning-manual__day-cancelled-note {
+  font-size: 11px;
+  color: var(--ui-danger-text);
+  font-weight: 600;
 }
 
 .planning-manual-shift {
@@ -2011,6 +2051,10 @@ pre {
 
   .planning-manual__month-grid {
     grid-template-columns: repeat(4, minmax(120px, 1fr));
+  }
+
+  .planning-manual__month-weekday:nth-child(n + 5) {
+    display: none;
   }
 
   .planning-structure__header-actions {
@@ -2105,6 +2149,10 @@ pre {
 
   .planning-manual__month-grid {
     grid-template-columns: repeat(2, minmax(120px, 1fr));
+  }
+
+  .planning-manual__month-weekday:nth-child(n + 3) {
+    display: none;
   }
 
   .planning-manual__toolbar {
