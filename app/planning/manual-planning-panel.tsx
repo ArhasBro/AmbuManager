@@ -452,7 +452,11 @@ export default function ManualPlanningPanel({
       </div>
 
       {canEditPlanning && (
-        <div className="planning-manual__editor" style={{ border: "1px solid var(--ui-border)", borderRadius: 12, padding: 12, display: "grid", gap: 8 }}>
+        <div
+          id="planning-manual-editor-anchor"
+          className="planning-manual__editor"
+          style={{ border: "1px solid var(--ui-border)", borderRadius: 12, padding: 12, display: "grid", gap: 8 }}
+        >
           <div className="planning-manual__editor-title">Ajouter un shift publie</div>
           <div className="planning-manual__editor-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 8 }}>
             <input type="date" value={createForm.date} onChange={(e) => setCreateForm((v) => ({ ...v, date: e.target.value }))} />

@@ -1830,7 +1830,9 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   RESULTATS.md
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
+|   |   |   |   +---CAPTURES_APRES
 |   |   |   |   \---PATCH
+|   |   |   |           PATCH__SESSION-20260510-02_A25_A25-PLAN-UI-02.diff
 |   |   |   |           README_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260510-03_A25_A25-PLAN-UI-03

@@ -1,6 +1,6 @@
 # Ambulance Manager — Prompts Production & Contrôle — Bloc A25
 
-Version : V1.0.0  
+Version : V1.2.0  
 Date : 10/05/2026  
 Bloc : `A25 — Planning UI/UX & ergonomie métier`
 
@@ -22,12 +22,18 @@ Règles communes à tout le bloc A25 :
 - La référence Planning détaillée est `docs/1-master/REFERENCE_UI_UX_A25_PLANNING.md`.
 - L’image Planning détaillée est `docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2_INFO_DETAIL.png`.
 - `CODE > DOCUMENTATION` en cas de contradiction fonctionnelle.
-- `MAQUETTE_DA > anciennes captures / anciennes descriptions` pour la direction artistique.
+- `MAQUETTE_DA > anciennes références visuelles / anciennes descriptions` pour la direction artistique.
 - Toute information non prouvée doit être écrite exactement : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Tout patch produit doit être réexporté en UTF-8 sans BOM.
+- Tout patch principal doit être accompagné d’une preuve réelle `git apply --check`.
+- Les sorties `npm run lint` et `npm run build` doivent être fournies complètes avec leur code retour.
 - Le contrôle qualité ne doit commencer qu’après réception explicite du retour complet de production et du ZIP documentaire final versionné ciblé de la session.
 - Les ZIPs documentaires transmis pour contrôle doivent être versionnés clairement : `_DOCS_FINAL_V1.zip`, puis `_DOCS_FINAL_V2.zip`, `_DOCS_FINAL_V3.zip`, etc. en cas de correction.
 - Après validation d’une session, le ZIP documentaire ne devient pas une source officielle durable : il sert uniquement au transfert vers ChatGPT pour contrôle ; la source officielle reste la documentation déposée dans le repo.
-- Côté production, Codex peut installer ou mettre à jour via PowerShell les dépendances, plugins, navigateurs ou outils nécessaires à la production, aux captures, aux vérifications et aux tests, à condition de documenter les commandes et résultats dans les preuves de session.
+- Côté production, Codex peut installer ou mettre à jour via PowerShell les dépendances, plugins, navigateurs ou outils nécessaires à la production, aux vérifications et aux tests, à condition de documenter les commandes et résultats dans les preuves de session.
+- Côté production, Codex doit limiter son analyse aux fichiers réellement utiles à la session, éviter les scans larges du dépôt, éviter les lectures documentaires inutiles et ne pas refaire les audits précédents.
+- Codex ne doit produire aucune capture afin de limiter la consommation de crédits. Les vérifications visuelles seront réalisées manuellement par l’utilisateur. La production doit fournir une checklist indiquant quand effectuer la vérification visuelle et quoi contrôler.
+- La génération du ZIP documentaire final peut être faite manuellement par l’utilisateur : Codex ne doit donc pas générer automatiquement le ZIP si ce n’est pas demandé, mais doit confirmer que les fichiers documentaires sont prêts à être zippés.
 - Si aucun patch code n’est produit, `PATCH/NO_PATCH.md` doit préciser qu’il s’agit d’une absence de patch code applicatif, et non d’une absence de livrable documentaire.
 - Lorsqu’un rapport ou contrôle demande une matrice par zone, chaque zone demandée doit disposer de sa propre ligne et d’un verdict individuel parmi : `conforme`, `non conforme`, `incomplet`, `à confirmer`.
 
@@ -71,18 +77,50 @@ Cette session doit être traitée avec Codex, car elle nécessite :
 - lecture du repo réel ;
 - inspection des fichiers planning ;
 - production documentaire structurée ;
-- captures si possible ;
+- checklist de vérification visuelle manuelle si le rendu est concerné ;
 - mise à jour des fichiers documentaires de session.
 
-Tu ne dois pas prétendre avoir exécuté une commande, produit une capture ou vérifié un fichier si ce n’est pas réellement fait.
+Tu ne dois pas prétendre avoir exécuté une commande, réalisé une vérification visuelle manuelle ou vérifié un fichier si ce n’est pas réellement fait.
 
 Si une information manque, écrire exactement :
 INFORMATION NON FOURNIE — À CONFIRMER
 
-Si nécessaire pour produire, capturer, vérifier ou tester la session, Codex peut installer ou mettre à jour via PowerShell les dépendances, plugins, navigateurs ou outils utiles.
+Si nécessaire pour produire, vérifier ou tester la session, Codex peut installer ou mettre à jour via PowerShell les dépendances, plugins, navigateurs ou outils utiles.
 Exemples : `npm ci`, `npm install`, `npx prisma generate`, `npx playwright install`, installation ou mise à jour d’un navigateur de test.
 Toute commande d’installation ou de mise à jour doit être documentée dans `EVIDENCES.md` avec la commande exécutée, le résultat obtenu et l’impact éventuel sur la session.
 Ces opérations ne doivent pas devenir une modification fonctionnelle du produit.
+
+============================================================
+RÈGLE D’ÉCONOMIE CODEX / PÉRIMÈTRE UTILE
+============================================================
+
+La session doit être traitée de manière ciblée afin de limiter la consommation inutile de crédits Codex.
+
+Codex doit :
+- analyser uniquement les fichiers réellement utiles au périmètre de la session ;
+- lire uniquement les documents obligatoires et les documents directement nécessaires ;
+- réutiliser les constats des sessions précédentes sans refaire leur audit complet ;
+- produire un patch minimal et ciblé quand un patch code est attendu ;
+- regrouper les validations terminales en fin de session ;
+- arrêter la production dès que la DoD est atteinte.
+
+Codex ne doit pas :
+- scanner tout le dépôt sans nécessité ;
+- explorer des modules hors périmètre ;
+- ouvrir des fichiers non concernés par la session ;
+- multiplier les commandes ou validations identiques ;
+- générer automatiquement un ZIP documentaire si l’utilisateur indique qu’il le fera manuellement.
+
+ZIP documentaire :
+- si l’utilisateur génère le ZIP manuellement, ne pas produire le ZIP ;
+- confirmer seulement que les fichiers documentaires sont finalisés et prêts à être zippés ;
+- si un ZIP est explicitement demandé, le nommer avec une version claire : `_DOCS_FINAL_V1.zip`, puis `_DOCS_FINAL_V2.zip`, `_DOCS_FINAL_V3.zip`, etc.
+
+Vérifications visuelles manuelles :
+- ne produire aucune capture ;
+- ne pas lancer Playwright, navigateur ou outil de capture uniquement pour générer des images ;
+- fournir une checklist de vérification visuelle manuelle indiquant quand l’utilisateur doit vérifier le rendu et quoi contrôler ;
+- si une zone visuelle ne peut pas être vérifiée par Codex, écrire exactement : INFORMATION NON FOURNIE — À CONFIRMER.
 
 ============================================================
 LECTURE DOCUMENTAIRE OBLIGATOIRE
@@ -107,7 +145,7 @@ Image Planning détaillée de référence :
 
 Règle d’autorité :
 - CODE > DOCUMENTATION en cas de contradiction fonctionnelle.
-- MAQUETTE_DA > anciennes captures / anciennes descriptions pour la direction artistique.
+- MAQUETTE_DA > anciennes références visuelles / anciennes descriptions pour la direction artistique.
 
 ============================================================
 PÉRIMÈTRE EXACT
@@ -219,15 +257,13 @@ Chaque zone listée doit avoir son verdict individuel parmi : conforme / non con
 Si une zone n’est pas suffisamment prouvée, écrire exactement :
 INFORMATION NON FOURNIE — À CONFIRMER
 
-5. Produire des captures avant si possible :
-   - planning principal en mode clair ;
-   - planning principal en mode sombre ;
-   - vue jour si accessible ;
-   - vue semaine si accessible ;
-   - vue mois si accessible ;
-   - panneau ou drawer si accessible.
+5. Ne produire aucune capture. Fournir à la place une checklist de vérification visuelle manuelle indiquant :
+   - quand l’utilisateur doit vérifier visuellement le planning ;
+   - quelles zones vérifier ;
+   - quels critères observer ;
+   - quels écarts bloquants signaler.
 
-Si une capture n’est pas possible, écrire :
+Si une zone visuelle ne peut pas être vérifiée par Codex, écrire :
 INFORMATION NON FOURNIE — À CONFIRMER
 
 6. Ne pas corriger le code applicatif pendant cette session.
@@ -248,12 +284,12 @@ Dans le dossier réel de session :
 - un rapport d’audit dédié, par exemple : RAPPORT_AUDIT_A25_PLANNING.md ;
 - PATCH/NO_PATCH.md complété si aucun patch code applicatif n’est produit, en précisant que les livrables documentaires restent attendus ;
 - patch documentaire final si la gouvernance du projet l’exige ;
-- ZIP documentaire final versionné contenant les fichiers de session et le dossier PATCH (`_DOCS_FINAL_V1.zip`, puis `_DOCS_FINAL_V2.zip`, `_DOCS_FINAL_V3.zip` en cas de correction).
+- fichiers documentaires finalisés et prêts à être zippés manuellement ; ZIP documentaire final versionné uniquement si demandé explicitement (`_DOCS_FINAL_V1.zip`, puis `_DOCS_FINAL_V2.zip`, `_DOCS_FINAL_V3.zip` en cas de correction).
 
 Le rapport doit contenir :
 - références lues ;
 - fichiers planning inspectés ;
-- captures produites ou manquantes ;
+- checklist des vérifications visuelles manuelles à effectuer ;
 - matrice des écarts ;
 - verdict détaillé par zone demandée, avec une ligne par zone et un verdict individuel ;
 - risques de régression ;
@@ -272,11 +308,11 @@ La session est terminée uniquement si :
 - le planning réel est comparé à `REFERENCE_UI_UX_A25_PLANNING.md` ;
 - chaque zone du planning possède un verdict individuel parmi conforme / non conforme / incomplet / à confirmer ;
 - les risques de régression sont listés ;
-- les captures avant sont produites ou explicitement marquées manquantes ;
+- aucune capture n’est produite par Codex ; une checklist de vérification visuelle manuelle est fournie ;
 - aucun code applicatif n’est modifié ;
 - le fichier PATCH/NO_PATCH.md est complété si aucun patch code applicatif n’est produit, en précisant que les livrables documentaires restent attendus ;
 - la documentation finale de session est prête ;
-- le ZIP documentaire final versionné est prêt.
+- les fichiers documentaires sont finalisés et prêts pour ZIP manuel ; si un ZIP est explicitement demandé, il est produit et versionné.
 
 ============================================================
 RÉPONSE FINALE ATTENDUE
@@ -286,13 +322,13 @@ Répondre avec :
 
 1. Résumé de l’audit
 2. Fichiers inspectés
-3. Captures produites ou manquantes
+3. Checklist de vérification visuelle manuelle
 4. Verdict par zone
 5. Risques principaux pour A25
 6. Livrables produits
 7. Patchs produits ou NO_PATCH
 8. Preuves terminales réellement exécutées
-9. ZIP documentaire final versionné
+9. État ZIP documentaire final versionné (prêt pour génération manuelle / produit si demandé)
 10. Verdict final
 
 Ne pas inventer de validation.
@@ -322,7 +358,7 @@ Tu dois attendre avant tout contrôle :
 - le fichier PATCH/NO_PATCH.md si aucun patch code applicatif n’a été produit ;
 - le patch documentaire si applicable ;
 - le ZIP documentaire final versionné ;
-- les captures produites si elles existent ;
+- la checklist de vérification visuelle manuelle si le rendu est concerné ;
 - les preuves terminales si elles existent.
 
 Règle d’attente avant contrôle :
@@ -345,7 +381,7 @@ Tu ne dois pas :
 - combler les manques par hypothèse ;
 - contrôler un ancien ZIP ;
 - contrôler un ZIP de dépôt complet ou non explicitement désigné comme ZIP documentaire final versionné de la session ;
-- supposer qu’une capture existe si elle n’est pas fournie ;
+- supposer qu’une vérification visuelle utilisateur a été faite sans confirmation ;
 - supposer qu’un patch a été appliqué sans preuve ;
 - utiliser un ZIP déjà validé comme source officielle durable au lieu de la documentation du repo.
 
@@ -355,7 +391,7 @@ Règle d’autorité :
 - réponse finale de production > brouillon ;
 - fichiers fournis dans le ZIP cible > mentions non prouvées ;
 - CODE > DOCUMENTATION en cas de contradiction fonctionnelle ;
-- MAQUETTE_DA > anciennes captures pour la direction artistique.
+- MAQUETTE_DA > anciennes références visuelles pour la direction artistique.
 
 ============================================================
 POINTS À CONTRÔLER
@@ -411,6 +447,8 @@ Vérifier que les limites A25 sont respectées :
 - pas de refonte Prisma/API lourde ;
 - pas de RH avancée.
 
+Vérifier que la production est restée ciblée, n’a pas produit de captures et n’a pas généré de scans, validations ou ZIP inutiles.
+
 ============================================================
 FORMAT DE RÉPONSE ATTENDU
 ============================================================
@@ -421,7 +459,7 @@ Répondre avec :
 2. Informations manquantes
 3. Contrôle du périmètre
 4. Contrôle du rapport d’audit
-5. Contrôle des captures
+5. Contrôle de la checklist visuelle manuelle
 6. Contrôle des livrables documentaires
 7. Contrôle des risques et verdicts
 8. Écarts ou réserves
@@ -467,6 +505,38 @@ Objectif unique de la session :
 Réaligner la structure générale de la page Planning avec `MAQUETTE_DA`, `Planning_V1.2_INFO_DETAIL.png` et `REFERENCE_UI_UX_A25_PLANNING.md`, sans modifier profondément la logique métier.
 
 ============================================================
+RÈGLE D’ÉCONOMIE CODEX / PÉRIMÈTRE UTILE
+============================================================
+
+La session doit être traitée de manière ciblée afin de limiter la consommation inutile de crédits Codex.
+
+Codex doit :
+- analyser uniquement les fichiers réellement utiles au périmètre de la session ;
+- lire uniquement les documents obligatoires et les documents directement nécessaires ;
+- réutiliser les constats des sessions précédentes sans refaire leur audit complet ;
+- produire un patch minimal et ciblé quand un patch code est attendu ;
+- regrouper les validations terminales en fin de session ;
+- arrêter la production dès que la DoD est atteinte.
+
+Codex ne doit pas :
+- scanner tout le dépôt sans nécessité ;
+- explorer des modules hors périmètre ;
+- ouvrir des fichiers non concernés par la session ;
+- multiplier les commandes ou validations identiques ;
+- générer automatiquement un ZIP documentaire si l’utilisateur indique qu’il le fera manuellement.
+
+ZIP documentaire :
+- si l’utilisateur génère le ZIP manuellement, ne pas produire le ZIP ;
+- confirmer seulement que les fichiers documentaires sont finalisés et prêts à être zippés ;
+- si un ZIP est explicitement demandé, le nommer avec une version claire : `_DOCS_FINAL_V1.zip`, puis `_DOCS_FINAL_V2.zip`, `_DOCS_FINAL_V3.zip`, etc.
+
+Vérifications visuelles manuelles :
+- ne produire aucune capture ;
+- ne pas lancer Playwright, navigateur ou outil de capture uniquement pour générer des images ;
+- fournir une checklist de vérification visuelle manuelle indiquant quand l’utilisateur doit vérifier le rendu et quoi contrôler ;
+- si une zone visuelle ne peut pas être vérifiée par Codex, écrire exactement : INFORMATION NON FOURNIE — À CONFIRMER.
+
+============================================================
 LECTURE DOCUMENTAIRE OBLIGATOIRE
 ============================================================
 
@@ -485,7 +555,7 @@ Référence visuelle principale :
 
 Règle d’autorité :
 - CODE > DOCUMENTATION en cas de contradiction fonctionnelle.
-- MAQUETTE_DA > anciennes captures / anciennes descriptions pour la direction artistique.
+- MAQUETTE_DA > anciennes références visuelles / anciennes descriptions pour la direction artistique.
 
 ============================================================
 PÉRIMÈTRE EXACT
@@ -538,6 +608,26 @@ RÈGLES TECHNIQUES
 - Utiliser ou réutiliser les composants du socle A24 si disponibles.
 
 ============================================================
+RÈGLE PATCH / PREUVES TERMINALES
+============================================================
+
+Pour toute session produisant un patch code :
+
+- le patch principal doit être exporté en UTF-8 sans BOM ;
+- le patch principal doit commencer par `diff --git` ;
+- fournir une preuve réelle de vérification avec `git apply --check` sur le patch principal ;
+- documenter la commande exacte exécutée et son résultat dans `EVIDENCES.md` ou `README_PATCH.md` ;
+- si `git apply --check` échoue parce que le patch est déjà appliqué ou parce que le dépôt local n’est pas propre, expliquer précisément la cause et fournir une preuve alternative contrôlable ;
+- ne pas affirmer qu’un patch est applicable sans preuve terminale réelle.
+
+Pour les validations terminales :
+
+- fournir les sorties complètes de `npm run lint` et `npm run build` ;
+- fournir le code retour de chaque commande ;
+- ne pas résumer uniquement par “OK” si la sortie complète est disponible ;
+- si une commande ne peut pas être exécutée, documenter la raison exacte et écrire : INFORMATION NON FOURNIE — À CONFIRMER.
+
+============================================================
 TRAVAIL ATTENDU
 ============================================================
 
@@ -558,10 +648,12 @@ TRAVAIL ATTENDU
 
 5. Vérifier le mode clair et le mode sombre sur ces zones.
 
-6. Produire des captures avant / après si possible.
+6. Ne produire aucune capture. Fournir à la place une checklist de vérification visuelle manuelle indiquant quand l’utilisateur doit contrôler le rendu et quoi vérifier.
 
 7. Produire un patch principal code :
    PATCH/PATCH__SESSION-20260510-02_A25_A25-PLAN-UI-02.diff
+
+Le patch doit être réexporté en UTF-8 sans BOM et accompagné d’une preuve réelle `git apply --check`.
 
 8. Mettre à jour README_PATCH.md.
 
@@ -571,7 +663,7 @@ TRAVAIL ATTENDU
 VALIDATIONS TERMINALES ATTENDUES
 ============================================================
 
-Avant ces validations, si l’environnement l’exige, Codex peut installer ou mettre à jour via PowerShell les dépendances, plugins, navigateurs ou outils nécessaires aux captures, vérifications et tests.
+Avant ces validations, si l’environnement l’exige, Codex peut installer ou mettre à jour via PowerShell les dépendances, plugins, navigateurs ou outils nécessaires aux vérifications et tests.
 Toute commande utile doit être documentée dans `EVIDENCES.md` avec son résultat.
 Ces opérations ne doivent pas devenir une modification fonctionnelle du produit.
 
@@ -579,6 +671,12 @@ Exécuter réellement, si l’environnement le permet :
 
 - npm run lint
 - npm run build
+
+Fournir obligatoirement pour chaque commande exécutée :
+- la commande exacte ;
+- la sortie terminale complète ;
+- le code retour ;
+- l’emplacement où la preuve est documentée.
 
 Si une commande ne peut pas être exécutée, documenter précisément la raison et écrire :
 INFORMATION NON FOURNIE — À CONFIRMER
@@ -600,9 +698,12 @@ La session est terminée uniquement si :
 - le mode sombre reste lisible ;
 - aucune logique métier lourde n’est ajoutée ;
 - le patch code est ciblé ;
+- le patch est en UTF-8 sans BOM ;
+- la preuve `git apply --check` du patch principal est fournie ;
+- les sorties complètes de `npm run lint` et `npm run build` avec codes retour sont fournies ou leur absence est justifiée ;
 - les validations terminales sont exécutées ou les limites sont documentées ;
 - les fichiers documentaires sont finalisés ;
-- le ZIP documentaire final versionné est produit.
+- les fichiers documentaires sont prêts pour ZIP manuel ; si un ZIP est explicitement demandé, il est produit et versionné.
 
 ============================================================
 RÉPONSE FINALE ATTENDUE
@@ -614,11 +715,11 @@ Répondre avec :
 2. Fichiers modifiés
 3. Périmètre traité
 4. Périmètre volontairement non traité
-5. Captures avant / après produites ou manquantes
-6. Patch produit
-7. Validations terminales
+5. Checklist de vérification visuelle manuelle
+6. Patch produit, encodage UTF-8 sans BOM et preuve `git apply --check`
+7. Validations terminales complètes avec codes retour
 8. Documentation mise à jour
-9. ZIP documentaire final versionné
+9. État ZIP documentaire final versionné (prêt pour génération manuelle / produit si demandé)
 10. Verdict final
 ```
 
@@ -642,10 +743,11 @@ Tu dois attendre avant tout contrôle :
 
 - la réponse finale de production ;
 - le patch principal code ;
+- la preuve réelle `git apply --check` du patch principal ;
 - les éventuels patchs correctifs ;
 - README_PATCH.md ;
 - les fichiers documentaires de session ;
-- les captures avant / après si produites ;
+- la checklist de vérification visuelle manuelle ;
 - les preuves terminales ;
 - le ZIP documentaire final versionné.
 
@@ -667,6 +769,8 @@ Tu ne dois pas :
 - refaire la correction ;
 - inventer des validations ;
 - supposer que le patch s’applique sans preuve ;
+- accepter un patch sans preuve `git apply --check` quand un patch est produit ;
+- accepter un patch si son encodage UTF-8 sans BOM n’est pas documenté ;
 - contrôler un ancien ZIP ;
 - contrôler un ZIP de dépôt complet ou non explicitement désigné comme ZIP documentaire final versionné de la session ;
 - combler les manques par hypothèse ;
@@ -705,9 +809,15 @@ Vérifier que la production ne traite pas en profondeur :
 
 Vérifier que le patch est ciblé et cohérent avec le périmètre.
 
-Vérifier que les validations terminales sont fournies.
+Vérifier que le patch principal est documenté comme UTF-8 sans BOM.
+
+Vérifier qu’une preuve réelle `git apply --check` du patch principal est fournie.
+
+Vérifier que les validations terminales sont fournies avec sorties complètes et codes retour.
 
 Vérifier que la documentation et le ZIP final sont cohérents.
+
+Vérifier que la production est restée ciblée, n’a pas produit de captures et n’a pas généré de scans, validations ou ZIP inutiles.
 
 ============================================================
 FORMAT DE RÉPONSE ATTENDU
@@ -719,7 +829,7 @@ Répondre avec :
 2. Informations manquantes
 3. Contrôle du périmètre
 4. Contrôle du patch
-5. Contrôle visuel / captures
+5. Contrôle de la checklist visuelle manuelle
 6. Contrôle terminal
 7. Contrôle documentaire
 8. Écarts ou réserves
@@ -763,6 +873,38 @@ docs/2-sessions/1-ALPHA/BLOC_A25/SESSION-20260510-03_A25_A25-PLAN-UI-03
 
 Objectif unique de la session :
 Réaligner les vues jour et semaine du planning afin d’améliorer la lisibilité métier, la hiérarchie visuelle, la densité et la cohérence avec `MAQUETTE_DA` et `REFERENCE_UI_UX_A25_PLANNING.md`, sans refonte fonctionnelle lourde.
+
+============================================================
+RÈGLE D’ÉCONOMIE CODEX / PÉRIMÈTRE UTILE
+============================================================
+
+La session doit être traitée de manière ciblée afin de limiter la consommation inutile de crédits Codex.
+
+Codex doit :
+- analyser uniquement les fichiers réellement utiles au périmètre de la session ;
+- lire uniquement les documents obligatoires et les documents directement nécessaires ;
+- réutiliser les constats des sessions précédentes sans refaire leur audit complet ;
+- produire un patch minimal et ciblé quand un patch code est attendu ;
+- regrouper les validations terminales en fin de session ;
+- arrêter la production dès que la DoD est atteinte.
+
+Codex ne doit pas :
+- scanner tout le dépôt sans nécessité ;
+- explorer des modules hors périmètre ;
+- ouvrir des fichiers non concernés par la session ;
+- multiplier les commandes ou validations identiques ;
+- générer automatiquement un ZIP documentaire si l’utilisateur indique qu’il le fera manuellement.
+
+ZIP documentaire :
+- si l’utilisateur génère le ZIP manuellement, ne pas produire le ZIP ;
+- confirmer seulement que les fichiers documentaires sont finalisés et prêts à être zippés ;
+- si un ZIP est explicitement demandé, le nommer avec une version claire : `_DOCS_FINAL_V1.zip`, puis `_DOCS_FINAL_V2.zip`, `_DOCS_FINAL_V3.zip`, etc.
+
+Vérifications visuelles manuelles :
+- ne produire aucune capture ;
+- ne pas lancer Playwright, navigateur ou outil de capture uniquement pour générer des images ;
+- fournir une checklist de vérification visuelle manuelle indiquant quand l’utilisateur doit vérifier le rendu et quoi contrôler ;
+- si une zone visuelle ne peut pas être vérifiée par Codex, écrire exactement : INFORMATION NON FOURNIE — À CONFIRMER.
 
 ============================================================
 LECTURE DOCUMENTAIRE OBLIGATOIRE
@@ -827,6 +969,26 @@ RÈGLES D’INTÉGRATION
 - Rester compatible avec la structure créée ou corrigée en A25-PLAN-UI-02.
 
 ============================================================
+RÈGLE PATCH / PREUVES TERMINALES
+============================================================
+
+Pour toute session produisant un patch code :
+
+- le patch principal doit être exporté en UTF-8 sans BOM ;
+- le patch principal doit commencer par `diff --git` ;
+- fournir une preuve réelle de vérification avec `git apply --check` sur le patch principal ;
+- documenter la commande exacte exécutée et son résultat dans `EVIDENCES.md` ou `README_PATCH.md` ;
+- si `git apply --check` échoue parce que le patch est déjà appliqué ou parce que le dépôt local n’est pas propre, expliquer précisément la cause et fournir une preuve alternative contrôlable ;
+- ne pas affirmer qu’un patch est applicable sans preuve terminale réelle.
+
+Pour les validations terminales :
+
+- fournir les sorties complètes de `npm run lint` et `npm run build` ;
+- fournir le code retour de chaque commande ;
+- ne pas résumer uniquement par “OK” si la sortie complète est disponible ;
+- si une commande ne peut pas être exécutée, documenter la raison exacte et écrire : INFORMATION NON FOURNIE — À CONFIRMER.
+
+============================================================
 TRAVAIL ATTENDU
 ============================================================
 
@@ -848,10 +1010,12 @@ TRAVAIL ATTENDU
 
 5. Vérifier mode clair et mode sombre.
 
-6. Produire des captures avant / après si possible.
+6. Ne produire aucune capture. Fournir à la place une checklist de vérification visuelle manuelle indiquant quand l’utilisateur doit contrôler le rendu et quoi vérifier.
 
 7. Produire un patch principal code :
    PATCH/PATCH__SESSION-20260510-03_A25_A25-PLAN-UI-03.diff
+
+Le patch doit être réexporté en UTF-8 sans BOM et accompagné d’une preuve réelle `git apply --check`.
 
 8. Mettre à jour README_PATCH.md.
 
@@ -861,7 +1025,7 @@ TRAVAIL ATTENDU
 VALIDATIONS TERMINALES ATTENDUES
 ============================================================
 
-Avant ces validations, si l’environnement l’exige, Codex peut installer ou mettre à jour via PowerShell les dépendances, plugins, navigateurs ou outils nécessaires aux captures, vérifications et tests.
+Avant ces validations, si l’environnement l’exige, Codex peut installer ou mettre à jour via PowerShell les dépendances, plugins, navigateurs ou outils nécessaires aux vérifications et tests.
 Toute commande utile doit être documentée dans `EVIDENCES.md` avec son résultat.
 Ces opérations ne doivent pas devenir une modification fonctionnelle du produit.
 
@@ -869,6 +1033,12 @@ Exécuter réellement, si l’environnement le permet :
 
 - npm run lint
 - npm run build
+
+Fournir obligatoirement pour chaque commande exécutée :
+- la commande exacte ;
+- la sortie terminale complète ;
+- le code retour ;
+- l’emplacement où la preuve est documentée.
 
 Si une commande ne peut pas être exécutée, documenter précisément la raison et écrire :
 INFORMATION NON FOURNIE — À CONFIRMER
@@ -889,8 +1059,11 @@ La session est terminée uniquement si :
 - le mode sombre est lisible ;
 - aucune logique métier lourde n’est ajoutée ;
 - le patch est ciblé ;
+- le patch est en UTF-8 sans BOM ;
+- la preuve `git apply --check` du patch principal est fournie ;
+- les sorties complètes de `npm run lint` et `npm run build` avec codes retour sont fournies ou leur absence est justifiée ;
 - les validations terminales sont exécutées ou limites documentées ;
-- la documentation finale et le ZIP sont produits.
+- la documentation finale est prête pour ZIP manuel ; si un ZIP est explicitement demandé, il est produit et versionné.
 
 ============================================================
 RÉPONSE FINALE ATTENDUE
@@ -902,11 +1075,11 @@ Répondre avec :
 2. Fichiers modifiés
 3. Vue jour : état et traitement
 4. Vue semaine : état et traitement
-5. Captures avant / après produites ou manquantes
-6. Patch produit
-7. Validations terminales
+5. Checklist de vérification visuelle manuelle
+6. Patch produit, encodage UTF-8 sans BOM et preuve `git apply --check`
+7. Validations terminales complètes avec codes retour
 8. Documentation mise à jour
-9. ZIP documentaire final versionné
+9. État ZIP documentaire final versionné (prêt pour génération manuelle / produit si demandé)
 10. Verdict final
 ```
 
@@ -930,10 +1103,11 @@ Tu dois attendre avant tout contrôle :
 
 - la réponse finale de production ;
 - le patch principal code ;
+- la preuve réelle `git apply --check` du patch principal ;
 - les éventuels patchs correctifs ;
 - README_PATCH.md ;
 - les fichiers documentaires de session ;
-- les captures avant / après si produites ;
+- la checklist de vérification visuelle manuelle ;
 - les preuves terminales ;
 - le ZIP documentaire final versionné.
 
@@ -978,7 +1152,15 @@ Vérifier que la production ne traite pas hors périmètre :
 Vérifier que les éléments absents sont signalés avec :
 INFORMATION NON FOURNIE — À CONFIRMER
 
-Vérifier que les validations terminales et les captures sont fournies ou explicitement absentes.
+Vérifier que le patch principal est documenté comme UTF-8 sans BOM.
+
+Vérifier qu’une preuve réelle `git apply --check` du patch principal est fournie.
+
+Vérifier que `npm run lint` et `npm run build` disposent de sorties terminales complètes avec codes retour.
+
+Vérifier que les validations terminales sont fournies ou explicitement absentes, et que la checklist de vérification visuelle manuelle est présente.
+
+Vérifier que la production est restée ciblée, n’a pas produit de captures et n’a pas généré de scans, validations ou ZIP inutiles.
 
 ============================================================
 FORMAT DE RÉPONSE ATTENDU
@@ -992,7 +1174,7 @@ Répondre avec :
 4. Contrôle du patch
 5. Contrôle vue jour
 6. Contrôle vue semaine
-7. Contrôle visuel / captures
+7. Contrôle de la checklist visuelle manuelle
 8. Contrôle terminal
 9. Écarts ou réserves
 10. Verdict final
@@ -1033,6 +1215,38 @@ docs/2-sessions/1-ALPHA/BLOC_A25/SESSION-20260510-04_A25_A25-PLAN-UI-04
 
 Objectif unique de la session :
 Réaligner la vue mois du planning afin de la rendre plus lisible, plus synthétique, plus cohérente avec `MAQUETTE_DA` et compatible avec l’ergonomie globale A25, sans créer une refonte fonctionnelle avancée.
+
+============================================================
+RÈGLE D’ÉCONOMIE CODEX / PÉRIMÈTRE UTILE
+============================================================
+
+La session doit être traitée de manière ciblée afin de limiter la consommation inutile de crédits Codex.
+
+Codex doit :
+- analyser uniquement les fichiers réellement utiles au périmètre de la session ;
+- lire uniquement les documents obligatoires et les documents directement nécessaires ;
+- réutiliser les constats des sessions précédentes sans refaire leur audit complet ;
+- produire un patch minimal et ciblé quand un patch code est attendu ;
+- regrouper les validations terminales en fin de session ;
+- arrêter la production dès que la DoD est atteinte.
+
+Codex ne doit pas :
+- scanner tout le dépôt sans nécessité ;
+- explorer des modules hors périmètre ;
+- ouvrir des fichiers non concernés par la session ;
+- multiplier les commandes ou validations identiques ;
+- générer automatiquement un ZIP documentaire si l’utilisateur indique qu’il le fera manuellement.
+
+ZIP documentaire :
+- si l’utilisateur génère le ZIP manuellement, ne pas produire le ZIP ;
+- confirmer seulement que les fichiers documentaires sont finalisés et prêts à être zippés ;
+- si un ZIP est explicitement demandé, le nommer avec une version claire : `_DOCS_FINAL_V1.zip`, puis `_DOCS_FINAL_V2.zip`, `_DOCS_FINAL_V3.zip`, etc.
+
+Vérifications visuelles manuelles :
+- ne produire aucune capture ;
+- ne pas lancer Playwright, navigateur ou outil de capture uniquement pour générer des images ;
+- fournir une checklist de vérification visuelle manuelle indiquant quand l’utilisateur doit vérifier le rendu et quoi contrôler ;
+- si une zone visuelle ne peut pas être vérifiée par Codex, écrire exactement : INFORMATION NON FOURNIE — À CONFIRMER.
 
 ============================================================
 LECTURE DOCUMENTAIRE OBLIGATOIRE
@@ -1094,6 +1308,26 @@ RÈGLES D’INTÉGRATION
 - Rester cohérent avec les structures et composants déjà stabilisés en A25-PLAN-UI-02 et A25-PLAN-UI-03.
 
 ============================================================
+RÈGLE PATCH / PREUVES TERMINALES
+============================================================
+
+Pour toute session produisant un patch code :
+
+- le patch principal doit être exporté en UTF-8 sans BOM ;
+- le patch principal doit commencer par `diff --git` ;
+- fournir une preuve réelle de vérification avec `git apply --check` sur le patch principal ;
+- documenter la commande exacte exécutée et son résultat dans `EVIDENCES.md` ou `README_PATCH.md` ;
+- si `git apply --check` échoue parce que le patch est déjà appliqué ou parce que le dépôt local n’est pas propre, expliquer précisément la cause et fournir une preuve alternative contrôlable ;
+- ne pas affirmer qu’un patch est applicable sans preuve terminale réelle.
+
+Pour les validations terminales :
+
+- fournir les sorties complètes de `npm run lint` et `npm run build` ;
+- fournir le code retour de chaque commande ;
+- ne pas résumer uniquement par “OK” si la sortie complète est disponible ;
+- si une commande ne peut pas être exécutée, documenter la raison exacte et écrire : INFORMATION NON FOURNIE — À CONFIRMER.
+
+============================================================
 TRAVAIL ATTENDU
 ============================================================
 
@@ -1113,10 +1347,12 @@ TRAVAIL ATTENDU
 
 4. Préserver la logique fonctionnelle existante.
 
-5. Produire des captures avant / après si possible.
+5. Ne produire aucune capture. Fournir à la place une checklist de vérification visuelle manuelle indiquant quand l’utilisateur doit contrôler le rendu et quoi vérifier.
 
 6. Produire un patch principal code :
    PATCH/PATCH__SESSION-20260510-04_A25_A25-PLAN-UI-04.diff
+
+Le patch doit être réexporté en UTF-8 sans BOM et accompagné d’une preuve réelle `git apply --check`.
 
 7. Mettre à jour README_PATCH.md.
 
@@ -1126,7 +1362,7 @@ TRAVAIL ATTENDU
 VALIDATIONS TERMINALES ATTENDUES
 ============================================================
 
-Avant ces validations, si l’environnement l’exige, Codex peut installer ou mettre à jour via PowerShell les dépendances, plugins, navigateurs ou outils nécessaires aux captures, vérifications et tests.
+Avant ces validations, si l’environnement l’exige, Codex peut installer ou mettre à jour via PowerShell les dépendances, plugins, navigateurs ou outils nécessaires aux vérifications et tests.
 Toute commande utile doit être documentée dans `EVIDENCES.md` avec son résultat.
 Ces opérations ne doivent pas devenir une modification fonctionnelle du produit.
 
@@ -1134,6 +1370,12 @@ Exécuter réellement, si l’environnement le permet :
 
 - npm run lint
 - npm run build
+
+Fournir obligatoirement pour chaque commande exécutée :
+- la commande exacte ;
+- la sortie terminale complète ;
+- le code retour ;
+- l’emplacement où la preuve est documentée.
 
 Si une commande ne peut pas être exécutée, documenter précisément la raison et écrire :
 INFORMATION NON FOURNIE — À CONFIRMER
@@ -1153,8 +1395,11 @@ La session est terminée uniquement si :
 - le mode sombre est lisible ;
 - aucune logique métier lourde n’est créée ;
 - le patch est ciblé ;
+- le patch est en UTF-8 sans BOM ;
+- la preuve `git apply --check` du patch principal est fournie ;
+- les sorties complètes de `npm run lint` et `npm run build` avec codes retour sont fournies ou leur absence est justifiée ;
 - les validations terminales sont exécutées ou limites documentées ;
-- la documentation finale et le ZIP sont produits.
+- la documentation finale est prête pour ZIP manuel ; si un ZIP est explicitement demandé, il est produit et versionné.
 
 ============================================================
 RÉPONSE FINALE ATTENDUE
@@ -1166,11 +1411,11 @@ Répondre avec :
 2. Fichiers modifiés
 3. État réel de la vue mois
 4. Traitement réalisé
-5. Captures avant / après produites ou manquantes
-6. Patch produit
-7. Validations terminales
+5. Checklist de vérification visuelle manuelle
+6. Patch produit, encodage UTF-8 sans BOM et preuve `git apply --check`
+7. Validations terminales complètes avec codes retour
 8. Documentation mise à jour
-9. ZIP documentaire final versionné
+9. État ZIP documentaire final versionné (prêt pour génération manuelle / produit si demandé)
 10. Verdict final
 ```
 
@@ -1194,10 +1439,11 @@ Tu dois attendre avant tout contrôle :
 
 - la réponse finale de production ;
 - le patch principal code ;
+- la preuve réelle `git apply --check` du patch principal ;
 - les éventuels patchs correctifs ;
 - README_PATCH.md ;
 - les fichiers documentaires de session ;
-- les captures avant / après si produites ;
+- la checklist de vérification visuelle manuelle ;
 - les preuves terminales ;
 - le ZIP documentaire final versionné.
 
@@ -1237,6 +1483,14 @@ Vérifier que la production ne crée pas :
 
 Vérifier que les données absentes ne sont pas présentées comme existantes.
 
+Vérifier que le patch principal est documenté comme UTF-8 sans BOM.
+
+Vérifier qu’une preuve réelle `git apply --check` du patch principal est fournie.
+
+Vérifier que `npm run lint` et `npm run build` disposent de sorties terminales complètes avec codes retour.
+
+Vérifier que la production est restée ciblée, n’a pas produit de captures et n’a pas généré de scans, validations ou ZIP inutiles.
+
 ============================================================
 FORMAT DE RÉPONSE ATTENDU
 ============================================================
@@ -1248,7 +1502,7 @@ Répondre avec :
 3. Contrôle du périmètre
 4. Contrôle du patch
 5. Contrôle vue mois
-6. Contrôle visuel / captures
+6. Contrôle de la checklist visuelle manuelle
 7. Contrôle terminal
 8. Écarts ou réserves
 9. Verdict final
@@ -1289,6 +1543,38 @@ docs/2-sessions/1-ALPHA/BLOC_A25/SESSION-20260510-05_A25_A25-PLAN-UI-05
 
 Objectif unique de la session :
 Réaligner les panneaux d’action et d’affectation du planning afin de rendre les actions plus claires, mieux hiérarchisées et plus proches de l’ergonomie attendue, sans créer une nouvelle logique métier lourde.
+
+============================================================
+RÈGLE D’ÉCONOMIE CODEX / PÉRIMÈTRE UTILE
+============================================================
+
+La session doit être traitée de manière ciblée afin de limiter la consommation inutile de crédits Codex.
+
+Codex doit :
+- analyser uniquement les fichiers réellement utiles au périmètre de la session ;
+- lire uniquement les documents obligatoires et les documents directement nécessaires ;
+- réutiliser les constats des sessions précédentes sans refaire leur audit complet ;
+- produire un patch minimal et ciblé quand un patch code est attendu ;
+- regrouper les validations terminales en fin de session ;
+- arrêter la production dès que la DoD est atteinte.
+
+Codex ne doit pas :
+- scanner tout le dépôt sans nécessité ;
+- explorer des modules hors périmètre ;
+- ouvrir des fichiers non concernés par la session ;
+- multiplier les commandes ou validations identiques ;
+- générer automatiquement un ZIP documentaire si l’utilisateur indique qu’il le fera manuellement.
+
+ZIP documentaire :
+- si l’utilisateur génère le ZIP manuellement, ne pas produire le ZIP ;
+- confirmer seulement que les fichiers documentaires sont finalisés et prêts à être zippés ;
+- si un ZIP est explicitement demandé, le nommer avec une version claire : `_DOCS_FINAL_V1.zip`, puis `_DOCS_FINAL_V2.zip`, `_DOCS_FINAL_V3.zip`, etc.
+
+Vérifications visuelles manuelles :
+- ne produire aucune capture ;
+- ne pas lancer Playwright, navigateur ou outil de capture uniquement pour générer des images ;
+- fournir une checklist de vérification visuelle manuelle indiquant quand l’utilisateur doit vérifier le rendu et quoi contrôler ;
+- si une zone visuelle ne peut pas être vérifiée par Codex, écrire exactement : INFORMATION NON FOURNIE — À CONFIRMER.
 
 ============================================================
 LECTURE DOCUMENTAIRE OBLIGATOIRE
@@ -1359,6 +1645,26 @@ RÈGLES D’INTÉGRATION
 - Les panneaux doivent rester cohérents avec la DA A24/A25.
 
 ============================================================
+RÈGLE PATCH / PREUVES TERMINALES
+============================================================
+
+Pour toute session produisant un patch code :
+
+- le patch principal doit être exporté en UTF-8 sans BOM ;
+- le patch principal doit commencer par `diff --git` ;
+- fournir une preuve réelle de vérification avec `git apply --check` sur le patch principal ;
+- documenter la commande exacte exécutée et son résultat dans `EVIDENCES.md` ou `README_PATCH.md` ;
+- si `git apply --check` échoue parce que le patch est déjà appliqué ou parce que le dépôt local n’est pas propre, expliquer précisément la cause et fournir une preuve alternative contrôlable ;
+- ne pas affirmer qu’un patch est applicable sans preuve terminale réelle.
+
+Pour les validations terminales :
+
+- fournir les sorties complètes de `npm run lint` et `npm run build` ;
+- fournir le code retour de chaque commande ;
+- ne pas résumer uniquement par “OK” si la sortie complète est disponible ;
+- si une commande ne peut pas être exécutée, documenter la raison exacte et écrire : INFORMATION NON FOURNIE — À CONFIRMER.
+
+============================================================
 TRAVAIL ATTENDU
 ============================================================
 
@@ -1386,10 +1692,12 @@ TRAVAIL ATTENDU
 
 4. Préserver le comportement fonctionnel existant.
 
-5. Produire des captures avant / après si possible.
+5. Ne produire aucune capture. Fournir à la place une checklist de vérification visuelle manuelle indiquant quand l’utilisateur doit contrôler le rendu et quoi vérifier.
 
 6. Produire un patch principal code :
    PATCH/PATCH__SESSION-20260510-05_A25_A25-PLAN-UI-05.diff
+
+Le patch doit être réexporté en UTF-8 sans BOM et accompagné d’une preuve réelle `git apply --check`.
 
 7. Mettre à jour README_PATCH.md.
 
@@ -1399,7 +1707,7 @@ TRAVAIL ATTENDU
 VALIDATIONS TERMINALES ATTENDUES
 ============================================================
 
-Avant ces validations, si l’environnement l’exige, Codex peut installer ou mettre à jour via PowerShell les dépendances, plugins, navigateurs ou outils nécessaires aux captures, vérifications et tests.
+Avant ces validations, si l’environnement l’exige, Codex peut installer ou mettre à jour via PowerShell les dépendances, plugins, navigateurs ou outils nécessaires aux vérifications et tests.
 Toute commande utile doit être documentée dans `EVIDENCES.md` avec son résultat.
 Ces opérations ne doivent pas devenir une modification fonctionnelle du produit.
 
@@ -1407,6 +1715,12 @@ Exécuter réellement, si l’environnement le permet :
 
 - npm run lint
 - npm run build
+
+Fournir obligatoirement pour chaque commande exécutée :
+- la commande exacte ;
+- la sortie terminale complète ;
+- le code retour ;
+- l’emplacement où la preuve est documentée.
 
 Si une commande ne peut pas être exécutée, documenter précisément la raison et écrire :
 INFORMATION NON FOURNIE — À CONFIRMER
@@ -1426,8 +1740,11 @@ La session est terminée uniquement si :
 - aucune logique métier lourde n’est ajoutée ;
 - les permissions existantes sont préservées ;
 - le patch est ciblé ;
+- le patch est en UTF-8 sans BOM ;
+- la preuve `git apply --check` du patch principal est fournie ;
+- les sorties complètes de `npm run lint` et `npm run build` avec codes retour sont fournies ou leur absence est justifiée ;
 - les validations terminales sont exécutées ou limites documentées ;
-- la documentation finale et le ZIP sont produits.
+- la documentation finale est prête pour ZIP manuel ; si un ZIP est explicitement demandé, il est produit et versionné.
 
 ============================================================
 RÉPONSE FINALE ATTENDUE
@@ -1439,11 +1756,11 @@ Répondre avec :
 2. Fichiers modifiés
 3. Panneaux et actions identifiés
 4. Traitement réalisé
-5. Captures avant / après produites ou manquantes
-6. Patch produit
-7. Validations terminales
+5. Checklist de vérification visuelle manuelle
+6. Patch produit, encodage UTF-8 sans BOM et preuve `git apply --check`
+7. Validations terminales complètes avec codes retour
 8. Documentation mise à jour
-9. ZIP documentaire final versionné
+9. État ZIP documentaire final versionné (prêt pour génération manuelle / produit si demandé)
 10. Verdict final
 ```
 
@@ -1467,10 +1784,11 @@ Tu dois attendre avant tout contrôle :
 
 - la réponse finale de production ;
 - le patch principal code ;
+- la preuve réelle `git apply --check` du patch principal ;
 - les éventuels patchs correctifs ;
 - README_PATCH.md ;
 - les fichiers documentaires de session ;
-- les captures avant / après si produites ;
+- la checklist de vérification visuelle manuelle ;
 - les preuves terminales ;
 - le ZIP documentaire final versionné.
 
@@ -1516,6 +1834,14 @@ Vérifier que la production ne crée pas :
 
 Vérifier que les actions sensibles sont correctement hiérarchisées.
 
+Vérifier que le patch principal est documenté comme UTF-8 sans BOM.
+
+Vérifier qu’une preuve réelle `git apply --check` du patch principal est fournie.
+
+Vérifier que `npm run lint` et `npm run build` disposent de sorties terminales complètes avec codes retour.
+
+Vérifier que la production est restée ciblée, n’a pas produit de captures et n’a pas généré de scans, validations ou ZIP inutiles.
+
 ============================================================
 FORMAT DE RÉPONSE ATTENDU
 ============================================================
@@ -1528,7 +1854,7 @@ Répondre avec :
 4. Contrôle du patch
 5. Contrôle des panneaux
 6. Contrôle des actions
-7. Contrôle visuel / captures
+7. Contrôle de la checklist visuelle manuelle
 8. Contrôle terminal
 9. Écarts ou réserves
 10. Verdict final
@@ -1571,6 +1897,38 @@ Objectif unique de la session :
 Valider globalement le planning UI/UX après les corrections A25, en contrôlant la cohérence avec `MAQUETTE_DA`, `Planning_V1.2_INFO_DETAIL.png`, `REFERENCE_UI_UX_A25_PLANNING.md`, le mode clair, le mode sombre, la navigation connectée et l’absence de régression fonctionnelle.
 
 Cette session ne doit pas produire de correction code sauf instruction explicite ultérieure. Elle doit produire un verdict de validation.
+
+============================================================
+RÈGLE D’ÉCONOMIE CODEX / PÉRIMÈTRE UTILE
+============================================================
+
+La session doit être traitée de manière ciblée afin de limiter la consommation inutile de crédits Codex.
+
+Codex doit :
+- analyser uniquement les fichiers réellement utiles au périmètre de la session ;
+- lire uniquement les documents obligatoires et les documents directement nécessaires ;
+- réutiliser les constats des sessions précédentes sans refaire leur audit complet ;
+- produire un patch minimal et ciblé quand un patch code est attendu ;
+- regrouper les validations terminales en fin de session ;
+- arrêter la production dès que la DoD est atteinte.
+
+Codex ne doit pas :
+- scanner tout le dépôt sans nécessité ;
+- explorer des modules hors périmètre ;
+- ouvrir des fichiers non concernés par la session ;
+- multiplier les commandes ou validations identiques ;
+- générer automatiquement un ZIP documentaire si l’utilisateur indique qu’il le fera manuellement.
+
+ZIP documentaire :
+- si l’utilisateur génère le ZIP manuellement, ne pas produire le ZIP ;
+- confirmer seulement que les fichiers documentaires sont finalisés et prêts à être zippés ;
+- si un ZIP est explicitement demandé, le nommer avec une version claire : `_DOCS_FINAL_V1.zip`, puis `_DOCS_FINAL_V2.zip`, `_DOCS_FINAL_V3.zip`, etc.
+
+Vérifications visuelles manuelles :
+- ne produire aucune capture ;
+- ne pas lancer Playwright, navigateur ou outil de capture uniquement pour générer des images ;
+- fournir une checklist de vérification visuelle manuelle indiquant quand l’utilisateur doit vérifier le rendu et quoi contrôler ;
+- si une zone visuelle ne peut pas être vérifiée par Codex, écrire exactement : INFORMATION NON FOURNIE — À CONFIRMER.
 
 ============================================================
 LECTURE DOCUMENTAIRE OBLIGATOIRE
@@ -1631,13 +1989,17 @@ TRAVAIL ATTENDU
 
 2. Vérifier que les corrections attendues ont bien été apportées.
 
-3. Produire des captures après si possible :
-   - planning principal mode clair ;
-   - planning principal mode sombre ;
+3. Ne produire aucune capture. Fournir à la place une checklist de vérification visuelle manuelle après correction :
+   - structure générale / header ;
+   - filtres / toolbar / exports ;
+   - onglets ;
    - vue jour ;
    - vue semaine ;
    - vue mois ;
-   - panneau détail / affectation si accessible.
+   - panneau détail / affectation si accessible ;
+   - mode clair ;
+   - mode sombre ;
+   - responsive minimal.
 
 4. Vérifier les flux essentiels sans refonte :
    - navigation planning ;
@@ -1663,7 +2025,7 @@ TRAVAIL ATTENDU
 VALIDATIONS TERMINALES ATTENDUES
 ============================================================
 
-Avant ces validations, si l’environnement l’exige, Codex peut installer ou mettre à jour via PowerShell les dépendances, plugins, navigateurs ou outils nécessaires aux captures, vérifications et tests.
+Avant ces validations, si l’environnement l’exige, Codex peut installer ou mettre à jour via PowerShell les dépendances, plugins, navigateurs ou outils nécessaires aux vérifications et tests.
 Toute commande utile doit être documentée dans `EVIDENCES.md` avec son résultat.
 Ces opérations ne doivent pas devenir une modification fonctionnelle du produit.
 
@@ -1677,6 +2039,12 @@ Si disponibles et pertinents :
 - npm run test:smoke
 - npm run test:targeted
 
+Fournir obligatoirement pour chaque commande exécutée :
+- la commande exacte ;
+- la sortie terminale complète ;
+- le code retour ;
+- l’emplacement où la preuve est documentée.
+
 Si une commande ne peut pas être exécutée, documenter précisément la raison et écrire :
 INFORMATION NON FOURNIE — À CONFIRMER
 
@@ -1687,13 +2055,13 @@ DÉFINITION OF DONE
 La session est terminée uniquement si :
 
 - toutes les zones A25 sont vérifiées ;
-- les captures après sont produites ou explicitement manquantes ;
+- aucune capture n’est produite par Codex ; une checklist de vérification visuelle manuelle après correction est fournie ;
 - les validations terminales sont exécutées ou limites documentées ;
 - les résiduels sont classés ;
 - aucun code n’est modifié ;
 - PATCH/NO_PATCH.md est complété ;
 - le rapport de validation est produit ;
-- la documentation finale et le ZIP sont produits.
+- la documentation finale est prête pour ZIP manuel ; si un ZIP est explicitement demandé, il est produit et versionné.
 
 ============================================================
 RÉPONSE FINALE ATTENDUE
@@ -1707,7 +2075,7 @@ Répondre avec :
 4. Résiduels bloquants
 5. Résiduels non bloquants
 6. Points à confirmer
-7. Captures produites ou manquantes
+7. Checklist de vérification visuelle manuelle
 8. Validations terminales
 9. Livrables documentaires
 10. Verdict final
@@ -1740,7 +2108,7 @@ Tu dois attendre avant tout contrôle :
 - le rapport de validation globale ;
 - les fichiers documentaires de session ;
 - PATCH/NO_PATCH.md si aucun patch code applicatif n’a été produit ;
-- les captures après si produites ;
+- la checklist de vérification visuelle manuelle après correction ;
 - les preuves terminales ;
 - le ZIP documentaire final versionné.
 
@@ -1768,13 +2136,15 @@ Vérifier que la validation couvre :
 - mode sombre ;
 - navigation ;
 - absence de régression ;
-- captures ;
+- checklists visuelles manuelles ;
 - validations terminales ;
 - classement des résiduels.
 
 Vérifier que la session ne produit pas de correction code non justifiée.
 
 Vérifier que le verdict est explicite.
+
+Vérifier que la production est restée ciblée, n’a pas produit de captures et n’a pas généré de scans, validations ou ZIP inutiles.
 
 ============================================================
 FORMAT DE RÉPONSE ATTENDU
@@ -1785,7 +2155,7 @@ Répondre avec :
 1. Informations reçues
 2. Informations manquantes
 3. Contrôle du périmètre de validation
-4. Contrôle des captures
+4. Contrôle de la checklist visuelle manuelle
 5. Contrôle terminal
 6. Contrôle documentaire
 7. Contrôle des résiduels
@@ -1827,12 +2197,44 @@ Dossier de session :
 docs/2-sessions/1-ALPHA/BLOC_A25/SESSION-20260510-07_A25_CLOTURE_A25
 
 Objectif unique de la session :
-Clôturer définitivement le bloc A25 en vérifiant les sessions A25-PLAN-UI-01 à A25-PLAN-UI-06, les patchs réellement produits, les preuves terminales, les captures, la documentation finale et les résiduels éventuels.
+Clôturer définitivement le bloc A25 en vérifiant les sessions A25-PLAN-UI-01 à A25-PLAN-UI-06, les patchs réellement produits, les preuves terminales, les checklists de vérification visuelle manuelle, la documentation finale et les résiduels éventuels.
 
 La session doit rendre un verdict explicite :
 - BLOC A25 CLÔTURABLE DÉFINITIVEMENT : OUI
 - ou
 - BLOC A25 CLÔTURABLE DÉFINITIVEMENT : NON
+
+============================================================
+RÈGLE D’ÉCONOMIE CODEX / PÉRIMÈTRE UTILE
+============================================================
+
+La session doit être traitée de manière ciblée afin de limiter la consommation inutile de crédits Codex.
+
+Codex doit :
+- analyser uniquement les fichiers réellement utiles au périmètre de la session ;
+- lire uniquement les documents obligatoires et les documents directement nécessaires ;
+- réutiliser les constats des sessions précédentes sans refaire leur audit complet ;
+- produire un patch minimal et ciblé quand un patch code est attendu ;
+- regrouper les validations terminales en fin de session ;
+- arrêter la production dès que la DoD est atteinte.
+
+Codex ne doit pas :
+- scanner tout le dépôt sans nécessité ;
+- explorer des modules hors périmètre ;
+- ouvrir des fichiers non concernés par la session ;
+- multiplier les commandes ou validations identiques ;
+- générer automatiquement un ZIP documentaire si l’utilisateur indique qu’il le fera manuellement.
+
+ZIP documentaire :
+- si l’utilisateur génère le ZIP manuellement, ne pas produire le ZIP ;
+- confirmer seulement que les fichiers documentaires sont finalisés et prêts à être zippés ;
+- si un ZIP est explicitement demandé, le nommer avec une version claire : `_DOCS_FINAL_V1.zip`, puis `_DOCS_FINAL_V2.zip`, `_DOCS_FINAL_V3.zip`, etc.
+
+Vérifications visuelles manuelles :
+- ne produire aucune capture ;
+- ne pas lancer Playwright, navigateur ou outil de capture uniquement pour générer des images ;
+- fournir une checklist de vérification visuelle manuelle indiquant quand l’utilisateur doit vérifier le rendu et quoi contrôler ;
+- si une zone visuelle ne peut pas être vérifiée par Codex, écrire exactement : INFORMATION NON FOURNIE — À CONFIRMER.
 
 ============================================================
 LECTURE DOCUMENTAIRE OBLIGATOIRE
@@ -1853,7 +2255,7 @@ Lire obligatoirement :
   - SESSION-20260510-06_A25_A25-PLAN-UI-06
 - tous les PATCH/README_PATCH.md ou PATCH/NO_PATCH.md associés ;
 - tous les rapports produits ;
-- toutes les captures disponibles ;
+- toutes les checklists visuelles manuelles disponibles ;
 - toutes les preuves terminales disponibles.
 
 Référence visuelle principale :
@@ -1876,7 +2278,7 @@ Contrôler :
 - patchs documentaires ;
 - README_PATCH / NO_PATCH ;
 - preuves terminales ;
-- captures ;
+- checklists visuelles manuelles ;
 - ZIPs documentaires ;
 - résiduels ;
 - cohérence avec `MAQUETTE_DA` ;
@@ -1897,6 +2299,11 @@ La clôture peut produire un unique correctif final minimal uniquement si :
 
 Sinon, ne pas produire de patch code.
 
+Si un correctif final minimal est produit :
+- le patch doit être exporté en UTF-8 sans BOM ;
+- fournir une preuve réelle `git apply --check` ;
+- fournir les sorties terminales complètes des validations exécutées avec codes retour.
+
 ============================================================
 TRAVAIL ATTENDU
 ============================================================
@@ -1908,7 +2315,7 @@ TRAVAIL ATTENDU
    - RESULTATS.md ;
    - FIN_SESSION.md ;
    - PATCH/README_PATCH.md ou PATCH/NO_PATCH.md ;
-   - ZIP documentaire final versionné si attendu.
+   - fichiers prêts pour ZIP documentaire final versionné si attendu.
 
 2. Vérifier que les patchs code sont présents, ciblés et documentés pour les sessions de correction.
 
@@ -1916,7 +2323,7 @@ TRAVAIL ATTENDU
 
 4. Vérifier que les preuves terminales existent ou que leur absence est explicitement documentée.
 
-5. Vérifier que les captures existent ou que leur absence est explicitement documentée.
+5. Vérifier que les checklists de vérification visuelle manuelle existent pour les sessions à impact visuel, et qu’elles indiquent quand l’utilisateur doit contrôler le rendu et quoi vérifier.
 
 6. Vérifier que les résiduels sont classés.
 
@@ -1926,7 +2333,7 @@ TRAVAIL ATTENDU
 
 9. Finaliser la documentation de session de clôture.
 
-10. Produire le ZIP documentaire final de clôture versionné.
+10. Préparer les fichiers de clôture pour ZIP manuel ; produire le ZIP documentaire final de clôture versionné uniquement si demandé.
 
 ============================================================
 VALIDATIONS TERMINALES ATTENDUES
@@ -1942,6 +2349,12 @@ Si disponibles et pertinents :
 - npm run test:smoke
 - npm run test:targeted
 
+Fournir obligatoirement pour chaque commande exécutée :
+- la commande exacte ;
+- la sortie terminale complète ;
+- le code retour ;
+- l’emplacement où la preuve est documentée.
+
 Si une commande ne peut pas être exécutée, documenter précisément la raison et écrire :
 INFORMATION NON FOURNIE — À CONFIRMER
 
@@ -1955,10 +2368,10 @@ La clôture est terminée uniquement si :
 - tous les patchs et NO_PATCH sont vérifiés ;
 - la documentation finale est cohérente ;
 - les preuves terminales sont listées ;
-- les captures sont listées ;
+- les checklists de vérification visuelle manuelle sont listées ;
 - les résiduels sont classés ;
 - le verdict de clôture est explicite ;
-- le ZIP documentaire final de clôture versionné est produit.
+- les fichiers de clôture sont prêts pour ZIP manuel ; si un ZIP est explicitement demandé, il est produit et versionné.
 
 ============================================================
 RÉPONSE FINALE ATTENDUE
@@ -1969,12 +2382,12 @@ Répondre avec :
 1. Résumé de clôture A25
 2. Sessions contrôlées
 3. Patchs contrôlés
-4. Captures contrôlées
+4. Checklists visuelles contrôlées
 5. Preuves terminales contrôlées
 6. Résiduels bloquants
 7. Résiduels non bloquants
 8. Documentation finale produite
-9. ZIP documentaire final versionné
+9. État ZIP documentaire final versionné (prêt pour génération manuelle / produit si demandé)
 10. Verdict final obligatoire
 
 Verdict final obligatoire :
@@ -2011,7 +2424,7 @@ Tu dois attendre avant tout contrôle :
 - le fichier PATCH/NO_PATCH.md si aucun patch code applicatif n’a été produit ;
 - la liste des sessions A25 contrôlées ;
 - les patchs A25 référencés ;
-- les captures référencées ;
+- les checklists visuelles manuelles ;
 - les preuves terminales ;
 - le ZIP documentaire final de clôture versionné.
 
@@ -2033,7 +2446,7 @@ Tu ne dois pas :
 - refaire l’audit complet du repo ;
 - inventer des preuves ;
 - supposer qu’un patch existe sans l’avoir reçu ;
-- supposer qu’une capture existe sans l’avoir reçue ;
+- supposer qu’une vérification visuelle utilisateur a été faite sans confirmation ;
 - contrôler un ancien ZIP ;
 - contrôler un ZIP de dépôt complet ou non explicitement désigné comme ZIP documentaire final versionné de la session ;
 - combler les manques par hypothèse ;
@@ -2054,10 +2467,12 @@ Vérifier que la clôture couvre :
 - A25-PLAN-UI-05 ;
 - A25-PLAN-UI-06 ;
 - patchs code ;
+- preuve `git apply --check` des patchs produits ;
+- encodage UTF-8 sans BOM des patchs ;
 - patchs documentaires ;
 - README_PATCH / NO_PATCH ;
 - preuves terminales ;
-- captures ;
+- checklists visuelles manuelles ;
 - résiduels ;
 - ZIP final ;
 - verdict explicite.
@@ -2076,6 +2491,8 @@ Vérifier que le verdict final est exactement l’un des deux :
 - BLOC A25 CLÔTURABLE DÉFINITIVEMENT : OUI
 - BLOC A25 CLÔTURABLE DÉFINITIVEMENT : NON
 
+Vérifier que la production est restée ciblée, n’a pas produit de captures et n’a pas généré de scans, validations ou ZIP inutiles.
+
 ============================================================
 FORMAT DE RÉPONSE ATTENDU
 ============================================================
@@ -2086,7 +2503,7 @@ Répondre avec :
 2. Informations manquantes
 3. Contrôle des sessions A25
 4. Contrôle des patchs
-5. Contrôle des captures
+5. Contrôle de la checklist visuelle manuelle
 6. Contrôle des preuves terminales
 7. Contrôle documentaire et ZIP
 8. Contrôle des résiduels

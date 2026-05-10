@@ -58,6 +58,7 @@ type RunAuditLog = {
 
 type ViewMode = PlanningViewModeValue;
 type VisibilityMode = "GLOBAL" | "PERSONAL" | "BINOME";
+type PlanningInternalTab = "manual" | "affectations" | "autoschedule" | "matching" | "history" | "exports";
 
 type BulkAssignFormState = {
   userId: string;
@@ -613,6 +614,8 @@ export default function PlanningClient({
   const [runMatchingVariant, setRunMatchingVariant] = useState<MatchingVariantDefinition | null>(null);
   const [selectedMatchingVariant, setSelectedMatchingVariant] = useState<MatchingVariantKey>("VARIANT_1");
   const [showLegacyPlanning, setShowLegacyPlanning] = useState(true);
+  const [activeTab, setActiveTab] = useState<PlanningInternalTab>("manual");
+  const [isManualAdvancedOpen, setIsManualAdvancedOpen] = useState(false);
 
   // ✅ verrou : le preview est lié à un runId précis
   const [matchPreviewRunId, setMatchPreviewRunId] = useState<string | null>(null);
@@ -1670,8 +1673,112 @@ export default function PlanningClient({
     return new Map((matchQuality?.shiftScores ?? []).map((item) => [item.shiftId, item]));
   }, [matchQuality]);
 
+  const focusPlanningZone = useCallback((tab: PlanningInternalTab, targetId: string) => {
+    setActiveTab(tab);
+    const target = document.getElementById(targetId);
+    if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
+
+  const openManualPlanning = useCallback(() => {
+    setIsManualAdvancedOpen(true);
+    focusPlanningZone("manual", "planning-manual-advanced");
+    window.setTimeout(() => {
+      const editor = document.getElementById("planning-manual-editor-anchor");
+      if (editor) editor.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 160);
+  }, [focusPlanningZone]);
+
+  const triggerPlanningExport = useCallback(
+    (format: "csv" | "xlsx" | "pdf") => {
+      if (!canExportPlanning) return;
+      const params = new URLSearchParams({ format, weekStart: weekStartStr, limit: "500" });
+      if (!canViewGlobal) params.set("userId", currentUser.id);
+      if (canViewGlobal && visibilityMode !== "GLOBAL" && selectedUserId) {
+        params.set("userId", selectedUserId);
+      }
+      window.location.href = `/api/planning/exports?${params.toString()}`;
+    },
+    [canExportPlanning, canViewGlobal, currentUser.id, selectedUserId, visibilityMode, weekStartStr]
+  );
+
   return (
     <section className="planning-page" style={{ display: "grid", gap: 12 }}>
+      <section className="planning-structure">
+        <div className="planning-structure__header">
+          <div className="planning-structure__header-body">
+            <h2 className="planning-structure__title">Planning</h2>
+            <p className="planning-structure__subtitle">
+              Vue globale des shifts, absences et affectations du personnel.
+            </p>
+          </div>
+          <div className="planning-structure__header-actions">
+            <ActionButton variant="primary" onClick={openManualPlanning}>
+              + Ajouter un shift
+            </ActionButton>
+          </div>
+        </div>
+
+        <div className="planning-structure__summary">
+          <StatusBadge variant="info">{title}</StatusBadge>
+          <StatusBadge variant={showLegacyPlanning ? "success" : "neutral"}>
+            {showLegacyPlanning ? "Grille visible" : "Grille masquee"}
+          </StatusBadge>
+          <StatusBadge variant="neutral">{visibleItems.length} shift(s) visibles</StatusBadge>
+          <ActionButton size="sm" onClick={() => setShowLegacyPlanning((value) => !value)}>
+            {showLegacyPlanning ? "Masquer la grille" : "Afficher la grille"}
+          </ActionButton>
+        </div>
+
+        <nav className="planning-structure__tabs" aria-label="Onglets internes du planning">
+          <button
+            type="button"
+            className={`planning-tab${activeTab === "manual" ? " is-active" : ""}`}
+            onClick={() => focusPlanningZone("manual", "planning-manual-zone")}
+          >
+            Planning manuel
+          </button>
+          <button
+            type="button"
+            className={`planning-tab${activeTab === "affectations" ? " is-active" : ""}`}
+            onClick={() => focusPlanningZone("affectations", "planning-affectations-zone")}
+          >
+            Affectations
+          </button>
+          <button
+            type="button"
+            className={`planning-tab${activeTab === "autoschedule" ? " is-active" : ""}`}
+            onClick={() => focusPlanningZone("autoschedule", "planning-toolbar-zone")}
+            disabled={!canAutoSchedule}
+          >
+            Autoschedule
+          </button>
+          <button
+            type="button"
+            className={`planning-tab${activeTab === "matching" ? " is-active" : ""}`}
+            onClick={() => focusPlanningZone("matching", "planning-matching-zone")}
+            disabled={!canAutoSchedule}
+          >
+            Matching
+          </button>
+          <button
+            type="button"
+            className={`planning-tab${activeTab === "history" ? " is-active" : ""}`}
+            onClick={() => focusPlanningZone("history", "planning-history-zone")}
+            disabled={!canViewAudit}
+          >
+            Historique
+          </button>
+          <button
+            type="button"
+            className={`planning-tab${activeTab === "exports" ? " is-active" : ""}`}
+            onClick={() => focusPlanningZone("exports", "planning-exports-zone")}
+            disabled={!canExportPlanning}
+          >
+            Exports
+          </button>
+        </nav>
+      </section>
+
       <section className="planning-legacy" style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 12, display: "grid", gap: 8 }}>
         <div className="planning-legacy__head" style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
           <div>
@@ -1680,137 +1787,133 @@ export default function PlanningClient({
               Vue hebdomadaire des affectations. Le mode manuel complet reste disponible en section avancee.
             </div>
           </div>
-          <div className="planning-legacy__actions">
-            <StatusBadge variant={showLegacyPlanning ? "success" : "neutral"}>
-              {showLegacyPlanning ? "Grille visible" : "Grille masquee"}
-            </StatusBadge>
-            <ActionButton size="sm" onClick={() => setShowLegacyPlanning((value) => !value)}>
-              {showLegacyPlanning ? "Masquer" : "Afficher"}
-            </ActionButton>
-          </div>
         </div>
       </section>
 
       {showLegacyPlanning && (
         <>
-      <div className="planning-legacy__toolbar" style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-        <ActionButton size="sm" onClick={() => setWeekStart(addDays(weekStart, -7))}>Semaine -1</ActionButton>
-        <ActionButton size="sm" onClick={() => setWeekStart(startOfWeekMonday(new Date()))}>Aujourd&apos;hui</ActionButton>
-        <ActionButton size="sm" onClick={() => setWeekStart(addDays(weekStart, 7))}>Semaine +1</ActionButton>
+      <section className="planning-control-card" id="planning-manual-zone">
+        <h3 className="planning-control-card__title">Filtres et navigation</h3>
+        <div className="planning-legacy__toolbar" style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+          <ActionButton size="sm" onClick={() => setWeekStart(addDays(weekStart, -7))}>Semaine -1</ActionButton>
+          <ActionButton size="sm" onClick={() => setWeekStart(startOfWeekMonday(new Date()))}>Aujourd&apos;hui</ActionButton>
+          <ActionButton size="sm" onClick={() => setWeekStart(addDays(weekStart, 7))}>Semaine +1</ActionButton>
+          <div style={{ marginLeft: 8, fontWeight: 700 }}>{title}</div>
+        </div>
 
-        <div style={{ marginLeft: 8, fontWeight: 700 }}>{title}</div>
-      </div>
-
-      <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-        <span style={{ opacity: 0.8 }}>Visibilite :</span>
-        {canViewGlobal && (
+        <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+          <span style={{ opacity: 0.8 }}>Visibilite :</span>
+          {canViewGlobal && (
+            <button
+              onClick={() => {
+                setVisibilityMode("GLOBAL");
+                setSelectedShiftIds([]);
+                setBulkAssignMsg(null);
+                resetViewFeedback();
+              }}
+              style={{
+                fontWeight: visibilityMode === "GLOBAL" ? 700 : 400,
+                border: "1px solid var(--ui-border-strong)",
+                padding: "6px 10px",
+                borderRadius: 8,
+              }}
+            >
+              Globale
+            </button>
+          )}
           <button
             onClick={() => {
-              setVisibilityMode("GLOBAL");
+              setVisibilityMode("PERSONAL");
               setSelectedShiftIds([]);
               setBulkAssignMsg(null);
               resetViewFeedback();
             }}
             style={{
-              fontWeight: visibilityMode === "GLOBAL" ? 700 : 400,
+              fontWeight: visibilityMode === "PERSONAL" ? 700 : 400,
               border: "1px solid var(--ui-border-strong)",
               padding: "6px 10px",
               borderRadius: 8,
             }}
           >
-            Globale
+            Personnelle
           </button>
-        )}
-        <button
-          onClick={() => {
-            setVisibilityMode("PERSONAL");
-            setSelectedShiftIds([]);
-            setBulkAssignMsg(null);
-            resetViewFeedback();
-          }}
-          style={{
-            fontWeight: visibilityMode === "PERSONAL" ? 700 : 400,
-            border: "1px solid var(--ui-border-strong)",
-            padding: "6px 10px",
-            borderRadius: 8,
-          }}
-        >
-          Personnelle
-        </button>
-        <button
-          onClick={() => {
-            setVisibilityMode("BINOME");
-            setSelectedShiftIds([]);
-            setBulkAssignMsg(null);
-            resetViewFeedback();
-          }}
-          style={{
-            fontWeight: visibilityMode === "BINOME" ? 700 : 400,
-            border: "1px solid var(--ui-border-strong)",
-            padding: "6px 10px",
-            borderRadius: 8,
-          }}
-        >
-          Binome
-        </button>
-
-        {visibilityMode !== "GLOBAL" && (
-          <>
-            <span style={{ opacity: 0.8 }}>{visibilityMode === "BINOME" ? "Agent :" : "Planning :"}</span>
-            {canViewGlobal ? (
-              <select
-                value={selectedUserId}
-                onChange={(e) => {
-                  setSelectedUserId(e.target.value);
-                  setBinomeUserId("");
-                  setSelectedShiftIds([]);
-                  setBulkAssignMsg(null);
-                  resetViewFeedback();
-                }}
-              >
-                {userOptions.map((user) => (
-                  <option key={user.id} value={user.id}>
-                    {user.id === currentUser.id ? `Moi - ${user.name}` : user.name}
-                  </option>
-                ))}
-              </select>
-            ) : (
-              <strong>{currentUser.name}</strong>
-            )}
-          </>
-        )}
-
-        {visibilityMode === "BINOME" && (
-          <select
-            value={binomeUserId}
-            onChange={(e) => {
-              setBinomeUserId(e.target.value);
+          <button
+            onClick={() => {
+              setVisibilityMode("BINOME");
               setSelectedShiftIds([]);
               setBulkAssignMsg(null);
               resetViewFeedback();
             }}
+            style={{
+              fontWeight: visibilityMode === "BINOME" ? 700 : 400,
+              border: "1px solid var(--ui-border-strong)",
+              padding: "6px 10px",
+              borderRadius: 8,
+            }}
           >
-            <option value="">Choisir le binome</option>
-            {binomeOptions.map((user) => (
-              <option key={user.id} value={user.id}>
-                {user.name}
-              </option>
-            ))}
-          </select>
-        )}
+            Binome
+          </button>
 
-        <div style={{ fontSize: 12, opacity: 0.72 }}>
-          {visibilityMode === "GLOBAL"
-            ? "Vue globale de la semaine"
-            : visibilityMode === "BINOME"
-              ? selectedBinomeUser
-                ? `Binome actif : ${selectedUser.name} + ${selectedBinomeUser.name}`
-                : "Selectionnez un binome pour afficher les shifts communs"
-              : `Planning cible : ${selectedUser.name}`}
+          {visibilityMode !== "GLOBAL" && (
+            <>
+              <span style={{ opacity: 0.8 }}>{visibilityMode === "BINOME" ? "Agent :" : "Planning :"}</span>
+              {canViewGlobal ? (
+                <select
+                  value={selectedUserId}
+                  onChange={(e) => {
+                    setSelectedUserId(e.target.value);
+                    setBinomeUserId("");
+                    setSelectedShiftIds([]);
+                    setBulkAssignMsg(null);
+                    resetViewFeedback();
+                  }}
+                >
+                  {userOptions.map((user) => (
+                    <option key={user.id} value={user.id}>
+                      {user.id === currentUser.id ? `Moi - ${user.name}` : user.name}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <strong>{currentUser.name}</strong>
+              )}
+            </>
+          )}
+
+          {visibilityMode === "BINOME" && (
+            <select
+              value={binomeUserId}
+              onChange={(e) => {
+                setBinomeUserId(e.target.value);
+                setSelectedShiftIds([]);
+                setBulkAssignMsg(null);
+                resetViewFeedback();
+              }}
+            >
+              <option value="">Choisir le binome</option>
+              {binomeOptions.map((user) => (
+                <option key={user.id} value={user.id}>
+                  {user.name}
+                </option>
+              ))}
+            </select>
+          )}
+
+          <div style={{ fontSize: 12, opacity: 0.72 }}>
+            {visibilityMode === "GLOBAL"
+              ? "Vue globale de la semaine"
+              : visibilityMode === "BINOME"
+                ? selectedBinomeUser
+                  ? `Binome actif : ${selectedUser.name} + ${selectedBinomeUser.name}`
+                  : "Selectionnez un binome pour afficher les shifts communs"
+                : `Planning cible : ${selectedUser.name}`}
+          </div>
         </div>
-      </div>
+      </section>
 
-        <div style={{ marginLeft: "auto", display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>
+      <section className="planning-control-card" id="planning-toolbar-zone">
+        <h3 className="planning-control-card__title">Toolbar metier</h3>
+        <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>
           <span style={{ opacity: 0.85 }}>Vue :</span>
 
           <button
@@ -1957,7 +2060,22 @@ export default function PlanningClient({
               </button>
             </>
           )}
-      </div>
+        </div>
+
+        <div className="planning-exports-row" id="planning-exports-zone">
+          <span className="planning-exports-row__label">Exports :</span>
+          {canExportPlanning ? (
+            <>
+              <ActionButton size="sm" onClick={() => triggerPlanningExport("pdf")}>PDF</ActionButton>
+              <ActionButton size="sm" onClick={() => triggerPlanningExport("xlsx")}>Excel</ActionButton>
+              <ActionButton size="sm" onClick={() => triggerPlanningExport("csv")}>CSV</ActionButton>
+            </>
+          ) : (
+            <StatusBadge variant="neutral">Non autorise</StatusBadge>
+          )}
+          <ActionButton size="sm" onClick={() => window.print()}>Imprimer</ActionButton>
+        </div>
+      </section>
 
       <div style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 10, opacity: 0.92 }}>
         {visibilityMode === "GLOBAL"
@@ -1970,7 +2088,7 @@ export default function PlanningClient({
       </div>
 
       {canEditPlanning && (
-        <div style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 10, display: "grid", gap: 10 }}>
+        <div id="planning-affectations-zone" style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 10, display: "grid", gap: 10 }}>
           <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
             <div>
               <div style={{ fontWeight: 800 }}>Selection multiple</div>
@@ -2067,7 +2185,7 @@ export default function PlanningClient({
       {matchMsg && <div style={{ opacity: 0.9 }}>{matchMsg}</div>}
 
       {lastRunId && (
-        <div style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 10, marginTop: 8 }}>
+        <div id="planning-history-zone" style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 10, marginTop: 8 }}>
           <div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: "baseline" }}>
             <div style={{ fontWeight: 900 }}>Historique du run courant</div>
             <div style={{ fontSize: 12, opacity: 0.75 }}>
@@ -2160,7 +2278,7 @@ export default function PlanningClient({
       {cancelMsg && <div style={{ opacity: 0.9 }}>{cancelMsg}</div>}
 
       {(matchPreview || matchApplied) && (
-        <div style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 10 }}>
+        <div id="planning-matching-zone" style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 10 }}>
           <div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: "baseline" }}>
             <div style={{ fontWeight: 900 }}>Auto-affectation autoschedule</div>
             <button
@@ -2375,8 +2493,13 @@ export default function PlanningClient({
         </>
       )}
 
-      <details className="planning-manual-advanced">
-        <summary>Mode manuel avance (creation, edition, annulation)</summary>
+      <details
+        id="planning-manual-advanced"
+        className="planning-manual-advanced"
+        open={isManualAdvancedOpen}
+        onToggle={(event) => setIsManualAdvancedOpen(event.currentTarget.open)}
+      >
+        <summary>Planning manuel detaille (creation, edition, annulation)</summary>
         <ManualPlanningPanel
           availableDepots={availableDepots}
           availableUsers={availableUsers}

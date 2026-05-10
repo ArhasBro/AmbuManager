@@ -83,7 +83,7 @@ export default async function PlanningPage() {
     <main className="page-wrap">
       <PageHeader
         title="Planning"
-        description="Vue globale des shifts, affectations, absences et exports selon vos droits."
+        description="Vue globale des shifts, absences et affectations du personnel."
         actions={
           canReadAudit ? (
             <Link className="page-back" href="/audit">
