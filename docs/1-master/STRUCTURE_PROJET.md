@@ -1,5 +1,5 @@
 ﻿Structure du dossier pour le volume Windows
-Le numÚro de sÚrie du volume est 000000AB 123E:4DB7
+Le numÚro de sÚrie du volume est 000000D0 123E:4DB7
 C:.
 |   .env
 |   .gitignore
@@ -5222,7 +5222,6 @@ C:.
 |   |   |   |                   
 |   |   |   +---BLOC_A25
 |   |   |   |   |   PROMPTS_A25_06_A_CLOTURE_PRODUCTION_CONTROLE_V1_2.md
-|   |   |   |   |   SESSION-20260510-07_A25_A25-PLAN-UI-07.zip
 |   |   |   |   |   
 |   |   |   |   +---ARCHIVE
 |   |   |   |   |   +---SESSION-20260510-01_A25_A25-PLAN-UI-01
