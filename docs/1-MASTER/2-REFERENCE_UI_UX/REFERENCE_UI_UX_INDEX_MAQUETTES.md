@@ -1,8 +1,8 @@
 # Ambulance Manager — REFERENCE_UI_UX_INDEX_MAQUETTES
 
-Version : V0.1 — Préparation chantier documentaire transversal UI/UX  
+Version : V0.2 — Normalisation chemins + cadrage Codex UI/UX  
 Date : 13/05/2026  
-Statut : Document d’index transversal à valider  
+Statut : Document d’index transversal — à intégrer / valider  
 Périmètre : UI/UX documentaire, hors bloc applicatif, sans modification de code
 
 ---
@@ -38,7 +38,7 @@ Les images officielles sont la vérité visuelle prioritaire.
 Source officielle :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA
+docs/1-MASTER/MAQUETTE/MAQUETTE_DA
 ```
 
 Les images `.png` présentes dans ce dossier sont la cible visuelle à reproduire au plus près.
@@ -60,13 +60,13 @@ Ils doivent :
 - cadrer ce que Codex peut modifier plus tard ;
 - empêcher l’invention de fonctionnalités non visibles ;
 - indiquer les zones où le code réel contient plus de fonctionnalités que la maquette ;
-- préciser comment préserver le fonctionnel existant tout en réalignant le visuel.
+- préciser comment conserver la vérité fonctionnelle du code tout en pouvant masquer, déplacer, replier, simplifier ou supprimer visuellement les éléments non conformes à la maquette.
 
 ### 2.3 Vérité fonctionnelle
 
 Le code réel reste la vérité fonctionnelle.
 
-Les maquettes ne doivent pas supprimer implicitement une fonctionnalité existante.
+Les maquettes ne suppriment pas la vérité fonctionnelle du code, mais la phase actuelle est visuelle : elles peuvent justifier de masquer, déplacer, replier, simplifier ou supprimer visuellement un élément fonctionnel si celui-ci empêche la fidélité maquette.
 
 Si une fonctionnalité existe dans le code mais n’apparaît pas dans la maquette, le document de référence doit la classer dans l’une des catégories suivantes :
 
@@ -89,7 +89,7 @@ Le dossier d’icônes exportées est considéré comme supprimé ou inutile pou
 
 Conséquence :
 
-- ne pas dépendre de `docs/1-MASTER/1-MAQUETTE/ICONES` ;
+- ne pas dépendre de `docs/1-MASTER/MAQUETTE/ICONES` ;
 - ne pas recréer de dépendance vers un dossier `ICONE` ou `ICONES` ;
 - ne pas bloquer une référence UI/UX à cause d’icônes exportées absentes ;
 - utiliser les icônes visibles dans les maquettes comme repères visuels uniquement ;
@@ -106,6 +106,65 @@ INFORMATION NON FOURNIE — À CONFIRMER
 est réservée aux documents, aux audits et au contrôle qualité.
 
 Elle ne doit jamais être affichée telle quelle dans l’interface utilisateur finale.
+
+
+### 2.7 Règle officielle — casse des dossiers documentaires
+
+La casse officielle des dossiers documentaires est :
+
+```txt
+docs/1-MASTER/
+docs/2-SESSIONS/
+docs/3-TEMPLATES/
+docs/4-ARCHIVES/
+```
+
+Les anciennes variantes en minuscules ne doivent plus être utilisées dans les nouveaux documents, prompts, preuves ou références :
+
+```txt
+docs/1-master/
+docs/2-sessions/
+docs/3-templates/
+docs/4-archives/
+```
+
+Exception : les anciens fichiers historiques, anciens patchs `.diff`, anciennes preuves terminales, anciens rapports de session et archives peuvent conserver les anciens chemins s’ils décrivent l’état réel du projet au moment où ils ont été produits.
+
+### 2.8 Règle de priorité visuelle actuelle
+
+Ce chantier documentaire UI/UX est strictement visuel.
+
+L’objectif est de permettre une reproduction à environ 99 % des maquettes officielles.
+
+La priorité actuelle n’est pas de préserver l’affichage de tout le fonctionnel existant.
+
+Règle verrouillée :
+
+```txt
+IMAGE OFFICIELLE = VÉRITÉ VISUELLE
+REFERENCE_UI_UX_<PAGE>.md = TRADUCTION CODABLE POUR CODEX
+CODE RÉEL = VÉRITÉ FONCTIONNELLE
+FONCTIONNEL EXISTANT = NON BLOQUANT POUR CETTE PHASE VISUELLE
+```
+
+Conséquences :
+
+- si un élément fonctionnel réel empêche la fidélité visuelle à la maquette, il peut être masqué, déplacé, replié, simplifié ou supprimé visuellement ;
+- les arbitrages fonctionnels seront traités plus tard dans des sessions applicatives dédiées ;
+- aucune API, Prisma, RBAC, service métier, logique serveur ou moteur métier ne doit être modifié dans ce chantier documentaire ;
+- les maquettes officielles ne sont pas une inspiration : elles sont la cible visuelle prioritaire.
+
+### 2.9 Référence Codex UI/UX visuelle
+
+Les futures productions Codex UI/UX visuelles doivent lire :
+
+```txt
+docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_INDEX_MAQUETTES.md
+docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_SHELL_GLOBAL.md
+docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_CODEX_UI_UX_VISUEL_99.md
+```
+
+Puis uniquement le `REFERENCE_UI_UX_<PAGE>.md` de la page concernée et les fichiers code utiles.
 
 ---
 
@@ -143,7 +202,7 @@ Le chantier exclut :
 Racine :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0
+docs/1-MASTER/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0
 ```
 
 | Page | Maquette | Route concernée | Statut |
@@ -154,14 +213,14 @@ docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03
 | Utilisateurs / RH | `3-Utilisateurs-RH/Utilisateurs-RH_V1.png` | `/users` | officielle |
 | Véhicules | `4-Véhicules/Véhicules_V1.2.png` | `/vehicles` | officielle |
 
-Note : les chemins de maquettes doivent être conservés en français avec accents. Les variantes non accentuées ne doivent pas être utilisées.
+Note : selon le contexte ZIP ou système de fichiers, certains chemins peuvent apparaître sous forme encodée, par exemple `V#U00e9hicules`. Codex devra toujours lister le dossier réel avant lecture si le chemin accentué échoue.
 
 ### 4.2 Maquettes complémentaires
 
 Racine :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA/A21-UX-04_MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0
+docs/1-MASTER/MAQUETTE/MAQUETTE_DA/A21-UX-04_MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0
 ```
 
 | Page | Maquette | Route concernée | Statut |
@@ -172,14 +231,14 @@ docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA/A21-UX-04_MAQUETTES_COMPLEMENTAIRES_IMAGES_
 | Onboarding société pilote | `4-Onboarding société pilote/Onboarding_V1.2.png` | `/onboarding` | officielle |
 | Audit | `5-Audit/Audit_V1.0.png` | `/audit` | officielle |
 
-Note : les chemins de maquettes doivent être conservés en français avec accents. Les variantes non accentuées ne doivent pas être utilisées.
+Note : selon le contexte ZIP ou système de fichiers, certains chemins peuvent apparaître sous forme encodée, par exemple `Soci#U00e9t#U00e9` ou `D#U00e9p#U00f4ts-bases`.
 
 ### 4.3 Pages simples / finitions
 
 Racine :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0/A21-UX-05_PAGES_SIMPLES_FINITIONS_IMAGE_V1.0
+docs/1-MASTER/MAQUETTE/MAQUETTE_DA/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0/A21-UX-05_PAGES_SIMPLES_FINITIONS_IMAGE_V1.0
 ```
 
 | Page | Maquette | Route concernée | Statut |
@@ -214,8 +273,8 @@ docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0/A21-UX-0
 |---|---|---|
 | `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_A24.md` | existant | Référence globale A24, utile comme contexte, mais trop large pour piloter Codex page par page. |
 | `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_A25_PLANNING.md` | existant | Référence page Planning déjà détaillée selon la méthode validée A25. |
-| `docs/1-MASTER/1-MAQUETTE/README_MAQUETTES_A24.md` | existant | Point d’entrée historique des maquettes A24. À lire comme contexte, avec neutralisation des références au dossier icônes supprimé. |
-| `docs/1-MASTER/1-MAQUETTE/SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md` | existant | Spécification générale utile, mais ne remplace pas les futures références page par page. |
+| `docs/1-MASTER/MAQUETTE/README_MAQUETTES_A24.md` | existant | Point d’entrée historique des maquettes A24. À lire comme contexte, avec neutralisation des références au dossier icônes supprimé. |
+| `docs/1-MASTER/MAQUETTE/SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md` | existant | Spécification générale utile, mais ne remplace pas les futures références page par page. |
 | `docs/1-MASTER/CADRAGE_UI_UX_ALPHA_MAQUETTE_V0.2.md` | existant | Contexte historique de conception. Ne prime pas sur les PNG officiels. |
 
 ---
@@ -344,7 +403,7 @@ Les écarts acceptables doivent être explicitement justifiés.
 |---|---|---|---|---|
 | UIX-IDX-001 | Icônes | Les anciens documents peuvent encore référencer `ICONES`, mais le dossier est supprimé / inutile pour ce chantier. | moyenne | Neutraliser dans les nouveaux documents, ne pas recréer de dépendance. |
 | UIX-IDX-002 | Audit | La formule `INFORMATION NON FOURNIE — À CONFIRMER` a été repérée comme risque d’affichage interface dans le module Audit. | élevée | À documenter dans `REFERENCE_UI_UX_AUDIT.md`, puis correction code ultérieure. |
-| UIX-IDX-003 | Chemins accentués | Les chemins doivent rester en français avec accents. Les variantes non accentuées ne sont pas conformes. | moyenne | Corriger les chemins avant usage Codex et conserver les noms français propres. |
+| UIX-IDX-003 | Chemins accentués | Certains chemins peuvent apparaître encodés dans le ZIP (`#U00e9`, `#U00f4`). | moyenne | Dans les prompts Codex, demander de lister les dossiers avant lecture si un chemin accentué échoue. |
 | UIX-IDX-004 | Shell global | La sidebar/topbar/thème sont transversaux mais sans maquette dédiée unique. | moyenne | Créer `REFERENCE_UI_UX_SHELL_GLOBAL.md` avant les pages. |
 | UIX-IDX-005 | Planning | Planning déjà cadré avec A25, mais doit être indexé dans le chantier transversal. | faible | Conserver `REFERENCE_UI_UX_A25_PLANNING.md`, ne pas le réécrire en priorité. |
 | UIX-IDX-006 | Pages riches | Certaines pages réelles contiennent plus de fonctionnel que les maquettes. | élevée | Les futurs documents devront distinguer visible, code réel et hors priorité visuelle. |

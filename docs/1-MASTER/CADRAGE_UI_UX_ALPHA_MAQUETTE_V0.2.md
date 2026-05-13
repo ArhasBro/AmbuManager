@@ -1,5 +1,63 @@
 # BLOC UI/UX ALPHA — Cadrage Maquette V0.2
 
+> Mise à jour documentaire — 13/05/2026  
+> Statut actuel : document de cadrage UI/UX historique et contextuel.  
+> Ce document ne prime pas sur les images officielles `MAQUETTE_DA`, ni sur les documents `REFERENCE_UI_UX_<PAGE>.md`, ni sur la référence Codex UI/UX visuel 99 %.
+
+## 0. Statut actuel et règles de priorité
+
+Ce document conserve le cadrage initial UI/UX du projet. Il reste utile pour comprendre l’origine de la direction artistique, les pages à maquetter et la logique A21.
+
+Depuis le chantier documentaire transversal UI/UX du 13/05/2026, son rôle est toutefois limité : il est un **contexte historique de conception**, pas une source d’autorité prioritaire pour Codex.
+
+Hiérarchie actuelle à appliquer :
+
+```txt
+1. Images officielles dans docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA
+2. Documents docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_<PAGE>.md
+3. docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_CODEX_UI_UX_VISUEL_99.md
+4. docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_SHELL_GLOBAL.md
+5. Documentation MAQUETTE générale et cadrages historiques
+6. Anciennes captures, anciens prompts, anciens récits de production
+```
+
+Règle actuelle verrouillée :
+
+```txt
+IMAGE OFFICIELLE = VÉRITÉ VISUELLE
+REFERENCE_UI_UX_<PAGE>.md = TRADUCTION CODABLE POUR CODEX
+CODE RÉEL = VÉRITÉ FONCTIONNELLE
+FONCTIONNEL EXISTANT = NON BLOQUANT POUR LA PHASE VISUELLE 99 %
+```
+
+Conséquences :
+
+- l’objectif actuel est le **visuel à 99 % des maquettes officielles** ;
+- il ne faut pas créer de nouveau bloc applicatif pour ce chantier documentaire ;
+- les blocs restent réservés à la production code ;
+- si un élément fonctionnel existant empêche la fidélité visuelle à la maquette, il peut être masqué, déplacé, replié, simplifié ou supprimé visuellement ;
+- les arbitrages fonctionnels seront repris plus tard dans des sessions applicatives dédiées ;
+- aucune API, Prisma, RBAC, service métier, logique serveur ou moteur métier ne doit être modifié au titre de ce cadrage ;
+- le dossier `ICONE` / `ICONES` est neutralisé et ne doit pas redevenir une dépendance ;
+- la formule `INFORMATION NON FOURNIE — À CONFIRMER` est réservée aux documents, audits et contrôles QA, jamais à l’interface utilisateur.
+
+### 0.1 Casse officielle des dossiers documentaires
+
+La casse officielle des dossiers documentaires est :
+
+```txt
+docs/1-MASTER/
+docs/2-SESSIONS/
+docs/3-TEMPLATES/
+docs/4-ARCHIVES/
+```
+
+Les anciennes variantes en minuscules sont obsolètes dans les nouveaux documents, prompts, preuves et références.
+
+Exception : les anciens fichiers historiques, anciens patchs `.diff`, anciennes preuves terminales, anciens rapports de session et archives peuvent conserver les anciens chemins s’ils décrivent l’état réel du projet au moment où ils ont été produits.
+
+---
+
 ## 1. Objet du document
 
 Ce document cadre le travail UI/UX à réaliser pour Ambulance Manager avant intégration dans le code.
@@ -12,10 +70,18 @@ Le bloc doit permettre de passer d’une interface fonctionnelle mais encore bru
 
 ## 2. Emplacement recommandé dans le dépôt
 
+Emplacement actuel du document maître contextuel :
+
+```text
+docs/1-MASTER/CADRAGE_UI_UX_ALPHA_MAQUETTE_V0.2.md
+```
+
+Ancienne proposition historique conservée ci-dessous pour traçabilité.
+
 Emplacement proposé :
 
 ```text
-docs/2-sessions/1-ALPHA/BLOC_A21/
+docs/2-SESSIONS/1-ALPHA/BLOC_A21/
 ```
 
 Nom de fichier recommandé :
@@ -777,7 +843,36 @@ Livrables immédiats à produire :
 
 ---
 
-## 14. Statut du cadrage
+## 14. Règles actuelles pour Codex
+
+Lors d’une future production UI/UX visuelle, Codex ne doit pas repartir de ce document seul.
+
+Codex doit lire en priorité :
+
+```text
+docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_INDEX_MAQUETTES.md
+docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_SHELL_GLOBAL.md
+docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_CODEX_UI_UX_VISUEL_99.md
+docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_<PAGE>.md
+```
+
+Puis uniquement les fichiers code utiles à la page concernée.
+
+Règles de production visuelle :
+
+- ne pas faire d’audit global du repo ;
+- ne pas scanner inutilement toute la documentation ;
+- ne pas refaire les audits précédents ;
+- ne pas générer de captures automatiques ;
+- fournir une checklist claire pour la vérification visuelle manuelle ;
+- viser la fidélité visuelle à 99 % de la maquette officielle ;
+- masquer, déplacer, replier, simplifier ou supprimer visuellement les éléments fonctionnels qui empêchent la fidélité maquette ;
+- ne pas modifier API, Prisma, RBAC, services métier, logique serveur ou moteurs métier ;
+- ne jamais afficher `INFORMATION NON FOURNIE — À CONFIRMER` dans l’interface utilisateur.
+
+---
+
+## 15. Statut du cadrage
 
 Statut :
 
@@ -793,10 +888,27 @@ Validation utilisateur requise avant passage à la production du design system.
 
 Ce document constitue le cadrage initial UI/UX.
 
+Il doit désormais être lu comme une archive active de contexte : il explique l’origine du chantier UI/UX, mais ne doit pas être utilisé seul pour produire du code.
+
+Les références actuelles pour une future intégration Codex sont :
+
+```text
+docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_INDEX_MAQUETTES.md
+docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_SHELL_GLOBAL.md
+docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_CODEX_UI_UX_VISUEL_99.md
+docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_<PAGE>.md
+```
+
+Le document A25 Planning déjà validé doit rester aligné avec cette logique :
+
+```text
+docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_A25_PLANNING.md
+```
+
 La référence finale UI/UX ALPHA validée pour une future intégration Codex est :
 
 ```text
-docs/2-sessions/1-ALPHA/BLOC_A21/SESSION-20260425-06_A21_UX-06/REFERENCE_UI_UX_ALPHA_V1.0.md
+docs/2-SESSIONS/1-ALPHA/BLOC_A21/SESSION-20260425-06_A21_UX-06/REFERENCE_UI_UX_ALPHA_V1.0.md
 ```
 
 Ce document ne doit donc pas être utilisé seul comme référence finale d’intégration.

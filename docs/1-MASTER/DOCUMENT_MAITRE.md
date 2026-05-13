@@ -1,7 +1,7 @@
 # Ambulance Manager — DOCUMENT_MAITRE
 
-Version : V1.6.0 (MASTER)  
-Date : 20/04/2026
+Version : V1.6.1 (MASTER)  
+Date : 13/05/2026
 
 ## Sommaire
 - [1. Vision du projet](#1-vision-du-projet)
@@ -30,7 +30,7 @@ Le cœur du produit est structuré autour de :
 ## 2. Référence produit officielle
 Le document suivant constitue la base officielle produit :
 
-`docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
+`docs/1-MASTER/DOCUMENT_CADRAGE_FONCTIONNEL.md`
 
 Ce document :
 - est validé comme base officielle de référence ;
@@ -65,10 +65,53 @@ Conséquence :
 
 ### 3.2 Convention documentaire associée
 La clôture de bloc doit disposer d’un dossier dédié en fin de bloc, par exemple :
-- `docs/2-sessions/1-ALPHA/BLOC_A2/4-CLOTURE_A2/` ;
-- `docs/2-sessions/1-ALPHA/BLOC_A2/4-CLOTURE_A2/SESSION-.../PATCH/` pour les patchs associés à chaque session.
+- `docs/2-SESSIONS/1-ALPHA/BLOC_A2/4-CLOTURE_A2/` ;
+- `docs/2-SESSIONS/1-ALPHA/BLOC_A2/4-CLOTURE_A2/SESSION-.../PATCH/` pour les patchs associés à chaque session.
 
 Compatibilité historique : les anciens chemins `docs/3-patches/...` peuvent subsister tant que l'historique n'a pas été migré.
+
+### 3.3 Règle officielle — casse des dossiers documentaires
+
+La casse officielle des dossiers documentaires du projet est :
+
+```txt
+docs/1-MASTER/
+docs/2-SESSIONS/
+docs/3-TEMPLATES/
+docs/4-ARCHIVES/
+```
+
+Les anciennes variantes en minuscules ne doivent plus être utilisées dans les nouveaux documents, prompts, preuves, références ou livrables documentaires :
+
+```txt
+docs/1-master/
+docs/2-sessions/
+docs/3-templates/
+docs/4-archives/
+```
+
+Exception : les anciens fichiers historiques, anciens patchs `.diff`, anciennes preuves terminales, anciens rapports de session et archives peuvent conserver les anciens chemins s’ils décrivent l’état réel du projet au moment où ils ont été produits.
+
+### 3.4 Règle UI/UX documentaire transversale
+
+Le chantier documentaire transversal UI/UX est hors bloc applicatif.
+
+Objectif : préparer les références visuelles codables pour reproduire les maquettes officielles à environ 99 %, page par page.
+
+Règle de vérité :
+
+```txt
+Image officielle = vérité visuelle
+REFERENCE_UI_UX_<PAGE>.md = traduction codable pour Codex
+Code réel = vérité fonctionnelle
+```
+
+La phase actuelle est strictement visuelle. Le fonctionnel existant ne doit pas bloquer la reproduction de la maquette.
+
+Si un élément fonctionnel existant gêne la fidélité visuelle, il peut être masqué, déplacé, replié, simplifié ou supprimé visuellement. Les arbitrages fonctionnels seront repris plus tard dans des sessions applicatives dédiées.
+
+Aucune API, Prisma, RBAC, service métier, logique serveur, autoschedule ou matching ne doit être modifié dans ce chantier documentaire.
+
 
 ## 4. Architecture technique cible
 Ordre cible :
@@ -113,7 +156,7 @@ Format attendu :
 Le périmètre fonctionnel détaillé n’est pas redéfini ici.  
 Il est porté par :
 
-`docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
+`docs/1-MASTER/DOCUMENT_CADRAGE_FONCTIONNEL.md`
 
 Les modules couverts par le produit incluent au minimum :
 - auth ;
@@ -138,11 +181,11 @@ Les modules couverts par le produit incluent au minimum :
 
 ## 9. Roadmap de pilotage actuelle
 Les statuts officiels doivent s’aligner sur :
-- `docs/1-master/ETAT_GLOBAL_PROJET.md` ;
-- `docs/1-master/REGISTRE_DECISIONS.md`.
+- `docs/1-MASTER/ETAT_GLOBAL_PROJET.md` ;
+- `docs/1-MASTER/REGISTRE_DECISIONS.md`.
 
 Le cadrage produit officiel est porté par :
-- `docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md`.
+- `docs/1-MASTER/DOCUMENT_CADRAGE_FONCTIONNEL.md`.
 
 La prochaine étape de pilotage n’est plus l’ouverture du premier bloc historique, mais la **consolidation du socle ALPHA**, avec priorité donnée à :
 - backend ;
@@ -154,13 +197,13 @@ La prochaine étape de pilotage n’est plus l’ouverture du premier bloc histo
 
 ## 10. Documentation de référence
 Documents de référence principaux :
-- `docs/1-master/DOCUMENT_MAITRE.md` ;
-- `docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md` ;
-- `docs/1-master/PLAN_DE_DEVELOPPEMENT.md` ;
-- `docs/1-master/ETAT_GLOBAL_PROJET.md` ;
-- `docs/1-master/REGISTRE_DECISIONS.md` ;
-- `docs/1-master/RECAP_DISCUSSIONS.md` ;
-- `docs/1-master/STRUCTURE_PROJET.md`.
+- `docs/1-MASTER/DOCUMENT_MAITRE.md` ;
+- `docs/1-MASTER/DOCUMENT_CADRAGE_FONCTIONNEL.md` ;
+- `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT.md` ;
+- `docs/1-MASTER/ETAT_GLOBAL_PROJET.md` ;
+- `docs/1-MASTER/REGISTRE_DECISIONS.md` ;
+- `docs/1-MASTER/RECAP_DISCUSSIONS.md` ;
+- `docs/1-MASTER/STRUCTURE_PROJET.md`.
 
 Règle :
 - `DOCUMENT_CADRAGE_FONCTIONNEL.md` = base officielle produit ;
@@ -168,9 +211,27 @@ Règle :
 - le passage à la suite de l’ALPHA s’effectue désormais par consolidation du socle, puis reprise des priorités fonctionnelles.
 
 ### 10.1 Référence opérationnelle A25 Planning
+
 Le détail d’exécution UI/UX du bloc `A25 — Planning UI/UX & ergonomie métier` est porté par :
 
-`docs/1-master/REFERENCE_UI_UX_A25_PLANNING.md`
+```txt
+docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_A25_PLANNING.md
+```
 
-Ce document constitue la référence opérationnelle du réalignement visuel Planning, en complément du plan de développement et des images Planning officielles conservées dans `docs/1-master/MAQUETTE/MAQUETTE_DA`.
+Ce document constitue la référence opérationnelle du réalignement visuel Planning, en complément du plan de développement et des images Planning officielles conservées dans :
 
+```txt
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA
+```
+
+### 10.2 Références UI/UX transversales
+
+Le chantier documentaire transversal UI/UX est porté par :
+
+```txt
+docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_INDEX_MAQUETTES.md
+docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_SHELL_GLOBAL.md
+docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_CODEX_UI_UX_VISUEL_99.md
+```
+
+Les documents `REFERENCE_UI_UX_<PAGE>.md` doivent être lus comme des spécifications visuelles codables pour Codex, non comme des demandes fonctionnelles.

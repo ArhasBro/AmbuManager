@@ -1,6 +1,6 @@
 # Ambulance Manager — RÉFÉRENCE UI/UX SHELL GLOBAL
 
-Version : V0.1 — Chantier documentaire transversal UI/UX  
+Version : V0.2 — Chantier documentaire transversal UI/UX + héritage page  
 Date : 13/05/2026  
 Statut : Document de référence à valider  
 Périmètre : Shell applicatif connecté, visuel uniquement, hors bloc applicatif  
@@ -31,6 +31,40 @@ Il reprend la méthode validée sur `REFERENCE_UI_UX_A25_PLANNING.md` :
 Ce document ne doit pas être lu comme une inspiration générale. Il doit être utilisé comme une spécification visuelle transversale à reproduire au plus près.
 
 Objectif principal : permettre aux futures sessions de production UI de rendre le shell global proche à environ 99 % des maquettes officielles, sans traiter le fonctionnel métier.
+
+---
+
+## Règle d’héritage par page
+
+Toutes les pages connectées doivent hériter du Shell global.
+
+Les documents page par page ne doivent pas redéfinir inutilement :
+
+- sidebar ;
+- topbar ;
+- logo ;
+- navigation ;
+- état actif du menu ;
+- fond général ;
+- conteneur principal ;
+- cartes ;
+- boutons ;
+- badges ;
+- tableaux ;
+- filtres ;
+- drawers ;
+- densité visuelle ;
+- règles clair / sombre si applicables.
+
+Chaque `REFERENCE_UI_UX_<PAGE>.md` doit seulement décrire les spécificités visuelles de la page concernée.
+
+En cas de contradiction :
+
+```txt
+Image officielle de la page > REFERENCE_UI_UX_<PAGE>.md > REFERENCE_UI_UX_SHELL_GLOBAL.md > documentation MAQUETTE générale
+```
+
+Règle de priorité actuelle : le fonctionnel existant est non bloquant pour cette phase visuelle. Si un élément fonctionnel affiché gêne la fidélité à la maquette, il peut être masqué, déplacé, replié, simplifié ou supprimé visuellement, sans modifier la vérité fonctionnelle du code ni les API / Prisma / RBAC / services métier.
 
 ---
 
@@ -88,7 +122,7 @@ Les images officielles sont la vérité visuelle prioritaire.
 Source officielle :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA
+docs/1-MASTER/MAQUETTE/MAQUETTE_DA
 ```
 
 Règle de priorité :
@@ -138,7 +172,7 @@ Le dossier d’icônes exportées est considéré comme supprimé ou inutile.
 
 Conséquences :
 
-- ne pas dépendre de `docs/1-MASTER/1-MAQUETTE/ICONES` ;
+- ne pas dépendre de `docs/1-MASTER/MAQUETTE/ICONES` ;
 - ne pas recréer un dossier `ICONE` ou `ICONES` ;
 - ne pas bloquer une production UI parce qu’un crop d’icône est absent ;
 - utiliser les icônes visibles dans les maquettes comme repères visuels ;
@@ -168,28 +202,28 @@ Le Shell global n’a pas une maquette isolée unique.
 Il est présent transversalement dans les maquettes officielles suivantes :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/1-Dashboard/Dashboard_V1.png
+docs/1-MASTER/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/1-Dashboard/Dashboard_V1.png
 
-docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2.png
+docs/1-MASTER/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2.png
 
-docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/3-Utilisateurs-RH/Utilisateurs-RH_V1.png
+docs/1-MASTER/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/3-Utilisateurs-RH/Utilisateurs-RH_V1.png
 
-docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/4-Véhicules/Véhicules_V1.2.png
+docs/1-MASTER/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/4-Véhicules/Véhicules_V1.2.png
 
-docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA/A21-UX-04_MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/1-Templates/Templates_V1.1.png
+docs/1-MASTER/MAQUETTE/MAQUETTE_DA/A21-UX-04_MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/1-Templates/Templates_V1.1.png
 
-docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA/A21-UX-04_MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/2-Société-paramètres-métier/Société_V1.0.png
+docs/1-MASTER/MAQUETTE/MAQUETTE_DA/A21-UX-04_MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/2-Société-paramètres-métier/Société_V1.0.png
 
-docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA/A21-UX-04_MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/3-Dépôts-bases/Dépôts-bases_V1.0.png
+docs/1-MASTER/MAQUETTE/MAQUETTE_DA/A21-UX-04_MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/3-Dépôts-bases/Dépôts-bases_V1.0.png
 
-docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA/A21-UX-04_MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/4-Onboarding société pilote/Onboarding_V1.2.png
+docs/1-MASTER/MAQUETTE/MAQUETTE_DA/A21-UX-04_MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/4-Onboarding société pilote/Onboarding_V1.2.png
 
-docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA/A21-UX-04_MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/5-Audit/Audit_V1.0.png
+docs/1-MASTER/MAQUETTE/MAQUETTE_DA/A21-UX-04_MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/5-Audit/Audit_V1.0.png
 
-docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0/A21-UX-05_PAGES_SIMPLES_FINITIONS_IMAGE_V1.0/2-Privacy/Privacy_V1.0.png
+docs/1-MASTER/MAQUETTE/MAQUETTE_DA/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0/A21-UX-05_PAGES_SIMPLES_FINITIONS_IMAGE_V1.0/2-Privacy/Privacy_V1.0.png
 ```
 
-Note chemin : les caractères accentués doivent être conservés dans les noms de dossiers et fichiers. Codex ne doit pas utiliser de variantes non accentuées.
+Note chemin : dans certains ZIP, les caractères accentués peuvent apparaître encodés sous la forme `V#U00e9hicules`, `Soci#U00e9t#U00e9`, `D#U00e9p#U00f4ts-bases`. Codex devra lister le dossier réel si un chemin accentué échoue.
 
 ---
 
