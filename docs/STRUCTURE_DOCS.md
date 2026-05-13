@@ -25,17 +25,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |       |   README_MAQUETTES_A24.md
 |       |   SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md
 |       |   
-|       +---ICONES
-|       |   |   CONTACT_SHEET_ICONES_V1_1.png
-|       |   |   LISTE_ICONES_EXPORTEES_V1_1.md
-|       |   |   TABLE_MAPPING_ICONES_V1_1.csv
-|       |   |   
-|       |   \---ICONES_MAQUETTES_V1_1
-|       |       \---icons_maquettes_v1_1
-|       |               CONTACT_SHEET_ICONES_V1_1.png
-|       |               LISTE_ICONES_EXPORT╔ES.md
-|       |               TABLE_MAPPING_ICONES.csv
-|       |               
 |       \---MAQUETTE_DA
 |           +---A21-UX-04_MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0
 |           |   +---1-Templates
@@ -2543,6 +2532,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |                   
 |   |   +---BLOC_A25
 |   |   |   |   PROMPTS_A25_06_A_CLOTURE_PRODUCTION_CONTROLE_V1_2.md
+|   |   |   |   SESSION-20260510-11_A25_A25-PLAN-UI-11.zip
 |   |   |   |   
 |   |   |   +---ARCHIVE
 |   |   |   |   +---SESSION-20260510-01_A25_A25-PLAN-UI-01
@@ -2683,6 +2673,10 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   
 |   |   |   |   \---PATCH
 |   |   |   |           NO_PATCH.md
+|   |   |   |           PATCH__SESSION-20260510-11_A25_A25-PLAN-UI-11_FIX-01.diff
+|   |   |   |           PATCH__SESSION-20260510-11_A25_A25-PLAN-UI-11_FIX-02.diff
+|   |   |   |           PATCH__SESSION-20260510-11_A25_A25-PLAN-UI-11_FIX-03.diff
+|   |   |   |           PATCH__SESSION-20260510-11_A25_A25-PLAN-UI-11_FIX-04.diff
 |   |   |   |           
 |   |   |   \---SESSION-20260510-12_A25_CLOTURE_A25
 |   |   |       |   EVIDENCES.md

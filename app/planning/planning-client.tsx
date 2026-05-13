@@ -6,8 +6,6 @@ import { COMPANY_PARAMETER_KEYS, parsePlanningViewModeValue, serializePlanningVi
 import { normalizeTemplateColor, resolveTemplateMinStaffCount } from "@/lib/templates/template-rules";
 import { ActionButton, ErrorMessage, StatusBadge } from "@/app/ui";
 
-import ManualPlanningPanel from "./manual-planning-panel";
-
 type Shift = {
   id: string;
   startAt: string;
@@ -659,9 +657,7 @@ export default function PlanningClient({
   const [runMatchQuality, setRunMatchQuality] = useState<PlanningQuality | null>(null);
   const [runMatchingVariant, setRunMatchingVariant] = useState<MatchingVariantDefinition | null>(null);
   const [selectedMatchingVariant, setSelectedMatchingVariant] = useState<MatchingVariantKey>("VARIANT_1");
-  const [showLegacyPlanning, setShowLegacyPlanning] = useState(false);
   const [activeTab, setActiveTab] = useState<PlanningInternalTab>("manual");
-  const [isManualAdvancedOpen, setIsManualAdvancedOpen] = useState(false);
   const [selectedMatrixCellKey, setSelectedMatrixCellKey] = useState<string | null>(null);
 
   // ✅ verrou : le preview est lié à un runId précis
@@ -1812,10 +1808,9 @@ export default function PlanningClient({
   }, []);
 
   const openManualPlanning = useCallback(() => {
-    setIsManualAdvancedOpen(true);
     focusPlanningZone("manual");
     window.setTimeout(() => {
-      const editor = document.getElementById("planning-manual-editor-anchor");
+      const editor = document.getElementById("planning-toolbar-zone");
       if (editor) editor.scrollIntoView({ behavior: "smooth", block: "center" });
     }, 160);
   }, [focusPlanningZone]);
@@ -1850,16 +1845,70 @@ export default function PlanningClient({
           </div>
         </div>
 
-        <div className="planning-structure__summary">
-          <StatusBadge variant="info">{title}</StatusBadge>
-          <StatusBadge variant={showLegacyPlanning ? "success" : "neutral"}>
-            {showLegacyPlanning ? "Grille visible" : "Grille masquee"}
-          </StatusBadge>
-          <StatusBadge variant="neutral">{visibleItems.length} shift(s) visibles</StatusBadge>
-          <ActionButton size="sm" onClick={() => setShowLegacyPlanning((value) => !value)}>
-            {showLegacyPlanning ? "Masquer la grille" : "Afficher la grille"}
-          </ActionButton>
-        </div>
+        <section className="planning-control-card" id="planning-toolbar-zone">
+          <div className="planning-toolbar">
+            <div className="planning-toolbar__group planning-toolbar__group--filters">
+              <div className="planning-filter-card">
+                <span className="planning-filter-card__label">Periode</span>
+                <span className="planning-filter-card__value">{title}</span>
+              </div>
+              <div className="planning-filter-card">
+                <span className="planning-filter-card__label">Depot</span>
+                <span className="planning-filter-card__value">Tous</span>
+              </div>
+              <div className="planning-filter-card">
+                <span className="planning-filter-card__label">Role</span>
+                <span className="planning-filter-card__value">Tous</span>
+              </div>
+              <div className="planning-filter-card">
+                <span className="planning-filter-card__label">Utilisateur</span>
+                <span className="planning-filter-card__value">{selectedUser.name}</span>
+              </div>
+            </div>
+
+            <div className="planning-toolbar__group planning-toolbar__group--view">
+              <div className="planning-view-toggle" role="group" aria-label="Bascule de vue planning">
+                {canViewGlobal && (
+                  <button
+                    className={`planning-view-toggle__option${visibilityMode === "GLOBAL" ? " is-active" : ""}`}
+                    onClick={() => {
+                      setVisibilityMode("GLOBAL");
+                      setSelectedShiftIds([]);
+                      setBulkAssignMsg(null);
+                      resetViewFeedback();
+                    }}
+                  >
+                    Vue dépôt
+                  </button>
+                )}
+                <button
+                  className={`planning-view-toggle__option${visibilityMode === "PERSONAL" ? " is-active" : ""}`}
+                  onClick={() => {
+                    setVisibilityMode("PERSONAL");
+                    setSelectedShiftIds([]);
+                    setBulkAssignMsg(null);
+                    resetViewFeedback();
+                  }}
+                >
+                  Personnel
+                </button>
+              </div>
+            </div>
+
+            <div className="planning-toolbar__group planning-toolbar__group--actions">
+              {canExportPlanning ? (
+                <>
+                  <ActionButton size="sm" onClick={() => triggerPlanningExport("pdf")}>PDF</ActionButton>
+                  <ActionButton size="sm" onClick={() => triggerPlanningExport("xlsx")}>Excel</ActionButton>
+                  <ActionButton size="sm" onClick={() => triggerPlanningExport("csv")}>CSV</ActionButton>
+                </>
+              ) : (
+                <StatusBadge variant="neutral">Non autorise</StatusBadge>
+              )}
+              <ActionButton size="sm" onClick={() => window.print()}>Imprimer</ActionButton>
+            </div>
+          </div>
+        </section>
 
         <nav className="planning-structure__tabs" aria-label="Onglets internes du planning">
           <button
@@ -2008,314 +2057,6 @@ export default function PlanningClient({
           </div>
         </section>
       )}
-      <section className="planning-legacy" style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 12, display: "grid", gap: 8 }}>
-        <div className="planning-legacy__head" style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
-          <div>
-            <div style={{ fontWeight: 800 }}>Grille planning operationnelle</div>
-            <div style={{ opacity: 0.75, fontSize: 13 }}>
-              Vue hebdomadaire des affectations. Le mode manuel complet reste disponible en section avancee.
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {showLegacyPlanning && (
-        <>
-      <section className="planning-control-card" id="planning-manual-zone">
-        <h3 className="planning-control-card__title">Filtres et navigation</h3>
-        <div className="planning-legacy__toolbar" style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-          <ActionButton size="sm" onClick={() => setWeekStart(addDays(weekStart, -7))}>Semaine -1</ActionButton>
-          <ActionButton size="sm" onClick={() => setWeekStart(startOfWeekMonday(new Date()))}>Aujourd&apos;hui</ActionButton>
-          <ActionButton size="sm" onClick={() => setWeekStart(addDays(weekStart, 7))}>Semaine +1</ActionButton>
-          <div style={{ marginLeft: 8, fontWeight: 700 }}>{title}</div>
-        </div>
-
-        <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-          <span style={{ opacity: 0.8 }}>Visibilité :</span>
-          {canViewGlobal && (
-            <button
-              onClick={() => {
-                setVisibilityMode("GLOBAL");
-                setSelectedShiftIds([]);
-                setBulkAssignMsg(null);
-                resetViewFeedback();
-              }}
-              style={{
-                fontWeight: visibilityMode === "GLOBAL" ? 700 : 400,
-                border: "1px solid var(--ui-border-strong)",
-                padding: "6px 10px",
-                borderRadius: 8,
-              }}
-            >
-              Globale
-            </button>
-          )}
-          <button
-            onClick={() => {
-              setVisibilityMode("PERSONAL");
-              setSelectedShiftIds([]);
-              setBulkAssignMsg(null);
-              resetViewFeedback();
-            }}
-            style={{
-              fontWeight: visibilityMode === "PERSONAL" ? 700 : 400,
-              border: "1px solid var(--ui-border-strong)",
-              padding: "6px 10px",
-              borderRadius: 8,
-            }}
-          >
-            Personnelle
-          </button>
-          <button
-            onClick={() => {
-              setVisibilityMode("BINOME");
-              setSelectedShiftIds([]);
-              setBulkAssignMsg(null);
-              resetViewFeedback();
-            }}
-            style={{
-              fontWeight: visibilityMode === "BINOME" ? 700 : 400,
-              border: "1px solid var(--ui-border-strong)",
-              padding: "6px 10px",
-              borderRadius: 8,
-            }}
-          >
-            Binôme
-          </button>
-
-          {visibilityMode !== "GLOBAL" && (
-            <>
-              <span style={{ opacity: 0.8 }}>{visibilityMode === "BINOME" ? "Agent :" : "Planning :"}</span>
-              {canViewGlobal ? (
-                <select
-                  value={selectedUserId}
-                  onChange={(e) => {
-                    setSelectedUserId(e.target.value);
-                    setBinomeUserId("");
-                    setSelectedShiftIds([]);
-                    setBulkAssignMsg(null);
-                    resetViewFeedback();
-                  }}
-                >
-                  {userOptions.map((user) => (
-                    <option key={user.id} value={user.id}>
-                      {user.id === currentUser.id ? `Moi - ${user.name}` : user.name}
-                    </option>
-                  ))}
-                </select>
-              ) : (
-                <strong>{currentUser.name}</strong>
-              )}
-            </>
-          )}
-
-          {visibilityMode === "BINOME" && (
-            <select
-              value={binomeUserId}
-              onChange={(e) => {
-                setBinomeUserId(e.target.value);
-                setSelectedShiftIds([]);
-                setBulkAssignMsg(null);
-                resetViewFeedback();
-              }}
-            >
-              <option value="">Choisir le binôme</option>
-              {binomeOptions.map((user) => (
-                <option key={user.id} value={user.id}>
-                  {user.name}
-                </option>
-              ))}
-            </select>
-          )}
-
-          <div style={{ fontSize: 12, opacity: 0.72 }}>
-            {visibilityMode === "GLOBAL"
-              ? "Vue globale de la semaine"
-              : visibilityMode === "BINOME"
-                ? selectedBinomeUser
-                  ? `Binôme actif : ${selectedUser.name} + ${selectedBinomeUser.name}`
-                  : "Sélectionnez un binôme pour afficher les shifts communs"
-                : `Planning cible : ${selectedUser.name}`}
-          </div>
-        </div>
-      </section>
-
-      <section className="planning-control-card" id="planning-toolbar-zone">
-        <h3 className="planning-control-card__title">Toolbar metier</h3>
-        <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>
-          <span style={{ opacity: 0.85 }}>Vue :</span>
-
-          <button
-            onClick={() => setMode("SIMPLE")}
-            style={{
-              fontWeight: mode === "SIMPLE" ? 700 : 400,
-              border: "1px solid var(--ui-border-strong)",
-              padding: "6px 10px",
-              borderRadius: 8,
-            }}
-          >
-            Simple
-          </button>
-
-          <button
-            onClick={() => setMode("AMBULANCE")}
-            style={{
-              fontWeight: mode === "AMBULANCE" ? 700 : 400,
-              border: "1px solid var(--ui-border-strong)",
-              padding: "6px 10px",
-              borderRadius: 8,
-            }}
-          >
-            Ambulance
-          </button>
-
-          {canManageCompanyMode && (
-            <button
-              onClick={saveCompanyMode}
-              disabled={saving || !companyRuleLoaded}
-              style={{
-                marginLeft: 8,
-                border: "1px solid var(--ui-border-strong)",
-                padding: "6px 10px",
-                borderRadius: 8,
-                opacity: saving ? 0.7 : 1,
-              }}
-              title={!companyRuleLoaded ? "Chargement du réglage entreprise…" : "Sauvegarder pour l’entreprise"}
-            >
-              {saving ? "Sauvegarde…" : "Sauvegarder (entreprise)"}
-            </button>
-          )}
-
-          {canAutoSchedule && (
-            <>
-              <label style={{ display: "flex", gap: 6, alignItems: "center", fontSize: 12, opacity: 0.92 }}>
-                <span>Matching :</span>
-                <select
-                  value={selectedMatchingVariant}
-                  onChange={(e) => setSelectedMatchingVariant(e.target.value as MatchingVariantKey)}
-                >
-                  {MATCHING_VARIANTS.map((variant) => (
-                    <option key={variant.key} value={variant.key}>
-                      {variant.label}
-                    </option>
-                  ))}
-                </select>
-              </label>
-
-              <button
-                onClick={previewMatch}
-                disabled={matchDisabled}
-                style={{
-                  border: "1px solid var(--ui-border-strong)",
-                  padding: "6px 10px",
-                  borderRadius: 8,
-                  opacity: matchDisabled ? 0.6 : 1,
-                }}
-                title="Simule l’auto-affectation employés + véhicules sans écrire en base sur le dernier brouillon"
-              >
-                {matchPreviewLoading ? "Simulation…" : "Simuler l’auto-affectation"}
-              </button>
-
-              <button
-                onClick={applyMatch}
-                disabled={matchDisabled || applyBlocked}
-                style={{
-                  border: "1px solid var(--ui-border-strong)",
-                  padding: "6px 10px",
-                  borderRadius: 8,
-                  opacity: matchDisabled || applyBlocked ? 0.6 : 1,
-                }}
-                title={applyBlocked ? "Simulation requise sur le run courant avec la variante sélectionnée" : "Applique l’auto-affectation sur le dernier brouillon"}
-              >
-                {matchApplyLoading ? "Application…" : "Appliquer l’auto-affectation"}
-              </button>
-            </>
-          )}
-
-          {canEditPlanning && listsError && <span style={{ fontSize: 12, opacity: 0.8 }}>Listes : erreur ({listsError})</span>}
-
-          {canAutoSchedule && (
-            <label style={{ display: "flex", gap: 6, alignItems: "center", fontSize: 12, opacity: 0.9 }}>
-              <span>Mode autoschedule :</span>
-              <select value={assignmentMode} onChange={(e) => setAssignmentMode(e.target.value as AssignmentMode)}>
-                <option value="SHIFTS_ONLY">Générer les shifts seuls</option>
-                <option value="AUTO_ASSIGN">Générer + auto-affecter employés et véhicules</option>
-              </select>
-            </label>
-          )}
-
-          {canAutoSchedule && (
-            <>
-              <button
-                onClick={generateWeek}
-                disabled={genLoading}
-                style={{
-                  border: "1px solid var(--ui-border-strong)",
-                  padding: "6px 10px",
-                  borderRadius: 8,
-                  opacity: genLoading ? 0.7 : 1,
-                }}
-                title="Génère un brouillon pour la semaine affichée selon le mode choisi"
-              >
-                {genLoading ? "Génération…" : "Générer la semaine"}
-              </button>
-
-              <button
-                onClick={publishLastRun}
-                disabled={publishDisabled}
-                style={{
-                  border: "1px solid var(--ui-border-strong)",
-                  padding: "6px 10px",
-                  borderRadius: 8,
-                  opacity: publishDisabled ? 0.6 : 1,
-                }}
-                title="Publie le dernier brouillon autoschedule"
-              >
-                {pubLoading ? "Publication…" : "Publier le brouillon"}
-              </button>
-
-              <button
-                onClick={cancelLastRun}
-                disabled={cancelLoading || !lastRunId || (lastRunStatus !== null && lastRunStatus !== "DRAFT")}
-                style={{
-                  border: "1px solid var(--ui-border-strong)",
-                  padding: "6px 10px",
-                  borderRadius: 8,
-                  opacity: cancelLoading ? 0.7 : 1,
-                }}
-                title="Annule le dernier brouillon autoschedule"
-              >
-                {cancelLoading ? "Annulation…" : "Annuler le brouillon"}
-              </button>
-            </>
-          )}
-        </div>
-
-        <div className="planning-exports-row" id="planning-exports-zone">
-          <span className="planning-exports-row__label">Exports :</span>
-          {canExportPlanning ? (
-            <>
-              <ActionButton size="sm" onClick={() => triggerPlanningExport("pdf")}>PDF</ActionButton>
-              <ActionButton size="sm" onClick={() => triggerPlanningExport("xlsx")}>Excel</ActionButton>
-              <ActionButton size="sm" onClick={() => triggerPlanningExport("csv")}>CSV</ActionButton>
-            </>
-          ) : (
-            <StatusBadge variant="neutral">Non autorise</StatusBadge>
-          )}
-          <ActionButton size="sm" onClick={() => window.print()}>Imprimer</ActionButton>
-        </div>
-      </section>
-
-      <div style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 10, opacity: 0.92 }}>
-        {visibilityMode === "GLOBAL"
-          ? `Visibilité globale active : ${visibleItems.length} shift(s) visible(s) sur la semaine.`
-          : visibilityMode === "BINOME"
-            ? selectedBinomeUser
-              ? `Visibilité binôme active : ${selectedUser.name} + ${selectedBinomeUser.name} (${visibleItems.length} shift(s) commun(s)).`
-              : "Visibilité binôme active : sélectionnez un binôme pour afficher les shifts communs."
-            : `Visibilité personnelle active : planning de ${selectedUser.name} (${visibleItems.length} shift(s)).`}
-      </div>
-
       {canEditPlanning && activeTab === "manual" && selectedShiftIds.length > 0 && (
         <div className="planning-bulk-bar">
           <div className="planning-bulk-bar__summary">{selectedShiftIds.length} shifts sélectionnés</div>
@@ -2751,28 +2492,6 @@ export default function PlanningClient({
             );
           })}
         </div>
-      )}
-        </>
-      )}
-
-      {activeTab === "manual" && (
-        <details
-          id="planning-manual-advanced"
-          className="planning-manual-advanced"
-          open={isManualAdvancedOpen}
-          onToggle={(event) => setIsManualAdvancedOpen(event.currentTarget.open)}
-        >
-          <summary>Planning manuel detaille (creation, edition, annulation)</summary>
-          <ManualPlanningPanel
-            availableDepots={availableDepots}
-            availableUsers={availableUsers}
-            currentUser={currentUser}
-            canViewGlobal={canViewGlobal}
-            canEditPlanning={canEditPlanning}
-            canViewAudit={canViewAudit}
-            canExportPlanning={canExportPlanning}
-          />
-        </details>
       )}
         </div>
         <aside className="planning-workspace__side">

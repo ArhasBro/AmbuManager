@@ -6,8 +6,178 @@
 
 ## Sources utilisées
 
-INFORMATION NON FOURNIE — À CONFIRMER
+- `docs/1-master/REFERENCE_UI_UX_A25_PLANNING.md`
+- `docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2.png`
+- `docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2_INFO_DETAIL.png`
+- `app/planning/page.tsx`
+- `app/planning/planning-client.tsx`
+- `app/globals.css`
+
+## Patchs produits pendant la reprise visuelle
+
+- `PATCH__SESSION-20260510-11_A25_A25-PLAN-UI-11_FIX-01.diff`
+- `PATCH__SESSION-20260510-11_A25_A25-PLAN-UI-11_FIX-02.diff`
+- `PATCH__SESSION-20260510-11_A25_A25-PLAN-UI-11_FIX-03.diff`
+- `PATCH__SESSION-20260510-11_A25_A25-PLAN-UI-11_FIX-04.diff`
+
+Patch de référence final retenu pour validation visuelle :
+
+- `PATCH__SESSION-20260510-11_A25_A25-PLAN-UI-11_FIX-04.diff`
 
 ## Preuves terminales
 
-INFORMATION NON FOURNIE — À CONFIRMER
+### Encodage patch final
+
+- `PATCH__SESSION-20260510-11_A25_A25-PLAN-UI-11_FIX-04.diff`
+- Octets initiaux : `64 69 66` (UTF-8 sans BOM, commence par `diff --git`).
+
+### Preuve `git apply --check`
+
+Commande :
+
+```powershell
+git apply --check PATCH__SESSION-20260510-11_A25_A25-PLAN-UI-11_FIX-04.diff
+```
+
+Résultat : `RC=0` (preuve réalisée sur worktree propre).
+
+### `npm run lint`
+
+Commande :
+
+```powershell
+npm run lint
+```
+
+Sortie complète :
+
+```text
+> ambulance-manager@0.1.0 lint
+> eslint .
+
+
+C:\Users\arche\ambulance-manager\app\planning\planning-client.tsx
+   597:3   warning  'canManageCompanyMode' is defined but never used                 @typescript-eslint/no-unused-vars
+   601:21  warning  'setWeekStart' is assigned a value but never used                @typescript-eslint/no-unused-vars
+   608:26  warning  'setSelectedUserId' is assigned a value but never used           @typescript-eslint/no-unused-vars
+   615:10  warning  'companyRuleLoaded' is assigned a value but never used           @typescript-eslint/no-unused-vars
+   616:10  warning  'saving' is assigned a value but never used                      @typescript-eslint/no-unused-vars
+   621:26  warning  'setAssignmentMode' is assigned a value but never used           @typescript-eslint/no-unused-vars
+   649:10  warning  'listsError' is assigned a value but never used                  @typescript-eslint/no-unused-vars
+   659:35  warning  'setSelectedMatchingVariant' is assigned a value but never used  @typescript-eslint/no-unused-vars
+   726:9   warning  'selectedBinomeUser' is assigned a value but never used          @typescript-eslint/no-unused-vars
+  1095:9   warning  'saveCompanyMode' is assigned a value but never used             @typescript-eslint/no-unused-vars
+  1178:9   warning  'generateWeek' is assigned a value but never used                @typescript-eslint/no-unused-vars
+  1289:9   warning  'previewMatch' is assigned a value but never used                @typescript-eslint/no-unused-vars
+  1369:9   warning  'applyMatch' is assigned a value but never used                  @typescript-eslint/no-unused-vars
+  1460:9   warning  'publishLastRun' is assigned a value but never used              @typescript-eslint/no-unused-vars
+  1581:9   warning  'cancelLastRun' is assigned a value but never used               @typescript-eslint/no-unused-vars
+  1767:9   warning  'publishDisabled' is assigned a value but never used             @typescript-eslint/no-unused-vars
+  1776:9   warning  'matchDisabled' is assigned a value but never used               @typescript-eslint/no-unused-vars
+  1797:9   warning  'applyBlocked' is assigned a value but never used                @typescript-eslint/no-unused-vars
+
+✖ 18 problems (0 errors, 18 warnings)
+```
+
+Code retour : `0`
+
+### `npm run build`
+
+Commande :
+
+```powershell
+npm run build
+```
+
+Sortie complète :
+
+```text
+> ambulance-manager@0.1.0 build
+> next build
+
+▲ Next.js 16.1.6 (Turbopack)
+- Environments: .env
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 16.0s
+  Running TypeScript ...
+  Collecting page data using 15 workers ...
+  Generating static pages using 15 workers (0/29) ...
+  Generating static pages using 15 workers (7/29)
+  Generating static pages using 15 workers (14/29)
+  Generating static pages using 15 workers (21/29)
+✓ Generating static pages using 15 workers (29/29) in 2.0s
+  Finalizing page optimization ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /api/audit
+├ ƒ /api/auth/[...nextauth]
+├ ƒ /api/company/profile
+├ ƒ /api/company/rules
+├ ƒ /api/depots
+├ ƒ /api/depots/[id]
+├ ƒ /api/depots/[id]/archive
+├ ƒ /api/health/prisma
+├ ƒ /api/imports
+├ ƒ /api/planning/autoschedule/day
+├ ƒ /api/planning/autoschedule/runs
+├ ƒ /api/planning/autoschedule/runs/[id]
+├ ƒ /api/planning/autoschedule/runs/[id]/cancel
+├ ƒ /api/planning/autoschedule/runs/[id]/match
+├ ƒ /api/planning/autoschedule/runs/[id]/match/apply
+├ ƒ /api/planning/autoschedule/runs/[id]/match/preview
+├ ƒ /api/planning/autoschedule/runs/[id]/publish
+├ ƒ /api/planning/autoschedule/week
+├ ƒ /api/planning/exports
+├ ƒ /api/planning/shifts
+├ ƒ /api/planning/shifts/[id]
+├ ƒ /api/planning/shifts/[id]/assign
+├ ƒ /api/planning/shifts/[id]/cancel
+├ ƒ /api/templates
+├ ƒ /api/templates/[id]
+├ ƒ /api/templates/[id]/archive
+├ ƒ /api/users
+├ ƒ /api/users/[id]
+├ ƒ /api/users/[id]/absences
+├ ƒ /api/users/[id]/absences/[absenceId]
+├ ƒ /api/users/[id]/archive
+├ ƒ /api/users/[id]/depot
+├ ƒ /api/users/[id]/reset-password
+├ ƒ /api/vehicles
+├ ƒ /api/vehicles/[id]
+├ ƒ /api/vehicles/[id]/archive
+├ ƒ /api/vehicles/[id]/depot
+├ ƒ /audit
+├ ƒ /company
+├ ƒ /dashboard
+├ ƒ /depots
+├ ƒ /login
+├ ƒ /onboarding
+├ ƒ /planning
+├ ƒ /privacy
+├ ƒ /templates
+├ ƒ /users
+└ ƒ /vehicles
+
+
+ƒ Proxy (Middleware)
+
+ƒ  (Dynamic)  server-rendered on demand
+```
+
+Code retour : `0`
+
+## Validation visuelle manuelle Nathan
+
+Contrôle manuel connecté confirmé :
+
+- ALIGNEMENT VISUEL 99 % MAQUETTE : OUI
+- ÉCART VISUEL BLOQUANT RESTANT : NON
+- DOUBLON UI BLOQUANT RESTANT : NON
+
+Conclusion :
+
+- VALIDÉ : VISUEL A25-PLAN-UI-11 FIX-04
+- AUTORISÉ : DOCUMENTATION
