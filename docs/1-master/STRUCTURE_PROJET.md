@@ -5,7 +5,6 @@ C:.
 |   .gitignore
 |   create_session.backup.ps1
 |   create_session.ps1
-|   docs_MAJ_V01.zip
 |   eslint.config.mjs
 |   next-env.d.ts
 |   next.config.ts
