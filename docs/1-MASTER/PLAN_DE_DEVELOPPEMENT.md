@@ -1,7 +1,7 @@
 # Ambulance Manager — PLAN_DE_DEVELOPPEMENT
 
-Version : V2.4.1 (MASTER)
-Date : 04/05/2026
+Version : V2.4.2 (MASTER)  
+Date : 13/05/2026
 
 ## Sommaire
 - [1. Rôle du document](#1-rôle-du-document)
@@ -16,7 +16,7 @@ Date : 04/05/2026
 - [9. Convention de structuration du plan](#9-convention-de-structuration-du-plan)
 - [10. Ordre global de développement retenu](#10-ordre-global-de-développement-retenu)
 - [11. ALPHA V1.0 — Socle et blocs historiques A1 à A13](#11-alpha-v10--socle-et-blocs-historiques-a1-à-a13)
-- [12. ALPHA — Suite active / consolidation A14 à A26](#12-alpha--suite-active--consolidation-a14-à-a26)
+- [12. ALPHA — Suite active / consolidation A14 à A27](#12-alpha--suite-active--consolidation-a14-à-a27)
 - [13. BETA V1.x — Plan prévisionnel](#13-beta-v1x--plan-prévisionnel)
 - [14. VERSION OFFICIELLE V2.x — Plan prévisionnel](#14-version-officielle-v2x--plan-prévisionnel)
 - [15. Règle de maintenance du plan](#15-règle-de-maintenance-du-plan)
@@ -49,7 +49,7 @@ La BETA ne doit pas être lancée tant que l’ALPHA n’est pas stabilisée et 
 ## 2. Référence produit officielle
 Le document suivant constitue la base officielle produit :
 
-`docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
+`docs/1-MASTER/DOCUMENT_CADRAGE_FONCTIONNEL.md`
 
 Règles associées :
 - ce document est figé
@@ -769,7 +769,7 @@ Finaliser l’ALPHA avec une vraie logique de contrôle qualité et une document
 - documentation d’usage minimale
 - décision propre d’entrée en test réel entreprise
 
-## 12. ALPHA — Suite active / consolidation A14 à A26
+## 12. ALPHA — Suite active / consolidation A14 à A27
 
 L’ALPHA 1.0 est considérée comme clôturée sur son cycle de tests locaux et de validation du socle actuel.
 
@@ -1041,13 +1041,13 @@ A24 traite désormais le réalignement UI/UX global de l’application, sans tra
 **Référence UI/UX officielle**  
 La direction artistique officielle est exclusivement :
 
-`docs/1-master/MAQUETTE/MAQUETTE_DA`
+`docs/1-MASTER/MAQUETTE/MAQUETTE_DA`
 
 En cas de contradiction entre anciens documents, anciennes captures, anciens prompts, anciennes interprétations ou références partielles, la référence prioritaire est :
 
-`docs/1-master/MAQUETTE/MAQUETTE_DA`
+`docs/1-MASTER/MAQUETTE/MAQUETTE_DA`
 
-Les autres éléments du dossier `docs/1-master/MAQUETTE/` peuvent servir de support d’analyse, de documentation, de mapping ou de référence complémentaire, mais ils ne doivent pas contredire `MAQUETTE_DA`.
+Les autres éléments du dossier `docs/1-MASTER/MAQUETTE/` peuvent servir de support d’analyse, de documentation, de mapping ou de référence complémentaire, mais ils ne doivent pas contredire `MAQUETTE_DA`.
 
 **Principe directeur**  
 A24 doit appliquer la DA officielle définie par `MAQUETTE_DA`.  
@@ -1237,15 +1237,15 @@ Le bloc A25 intervient après :
 **Références UI/UX officielles**  
 La direction artistique officielle reste exclusivement :
 
-`docs/1-master/MAQUETTE/MAQUETTE_DA`
+`docs/1-MASTER/MAQUETTE/MAQUETTE_DA`
 
 La référence Planning détaillée et prioritaire du bloc A25 est :
 
-`docs/1-master/REFERENCE_UI_UX_A25_PLANNING.md`
+`docs/1-MASTER/REFERENCE_UI_UX_A25_PLANNING.md`
 
 Les images Planning à reproduire sont situées dans :
 
-`docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning`
+`docs/1-MASTER/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning`
 
 Images principales :
 - `Planning_V1.2.png` ;
@@ -1390,30 +1390,156 @@ La formule `INFORMATION NON FOURNIE — À CONFIRMER` est réservée aux documen
 
 ---
 
-### BLOC A26 — Stabilisation / non-régression post UI/UX
+### BLOC A26 — Exécution UI/UX visuelle 99 % sur références officielles
 
 **Objectif du bloc**  
-Vérifier que les réalignements UI/UX réalisés en A24 et A25 n’ont pas introduit de régressions visuelles, fonctionnelles ou de navigation, puis corriger uniquement les régressions prouvées.
+Exécuter en code le chantier UI/UX transversal préparé dans `docs/1-MASTER/2-REFERENCE_UI_UX/`, afin de rapprocher les pages disposant d’une maquette officielle à environ 99 % de leur cible visuelle.
 
-Le bloc A26 intervient après :
+Le bloc A26 ne crée pas de nouvelle direction artistique.  
+Il applique les références visuelles officielles déjà préparées.
+
+A26 intervient après :
 - A24 — Réalignement UI/UX global sur `MAQUETTE_DA` ;
-- A25 — Planning UI/UX & ergonomie métier.
+- A25 — Planning UI/UX & ergonomie métier ;
+- le chantier documentaire transversal UI/UX hors bloc applicatif.
 
-A26 n’est pas un nouveau bloc de refonte.  
-A26 est un bloc de sécurisation finale après réalignement UI/UX.
+**Références obligatoires du bloc**
+
+```txt
+docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_INDEX_MAQUETTES.md
+docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_SHELL_GLOBAL.md
+docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_CODEX_UI_UX_VISUEL_99.md
+docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_<PAGE>.md
+```
+
+Pour le planning, la référence déjà validée est :
+
+```txt
+docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_A25_PLANNING.md
+```
+
+**Principe directeur**
+
+```txt
+IMAGE OFFICIELLE = VÉRITÉ VISUELLE
+REFERENCE_UI_UX_<PAGE>.md = TRADUCTION CODABLE POUR CODEX
+CODE RÉEL = VÉRITÉ FONCTIONNELLE
+FONCTIONNEL EXISTANT = NON BLOQUANT POUR LA PHASE VISUELLE 99 %
+```
+
+Le bloc A26 est strictement visuel.  
+Il ne doit pas être transformé en refonte fonctionnelle.
+
+**Périmètre inclus**
+
+- Shell global connecté ;
+- Login ;
+- Dashboard ;
+- Société / paramètres métier ;
+- Dépôts / bases ;
+- Véhicules ;
+- Templates ;
+- Utilisateurs / RH ;
+- Onboarding ;
+- Audit ;
+- Privacy ;
+- cohérence visuelle globale entre pages ;
+- vérification visuelle manuelle Nathan après chaque session.
+
+**Périmètre exclu**
+
+- refonte fonctionnelle ;
+- ajout métier ;
+- API ;
+- Prisma ;
+- RBAC ;
+- services métier ;
+- logique serveur ;
+- autoschedule ;
+- matching ;
+- moteur planning ;
+- RGPD avancé ;
+- génération automatique de captures ;
+- audit global du dépôt.
+
+**Règle de traitement du fonctionnel existant**
+
+Si un élément fonctionnel existant empêche de reproduire la maquette officielle à environ 99 %, il peut être :
+
+```txt
+masqué visuellement
+déplacé
+replié
+simplifié
+supprimé de l’affichage par défaut
+```
+
+Les arbitrages fonctionnels seront traités plus tard dans des sessions applicatives dédiées.
+
+**Règle d’économie Codex**
+
+Codex doit :
+
+- lire uniquement les références UI/UX utiles à la page traitée ;
+- lire uniquement les fichiers code utiles ;
+- ne pas scanner tout le dépôt ;
+- ne pas relire tout l’historique documentaire ;
+- ne pas générer de captures ;
+- fournir une checklist de contrôle visuel manuel Nathan.
+
+#### Sessions
+
+- **A26-UI-01 — AUDIT+CADRAGE** — Audit d’exécution visuelle page par page.  
+  Objectif : auditer l’existant réel après A24 et A25, comparer chaque page aux références UI/UX officielles, identifier les écarts visuels restants, puis proposer le découpage exact du bloc A26.  
+  Périmètre : inventaire page par page, état réel du code, écart visuel avec chaque maquette, fichiers code réellement concernés, niveau d’effort estimé, risques, regroupements possibles, pages à traiter seules, pages à traiter après Shell global, éléments fonctionnels à masquer / déplacer / simplifier visuellement.  
+  Livrable attendu : rapport d’audit/cadrage A26 avec matrice d’exécution page par page, ordre recommandé de production et proposition de sessions A26 restantes. Aucun patch code applicatif n’est attendu.  
+  DoD : l’ordre de production A26 est proposé sur preuves, les risques sont identifiés, les fichiers utiles par page sont cadrés, et le reste du bloc A26 peut être créé sans hypothèse.
+
+- **A26-UI-02 à A26-UI-XX — À DÉFINIR APRÈS A26-UI-01**.  
+  Le découpage définitif des sessions de production visuelle A26 sera établi uniquement après l’audit `A26-UI-01`.  
+  Les sessions ne doivent pas être créées à l’avance si l’audit démontre qu’un regroupement, un découpage plus fin ou une priorité différente est nécessaire.
+
+- **CLOTURE_A26 — VALIDATION** — Clôture finale du bloc A26.  
+  Périmètre : vérifier les sessions A26 réellement créées, les patchs, les validations terminales, les checklists visuelles manuelles, les résiduels et la documentation finale.  
+  Livrable attendu : verdict de clôture final du bloc A26.  
+  DoD : produire explicitement `BLOC A26 CLÔTURABLE DÉFINITIVEMENT : OUI` ou `BLOC A26 CLÔTURABLE DÉFINITIVEMENT : NON`.
+
+#### Résultat attendu
+
+- Shell global et pages officielles réalignés selon les références UI/UX ;
+- exécution guidée par les maquettes et les documents `REFERENCE_UI_UX_<PAGE>.md` ;
+- aucune nouvelle direction artistique ;
+- aucun ajout fonctionnel non demandé ;
+- fonctionnel réel préservé en profondeur mais non bloquant visuellement ;
+- base UI/UX propre avant validation globale de non-régression A27.
+
+---
+
+### BLOC A27 — Stabilisation / non-régression post UI/UX A24-A25-A26
+
+**Objectif du bloc**  
+Vérifier que les réalignements UI/UX réalisés en A24, A25 et A26 n’ont pas introduit de régressions visuelles, fonctionnelles ou de navigation, puis corriger uniquement les régressions prouvées.
+
+Le bloc A27 intervient après :
+- A24 — Réalignement UI/UX global sur `MAQUETTE_DA` ;
+- A25 — Planning UI/UX & ergonomie métier ;
+- A26 — Exécution UI/UX visuelle 99 % sur références officielles.
+
+A27 n’est pas un nouveau bloc de refonte.  
+A27 est un bloc de sécurisation finale après réalignements UI/UX.
 
 **Principe directeur**  
-Le bloc A26 doit contrôler l’application dans son ensemble après les modifications UI/UX, afin de garantir que :
+Le bloc A27 doit contrôler l’application dans son ensemble après les modifications UI/UX, afin de garantir que :
 - les pages restent fonctionnelles ;
 - la navigation reste cohérente ;
 - le mode clair fonctionne ;
 - le mode sombre fonctionne ;
-- les pages principales restent alignées avec `MAQUETTE_DA` ;
+- les pages principales restent alignées avec les références visuelles officielles ;
 - aucune fonctionnalité stabilisée n’a été cassée ;
 - aucune régression majeure n’est laissée avant la suite du développement.
 
 **Périmètre**  
-Le bloc A26 peut contrôler :
+Le bloc A27 peut contrôler :
 - login ;
 - dashboard ;
 - sidebar ;
@@ -1432,11 +1558,10 @@ Le bloc A26 peut contrôler :
 - mode sombre ;
 - responsive minimal ;
 - permissions et accès visibles côté UI ;
-- captures finales ;
 - validations terminales.
 
 **Exclusions**  
-Le bloc A26 ne doit pas traiter :
+Le bloc A27 ne doit pas traiter :
 - nouvelle refonte UI/UX ;
 - nouvelle fonctionnalité métier ;
 - nouveau module ;
@@ -1450,44 +1575,45 @@ Le bloc A26 ne doit pas traiter :
 - préparation société pilote ;
 - déploiement.
 
-A26 doit corriger uniquement les régressions réellement démontrées.
+A27 doit corriger uniquement les régressions réellement démontrées.
 
 #### Sessions
 
-- **A26-STAB-01 — AUDIT** — Audit global de non-régression post A24-A25.  
-  Objectif : vérifier l’état réel de l’application après les réalignements UI/UX global et planning.  
-  Livrable attendu : rapport d’audit de non-régression avec captures, routes contrôlées, anomalies visuelles, anomalies fonctionnelles et classement bloquant / non bloquant.  
+- **A27-STAB-01 — AUDIT** — Audit global de non-régression post A24-A25-A26.  
+  Objectif : vérifier l’état réel de l’application après les réalignements UI/UX global, planning et exécution visuelle 99 %.  
+  Livrable attendu : rapport d’audit de non-régression avec routes contrôlées, anomalies visuelles, anomalies fonctionnelles, anomalies de navigation et classement bloquant / non bloquant.  
   DoD : chaque page principale possède un statut clair : OK / régression mineure / régression bloquante / à confirmer.
 
-- **A26-STAB-02 — CORRECTION** — Correction ciblée des régressions bloquantes post UI/UX.  
+- **A27-STAB-02 — CORRECTION** — Correction ciblée des régressions bloquantes post UI/UX.  
   Objectif : corriger uniquement les régressions prouvées qui empêchent la navigation, l’usage ou la cohérence minimale de l’application.  
   Livrable attendu : patch code minimal de correction.  
-  DoD : aucune correction ne sort du périmètre des régressions constatées en A26-STAB-01.
+  DoD : aucune correction ne sort du périmètre des régressions constatées en A27-STAB-01.
 
-- **A26-STAB-03 — COMPLÉTION** — Complétion des preuves visuelles et documentaires post-correction.  
-  Objectif : compléter les captures, preuves, notes de non-régression et documentation finale.  
+- **A27-STAB-03 — COMPLÉTION** — Complétion des preuves visuelles et documentaires post-correction.  
+  Objectif : compléter les preuves, notes de non-régression et documentation finale.  
   Livrable attendu : documentation consolidée des contrôles post UI/UX.  
-  DoD : les preuves permettent de comparer l’état final aux objectifs A24 et A25.
+  DoD : les preuves permettent de comparer l’état final aux objectifs A24, A25 et A26.
 
-- **A26-STAB-04 — VALIDATION** — Validation finale de non-régression post UI/UX.  
+- **A27-STAB-04 — VALIDATION** — Validation finale de non-régression post UI/UX.  
   À vérifier : navigation connectée, pages principales, mode clair, mode sombre, planning, absence de régression bloquante, validations terminales.  
-  Livrable attendu : rapport de validation finale avec preuves terminales et captures.  
+  Livrable attendu : rapport de validation finale avec preuves terminales et checklist visuelle manuelle.  
   DoD : toutes les régressions bloquantes sont corrigées ou classées explicitement.
 
-- **CLOTURE_A26 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc A26.  
-  Livrable attendu : contrôle final de stabilisation post UI/UX, vérification des patchs, preuves, captures, documentation finale et ZIP documentaire.  
+- **CLOTURE_A27 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc A27.  
+  Livrable attendu : contrôle final de stabilisation post UI/UX, vérification des patchs, preuves, documentation finale et ZIP documentaire.  
   Verdict attendu :
-  - `BLOC A26 CLÔTURABLE DÉFINITIVEMENT : OUI`
+  - `BLOC A27 CLÔTURABLE DÉFINITIVEMENT : OUI`
   - ou
-  - `BLOC A26 CLÔTURABLE DÉFINITIVEMENT : NON`
+  - `BLOC A27 CLÔTURABLE DÉFINITIVEMENT : NON`
 
 #### Résultat attendu
-- application stable après A24 et A25 ;
+
+- application stable après A24, A25 et A26 ;
 - aucune régression bloquante post UI/UX ;
 - navigation connectée validée ;
 - pages principales contrôlées ;
 - mode clair et mode sombre validés ;
-- planning contrôlé après réalignement ;
+- planning contrôlé après réalignements ;
 - documentation finale complète ;
 - base saine avant la suite du développement.
 
@@ -1569,7 +1695,7 @@ Faire passer Ambulance Manager vers une logique SaaS plus complète.
 
 ## 15. Règle de maintenance du plan
 
-- ce plan doit rester aligné sur `docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
+- ce plan doit rester aligné sur `docs/1-MASTER/DOCUMENT_CADRAGE_FONCTIONNEL.md`
 - il ne doit pas recontester le cadrage validé
 - une session validée ne supprime pas la nécessité d’une validation explicite utilisateur
 - aucun bloc ne peut être considéré comme terminé sans session dédiée de clôture

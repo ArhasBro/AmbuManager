@@ -1802,6 +1802,164 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |               PATCH__SESSION-20260506-10_A24_CLOTURE_A24_DOCS.diff
 |   |   |   |               README_PATCH.md
 |   |   |   |               
+|   |   |   +---BLOC_A25
+|   |   |   |   |   PROMPTS_A25_06_A_CLOTURE_PRODUCTION_CONTROLE_V1_2.md
+|   |   |   |   |   SESSION-20260510-11_A25_A25-PLAN-UI-11.zip
+|   |   |   |   |   
+|   |   |   |   +---ARCHIVE
+|   |   |   |   |   +---SESSION-20260510-01_A25_A25-PLAN-UI-01
+|   |   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   |   RAPPORT_AUDIT_A25_PLANNING.md
+|   |   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   |   
+|   |   |   |   |   |   +---CAPTURES_AVANT
+|   |   |   |   |   |   |       planning_dark_before.png
+|   |   |   |   |   |   |       planning_light_before.png
+|   |   |   |   |   |   |       planning_manual_day_before.png
+|   |   |   |   |   |   |       planning_manual_month_before.png
+|   |   |   |   |   |   |       planning_manual_week_before.png
+|   |   |   |   |   |   |       
+|   |   |   |   |   |   \---PATCH
+|   |   |   |   |   |           NO_PATCH.md
+|   |   |   |   |   |           
+|   |   |   |   |   +---SESSION-20260510-02_A25_A25-PLAN-UI-02
+|   |   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   |   
+|   |   |   |   |   |   \---PATCH
+|   |   |   |   |   |           PATCH__SESSION-20260510-02_A25_A25-PLAN-UI-02.diff
+|   |   |   |   |   |           README_PATCH.md
+|   |   |   |   |   |           
+|   |   |   |   |   +---SESSION-20260510-03_A25_A25-PLAN-UI-03
+|   |   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   |   
+|   |   |   |   |   |   \---PATCH
+|   |   |   |   |   |           PATCH__SESSION-20260510-03_A25_A25-PLAN-UI-03.diff
+|   |   |   |   |   |           PATCH__SESSION-20260510-03_A25_A25-PLAN-UI-03_DOCS_FIX-01.diff
+|   |   |   |   |   |           README_PATCH.md
+|   |   |   |   |   |           
+|   |   |   |   |   +---SESSION-20260510-04_A25_A25-PLAN-UI-04
+|   |   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   |   
+|   |   |   |   |   |   \---PATCH
+|   |   |   |   |   |           PATCH__SESSION-20260510-04_A25_A25-PLAN-UI-04.diff
+|   |   |   |   |   |           README_PATCH.md
+|   |   |   |   |   |           
+|   |   |   |   |   \---SESSION-20260510-05_A25_A25-PLAN-UI-05
+|   |   |   |   |       |   BUILD_OUTPUT.txt
+|   |   |   |   |       |   EVIDENCES.md
+|   |   |   |   |       |   FIN_SESSION.md
+|   |   |   |   |       |   LINT_OUTPUT.txt
+|   |   |   |   |       |   NOTES.md
+|   |   |   |   |       |   RESULTATS.md
+|   |   |   |   |       |   SESSION.md
+|   |   |   |   |       |   
+|   |   |   |   |       \---PATCH
+|   |   |   |   |               PATCH__SESSION-20260510-05_A25_A25-PLAN-UI-05.diff
+|   |   |   |   |               README_PATCH.md
+|   |   |   |   |               
+|   |   |   |   +---SESSION-20260510-06_A25_A25-PLAN-UI-06
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           NO_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260510-07_A25_A25-PLAN-UI-07
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           PATCH__SESSION-20260510-07_A25_A25-PLAN-UI-07.diff
+|   |   |   |   |           PATCH__SESSION-20260510-07_A25_A25-PLAN-UI-07_FIX-01.diff
+|   |   |   |   |           README_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260510-08_A25_A25-PLAN-UI-08
+|   |   |   |   |   |   APPLY_CHECK_OUTPUT.txt
+|   |   |   |   |   |   BUILD_OUTPUT.txt
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   LINT_OUTPUT.txt
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           PATCH__SESSION-20260510-08_A25_A25-PLAN-UI-08.diff
+|   |   |   |   |           PATCH__SESSION-20260510-08_A25_A25-PLAN-UI-08_FIX-01.diff
+|   |   |   |   |           README_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260510-09_A25_A25-PLAN-UI-09
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           PATCH__SESSION-20260510-09_A25_A25-PLAN-UI-09.diff
+|   |   |   |   |           PATCH__SESSION-20260510-09_A25_A25-PLAN-UI-09_FINAL_VALIDABLE.diff
+|   |   |   |   |           PATCH__SESSION-20260510-09_A25_A25-PLAN-UI-09_FINAL_VALIDABLE_V2.diff
+|   |   |   |   |           PATCH__SESSION-20260510-09_A25_A25-PLAN-UI-09_FIX-01.diff
+|   |   |   |   |           PATCH__SESSION-20260510-09_A25_A25-PLAN-UI-09_FIX-02.diff
+|   |   |   |   |           PATCH__SESSION-20260510-09_A25_A25-PLAN-UI-09_FIX-03.diff
+|   |   |   |   |           README_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260510-10_A25_A25-PLAN-UI-10
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           PATCH__SESSION-20260510-10_A25_A25-PLAN-UI-10.diff
+|   |   |   |   |           README_PATCH.md
+|   |   |   |   |           
+|   |   |   |   +---SESSION-20260510-11_A25_A25-PLAN-UI-11
+|   |   |   |   |   |   EVIDENCES.md
+|   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   NOTES.md
+|   |   |   |   |   |   RESULTATS.md
+|   |   |   |   |   |   SESSION.md
+|   |   |   |   |   |   
+|   |   |   |   |   \---PATCH
+|   |   |   |   |           NO_PATCH.md
+|   |   |   |   |           PATCH__SESSION-20260510-11_A25_A25-PLAN-UI-11_FIX-01.diff
+|   |   |   |   |           PATCH__SESSION-20260510-11_A25_A25-PLAN-UI-11_FIX-02.diff
+|   |   |   |   |           PATCH__SESSION-20260510-11_A25_A25-PLAN-UI-11_FIX-03.diff
+|   |   |   |   |           PATCH__SESSION-20260510-11_A25_A25-PLAN-UI-11_FIX-04.diff
+|   |   |   |   |           
+|   |   |   |   \---SESSION-20260510-12_A25_CLOTURE_A25
+|   |   |   |       |   EVIDENCES.md
+|   |   |   |       |   FIN_SESSION.md
+|   |   |   |       |   NOTES.md
+|   |   |   |       |   RESULTATS.md
+|   |   |   |       |   SESSION.md
+|   |   |   |       |   
+|   |   |   |       \---PATCH
+|   |   |   |               NO_PATCH.md
+|   |   |   |               
 |   |   |   +---BLOC_A3
 |   |   |   |   +---1-USER
 |   |   |   |   |   +---SESSION-20260319-09_A3_USERS-01
@@ -2543,155 +2701,8 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |                   NO_PATCH.md
 |   |   |                   README_PATCH.md
 |   |   |                   
-|   |   +---BLOC_A25
-|   |   |   |   PROMPTS_A25_06_A_CLOTURE_PRODUCTION_CONTROLE_V1_2.md
-|   |   |   |   SESSION-20260510-11_A25_A25-PLAN-UI-11.zip
-|   |   |   |   
-|   |   |   +---ARCHIVE
-|   |   |   |   +---SESSION-20260510-01_A25_A25-PLAN-UI-01
-|   |   |   |   |   |   EVIDENCES.md
-|   |   |   |   |   |   FIN_SESSION.md
-|   |   |   |   |   |   NOTES.md
-|   |   |   |   |   |   RAPPORT_AUDIT_A25_PLANNING.md
-|   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   SESSION.md
-|   |   |   |   |   |   
-|   |   |   |   |   +---CAPTURES_AVANT
-|   |   |   |   |   |       planning_dark_before.png
-|   |   |   |   |   |       planning_light_before.png
-|   |   |   |   |   |       planning_manual_day_before.png
-|   |   |   |   |   |       planning_manual_month_before.png
-|   |   |   |   |   |       planning_manual_week_before.png
-|   |   |   |   |   |       
-|   |   |   |   |   \---PATCH
-|   |   |   |   |           NO_PATCH.md
-|   |   |   |   |           
-|   |   |   |   +---SESSION-20260510-02_A25_A25-PLAN-UI-02
-|   |   |   |   |   |   EVIDENCES.md
-|   |   |   |   |   |   FIN_SESSION.md
-|   |   |   |   |   |   NOTES.md
-|   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   SESSION.md
-|   |   |   |   |   |   
-|   |   |   |   |   \---PATCH
-|   |   |   |   |           PATCH__SESSION-20260510-02_A25_A25-PLAN-UI-02.diff
-|   |   |   |   |           README_PATCH.md
-|   |   |   |   |           
-|   |   |   |   +---SESSION-20260510-03_A25_A25-PLAN-UI-03
-|   |   |   |   |   |   EVIDENCES.md
-|   |   |   |   |   |   FIN_SESSION.md
-|   |   |   |   |   |   NOTES.md
-|   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   SESSION.md
-|   |   |   |   |   |   
-|   |   |   |   |   \---PATCH
-|   |   |   |   |           PATCH__SESSION-20260510-03_A25_A25-PLAN-UI-03.diff
-|   |   |   |   |           PATCH__SESSION-20260510-03_A25_A25-PLAN-UI-03_DOCS_FIX-01.diff
-|   |   |   |   |           README_PATCH.md
-|   |   |   |   |           
-|   |   |   |   +---SESSION-20260510-04_A25_A25-PLAN-UI-04
-|   |   |   |   |   |   EVIDENCES.md
-|   |   |   |   |   |   FIN_SESSION.md
-|   |   |   |   |   |   NOTES.md
-|   |   |   |   |   |   RESULTATS.md
-|   |   |   |   |   |   SESSION.md
-|   |   |   |   |   |   
-|   |   |   |   |   \---PATCH
-|   |   |   |   |           PATCH__SESSION-20260510-04_A25_A25-PLAN-UI-04.diff
-|   |   |   |   |           README_PATCH.md
-|   |   |   |   |           
-|   |   |   |   \---SESSION-20260510-05_A25_A25-PLAN-UI-05
-|   |   |   |       |   BUILD_OUTPUT.txt
-|   |   |   |       |   EVIDENCES.md
-|   |   |   |       |   FIN_SESSION.md
-|   |   |   |       |   LINT_OUTPUT.txt
-|   |   |   |       |   NOTES.md
-|   |   |   |       |   RESULTATS.md
-|   |   |   |       |   SESSION.md
-|   |   |   |       |   
-|   |   |   |       \---PATCH
-|   |   |   |               PATCH__SESSION-20260510-05_A25_A25-PLAN-UI-05.diff
-|   |   |   |               README_PATCH.md
-|   |   |   |               
-|   |   |   +---SESSION-20260510-06_A25_A25-PLAN-UI-06
-|   |   |   |   |   EVIDENCES.md
-|   |   |   |   |   FIN_SESSION.md
-|   |   |   |   |   NOTES.md
-|   |   |   |   |   RESULTATS.md
-|   |   |   |   |   SESSION.md
-|   |   |   |   |   
-|   |   |   |   \---PATCH
-|   |   |   |           NO_PATCH.md
-|   |   |   |           
-|   |   |   +---SESSION-20260510-07_A25_A25-PLAN-UI-07
-|   |   |   |   |   EVIDENCES.md
-|   |   |   |   |   FIN_SESSION.md
-|   |   |   |   |   NOTES.md
-|   |   |   |   |   RESULTATS.md
-|   |   |   |   |   SESSION.md
-|   |   |   |   |   
-|   |   |   |   \---PATCH
-|   |   |   |           PATCH__SESSION-20260510-07_A25_A25-PLAN-UI-07.diff
-|   |   |   |           PATCH__SESSION-20260510-07_A25_A25-PLAN-UI-07_FIX-01.diff
-|   |   |   |           README_PATCH.md
-|   |   |   |           
-|   |   |   +---SESSION-20260510-08_A25_A25-PLAN-UI-08
-|   |   |   |   |   APPLY_CHECK_OUTPUT.txt
-|   |   |   |   |   BUILD_OUTPUT.txt
-|   |   |   |   |   EVIDENCES.md
-|   |   |   |   |   FIN_SESSION.md
-|   |   |   |   |   LINT_OUTPUT.txt
-|   |   |   |   |   NOTES.md
-|   |   |   |   |   RESULTATS.md
-|   |   |   |   |   SESSION.md
-|   |   |   |   |   
-|   |   |   |   \---PATCH
-|   |   |   |           PATCH__SESSION-20260510-08_A25_A25-PLAN-UI-08.diff
-|   |   |   |           PATCH__SESSION-20260510-08_A25_A25-PLAN-UI-08_FIX-01.diff
-|   |   |   |           README_PATCH.md
-|   |   |   |           
-|   |   |   +---SESSION-20260510-09_A25_A25-PLAN-UI-09
-|   |   |   |   |   EVIDENCES.md
-|   |   |   |   |   FIN_SESSION.md
-|   |   |   |   |   NOTES.md
-|   |   |   |   |   RESULTATS.md
-|   |   |   |   |   SESSION.md
-|   |   |   |   |   
-|   |   |   |   \---PATCH
-|   |   |   |           PATCH__SESSION-20260510-09_A25_A25-PLAN-UI-09.diff
-|   |   |   |           PATCH__SESSION-20260510-09_A25_A25-PLAN-UI-09_FINAL_VALIDABLE.diff
-|   |   |   |           PATCH__SESSION-20260510-09_A25_A25-PLAN-UI-09_FINAL_VALIDABLE_V2.diff
-|   |   |   |           PATCH__SESSION-20260510-09_A25_A25-PLAN-UI-09_FIX-01.diff
-|   |   |   |           PATCH__SESSION-20260510-09_A25_A25-PLAN-UI-09_FIX-02.diff
-|   |   |   |           PATCH__SESSION-20260510-09_A25_A25-PLAN-UI-09_FIX-03.diff
-|   |   |   |           README_PATCH.md
-|   |   |   |           
-|   |   |   +---SESSION-20260510-10_A25_A25-PLAN-UI-10
-|   |   |   |   |   EVIDENCES.md
-|   |   |   |   |   FIN_SESSION.md
-|   |   |   |   |   NOTES.md
-|   |   |   |   |   RESULTATS.md
-|   |   |   |   |   SESSION.md
-|   |   |   |   |   
-|   |   |   |   \---PATCH
-|   |   |   |           PATCH__SESSION-20260510-10_A25_A25-PLAN-UI-10.diff
-|   |   |   |           README_PATCH.md
-|   |   |   |           
-|   |   |   +---SESSION-20260510-11_A25_A25-PLAN-UI-11
-|   |   |   |   |   EVIDENCES.md
-|   |   |   |   |   FIN_SESSION.md
-|   |   |   |   |   NOTES.md
-|   |   |   |   |   RESULTATS.md
-|   |   |   |   |   SESSION.md
-|   |   |   |   |   
-|   |   |   |   \---PATCH
-|   |   |   |           NO_PATCH.md
-|   |   |   |           PATCH__SESSION-20260510-11_A25_A25-PLAN-UI-11_FIX-01.diff
-|   |   |   |           PATCH__SESSION-20260510-11_A25_A25-PLAN-UI-11_FIX-02.diff
-|   |   |   |           PATCH__SESSION-20260510-11_A25_A25-PLAN-UI-11_FIX-03.diff
-|   |   |   |           PATCH__SESSION-20260510-11_A25_A25-PLAN-UI-11_FIX-04.diff
-|   |   |   |           
-|   |   |   \---SESSION-20260510-12_A25_CLOTURE_A25
+|   |   +---BLOC_A26
+|   |   |   \---SESSION-20260513-01_A26_A26-UI-01
 |   |   |       |   EVIDENCES.md
 |   |   |       |   FIN_SESSION.md
 |   |   |       |   NOTES.md
