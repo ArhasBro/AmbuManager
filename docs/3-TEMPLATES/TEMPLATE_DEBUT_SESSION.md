@@ -7,18 +7,18 @@ Sous-projet : Ambulance Manager
 
 ## 1. Lecture documentaire
 
-Ne pas relire automatiquement toute la documentation de `./docs/1-master`.
+Ne pas relire automatiquement toute la documentation de `./docs/1-MASTER`.
 
 ### Lecture obligatoire
-- `./docs/1-master/DOCUMENT_MAITRE.md`
-- `./docs/1-master/PLAN_DE_DEVELOPPEMENT.md`
+- `./docs/1-MASTER/DOCUMENT_MAITRE.md`
+- `./docs/1-MASTER/PLAN_DE_DEVELOPPEMENT.md`
 
 ### Lecture complémentaire uniquement si utile à la session
-- `./docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
-- `./docs/1-master/ETAT_GLOBAL_PROJET.md`
-- `./docs/1-master/REGISTRE_DECISIONS.md`
-- `./docs/1-master/RECAP_DISCUSSIONS.md`
-- `./docs/1-master/STRUCTURE_PROJET.md`
+- `./docs/1-MASTER/DOCUMENT_CADRAGE_FONCTIONNEL.md`
+- `./docs/1-MASTER/ETAT_GLOBAL_PROJET.md`
+- `./docs/1-MASTER/REGISTRE_DECISIONS.md`
+- `./docs/1-MASTER/RECAP_DISCUSSIONS.md`
+- `./docs/1-MASTER/STRUCTURE_PROJET.md`
 - documentation de la session précédente validée si elle sert de base
 - tout document strictement nécessaire au périmètre traité
 
