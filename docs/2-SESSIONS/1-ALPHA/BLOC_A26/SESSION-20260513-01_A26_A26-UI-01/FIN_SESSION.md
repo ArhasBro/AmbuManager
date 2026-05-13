@@ -1,14 +1,22 @@
-﻿# FIN_SESSION
+# FIN_SESSION
 
-## ClÃ´ture
+## Cloture
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+Session A26-UI-01 executee en mode AUDIT+CADRAGE uniquement, conformement au perimetre documentaire et aux interdictions de modification applicative.
 
 ## Validation
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+- Matrice obligatoire page par page produite.
+- Matrice de decoupage futur A26 produite.
+- Dependances Shell, risques et ordre des futures sessions identifies.
+- Aucun patch de code applicatif produit.
 
 ## Verdict final
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+A26-UI-01 � AUDIT D'EXECUTION VISUELLE PAGE PAR PAGE : TERMINE
 
+DECOUPAGE A26 PROPOSE : OUI
+CORRECTION CODE APPLICATIF PRODUITE : NON
+PATCH CODE APPLICATIF : NON
+CAPTURES GENEREES : NON
+PROCHAINE ETAPE RECOMMANDEE : A26-UI-02
