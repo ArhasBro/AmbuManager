@@ -1,6 +1,6 @@
 # Ambulance Manager — PLAN_DE_DEVELOPPEMENT
 
-Version : V2.4.2 (MASTER)  
+Version : V2.4.3 (MASTER)  
 Date : 13/05/2026
 
 ## Sommaire
@@ -39,7 +39,7 @@ Il doit s’y conformer.
 Le plan est volontairement ordonné ainsi :
 
 1. ALPHA — socle et blocs historiques A1 à A13 ;
-2. ALPHA — suite active / consolidation A14 à A26 ;
+2. ALPHA — suite active / consolidation A14 à A27 ;
 3. BETA — évolutions prévisionnelles après stabilisation ALPHA ;
 4. VERSION OFFICIELLE / V2 — extensions long terme.
 
@@ -1393,15 +1393,16 @@ La formule `INFORMATION NON FOURNIE — À CONFIRMER` est réservée aux documen
 ### BLOC A26 — Exécution UI/UX visuelle 99 % sur références officielles
 
 **Objectif du bloc**  
-Exécuter en code le chantier UI/UX transversal préparé dans `docs/1-MASTER/2-REFERENCE_UI_UX/`, afin de rapprocher les pages disposant d’une maquette officielle à environ 99 % de leur cible visuelle.
+Exécuter en code les références UI/UX officielles préparées dans `docs/1-MASTER/2-REFERENCE_UI_UX/`, afin de rapprocher les pages disposant d’une maquette officielle à environ 99 % de leur cible visuelle.
 
-Le bloc A26 ne crée pas de nouvelle direction artistique.  
-Il applique les références visuelles officielles déjà préparées.
+A26 n’est pas un bloc documentaire.  
+A26 applique en code les références visuelles officielles déjà préparées.
 
 A26 intervient après :
 - A24 — Réalignement UI/UX global sur `MAQUETTE_DA` ;
 - A25 — Planning UI/UX & ergonomie métier ;
-- le chantier documentaire transversal UI/UX hors bloc applicatif.
+- le chantier documentaire transversal UI/UX hors bloc applicatif ;
+- la validation de `A26-UI-01 — AUDIT+CADRAGE`.
 
 **Références obligatoires du bloc**
 
@@ -1410,11 +1411,6 @@ docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_INDEX_MAQUETTES.md
 docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_SHELL_GLOBAL.md
 docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_CODEX_UI_UX_VISUEL_99.md
 docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_<PAGE>.md
-```
-
-Pour le planning, la référence déjà validée est :
-
-```txt
 docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_A25_PLANNING.md
 ```
 
@@ -1424,6 +1420,7 @@ docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_A25_PLANNING.md
 IMAGE OFFICIELLE = VÉRITÉ VISUELLE
 REFERENCE_UI_UX_<PAGE>.md = TRADUCTION CODABLE POUR CODEX
 CODE RÉEL = VÉRITÉ FONCTIONNELLE
+DOCUMENTATION MAQUETTE GÉNÉRALE = CONTEXTE DA UNIQUEMENT
 FONCTIONNEL EXISTANT = NON BLOQUANT POUR LA PHASE VISUELLE 99 %
 ```
 
@@ -1437,13 +1434,15 @@ Il ne doit pas être transformé en refonte fonctionnelle.
 - Dashboard ;
 - Société / paramètres métier ;
 - Dépôts / bases ;
+- Planning ;
 - Véhicules ;
 - Templates ;
 - Utilisateurs / RH ;
-- Onboarding ;
+- Onboarding société pilote ;
 - Audit ;
-- Privacy ;
-- cohérence visuelle globale entre pages ;
+- Privacy / mentions d’information ;
+- harmonisation transversale ;
+- validation visuelle globale ;
 - vérification visuelle manuelle Nathan après chaque session.
 
 **Périmètre exclu**
@@ -1460,7 +1459,8 @@ Il ne doit pas être transformé en refonte fonctionnelle.
 - moteur planning ;
 - RGPD avancé ;
 - génération automatique de captures ;
-- audit global du dépôt.
+- audit global du dépôt ;
+- recréation du dossier `ICONE` / `ICONES`.
 
 **Règle de traitement du fonctionnel existant**
 
@@ -1490,28 +1490,83 @@ Codex doit :
 #### Sessions
 
 - **A26-UI-01 — AUDIT+CADRAGE** — Audit d’exécution visuelle page par page.  
-  Objectif : auditer l’existant réel après A24 et A25, comparer chaque page aux références UI/UX officielles, identifier les écarts visuels restants, puis proposer le découpage exact du bloc A26.  
-  Périmètre : inventaire page par page, état réel du code, écart visuel avec chaque maquette, fichiers code réellement concernés, niveau d’effort estimé, risques, regroupements possibles, pages à traiter seules, pages à traiter après Shell global, éléments fonctionnels à masquer / déplacer / simplifier visuellement.  
-  Livrable attendu : rapport d’audit/cadrage A26 avec matrice d’exécution page par page, ordre recommandé de production et proposition de sessions A26 restantes. Aucun patch code applicatif n’est attendu.  
-  DoD : l’ordre de production A26 est proposé sur preuves, les risques sont identifiés, les fichiers utiles par page sont cadrés, et le reste du bloc A26 peut être créé sans hypothèse.
+  Statut : **validée**.  
+  Livrable : matrice page par page, risques, dépendances Shell, découpage A26 proposé.  
+  Résultat : découpage A26 exploitable.
 
-- **A26-UI-02 à A26-UI-XX — À DÉFINIR APRÈS A26-UI-01**.  
-  Le découpage définitif des sessions de production visuelle A26 sera établi uniquement après l’audit `A26-UI-01`.  
-  Les sessions ne doivent pas être créées à l’avance si l’audit démontre qu’un regroupement, un découpage plus fin ou une priorité différente est nécessaire.
+- **A26-UI-02 — CORRECTION+COMPLÉTION** — Shell global connecté.  
+  Périmètre : sidebar, topbar, layout connecté, fond général, navigation, logo, société, utilisateur, déconnexion, thème, libellés, rythme global.  
+  Référence : `REFERENCE_UI_UX_SHELL_GLOBAL.md`.  
+  Livrable attendu : patch code visuel ciblé Shell global.  
+  DoD : le Shell global devient le socle visuel conforme des pages connectées, avec labels accentués, topbar/sidebar alignées, rythme visuel propre et bouton déconnexion non primaire.
+
+- **A26-UI-03 — CORRECTION+COMPLÉTION** — Login.  
+  Périmètre : page `/login`, split gauche/droite, zone immersive, carte de connexion, microcopy, badge bas, CTA, états visuels.  
+  Référence : `REFERENCE_UI_UX_LOGIN.md`.  
+  Livrable attendu : patch code visuel ciblé Login.  
+  DoD : la page Login se rapproche à environ 99 % de `Login_V1.1.png`, sans dépendance au Shell connecté.
+
+- **A26-UI-04 — CORRECTION+COMPLÉTION** — Dashboard, Société et Dépôts.  
+  Périmètre : `/dashboard`, `/company`, `/depots`, KPI, cards, filtres, listes, panneaux, suppression visuelle des blocs parasites.  
+  Références : `REFERENCE_UI_UX_DASHBOARD.md`, `REFERENCE_UI_UX_COMPANY.md`, `REFERENCE_UI_UX_DEPOTS_BASES.md`.  
+  Livrable attendu : patch code visuel ciblé pages admin référentiel.  
+  DoD : les trois pages sont alignées avec leurs maquettes respectives et héritent proprement du Shell A26.
+
+- **A26-UI-05 — CORRECTION+COMPLÉTION** — Planning.  
+  Périmètre : `/planning`, structure unique maquette, header, toolbar, tabs, matrice, panneau droit, barre d’actions groupées, dette visuelle legacy.  
+  Référence : `REFERENCE_UI_UX_A25_PLANNING.md`.  
+  Livrable attendu : patch code visuel ciblé Planning.  
+  DoD : le Planning conserve le cadrage A25 validé et se rapproche à environ 99 % des maquettes Planning officielles.
+
+- **A26-UI-06 — CORRECTION+COMPLÉTION** — Véhicules.  
+  Périmètre : `/vehicles`, KPI, filtres, tableau, panneau détail, conformité, formulaires lourds relégués.  
+  Référence : `REFERENCE_UI_UX_VEHICLES.md`.  
+  Livrable attendu : patch code visuel ciblé Véhicules.  
+  DoD : la page Véhicules priorise la vue liste + détail conforme à `Véhicules_V1.2.png`.
+
+- **A26-UI-07 — CORRECTION+COMPLÉTION** — Templates.  
+  Périmètre : `/templates`, KPI, filtres, tableau/liste, panneau détail, actions visibles, formulaires lourds non exposés par défaut.  
+  Référence : `REFERENCE_UI_UX_TEMPLATES.md`.  
+  Livrable attendu : patch code visuel ciblé Templates.  
+  DoD : la page Templates se rapproche à environ 99 % de `Templates_V1.1.png`.
+
+- **A26-UI-08 — CORRECTION+COMPLÉTION** — Utilisateurs / RH.  
+  Périmètre : `/users`, KPI RH, filtres, table, panneau RH, onglets absences, zone sécurité, opérations avancées masquées par défaut.  
+  Référence : `REFERENCE_UI_UX_USERS_RH.md`.  
+  Livrable attendu : patch code visuel ciblé Utilisateurs / RH.  
+  DoD : la page Utilisateurs / RH se rapproche à environ 99 % de `Utilisateurs-RH_V1.png`.
+
+- **A26-UI-09 — CORRECTION+COMPLÉTION** — Onboarding et Audit.  
+  Périmètre : `/onboarding`, `/audit`, structure onboarding, table audit, drawer audit, payload, suppression des textes documentaires affichés en UI.  
+  Références : `REFERENCE_UI_UX_ONBOARDING.md`, `REFERENCE_UI_UX_AUDIT.md`.  
+  Livrable attendu : patch code visuel ciblé Onboarding + Audit.  
+  DoD : Onboarding reste proche de sa maquette et Audit n’affiche plus de formule documentaire réservée QA dans l’interface.
+
+- **A26-UI-10 — CORRECTION+COMPLÉTION** — Privacy et harmonisation transversale.  
+  Périmètre : `/privacy`, tokens, cards, espacements, accents, libellés, finitions transversales légères après les lots précédents.  
+  Référence : `REFERENCE_UI_UX_PRIVACY.md` + références transversales.  
+  Livrable attendu : patch code visuel ciblé Privacy + harmonisation.  
+  DoD : Privacy reste proche de `Privacy_V1.0.png` et les pages A26 gagnent en cohérence finale.
+
+- **A26-UI-11 — VALIDATION** — Validation visuelle globale A26.  
+  Périmètre : toutes les pages A26 traitées.  
+  Livrable attendu : rapport de validation visuelle globale, checklists Nathan, classement des écarts restants.  
+  DoD : l’ensemble A26 est prêt pour clôture ou liste clairement les corrections restantes.
 
 - **CLOTURE_A26 — VALIDATION** — Clôture finale du bloc A26.  
-  Périmètre : vérifier les sessions A26 réellement créées, les patchs, les validations terminales, les checklists visuelles manuelles, les résiduels et la documentation finale.  
-  Livrable attendu : verdict de clôture final du bloc A26.  
+  Périmètre : vérifier sessions A26, patchs, validations terminales, documentation finale, résiduels et verdict de clôture.  
+  Livrable attendu : verdict final de clôture.  
   DoD : produire explicitement `BLOC A26 CLÔTURABLE DÉFINITIVEMENT : OUI` ou `BLOC A26 CLÔTURABLE DÉFINITIVEMENT : NON`.
 
 #### Résultat attendu
 
-- Shell global et pages officielles réalignés selon les références UI/UX ;
-- exécution guidée par les maquettes et les documents `REFERENCE_UI_UX_<PAGE>.md` ;
-- aucune nouvelle direction artistique ;
+- Shell global harmonisé ;
+- pages avec maquette officielle rapprochées à environ 99 % ;
+- dette visuelle legacy réduite ;
+- éléments fonctionnels gênants masqués, déplacés, repliés ou simplifiés visuellement ;
 - aucun ajout fonctionnel non demandé ;
-- fonctionnel réel préservé en profondeur mais non bloquant visuellement ;
-- base UI/UX propre avant validation globale de non-régression A27.
+- aucune nouvelle direction artistique ;
+- base UI/UX propre avant A27.
 
 ---
 
@@ -1520,102 +1575,35 @@ Codex doit :
 **Objectif du bloc**  
 Vérifier que les réalignements UI/UX réalisés en A24, A25 et A26 n’ont pas introduit de régressions visuelles, fonctionnelles ou de navigation, puis corriger uniquement les régressions prouvées.
 
-Le bloc A27 intervient après :
-- A24 — Réalignement UI/UX global sur `MAQUETTE_DA` ;
-- A25 — Planning UI/UX & ergonomie métier ;
-- A26 — Exécution UI/UX visuelle 99 % sur références officielles.
+A27 ne doit pas refaire A26.  
+A27 intervient uniquement après clôture de A26.
 
-A27 n’est pas un nouveau bloc de refonte.  
-A27 est un bloc de sécurisation finale après réalignements UI/UX.
+**Périmètre inclus**
 
-**Principe directeur**  
-Le bloc A27 doit contrôler l’application dans son ensemble après les modifications UI/UX, afin de garantir que :
-- les pages restent fonctionnelles ;
-- la navigation reste cohérente ;
-- le mode clair fonctionne ;
-- le mode sombre fonctionne ;
-- les pages principales restent alignées avec les références visuelles officielles ;
-- aucune fonctionnalité stabilisée n’a été cassée ;
-- aucune régression majeure n’est laissée avant la suite du développement.
+- vérification visuelle post A24/A25/A26 ;
+- vérification de navigation ;
+- vérification fonctionnelle non exhaustive mais ciblée sur les zones touchées ;
+- correction uniquement des régressions prouvées ;
+- validation de stabilité avant suite projet.
 
-**Périmètre**  
-Le bloc A27 peut contrôler :
-- login ;
-- dashboard ;
-- sidebar ;
-- topbar ;
-- navigation connectée ;
-- société ;
-- dépôts ;
-- véhicules ;
-- templates ;
-- utilisateurs/RH ;
-- planning ;
-- audit ;
-- onboarding ;
-- privacy ;
-- mode clair ;
-- mode sombre ;
-- responsive minimal ;
-- permissions et accès visibles côté UI ;
-- validations terminales.
+**Périmètre exclu**
 
-**Exclusions**  
-Le bloc A27 ne doit pas traiter :
 - nouvelle refonte UI/UX ;
-- nouvelle fonctionnalité métier ;
-- nouveau module ;
-- refonte planning avancée ;
-- autoschedule complet ;
-- matching complet ;
-- RH avancée ;
-- refonte RBAC ;
-- RGPD complet ;
-- sécurité avancée ;
-- préparation société pilote ;
-- déploiement.
+- ajout fonctionnel ;
+- reprise globale des pages ;
+- audit complet hors zones impactées ;
+- nouvelle direction artistique.
 
-A27 doit corriger uniquement les régressions réellement démontrées.
+#### Sessions à définir après clôture A26
 
-#### Sessions
-
-- **A27-STAB-01 — AUDIT** — Audit global de non-régression post A24-A25-A26.  
-  Objectif : vérifier l’état réel de l’application après les réalignements UI/UX global, planning et exécution visuelle 99 %.  
-  Livrable attendu : rapport d’audit de non-régression avec routes contrôlées, anomalies visuelles, anomalies fonctionnelles, anomalies de navigation et classement bloquant / non bloquant.  
-  DoD : chaque page principale possède un statut clair : OK / régression mineure / régression bloquante / à confirmer.
-
-- **A27-STAB-02 — CORRECTION** — Correction ciblée des régressions bloquantes post UI/UX.  
-  Objectif : corriger uniquement les régressions prouvées qui empêchent la navigation, l’usage ou la cohérence minimale de l’application.  
-  Livrable attendu : patch code minimal de correction.  
-  DoD : aucune correction ne sort du périmètre des régressions constatées en A27-STAB-01.
-
-- **A27-STAB-03 — COMPLÉTION** — Complétion des preuves visuelles et documentaires post-correction.  
-  Objectif : compléter les preuves, notes de non-régression et documentation finale.  
-  Livrable attendu : documentation consolidée des contrôles post UI/UX.  
-  DoD : les preuves permettent de comparer l’état final aux objectifs A24, A25 et A26.
-
-- **A27-STAB-04 — VALIDATION** — Validation finale de non-régression post UI/UX.  
-  À vérifier : navigation connectée, pages principales, mode clair, mode sombre, planning, absence de régression bloquante, validations terminales.  
-  Livrable attendu : rapport de validation finale avec preuves terminales et checklist visuelle manuelle.  
-  DoD : toutes les régressions bloquantes sont corrigées ou classées explicitement.
-
-- **CLOTURE_A27 — AUDIT+CORRECTION+COMPLÉTION+VALIDATION** — Clôture finale du bloc A27.  
-  Livrable attendu : contrôle final de stabilisation post UI/UX, vérification des patchs, preuves, documentation finale et ZIP documentaire.  
-  Verdict attendu :
-  - `BLOC A27 CLÔTURABLE DÉFINITIVEMENT : OUI`
-  - ou
-  - `BLOC A27 CLÔTURABLE DÉFINITIVEMENT : NON`
+Le découpage exact de A27 sera défini uniquement après `CLOTURE_A26`.
 
 #### Résultat attendu
 
-- application stable après A24, A25 et A26 ;
-- aucune régression bloquante post UI/UX ;
-- navigation connectée validée ;
-- pages principales contrôlées ;
-- mode clair et mode sombre validés ;
-- planning contrôlé après réalignements ;
-- documentation finale complète ;
-- base saine avant la suite du développement.
+- absence de régressions prouvées non traitées ;
+- navigation stabilisée ;
+- rendu UI/UX cohérent après A24/A25/A26 ;
+- décision possible sur la suite : tests, stabilisation société pilote ou reprise de blocs fonctionnels.
 
 
 ## 13. BETA V1.x — Plan prévisionnel
