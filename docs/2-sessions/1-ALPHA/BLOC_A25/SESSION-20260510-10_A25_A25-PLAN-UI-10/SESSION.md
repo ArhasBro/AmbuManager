@@ -6,7 +6,7 @@ SESSION-20260510-10_A25_A25-PLAN-UI-10
 
 ## Date
 
-10/05/2026
+13/05/2026
 
 ## Contexte
 
@@ -19,15 +19,22 @@ Intitulé : Finitions visuelles, états, mode sombre et responsive minimal
 
 ## Objectif de la session
 
-INFORMATION NON FOURNIE — À CONFIRMER
+Harmoniser la page Planning après les corrections structure/matrice/panneau : finitions visuelles, états, mode sombre et responsive minimal.
 
 ## Périmètre exact traité
 
-INFORMATION NON FOURNIE — À CONFIRMER
+- Ajustements CSS ciblés sur la page Planning.
+- Harmonisation des couleurs, bordures, contrastes et états visuels.
+- Normalisation clair/sombre sur le scope Planning.
+- Responsive minimal desktop/intermédiaire (matrice + barre d’actions groupées).
 
 ## Résultat synthétique de session
 
-INFORMATION NON FOURNIE — À CONFIRMER
+Patch code applicatif produit et validé techniquement :
+- `npm run lint` : OK.
+- `npm run build` : OK.
+- patch exporté UTF-8 sans BOM.
+- preuve réelle `git apply --check` fournie sur snapshot propre HEAD reconstruit.
 
 ## Dossiers liés
 
