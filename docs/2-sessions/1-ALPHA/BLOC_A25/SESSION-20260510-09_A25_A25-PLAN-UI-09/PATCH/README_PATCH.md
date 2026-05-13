@@ -2,30 +2,27 @@
 
 ## Session liée
 
-SESSION-20260510-09_A25_A25-PLAN-UI-09
+`SESSION-20260510-09_A25_A25-PLAN-UI-09`
 
-## Type
+## Patch de référence final
 
-CORRECTION+COMPLÉTION
+`PATCH__SESSION-20260510-09_A25_A25-PLAN-UI-09_FINAL_VALIDABLE_V2.diff`
 
-## Dossier PATCH
+## Patchs conservés pour historique
 
-`docs/2-sessions/1-ALPHA/BLOC_A25/SESSION-20260510-09_A25_A25-PLAN-UI-09/PATCH`
+- `PATCH__SESSION-20260510-09_A25_A25-PLAN-UI-09.diff`
+- `PATCH__SESSION-20260510-09_A25_A25-PLAN-UI-09_FIX-01.diff`
+- `PATCH__SESSION-20260510-09_A25_A25-PLAN-UI-09_FIX-02.diff`
+- `PATCH__SESSION-20260510-09_A25_A25-PLAN-UI-09_FIX-03.diff`
+- `PATCH__SESSION-20260510-09_A25_A25-PLAN-UI-09_FINAL_VALIDABLE.diff`
 
-## Patch officiel attendu
-
-`PATCH__SESSION-20260510-09_A25_A25-PLAN-UI-09.diff`
-
-## Commandes d’application
+## Commandes d’application (patch de référence)
 
 ```bash
-git apply --check "docs/2-sessions/1-ALPHA/BLOC_A25/SESSION-20260510-09_A25_A25-PLAN-UI-09/PATCH/PATCH__SESSION-20260510-09_A25_A25-PLAN-UI-09.diff"
-git apply "docs/2-sessions/1-ALPHA/BLOC_A25/SESSION-20260510-09_A25_A25-PLAN-UI-09/PATCH/PATCH__SESSION-20260510-09_A25_A25-PLAN-UI-09.diff"
+git apply --check "docs/2-sessions/1-ALPHA/BLOC_A25/SESSION-20260510-09_A25_A25-PLAN-UI-09/PATCH/PATCH__SESSION-20260510-09_A25_A25-PLAN-UI-09_FINAL_VALIDABLE_V2.diff"
+git apply "docs/2-sessions/1-ALPHA/BLOC_A25/SESSION-20260510-09_A25_A25-PLAN-UI-09/PATCH/PATCH__SESSION-20260510-09_A25_A25-PLAN-UI-09_FINAL_VALIDABLE_V2.diff"
 ```
 
-## Statut
+## Encodage
 
-- Dossier patch initialisé.
-- Patch officiel à produire uniquement si du code applicatif est modifié pendant la session.
-- Le patch final devra être UTF-8 sans BOM et commencer directement par `diff --git`.
-- Une preuve réelle `git apply --check` devra être fournie.
+Tous les fichiers documentaires de session ont été réexportés en UTF-8 sans BOM.

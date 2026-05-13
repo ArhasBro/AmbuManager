@@ -516,6 +516,10 @@ function weekendLabelFromIso(iso: string) {
   return null;
 }
 
+function formatPlanningDayLabel(iso: string) {
+  return new Date(iso).toLocaleDateString("fr-FR", { weekday: "short", day: "2-digit", month: "short" });
+}
+
 function shiftHasUser(shift: Shift, userId: string | null | undefined) {
   if (!userId) return false;
   return shift.user?.id === userId || shift.user2?.id === userId;
@@ -837,6 +841,11 @@ export default function PlanningClient({
       shifts: row.shiftsByWeek.get(weekKey) ?? [],
     };
   }, [matrixRows, selectedMatrixCellKey]);
+  const selectedMatrixWeekLabel = useMemo(() => {
+    if (!selectedMatrixCellKey) return null;
+    const [, weekKey] = selectedMatrixCellKey.split("|");
+    return matrixWeeks.find((week) => week.key === weekKey) ?? null;
+  }, [matrixWeeks, selectedMatrixCellKey]);
 
   const selectedShiftIdSet = useMemo(() => new Set(selectedShiftIds), [selectedShiftIds]);
 
@@ -1731,7 +1740,7 @@ export default function PlanningClient({
         setSelectedShiftIds([]);
         setBulkAssignForm(createBulkAssignFormState());
         setBulkAssignMsg(
-          `Affectation multiple enregistree: ${successes.length} shift(s) mis a jour${skipped > 0 ? `, ${skipped} ignore(s)` : ""}.`
+          `Affectation multiple enregistrée: ${successes.length} shift(s) mis à jour${skipped > 0 ? `, ${skipped} ignoré(s)` : ""}.`
         );
         return;
       }
@@ -1741,7 +1750,7 @@ export default function PlanningClient({
         .map((failure) => `${failure.shiftId}: ${failure.message}`)
         .join(" | ");
       setBulkAssignMsg(
-        `Affectation multiple partielle: ${successes.length} succes, ${failures.length} echec(s)${skipped > 0 ? `, ${skipped} ignore(s)` : ""}. ${details}`
+        `Affectation multiple partielle: ${successes.length} succès, ${failures.length} échec(s)${skipped > 0 ? `, ${skipped} ignoré(s)` : ""}. ${details}`
       );
     } finally {
       setBulkAssignLoading(false);
@@ -1922,7 +1931,7 @@ export default function PlanningClient({
             </div>
             <div className="planning-matrix__body">
               {matrixRows.length === 0 && (
-                <div className="planning-matrix__empty">Aucun element a afficher</div>
+                <div className="planning-matrix__empty">Aucun élément à afficher</div>
               )}
               {matrixRows.map((row) => (
                 <div key={row.user.id} className="planning-matrix__row">
@@ -2022,7 +2031,7 @@ export default function PlanningClient({
         </div>
 
         <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-          <span style={{ opacity: 0.8 }}>Visibilite :</span>
+          <span style={{ opacity: 0.8 }}>Visibilité :</span>
           {canViewGlobal && (
             <button
               onClick={() => {
@@ -2071,7 +2080,7 @@ export default function PlanningClient({
               borderRadius: 8,
             }}
           >
-            Binome
+            Binôme
           </button>
 
           {visibilityMode !== "GLOBAL" && (
@@ -2110,7 +2119,7 @@ export default function PlanningClient({
                 resetViewFeedback();
               }}
             >
-              <option value="">Choisir le binome</option>
+              <option value="">Choisir le binôme</option>
               {binomeOptions.map((user) => (
                 <option key={user.id} value={user.id}>
                   {user.name}
@@ -2124,8 +2133,8 @@ export default function PlanningClient({
               ? "Vue globale de la semaine"
               : visibilityMode === "BINOME"
                 ? selectedBinomeUser
-                  ? `Binome actif : ${selectedUser.name} + ${selectedBinomeUser.name}`
-                  : "Selectionnez un binome pour afficher les shifts communs"
+                  ? `Binôme actif : ${selectedUser.name} + ${selectedBinomeUser.name}`
+                  : "Sélectionnez un binôme pour afficher les shifts communs"
                 : `Planning cible : ${selectedUser.name}`}
           </div>
         </div>
@@ -2299,13 +2308,43 @@ export default function PlanningClient({
 
       <div style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 10, opacity: 0.92 }}>
         {visibilityMode === "GLOBAL"
-          ? `Visibilite globale active : ${visibleItems.length} shift(s) visible(s) sur la semaine.`
+          ? `Visibilité globale active : ${visibleItems.length} shift(s) visible(s) sur la semaine.`
           : visibilityMode === "BINOME"
             ? selectedBinomeUser
-              ? `Visibilite binome active : ${selectedUser.name} + ${selectedBinomeUser.name} (${visibleItems.length} shift(s) commun(s)).`
-              : "Visibilite binome active : selectionnez un binome pour afficher les shifts communs."
-            : `Visibilite personnelle active : planning de ${selectedUser.name} (${visibleItems.length} shift(s)).`}
+              ? `Visibilité binôme active : ${selectedUser.name} + ${selectedBinomeUser.name} (${visibleItems.length} shift(s) commun(s)).`
+              : "Visibilité binôme active : sélectionnez un binôme pour afficher les shifts communs."
+            : `Visibilité personnelle active : planning de ${selectedUser.name} (${visibleItems.length} shift(s)).`}
       </div>
+
+      {canEditPlanning && activeTab === "manual" && selectedShiftIds.length > 0 && (
+        <div className="planning-bulk-bar">
+          <div className="planning-bulk-bar__summary">{selectedShiftIds.length} shifts sélectionnés</div>
+          <button className="planning-bulk-bar__action" onClick={() => setActiveTab("affectations")} disabled={bulkAssignLoading}>
+            Affecter employé 1
+          </button>
+          <button className="planning-bulk-bar__action" onClick={() => setActiveTab("affectations")} disabled={bulkAssignLoading}>
+            Affecter employé 2
+          </button>
+          <button className="planning-bulk-bar__action" onClick={() => setActiveTab("affectations")} disabled={bulkAssignLoading}>
+            Affecter véhicule
+          </button>
+          <button className="planning-bulk-bar__action" onClick={() => setActiveTab("affectations")} disabled={bulkAssignLoading}>
+            Affecter base
+          </button>
+          <button
+            className="planning-bulk-bar__action planning-bulk-bar__action--danger"
+            onClick={() => {
+              setSelectedShiftIds([]);
+              setBulkAssignMsg(null);
+            }}
+            disabled={bulkAssignLoading}
+            title="Vider la sélection sans suppression"
+            aria-label="Vider la sélection sans suppression"
+          >
+            Vider
+          </button>
+        </div>
+      )}
 
       {canEditPlanning && activeTab === "affectations" && (
         <div id="planning-affectations-zone" className="planning-affectations-panel" style={{ border: "1px solid var(--ui-border)", borderRadius: 10, padding: 10, display: "grid", gap: 10 }}>
@@ -2378,7 +2417,7 @@ export default function PlanningClient({
           </div>
 
           <div style={{ fontSize: 12, opacity: 0.72 }}>
-            L&apos;affectation lot applique seulement les champs selectionnes. Le slot Employe 2 est ignore sur les shifts mono-agent.
+            L&apos;affectation lot applique seulement les champs sélectionnés. Le slot Employé 2 est ignoré sur les shifts mono-agent.
           </div>
 
           <div className="planning-affectations-panel__actions-grouped" style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
@@ -2738,28 +2777,73 @@ export default function PlanningClient({
         </div>
         <aside className="planning-workspace__side">
           <div className="planning-side-panel">
-            <div className="planning-side-panel__title">Détail de la zone active</div>
-            <div className="planning-side-panel__value">
-              {activeTab === "manual" && "Planning manuel"}
-              {activeTab === "affectations" && "Affectations"}
-              {activeTab === "autoschedule" && "Autoschedule"}
-              {activeTab === "matching" && "Matching"}
-              {activeTab === "history" && "Historique"}
-              {activeTab === "exports" && "Exports"}
-            </div>
-            <div className="planning-side-panel__meta">{title}</div>
-            {activeTab === "manual" && selectedMatrixCell && (
-              <div className="planning-side-panel__meta">
-                <div><strong>{selectedMatrixCell.user.name}</strong></div>
-                <div>{selectedMatrixCell.shifts.length} shift(s) sur la cellule selectionnee</div>
-              </div>
+            <div className="planning-side-panel__title">{activeTab === "manual" ? "Détail de la cellule" : "Détail de la zone active"}</div>
+            {activeTab === "manual" && selectedMatrixCell ? (
+              <>
+                <div className="planning-side-panel__value">{selectedMatrixCell.user.name}</div>
+                <div className="planning-side-panel__meta">
+                  {selectedMatrixWeekLabel ? `${selectedMatrixWeekLabel.label} - ${selectedMatrixWeekLabel.rangeLabel}` : title}
+                </div>
+
+                <div className="planning-side-panel__section">
+                  <div className="planning-side-panel__section-title">Affectations ({selectedMatrixCell.shifts.length})</div>
+                  {selectedMatrixCell.shifts.length === 0 ? (
+                    <div className="planning-side-panel__empty">Aucun élément à afficher</div>
+                  ) : (
+                    <div className="planning-side-panel__assignments">
+                      {selectedMatrixCell.shifts.slice(0, 6).map((shift) => (
+                        <div key={shift.id} className="planning-side-panel__assignment-row">
+                          <span>{formatPlanningDayLabel(shift.startAt)}</span>
+                          <span>{shift.template?.name ?? "Shift"}</span>
+                          <span>{`${timeHM(shift.startAt)} - ${timeHM(shift.endAt)}`}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div className="planning-side-panel__section">
+                  <div className="planning-side-panel__section-title">
+                    Absences <span className="planning-side-panel__count">0</span>
+                  </div>
+                  <div className="planning-side-panel__empty">Aucune absence</div>
+                </div>
+
+                <div className="planning-side-panel__section">
+                  <div className="planning-side-panel__section-title">
+                    Conflits / alertes <span className="planning-side-panel__count">0</span>
+                  </div>
+                  <div className="planning-side-panel__success">Aucun conflit détecté.</div>
+                </div>
+
+                <div className="planning-side-panel__actions">
+                  <button className="planning-action-secondary" onClick={openManualPlanning}>Voir détail</button>
+                  <button className="planning-action-secondary" onClick={openManualPlanning}>Modifier</button>
+                  <button className="planning-action-primary" onClick={openManualPlanning}>+ Ajouter shift</button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="planning-side-panel__value">
+                  {activeTab === "manual" && "Planning manuel"}
+                  {activeTab === "affectations" && "Affectations"}
+                  {activeTab === "autoschedule" && "Autoschedule"}
+                  {activeTab === "matching" && "Matching"}
+                  {activeTab === "history" && "Historique"}
+                  {activeTab === "exports" && "Exports"}
+                </div>
+                <div className="planning-side-panel__meta">{title}</div>
+                <div className="planning-side-panel__meta">
+                  {activeTab === "manual" ? "Sélectionnez une cellule de la matrice pour afficher le détail." : "Informations contextuelles de l'onglet actif."}
+                </div>
+                <div className="planning-side-panel__actions">
+                  <ActionButton size="sm" onClick={openManualPlanning}>Voir détail</ActionButton>
+                  {activeTab === "exports" && canExportPlanning && (
+                    <ActionButton size="sm" onClick={() => triggerPlanningExport("pdf")}>Export PDF</ActionButton>
+                  )}
+                </div>
+              </>
             )}
-            <div className="planning-side-panel__actions">
-              <ActionButton size="sm" onClick={openManualPlanning}>Voir détail</ActionButton>
-              {activeTab === "exports" && canExportPlanning && (
-                <ActionButton size="sm" onClick={() => triggerPlanningExport("pdf")}>Export PDF</ActionButton>
-              )}
-            </div>
           </div>
         </aside>
       </section>

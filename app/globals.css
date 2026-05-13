@@ -1987,6 +1987,62 @@ pre {
   color: #2f5b47;
 }
 
+.planning-side-panel__section {
+  display: grid;
+  gap: 6px;
+}
+
+.planning-side-panel__section-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #184d35;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.planning-side-panel__count {
+  border: 1px solid #d1f0df;
+  border-radius: 999px;
+  padding: 1px 8px;
+  background: #e9f8f0;
+  color: #206f47;
+  font-size: 11px;
+}
+
+.planning-side-panel__assignments {
+  border: 1px solid #d9eadf;
+  border-radius: 8px;
+  padding: 8px;
+  background: #ffffff;
+  display: grid;
+  gap: 6px;
+}
+
+.planning-side-panel__assignment-row {
+  display: grid;
+  grid-template-columns: 84px 1fr auto;
+  gap: 8px;
+  align-items: center;
+  font-size: 12px;
+  color: #2f5b47;
+}
+
+.planning-side-panel__empty {
+  font-size: 12px;
+  color: #2f5b47;
+}
+
+.planning-side-panel__success {
+  border: 1px solid rgba(22, 128, 74, 0.1);
+  border-radius: 6px;
+  background: #eaf8f0;
+  color: #16804a;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 9px 10px;
+}
+
 .planning-side-panel__actions {
   display: grid;
   gap: 8px;
@@ -2047,6 +2103,50 @@ pre {
   background: var(--ui-surface-soft);
   color: var(--ui-text-muted);
   padding: 8px 10px;
+}
+
+.planning-bulk-bar {
+  height: 56px;
+  display: grid;
+  grid-template-columns: 200px repeat(4, 1fr) 96px;
+  background: #ffffff;
+  border: 1px solid #edf1f7;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.planning-bulk-bar__summary,
+.planning-bulk-bar__action {
+  border: 0;
+  border-left: 1px solid #edf1f7;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: #65758e;
+}
+
+.planning-bulk-bar__summary {
+  border-left: 0;
+  justify-content: flex-start;
+  padding-left: 16px;
+  color: #1e2b4a;
+  font-weight: 700;
+}
+
+.planning-bulk-bar__action:hover:not(:disabled) {
+  background: #f8fbff;
+}
+
+.planning-bulk-bar__action--danger {
+  background: #fff1f1;
+  color: #ef4444;
+}
+
+.planning-bulk-bar__action--danger:hover:not(:disabled) {
+  background: #fee8e8;
 }
 
 .planning-action-primary {

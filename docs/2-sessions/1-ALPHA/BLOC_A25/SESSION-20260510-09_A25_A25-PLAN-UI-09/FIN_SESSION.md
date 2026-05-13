@@ -2,12 +2,15 @@
 
 ## Clôture
 
-INFORMATION NON FOURNIE — À CONFIRMER
+Session clôturée côté production code et gouvernance patch.
 
 ## Validation
 
-INFORMATION NON FOURNIE — À CONFIRMER
+Le patch de référence final est :
+`PATCH__SESSION-20260510-09_A25_A25-PLAN-UI-09_FINAL_VALIDABLE_V2.diff`
+
+Les patchs historiques précédents sont conservés pour traçabilité, mais non retenus comme chaîne finale.
 
 ## Verdict final
 
-INFORMATION NON FOURNIE — À CONFIRMER
+PATCH FINAL VALIDABLE V2 SESSION-20260510-09_A25_A25-PLAN-UI-09 PRÊT POUR CONTRÔLE : OUI
