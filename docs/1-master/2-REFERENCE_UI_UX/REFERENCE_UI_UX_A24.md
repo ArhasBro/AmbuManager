@@ -4,6 +4,18 @@ Version : V1.0.0 (MASTER)
 Date : 04/05/2026  
 Bloc concerné : `A24 — Réalignement UI/UX global sur MAQUETTE_DA`
 
+## Avertissement de statut — contexte uniquement
+
+Ce document est conservé dans `docs/1-MASTER/2-REFERENCE_UI_UX/` pour mémoire et contexte A24.
+
+Pour le chantier documentaire transversal UI/UX actuel, il ne prime pas sur :
+- les images officielles dans `docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA/` ;
+- les documents `REFERENCE_UI_UX_<PAGE>.md` ;
+- la règle actuelle : reproduction visuelle à 99 % des maquettes ;
+- la règle actuelle : le fonctionnel ne bloque pas la validation visuelle.
+
+En cas de contradiction, ce document doit être lu comme contexte historique A24 uniquement.
+
 ## Sommaire
 - [1. Rôle du document](#1-rôle-du-document)
 - [2. Source officielle de direction artistique](#2-source-officielle-de-direction-artistique)
@@ -39,7 +51,7 @@ Il doit être utilisé par :
 La direction artistique officielle est exclusivement :
 
 ```txt
-docs/1-master/MAQUETTE/MAQUETTE_DA
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA
 ```
 
 En cas de contradiction entre :
@@ -54,10 +66,10 @@ En cas de contradiction entre :
 la référence prioritaire est toujours :
 
 ```txt
-docs/1-master/MAQUETTE/MAQUETTE_DA
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA
 ```
 
-Les autres fichiers du dossier `docs/1-master/MAQUETTE/` peuvent servir de supports complémentaires, mais ils ne priment pas sur `MAQUETTE_DA`.
+Les autres fichiers du dossier `docs/1-MASTER/1-MAQUETTE/` peuvent servir de supports complémentaires, mais ils ne priment pas sur `MAQUETTE_DA`.
 
 ## 3. Objectif visuel A24
 A24 doit rapprocher l’application réelle de la maquette officielle avec un niveau d’exigence élevé.
@@ -270,7 +282,7 @@ INFORMATION NON FOURNIE — À CONFIRMER
 
 ```txt
 La direction artistique officielle est exclusivement :
-docs/1-master/MAQUETTE/MAQUETTE_DA
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA
 
 Les maquettes ne sont pas une inspiration.
 Elles constituent la cible visuelle officielle.

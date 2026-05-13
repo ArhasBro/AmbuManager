@@ -14,12 +14,12 @@ Statut: OFFICIEL - A CONSERVER
 | `REGISTRE_DECISIONS.md` | Registre des decisions validees | OFFICIEL - A CONSERVER |
 | `RECAP_DISCUSSIONS.md` | Synthese tracee des echanges et arbitrages | OFFICIEL - A CONSERVER |
 | `STRUCTURE_PROJET.md` | Structure documentaire officielle et cible | OFFICIEL - A CONSERVER |
-| `REFERENCE_UI_UX_A24.md` | Regles d'execution UI/UX pour A24 | OFFICIEL - A CONSERVER |
+| `2-REFERENCE_UI_UX/REFERENCE_UI_UX_A24.md` | Contexte historique UI/UX A24 | CONTEXTE - NE PRIME PAS SUR LES RÉFÉRENCES PAGE |
 
 ## 2. Reference UI/UX officielle
 La direction artistique officielle est exclusivement:
 
-`docs/1-master/MAQUETTE/MAQUETTE_DA`
+`docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA`
 
 Regle prioritaire: en cas de contradiction, `MAQUETTE_DA` prime.
 
@@ -34,16 +34,16 @@ Elements autorises directement a la racine:
 - `4-archives/`
 
 ## 4. Fichiers et dossiers a ne pas deplacer
-- `docs/1-master/DOCUMENT_MAITRE.md`
-- `docs/1-master/PLAN_DE_DEVELOPPEMENT.md`
-- `docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
-- `docs/1-master/ETAT_GLOBAL_PROJET.md`
-- `docs/1-master/REGISTRE_DECISIONS.md`
-- `docs/1-master/RECAP_DISCUSSIONS.md`
-- `docs/1-master/STRUCTURE_PROJET.md`
-- `docs/1-master/REFERENCE_UI_UX_A24.md`
-- `docs/1-master/MAQUETTE/`
-- `docs/1-master/MAQUETTE/MAQUETTE_DA/`
+- `docs/1-MASTER/DOCUMENT_MAITRE.md`
+- `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT.md`
+- `docs/1-MASTER/DOCUMENT_CADRAGE_FONCTIONNEL.md`
+- `docs/1-MASTER/ETAT_GLOBAL_PROJET.md`
+- `docs/1-MASTER/REGISTRE_DECISIONS.md`
+- `docs/1-MASTER/RECAP_DISCUSSIONS.md`
+- `docs/1-MASTER/STRUCTURE_PROJET.md`
+- `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_A24.md`
+- `docs/1-MASTER/1-MAQUETTE/`
+- `docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA/`
 - `docs/2-sessions/`
 - `docs/3-templates/`
 

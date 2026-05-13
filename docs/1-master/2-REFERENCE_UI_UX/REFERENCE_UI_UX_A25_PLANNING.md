@@ -3,7 +3,7 @@
 Version : V2.0.0 — RÉÉCRITURE COMPLÈTE MAQUETTE 99 %  
 Date : 10/05/2026  
 Bloc concerné : `A25 — Planning UI/UX & ergonomie métier`  
-Document cible à déposer dans le repo : `docs/1-master/REFERENCE_UI_UX_A25_PLANNING.md`
+Document cible à déposer dans le repo : `docs\1-MASTER\2-REFERENCE_UI_UX`
 
 ---
 
@@ -30,7 +30,7 @@ Objectif principal : permettre à Codex de reconstruire ensuite la page Planning
 Les références officielles du Planning A25 sont les images situées dans :
 
 ```txt
-docs/1-master/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning
 ```
 
 Images principales analysées :

@@ -6,66 +6,81 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   README_DOCS.md
 |   STRUCTURE_DOCS.md
 |   
-+---1-master
++---1-MASTER
 |   |   CADRAGE_UI_UX_ALPHA_MAQUETTE_V0.2.md
 |   |   DOCUMENT_CADRAGE_FONCTIONNEL.md
 |   |   DOCUMENT_MAITRE.md
 |   |   ETAT_GLOBAL_PROJET.md
 |   |   PLAN_DE_DEVELOPPEMENT.md
 |   |   RECAP_DISCUSSIONS.md
-|   |   REFERENCE_UI_UX_A24.md
-|   |   REFERENCE_UI_UX_A25_PLANNING.md
 |   |   REGISTRE_DECISIONS.md
 |   |   RGPD_BASE_MINIMALE.md
 |   |   STRUCTURE_PROJET.md
 |   |   _INDEX_MASTER.md
 |   |   
-|   \---MAQUETTE
-|       |   CADRAGE_UI_UX_ALPHA_MAQUETTE_V0.2.md
-|       |   README_MAQUETTES_A24.md
-|       |   SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md
-|       |   
-|       \---MAQUETTE_DA
-|           +---A21-UX-04_MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0
-|           |   +---1-Templates
-|           |   |       Templates_V1.1.png
-|           |   |       
-|           |   +---2-SociÚtÚ-paramÞtres-mÚtier
-|           |   |       SociÚtÚ_V1.0.png
-|           |   |       
-|           |   +---3-DÚp¶ts-bases
-|           |   |       DÚp¶ts-bases_V1.0.png
-|           |   |       
-|           |   +---4-Onboarding sociÚtÚ pilote
-|           |   |       Onboarding_V1.2.png
-|           |   |       
-|           |   \---5-Audit
-|           |           Audit_V1.0.png
-|           |           
-|           +---MAQUETTES_FONDATRICES_IMAGES_V1.0
-|           |   \---A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0
-|           |       +---1-Dashboard
-|           |       |       Dashboard_V1.png
-|           |       |       
-|           |       +---2-Planning
-|           |       |       Planning_V1.2.png
-|           |       |       Planning_V1.2_INFO_DETAIL.png
-|           |       |       
-|           |       +---3-Utilisateurs-RH
-|           |       |       Utilisateurs-RH_V1.png
-|           |       |       
-|           |       \---4-VÚhicules
-|           |               VÚhicules_V1.2.png
-|           |               
-|           \---PAGES_SIMPLES_FINITIONS_IMAGE_V1.0
-|               \---A21-UX-05_PAGES_SIMPLES_FINITIONS_IMAGE_V1.0
-|                   +---1-Login
-|                   |       Login_V1.1.png
-|                   |       
-|                   \---2-Privacy
-|                           Privacy_V1.0.png
-|                           
-+---2-sessions
+|   +---1-MAQUETTE
+|   |   |   CADRAGE_UI_UX_ALPHA_MAQUETTE_V0.2.md
+|   |   |   README_MAQUETTES_A24.md
+|   |   |   SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md
+|   |   |   
+|   |   \---MAQUETTE_DA
+|   |       +---A21-UX-04_MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0
+|   |       |   +---1-Templates
+|   |       |   |       Templates_V1.1.png
+|   |       |   |       
+|   |       |   +---2-Soci+«t+«-param+┐tres-m+«tier
+|   |       |   |       Soci+«t+«_V1.0.png
+|   |       |   |       
+|   |       |   +---3-D+«p+ªts-bases
+|   |       |   |       D+«p+ªts-bases_V1.0.png
+|   |       |   |       
+|   |       |   +---4-Onboarding soci+«t+« pilote
+|   |       |   |       Onboarding_V1.2.png
+|   |       |   |       
+|   |       |   \---5-Audit
+|   |       |           Audit_V1.0.png
+|   |       |           
+|   |       +---MAQUETTES_FONDATRICES_IMAGES_V1.0
+|   |       |   \---A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0
+|   |       |       +---1-Dashboard
+|   |       |       |       Dashboard_V1.png
+|   |       |       |       
+|   |       |       +---2-Planning
+|   |       |       |       Planning_V1.2.png
+|   |       |       |       Planning_V1.2_INFO_DETAIL.png
+|   |       |       |       
+|   |       |       +---3-Utilisateurs-RH
+|   |       |       |       Utilisateurs-RH_V1.png
+|   |       |       |       
+|   |       |       \---4-V+«hicules
+|   |       |               V+«hicules_V1.2.png
+|   |       |               
+|   |       \---PAGES_SIMPLES_FINITIONS_IMAGE_V1.0
+|   |           \---A21-UX-05_PAGES_SIMPLES_FINITIONS_IMAGE_V1.0
+|   |               +---1-Login
+|   |               |       Login_V1.1.png
+|   |               |       
+|   |               \---2-Privacy
+|   |                       Privacy_V1.0.png
+|   |                       
+|   \---2-REFERENCE_UI_UX
+|           README_PACK_REFERENCE_UI_UX.md
+|           REFERENCE_UI_UX_A24.md
+|           REFERENCE_UI_UX_A25_PLANNING.md
+|           REFERENCE_UI_UX_AUDIT.md
+|           REFERENCE_UI_UX_COMPANY.md
+|           REFERENCE_UI_UX_DASHBOARD.md
+|           REFERENCE_UI_UX_DEPOTS_BASES.md
+|           REFERENCE_UI_UX_INDEX_MAQUETTES.md
+|           REFERENCE_UI_UX_LOGIN.md
+|           REFERENCE_UI_UX_ONBOARDING.md
+|           REFERENCE_UI_UX_PRIVACY.md
+|           REFERENCE_UI_UX_SHELL_GLOBAL.md
+|           REFERENCE_UI_UX_TEMPLATES.md
+|           REFERENCE_UI_UX_USERS_RH.md
+|           REFERENCE_UI_UX_VEHICLES.md
+|           
++---2-SESSIONS
 |   |   README.md
 |   |   
 |   +---1-ALPHA
@@ -2753,13 +2768,13 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |           RESULTATS.md
 |           SESSION.md
 |           
-+---3-templates
++---3-TEMPLATES
 |       TEMPLATE_DEBUT_SESSION.md
 |       TEMPLATE_DOD_4_4.md
 |       TEMPLATE_FIN_SESSION.md
 |       TEMPLATE_RECAP_SESSION.md
 |       
-\---4-archives
+\---4-ARCHIVES
     |   .gitkeep
     |   
     +---a-confirmer
