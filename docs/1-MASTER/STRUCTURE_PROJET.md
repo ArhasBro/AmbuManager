@@ -1,5 +1,5 @@
 ﻿Structure du dossier pour le volume Windows
-Le numÚro de sÚrie du volume est 123E-4DB7
+Le numÚro de sÚrie du volume est 000000AF 123E:4DB7
 C:.
 |   .env
 |   .gitignore
@@ -3981,8 +3981,6 @@ C:.
 |   |   |   README.md
 |   |   |   
 |   |   +---1-ALPHA
-|   |   |   |   BLOC_A26.zip
-|   |   |   |   
 |   |   |   +---1-VALIDE
 |   |   |   |   +---BLOC_A1
 |   |   |   |   |   +---1-AUTH
@@ -6603,6 +6601,8 @@ C:.
 |   |   |   |                   README_PATCH.md
 |   |   |   |                   
 |   |   |   +---BLOC_A26
+|   |   |   |   |   PROMPTS_A26_PRODUCTION_CONTROLE_V1_0.md
+|   |   |   |   |   
 |   |   |   |   +---SESSION-20260513-01_A26_A26-UI-01
 |   |   |   |   |   |   EVIDENCES.md
 |   |   |   |   |   |   FIN_SESSION.md
