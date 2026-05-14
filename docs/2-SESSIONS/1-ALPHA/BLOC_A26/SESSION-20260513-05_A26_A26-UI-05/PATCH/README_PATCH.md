@@ -1,24 +1,27 @@
-﻿# README_PATCH
+# README_PATCH
 
-## Session liee
+## Session liée
 SESSION-20260513-05_A26_A26-UI-05
 
 ## Type
-CORRECTION+COMPLETION
+CORRECTION+COMPLÉTION
 
 ## Dossier PATCH
-docs/2-sessions/1-ALPHA/BLOC_A26/SESSION-20260513-05_A26_A26-UI-05/PATCH
+`docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-05_A26_A26-UI-05/PATCH`
 
-## Patch officiel attendu
-PATCH__SESSION-20260513-05_A26_A26-UI-05.diff
+## Patch officiel
+`PATCH__SESSION-20260513-05_A26_A26-UI-05.diff`
 
 ## Commandes d'application
 
-`ash
-git apply --check "docs/2-sessions/1-ALPHA/BLOC_A26/SESSION-20260513-05_A26_A26-UI-05/PATCH/PATCH__SESSION-20260513-05_A26_A26-UI-05.diff"
-git apply         "docs/2-sessions/1-ALPHA/BLOC_A26/SESSION-20260513-05_A26_A26-UI-05/PATCH/PATCH__SESSION-20260513-05_A26_A26-UI-05.diff"
-`
+```bash
+git apply --check "docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-05_A26_A26-UI-05/PATCH/PATCH__SESSION-20260513-05_A26_A26-UI-05.diff"
+git apply         "docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-05_A26_A26-UI-05/PATCH/PATCH__SESSION-20260513-05_A26_A26-UI-05.diff"
+```
 
 ## Statut
-- Dossier patch initialise.
-- Patch officiel a produire dans cette session si du code est modifie.
+
+- Patch code applicatif produit.
+- Encodage UTF-8 sans BOM vérifié.
+- Début `diff --git` vérifié.
+- `git apply --check` vérifié (code retour 0).

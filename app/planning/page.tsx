@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 
@@ -80,12 +79,6 @@ export default async function PlanningPage() {
 
   return (
     <main className="page-wrap">
-      {canReadAudit ? (
-        <Link className="page-back" href="/audit">
-          Ouvrir l&apos;audit dedie
-        </Link>
-      ) : null}
-
       <PlanningClient
         availableDepots={depots}
         availableUsers={accessibleUsers}

@@ -59,7 +59,6 @@ C:.
 |   +---dev
 |   |   |   build-manifest.json
 |   |   |   fallback-build-manifest.json
-|   |   |   lock
 |   |   |   package.json
 |   |   |   prerender-manifest.json
 |   |   |   routes-manifest.json
@@ -3382,6 +3381,220 @@ C:.
 |   |   |               00004024.meta
 |   |   |               00004025.meta
 |   |   |               00004026.meta
+|   |   |               00004027.sst
+|   |   |               00004028.sst
+|   |   |               00004029.sst
+|   |   |               00004030.meta
+|   |   |               00004031.meta
+|   |   |               00004032.meta
+|   |   |               00004033.sst
+|   |   |               00004034.sst
+|   |   |               00004035.sst
+|   |   |               00004036.meta
+|   |   |               00004037.meta
+|   |   |               00004038.meta
+|   |   |               00004039.sst
+|   |   |               00004040.sst
+|   |   |               00004041.sst
+|   |   |               00004042.sst
+|   |   |               00004043.sst
+|   |   |               00004044.meta
+|   |   |               00004045.meta
+|   |   |               00004046.meta
+|   |   |               00004047.meta
+|   |   |               00004048.meta
+|   |   |               00004049.sst
+|   |   |               00004050.sst
+|   |   |               00004051.sst
+|   |   |               00004052.meta
+|   |   |               00004053.meta
+|   |   |               00004054.meta
+|   |   |               00004055.sst
+|   |   |               00004056.sst
+|   |   |               00004057.sst
+|   |   |               00004058.meta
+|   |   |               00004059.meta
+|   |   |               00004060.meta
+|   |   |               00004061.sst
+|   |   |               00004062.sst
+|   |   |               00004063.sst
+|   |   |               00004064.meta
+|   |   |               00004065.meta
+|   |   |               00004066.meta
+|   |   |               00004067.sst
+|   |   |               00004068.sst
+|   |   |               00004069.meta
+|   |   |               00004070.meta
+|   |   |               00004071.sst
+|   |   |               00004072.sst
+|   |   |               00004073.sst
+|   |   |               00004074.meta
+|   |   |               00004075.meta
+|   |   |               00004076.meta
+|   |   |               00004077.sst
+|   |   |               00004078.sst
+|   |   |               00004079.sst
+|   |   |               00004080.meta
+|   |   |               00004081.meta
+|   |   |               00004082.meta
+|   |   |               00004083.sst
+|   |   |               00004084.sst
+|   |   |               00004085.sst
+|   |   |               00004086.meta
+|   |   |               00004087.meta
+|   |   |               00004088.meta
+|   |   |               00004089.sst
+|   |   |               00004090.sst
+|   |   |               00004091.sst
+|   |   |               00004092.meta
+|   |   |               00004093.meta
+|   |   |               00004094.meta
+|   |   |               00004095.sst
+|   |   |               00004096.sst
+|   |   |               00004097.sst
+|   |   |               00004098.meta
+|   |   |               00004099.meta
+|   |   |               00004100.meta
+|   |   |               00004101.sst
+|   |   |               00004102.sst
+|   |   |               00004103.sst
+|   |   |               00004104.meta
+|   |   |               00004105.meta
+|   |   |               00004106.meta
+|   |   |               00004107.sst
+|   |   |               00004108.sst
+|   |   |               00004109.sst
+|   |   |               00004110.meta
+|   |   |               00004111.meta
+|   |   |               00004112.meta
+|   |   |               00004113.sst
+|   |   |               00004114.sst
+|   |   |               00004115.sst
+|   |   |               00004116.meta
+|   |   |               00004117.meta
+|   |   |               00004118.meta
+|   |   |               00004119.sst
+|   |   |               00004120.sst
+|   |   |               00004121.sst
+|   |   |               00004122.meta
+|   |   |               00004123.meta
+|   |   |               00004124.meta
+|   |   |               00004125.sst
+|   |   |               00004126.sst
+|   |   |               00004127.sst
+|   |   |               00004128.meta
+|   |   |               00004129.meta
+|   |   |               00004130.meta
+|   |   |               00004131.sst
+|   |   |               00004132.sst
+|   |   |               00004133.sst
+|   |   |               00004134.meta
+|   |   |               00004135.meta
+|   |   |               00004136.meta
+|   |   |               00004137.sst
+|   |   |               00004138.sst
+|   |   |               00004139.sst
+|   |   |               00004140.meta
+|   |   |               00004141.meta
+|   |   |               00004142.meta
+|   |   |               00004143.sst
+|   |   |               00004144.sst
+|   |   |               00004145.sst
+|   |   |               00004146.sst
+|   |   |               00004147.sst
+|   |   |               00004148.meta
+|   |   |               00004149.meta
+|   |   |               00004150.meta
+|   |   |               00004151.meta
+|   |   |               00004152.meta
+|   |   |               00004153.sst
+|   |   |               00004154.sst
+|   |   |               00004155.sst
+|   |   |               00004156.meta
+|   |   |               00004157.meta
+|   |   |               00004158.meta
+|   |   |               00004159.sst
+|   |   |               00004160.sst
+|   |   |               00004161.sst
+|   |   |               00004162.meta
+|   |   |               00004163.meta
+|   |   |               00004164.meta
+|   |   |               00004165.sst
+|   |   |               00004166.sst
+|   |   |               00004167.sst
+|   |   |               00004168.sst
+|   |   |               00004169.sst
+|   |   |               00004170.meta
+|   |   |               00004171.meta
+|   |   |               00004172.meta
+|   |   |               00004173.meta
+|   |   |               00004174.meta
+|   |   |               00004175.sst
+|   |   |               00004176.sst
+|   |   |               00004177.sst
+|   |   |               00004178.meta
+|   |   |               00004179.meta
+|   |   |               00004180.meta
+|   |   |               00004181.sst
+|   |   |               00004182.sst
+|   |   |               00004183.sst
+|   |   |               00004184.meta
+|   |   |               00004185.meta
+|   |   |               00004186.meta
+|   |   |               00004187.sst
+|   |   |               00004188.sst
+|   |   |               00004189.sst
+|   |   |               00004190.meta
+|   |   |               00004191.meta
+|   |   |               00004192.meta
+|   |   |               00004193.sst
+|   |   |               00004194.sst
+|   |   |               00004195.sst
+|   |   |               00004196.meta
+|   |   |               00004197.meta
+|   |   |               00004198.meta
+|   |   |               00004199.sst
+|   |   |               00004200.sst
+|   |   |               00004201.sst
+|   |   |               00004202.meta
+|   |   |               00004203.meta
+|   |   |               00004204.meta
+|   |   |               00004205.sst
+|   |   |               00004206.sst
+|   |   |               00004207.sst
+|   |   |               00004208.meta
+|   |   |               00004209.meta
+|   |   |               00004210.meta
+|   |   |               00004211.sst
+|   |   |               00004212.sst
+|   |   |               00004213.sst
+|   |   |               00004214.meta
+|   |   |               00004215.meta
+|   |   |               00004216.meta
+|   |   |               00004217.sst
+|   |   |               00004218.sst
+|   |   |               00004219.sst
+|   |   |               00004220.meta
+|   |   |               00004221.meta
+|   |   |               00004222.meta
+|   |   |               00004223.sst
+|   |   |               00004224.sst
+|   |   |               00004225.sst
+|   |   |               00004226.meta
+|   |   |               00004227.meta
+|   |   |               00004228.meta
+|   |   |               00004229.sst
+|   |   |               00004230.sst
+|   |   |               00004231.sst
+|   |   |               00004232.meta
+|   |   |               00004233.meta
+|   |   |               00004234.meta
+|   |   |               00004235.sst
+|   |   |               00004236.sst
+|   |   |               00004237.sst
+|   |   |               00004238.meta
+|   |   |               00004239.meta
+|   |   |               00004240.meta
 |   |   |               CURRENT
 |   |   |               LOG
 |   |   |               
@@ -4033,6 +4246,8 @@ C:.
 |   |   |   |           node_modules_next_dist_194d0734._.js.map
 |   |   |   |           node_modules_next_dist_3e1f69b5._.js
 |   |   |   |           node_modules_next_dist_3e1f69b5._.js.map
+|   |   |   |           node_modules_next_dist_5180f152._.js
+|   |   |   |           node_modules_next_dist_5180f152._.js.map
 |   |   |   |           node_modules_next_dist_6c3f6d39._.js
 |   |   |   |           node_modules_next_dist_6c3f6d39._.js.map
 |   |   |   |           node_modules_next_dist_aaa37639._.js
@@ -5435,6 +5650,10 @@ C:.
 |   |   |           [root-of-the-server]__40d730e6._.js.map
 |   |   |           [root-of-the-server]__4fec2201._.js
 |   |   |           [root-of-the-server]__4fec2201._.js.map
+|   |   |           [root-of-the-server]__6d858a74._.js
+|   |   |           [root-of-the-server]__6d858a74._.js.map
+|   |   |           [root-of-the-server]__8ca69655._.js
+|   |   |           [root-of-the-server]__8ca69655._.js.map
 |   |   |           [root-of-the-server]__9029055b._.js
 |   |   |           [root-of-the-server]__9029055b._.js.map
 |   |   |           [root-of-the-server]__99048386._.js
@@ -5449,18 +5668,14 @@ C:.
 |   |   |           [root-of-the-server]__b9356576._.js.map
 |   |   |           [root-of-the-server]__c28e3622._.js
 |   |   |           [root-of-the-server]__c28e3622._.js.map
-|   |   |           [root-of-the-server]__c5a176a7._.js
-|   |   |           [root-of-the-server]__c5a176a7._.js.map
-|   |   |           [root-of-the-server]__cfa04c8b._.js
-|   |   |           [root-of-the-server]__cfa04c8b._.js.map
+|   |   |           [root-of-the-server]__d501cffb._.js
+|   |   |           [root-of-the-server]__d501cffb._.js.map
 |   |   |           [root-of-the-server]__e0a07927._.js
 |   |   |           [root-of-the-server]__e0a07927._.js.map
 |   |   |           [root-of-the-server]__e1b2e646._.js
 |   |   |           [root-of-the-server]__e1b2e646._.js.map
 |   |   |           [root-of-the-server]__e41b7eed._.js
 |   |   |           [root-of-the-server]__e41b7eed._.js.map
-|   |   |           [root-of-the-server]__e526cac7._.js
-|   |   |           [root-of-the-server]__e526cac7._.js.map
 |   |   |           [root-of-the-server]__eacfea71._.js
 |   |   |           [root-of-the-server]__eacfea71._.js.map
 |   |   |           [turbopack]_runtime.js
@@ -5543,7 +5758,7 @@ C:.
 |   |           500.html
 |   |           
 |   +---static
-|   |   +---4tkaYRW8yWiyNjfjpIG05
+|   |   +---3ZmuIiVT9u5yIzZTUcTHm
 |   |   |       _buildManifest.js
 |   |   |       _clientMiddlewareManifest.json
 |   |   |       _ssgManifest.js
@@ -5556,15 +5771,15 @@ C:.
 |   |   |       4fee5e0abb56af75.js
 |   |   |       50c436168b2df0a8.js
 |   |   |       52b032db1c1b6cf3.js
-|   |   |       57c0692476490b5b.css
 |   |   |       82abf2d65f5428ae.js
 |   |   |       83f9fc48596bcd6d.css
 |   |   |       899b7782e7cb92a1.js
+|   |   |       a5b8b793524a30f4.js
 |   |   |       a6dad97d9634a72d.js
 |   |   |       a6dad97d9634a72d.js.map
+|   |   |       a87845044f269db7.css
 |   |   |       af7027598a07baa5.js
 |   |   |       d44e9e8e8615ccb6.js
-|   |   |       d64bc78f9fbc7d35.js
 |   |   |       d8ca517394c78d85.js
 |   |   |       e7572613fd3d5a7b.js
 |   |   |       ed2a7d8b4ad52ac2.js
@@ -8535,13 +8750,16 @@ C:.
 |   |   |   |   |           README_PATCH.md
 |   |   |   |   |           
 |   |   |   |   +---SESSION-20260513-05_A26_A26-UI-05
+|   |   |   |   |   |   BUILD_OUTPUT.txt
 |   |   |   |   |   |   EVIDENCES.md
 |   |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   |   LINT_OUTPUT.txt
 |   |   |   |   |   |   NOTES.md
 |   |   |   |   |   |   RESULTATS.md
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
+|   |   |   |   |           PATCH__SESSION-20260513-05_A26_A26-UI-05.diff
 |   |   |   |   |           README_PATCH.md
 |   |   |   |   |           
 |   |   |   |   +---SESSION-20260513-06_A26_A26-UI-06
@@ -48610,6 +48828,10 @@ C:.
 |               index.mjs
 |               index.mjs.map
 |               
++---PATCH
+|       FIX-01__SESSION-20260513-05_A26_A26-UI-05.diff
+|       PATCH__SESSION-20260513-05_A26_A26-UI-05.diff
+|       
 +---prisma
 |   |   schema.prisma
 |   |   seed.ts

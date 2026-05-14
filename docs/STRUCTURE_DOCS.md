@@ -2763,13 +2763,16 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |           README_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260513-05_A26_A26-UI-05
+|   |   |   |   |   BUILD_OUTPUT.txt
 |   |   |   |   |   EVIDENCES.md
 |   |   |   |   |   FIN_SESSION.md
+|   |   |   |   |   LINT_OUTPUT.txt
 |   |   |   |   |   NOTES.md
 |   |   |   |   |   RESULTATS.md
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
+|   |   |   |           PATCH__SESSION-20260513-05_A26_A26-UI-05.diff
 |   |   |   |           README_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260513-06_A26_A26-UI-06

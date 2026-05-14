@@ -1829,7 +1829,7 @@ export default function PlanningClient({
   );
 
   return (
-    <section className="planning-page" style={{ display: "grid", gap: 12 }}>
+    <section className="planning-page">
       <section className="planning-structure">
         <div className="planning-structure__header">
           <div className="planning-structure__header-body">
@@ -1868,6 +1868,17 @@ export default function PlanningClient({
 
             <div className="planning-toolbar__group planning-toolbar__group--view">
               <div className="planning-view-toggle" role="group" aria-label="Bascule de vue planning">
+                <button
+                  className={`planning-view-toggle__option${visibilityMode === "PERSONAL" ? " is-active" : ""}`}
+                  onClick={() => {
+                    setVisibilityMode("PERSONAL");
+                    setSelectedShiftIds([]);
+                    setBulkAssignMsg(null);
+                    resetViewFeedback();
+                  }}
+                >
+                  Personnel
+                </button>
                 {canViewGlobal && (
                   <button
                     className={`planning-view-toggle__option${visibilityMode === "GLOBAL" ? " is-active" : ""}`}
@@ -1881,26 +1892,15 @@ export default function PlanningClient({
                     Vue dépôt
                   </button>
                 )}
-                <button
-                  className={`planning-view-toggle__option${visibilityMode === "PERSONAL" ? " is-active" : ""}`}
-                  onClick={() => {
-                    setVisibilityMode("PERSONAL");
-                    setSelectedShiftIds([]);
-                    setBulkAssignMsg(null);
-                    resetViewFeedback();
-                  }}
-                >
-                  Personnel
-                </button>
               </div>
             </div>
 
             <div className="planning-toolbar__group planning-toolbar__group--actions">
               {canExportPlanning ? (
                 <>
-                  <ActionButton size="sm" onClick={() => triggerPlanningExport("pdf")}>PDF</ActionButton>
-                  <ActionButton size="sm" onClick={() => triggerPlanningExport("xlsx")}>Excel</ActionButton>
-                  <ActionButton size="sm" onClick={() => triggerPlanningExport("csv")}>CSV</ActionButton>
+                  <ActionButton size="sm" onClick={() => triggerPlanningExport("pdf")}>Export PDF</ActionButton>
+                  <ActionButton size="sm" onClick={() => triggerPlanningExport("xlsx")}>Export Excel</ActionButton>
+                  <ActionButton size="sm" onClick={() => triggerPlanningExport("csv")}>Export CSV</ActionButton>
                 </>
               ) : (
                 <StatusBadge variant="neutral">Non autorise</StatusBadge>
@@ -2385,23 +2385,16 @@ export default function PlanningClient({
       {error && <ErrorMessage title="Erreur planning" message={error} />}
 
       {!loading && !error && activeTab === "manual" && (
-        <div className="planning-legacy__week-grid" style={{ display: "grid", gridTemplateColumns: "repeat(7, minmax(160px, 1fr))", gap: 10 }}>
+        <details className="planning-manual-advanced">
+          <summary>Vue legacy (avancée)</summary>
+          <div className="planning-legacy__week-grid">
           {weekDays.map((d) => {
             const key = formatDate(d);
             const dayShifts = grouped[key] ?? [];
             const isDayGenerating = dayGenLoadingKey === key;
 
             return (
-              <div
-                className="planning-legacy__day-card"
-                key={key}
-                style={{
-                  border: "1px solid var(--ui-border)",
-                  borderRadius: 10,
-                  padding: 10,
-                  minHeight: 220,
-                }}
-              >
+              <div className="planning-legacy__day-card" key={key}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
                   <div style={{ fontWeight: 800, textTransform: "capitalize" }}>{dayLabelFR(d)}</div>
 
@@ -2491,7 +2484,8 @@ export default function PlanningClient({
               </div>
             );
           })}
-        </div>
+          </div>
+        </details>
       )}
         </div>
         <aside className="planning-workspace__side">

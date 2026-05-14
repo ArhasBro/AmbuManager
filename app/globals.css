@@ -2616,7 +2616,11 @@ pre {
 }
 
 .planning-legacy__day-card {
-  background: var(--ui-surface);
+  border: 1px solid var(--planning-border);
+  border-radius: 10px;
+  padding: 10px;
+  min-height: 220px;
+  background: var(--planning-surface);
 }
 
 .planning-affectations-panel {
@@ -2941,6 +2945,10 @@ pre {
   cursor: pointer;
   color: var(--ui-text-muted);
   font-weight: 600;
+}
+
+.planning-manual-advanced[open] > summary {
+  margin-bottom: 10px;
 }
 
 .planning-manual-advanced .planning-manual {
