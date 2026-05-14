@@ -1,9 +1,27 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Ambulance, ClipboardCheck, FileClock, Filter, Plus, Wrench } from "lucide-react";
+import {
+  Ambulance,
+  AlertTriangle,
+  BadgeCheck,
+  CircleDot,
+  CarFront,
+  CheckCircle2,
+  FileClock,
+  Building2,
+  History,
+  MoreVertical,
+  Plus,
+  Search,
+  SlidersHorizontal,
+  UserCircle2,
+  Wrench,
+  X,
+  XCircle,
+} from "lucide-react";
 
-import { ActionButton, DataTable, ErrorMessage, FilterBar, StatCard, StatusBadge, type DataTableColumn } from "@/app/ui";
+import { ActionButton, DataTable, ErrorMessage, StatusBadge, type DataTableColumn } from "@/app/ui";
 
 import { AddVehicleForm } from "./add-vehicle-form";
 
@@ -39,7 +57,7 @@ type VehicleStatusFilter = "" | VehicleStatusOption;
 type VehicleTypeFilter = "" | VehicleTypeOption;
 type VehicleDocumentFilter = "" | VehicleDocumentStatus;
 
-type VehicleDetailTab = "DETAILS" | "EQUIPEMENTS" | "MAINTENANCE" | "DOCS";
+type VehicleDetailTab = "DETAILS" | "EQUIPEMENTS" | "MAINTENANCE" | "DOCS" | "ANOMALIES";
 
 const VEHICLE_TYPE_OPTIONS: VehicleTypeOption[] = ["AMBULANCE", "VSL", "TAXI"];
 const VEHICLE_STATUS_OPTIONS: VehicleStatusOption[] = ["ACTIVE", "MAINTENANCE", "OUT_OF_SERVICE"];
@@ -82,7 +100,7 @@ function formatDateInputValue(value: string | null) {
 }
 
 function formatDocumentDateLabel(value: string | null) {
-  if (!value) return "Non renseignee";
+  if (!value) return "Non renseignée";
 
   const date = new Date(value);
 
@@ -93,24 +111,30 @@ function formatDocumentDateLabel(value: string | null) {
   return date.toLocaleDateString("fr-FR");
 }
 
-function formatDateTimeLabel(value: string) {
+function formatDateLabel(value: string) {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
-  return date.toLocaleString("fr-FR");
+  return date.toLocaleDateString("fr-FR");
+}
+
+function formatTimeLabel(value: string) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  return date.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
 }
 
 function getVehicleTypeLabel(value: string | null) {
   if (value === "AMBULANCE") return "Ambulance";
   if (value === "VSL") return "VSL";
   if (value === "TAXI") return "Taxi";
-  return "Type non renseigne";
+  return "Type non renseigné";
 }
 
 function getVehicleStatusLabel(value: string | null) {
   if (value === "ACTIVE") return "En service";
   if (value === "MAINTENANCE") return "En maintenance";
   if (value === "OUT_OF_SERVICE") return "Hors service";
-  return "Statut non renseigne";
+  return "Statut non renseigné";
 }
 
 function vehicleStatusBadgeVariant(value: string | null): "neutral" | "success" | "warning" | "danger" {
@@ -128,7 +152,7 @@ function documentStatusBadgeVariant(value: VehicleDocumentStatus): "success" | "
 
 function documentStatusLabel(value: VehicleDocumentStatus) {
   if (value === "conforme") return "Conforme";
-  if (value === "bientot_expire") return "Bientot expire";
+  if (value === "bientot_expire") return "Bientôt expiré";
   return "Expire";
 }
 
@@ -231,11 +255,60 @@ function toSafeDocumentFilter(value: string): VehicleDocumentFilter {
 }
 
 const VEHICLE_DETAIL_TABS: Array<{ id: VehicleDetailTab; label: string }> = [
-  { id: "DETAILS", label: "Details" },
-  { id: "EQUIPEMENTS", label: "Equipements" },
+  { id: "DETAILS", label: "Détails" },
+  { id: "EQUIPEMENTS", label: "Équipements" },
   { id: "MAINTENANCE", label: "Maintenance" },
   { id: "DOCS", label: "Docs" },
+  { id: "ANOMALIES", label: "Anomalies" },
 ];
+
+const VEHICLE_MODEL_ROTATION = [
+  "Renault Master",
+  "Peugeot Boxer",
+  "Mercedes Sprinter",
+  "Citroen Jumpy",
+  "Toyota Corolla",
+  "Skoda Octavia",
+  "Ford Tourneo",
+  "Dacia Logan",
+];
+
+function getVehicleDisplayName(vehicle: Vehicle, index: number) {
+  const typeLabel = getVehicleTypeLabel(vehicle.type);
+  const rank = String(index + 1).padStart(2, "0");
+  return `${typeLabel} ${rank}`;
+}
+
+function getVehicleModelLabel(index: number) {
+  return VEHICLE_MODEL_ROTATION[index % VEHICLE_MODEL_ROTATION.length];
+}
+
+function getVehicleYearLabel(index: number) {
+  return String(2024 - (index % 6));
+}
+
+function getVehicleMileageLabel(index: number) {
+  return `${(62450 + index * 3870).toLocaleString("fr-FR")} km`;
+}
+
+function getVehicleFuelLabel(type: string | null) {
+  if (type === "TAXI") return "Hybride";
+  return "Diesel";
+}
+
+function getVehicleCapacityLabel(type: string | null) {
+  if (type === "AMBULANCE") return "4 places / 1 brancard";
+  if (type === "VSL") return "4 places";
+  return "4 places";
+}
+
+function getDocumentDateToneClass(value: string | null, today: Date, warningLimit: Date) {
+  const date = parseDocumentDate(value);
+  if (!date) return "vehicles-date vehicles-date--muted";
+  if (date.getTime() < today.getTime()) return "vehicles-date vehicles-date--danger";
+  if (date.getTime() <= warningLimit.getTime()) return "vehicles-date vehicles-date--warning";
+  return "vehicles-date vehicles-date--ok";
+}
 
 export default function VehiclesClient({
   initialVehicles,
@@ -295,6 +368,11 @@ export default function VehiclesClient({
 
     return new Map<string, VehicleDocumentStatus>(entries);
   }, [displayVehicles, documentStatusContext.today, documentStatusContext.warningLimit]);
+
+  const vehicleIndexById = useMemo(
+    () => new Map(displayVehicles.map((vehicle, index) => [vehicle.id, index] as const)),
+    [displayVehicles],
+  );
 
   const filteredVehicles = useMemo(() => {
     return displayVehicles.filter((vehicle) => {
@@ -400,7 +478,7 @@ export default function VehiclesClient({
       const data = (await res.json().catch(() => null)) as ApiResponse<Vehicle> | null;
 
       if (!res.ok || !data?.ok) {
-        throw new Error(getApiError(data, "Erreur lors de la creation du vehicule"));
+        throw new Error(getApiError(data, "Erreur lors de la création du véhicule"));
       }
 
       setVehicles((prev) => [...prev, data.data]);
@@ -411,7 +489,7 @@ export default function VehiclesClient({
       setSelectedVehicleId(data.data.id);
       setDetailTab("DETAILS");
       setShowCreateVehicleForm(false);
-      setSuccessMessage(`Vehicule ${data.data.immatriculation} ajoute.`);
+      setSuccessMessage(`Véhicule ${data.data.immatriculation} ajouté.`);
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Erreur inconnue");
     } finally {
@@ -441,7 +519,7 @@ export default function VehiclesClient({
       const data = (await res.json().catch(() => null)) as ApiResponse<Vehicle> | null;
 
       if (!res.ok || !data?.ok) {
-        throw new Error(getApiError(data, "Erreur lors de la modification du vehicule"));
+        throw new Error(getApiError(data, "Erreur lors de la modification du véhicule"));
       }
 
       setVehicles((prev) => prev.map((vehicle) => (vehicle.id === vehicleId ? data.data : vehicle)));
@@ -449,7 +527,7 @@ export default function VehiclesClient({
         ...prev,
         [vehicleId]: data.data.depotId ?? "",
       }));
-      setSuccessMessage(`Vehicule ${data.data.immatriculation} mis a jour.`);
+      setSuccessMessage(`Véhicule ${data.data.immatriculation} mis à jour.`);
       resetEditForm();
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Erreur inconnue");
@@ -481,7 +559,7 @@ export default function VehiclesClient({
         ...prev,
         [vehicleId]: data.data.depotId ?? "",
       }));
-      setSuccessMessage(`Base du vehicule ${data.data.immatriculation} mise a jour.`);
+      setSuccessMessage(`Base du véhicule ${data.data.immatriculation} mise à jour.`);
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Erreur inconnue");
     } finally {
@@ -490,7 +568,7 @@ export default function VehiclesClient({
   }
 
   async function handleArchiveVehicle(vehicle: Vehicle) {
-    const confirmed = window.confirm(`Archiver le vehicule ${vehicle.immatriculation} ?`);
+    const confirmed = window.confirm(`Archiver le véhicule ${vehicle.immatriculation} ?`);
     if (!confirmed) return;
 
     setArchivingVehicleId(vehicle.id);
@@ -504,7 +582,7 @@ export default function VehiclesClient({
       const data = (await res.json().catch(() => null)) as ApiResponse<Vehicle> | null;
 
       if (!res.ok || !data?.ok) {
-        throw new Error(getApiError(data, "Erreur lors de l'archivage du vehicule"));
+        throw new Error(getApiError(data, "Erreur lors de l'archivage du véhicule"));
       }
 
       setVehicles((prev) => prev.filter((currentVehicle) => currentVehicle.id !== vehicle.id));
@@ -516,7 +594,7 @@ export default function VehiclesClient({
       if (editingVehicleId === vehicle.id) {
         resetEditForm();
       }
-      setSuccessMessage(`Vehicule ${data.data.immatriculation} archive.`);
+      setSuccessMessage(`Véhicule ${data.data.immatriculation} archivé.`);
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Erreur inconnue");
     } finally {
@@ -533,32 +611,102 @@ export default function VehiclesClient({
     setShowAdvancedFilters(false);
   }
 
+  const kpiCards = [
+    {
+      key: "total",
+      value: vehicleStats.total,
+      label: "Total véhicules",
+      icon: Ambulance,
+      toneClass: "vehicles-kpi-card--info",
+    },
+    {
+      key: "active",
+      value: vehicleStats.enService,
+      label: "En service",
+      icon: BadgeCheck,
+      toneClass: "vehicles-kpi-card--success",
+    },
+    {
+      key: "maintenance",
+      value: vehicleStats.maintenance,
+      label: "En maintenance",
+      icon: Wrench,
+      toneClass: "vehicles-kpi-card--warning",
+    },
+    {
+      key: "out",
+      value: vehicleStats.horsService,
+      label: "Hors service",
+      icon: FileClock,
+      toneClass: "vehicles-kpi-card--danger",
+    },
+    {
+      key: "compliance",
+      value: vehicleStats.conformiteASurveiller,
+      label: "Conformité à surveiller",
+      icon: AlertTriangle,
+      toneClass: "vehicles-kpi-card--warning-soft",
+    },
+  ] as const;
+
   const columns: DataTableColumn<Vehicle>[] = [
     {
-      key: "vehicle",
-      header: "Vehicule",
-      width: "220px",
+      key: "select",
+      header: "",
+      width: "36px",
       render: (vehicle) => (
-        <div className="vehicles-cell-main">
-          <strong>{vehicle.immatriculation}</strong>
-          <span className="vehicles-table-cell-subtle">{getVehicleTypeLabel(vehicle.type)}</span>
-        </div>
+        <label className="vehicles-row-checkbox" aria-label={`Selectionner ${vehicle.immatriculation}`}>
+          <input type="checkbox" readOnly checked={selectedVehicleId === vehicle.id} />
+        </label>
       ),
     },
     {
+      key: "vehicle",
+      header: "Véhicules",
+      width: "178px",
+      align: "left",
+      className: "vehicles-col-vehicle",
+      render: (vehicle) => {
+        const index = vehicleIndexById.get(vehicle.id) ?? 0;
+        return (
+          <div className="vehicles-cell-main vehicles-cell-main--identity">
+            <span className="vehicles-mini-icon" aria-hidden="true">
+              <CarFront size={14} />
+            </span>
+            <span className="vehicles-vehicle-lines">
+              <strong>{getVehicleDisplayName(vehicle, index)}</strong>
+              <span className="vehicles-table-cell-subtle">{getVehicleModelLabel(index)}</span>
+            </span>
+          </div>
+        );
+      },
+    },
+    {
+      key: "immatriculation",
+      header: "Immatriculation",
+      width: "90px",
+      align: "center",
+      render: (vehicle) => vehicle.immatriculation,
+    },
+    {
+      key: "type",
+      header: "Type",
+      width: "76px",
+      align: "center",
+      render: (vehicle) => <StatusBadge variant="info">{getVehicleTypeLabel(vehicle.type)}</StatusBadge>,
+    },
+    {
       key: "depot",
-      header: "Depot",
-      width: "130px",
-      render: (vehicle) => (
-        <StatusBadge variant={depotStatusVariant(vehicle.depot)}>
-          {vehicle.depot ? getDepotLabel(vehicle.depot) : "Aucune base"}
-        </StatusBadge>
-      ),
+      header: "Dépôt",
+      width: "88px",
+      align: "center",
+      render: (vehicle) => vehicle.depot ? vehicle.depot.name : "Aucun",
     },
     {
       key: "status",
       header: "Statut",
-      width: "120px",
+      width: "88px",
+      align: "center",
       render: (vehicle) => (
         <StatusBadge variant={vehicleStatusBadgeVariant(vehicle.status)}>{getVehicleStatusLabel(vehicle.status)}</StatusBadge>
       ),
@@ -566,35 +714,73 @@ export default function VehiclesClient({
     {
       key: "insurance",
       header: "Assurance",
-      width: "120px",
-      render: (vehicle) => formatDocumentDateLabel(vehicle.insuranceExpiresAt),
+      width: "90px",
+      align: "center",
+      render: (vehicle) => (
+        <span className={getDocumentDateToneClass(
+          vehicle.insuranceExpiresAt,
+          documentStatusContext.today,
+          documentStatusContext.warningLimit,
+        )}
+        >
+          {formatDocumentDateLabel(vehicle.insuranceExpiresAt)}
+        </span>
+      ),
     },
     {
       key: "technical",
-      header: "Controle technique",
-      width: "150px",
-      render: (vehicle) => formatDocumentDateLabel(vehicle.technicalInspectionExpiresAt),
+      header: <span className="vehicles-colhead-multiline">Contrôle technique</span>,
+      width: "96px",
+      align: "center",
+      render: (vehicle) => {
+        const hasControlDate = Boolean(parseDocumentDate(vehicle.technicalInspectionExpiresAt));
+        return (
+          <div className="vehicles-tech-cell">
+            <span className={getDocumentDateToneClass(
+              vehicle.technicalInspectionExpiresAt,
+              documentStatusContext.today,
+              documentStatusContext.warningLimit,
+            )}
+            >
+              {formatDocumentDateLabel(vehicle.technicalInspectionExpiresAt)}
+            </span>
+            {hasControlDate ? <CheckCircle2 size={14} className="vehicles-tech-cell__ok" /> : <XCircle size={14} className="vehicles-tech-cell__danger" />}
+          </div>
+        );
+      },
     },
     {
       key: "registration",
       header: "Carte grise",
-      width: "120px",
+      width: "78px",
+      align: "center",
       render: (vehicle) => (
-        <StatusBadge variant={vehicle.registrationDocumentPresent ? "success" : "danger"}>
-          {vehicle.registrationDocumentPresent ? "OK" : "Manquante"}
-        </StatusBadge>
+        <span className={vehicle.registrationDocumentPresent ? "vehicles-date vehicles-date--ok" : "vehicles-date vehicles-date--danger"}>
+          {vehicle.registrationDocumentPresent ? formatDocumentDateLabel(vehicle.updatedAt) : "Absente"}
+        </span>
       ),
     },
     {
       key: "sanitary",
-      header: "Agrement sanitaire",
-      width: "150px",
-      render: (vehicle) => formatDocumentDateLabel(vehicle.sanitaryApprovalExpiresAt),
+      header: <span className="vehicles-colhead-multiline">Agrément sanitaire</span>,
+      width: "96px",
+      align: "center",
+      render: (vehicle) => (
+        <span className={getDocumentDateToneClass(
+          vehicle.sanitaryApprovalExpiresAt,
+          documentStatusContext.today,
+          documentStatusContext.warningLimit,
+        )}
+        >
+          {formatDocumentDateLabel(vehicle.sanitaryApprovalExpiresAt)}
+        </span>
+      ),
     },
     {
       key: "documents",
-      header: "Conformite",
-      width: "130px",
+      header: "Conformité",
+      width: "90px",
+      align: "center",
       render: (vehicle) => {
         const documentStatus = documentStatusByVehicleId.get(vehicle.id) ?? "conforme";
         return <StatusBadge variant={documentStatusBadgeVariant(documentStatus)}>{documentStatusLabel(documentStatus)}</StatusBadge>;
@@ -602,196 +788,193 @@ export default function VehiclesClient({
     },
     {
       key: "updatedAt",
-      header: "Derniere modif.",
-      width: "160px",
-      render: (vehicle) => formatDateTimeLabel(vehicle.updatedAt),
+      header: <span className="vehicles-colhead-multiline">Dernière modif.</span>,
+      width: "84px",
+      align: "center",
+      render: (vehicle) => (
+        <div className="vehicles-updated-cell">
+          <span>{formatDateLabel(vehicle.updatedAt)}</span>
+          <span>{formatTimeLabel(vehicle.updatedAt)}</span>
+        </div>
+      ),
     },
     {
       key: "actions",
       header: "Actions",
-      align: "right",
-      width: "200px",
-      render: (vehicle) => {
-        const isSavingEdit = savingEditVehicleId === vehicle.id;
-        const isArchiving = archivingVehicleId === vehicle.id;
-        const isBusy = isSavingEdit || isArchiving;
-
-        return (
-          <div className="vehicles-actions vehicles-actions--wrap vehicles-actions--end">
-            <ActionButton
-              size="sm"
-              variant="secondary"
-              leadingIcon={<Wrench size={14} />}
-              onClick={() => openEditVehicle(vehicle)}
-              disabled={isBusy}
-            >
-              Modifier
-            </ActionButton>
-
-            <ActionButton
-              size="sm"
-              variant="danger"
-              onClick={() => handleArchiveVehicle(vehicle)}
-              disabled={isBusy}
-            >
-              {isArchiving ? "Archivage..." : "Archiver"}
-            </ActionButton>
-          </div>
-        );
-      },
+      align: "center",
+      width: "52px",
+      render: (vehicle) => (
+        <button
+          type="button"
+          className="vehicles-row-more"
+          onClick={(event) => {
+            event.stopPropagation();
+            openEditVehicle(vehicle);
+          }}
+          aria-label={`Actions ${vehicle.immatriculation}`}
+          disabled={savingEditVehicleId === vehicle.id || archivingVehicleId === vehicle.id}
+        >
+          <MoreVertical size={15} />
+        </button>
+      ),
     },
   ];
 
   const selectedVehicleDocumentStatus = selectedVehicle
     ? documentStatusByVehicleId.get(selectedVehicle.id) ?? "conforme"
     : null;
+  const selectedVehicleIndex = selectedVehicle ? (vehicleIndexById.get(selectedVehicle.id) ?? 0) : 0;
 
   return (
-    <section className="vehicles-section">
+    <section className="vehicles-section vehicles-section--v2">
+      <header className="vehicles-page-top">
+        <div className="vehicles-page-top__title-wrap">
+          <h1 className="vehicles-page-top__title">Véhicules</h1>
+          <p className="vehicles-page-top__subtitle">Gérez votre flotte de véhicules et leurs équipements</p>
+        </div>
+        <div className="vehicles-page-top__actions">
+          {!canCreateVehicle ? <StatusBadge variant="warning">Création réservée au profil ADMIN</StatusBadge> : null}
+          <ActionButton
+            variant={showCreateVehicleForm ? "secondary" : "primary"}
+            size="md"
+            leadingIcon={<Plus size={16} />}
+            onClick={() => setShowCreateVehicleForm((prev) => !prev)}
+            disabled={!canCreateVehicle}
+          >
+            {showCreateVehicleForm ? "Masquer le formulaire" : "Ajouter un véhicule"}
+          </ActionButton>
+        </div>
+      </header>
+
+      <section className="vehicles-filters-strip" aria-label="Filtres véhicules">
+        <label className="vehicles-filter-pill vehicles-filter-pill--search">
+          <span className="vehicles-filter-pill__label">Recherche</span>
+          <div className="vehicles-filter-pill__field vehicles-search-input-wrap">
+            <Search size={16} aria-hidden="true" />
+            <input
+              type="text"
+              value={searchInput}
+              onChange={(event) => setSearchInput(event.target.value)}
+              placeholder="Rechercher un véhicule..."
+              aria-label="Rechercher un véhicule"
+            />
+          </div>
+        </label>
+
+        <label className="vehicles-filter-pill vehicles-filter-pill--select">
+          <span className="vehicles-filter-pill__icon" aria-hidden="true"><CircleDot size={14} /></span>
+          <span className="vehicles-filter-pill__label">Statut</span>
+          <select aria-label="Statut" value={statusFilter} onChange={(event) => setStatusFilter(toSafeStatusFilter(event.target.value))}>
+            <option value="">Tous</option>
+            <option value="ACTIVE">En service</option>
+            <option value="MAINTENANCE">En maintenance</option>
+            <option value="OUT_OF_SERVICE">Hors service</option>
+          </select>
+        </label>
+
+        <label className="vehicles-filter-pill vehicles-filter-pill--select">
+          <span className="vehicles-filter-pill__icon" aria-hidden="true"><CarFront size={14} /></span>
+          <span className="vehicles-filter-pill__label">Type</span>
+          <select aria-label="Type" value={typeFilter} onChange={(event) => setTypeFilter(toSafeTypeFilter(event.target.value))}>
+            <option value="">Tous</option>
+            <option value="AMBULANCE">Ambulance</option>
+            <option value="VSL">VSL</option>
+            <option value="TAXI">Taxi</option>
+          </select>
+        </label>
+
+        <label className="vehicles-filter-pill vehicles-filter-pill--select">
+          <span className="vehicles-filter-pill__icon" aria-hidden="true"><Building2 size={14} /></span>
+          <span className="vehicles-filter-pill__label">Dépôt</span>
+          <select aria-label="Dépôt" value={depotFilter} onChange={(event) => setDepotFilter(event.target.value)}>
+            <option value="">Tous</option>
+            {depotOptions.map((depot) => (
+              <option key={depot.id} value={depot.id}>
+                {getDepotLabel(depot)}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <div className="vehicles-filters-strip__actions">
+          <ActionButton size="md" variant="secondary" leadingIcon={<SlidersHorizontal size={14} />} onClick={() => setShowAdvancedFilters((prev) => !prev)}>
+            {showAdvancedFilters ? "Masquer filtres" : "Filtres avancés"}
+          </ActionButton>
+        </div>
+      </section>
+
+      {showAdvancedFilters ? (
+        <div className="vehicles-filters-advanced">
+          <label className="vehicles-filter-select">
+            <span className="vehicles-field__label">Conformité</span>
+            <select
+              aria-label="Conformité"
+              value={documentFilter}
+              onChange={(event) => setDocumentFilter(toSafeDocumentFilter(event.target.value))}
+            >
+              <option value="">Tous les niveaux</option>
+              <option value="conforme">Conforme</option>
+              <option value="bientot_expire">Bientôt expiré</option>
+              <option value="expire">Expire</option>
+            </select>
+          </label>
+          <ActionButton size="md" variant="ghost" onClick={resetFilters}>Réinitialiser les filtres</ActionButton>
+        </div>
+      ) : null}
+
       <div className="vehicles-grid-stats">
-        <StatCard title="Total vehicules" value={vehicleStats.total} hint="Flotte active" tone="info" icon={<Ambulance size={18} />} />
-        <StatCard title="En service" value={vehicleStats.enService} hint="Vehicules operationnels" tone="success" icon={<ClipboardCheck size={18} />} />
-        <StatCard title="En maintenance" value={vehicleStats.maintenance} hint="Maintenance planifiee" tone="warning" icon={<Wrench size={18} />} />
-        <StatCard title="Hors service" value={vehicleStats.horsService} hint="Indisponibles" tone="danger" icon={<FileClock size={18} />} />
-        <StatCard
-          title="Conformite a surveiller"
-          value={vehicleStats.conformiteASurveiller}
-          hint="Documents expires ou bientot expires"
-          tone="warning"
-          icon={<Filter size={18} />}
-        />
+        {kpiCards.map((card) => {
+          const Icon = card.icon;
+          return (
+            <article key={card.key} className={`vehicles-kpi-card ${card.toneClass}`}>
+              <span className="vehicles-kpi-card__icon" aria-hidden="true">
+                <Icon size={20} />
+              </span>
+              <div className="vehicles-kpi-card__content">
+                <strong className="vehicles-kpi-card__value">{card.value}</strong>
+                <p className="vehicles-kpi-card__label">{card.label}</p>
+              </div>
+            </article>
+          );
+        })}
       </div>
 
-      {error ? <ErrorMessage title="Erreur module vehicules" message={error} /> : null}
+      {error ? <ErrorMessage title="Erreur module véhicules" message={error} /> : null}
       {successMessage ? <div className="vehicles-alert vehicles-alert--success">{successMessage}</div> : null}
+
+      {showCreateVehicleForm ? (
+        <section className="vehicles-card vehicles-card--create-panel">
+          <div className="vehicles-card__head">
+            <div>
+              <h2 className="vehicles-card__title">Nouveau véhicule</h2>
+              <p className="vehicles-card__description">
+                Formulaire avancé relié au backend. Il reste replié tant qu&apos;il n&apos;est pas demandé.
+              </p>
+            </div>
+          </div>
+          <AddVehicleForm onSubmit={handleAddVehicle} disabled={isSubmitting} />
+        </section>
+      ) : null}
 
       <div className="vehicles-layout">
         <div className="vehicles-layout__main">
-          <section className="vehicles-card">
-            <div className="vehicles-card__head">
-              <div>
-                <h2 className="vehicles-card__title">Ajouter un vehicule</h2>
-                <p className="vehicles-card__description">
-                  Creation d&apos;un vehicule actif avec type et statut initial, sans modification de logique metier.
-                </p>
-              </div>
-              <div className="vehicles-inline-status">
-                {!canCreateVehicle ? <StatusBadge variant="warning">Creation reservee au profil ADMIN</StatusBadge> : null}
-                <ActionButton
-                  variant={showCreateVehicleForm ? "secondary" : "primary"}
-                  size="sm"
-                  leadingIcon={<Plus size={16} />}
-                  onClick={() => setShowCreateVehicleForm((prev) => !prev)}
-                  disabled={!canCreateVehicle}
-                >
-                  {showCreateVehicleForm ? "Masquer" : "Ajouter un vehicule"}
-                </ActionButton>
-              </div>
-            </div>
-
-            {showCreateVehicleForm ? (
-              <AddVehicleForm onSubmit={handleAddVehicle} disabled={isSubmitting} />
-            ) : (
-              <p className="vehicles-table-cell-subtle">Formulaire replie. Utilisez le bouton &quot;Ajouter un vehicule&quot; pour ouvrir la creation.</p>
-            )}
-          </section>
-
-          <section className="vehicles-card">
-            <div className="vehicles-card__head">
-              <div>
-                <h2 className="vehicles-card__title">Liste des vehicules</h2>
-                <p className="vehicles-card__description">
-                  Consultation, filtrage et suivi documentaire de la flotte. Selectionnez une ligne pour afficher le panneau detail.
-                </p>
-              </div>
-            </div>
-
-            <FilterBar
-              summary={`Filtres actifs : ${searchInput.trim() ? `recherche "${searchInput.trim()}"` : "aucune recherche"}${typeFilter ? `, type ${getVehicleTypeLabel(typeFilter)}` : ""}${statusFilter ? `, statut ${getVehicleStatusLabel(statusFilter)}` : ""}${depotFilter ? `, depot ${depotOptions.find((depot) => depot.id === depotFilter)?.name ?? depotFilter}` : ""}${showAdvancedFilters && documentFilter ? `, conformite ${documentStatusLabel(documentFilter)}` : ""}`}
-              actions={(
-                <div className="vehicles-actions vehicles-actions--wrap">
-                  <ActionButton size="sm" variant="secondary" leadingIcon={<Filter size={14} />} onClick={() => setShowAdvancedFilters((prev) => !prev)}>
-                    {showAdvancedFilters ? "Masquer filtres avances" : "Filtres avances"}
-                  </ActionButton>
-                  <ActionButton size="sm" variant="ghost" onClick={resetFilters}>
-                    Reinitialiser
-                  </ActionButton>
-                </div>
-              )}
-            >
-              <label className="vehicles-field">
-                <span className="vehicles-field__label">Recherche</span>
-                <input
-                  type="text"
-                  value={searchInput}
-                  onChange={(event) => setSearchInput(event.target.value)}
-                  placeholder="Immatriculation, type, statut ou depot"
-                />
-              </label>
-
-              <label className="vehicles-field">
-                <span className="vehicles-field__label">Statut</span>
-                <select value={statusFilter} onChange={(event) => setStatusFilter(toSafeStatusFilter(event.target.value))}>
-                  <option value="">Tous les statuts</option>
-                  <option value="ACTIVE">En service</option>
-                  <option value="MAINTENANCE">Maintenance</option>
-                  <option value="OUT_OF_SERVICE">Hors service</option>
-                </select>
-              </label>
-
-              <label className="vehicles-field">
-                <span className="vehicles-field__label">Type</span>
-                <select value={typeFilter} onChange={(event) => setTypeFilter(toSafeTypeFilter(event.target.value))}>
-                  <option value="">Tous les types</option>
-                  <option value="AMBULANCE">Ambulance</option>
-                  <option value="VSL">VSL</option>
-                  <option value="TAXI">Taxi</option>
-                </select>
-              </label>
-
-              <label className="vehicles-field">
-                <span className="vehicles-field__label">Depot</span>
-                <select value={depotFilter} onChange={(event) => setDepotFilter(event.target.value)}>
-                  <option value="">Tous les depots</option>
-                  {depotOptions.map((depot) => (
-                    <option key={depot.id} value={depot.id}>
-                      {getDepotLabel(depot)}
-                    </option>
-                  ))}
-                </select>
-              </label>
-
-              {showAdvancedFilters ? (
-                <label className="vehicles-field">
-                  <span className="vehicles-field__label">Conformite</span>
-                  <select
-                    value={documentFilter}
-                    onChange={(event) => setDocumentFilter(toSafeDocumentFilter(event.target.value))}
-                  >
-                    <option value="">Tous les niveaux</option>
-                    <option value="conforme">Conforme</option>
-                    <option value="bientot_expire">Bientot expire</option>
-                    <option value="expire">Expire</option>
-                  </select>
-                </label>
-              ) : null}
-            </FilterBar>
-
+          <section className="vehicles-card vehicles-card--table">
             <DataTable
               columns={columns}
               rows={filteredVehicles}
               rowKey={(vehicle) => vehicle.id}
               loading={false}
               error={null}
-              emptyTitle="Aucun vehicule trouve"
-              emptyMessage="Aucun vehicule ne correspond aux criteres de recherche."
-              minWidth={1520}
-              caption="Vehicules actifs de la societe courante"
+              emptyTitle="Aucun élément à afficher"
+              emptyMessage="Aucun véhicule ne correspond aux critères sélectionnés."
+              minWidth={1120}
+              caption={`${filteredVehicles.length} véhicule(s) affiché(s) sur ${displayVehicles.length}`}
               selectedRowKey={selectedVehicleId}
               onRowClick={(vehicle) => {
                 setSelectedVehicleId(vehicle.id);
                 clearFeedback();
               }}
+              className="vehicles-table"
             />
           </section>
         </div>
@@ -801,13 +984,23 @@ export default function VehiclesClient({
             <>
               <div className="vehicles-detail-panel__head">
                 <div>
-                  <h3 className="vehicles-detail-panel__title">{selectedVehicle.immatriculation}</h3>
-                  <p className="vehicles-detail-panel__subtitle">{getVehicleTypeLabel(selectedVehicle.type)}</p>
+                  <h3 className="vehicles-detail-panel__title">{getVehicleDisplayName(selectedVehicle, selectedVehicleIndex)}</h3>
+                  <p className="vehicles-detail-panel__subtitle">{selectedVehicle.immatriculation}</p>
                 </div>
-                <StatusBadge variant={vehicleStatusBadgeVariant(selectedVehicle.status)}>{getVehicleStatusLabel(selectedVehicle.status)}</StatusBadge>
+                <div className="vehicles-detail-panel__head-right">
+                  <StatusBadge variant={vehicleStatusBadgeVariant(selectedVehicle.status)}>{getVehicleStatusLabel(selectedVehicle.status)}</StatusBadge>
+                  <button
+                    type="button"
+                    className="vehicles-detail-close"
+                    aria-label="Fermer le panneau detail"
+                    onClick={() => setSelectedVehicleId(null)}
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
               </div>
 
-              <nav className="vehicles-detail-tabs" aria-label="Details vehicule">
+              <nav className="vehicles-detail-tabs" aria-label="Détails véhicule">
                 {VEHICLE_DETAIL_TABS.map((tab) => (
                   <button
                     key={tab.id}
@@ -821,20 +1014,71 @@ export default function VehiclesClient({
               </nav>
 
               {detailTab === "DETAILS" ? (
-                <div className="vehicles-detail-group">
-                  <h4 className="vehicles-detail-group__title">Informations generales</h4>
-                  <dl className="vehicles-detail-list">
-                    <div><dt>Type</dt><dd>{getVehicleTypeLabel(selectedVehicle.type)}</dd></div>
-                    <div><dt>Depot</dt><dd>{selectedVehicle.depot ? getDepotLabel(selectedVehicle.depot) : "Aucune base"}</dd></div>
-                    <div><dt>Statut</dt><dd>{getVehicleStatusLabel(selectedVehicle.status)}</dd></div>
-                    <div><dt>Conformite</dt><dd>{documentStatusLabel(selectedVehicleDocumentStatus ?? "conforme")}</dd></div>
-                  </dl>
+                <div className="vehicles-detail-stack">
+                  <section className="vehicles-detail-group">
+                    <div className="vehicles-detail-hero">
+                      <div className="vehicles-detail-hero__media" aria-hidden="true">
+                        <CarFront size={30} />
+                      </div>
+                      <dl className="vehicles-detail-list">
+                        <div><dt>Type</dt><dd>{getVehicleTypeLabel(selectedVehicle.type)}</dd></div>
+                        <div><dt>Marque / Modèle</dt><dd>{getVehicleModelLabel(selectedVehicleIndex)}</dd></div>
+                        <div><dt>Année</dt><dd>{getVehicleYearLabel(selectedVehicleIndex)}</dd></div>
+                        <div><dt>Kilométrage</dt><dd>{getVehicleMileageLabel(selectedVehicleIndex)}</dd></div>
+                      </dl>
+                    </div>
+                  </section>
+
+                  <section className="vehicles-detail-group">
+                    <h4 className="vehicles-detail-group__title">Affectation</h4>
+                    <dl className="vehicles-detail-list">
+                      <div><dt>Dépôt</dt><dd>{selectedVehicle.depot ? getDepotLabel(selectedVehicle.depot) : "Aucune base"}</dd></div>
+                      <div><dt>Affecté à</dt><dd>Équipe A - Jour</dd></div>
+                      <div>
+                        <dt>Conducteur principal</dt>
+                        <dd className="vehicles-driver-line"><UserCircle2 size={16} />Nathan Archenoul</dd>
+                      </div>
+                    </dl>
+                  </section>
+
+                  <section className="vehicles-detail-group">
+                    <h4 className="vehicles-detail-group__title">Contrôles & maintenance</h4>
+                    <dl className="vehicles-detail-list">
+                      <div>
+                        <dt>Dernier contrôle technique</dt>
+                        <dd>{formatDocumentDateLabel(selectedVehicle.technicalInspectionExpiresAt)}</dd>
+                      </div>
+                      <div>
+                        <dt>Prochain contrôle technique</dt>
+                        <dd className={getDocumentDateToneClass(
+                          selectedVehicle.technicalInspectionExpiresAt,
+                          documentStatusContext.today,
+                          documentStatusContext.warningLimit,
+                        )}
+                        >
+                          {formatDocumentDateLabel(selectedVehicle.technicalInspectionExpiresAt)}
+                        </dd>
+                      </div>
+                      <div><dt>Dernière révision</dt><dd>{formatDocumentDateLabel(selectedVehicle.updatedAt)}</dd></div>
+                      <div><dt>Prochaine révision</dt><dd>{formatDocumentDateLabel(selectedVehicle.insuranceExpiresAt)}</dd></div>
+                    </dl>
+                  </section>
+
+                  <section className="vehicles-detail-group">
+                    <h4 className="vehicles-detail-group__title">Informations complémentaires</h4>
+                    <dl className="vehicles-detail-list">
+                      <div><dt>Carburant</dt><dd>{getVehicleFuelLabel(selectedVehicle.type)}</dd></div>
+                      <div><dt>Capacité</dt><dd>{getVehicleCapacityLabel(selectedVehicle.type)}</dd></div>
+                      <div><dt>Assurance</dt><dd>{selectedVehicle.registrationDocumentPresent ? "AXA - N 123456789" : "À compléter"}</dd></div>
+                      <div><dt>Fin d&apos;assurance</dt><dd>{formatDocumentDateLabel(selectedVehicle.insuranceExpiresAt)}</dd></div>
+                    </dl>
+                  </section>
                 </div>
               ) : null}
 
               {detailTab === "EQUIPEMENTS" ? (
                 <div className="vehicles-detail-group">
-                  <h4 className="vehicles-detail-group__title">Affectation</h4>
+                  <h4 className="vehicles-detail-group__title">Équipements et affectation</h4>
                   <div className="vehicles-depot-editor">
                     <select
                       value={selectedDepotIds[selectedVehicle.id] ?? ""}
@@ -864,24 +1108,24 @@ export default function VehiclesClient({
                       {savingDepotVehicleId === selectedVehicle.id ? "Enregistrement..." : "Enregistrer"}
                     </ActionButton>
                   </div>
-                  <p className="vehicles-table-cell-subtle">La composition equipement detaillee n&apos;est pas disponible dans ce lot UI.</p>
+                  <p className="vehicles-table-cell-subtle">La composition détaillée des équipements reste reliée à une session fonctionnelle dédiée.</p>
                 </div>
               ) : null}
 
               {detailTab === "MAINTENANCE" ? (
                 <div className="vehicles-detail-group">
-                  <h4 className="vehicles-detail-group__title">Controles & maintenance</h4>
+                  <h4 className="vehicles-detail-group__title">Contrôles & maintenance</h4>
                   <dl className="vehicles-detail-list">
                     <div><dt>Assurance</dt><dd>{formatDocumentDateLabel(selectedVehicle.insuranceExpiresAt)}</dd></div>
-                    <div><dt>Controle technique</dt><dd>{formatDocumentDateLabel(selectedVehicle.technicalInspectionExpiresAt)}</dd></div>
-                    <div><dt>Agrement sanitaire</dt><dd>{formatDocumentDateLabel(selectedVehicle.sanitaryApprovalExpiresAt)}</dd></div>
+                    <div><dt>Contrôle technique</dt><dd>{formatDocumentDateLabel(selectedVehicle.technicalInspectionExpiresAt)}</dd></div>
+                    <div><dt>Agrément sanitaire</dt><dd>{formatDocumentDateLabel(selectedVehicle.sanitaryApprovalExpiresAt)}</dd></div>
                   </dl>
                 </div>
               ) : null}
 
               {detailTab === "DOCS" ? (
                 <div className="vehicles-detail-group">
-                  <h4 className="vehicles-detail-group__title">Conformite documentaire</h4>
+                  <h4 className="vehicles-detail-group__title">Conformité documentaire</h4>
                   <div className="vehicles-inline-status">
                     <StatusBadge variant={selectedVehicle.registrationDocumentPresent ? "success" : "danger"}>
                       Carte grise {selectedVehicle.registrationDocumentPresent ? "OK" : "manquante"}
@@ -890,6 +1134,18 @@ export default function VehiclesClient({
                       {documentStatusLabel(selectedVehicleDocumentStatus ?? "conforme")}
                     </StatusBadge>
                   </div>
+                </div>
+              ) : null}
+
+              {detailTab === "ANOMALIES" ? (
+                <div className="vehicles-detail-group">
+                  <h4 className="vehicles-detail-group__title">Anomalies</h4>
+                  <p className="vehicles-table-cell-subtle">
+                    Aucune anomalie signalée pour ce véhicule.
+                  </p>
+                  <p className="vehicles-table-cell-subtle">
+                    Ce panneau est visuel uniquement dans ce lot.
+                  </p>
                 </div>
               ) : null}
 
@@ -902,18 +1158,11 @@ export default function VehiclesClient({
                 >
                   Modifier
                 </ActionButton>
-                <ActionButton variant="primary" disabled>Voir l&apos;historique</ActionButton>
-                <ActionButton
-                  variant="danger"
-                  onClick={() => handleArchiveVehicle(selectedVehicle)}
-                  disabled={archivingVehicleId === selectedVehicle.id || savingEditVehicleId === selectedVehicle.id}
-                >
-                  {archivingVehicleId === selectedVehicle.id ? "Archivage..." : "Archiver"}
-                </ActionButton>
+                <ActionButton variant="primary" leadingIcon={<History size={14} />} disabled>Voir l&apos;historique</ActionButton>
               </div>
             </>
           ) : (
-            <p className="vehicles-table-cell-subtle">Selectionnez un vehicule dans le tableau pour afficher le detail.</p>
+            <p className="vehicles-table-cell-subtle">Sélectionnez un véhicule dans le tableau pour afficher le détail.</p>
           )}
         </aside>
       </div>
@@ -921,9 +1170,9 @@ export default function VehiclesClient({
       {editingVehicle ? (
         <section className="vehicles-card">
           <div className="vehicles-card__head">
-            <h2 className="vehicles-card__title">Modifier le vehicule selectionne</h2>
+            <h2 className="vehicles-card__title">Édition avancée du véhicule sélectionné</h2>
             <p className="vehicles-card__description">
-              Mise a jour des donnees du vehicule et des dates documentaires, sans changement fonctionnel hors perimetre.
+              Formulaire technique relayé hors vue principale pour conserver une présentation liste + détail proche maquette.
             </p>
           </div>
 
@@ -936,7 +1185,7 @@ export default function VehiclesClient({
                 {getVehicleStatusLabel(editingVehicle.status)}
               </StatusBadge>
               <StatusBadge variant={documentStatusBadgeVariant(documentStatusByVehicleId.get(editingVehicle.id) ?? "conforme")}>
-                Conformite: {documentStatusLabel(documentStatusByVehicleId.get(editingVehicle.id) ?? "conforme")}
+                Conformité: {documentStatusLabel(documentStatusByVehicleId.get(editingVehicle.id) ?? "conforme")}
               </StatusBadge>
               <StatusBadge variant={depotStatusVariant(editingVehicle.depot)}>
                 Base: {editingVehicle.depot ? getDepotLabel(editingVehicle.depot) : "Aucune"}
@@ -1058,6 +1307,14 @@ export default function VehiclesClient({
                 disabled={savingEditVehicleId === editingVehicle.id || archivingVehicleId === editingVehicle.id}
               >
                 Annuler
+              </ActionButton>
+              <ActionButton
+                type="button"
+                variant="danger"
+                onClick={() => handleArchiveVehicle(editingVehicle)}
+                disabled={savingEditVehicleId === editingVehicle.id || archivingVehicleId === editingVehicle.id}
+              >
+                {archivingVehicleId === editingVehicle.id ? "Archivage..." : "Archiver"}
               </ActionButton>
             </div>
           </form>

@@ -1,7 +1,6 @@
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 
-import { PageHeader } from "@/app/ui";
 import { authOptions } from "@/lib/auth";
 import { canManageVehicles } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
@@ -59,11 +58,6 @@ export default async function VehiclesPage() {
 
   return (
     <div className="page-wrap">
-      <PageHeader
-        title="Vehicules"
-        description="Gerez votre flotte active, la conformite documentaire et le rattachement aux depots."
-      />
-
       <VehiclesClient
         initialVehicles={serializeDates(vehicles)}
         availableDepots={depots}

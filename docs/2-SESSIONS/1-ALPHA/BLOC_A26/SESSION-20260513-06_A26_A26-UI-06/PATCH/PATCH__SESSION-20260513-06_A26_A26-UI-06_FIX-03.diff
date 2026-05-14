@@ -1,0 +1,310 @@
+diff --git a/app/a24-vehicles-templates.css b/app/a24-vehicles-templates.css
+index 798e23b..b801bcd 100644
+--- a/app/a24-vehicles-templates.css
++++ b/app/a24-vehicles-templates.css
+@@ -531,6 +531,10 @@
+   gap: 14px;
+ }
+ 
++.vehicles-section--v2 .vehicles-layout {
++  grid-template-columns: minmax(0, 1.54fr) minmax(390px, 0.94fr);
++}
++
+ .vehicles-section--v2 .ui-status-badge {
+   min-height: 23px;
+   padding: 2px 8px;
+@@ -573,7 +577,7 @@
+ 
+ .vehicles-filters-strip {
+   display: grid;
+-  grid-template-columns: minmax(210px, 1.45fr) repeat(3, minmax(120px, 0.76fr)) auto;
++  grid-template-columns: minmax(250px, 1.65fr) repeat(3, minmax(150px, 0.9fr)) auto;
+   gap: 10px;
+   align-items: center;
+ }
+@@ -589,49 +593,78 @@
+ .vehicles-filters-strip__actions {
+   display: inline-flex;
+   justify-content: flex-end;
++  align-items: center;
+ }
+ 
+-.vehicles-search-field,
+-.vehicles-filter-select {
++.vehicles-filter-pill {
+   display: grid;
+-  gap: 0;
++  gap: 4px;
++  min-height: 48px;
++  border: 1px solid var(--ui-border);
++  border-radius: 12px;
++  background: var(--ui-surface);
++  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
++  padding: 4px 10px;
+ }
+ 
+-.vehicles-filters-strip .vehicles-field__label,
+-.vehicles-filters-advanced .vehicles-field__label {
+-  position: absolute;
+-  width: 1px;
+-  height: 1px;
+-  overflow: hidden;
+-  clip: rect(0, 0, 0, 0);
+-  white-space: nowrap;
++.vehicles-filter-pill--search {
++  display: grid;
++  gap: 3px;
++}
++
++.vehicles-filter-pill--select {
++  display: grid;
++  grid-template-columns: auto 1fr;
++  grid-template-areas:
++    "icon label"
++    "icon control";
++  column-gap: 6px;
++  align-items: center;
++}
++
++.vehicles-filter-pill__icon {
++  grid-area: icon;
++  align-self: center;
++  color: var(--ui-text-muted);
++}
++
++.vehicles-filter-pill__label {
++  grid-area: label;
++  color: var(--ui-text-muted);
++  font-size: 11px;
++  font-weight: 600;
++  line-height: 1;
+ }
+ 
+ .vehicles-search-input-wrap {
+   min-height: 46px;
+-  border: 1px solid var(--ui-border);
+-  border-radius: 10px;
+-  background: var(--ui-surface);
++  border: 0;
++  border-radius: 8px;
++  background: transparent;
+   display: flex;
+   align-items: center;
+   gap: 8px;
+-  padding: 0 12px;
++  padding: 0 2px;
+   color: var(--ui-text-muted);
+-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
++  box-shadow: none;
+ }
+ 
+ .vehicles-search-input-wrap input {
+   border: 0;
+   padding: 0;
+-  min-height: 42px;
++  min-height: 30px;
+   width: 100%;
+   background: transparent;
+ }
+ 
+-.vehicles-filter-select select {
+-  min-height: 46px;
+-  border-radius: 10px;
+-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42);
++.vehicles-filter-pill--select select {
++  grid-area: control;
++  min-height: 30px;
++  border: 0;
++  border-radius: 0;
++  padding: 0;
++  background: transparent;
++  box-shadow: none;
+ }
+ 
+ .vehicles-card--create-panel .vehicles-card__head::before,
+@@ -689,6 +722,14 @@
+   text-align: left;
+ }
+ 
++.vehicles-table .ui-data-table__head-cell.vehicles-col-vehicle {
++  text-align: center;
++}
++
++.vehicles-table .ui-data-table__cell.vehicles-col-vehicle {
++  text-align: left;
++}
++
+ .vehicles-table .ui-data-table__head-cell.ui-data-table__cell--center,
+ .vehicles-table .ui-data-table__cell.ui-data-table__cell--center {
+   text-align: center;
+@@ -721,6 +762,24 @@
+   gap: 6px;
+ }
+ 
++.vehicles-vehicle-lines {
++  display: grid;
++  align-items: start;
++  gap: 1px;
++  min-width: 0;
++}
++
++.vehicles-vehicle-lines strong {
++  display: block;
++  line-height: 1.2;
++}
++
++.vehicles-vehicle-lines .vehicles-table-cell-subtle {
++  display: block;
++  font-size: 11px;
++  line-height: 1.2;
++}
++
+ .vehicles-mini-icon {
+   width: 20px;
+   height: 20px;
+@@ -805,27 +864,54 @@
+ }
+ 
+ .vehicles-section--v2 .vehicles-detail-tabs {
+-  grid-template-columns: repeat(5, minmax(0, 1fr));
+-  column-gap: 8px;
+-  align-items: end;
+-  padding-inline: 4px;
++  display: flex;
++  flex-wrap: nowrap;
++  gap: 6px;
++  overflow-x: auto;
++  padding: 0 0 2px;
++  scrollbar-width: thin;
+ }
+ 
+ .vehicles-section--v2 .vehicles-detail-tab {
++  flex: 0 0 auto;
+   justify-content: center;
+   font-size: 12px;
+-  padding: 0 6px;
++  padding: 0 10px;
+   white-space: nowrap;
++  min-height: 38px;
+ }
+ 
+ .vehicles-section--v2 .vehicles-detail-panel__actions {
+   grid-template-columns: repeat(2, minmax(0, 1fr));
++  gap: 10px;
+ }
+ 
+ .vehicles-section--v2 .vehicles-detail-panel__actions .ui-action-button__label {
+   white-space: nowrap;
+ }
+ 
++.vehicles-section--v2 .vehicles-detail-panel {
++  gap: 16px;
++  padding: 18px 16px 16px;
++}
++
++.vehicles-section--v2 .vehicles-detail-panel__head {
++  gap: 12px;
++}
++
++.vehicles-section--v2 .vehicles-detail-panel__subtitle {
++  margin-top: 8px;
++}
++
++.vehicles-section--v2 .vehicles-detail-group {
++  padding: 14px;
++  gap: 14px;
++}
++
++.vehicles-section--v2 .vehicles-detail-list {
++  gap: 12px;
++}
++
+ .vehicles-detail-close {
+   width: 30px;
+   height: 30px;
+diff --git a/app/vehicles/vehicles-client.tsx b/app/vehicles/vehicles-client.tsx
+index 28286e0..a7c0547 100644
+--- a/app/vehicles/vehicles-client.tsx
++++ b/app/vehicles/vehicles-client.tsx
+@@ -5,9 +5,11 @@ import {
+   Ambulance,
+   AlertTriangle,
+   BadgeCheck,
++  CircleDot,
+   CarFront,
+   CheckCircle2,
+   FileClock,
++  Building2,
+   History,
+   MoreVertical,
+   Plus,
+@@ -660,9 +662,10 @@ export default function VehiclesClient({
+     },
+     {
+       key: "vehicle",
+-      header: "Véhicule",
++      header: "Véhicules",
+       width: "178px",
+       align: "left",
++      className: "vehicles-col-vehicle",
+       render: (vehicle) => {
+         const index = vehicleIndexById.get(vehicle.id) ?? 0;
+         return (
+@@ -670,7 +673,7 @@ export default function VehiclesClient({
+             <span className="vehicles-mini-icon" aria-hidden="true">
+               <CarFront size={14} />
+             </span>
+-            <span>
++            <span className="vehicles-vehicle-lines">
+               <strong>{getVehicleDisplayName(vehicle, index)}</strong>
+               <span className="vehicles-table-cell-subtle">{getVehicleModelLabel(index)}</span>
+             </span>
+@@ -844,9 +847,9 @@ export default function VehiclesClient({
+       </header>
+ 
+       <section className="vehicles-filters-strip" aria-label="Filtres véhicules">
+-        <label className="vehicles-search-field">
+-          <span className="vehicles-field__label">Recherche</span>
+-          <div className="vehicles-search-input-wrap">
++        <label className="vehicles-filter-pill vehicles-filter-pill--search">
++          <span className="vehicles-filter-pill__label">Recherche</span>
++          <div className="vehicles-filter-pill__field vehicles-search-input-wrap">
+             <Search size={16} aria-hidden="true" />
+             <input
+               type="text"
+@@ -858,8 +861,9 @@ export default function VehiclesClient({
+           </div>
+         </label>
+ 
+-        <label className="vehicles-filter-select">
+-          <span className="vehicles-field__label">Statut</span>
++        <label className="vehicles-filter-pill vehicles-filter-pill--select">
++          <span className="vehicles-filter-pill__icon" aria-hidden="true"><CircleDot size={14} /></span>
++          <span className="vehicles-filter-pill__label">Statut</span>
+           <select aria-label="Statut" value={statusFilter} onChange={(event) => setStatusFilter(toSafeStatusFilter(event.target.value))}>
+             <option value="">Tous</option>
+             <option value="ACTIVE">En service</option>
+@@ -868,8 +872,9 @@ export default function VehiclesClient({
+           </select>
+         </label>
+ 
+-        <label className="vehicles-filter-select">
+-          <span className="vehicles-field__label">Type</span>
++        <label className="vehicles-filter-pill vehicles-filter-pill--select">
++          <span className="vehicles-filter-pill__icon" aria-hidden="true"><CarFront size={14} /></span>
++          <span className="vehicles-filter-pill__label">Type</span>
+           <select aria-label="Type" value={typeFilter} onChange={(event) => setTypeFilter(toSafeTypeFilter(event.target.value))}>
+             <option value="">Tous</option>
+             <option value="AMBULANCE">Ambulance</option>
+@@ -878,8 +883,9 @@ export default function VehiclesClient({
+           </select>
+         </label>
+ 
+-        <label className="vehicles-filter-select">
+-          <span className="vehicles-field__label">Dépôt</span>
++        <label className="vehicles-filter-pill vehicles-filter-pill--select">
++          <span className="vehicles-filter-pill__icon" aria-hidden="true"><Building2 size={14} /></span>
++          <span className="vehicles-filter-pill__label">Dépôt</span>
+           <select aria-label="Dépôt" value={depotFilter} onChange={(event) => setDepotFilter(event.target.value)}>
+             <option value="">Tous</option>
+             {depotOptions.map((depot) => (

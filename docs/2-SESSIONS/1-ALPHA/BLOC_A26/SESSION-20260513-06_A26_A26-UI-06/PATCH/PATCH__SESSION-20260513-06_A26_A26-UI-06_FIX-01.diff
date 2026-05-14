@@ -1,0 +1,449 @@
+diff --git a/app/a24-vehicles-templates.css b/app/a24-vehicles-templates.css
+index beebd60..9d1869e 100644
+--- a/app/a24-vehicles-templates.css
++++ b/app/a24-vehicles-templates.css
+@@ -531,6 +531,13 @@
+   gap: 14px;
+ }
+ 
++.vehicles-section--v2 .ui-status-badge {
++  min-height: 24px;
++  padding: 2px 8px;
++  border-radius: 10px;
++  font-weight: 650;
++}
++
+ .vehicles-page-top {
+   display: flex;
+   align-items: flex-start;
+@@ -593,13 +600,14 @@
+ .vehicles-search-input-wrap {
+   min-height: 50px;
+   border: 1px solid var(--ui-border);
+-  border-radius: 12px;
++  border-radius: 10px;
+   background: var(--ui-surface);
+   display: flex;
+   align-items: center;
+   gap: 8px;
+   padding: 0 12px;
+   color: var(--ui-text-muted);
++  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+ }
+ 
+ .vehicles-search-input-wrap input {
+@@ -612,7 +620,8 @@
+ 
+ .vehicles-filter-select select {
+   min-height: 50px;
+-  border-radius: 12px;
++  border-radius: 10px;
++  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42);
+ }
+ 
+ .vehicles-card--create-panel .vehicles-card__head::before,
+@@ -646,12 +655,36 @@
+   font-size: 11px;
+   text-transform: none;
+   letter-spacing: 0;
++  white-space: normal;
++  line-height: 1.2;
++  text-align: center;
+ }
+ 
+ .vehicles-table .ui-data-table__cell {
+   padding: 9px 8px;
+   font-size: 12px;
+   white-space: nowrap;
++  border-bottom: 1px solid color-mix(in srgb, var(--ui-border), #ffffff 18%);
++  vertical-align: middle;
++}
++
++.vehicles-table .ui-data-table__head-cell.ui-data-table__cell--left,
++.vehicles-table .ui-data-table__cell.ui-data-table__cell--left {
++  text-align: left;
++}
++
++.vehicles-table .ui-data-table__head-cell.ui-data-table__cell--center,
++.vehicles-table .ui-data-table__cell.ui-data-table__cell--center {
++  text-align: center;
++}
++
++.vehicles-table .ui-data-table__row.is-selected .ui-data-table__cell {
++  background: color-mix(in srgb, var(--ui-selected-row), transparent 44%);
++  box-shadow: none;
++}
++
++.vehicles-table .ui-data-table__row.is-clickable:hover .ui-data-table__cell {
++  background: color-mix(in srgb, var(--ui-selected-row), transparent 64%);
+ }
+ 
+ .vehicles-row-checkbox {
+@@ -668,6 +701,7 @@
+ .vehicles-cell-main--identity {
+   grid-template-columns: auto 1fr;
+   align-items: center;
++  justify-items: start;
+ }
+ 
+ .vehicles-mini-icon {
+@@ -686,6 +720,17 @@
+   font-weight: 600;
+ }
+ 
++.vehicles-updated-cell {
++  display: inline-grid;
++  gap: 2px;
++  justify-items: start;
++  text-align: left;
++}
++
++.vehicles-updated-cell span:last-child {
++  color: var(--ui-text-muted);
++}
++
+ .vehicles-date--ok {
+   color: #1f7a4a;
+ }
+@@ -740,6 +785,10 @@
+   gap: 8px;
+ }
+ 
++.vehicles-section--v2 .vehicles-detail-tabs {
++  grid-template-columns: repeat(5, minmax(0, 1fr));
++}
++
+ .vehicles-detail-close {
+   width: 30px;
+   height: 30px;
+@@ -788,6 +837,73 @@
+   gap: 6px;
+ }
+ 
++.vehicles-kpi-card {
++  min-height: 108px;
++  border: 1px solid var(--ui-border);
++  border-radius: 16px;
++  background: var(--ui-surface);
++  display: grid;
++  grid-template-columns: auto minmax(0, 1fr);
++  align-items: center;
++  gap: 12px;
++  padding: 14px 16px;
++  box-shadow: 0 10px 20px rgba(22, 42, 81, 0.05);
++}
++
++.vehicles-kpi-card__icon {
++  width: 42px;
++  height: 42px;
++  border-radius: 12px;
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  color: var(--ui-primary);
++  background: color-mix(in srgb, var(--ui-primary), #ffffff 88%);
++  border: 1px solid color-mix(in srgb, var(--ui-primary), #ffffff 74%);
++}
++
++.vehicles-kpi-card__content {
++  min-width: 0;
++  display: grid;
++  justify-items: center;
++  text-align: center;
++  gap: 4px;
++}
++
++.vehicles-kpi-card__value {
++  margin: 0;
++  color: #124491;
++  font-size: clamp(30px, 3vw, 36px);
++  line-height: 1;
++}
++
++.vehicles-kpi-card__label {
++  margin: 0;
++  color: var(--ui-text-muted);
++  font-size: 13px;
++  font-weight: 600;
++}
++
++.vehicles-kpi-card--info {
++  border-color: #bfdbfe;
++}
++
++.vehicles-kpi-card--success {
++  border-color: var(--ui-success-border);
++}
++
++.vehicles-kpi-card--warning {
++  border-color: var(--ui-warning-border);
++}
++
++.vehicles-kpi-card--warning-soft {
++  border-color: #f3cd83;
++}
++
++.vehicles-kpi-card--danger {
++  border-color: var(--ui-danger-border);
++}
++
+ :root[data-theme="dark"] .vehicles-search-input-wrap {
+   background: var(--ui-surface);
+ }
+diff --git a/app/vehicles/vehicles-client.tsx b/app/vehicles/vehicles-client.tsx
+index a81e647..7e2290b 100644
+--- a/app/vehicles/vehicles-client.tsx
++++ b/app/vehicles/vehicles-client.tsx
+@@ -3,11 +3,11 @@
+ import { useEffect, useMemo, useState } from "react";
+ import {
+   Ambulance,
++  AlertTriangle,
++  BadgeCheck,
+   CarFront,
+   CheckCircle2,
+-  ClipboardCheck,
+   FileClock,
+-  Filter,
+   History,
+   MoreVertical,
+   Plus,
+@@ -19,7 +19,7 @@ import {
+   XCircle,
+ } from "lucide-react";
+ 
+-import { ActionButton, DataTable, ErrorMessage, StatCard, StatusBadge, type DataTableColumn } from "@/app/ui";
++import { ActionButton, DataTable, ErrorMessage, StatusBadge, type DataTableColumn } from "@/app/ui";
+ 
+ import { AddVehicleForm } from "./add-vehicle-form";
+ 
+@@ -55,7 +55,7 @@ type VehicleStatusFilter = "" | VehicleStatusOption;
+ type VehicleTypeFilter = "" | VehicleTypeOption;
+ type VehicleDocumentFilter = "" | VehicleDocumentStatus;
+ 
+-type VehicleDetailTab = "DETAILS" | "EQUIPEMENTS" | "MAINTENANCE" | "DOCS";
++type VehicleDetailTab = "DETAILS" | "EQUIPEMENTS" | "MAINTENANCE" | "DOCS" | "ANOMALIES";
+ 
+ const VEHICLE_TYPE_OPTIONS: VehicleTypeOption[] = ["AMBULANCE", "VSL", "TAXI"];
+ const VEHICLE_STATUS_OPTIONS: VehicleStatusOption[] = ["ACTIVE", "MAINTENANCE", "OUT_OF_SERVICE"];
+@@ -109,10 +109,16 @@ function formatDocumentDateLabel(value: string | null) {
+   return date.toLocaleDateString("fr-FR");
+ }
+ 
+-function formatDateTimeLabel(value: string) {
++function formatDateLabel(value: string) {
+   const date = new Date(value);
+   if (Number.isNaN(date.getTime())) return value;
+-  return date.toLocaleString("fr-FR");
++  return date.toLocaleDateString("fr-FR");
++}
++
++function formatTimeLabel(value: string) {
++  const date = new Date(value);
++  if (Number.isNaN(date.getTime())) return "";
++  return date.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+ }
+ 
+ function getVehicleTypeLabel(value: string | null) {
+@@ -251,6 +257,7 @@ const VEHICLE_DETAIL_TABS: Array<{ id: VehicleDetailTab; label: string }> = [
+   { id: "EQUIPEMENTS", label: "Equipements" },
+   { id: "MAINTENANCE", label: "Maintenance" },
+   { id: "DOCS", label: "Docs" },
++  { id: "ANOMALIES", label: "Anomalies" },
+ ];
+ 
+ const VEHICLE_MODEL_ROTATION = [
+@@ -602,6 +609,44 @@ export default function VehiclesClient({
+     setShowAdvancedFilters(false);
+   }
+ 
++  const kpiCards = [
++    {
++      key: "total",
++      value: vehicleStats.total,
++      label: "Total vehicules",
++      icon: Ambulance,
++      toneClass: "vehicles-kpi-card--info",
++    },
++    {
++      key: "active",
++      value: vehicleStats.enService,
++      label: "En service",
++      icon: BadgeCheck,
++      toneClass: "vehicles-kpi-card--success",
++    },
++    {
++      key: "maintenance",
++      value: vehicleStats.maintenance,
++      label: "En maintenance",
++      icon: Wrench,
++      toneClass: "vehicles-kpi-card--warning",
++    },
++    {
++      key: "out",
++      value: vehicleStats.horsService,
++      label: "Hors service",
++      icon: FileClock,
++      toneClass: "vehicles-kpi-card--danger",
++    },
++    {
++      key: "compliance",
++      value: vehicleStats.conformiteASurveiller,
++      label: "Conformite a surveiller",
++      icon: AlertTriangle,
++      toneClass: "vehicles-kpi-card--warning-soft",
++    },
++  ] as const;
++
+   const columns: DataTableColumn<Vehicle>[] = [
+     {
+       key: "select",
+@@ -617,6 +662,7 @@ export default function VehiclesClient({
+       key: "vehicle",
+       header: "Vehicule",
+       width: "230px",
++      align: "left",
+       render: (vehicle) => {
+         const index = vehicleIndexById.get(vehicle.id) ?? 0;
+         return (
+@@ -636,24 +682,28 @@ export default function VehiclesClient({
+       key: "immatriculation",
+       header: "Immatriculation",
+       width: "118px",
++      align: "center",
+       render: (vehicle) => vehicle.immatriculation,
+     },
+     {
+       key: "type",
+       header: "Type",
+       width: "108px",
++      align: "center",
+       render: (vehicle) => <StatusBadge variant="info">{getVehicleTypeLabel(vehicle.type)}</StatusBadge>,
+     },
+     {
+       key: "depot",
+       header: "Depot",
+       width: "132px",
++      align: "center",
+       render: (vehicle) => vehicle.depot ? getDepotLabel(vehicle.depot) : "Aucun depot",
+     },
+     {
+       key: "status",
+       header: "Statut",
+       width: "128px",
++      align: "center",
+       render: (vehicle) => (
+         <StatusBadge variant={vehicleStatusBadgeVariant(vehicle.status)}>{getVehicleStatusLabel(vehicle.status)}</StatusBadge>
+       ),
+@@ -662,6 +712,7 @@ export default function VehiclesClient({
+       key: "insurance",
+       header: "Assurance",
+       width: "120px",
++      align: "center",
+       render: (vehicle) => (
+         <span className={getDocumentDateToneClass(
+           vehicle.insuranceExpiresAt,
+@@ -677,6 +728,7 @@ export default function VehiclesClient({
+       key: "technical",
+       header: "Controle technique",
+       width: "138px",
++      align: "center",
+       render: (vehicle) => {
+         const hasControlDate = Boolean(parseDocumentDate(vehicle.technicalInspectionExpiresAt));
+         return (
+@@ -698,6 +750,7 @@ export default function VehiclesClient({
+       key: "registration",
+       header: "Carte grise",
+       width: "110px",
++      align: "center",
+       render: (vehicle) => (
+         <span className={vehicle.registrationDocumentPresent ? "vehicles-date vehicles-date--ok" : "vehicles-date vehicles-date--danger"}>
+           {vehicle.registrationDocumentPresent ? formatDocumentDateLabel(vehicle.updatedAt) : "Absente"}
+@@ -708,6 +761,7 @@ export default function VehiclesClient({
+       key: "sanitary",
+       header: "Agrement sanitaire",
+       width: "130px",
++      align: "center",
+       render: (vehicle) => (
+         <span className={getDocumentDateToneClass(
+           vehicle.sanitaryApprovalExpiresAt,
+@@ -723,6 +777,7 @@ export default function VehiclesClient({
+       key: "documents",
+       header: "Conformite",
+       width: "120px",
++      align: "center",
+       render: (vehicle) => {
+         const documentStatus = documentStatusByVehicleId.get(vehicle.id) ?? "conforme";
+         return <StatusBadge variant={documentStatusBadgeVariant(documentStatus)}>{documentStatusLabel(documentStatus)}</StatusBadge>;
+@@ -732,12 +787,18 @@ export default function VehiclesClient({
+       key: "updatedAt",
+       header: "Derniere modif.",
+       width: "118px",
+-      render: (vehicle) => formatDateTimeLabel(vehicle.updatedAt),
++      align: "center",
++      render: (vehicle) => (
++        <div className="vehicles-updated-cell">
++          <span>{formatDateLabel(vehicle.updatedAt)}</span>
++          <span>{formatTimeLabel(vehicle.updatedAt)}</span>
++        </div>
++      ),
+     },
+     {
+       key: "actions",
+       header: "Actions",
+-      align: "right",
++      align: "center",
+       width: "64px",
+       render: (vehicle) => (
+         <button
+@@ -854,17 +915,20 @@ export default function VehiclesClient({
+       ) : null}
+ 
+       <div className="vehicles-grid-stats">
+-        <StatCard title="Total vehicules" value={vehicleStats.total} hint="Total vehicules" tone="info" icon={<Ambulance size={18} />} />
+-        <StatCard title="En service" value={vehicleStats.enService} hint="En service" tone="success" icon={<ClipboardCheck size={18} />} />
+-        <StatCard title="En maintenance" value={vehicleStats.maintenance} hint="En maintenance" tone="warning" icon={<Wrench size={18} />} />
+-        <StatCard title="Hors service" value={vehicleStats.horsService} hint="Hors service" tone="danger" icon={<FileClock size={18} />} />
+-        <StatCard
+-          title="Conformite a surveiller"
+-          value={vehicleStats.conformiteASurveiller}
+-          hint="Conformite a surveiller"
+-          tone="warning"
+-          icon={<Filter size={18} />}
+-        />
++        {kpiCards.map((card) => {
++          const Icon = card.icon;
++          return (
++            <article key={card.key} className={`vehicles-kpi-card ${card.toneClass}`}>
++              <span className="vehicles-kpi-card__icon" aria-hidden="true">
++                <Icon size={20} />
++              </span>
++              <div className="vehicles-kpi-card__content">
++                <strong className="vehicles-kpi-card__value">{card.value}</strong>
++                <p className="vehicles-kpi-card__label">{card.label}</p>
++              </div>
++            </article>
++          );
++        })}
+       </div>
+ 
+       {error ? <ErrorMessage title="Erreur module vehicules" message={error} /> : null}
+@@ -1065,6 +1129,18 @@ export default function VehiclesClient({
+                 </div>
+               ) : null}
+ 
++              {detailTab === "ANOMALIES" ? (
++                <div className="vehicles-detail-group">
++                  <h4 className="vehicles-detail-group__title">Anomalies</h4>
++                  <p className="vehicles-table-cell-subtle">
++                    Aucune anomalie signalee pour ce vehicule.
++                  </p>
++                  <p className="vehicles-table-cell-subtle">
++                    Ce panneau est visuel uniquement dans ce lot.
++                  </p>
++                </div>
++              ) : null}
++
+               <div className="vehicles-detail-panel__actions">
+                 <ActionButton
+                   variant="secondary"
