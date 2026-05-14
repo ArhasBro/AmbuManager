@@ -1,4 +1,4 @@
-﻿# SESSION
+# SESSION
 
 ## ID SESSION
 
@@ -12,24 +12,44 @@ SESSION-20260513-04_A26_A26-UI-04
 
 Projet : Investissement  
 Sous-projet : Ambulance Manager  
-Maturite : 1-ALPHA  
+Maturité : 1-ALPHA  
 Bloc : A26  
-Type : CORRECTION+COMPLETION  
-Intitule : Dashboard, Société et Dépôts
+Type : CORRECTION+COMPLÉTION  
+Intitulé : Dashboard, Société et Dépôts
 
 ## Objectif de la session
 
-INFORMATION NON FOURNIE - A CONFIRMER
+Alignement visuel (cible 99 %) des pages `/dashboard`, `/company` et `/depots` avec les maquettes officielles A26, en correction UI/UX uniquement, sans ajout fonctionnel métier.
 
-## Perimetre exact traite
+## Périmètre exact traité
 
-INFORMATION NON FOURNIE - A CONFIRMER
+- Dashboard : KPI, carte profil, cartes modules, badges, bouton/lien d'action, alignements.
+- Société : identité société, paramètres métier (densité/présentation), résumé société, cohérence visuelle.
+- Dépôts : KPI, filtres, tableau, alignements colonnes/cellules, panneau droit, encarts.
+- Harmonisation visuelle ciblée via `app/globals.css` sur le périmètre A26.
 
-## Resultat synthetique de session
+## Fichiers applicatifs réellement modifiés
 
-INFORMATION NON FOURNIE - A CONFIRMER
+- `app/dashboard/page.tsx`
+- `app/company/page.tsx`
+- `app/company/company-profile-form.tsx`
+- `app/company/company-rules-panel.tsx`
+- `app/depots/page.tsx`
+- `app/depots/depots-client.tsx`
+- `app/globals.css`
 
-## Dossiers lies
+## Patchs produits
 
-- Session : docs/2-sessions/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04
-- PATCH   : docs/2-sessions/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/PATCH
+- `PATCH__SESSION-20260513-04_A26_A26-UI-04.diff`
+- `PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-01.diff`
+- `PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-02.diff`
+- `PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-03.diff`
+- `PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-04.diff`
+- `PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-04_V2.diff`
+
+## Verdict final
+
+- CODE VALIDABLE : OUI
+- DOCUMENTATION AUTORISÉE : OUI
+- CORRECTIONS REQUISES : NON
+- SESSION VALIDÉE : OUI

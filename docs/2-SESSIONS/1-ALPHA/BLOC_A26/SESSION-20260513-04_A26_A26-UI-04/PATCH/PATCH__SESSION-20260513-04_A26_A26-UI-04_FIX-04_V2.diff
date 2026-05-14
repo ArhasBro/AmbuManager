@@ -1,0 +1,133 @@
+diff --git a/app/depots/depots-client.tsx b/app/depots/depots-client.tsx
+index a7721f6..5db0ffb 100644
+--- a/app/depots/depots-client.tsx
++++ b/app/depots/depots-client.tsx
+@@ -302,6 +302,7 @@ export default function DepotsClient({
+       key: "selection",
+       header: "",
+       width: "48px",
++      align: "center",
+       render: (depot) => (
+         <input
+           type="checkbox"
+@@ -315,6 +316,7 @@ export default function DepotsClient({
+       key: "name",
+       header: "Nom",
+       width: "170px",
++      align: "left",
+       render: (depot) => (
+         <div className="depots-cell-main">
+           <strong>{depot.name}</strong>
+@@ -325,12 +327,14 @@ export default function DepotsClient({
+       key: "address",
+       header: "Adresse",
+       width: "196px",
++      align: "left",
+       render: (depot) => <span className="depots-table-cell-subtle">{depot.address || "Adresse non renseignée"}</span>,
+     },
+         {
+       key: "status",
+       header: "Statut",
+       width: "92px",
++      align: "center",
+       render: (depot) => (
+         <div className="depots-status-badge-cell">
+           <StatusBadge variant={depot.isActive ? "success" : "warning"}>
+@@ -343,18 +347,21 @@ export default function DepotsClient({
+       key: "vehicles",
+       header: "Véhicules",
+       width: "72px",
++      align: "center",
+       render: (depot) => depot.vehicleCount,
+     },
+     {
+       key: "users",
+       header: "Utilisateurs",
+       width: "84px",
++      align: "center",
+       render: (depot) => depot.userCount,
+     },
+     {
+       key: "updatedAt",
+       header: "Dernière modif.",
+       width: "98px",
++      align: "left",
+       render: (depot) => {
+         const parts = formatDateParts(depot.updatedAt);
+         return (
+@@ -368,7 +375,7 @@ export default function DepotsClient({
+     {
+       key: "actions",
+       header: "Actions",
+-      align: "right",
++      align: "left",
+       width: "70px",
+       render: (depot) => (
+         <div className="depots-table-actions">
+diff --git a/app/globals.css b/app/globals.css
+index 3504e37..4de81ad 100644
+--- a/app/globals.css
++++ b/app/globals.css
+@@ -1610,6 +1610,8 @@ pre {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
++  align-items: center;
++  text-align: center;
+   gap: 4px;
+   min-height: 72px;
+ }
+@@ -1944,12 +1946,12 @@ pre {
+ 
+ .dashboard-link-card__action {
+   margin-top: auto;
+-  display: inline-flex;
++  display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: 8px;
+-  justify-self: start;
+-  width: fit-content;
++  justify-self: stretch;
++  width: 100%;
+   border: 1px solid #cfe0f7;
+   border-radius: 8px;
+   background: #f8fbff;
+@@ -3916,7 +3918,7 @@ pre {
+ .company-rules-table-card {
+   border: 1px solid var(--ui-border);
+   border-radius: 12px;
+-  background: var(--ui-surface-soft);
++  background: var(--ui-surface);
+   padding: 12px;
+   display: grid;
+   gap: 10px;
+@@ -4162,6 +4164,8 @@ pre {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
++  align-items: center;
++  text-align: center;
+   gap: 4px;
+   min-height: 72px;
+ }
+@@ -4609,8 +4613,19 @@ pre {
+   padding: 9px 7px;
+ }
+ 
++.depots-table .ui-data-table__head-cell {
++  text-align: center;
++  border-bottom: 1px solid var(--ui-border-strong);
++}
++
++.depots-table .ui-data-table__head-cell:not(:last-child),
++.depots-table .ui-data-table__cell:not(:last-child) {
++  border-right: 1px solid color-mix(in srgb, var(--ui-border), #ffffff 18%);
++}
++
+ .depots-table .ui-data-table__cell {
+   vertical-align: middle;
++  border-bottom: 1px solid var(--ui-border-strong);
+ }
+ 
+ .depots-status-badge-cell {

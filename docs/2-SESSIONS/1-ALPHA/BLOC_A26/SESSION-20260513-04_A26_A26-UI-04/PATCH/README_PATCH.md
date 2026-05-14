@@ -1,24 +1,45 @@
-﻿# README_PATCH
+# README_PATCH
 
-## Session liee
+## Session liée
+
 SESSION-20260513-04_A26_A26-UI-04
 
 ## Type
-CORRECTION+COMPLETION
+
+CORRECTION+COMPLÉTION
 
 ## Dossier PATCH
-docs/2-sessions/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/PATCH
 
-## Patch officiel attendu
-PATCH__SESSION-20260513-04_A26_A26-UI-04.diff
+`docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/PATCH`
 
-## Commandes d'application
+## Patchs produits
 
-`ash
-git apply --check "docs/2-sessions/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/PATCH/PATCH__SESSION-20260513-04_A26_A26-UI-04.diff"
-git apply         "docs/2-sessions/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/PATCH/PATCH__SESSION-20260513-04_A26_A26-UI-04.diff"
-`
+- `PATCH__SESSION-20260513-04_A26_A26-UI-04.diff`
+- `PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-01.diff`
+- `PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-02.diff`
+- `PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-03.diff`
+- `PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-04.diff`
+- `PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-04_V2.diff`
 
-## Statut
-- Dossier patch initialise.
-- Patch officiel a produire dans cette session si du code est modifie.
+## Patch final à utiliser
+
+`PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-04_V2.diff`
+
+## Clarification obligatoire
+
+`PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-04.diff` est remplacé par `PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-04_V2.diff`.
+Le patch `FIX-04` ne doit pas être utilisé.
+Le patch final validé visuellement est `FIX-04_V2`.
+`FIX-04_V2` doit être appliqué sur la base `FIX-03`.
+
+## Application du patch final
+
+```bash
+git apply --check "docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/PATCH/PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-04_V2.diff"
+git apply "docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/PATCH/PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-04_V2.diff"
+```
+
+## Vérifications terminales
+
+- `npm run lint` : code retour `0` (18 warnings connus hors périmètre dans `app/planning/planning-client.tsx`).
+- `npm run build` : code retour `0`.

@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Building2, Save } from "lucide-react";
+import { Building2 } from "lucide-react";
 
-import { ActionButton, ErrorMessage } from "@/app/ui";
+import { ErrorMessage } from "@/app/ui";
 
 type CompanyProfile = {
   name: string;
@@ -42,12 +42,6 @@ export default function CompanyProfileForm({
     setForm((prev) => ({ ...prev, [key]: value }));
   }
 
-  function resetForm() {
-    setForm(initialProfile);
-    setError(null);
-    setSuccess(null);
-  }
-
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsSubmitting(true);
@@ -64,7 +58,7 @@ export default function CompanyProfileForm({
       const data = (await res.json().catch(() => null)) as ApiResponse<CompanyProfileResponse> | null;
 
       if (!res.ok || !data?.ok) {
-        throw new Error(getApiError(data, "Erreur lors de la mise a jour du profil societe"));
+        throw new Error(getApiError(data, "Erreur lors de la mise à jour du profil société"));
       }
 
       setForm({
@@ -74,7 +68,7 @@ export default function CompanyProfileForm({
         phone: data.data.phone,
         siret: data.data.siret,
       });
-      setSuccess("Profil societe mis a jour.");
+      setSuccess("Profil société mis à jour.");
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Erreur inconnue");
     } finally {
@@ -89,21 +83,18 @@ export default function CompanyProfileForm({
           <span className="company-card__title-icon" aria-hidden="true">
             <Building2 size={16} />
           </span>
-          <h2 className="company-card__title">Identite societe</h2>
-          <span className="company-chip">Profil societe</span>
+          <h2 className="company-card__title">Identité société</h2>
+          <span className="company-chip">Profil société</span>
         </div>
-        <p className="company-card__description">
-          Mettez a jour les informations de reference de la societe courante.
-        </p>
       </div>
 
-      {error ? <ErrorMessage title="Erreur profil societe" message={error} /> : null}
+      {error ? <ErrorMessage title="Erreur profil société" message={error} /> : null}
       {success ? <div className="company-alert company-alert--success">{success}</div> : null}
 
       <form id={formId} onSubmit={handleSubmit} className="company-form">
-        <div className="company-form-grid">
-          <label className="company-field">
-            <span className="company-field__label">Nom societe</span>
+        <div className="company-form-grid company-form-grid--identity">
+          <label className="company-field company-field--full">
+            <span className="company-field__label">Nom de la société</span>
             <input
               id="company-name"
               value={form.name}
@@ -113,8 +104,8 @@ export default function CompanyProfileForm({
             />
           </label>
 
-          <label className="company-field">
-            <span className="company-field__label">Nom des gerants</span>
+          <label className="company-field company-field--full">
+            <span className="company-field__label">Gérants</span>
             <input
               id="company-managers"
               value={form.managerNames}
@@ -124,8 +115,19 @@ export default function CompanyProfileForm({
             />
           </label>
 
-          <label className="company-field">
-            <span className="company-field__label">Telephone</span>
+          <label className="company-field company-field--full">
+            <span className="company-field__label">Adresse</span>
+            <input
+              id="company-address"
+              value={form.address}
+              onChange={(e) => updateField("address", e.target.value)}
+              required
+              disabled={isSubmitting}
+            />
+          </label>
+
+          <label className="company-field company-field--full">
+            <span className="company-field__label">Téléphone</span>
             <input
               id="company-phone"
               value={form.phone}
@@ -135,7 +137,7 @@ export default function CompanyProfileForm({
             />
           </label>
 
-          <label className="company-field">
+          <label className="company-field company-field--full">
             <span className="company-field__label">SIRET</span>
             <input
               id="company-siret"
@@ -145,26 +147,6 @@ export default function CompanyProfileForm({
               disabled={isSubmitting}
             />
           </label>
-        </div>
-
-        <label className="company-field">
-          <span className="company-field__label">Adresse</span>
-          <input
-            id="company-address"
-            value={form.address}
-            onChange={(e) => updateField("address", e.target.value)}
-            required
-            disabled={isSubmitting}
-          />
-        </label>
-
-        <div className="company-actions company-actions--end">
-          <ActionButton type="button" variant="secondary" disabled={isSubmitting} onClick={resetForm}>
-            Annuler
-          </ActionButton>
-          <ActionButton type="submit" variant="primary" disabled={isSubmitting} leadingIcon={<Save size={16} />}>
-            {isSubmitting ? "Enregistrement..." : "Enregistrer"}
-          </ActionButton>
         </div>
       </form>
     </section>

@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 import { Ambulance, Building2, CalendarDays, Landmark, Save, UsersRound } from "lucide-react";
 
-import { ActionButton, PageHeader, StatCard } from "@/app/ui";
+import { ActionButton, PageHeader } from "@/app/ui";
 import { authOptions } from "@/lib/auth";
 import { canManageCompanyRules } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
@@ -75,13 +75,51 @@ export default async function CompanyPage() {
       hour: "2-digit",
       minute: "2-digit",
     }).format(lastUpdatedAt)
-    : "N/A";
+    : "Donnée non renseignée";
+
+  const summaryItems = [
+    {
+      key: "company",
+      label: "Société active",
+      value: company?.name ?? "Donnée non renseignée",
+      icon: <Building2 size={16} />,
+      tone: "neutral",
+    },
+    {
+      key: "depots",
+      label: "Dépôts actifs",
+      value: `${companyKpis.depots} dépôts`,
+      icon: <Landmark size={16} />,
+      tone: "info",
+    },
+    {
+      key: "users",
+      label: "Utilisateurs actifs",
+      value: `${companyKpis.users} utilisateurs`,
+      icon: <UsersRound size={16} />,
+      tone: "info",
+    },
+    {
+      key: "vehicles",
+      label: "Véhicules actifs",
+      value: `${companyKpis.vehicles} véhicules`,
+      icon: <Ambulance size={16} />,
+      tone: "success",
+    },
+    {
+      key: "updated",
+      label: "Dernière mise à jour",
+      value: lastUpdatedLabel,
+      icon: <CalendarDays size={16} />,
+      tone: "neutral",
+    },
+  ] as const;
 
   return (
     <section className="company-section">
       <PageHeader
-        title="Societe"
-        description="Gerez l'identite de la societe et les parametres metier principaux."
+        title="Société"
+        description="Gérez l'identité de la société et les paramètres métier principaux."
         actions={
           canManageProfile ? (
             <ActionButton type="submit" form="company-profile-form" variant="primary" leadingIcon={<Save size={16} />}>
@@ -107,9 +145,9 @@ export default async function CompanyPage() {
           ) : (
             <section className="company-card company-card--soft">
               <div className="company-card__head">
-                <h2 className="company-card__title">Profil societe</h2>
+                <h2 className="company-card__title">Profil société</h2>
                 <p className="company-card__description">
-                  L&apos;edition du profil societe reste reservee aux comptes ADMIN / GERANT.
+                  L&apos;édition du profil société reste réservée aux comptes ADMIN / GÉRANT.
                 </p>
               </div>
             </section>
@@ -122,9 +160,9 @@ export default async function CompanyPage() {
           ) : (
             <section className="company-card company-card--soft">
               <div className="company-card__head">
-                <h2 className="company-card__title">Parametres metier</h2>
+                <h2 className="company-card__title">Paramètres métier</h2>
                 <p className="company-card__description">
-                  L&apos;acces aux regles metier est reserve aux comptes autorises.
+                  L&apos;accès aux règles métier est réservé aux comptes autorisés.
                 </p>
               </div>
             </section>
@@ -132,48 +170,37 @@ export default async function CompanyPage() {
         </div>
 
         <aside className="company-summary-rail">
-          <section className="company-card">
+          <section className="company-card company-summary-card">
             <div className="company-card__head">
-              <h2 className="company-card__title">Resume societe</h2>
+              <h2 className="company-card__title">Résumé société</h2>
             </div>
-            <div className="company-summary-stack">
-              <StatCard
-                title="Societe active"
-                value={<span className="company-summary-value">{company?.name ?? "N/A"}</span>}
-                tone="neutral"
-                icon={<Building2 size={16} />}
-              />
-              <StatCard
-                title="Depots actifs"
-                value={companyKpis.depots}
-                hint="depots"
-                tone="warning"
-                icon={<Landmark size={16} />}
-              />
-              <StatCard
-                title="Utilisateurs actifs"
-                value={companyKpis.users}
-                hint="utilisateurs"
-                tone="info"
-                icon={<UsersRound size={16} />}
-              />
-              <StatCard
-                title="Vehicules actifs"
-                value={companyKpis.vehicles}
-                hint="vehicules"
-                tone="success"
-                icon={<Ambulance size={16} />}
-              />
-              <StatCard
-                title="Derniere mise a jour"
-                value={<span className="company-summary-value">{lastUpdatedLabel}</span>}
-                tone="neutral"
-                icon={<CalendarDays size={16} />}
-              />
+            <div className="company-summary-items">
+              {summaryItems.map((item) => (
+                <article key={item.key} className={`company-summary-item company-summary-item--${item.tone}`}>
+                  <span className="company-summary-item__icon" aria-hidden="true">
+                    {item.icon}
+                  </span>
+                  <div className="company-summary-item__copy">
+                    <p className="company-summary-item__label">{item.label}</p>
+                    <strong className="company-summary-item__value">{item.value}</strong>
+                  </div>
+                </article>
+              ))}
             </div>
           </section>
         </aside>
       </div>
+
+      {canManageProfile ? (
+        <div className="company-page-footer-actions">
+          <ActionButton type="reset" form="company-profile-form" variant="secondary">
+            Annuler
+          </ActionButton>
+          <ActionButton type="submit" form="company-profile-form" variant="primary" leadingIcon={<Save size={16} />}>
+            Enregistrer les modifications
+          </ActionButton>
+        </div>
+      ) : null}
     </section>
   );
 }

@@ -1,8 +1,8 @@
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
-import { Ambulance, FileArchive, Landmark, UsersRound } from "lucide-react";
+import { Ambulance, FileArchive, Landmark, Plus, UsersRound, type LucideIcon } from "lucide-react";
 
-import { PageHeader, StatCard } from "@/app/ui";
+import { PageHeader } from "@/app/ui";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
@@ -11,6 +11,14 @@ import DepotsClient from "./depots-client";
 function canManageDepots(role?: string) {
   return role === "ADMIN" || role === "GERANT";
 }
+
+type DepotKpi = {
+  label: string;
+  value: number;
+  hint: string;
+  Icon: LucideIcon;
+  toneClass: string;
+};
 
 export default async function DepotsPage() {
   const session = await getServerSession(authOptions);
@@ -42,43 +50,65 @@ export default async function DepotsPage() {
   const archivedCount = depots.length - activeCount;
   const attachedVehicleCount = depots.reduce((total, depot) => total + depot._count.vehicles, 0);
   const attachedUserCount = depots.reduce((total, depot) => total + depot._count.users, 0);
+  const kpis: DepotKpi[] = [
+    {
+      label: "Dépôts actifs",
+      value: activeCount,
+      hint: `sur ${depots.length} dépôts`,
+      Icon: Landmark,
+      toneClass: "depots-kpi-card--violet",
+    },
+    {
+      label: "Archivés",
+      value: archivedCount,
+      hint: `sur ${depots.length} dépôts`,
+      Icon: FileArchive,
+      toneClass: "depots-kpi-card--orange",
+    },
+    {
+      label: "Véhicules rattachés",
+      value: attachedVehicleCount,
+      hint: "au total",
+      Icon: Ambulance,
+      toneClass: "depots-kpi-card--turquoise",
+    },
+    {
+      label: "Utilisateurs rattachés",
+      value: attachedUserCount,
+      hint: "au total",
+      Icon: UsersRound,
+      toneClass: "depots-kpi-card--blue",
+    },
+  ];
 
   return (
     <section className="depots-section">
       <PageHeader
-        title="Depots / bases"
-        description="Gerez les bases de rattachement de vos equipes et vehicules."
+        title="Dépôts / bases"
+        description="Gérez les bases de rattachement de vos équipes et véhicules."
+        actions={
+          <a href="#depots-create-form" className="ui-action-button ui-action-button--primary ui-action-button--md">
+            <span className="ui-action-button__icon" aria-hidden="true">
+              <Plus size={16} />
+            </span>
+            <span className="ui-action-button__label">Créer un dépôt</span>
+          </a>
+        }
       />
 
       <div className="depots-grid-stats">
-        <StatCard
-          title="Depots actifs"
-          value={activeCount}
-          hint={`sur ${depots.length} depots`}
-          tone="warning"
-          icon={<Landmark size={16} />}
-        />
-        <StatCard
-          title="Archives"
-          value={archivedCount}
-          hint={`sur ${depots.length} depots`}
-          tone="neutral"
-          icon={<FileArchive size={16} />}
-        />
-        <StatCard
-          title="Vehicules rattaches"
-          value={attachedVehicleCount}
-          hint="au total"
-          tone="success"
-          icon={<Ambulance size={16} />}
-        />
-        <StatCard
-          title="Utilisateurs rattaches"
-          value={attachedUserCount}
-          hint="au total"
-          tone="info"
-          icon={<UsersRound size={16} />}
-        />
+        {kpis.map((kpi) => (
+          <article key={kpi.label} className={`depots-kpi-card ${kpi.toneClass}`}>
+            <span className="depots-kpi-card__icon" aria-hidden="true">
+              <kpi.Icon size={18} strokeWidth={2.1} />
+            </span>
+            <div className="depots-kpi-card__copy">
+              <p className="depots-kpi-card__label">{kpi.label}</p>
+              <strong className="depots-kpi-card__value">{kpi.value}</strong>
+              <p className="depots-kpi-card__hint">{kpi.hint}</p>
+            </div>
+          </article>
+        ))}
       </div>
 
       <DepotsClient

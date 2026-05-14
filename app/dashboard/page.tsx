@@ -4,17 +4,19 @@ import {
   ArrowRight,
   Building2,
   CalendarDays,
+  Mail,
   FileText,
   GraduationCap,
   Landmark,
-  Mail,
   ShieldCheck,
+  UserRound,
   UsersRound,
   type LucideIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { EmptyState, PageHeader, StatusBadge, type StatusBadgeVariant } from "@/app/ui";
 import { authOptions } from "@/lib/auth";
 import {
   canAccessAdminDashboard,
@@ -28,8 +30,6 @@ import {
   canViewSelfPlanning,
 } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
-import { EmptyState, PageHeader, StatCard, StatusBadge, type StatusBadgeVariant } from "@/app/ui";
-
 
 type DashboardCardTone = "blue" | "teal" | "violet" | "amber" | "slate";
 
@@ -47,23 +47,23 @@ type DashboardMetric = {
   label: string;
   value: number;
   total: number;
-  tone: "neutral" | "info" | "success" | "warning";
   Icon: LucideIcon;
+  hintLabel: string;
 };
 
 const ROLE_LABELS: Record<string, string> = {
-  ADMIN: "Administration",
-  GERANT: "Gerance",
+  ADMIN: "Administrateur",
+  GERANT: "Gérant",
   BUREAU: "Bureau",
-  ADE: "Ambulancier diplome d'Etat",
+  ADE: "Ambulancier diplômé d'État",
   AA: "Auxiliaire ambulancier",
   TAXI: "Taxi",
-  REGULATEUR: "Regulation",
+  REGULATEUR: "Régulation",
 };
 
 function getProfileLabel(role?: string | null, platformRole?: string | null): string {
   if (platformRole === "SUPPORT") return "Support global";
-  if (!role) return "Profil non renseigne";
+  if (!role) return "Profil non renseigné";
   return ROLE_LABELS[role] ?? role;
 }
 
@@ -137,90 +137,81 @@ export default async function DashboardPage() {
   const planningAllowed = companyScopedSession && (planningSelfAllowed || planningGlobalAllowed);
   const nativeAdminMetricsAllowed = Boolean(companyId) && companyProfileAllowed;
 
-  const [activeUsersCount, totalUsersCount, activeVehiclesCount, totalVehiclesCount, activeDepotsCount, totalDepotsCount, activeTemplatesCount, totalTemplatesCount] =
-    nativeAdminMetricsAllowed && companyId
-      ? await Promise.all([
-          prisma.user.count({
-            where: {
-              companyId,
-              isActive: true,
-              platformRole: null,
-            },
-          }),
-          prisma.user.count({
-            where: {
-              companyId,
-              platformRole: null,
-            },
-          }),
-          prisma.vehicle.count({
-            where: {
-              companyId,
-              isActive: true,
-            },
-          }),
-          prisma.vehicle.count({
-            where: {
-              companyId,
-            },
-          }),
-          prisma.depot.count({
-            where: {
-              companyId,
-              isActive: true,
-            },
-          }),
-          prisma.depot.count({
-            where: {
-              companyId,
-            },
-          }),
-          prisma.shiftTemplate.count({
-            where: {
-              companyId,
-              isActive: true,
-              archivedAt: null,
-            },
-          }),
-          prisma.shiftTemplate.count({
-            where: {
-              companyId,
-              archivedAt: null,
-            },
-          }),
-        ])
-      : [0, 0, 0, 0, 0, 0, 0, 0];
+  const [
+    activeUsersCount,
+    totalUsersCount,
+    activeVehiclesCount,
+    totalVehiclesCount,
+    activeDepotsCount,
+    totalDepotsCount,
+    activeTemplatesCount,
+    totalTemplatesCount,
+    companyName,
+  ] = nativeAdminMetricsAllowed && companyId
+    ? await Promise.all([
+        prisma.user.count({
+          where: {
+            companyId,
+            isActive: true,
+            platformRole: null,
+          },
+        }),
+        prisma.user.count({
+          where: {
+            companyId,
+            platformRole: null,
+          },
+        }),
+        prisma.vehicle.count({
+          where: {
+            companyId,
+            isActive: true,
+          },
+        }),
+        prisma.vehicle.count({
+          where: {
+            companyId,
+          },
+        }),
+        prisma.depot.count({
+          where: {
+            companyId,
+            isActive: true,
+          },
+        }),
+        prisma.depot.count({
+          where: {
+            companyId,
+          },
+        }),
+        prisma.shiftTemplate.count({
+          where: {
+            companyId,
+            isActive: true,
+            archivedAt: null,
+          },
+        }),
+        prisma.shiftTemplate.count({
+          where: {
+            companyId,
+            archivedAt: null,
+          },
+        }),
+        prisma.company
+          .findUnique({
+            where: { id: companyId },
+            select: { name: true },
+          })
+          .then((item) => item?.name ?? "Société non renseignée"),
+      ])
+    : [0, 0, 0, 0, 0, 0, 0, 0, "Société non renseignée"];
 
   const metrics: DashboardMetric[] = nativeAdminMetricsAllowed
     ? [
-        {
-          label: "Utilisateurs actifs",
-          value: activeUsersCount,
-          total: totalUsersCount,
-          tone: "info",
-          Icon: UsersRound,
-        },
-        {
-          label: "Vehicules actifs",
-          value: activeVehiclesCount,
-          total: totalVehiclesCount,
-          tone: "success",
-          Icon: Ambulance,
-        },
-        {
-          label: "Depots actifs",
-          value: activeDepotsCount,
-          total: totalDepotsCount,
-          tone: "neutral",
-          Icon: Landmark,
-        },
-        {
-          label: "Templates actifs",
-          value: activeTemplatesCount,
-          total: totalTemplatesCount,
-          tone: "warning",
-          Icon: FileText,
-        },
+        { label: "Utilisateurs actifs", value: activeUsersCount, total: totalUsersCount, Icon: UsersRound, hintLabel: "utilisateurs" },
+        { label: "Véhicules actifs", value: activeVehiclesCount, total: totalVehiclesCount, Icon: Ambulance, hintLabel: "véhicules" },
+        { label: "Dépôts actifs", value: activeDepotsCount, total: totalDepotsCount, Icon: Landmark, hintLabel: "dépôts" },
+        { label: "Templates actifs", value: activeTemplatesCount, total: totalTemplatesCount, Icon: FileText, hintLabel: "templates" },
       ]
     : [];
 
@@ -228,10 +219,8 @@ export default async function DashboardPage() {
     ? [
         {
           href: "/planning",
-          title: planningGlobalAllowed ? "Planning" : "Mon planning",
-          description: planningGlobalAllowed
-            ? "Consulter le planning de la societe selon vos droits reels."
-            : "Acceder a votre planning sans exposer les modules d'administration.",
+          title: "Planning",
+          description: "Consultez le planning de la société selon vos droits.",
           Icon: CalendarDays,
           tone: "blue",
           statusLabel: "Disponible",
@@ -242,49 +231,11 @@ export default async function DashboardPage() {
 
   const adminLinks: DashboardLink[] = [];
 
-  if (companyScopedSession && (companyProfileAllowed || companyRulesAllowed)) {
-    adminLinks.push({
-      href: "/company",
-      title: "Societe",
-      description: companyProfileAllowed
-        ? "Profil societe et regles metier de la societe courante."
-        : "Acces aux regles metier deleguees sur la societe courante.",
-      Icon: Building2,
-      tone: "slate",
-      statusLabel: companyProfileAllowed ? "Disponible" : "Selon permissions",
-      statusVariant: companyProfileAllowed ? "success" : "warning",
-    });
-  }
-
-  if (companyScopedSession && companyProfileAllowed) {
-    adminLinks.push({
-      href: "/onboarding",
-      title: "Onboarding",
-      description: "Parcours manuel guide et imports initiaux simples pour demarrer.",
-      Icon: GraduationCap,
-      tone: "violet",
-      statusLabel: "Disponible",
-      statusVariant: "success",
-    });
-  }
-
-  if (companyScopedSession && depotsAllowed) {
-    adminLinks.push({
-      href: "/depots",
-      title: "Depots / bases",
-      description: "Gerer les depots actifs de la societe courante.",
-      Icon: Landmark,
-      tone: "violet",
-      statusLabel: "Disponible",
-      statusVariant: "success",
-    });
-  }
-
   if (companyScopedSession && usersAllowed) {
     adminLinks.push({
       href: "/users",
       title: "Utilisateurs / RH",
-      description: "Creer, modifier, archiver et administrer les comptes de la societe.",
+      description: "Gérez les équipes, rôles et affectations.",
       Icon: UsersRound,
       tone: "teal",
       statusLabel: "Disponible",
@@ -295,8 +246,8 @@ export default async function DashboardPage() {
   if (companyScopedSession && vehiclesAllowed) {
     adminLinks.push({
       href: "/vehicles",
-      title: "Vehicules",
-      description: "Consulter et gerer la flotte reellement autorisee.",
+      title: "Véhicules",
+      description: "Consultez et gérez la flotte ambulancière.",
       Icon: Ambulance,
       tone: "blue",
       statusLabel: "Disponible",
@@ -308,7 +259,7 @@ export default async function DashboardPage() {
     adminLinks.push({
       href: "/templates",
       title: "Templates",
-      description: "Gerer les templates de shifts disponibles dans le depot.",
+      description: "Gérez les modèles de shifts disponibles.",
       Icon: FileText,
       tone: "amber",
       statusLabel: "Disponible",
@@ -316,11 +267,47 @@ export default async function DashboardPage() {
     });
   }
 
+  if (companyScopedSession && (companyProfileAllowed || companyRulesAllowed)) {
+    adminLinks.push({
+      href: "/company",
+      title: "Société",
+      description: "Consultez le profil et les règles de la société courante.",
+      Icon: Building2,
+      tone: "slate",
+      statusLabel: "Disponible",
+      statusVariant: "success",
+    });
+  }
+
+  if (companyScopedSession && depotsAllowed) {
+    adminLinks.push({
+      href: "/depots",
+      title: "Dépôts",
+      description: "Gérez les dépôts et leurs informations opérationnelles.",
+      Icon: Landmark,
+      tone: "violet",
+      statusLabel: "Disponible",
+      statusVariant: "success",
+    });
+  }
+
+  if (companyScopedSession && companyProfileAllowed) {
+    adminLinks.push({
+      href: "/onboarding",
+      title: "Onboarding",
+      description: "Parcours et guides pour les nouveaux collaborateurs.",
+      Icon: GraduationCap,
+      tone: "violet",
+      statusLabel: "Selon permissions",
+      statusVariant: "warning",
+    });
+  }
+
   if ((companyScopedSession || supportActor) && auditAllowed) {
     adminLinks.push({
       href: "/audit",
       title: "Audit",
-      description: "Consulter les evenements de securite, support et modifications recentes.",
+      description: "Consultez les journaux d’audit et exports des droits.",
       Icon: ShieldCheck,
       tone: "slate",
       statusLabel: "Disponible",
@@ -338,73 +325,68 @@ export default async function DashboardPage() {
     const safeB = rankB === -1 ? Number.MAX_SAFE_INTEGER : rankB;
     return safeA - safeB;
   });
-  const visibleModuleCount = moduleLinks.length;
+
+  const profileLabel = getProfileLabel(user.role, user.platformRole);
+  const userLabel = user.name ?? user.email ?? "Utilisateur";
+  const companyLabel = companyScopedSession ? companyName : "Société non rattachée";
 
   return (
     <div className="page-wrap">
       <PageHeader
         title="Tableau de bord"
-        description="Portail d'acces aux modules de gestion de votre societe ambulanciere."
+        description="Portail d’accès aux modules de gestion de votre société ambulancière."
       />
 
-      <section className="panel dashboard-welcome">
-        <div className="dashboard-profile">
-          <span className="dashboard-profile__avatar" aria-hidden="true">
-            {(user.name ?? user.email ?? "U").slice(0, 2).toUpperCase()}
+      <section className="panel dashboard-profile-card">
+        <div className="dashboard-profile-card__head">
+          <span className="dashboard-profile-card__avatar" aria-hidden="true">
+            <UserRound size={34} strokeWidth={2} />
+            <span className="dashboard-profile-card__online-dot" />
           </span>
-          <div className="dashboard-profile__copy">
-            <h2 className="dashboard-welcome__title">
-              Connecte en tant que {user.name ?? user.email ?? "Utilisateur"}
-            </h2>
-            <div className="dashboard-profile__meta">
-              <span>
-                <Mail size={14} strokeWidth={2.2} aria-hidden="true" />
-                {user.email ?? "email non renseigne"}
+          <div className="dashboard-profile-card__copy">
+            <h2 className="dashboard-profile-card__title">Connecté en tant que {userLabel}</h2>
+            <div className="dashboard-profile-card__meta">
+              <span className="dashboard-profile-card__meta-item dashboard-profile-card__meta-item--plain">
+                <Mail size={16} />
+                {user.email ?? "Email non renseigné"}
               </span>
-              <span>
-                <Building2 size={14} strokeWidth={2.2} aria-hidden="true" />
-                {companyScopedSession ? "Societe rattachee" : "Societe non rattachee"}
+              <span className="dashboard-profile-card__meta-separator" aria-hidden="true" />
+              <span className="dashboard-profile-card__meta-item">
+                <span className="dashboard-profile-card__meta-chip">Rôle</span>
+                <span>{profileLabel}</span>
+              </span>
+              <span className="dashboard-profile-card__meta-separator" aria-hidden="true" />
+              <span className="dashboard-profile-card__meta-item">
+                <span className="dashboard-profile-card__meta-chip">Société</span>
+                <span>{companyLabel}</span>
               </span>
             </div>
           </div>
-        </div>
-
-        <div className="dashboard-welcome__badges">
-          <StatusBadge variant="info">Profil : {getProfileLabel(user.role, user.platformRole)}</StatusBadge>
-          <StatusBadge variant={companyScopedSession ? "success" : "warning"}>Acces : {companyScopedSession ? "normal" : "limite"}</StatusBadge>
-          <StatusBadge variant="neutral">Modules visibles : {visibleModuleCount}</StatusBadge>
         </div>
       </section>
 
       {!companyScopedSession ? (
         <section className="panel status-warning dashboard-warning">
-          <strong>Compte sans societe courante</strong>
-          <p>
-            La session n&apos;est pas rattachee a une societe cliente. Les modules societe restent masques.
-          </p>
+          <strong>Compte sans société courante</strong>
+          <p>La session n&apos;est pas rattachée à une société cliente. Les modules société restent masqués.</p>
         </section>
       ) : null}
 
       {showTerrainSection || showAdminSection ? (
-        <section className="panel dashboard-section">
-          <header className="dashboard-section__head">
-            <h2 className="dashboard-section__title">Modules d&apos;acces</h2>
-            <p className="dashboard-section__description">
-              Les cartes ci-dessous respectent les permissions de la session active.
-            </p>
-          </header>
-
+        <section className="dashboard-content-stack">
           {metrics.length > 0 ? (
             <div className="dashboard-metrics-grid">
-              {metrics.map((metric) => (
-                <StatCard
-                  key={metric.label}
-                  title={metric.label}
-                  value={metric.value}
-                  hint={`sur ${metric.total}`}
-                  tone={metric.tone}
-                  icon={<metric.Icon size={18} strokeWidth={2.1} />}
-                />
+              {metrics.map((metric, index) => (
+                <article key={metric.label} className={`dashboard-kpi-card dashboard-kpi-card--${index}`}>
+                  <span className="dashboard-kpi-card__icon" aria-hidden="true">
+                    <metric.Icon size={18} strokeWidth={2.1} />
+                  </span>
+                  <div className="dashboard-kpi-card__copy">
+                    <p className="dashboard-kpi-card__label">{metric.label}</p>
+                    <strong className="dashboard-kpi-card__value">{metric.value}</strong>
+                    <p className="dashboard-kpi-card__hint">sur {metric.total} {metric.hintLabel}</p>
+                  </div>
+                </article>
               ))}
             </div>
           ) : null}
@@ -418,7 +400,7 @@ export default async function DashboardPage() {
           ) : (
             <EmptyState
               title="Aucun module disponible"
-              message="Aucun module supplementaire n'est reellement accessible."
+              message="Aucun module supplémentaire n&apos;est réellement accessible."
             />
           )}
         </section>
@@ -426,11 +408,10 @@ export default async function DashboardPage() {
 
       {!showTerrainSection && !showAdminSection && companyScopedSession ? (
         <EmptyState
-          title="Aucun acces module exploitable"
-          message="Aucun module n'est actuellement publie sur le dashboard pour cette session."
+          title="Aucun accès module exploitable"
+          message="Aucun module n&apos;est actuellement publié sur le dashboard pour cette session."
         />
       ) : null}
-
     </div>
   );
 }

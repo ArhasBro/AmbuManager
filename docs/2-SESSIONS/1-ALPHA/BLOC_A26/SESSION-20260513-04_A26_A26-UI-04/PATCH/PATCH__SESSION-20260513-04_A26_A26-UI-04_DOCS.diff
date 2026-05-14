@@ -1,0 +1,279 @@
+diff --git a/docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/EVIDENCES.md b/docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/EVIDENCES.md
+index ed53cf4..a107b6b 100644
+--- a/docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/EVIDENCES.md
++++ b/docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/EVIDENCES.md
+@@ -1,10 +1,26 @@
+-﻿# EVIDENCES
++# EVIDENCES
+ 
+-Ã‰lÃ©ments factuels utilisÃ©s pendant la session.
++## Chaîne de patchs produits
+ 
+----
++- `PATCH__SESSION-20260513-04_A26_A26-UI-04.diff`
++- `PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-01.diff`
++- `PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-02.diff`
++- `PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-03.diff`
++- `PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-04.diff`
++- `PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-04_V2.diff`
+ 
+-## Sources utilisÃ©es
++## Statut patch final
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++`PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-04.diff` est remplacé par `PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-04_V2.diff`.
+ 
++Le patch `FIX-04` ne doit pas être utilisé comme correctif final.
++Le patch final validé visuellement est `FIX-04_V2`.
++
++## Preuves techniques
++
++- Patch final en UTF-8 sans BOM : vérifié.
++- Fichiers source modifiés sans BOM en tête : vérifié.
++- `git apply --check PATCH__...FIX-04_V2.diff : code retour 0`.
++- `npm run lint : code retour 0`.
++- `npm run build : code retour 0`.
++- `npm run lint signale 18 warnings dans app/planning/planning-client.tsx, hors périmètre de cette session`.
+\ No newline at end of file
+diff --git a/docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/FIN_SESSION.md b/docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/FIN_SESSION.md
+index fb41981..9ef9195 100644
+--- a/docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/FIN_SESSION.md
++++ b/docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/FIN_SESSION.md
+@@ -1,14 +1,23 @@
+-﻿# FIN_SESSION
++# FIN_SESSION
+ 
+-## ClÃ´ture
++## Clôture
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++Session clôturée après validation visuelle manuelle Nathan sur la version `FIX-04_V2`.
+ 
+ ## Validation
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++VALIDÉ : rendu visuel Dashboard / Société / Dépôts après FIX-04_V2
+ 
+-## Verdict final
++## Contraintes respectées
++
++- Aucun changement API / Prisma / RBAC / services métier.
++- Aucun changement Shell global retenu (A26-01 conservé).
++- Aucune capture automatique produite.
++- Aucun ZIP généré.
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++## Verdict final
+ 
++- CODE VALIDABLE : OUI
++- DOCUMENTATION AUTORISÉE : OUI
++- CORRECTIONS REQUISES : NON
++- SESSION VALIDÉE : OUI
+\ No newline at end of file
+diff --git a/docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/NOTES.md b/docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/NOTES.md
+index cf1efd7..79ea4aa 100644
+--- a/docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/NOTES.md
++++ b/docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/NOTES.md
+@@ -1,10 +1,28 @@
+-﻿# NOTES
++# NOTES
+ 
+-Notes de travail de la session.
++## Méthode
+ 
+----
++- Travail en reprises correctives ciblées, sans refonte fonctionnelle.
++- Priorité stricte à la fidélité maquette sur Dashboard, Société, Dépôts.
++- Ajustements incrémentaux UI/CSS et structures JSX minimales nécessaires.
+ 
+-## MÃ©thode / observations
++## Références utilisées
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++- `Dashboard_V1.png`
++- `Société_V1.0.png`
++- `Dépôts-bases_V1.0.png`
++- `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_CODEX_UI_UX_VISUEL_99.md`
++- `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_DASHBOARD.md`
++- `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_COMPANY.md`
++- `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_DEPOTS_BASES.md`
++- `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_INDEX_MAQUETTES.md`
++- `docs/1-MASTER/2-REFERENCE_UI_UX/CADRAGE_UI_UX_ALPHA_MAQUETTE_V0.2.md` : INFORMATION NON FOURNIE — À CONFIRMER (non disponible au moment de la production)
+ 
++## Arbitrages
++
++- Conservation du fonctionnel existant ; réduction/ajustement de son exposition visuelle si divergence maquette.
++- Aucun changement API, Prisma, RBAC, services métier, Shell global final.
++
++## Validation manuelle
++
++VALIDÉ : rendu visuel Dashboard / Société / Dépôts après FIX-04_V2
+\ No newline at end of file
+diff --git a/docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/PATCH/README_PATCH.md b/docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/PATCH/README_PATCH.md
+index 1a41a9f..c96489d 100644
+--- a/docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/PATCH/README_PATCH.md
++++ b/docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/PATCH/README_PATCH.md
+@@ -1,24 +1,43 @@
+-﻿# README_PATCH
++# README_PATCH
++
++## Session liée
+ 
+-## Session liee
+ SESSION-20260513-04_A26_A26-UI-04
+ 
+ ## Type
+-CORRECTION+COMPLETION
++
++CORRECTION+COMPLÉTION
+ 
+ ## Dossier PATCH
+-docs/2-sessions/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/PATCH
+ 
+-## Patch officiel attendu
+-PATCH__SESSION-20260513-04_A26_A26-UI-04.diff
++`docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/PATCH`
++
++## Patchs produits
++
++- `PATCH__SESSION-20260513-04_A26_A26-UI-04.diff`
++- `PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-01.diff`
++- `PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-02.diff`
++- `PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-03.diff`
++- `PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-04.diff`
++- `PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-04_V2.diff`
++
++## Patch final à utiliser
++
++`PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-04_V2.diff`
++
++## Important
++
++`PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-04.diff` est remplacé par `PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-04_V2.diff`.
++Le patch `FIX-04` ne doit pas être utilisé comme correctif final.
++
++## Application du patch final
+ 
+-## Commandes d'application
++```bash
++git apply --check "docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/PATCH/PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-04_V2.diff"
++git apply "docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/PATCH/PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-04_V2.diff"
++```
+ 
+-`ash
+-git apply --check "docs/2-sessions/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/PATCH/PATCH__SESSION-20260513-04_A26_A26-UI-04.diff"
+-git apply         "docs/2-sessions/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/PATCH/PATCH__SESSION-20260513-04_A26_A26-UI-04.diff"
+-`
++## Vérifications terminales (session validée)
+ 
+-## Statut
+-- Dossier patch initialise.
+-- Patch officiel a produire dans cette session si du code est modifie.
++- `npm run lint` : code retour `0` (18 warnings connus hors périmètre dans `app/planning/planning-client.tsx`).
++- `npm run build` : code retour `0`.
+\ No newline at end of file
+diff --git a/docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/RESULTATS.md b/docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/RESULTATS.md
+index bbf7c32..6b0af6f 100644
+--- a/docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/RESULTATS.md
++++ b/docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/RESULTATS.md
+@@ -1,12 +1,26 @@
+-﻿# RESULTATS
++# RESULTATS
+ 
+-## RÃ©sultats obtenus
++## Résultats obtenus
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++- Alignement visuel validé sur les pages :
++  - `/dashboard`
++  - `/company`
++  - `/depots`
++- Correctif final retenu : `FIX-04_V2`.
++- Aucun ajout de fonctionnalité métier.
+ 
+----
++## Documents modifiés
+ 
+-## Documents modifiÃ©s
++- `SESSION.md`
++- `NOTES.md`
++- `EVIDENCES.md`
++- `RESULTATS.md`
++- `FIN_SESSION.md`
++- `PATCH/README_PATCH.md`
+ 
+-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
++## Verdict de session
+ 
++- CODE VALIDABLE : OUI
++- DOCUMENTATION AUTORISÉE : OUI
++- CORRECTIONS REQUISES : NON
++- SESSION VALIDÉE : OUI
+\ No newline at end of file
+diff --git a/docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/SESSION.md b/docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/SESSION.md
+index d35d12e..128f2bc 100644
+--- a/docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/SESSION.md
++++ b/docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/SESSION.md
+@@ -1,4 +1,4 @@
+-﻿# SESSION
++# SESSION
+ 
+ ## ID SESSION
+ 
+@@ -12,24 +12,44 @@ SESSION-20260513-04_A26_A26-UI-04
+ 
+ Projet : Investissement  
+ Sous-projet : Ambulance Manager  
+-Maturite : 1-ALPHA  
++Maturité : 1-ALPHA  
+ Bloc : A26  
+-Type : CORRECTION+COMPLETION  
+-Intitule : Dashboard, Société et Dépôts
++Type : CORRECTION+COMPLÉTION  
++Intitulé : Dashboard, Société et Dépôts
+ 
+ ## Objectif de la session
+ 
+-INFORMATION NON FOURNIE - A CONFIRMER
++Alignement visuel (cible 99 %) des pages `/dashboard`, `/company` et `/depots` avec les maquettes officielles A26, en correction UI/UX uniquement, sans ajout fonctionnel métier.
+ 
+-## Perimetre exact traite
++## Périmètre exact traité
+ 
+-INFORMATION NON FOURNIE - A CONFIRMER
++- Dashboard : KPI, carte profil, cartes modules, badges, bouton/lien d'action, alignements.
++- Société : identité société, paramètres métier (densité/présentation), résumé société, cohérence visuelle.
++- Dépôts : KPI, filtres, tableau, alignements colonnes/cellules, panneau droit, encarts.
++- Harmonisation visuelle ciblée via `app/globals.css` sur le périmètre A26.
+ 
+-## Resultat synthetique de session
++## Résultat synthétique de session
+ 
+-INFORMATION NON FOURNIE - A CONFIRMER
++- Production principale + correctifs successifs jusqu'à `FIX-04_V2`.
++- Version finale retenue : `PATCH__SESSION-20260513-04_A26_A26-UI-04_FIX-04_V2.diff`.
++- Validation visuelle manuelle Nathan : Dashboard / Société / Dépôts validés.
+ 
+-## Dossiers lies
++## Fichiers applicatifs modifiés pendant la session
+ 
+-- Session : docs/2-sessions/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04
+-- PATCH   : docs/2-sessions/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/PATCH
++- `app/dashboard/page.tsx`
++- `app/company/page.tsx`
++- `app/company/company-profile-form.tsx`
++- `app/company/company-rules-panel.tsx`
++- `app/depots/page.tsx`
++- `app/depots/depots-client.tsx`
++- `app/globals.css`
++
++## Shell global
++
++- `app/layout.tsx` et `app/app-shell.tsx` ont été restaurés.
++- Le Shell validé A26-01 n'est pas modifié dans la version finale retenue.
++
++## Dossiers liés
++
++- Session : `docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04`
++- PATCH   : `docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-04_A26_A26-UI-04/PATCH`
+\ No newline at end of file

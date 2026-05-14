@@ -1,0 +1,1749 @@
+diff --git a/app/depots/depots-client.tsx b/app/depots/depots-client.tsx
+index 32d8140..a7721f6 100644
+--- a/app/depots/depots-client.tsx
++++ b/app/depots/depots-client.tsx
+@@ -1,14 +1,13 @@
+ "use client";
+ 
+-import { useMemo, useRef, useState } from "react";
+-import { Ambulance, Archive, Filter, Info, Landmark, Plus, Save, Search, UsersRound } from "lucide-react";
++import { useEffect, useMemo, useState } from "react";
++import { Ambulance, Archive, Filter, Info, Landmark, MoreHorizontal, Save, Search, UsersRound, X } from "lucide-react";
+ 
+ import {
+   ActionButton,
+   DataTable,
+   EmptyState,
+   ErrorMessage,
+-  FilterBar,
+   StatusBadge,
+   type DataTableColumn,
+ } from "@/app/ui";
+@@ -63,15 +62,25 @@ function formatDateTime(value: string) {
+   return date.toLocaleString("fr-FR");
+ }
+ 
++function formatDateParts(value: string) {
++  const date = new Date(value);
++  if (Number.isNaN(date.getTime())) {
++    return { date: value, time: "" };
++  }
++
++  return {
++    date: date.toLocaleDateString("fr-FR"),
++    time: date.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }),
++  };
++}
++
+ function depotMatchesSearch(depot: Depot, searchInput: string) {
+   const query = searchInput.trim().toLowerCase();
+   if (!query) return true;
+ 
+-  return [
+-    depot.name,
+-    depot.address ?? "",
+-    depot.isActive ? "actif" : "archive",
+-  ].some((value) => value.toLowerCase().includes(query));
++  return [depot.name, depot.address ?? "", depot.isActive ? "actif" : "archivé"].some((value) =>
++    value.toLowerCase().includes(query),
++  );
+ }
+ 
+ function mergeDepotWithCounts(previousDepots: Depot[], nextDepot: Depot) {
+@@ -94,14 +103,33 @@ export default function DepotsClient({
+   const [selectedDepotId, setSelectedDepotId] = useState<string | null>(initialDepots[0]?.id ?? null);
+   const [searchInput, setSearchInput] = useState("");
+   const [statusFilter, setStatusFilter] = useState<DepotStatusFilter>("");
++  const [sortLabel, setSortLabel] = useState("NAME_ASC");
++  const [pageSize, setPageSize] = useState(10);
++  const [currentPage, setCurrentPage] = useState(1);
+ 
++  const [showCreateForm, setShowCreateForm] = useState(false);
+   const [isCreating, setIsCreating] = useState(false);
+   const [savingId, setSavingId] = useState<string | null>(null);
+   const [archivingId, setArchivingId] = useState<string | null>(null);
++  const [isEditing, setIsEditing] = useState(false);
+   const [error, setError] = useState<string | null>(null);
+   const [success, setSuccess] = useState<string | null>(null);
+ 
+-  const selectedNameRef = useRef<HTMLInputElement | null>(null);
++  useEffect(() => {
++    function syncFromHash() {
++      if (window.location.hash === "#depots-create-form") {
++        setShowCreateForm(true);
++      }
++    }
++
++    syncFromHash();
++    window.addEventListener("hashchange", syncFromHash);
++    return () => window.removeEventListener("hashchange", syncFromHash);
++  }, []);
++
++  useEffect(() => {
++    setIsEditing(false);
++  }, [selectedDepotId]);
+ 
+   function updateCreateForm(key: keyof DepotForm, value: string) {
+     setCreateForm((prev) => ({ ...prev, [key]: value }));
+@@ -120,10 +148,7 @@ export default function DepotsClient({
+   function resetFilters() {
+     setSearchInput("");
+     setStatusFilter("");
+-  }
+-
+-  function focusSelectedNameField() {
+-    selectedNameRef.current?.focus();
++    setSortLabel("NAME_ASC");
+   }
+ 
+   async function handleCreate(event: React.FormEvent<HTMLFormElement>) {
+@@ -145,7 +170,7 @@ export default function DepotsClient({
+       const data = (await res.json().catch(() => null)) as ApiResponse<Depot> | null;
+ 
+       if (!res.ok || !data?.ok) {
+-        throw new Error(getApiError(data, "Erreur lors de la creation du depot"));
++        throw new Error(getApiError(data, "Erreur lors de la création du dépôt"));
+       }
+ 
+       const createdDepot: Depot = {
+@@ -158,7 +183,8 @@ export default function DepotsClient({
+       setForms((prev) => ({ ...prev, [createdDepot.id]: toDepotForm(createdDepot) }));
+       setCreateForm({ name: "", address: "" });
+       setSelectedDepotId(createdDepot.id);
+-      setSuccess("Depot cree.");
++      setShowCreateForm(false);
++      setSuccess("Dépôt créé.");
+     } catch (e: unknown) {
+       setError(e instanceof Error ? e.message : "Erreur inconnue");
+     } finally {
+@@ -187,18 +213,24 @@ export default function DepotsClient({
+       const data = (await res.json().catch(() => null)) as ApiResponse<Depot> | null;
+ 
+       if (!res.ok || !data?.ok) {
+-        throw new Error(getApiError(data, "Erreur lors de la modification du depot"));
++        throw new Error(getApiError(data, "Erreur lors de la modification du dépôt"));
+       }
+ 
+-      setDepots((prev) => sortDepots(prev.map((item) => (
+-        item.id === id ? mergeDepotWithCounts(prev, data.data) : item
+-      ))));
+-      setForms((prev) => ({ ...prev, [id]: toDepotForm({
+-        ...data.data,
+-        vehicleCount: depots.find((item) => item.id === id)?.vehicleCount ?? 0,
+-        userCount: depots.find((item) => item.id === id)?.userCount ?? 0,
+-      }) }));
+-      setSuccess("Depot mis a jour.");
++      setDepots((prev) =>
++        sortDepots(
++          prev.map((item) => (item.id === id ? mergeDepotWithCounts(prev, data.data) : item)),
++        ),
++      );
++      setForms((prev) => ({
++        ...prev,
++        [id]: toDepotForm({
++          ...data.data,
++          vehicleCount: depots.find((item) => item.id === id)?.vehicleCount ?? 0,
++          userCount: depots.find((item) => item.id === id)?.userCount ?? 0,
++        }),
++      }));
++      setIsEditing(false);
++      setSuccess("Dépôt mis à jour.");
+     } catch (e: unknown) {
+       setError(e instanceof Error ? e.message : "Erreur inconnue");
+     } finally {
+@@ -207,7 +239,7 @@ export default function DepotsClient({
+   }
+ 
+   async function handleArchive(id: string) {
+-    const confirmed = window.confirm("Archiver ce depot ?");
++    const confirmed = window.confirm("Archiver ce dépôt ?");
+     if (!confirmed) return;
+ 
+     setArchivingId(id);
+@@ -222,13 +254,16 @@ export default function DepotsClient({
+       const data = (await res.json().catch(() => null)) as ApiResponse<Depot> | null;
+ 
+       if (!res.ok || !data?.ok) {
+-        throw new Error(getApiError(data, "Erreur lors de l'archivage du depot"));
++        throw new Error(getApiError(data, "Erreur lors de l'archivage du dépôt"));
+       }
+ 
+-      setDepots((prev) => sortDepots(prev.map((item) => (
+-        item.id === id ? mergeDepotWithCounts(prev, data.data) : item
+-      ))));
+-      setSuccess("Depot archive.");
++      setDepots((prev) =>
++        sortDepots(
++          prev.map((item) => (item.id === id ? mergeDepotWithCounts(prev, data.data) : item)),
++        ),
++      );
++      setIsEditing(false);
++      setSuccess("Dépôt archivé.");
+     } catch (e: unknown) {
+       setError(e instanceof Error ? e.message : "Erreur inconnue");
+     } finally {
+@@ -236,41 +271,24 @@ export default function DepotsClient({
+     }
+   }
+ 
+-  const depotStats = useMemo(() => {
+-    let active = 0;
+-    let archived = 0;
+-    let attachedVehicles = 0;
+-    let attachedUsers = 0;
+-
+-    for (const depot of depots) {
+-      if (depot.isActive) {
+-        active += 1;
+-      } else {
+-        archived += 1;
+-      }
+-      attachedVehicles += depot.vehicleCount;
+-      attachedUsers += depot.userCount;
+-    }
+-
+-    return {
+-      total: depots.length,
+-      active,
+-      archived,
+-      attachedVehicles,
+-      attachedUsers,
+-    };
+-  }, [depots]);
+-
+   const filteredDepots = useMemo(() => {
+-    return depots.filter((depot) => {
++    const matched = depots.filter((depot) => {
+       if (!depotMatchesSearch(depot, searchInput)) return false;
+-
+       if (statusFilter === "ACTIVE" && !depot.isActive) return false;
+       if (statusFilter === "ARCHIVED" && depot.isActive) return false;
+-
+       return true;
+     });
+-  }, [depots, searchInput, statusFilter]);
++
++    if (sortLabel === "NAME_ASC") {
++      return [...matched].sort((a, b) => a.name.localeCompare(b.name, "fr", { sensitivity: "base" }));
++    }
++
++    return matched;
++  }, [depots, searchInput, sortLabel, statusFilter]);
++
++  useEffect(() => {
++    setCurrentPage(1);
++  }, [searchInput, statusFilter, sortLabel, pageSize]);
+ 
+   const selectedDepot = useMemo(
+     () => depots.find((depot) => depot.id === selectedDepotId) ?? null,
+@@ -280,209 +298,208 @@ export default function DepotsClient({
+   const selectedDepotForm = selectedDepot ? forms[selectedDepot.id] ?? toDepotForm(selectedDepot) : null;
+ 
+   const columns: DataTableColumn<Depot>[] = [
++    {
++      key: "selection",
++      header: "",
++      width: "48px",
++      render: (depot) => (
++        <input
++          type="checkbox"
++          checked={selectedDepotId === depot.id}
++          readOnly
++          aria-label={`Sélection ${depot.name}`}
++        />
++      ),
++    },
+     {
+       key: "name",
+       header: "Nom",
+-      width: "300px",
++      width: "170px",
+       render: (depot) => (
+         <div className="depots-cell-main">
+           <strong>{depot.name}</strong>
+-          <span className="depots-table-cell-subtle">{depot.address || "Adresse non renseignee"}</span>
+         </div>
+       ),
+     },
+     {
++      key: "address",
++      header: "Adresse",
++      width: "196px",
++      render: (depot) => <span className="depots-table-cell-subtle">{depot.address || "Adresse non renseignée"}</span>,
++    },
++        {
+       key: "status",
+       header: "Statut",
+-      width: "130px",
++      width: "92px",
+       render: (depot) => (
+-        <StatusBadge variant={depot.isActive ? "success" : "warning"}>
+-          {depot.isActive ? "Actif" : "Archive"}
+-        </StatusBadge>
++        <div className="depots-status-badge-cell">
++          <StatusBadge variant={depot.isActive ? "success" : "warning"}>
++            {depot.isActive ? "Actif" : "Archivé"}
++          </StatusBadge>
++        </div>
+       ),
+     },
+     {
+       key: "vehicles",
+-      header: "Vehicules",
+-      width: "120px",
++      header: "Véhicules",
++      width: "72px",
+       render: (depot) => depot.vehicleCount,
+     },
+     {
+       key: "users",
+       header: "Utilisateurs",
+-      width: "130px",
++      width: "84px",
+       render: (depot) => depot.userCount,
+     },
+     {
+       key: "updatedAt",
+-      header: "Derniere modif.",
+-      width: "190px",
+-      render: (depot) => formatDateTime(depot.updatedAt),
++      header: "Dernière modif.",
++      width: "98px",
++      render: (depot) => {
++        const parts = formatDateParts(depot.updatedAt);
++        return (
++          <span className="depots-updated-cell">
++            <strong>{parts.date}</strong>
++            {parts.time ? <small>{parts.time}</small> : null}
++          </span>
++        );
++      },
+     },
+     {
+       key: "actions",
+       header: "Actions",
+       align: "right",
+-      width: "220px",
+-      render: (depot) => {
+-        const isSaving = savingId === depot.id;
+-        const isArchiving = archivingId === depot.id;
+-        const isBusy = isSaving || isArchiving;
+-
+-        return (
+-          <div className="depots-actions depots-actions--end depots-actions--wrap">
+-            <ActionButton
+-              size="sm"
+-              variant="secondary"
+-              disabled={isBusy}
+-              onClick={() => setSelectedDepotId(depot.id)}
+-            >
+-              Modifier
+-            </ActionButton>
+-            {depot.isActive ? (
+-              <ActionButton
+-                size="sm"
+-                variant="danger"
+-                disabled={isBusy}
+-                onClick={() => handleArchive(depot.id)}
+-              >
+-                {isArchiving ? "Archivage..." : "Archiver"}
+-              </ActionButton>
+-            ) : null}
+-          </div>
+-        );
+-      },
++      width: "70px",
++      render: (depot) => (
++        <div className="depots-table-actions">
++          <span className="depots-table-actions__avatar" aria-hidden="true">
++            {(depot.name || "D").slice(0, 2).toUpperCase()}
++          </span>
++          <button type="button" className="depots-table-actions__menu" onClick={() => setSelectedDepotId(depot.id)} aria-label={`Actions ${depot.name}`}>
++            <MoreHorizontal size={16} />
++          </button>
++        </div>
++      ),
+     },
+   ];
+ 
++  const totalVisible = filteredDepots.length;
++  const totalPages = Math.max(1, Math.ceil(totalVisible / pageSize));
++  const safeCurrentPage = Math.min(currentPage, totalPages);
++  const firstRowIndex = totalVisible === 0 ? 0 : (safeCurrentPage - 1) * pageSize + 1;
++  const lastRowIndex = totalVisible === 0 ? 0 : Math.min(safeCurrentPage * pageSize, totalVisible);
++  const pagedDepots = totalVisible === 0 ? [] : filteredDepots.slice(firstRowIndex - 1, lastRowIndex);
++
+   return (
+     <section className="depots-module">
+-      {error ? <ErrorMessage title="Erreur module depots" message={error} /> : null}
++      {error ? <ErrorMessage title="Erreur module dépôts" message={error} /> : null}
+       {success ? <div className="depots-alert depots-alert--success">{success}</div> : null}
+ 
+       <div className="depots-layout">
+         <div className="depots-layout__main">
+-          <section id="depots-create-form" className="depots-card">
+-            <div className="depots-card__head">
+-              <h2 className="depots-card__title">Creer un depot</h2>
+-              <p className="depots-card__description">
+-                Creation rapide d&apos;un depot avec nom et adresse.
+-              </p>
+-            </div>
+-
+-            <form onSubmit={handleCreate} className="depots-form">
+-              <div className="depots-form-grid depots-form-grid--create">
+-                <label className="depots-field">
+-                  <span className="depots-field__label">Nom</span>
+-                  <input
+-                    value={createForm.name}
+-                    onChange={(event) => updateCreateForm("name", event.target.value)}
+-                    disabled={isCreating}
+-                    required
+-                  />
+-                </label>
+-
+-                <label className="depots-field">
+-                  <span className="depots-field__label">Adresse</span>
+-                  <input
+-                    value={createForm.address}
+-                    onChange={(event) => updateCreateForm("address", event.target.value)}
+-                    disabled={isCreating}
+-                  />
+-                </label>
+-
+-                <div className="depots-actions depots-actions--end depots-actions--align-end">
+-                  <ActionButton type="submit" variant="primary" disabled={isCreating} leadingIcon={<Plus size={16} />}>
+-                    {isCreating ? "Creation..." : "Creer un depot"}
+-                  </ActionButton>
+-                </div>
+-              </div>
+-            </form>
+-          </section>
+-
+           <section className="depots-card">
+-            <div className="depots-card__head">
+-              <h2 className="depots-card__title">Liste des depots</h2>
+-              <p className="depots-card__description">
+-                Filtrage, consultation et selection d&apos;un depot pour edition.
+-              </p>
+-            </div>
+-
+-            <FilterBar
+-              summary={`Depots ${depotStats.total} | Actifs ${depotStats.active} | Archives ${depotStats.archived} | Vehicules ${depotStats.attachedVehicles} | Utilisateurs ${depotStats.attachedUsers}`}
+-              actions={(
+-                <ActionButton size="sm" variant="ghost" onClick={resetFilters}>
+-                  Reinitialiser
+-                </ActionButton>
+-              )}
+-            >
++            <div className="depots-filters">
+               <label className="depots-field">
+-                <span className="depots-field__label">Recherche</span>
+                 <div className="depots-input-with-icon">
+                   <Search size={16} aria-hidden="true" />
+                   <input
+                     type="text"
+                     value={searchInput}
+                     onChange={(event) => setSearchInput(event.target.value)}
+-                    placeholder="Rechercher un depot..."
++                    placeholder="Rechercher un dépôt..."
+                   />
+                 </div>
+               </label>
+ 
+               <label className="depots-field">
+-                <span className="depots-field__label">Statut</span>
+                 <select
+                   value={statusFilter}
+                   onChange={(event) => setStatusFilter(event.target.value as DepotStatusFilter)}
+                 >
+-                  <option value="">Tous les statuts</option>
++                  <option value="">Statut</option>
+                   <option value="ACTIVE">Actif</option>
+-                  <option value="ARCHIVED">Archive</option>
++                  <option value="ARCHIVED">Archivé</option>
++                </select>
++              </label>
++
++              <label className="depots-field depots-field--tri">
++                <select value={sortLabel} onChange={(event) => setSortLabel(event.target.value)}>
++                  <option value="NAME_ASC">Nom A → Z</option>
+                 </select>
+               </label>
+ 
+               <div className="depots-field depots-field--filter-action">
+-                <span className="depots-field__label">Actions</span>
+                 <ActionButton size="md" variant="secondary" leadingIcon={<Filter size={16} />} onClick={resetFilters}>
+                   Filtrer
+                 </ActionButton>
+               </div>
+-            </FilterBar>
++            </div>
+ 
+             <DataTable
+               columns={columns}
+-              rows={filteredDepots}
++              rows={pagedDepots}
+               rowKey={(depot) => depot.id}
+               selectedRowKey={selectedDepotId}
+               onRowClick={(depot) => setSelectedDepotId(depot.id)}
+-              emptyTitle="Aucun depot"
+-              emptyMessage="Aucun depot ne correspond aux filtres selectionnes."
+-              caption="Depots de la societe courante"
+-              minWidth={1040}
++              emptyTitle="Aucun dépôt"
++              emptyMessage="Aucun dépôt ne correspond aux filtres sélectionnés."
++              caption="Dépôts de la société courante"
++              minWidth={860}
++              className="depots-table"
+             />
++
++            <footer className="depots-table-footer">
++              <span>{firstRowIndex} - {lastRowIndex} sur {totalVisible} dépôts</span>
++              <div className="depots-table-footer__pager">
++                <button
++                  type="button"
++                  aria-label="Page précédente"
++                  disabled={safeCurrentPage <= 1}
++                  onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
++                >
++                  ‹
++                </button>
++                <button type="button" className="is-active">
++                  {safeCurrentPage}
++                </button>
++                <button
++                  type="button"
++                  aria-label="Page suivante"
++                  disabled={safeCurrentPage >= totalPages}
++                  onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}
++                >
++                  ›
++                </button>
++              </div>
++              <label>
++                Lignes par page
++                <select value={String(pageSize)} onChange={(event) => setPageSize(Number(event.target.value))}>
++                  <option value="10">10</option>
++                  <option value="25">25</option>
++                </select>
++              </label>
++            </footer>
+           </section>
+         </div>
+ 
+         <aside className="depots-detail-panel">
+-          {selectedDepot && selectedDepotForm ? (
+-            <section className="depots-detail-card">
++          {showCreateForm ? (
++            <section id="depots-create-form" className="depots-detail-card depots-create-panel">
+               <div className="depots-detail-card__head">
+-                <h2 className="depots-detail-card__title">{selectedDepot.name}</h2>
+-                <StatusBadge variant={selectedDepot.isActive ? "success" : "warning"}>
+-                  {selectedDepot.isActive ? "Actif" : "Archive"}
+-                </StatusBadge>
++                <h2 className="depots-detail-card__title">Créer un dépôt</h2>
++                <button type="button" className="depots-detail-card__close" onClick={() => setShowCreateForm(false)}>
++                  <X size={20} />
++                </button>
+               </div>
+ 
+-              <div className="depots-detail-block">
+-                <h3>Identite du depot</h3>
++              <form onSubmit={handleCreate} className="depots-form depots-create-disclosure__form">
+                 <div className="depots-form-grid depots-form-grid--edit">
+                   <label className="depots-field">
+                     <span className="depots-field__label">Nom</span>
+                     <input
+-                      ref={selectedNameRef}
+-                      value={selectedDepotForm.name}
+-                      onChange={(event) => updateDepotForm(selectedDepot.id, "name", event.target.value)}
+-                      disabled={savingId === selectedDepot.id || archivingId === selectedDepot.id}
++                      value={createForm.name}
++                      onChange={(event) => updateCreateForm("name", event.target.value)}
++                      disabled={isCreating}
+                       required
+                     />
+                   </label>
+@@ -490,12 +507,76 @@ export default function DepotsClient({
+                   <label className="depots-field">
+                     <span className="depots-field__label">Adresse</span>
+                     <input
+-                      value={selectedDepotForm.address}
+-                      onChange={(event) => updateDepotForm(selectedDepot.id, "address", event.target.value)}
+-                      disabled={savingId === selectedDepot.id || archivingId === selectedDepot.id}
++                      value={createForm.address}
++                      onChange={(event) => updateCreateForm("address", event.target.value)}
++                      disabled={isCreating}
+                     />
+                   </label>
+                 </div>
++
++                <div className="depots-actions depots-actions--end depots-actions--footer">
++                  <ActionButton type="submit" variant="primary" disabled={isCreating}>
++                    {isCreating ? "Création..." : "Créer un dépôt"}
++                  </ActionButton>
++                </div>
++              </form>
++            </section>
++          ) : null}
++
++          {selectedDepot && selectedDepotForm ? (
++            <section className="depots-detail-card">
++              <div className="depots-detail-card__head">
++                <h2 className="depots-detail-card__title">{selectedDepot.name}</h2>
++                <div className="depots-detail-card__head-actions">
++                  <StatusBadge variant={selectedDepot.isActive ? "success" : "warning"}>
++                    {selectedDepot.isActive ? "Actif" : "Archivé"}
++                  </StatusBadge>
++                  <button type="button" className="depots-detail-card__close" onClick={() => setSelectedDepotId(null)}>
++                    <X size={20} />
++                  </button>
++                </div>
++              </div>
++
++              <div className="depots-detail-block">
++                <h3>Identité du dépôt</h3>
++                {isEditing ? (
++                  <div className="depots-form-grid depots-form-grid--edit">
++                    <label className="depots-field">
++                      <span className="depots-field__label">Nom</span>
++                      <input
++                        value={selectedDepotForm.name}
++                        onChange={(event) => updateDepotForm(selectedDepot.id, "name", event.target.value)}
++                        disabled={savingId === selectedDepot.id || archivingId === selectedDepot.id}
++                        required
++                      />
++                    </label>
++                  </div>
++                ) : (
++                  <div className="depots-detail-pair-list">
++                    <div><span>Nom</span><strong>{selectedDepot.name}</strong></div>
++                    <div><span>Statut</span><strong>{selectedDepot.isActive ? "Actif" : "Archivé"}</strong></div>
++                  </div>
++                )}
++              </div>
++
++              <div className="depots-detail-block">
++                <h3>Adresse</h3>
++                {isEditing ? (
++                  <div className="depots-form-grid depots-form-grid--edit">
++                    <label className="depots-field">
++                      <span className="depots-field__label">Adresse complète</span>
++                      <input
++                        value={selectedDepotForm.address}
++                        onChange={(event) => updateDepotForm(selectedDepot.id, "address", event.target.value)}
++                        disabled={savingId === selectedDepot.id || archivingId === selectedDepot.id}
++                      />
++                    </label>
++                  </div>
++                ) : (
++                    <div className="depots-detail-pair-list">
++                      <div><span>Adresse</span><strong>{selectedDepot.address || "Adresse non renseignée"}</strong></div>
++                    </div>
++                )}
+               </div>
+ 
+               <div className="depots-detail-block">
+@@ -506,8 +587,8 @@ export default function DepotsClient({
+                       <Ambulance size={16} />
+                     </span>
+                     <div>
+-                      <strong>Vehicules rattaches</strong>
+-                      <p>{selectedDepot.vehicleCount} vehicules</p>
++                      <strong>Véhicules rattachés</strong>
++                      <p>{selectedDepot.vehicleCount} véhicules</p>
+                     </div>
+                   </div>
+                   <div>
+@@ -515,24 +596,25 @@ export default function DepotsClient({
+                       <UsersRound size={16} />
+                     </span>
+                     <div>
+-                      <strong>Utilisateurs rattaches</strong>
++                      <strong>Utilisateurs rattachés</strong>
+                       <p>{selectedDepot.userCount} utilisateurs</p>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+ 
+-              <div className="depots-detail-note">
+-                <Info size={16} aria-hidden="true" />
+-                <p>
+-                  Derniere modification: {formatDateTime(selectedDepot.updatedAt)}.
+-                </p>
++              <div className="depots-detail-block">
++                <h3>Notes</h3>
++                <div className="depots-detail-note">
++                  <Info size={16} aria-hidden="true" />
++                  <p>Dernière mise à jour : {formatDateTime(selectedDepot.updatedAt)}.</p>
++                </div>
+               </div>
+ 
+               <div className="depots-danger-zone">
+                 <h3>Zone danger</h3>
+                 <p>
+-                  Cette action est irreversible. Les donnees restent conservees, mais le depot devient inactif.
++                  Cette action est irréversible. Toutes les données restent conservées, mais le dépôt sera inaccessible.
+                 </p>
+                 <ActionButton
+                   variant="danger"
+@@ -540,19 +622,19 @@ export default function DepotsClient({
+                   onClick={() => handleArchive(selectedDepot.id)}
+                   disabled={!selectedDepot.isActive || savingId === selectedDepot.id || archivingId === selectedDepot.id}
+                 >
+-                  {archivingId === selectedDepot.id ? "Archivage..." : "Archiver le depot"}
++                  {archivingId === selectedDepot.id ? "Archivage..." : "Archiver le dépôt"}
+                 </ActionButton>
+               </div>
+ 
+-              <div className="depots-actions depots-actions--between depots-actions--footer">
+-                <ActionButton variant="secondary" onClick={focusSelectedNameField} leadingIcon={<Landmark size={16} />}>
++              <div className="depots-actions depots-actions--end depots-actions--footer">
++                <ActionButton variant="secondary" leadingIcon={<Landmark size={16} />} onClick={() => setIsEditing((v) => !v)}>
+                   Modifier
+                 </ActionButton>
+                 <ActionButton
+                   variant="primary"
+                   leadingIcon={<Save size={16} />}
+                   onClick={() => handleSave(selectedDepot.id)}
+-                  disabled={savingId === selectedDepot.id || archivingId === selectedDepot.id}
++                  disabled={!isEditing || savingId === selectedDepot.id || archivingId === selectedDepot.id}
+                 >
+                   {savingId === selectedDepot.id ? "Enregistrement..." : "Enregistrer"}
+                 </ActionButton>
+@@ -560,8 +642,8 @@ export default function DepotsClient({
+             </section>
+           ) : (
+             <EmptyState
+-              title="Aucun depot selectionne"
+-              message="Selectionnez une ligne de la liste pour afficher le panneau de detail."
++              title="Aucun dépôt sélectionné"
++              message="Sélectionnez une ligne de la liste pour afficher le panneau de détail."
+             />
+           )}
+         </aside>
+@@ -569,3 +651,5 @@ export default function DepotsClient({
+     </section>
+   );
+ }
++
++
+diff --git a/app/globals.css b/app/globals.css
+index bd27107..3504e37 100644
+--- a/app/globals.css
++++ b/app/globals.css
+@@ -1495,6 +1495,252 @@ pre {
+   color: var(--ui-success-text);
+ }
+ 
++.dashboard-profile-card {
++  display: grid;
++  gap: 14px;
++}
++
++.dashboard-profile-card__head {
++  display: flex;
++  align-items: center;
++  gap: 24px;
++}
++
++.dashboard-profile-card__avatar {
++  position: relative;
++  width: 84px;
++  height: 84px;
++  border-radius: 999px;
++  border: 1px solid #d4deee;
++  background: #edf2f8;
++  color: #6b7895;
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  flex-shrink: 0;
++}
++
++.dashboard-profile-card__online-dot {
++  position: absolute;
++  right: 6px;
++  bottom: 8px;
++  width: 16px;
++  height: 16px;
++  border-radius: 999px;
++  background: #2bc06f;
++  border: 2px solid #ffffff;
++}
++
++.dashboard-profile-card__copy {
++  min-width: 0;
++  display: grid;
++  gap: 8px;
++}
++
++.dashboard-profile-card__title {
++  margin: 0;
++  font-size: 16px;
++  line-height: 1.2;
++  color: #0b1736;
++}
++
++.dashboard-profile-card__meta {
++  display: inline-flex;
++  align-items: center;
++  flex-wrap: wrap;
++  gap: 12px;
++}
++
++.dashboard-profile-card__meta-item {
++  display: inline-flex;
++  align-items: center;
++  gap: 10px;
++  min-height: 24px;
++  color: #4c5f82;
++  font-size: 15px;
++}
++
++.dashboard-profile-card__meta-item--plain {
++  color: #4c5f82;
++}
++
++.dashboard-profile-card__meta-chip {
++  display: inline-flex;
++  align-items: center;
++  min-height: 28px;
++  padding: 0 10px;
++  border-radius: 999px;
++  border: 1px solid #d8e5fa;
++  background: #eef4ff;
++  color: #2563eb;
++  font-size: 13px;
++  font-weight: 600;
++}
++
++.dashboard-profile-card__meta-separator {
++  width: 1px;
++  height: 24px;
++  background: #e4eaf3;
++}
++
++.dashboard-kpi-card {
++  border: 1px solid var(--ui-border);
++  border-radius: 14px;
++  background: var(--ui-surface);
++  padding: 14px;
++  display: grid;
++  grid-template-columns: 46px minmax(0, 1fr);
++  gap: 12px;
++  align-items: center;
++}
++
++.dashboard-kpi-card__icon {
++  width: 40px;
++  height: 40px;
++  border-radius: 12px;
++  border: 1px solid var(--ui-border);
++  background: var(--ui-surface-soft);
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  align-self: center;
++}
++
++.dashboard-kpi-card__copy {
++  display: flex;
++  flex-direction: column;
++  justify-content: center;
++  gap: 4px;
++  min-height: 72px;
++}
++
++.dashboard-kpi-card__label {
++  margin: 0;
++  font-size: 13px;
++  color: var(--ui-text-muted);
++  font-weight: 700;
++}
++
++.dashboard-kpi-card__value {
++  font-size: clamp(28px, 3vw, 34px);
++  line-height: 1;
++}
++
++.dashboard-kpi-card__hint {
++  margin: 0;
++  font-size: 12px;
++  color: var(--ui-text-muted);
++}
++
++.dashboard-kpi-card--0 .dashboard-kpi-card__icon {
++  border-color: #bfdbfe;
++  background: #eff6ff;
++  color: #2563eb;
++}
++
++.dashboard-kpi-card--1 .dashboard-kpi-card__icon {
++  border-color: #a7f3d0;
++  background: #ecfdf5;
++  color: #0f766e;
++}
++
++.dashboard-kpi-card--2 .dashboard-kpi-card__icon {
++  border-color: #ddd6fe;
++  background: #f5f3ff;
++  color: #7c3aed;
++}
++
++.dashboard-kpi-card--3 .dashboard-kpi-card__icon {
++  border-color: #fde68a;
++  background: #fffbeb;
++  color: #b45309;
++}
++
++.dashboard-kpi-card--0 .dashboard-kpi-card__value {
++  color: #2563eb;
++}
++
++.dashboard-kpi-card--1 .dashboard-kpi-card__value {
++  color: #0f766e;
++}
++
++.dashboard-kpi-card--2 .dashboard-kpi-card__value {
++  color: #7c3aed;
++}
++
++.dashboard-kpi-card--3 .dashboard-kpi-card__value {
++  color: #b45309;
++}
++
++.dashboard-identity-card {
++  display: grid;
++  gap: 14px;
++}
++
++.dashboard-identity-card__head {
++  display: flex;
++  align-items: flex-start;
++  gap: 14px;
++}
++
++.dashboard-identity-card__avatar {
++  width: 54px;
++  height: 54px;
++  border-radius: 14px;
++  border: 1px solid #a9c9fb;
++  background: #dbeafe;
++  color: #124491;
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  font-weight: 800;
++  letter-spacing: 0.03em;
++  flex-shrink: 0;
++}
++
++.dashboard-identity-card__copy {
++  min-width: 0;
++  display: grid;
++  gap: 6px;
++}
++
++.dashboard-identity-card__title {
++  margin: 0;
++  font-size: 28px;
++  line-height: 1.15;
++  color: #124491;
++}
++
++.dashboard-identity-card__subtitle {
++  margin: 0;
++  color: var(--ui-text-muted);
++}
++
++.dashboard-identity-card__meta {
++  display: inline-flex;
++  align-items: center;
++  flex-wrap: wrap;
++  gap: 8px;
++}
++
++.dashboard-identity-card__meta span {
++  display: inline-flex;
++  align-items: center;
++  min-height: 30px;
++  padding: 0 10px;
++  border-radius: 999px;
++  border: 1px solid var(--ui-border);
++  background: #ffffff;
++  color: var(--ui-text-muted);
++  font-size: 12px;
++  font-weight: 600;
++}
++
++.dashboard-content-stack {
++  display: grid;
++  gap: 14px;
++}
++
+ .dashboard-welcome {
+   display: grid;
+   gap: 14px;
+@@ -1608,8 +1854,8 @@ pre {
+ 
+ .dashboard-card-grid {
+   display: grid;
+-  gap: 12px;
+-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
++  gap: 14px;
++  grid-template-columns: repeat(4, minmax(0, 1fr));
+ }
+ 
+ .dashboard-link-card {
+@@ -1698,23 +1944,81 @@ pre {
+ 
+ .dashboard-link-card__action {
+   margin-top: auto;
+-  display: flex;
++  display: inline-flex;
+   align-items: center;
+-  justify-content: space-between;
++  justify-content: center;
+   gap: 8px;
+-  border: 1px solid var(--ui-border);
+-  border-radius: 12px;
+-  background: linear-gradient(180deg, var(--ui-surface-soft) 0%, #ffffff 100%);
+-  padding: 9px 12px;
+-  color: #124491;
++  justify-self: start;
++  width: fit-content;
++  border: 1px solid #cfe0f7;
++  border-radius: 8px;
++  background: #f8fbff;
++  min-height: 36px;
++  padding: 0 11px;
++  color: #1651a6;
++  font-size: 13px;
+   font-weight: 700;
+ }
+ 
++.dashboard-link-card__action svg {
++  position: static;
++}
++
++.dashboard-link-card > .ui-status-badge {
++  justify-self: start;
++  width: fit-content;
++  justify-content: center;
++  min-height: 25px;
++  padding: 0 9px;
++  border-radius: 7px;
++  gap: 7px;
++  text-align: center;
++}
++
++.dashboard-link-card > .ui-status-badge::before {
++  content: "";
++  width: 7px;
++  height: 7px;
++  border-radius: 999px;
++}
++
++.dashboard-link-card > .ui-status-badge.ui-status-badge--success::before {
++  background: #16a34a;
++}
++
++.dashboard-link-card > .ui-status-badge.ui-status-badge--warning::before {
++  background: #f59e0b;
++}
++
+ :root[data-theme="dark"] .dashboard-profile {
+   background: linear-gradient(145deg, #0f2342 0%, #112948 100%);
+   border-color: #2d476f;
+ }
+ 
++:root[data-theme="dark"] .dashboard-profile-card__avatar {
++  border-color: #3f608d;
++  background: #1a3a66;
++  color: #d9e8ff;
++}
++
++:root[data-theme="dark"] .dashboard-profile-card__meta-chip {
++  border-color: #35527d;
++  background: #142845;
++  color: #bdd0ee;
++}
++
++:root[data-theme="dark"] .dashboard-identity-card__avatar {
++  border-color: #3f608d;
++  background: #1a3a66;
++  color: #d9e8ff;
++}
++
++:root[data-theme="dark"] .dashboard-identity-card__meta span {
++  border-color: #35527d;
++  background: #142845;
++  color: #bdd0ee;
++}
++
+ :root[data-theme="dark"] .dashboard-profile__avatar {
+   border-color: #3f608d;
+   background: #1a3a66;
+@@ -3309,7 +3613,7 @@ pre {
+ 
+ .company-layout__column {
+   display: grid;
+-  gap: 16px;
++  gap: 18px;
+ }
+ 
+ .company-summary-rail {
+@@ -3348,10 +3652,10 @@ pre {
+   border: 1px solid var(--ui-border);
+   border-radius: 12px;
+   background: var(--ui-surface);
+-  padding: 16px;
++  padding: 20px;
+   box-shadow: var(--ui-shadow);
+   display: grid;
+-  gap: 12px;
++  gap: 16px;
+ }
+ 
+ .company-card--soft {
+@@ -3365,6 +3669,7 @@ pre {
+ 
+ .company-card__title-row {
+   display: inline-flex;
++  width: 100%;
+   align-items: center;
+   gap: 10px;
+   flex-wrap: wrap;
+@@ -3373,7 +3678,7 @@ pre {
+ .company-card__title-icon {
+   width: 38px;
+   height: 38px;
+-  border-radius: 12px;
++  border-radius: 999px;
+   border: 1px solid var(--ui-border);
+   background: var(--ui-surface-soft);
+   display: inline-flex;
+@@ -3396,9 +3701,10 @@ pre {
+ .company-chip {
+   display: inline-flex;
+   align-items: center;
+-  min-height: 24px;
+-  padding: 0 10px;
+-  border-radius: 999px;
++  justify-content: center;
++  min-height: 23px;
++  padding: 0 9px;
++  border-radius: 6px;
+   border: 1px solid #c9dcff;
+   background: #ebf3ff;
+   color: #1f62bd;
+@@ -3406,22 +3712,31 @@ pre {
+   font-weight: 700;
+   letter-spacing: 0.02em;
+   text-transform: uppercase;
++  margin-left: auto;
+ }
+ 
+ .company-form {
+   display: grid;
+-  gap: 12px;
++  gap: 14px;
+ }
+ 
+ .company-form-grid {
+   display: grid;
+-  gap: 12px;
++  gap: 14px;
+   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+ }
+ 
++.company-form-grid--identity {
++  grid-template-columns: repeat(2, minmax(0, 1fr));
++}
++
+ .company-field {
+   display: grid;
+-  gap: 6px;
++  gap: 8px;
++}
++
++.company-field--full {
++  grid-column: 1 / -1;
+ }
+ 
+ .company-field__label {
+@@ -3512,11 +3827,150 @@ pre {
+   gap: 12px;
+ }
+ 
++.company-summary-card {
++  gap: 18px;
++}
++
++.company-summary-items {
++  display: grid;
++  border: 1px solid var(--ui-border);
++  border-radius: 12px;
++  overflow: hidden;
++}
++
++.company-summary-item {
++  display: grid;
++  grid-template-columns: 40px minmax(0, 1fr);
++  gap: 13px;
++  align-items: center;
++  padding: 16px 14px;
++  border-bottom: 1px solid var(--ui-border);
++  background: var(--ui-surface);
++}
++
++.company-summary-item:last-child {
++  border-bottom: 0;
++}
++
++.company-summary-item__icon {
++  width: 38px;
++  height: 38px;
++  border-radius: 999px;
++  border: 1px solid var(--ui-border);
++  background: var(--ui-surface-soft);
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  color: var(--ui-text-muted);
++}
++
++.company-summary-item--info .company-summary-item__icon {
++  border-color: #bfdbfe;
++  background: #eaf2ff;
++  color: #2563eb;
++}
++
++.company-summary-item--success .company-summary-item__icon {
++  border-color: var(--ui-success-border);
++  background: var(--ui-success-bg);
++  color: var(--ui-success-text);
++}
++
++.company-summary-item__copy {
++  display: grid;
++  gap: 4px;
++  align-content: center;
++  justify-items: center;
++  text-align: center;
++}
++
++.company-summary-item__label {
++  margin: 0;
++  font-size: 12px;
++  color: var(--ui-text-muted);
++}
++
++.company-summary-item__value {
++  color: #124491;
++  font-size: 17px;
++  line-height: 1.25;
++}
++
+ .company-summary-value {
+   font-size: 18px;
+   line-height: 1.3;
+ }
+ 
++.company-page-footer-actions {
++  border: 1px solid var(--ui-border);
++  border-radius: 14px;
++  background: var(--ui-surface);
++  padding: 12px 14px;
++  display: inline-flex;
++  gap: 10px;
++  justify-self: end;
++}
++
++.company-rules-inline-card,
++.company-rules-mode-card,
++.company-rules-table-card {
++  border: 1px solid var(--ui-border);
++  border-radius: 12px;
++  background: var(--ui-surface-soft);
++  padding: 12px;
++  display: grid;
++  gap: 10px;
++}
++
++.company-rules-inline-card__label,
++.company-rules-mode-card__label {
++  margin: 0;
++  color: var(--ui-text-muted);
++  font-size: 13px;
++  font-weight: 700;
++}
++
++.company-rules-inline-card__value {
++  color: #124491;
++  font-size: 24px;
++  line-height: 1.1;
++}
++
++.company-rules-mode-switch {
++  display: inline-flex;
++  border: 1px solid var(--ui-border);
++  border-radius: 10px;
++  background: var(--ui-surface);
++  padding: 4px;
++  gap: 4px;
++}
++
++.company-rules-mode-switch__item {
++  border: 0;
++  min-height: 32px;
++  padding: 0 12px;
++  border-radius: 8px;
++  background: transparent;
++  color: var(--ui-text-muted);
++  font-weight: 700;
++}
++
++.company-rules-mode-switch__item.is-active {
++  background: #eaf2ff;
++  color: #2563eb;
++  box-shadow: inset 0 0 0 1px #bfdbfe;
++}
++
++.company-rules-table-card__head h3 {
++  margin: 0;
++  font-size: 16px;
++  color: #124491;
++}
++
++.company-rules-table--compact {
++  min-width: 100%;
++}
++
+ .company-rules-table__meta {
+   margin-top: 4px;
+   color: var(--ui-text-muted);
+@@ -3682,6 +4136,90 @@ pre {
+   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+ }
+ 
++.depots-kpi-card {
++  border: 1px solid var(--ui-border);
++  border-radius: 14px;
++  background: var(--ui-surface);
++  padding: 14px;
++  display: grid;
++  grid-template-columns: 46px minmax(0, 1fr);
++  gap: 12px;
++  align-items: center;
++  box-shadow: 0 8px 18px rgba(20, 35, 70, 0.04);
++}
++
++.depots-kpi-card__icon {
++  width: 40px;
++  height: 40px;
++  border-radius: 12px;
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  align-self: center;
++}
++
++.depots-kpi-card__copy {
++  display: flex;
++  flex-direction: column;
++  justify-content: center;
++  gap: 4px;
++  min-height: 72px;
++}
++
++.depots-kpi-card__label {
++  margin: 0;
++  font-size: 13px;
++  color: var(--ui-text-muted);
++  font-weight: 700;
++}
++
++.depots-kpi-card__value {
++  font-size: clamp(34px, 3vw, 42px);
++  line-height: 1;
++}
++
++.depots-kpi-card__hint {
++  margin: 0;
++  color: var(--ui-text-muted);
++  font-size: 12px;
++}
++
++.depots-kpi-card--violet .depots-kpi-card__icon {
++  background: #f5f3ff;
++  color: #7c3aed;
++}
++
++.depots-kpi-card--orange .depots-kpi-card__icon {
++  background: #fff7ed;
++  color: #c2410c;
++}
++
++.depots-kpi-card--turquoise .depots-kpi-card__icon {
++  background: #ecfeff;
++  color: #0f766e;
++}
++
++.depots-kpi-card--blue .depots-kpi-card__icon {
++  background: #eff6ff;
++  color: #2563eb;
++}
++
++.depots-kpi-card--violet .depots-kpi-card__value {
++  color: #7c3aed;
++}
++
++.depots-kpi-card--orange .depots-kpi-card__value {
++  color: #f97316;
++}
++
++.depots-kpi-card--turquoise .depots-kpi-card__value {
++  color: #0ea5a6;
++}
++
++.depots-kpi-card--blue .depots-kpi-card__value {
++  color: #2563eb;
++}
++
+ .depots-module {
+   display: grid;
+   gap: 16px;
+@@ -3699,6 +4237,13 @@ pre {
+   gap: 16px;
+ }
+ 
++.depots-filters {
++  display: grid;
++  gap: 12px;
++  grid-template-columns: minmax(240px, 1.7fr) minmax(160px, 1fr) minmax(160px, 1fr) auto;
++  align-items: end;
++}
++
+ .depots-card {
+   border: 1px solid var(--ui-border);
+   border-radius: 12px;
+@@ -3730,6 +4275,33 @@ pre {
+   gap: 12px;
+ }
+ 
++.depots-create-disclosure > summary {
++  list-style: none;
++  cursor: pointer;
++  display: flex;
++  align-items: center;
++  justify-content: space-between;
++  gap: 10px;
++  min-height: 40px;
++  padding: 0 2px;
++  font-weight: 700;
++  color: #124491;
++}
++
++.depots-create-disclosure > summary::-webkit-details-marker {
++  display: none;
++}
++
++.depots-create-disclosure > summary span:last-child {
++  color: var(--ui-text-muted);
++  font-size: 12px;
++  font-weight: 600;
++}
++
++.depots-create-disclosure__form {
++  margin-top: 12px;
++}
++
+ .depots-form-grid {
+   display: grid;
+   gap: 12px;
+@@ -3746,7 +4318,7 @@ pre {
+ 
+ .depots-field {
+   display: grid;
+-  gap: 6px;
++  gap: 0;
+ }
+ 
+ .depots-field__label {
+@@ -3843,6 +4415,13 @@ pre {
+ 
+ .depots-field--filter-action {
+   align-self: end;
++  min-height: 40px;
++  display: inline-flex;
++  align-items: center;
++}
++
++.depots-field--tri {
++  align-self: end;
+ }
+ 
+ .depots-detail-panel {
+@@ -3869,16 +4448,33 @@ pre {
+   gap: 10px;
+ }
+ 
++.depots-detail-card__head-actions {
++  display: inline-flex;
++  align-items: center;
++  gap: 8px;
++}
++
++.depots-detail-card__close {
++  width: 40px;
++  height: 40px;
++  border-radius: 10px;
++  border: 1px solid var(--ui-border);
++  background: var(--ui-surface);
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++}
++
+ .depots-detail-card__title {
+   margin: 0;
+-  font-size: 35px;
++  font-size: 30px;
+   color: #1e3a8a;
+ }
+ 
+ .depots-detail-block {
+   border: 1px solid var(--ui-border);
+   border-radius: 12px;
+-  background: var(--ui-surface-soft);
++  background: var(--ui-surface);
+   padding: 12px;
+   display: grid;
+   gap: 10px;
+@@ -3890,6 +4486,25 @@ pre {
+   color: #1e3a8a;
+ }
+ 
++.depots-detail-pair-list {
++  display: grid;
++  gap: 8px;
++}
++
++.depots-detail-pair-list > div {
++  display: grid;
++  gap: 3px;
++}
++
++.depots-detail-pair-list span {
++  color: var(--ui-text-muted);
++  font-size: 12px;
++}
++
++.depots-detail-pair-list strong {
++  color: #124491;
++}
++
+ .depots-attachments-list {
+   display: grid;
+   gap: 10px;
+@@ -3952,9 +4567,9 @@ pre {
+ }
+ 
+ .depots-danger-zone {
+-  border: 1px solid #fecaca;
++  border: 1px solid #f5a8b3;
+   border-radius: 12px;
+-  background: #fff1f2;
++  background: #ffe6ea;
+   padding: 12px;
+   display: grid;
+   gap: 10px;
+@@ -3966,6 +4581,7 @@ pre {
+   display: inline-flex;
+   align-items: center;
+   gap: 6px;
++  font-weight: 800;
+ }
+ 
+ .depots-danger-zone p {
+@@ -3979,6 +4595,136 @@ pre {
+   margin-top: 2px;
+ }
+ 
++.depots-table input[type="checkbox"] {
++  width: 16px;
++  height: 16px;
++}
++
++.depots-table .ui-data-table__row.is-selected .ui-data-table__cell:first-child {
++  box-shadow: inset 3px 0 0 var(--ui-primary);
++}
++
++.depots-table .ui-data-table__head-cell,
++.depots-table .ui-data-table__cell {
++  padding: 9px 7px;
++}
++
++.depots-table .ui-data-table__cell {
++  vertical-align: middle;
++}
++
++.depots-status-badge-cell {
++  display: flex;
++  justify-content: center;
++}
++
++.depots-status-badge-cell .ui-status-badge {
++  border-radius: 7px;
++  justify-content: center;
++}
++
++.depots-updated-cell {
++  display: grid;
++  gap: 2px;
++  line-height: 1.2;
++}
++
++.depots-updated-cell strong {
++  font-size: 12px;
++  font-weight: 700;
++  color: #124491;
++}
++
++.depots-updated-cell small {
++  font-size: 12px;
++  color: var(--ui-text-muted);
++}
++
++.depots-table-actions {
++  display: inline-flex;
++  align-items: center;
++  gap: 6px;
++}
++
++.depots-table-actions__avatar {
++  width: 26px;
++  height: 26px;
++  border-radius: 999px;
++  border: 1px solid var(--ui-border);
++  background: var(--ui-surface-soft);
++  color: var(--ui-text-muted);
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  font-size: 11px;
++  font-weight: 700;
++}
++
++.depots-table-actions__menu {
++  min-width: 28px;
++  min-height: 28px;
++  border: 1px solid transparent;
++  border-radius: 8px;
++  background: transparent;
++  color: var(--ui-text-muted);
++  padding: 0;
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++}
++
++.depots-table-actions__menu:hover:not(:disabled) {
++  border-color: var(--ui-border);
++  background: var(--ui-surface-soft);
++  transform: none;
++}
++
++.depots-table-footer {
++  margin-top: 10px;
++  display: flex;
++  align-items: center;
++  justify-content: space-between;
++  gap: 10px;
++  flex-wrap: wrap;
++  color: var(--ui-text-muted);
++  font-size: 13px;
++}
++
++.depots-table-footer__pager {
++  display: inline-flex;
++  align-items: center;
++  gap: 6px;
++}
++
++.depots-table-footer__pager button {
++  min-width: 30px;
++  min-height: 30px;
++  border-radius: 8px;
++  border: 1px solid var(--ui-border);
++  background: var(--ui-surface);
++  padding: 0 8px;
++}
++
++.depots-table-footer__pager button.is-active {
++  border-color: #bfdbfe;
++  background: #eff6ff;
++  color: #2563eb;
++}
++
++.depots-table-footer__pager button:disabled {
++  opacity: 0.45;
++}
++
++.depots-table-footer label {
++  display: inline-flex;
++  align-items: center;
++  gap: 8px;
++}
++
++.depots-create-panel .depots-detail-card__title {
++  font-size: 22px;
++}
++
+ :root[data-theme="dark"] .company-chip {
+   border-color: #355c9a;
+   background: #1a2f50;
+@@ -4030,6 +4776,14 @@ pre {
+     grid-template-columns: 1fr;
+   }
+ 
++  .depots-filters {
++    grid-template-columns: 1fr 1fr;
++  }
++
++  .depots-field--filter-action {
++    justify-content: flex-end;
++  }
++
+   .depots-detail-panel {
+     position: static;
+   }
+@@ -4040,6 +4794,14 @@ pre {
+ }
+ 
+ @media (max-width: 980px) {
++  .dashboard-card-grid {
++    grid-template-columns: repeat(2, minmax(0, 1fr));
++  }
++
++  .depots-filters {
++    grid-template-columns: 1fr;
++  }
++
+   .company-layout {
+     grid-template-columns: 1fr;
+   }
+@@ -4053,6 +4815,10 @@ pre {
+   .depots-actions--between {
+     justify-content: flex-start;
+   }
++
++  .company-form-grid--identity {
++    grid-template-columns: 1fr;
++  }
+ }
+ 
+ .onboarding-page {

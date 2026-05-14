@@ -1,14 +1,13 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
-import { Ambulance, Archive, Filter, Info, Landmark, Plus, Save, Search, UsersRound } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Ambulance, Archive, Filter, Info, Landmark, MoreHorizontal, Save, Search, UsersRound, X } from "lucide-react";
 
 import {
   ActionButton,
   DataTable,
   EmptyState,
   ErrorMessage,
-  FilterBar,
   StatusBadge,
   type DataTableColumn,
 } from "@/app/ui";
@@ -63,15 +62,25 @@ function formatDateTime(value: string) {
   return date.toLocaleString("fr-FR");
 }
 
+function formatDateParts(value: string) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return { date: value, time: "" };
+  }
+
+  return {
+    date: date.toLocaleDateString("fr-FR"),
+    time: date.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }),
+  };
+}
+
 function depotMatchesSearch(depot: Depot, searchInput: string) {
   const query = searchInput.trim().toLowerCase();
   if (!query) return true;
 
-  return [
-    depot.name,
-    depot.address ?? "",
-    depot.isActive ? "actif" : "archive",
-  ].some((value) => value.toLowerCase().includes(query));
+  return [depot.name, depot.address ?? "", depot.isActive ? "actif" : "archivé"].some((value) =>
+    value.toLowerCase().includes(query),
+  );
 }
 
 function mergeDepotWithCounts(previousDepots: Depot[], nextDepot: Depot) {
@@ -94,14 +103,33 @@ export default function DepotsClient({
   const [selectedDepotId, setSelectedDepotId] = useState<string | null>(initialDepots[0]?.id ?? null);
   const [searchInput, setSearchInput] = useState("");
   const [statusFilter, setStatusFilter] = useState<DepotStatusFilter>("");
+  const [sortLabel, setSortLabel] = useState("NAME_ASC");
+  const [pageSize, setPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
 
+  const [showCreateForm, setShowCreateForm] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [savingId, setSavingId] = useState<string | null>(null);
   const [archivingId, setArchivingId] = useState<string | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  const selectedNameRef = useRef<HTMLInputElement | null>(null);
+  useEffect(() => {
+    function syncFromHash() {
+      if (window.location.hash === "#depots-create-form") {
+        setShowCreateForm(true);
+      }
+    }
+
+    syncFromHash();
+    window.addEventListener("hashchange", syncFromHash);
+    return () => window.removeEventListener("hashchange", syncFromHash);
+  }, []);
+
+  useEffect(() => {
+    setIsEditing(false);
+  }, [selectedDepotId]);
 
   function updateCreateForm(key: keyof DepotForm, value: string) {
     setCreateForm((prev) => ({ ...prev, [key]: value }));
@@ -120,10 +148,7 @@ export default function DepotsClient({
   function resetFilters() {
     setSearchInput("");
     setStatusFilter("");
-  }
-
-  function focusSelectedNameField() {
-    selectedNameRef.current?.focus();
+    setSortLabel("NAME_ASC");
   }
 
   async function handleCreate(event: React.FormEvent<HTMLFormElement>) {
@@ -145,7 +170,7 @@ export default function DepotsClient({
       const data = (await res.json().catch(() => null)) as ApiResponse<Depot> | null;
 
       if (!res.ok || !data?.ok) {
-        throw new Error(getApiError(data, "Erreur lors de la creation du depot"));
+        throw new Error(getApiError(data, "Erreur lors de la création du dépôt"));
       }
 
       const createdDepot: Depot = {
@@ -158,7 +183,8 @@ export default function DepotsClient({
       setForms((prev) => ({ ...prev, [createdDepot.id]: toDepotForm(createdDepot) }));
       setCreateForm({ name: "", address: "" });
       setSelectedDepotId(createdDepot.id);
-      setSuccess("Depot cree.");
+      setShowCreateForm(false);
+      setSuccess("Dépôt créé.");
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Erreur inconnue");
     } finally {
@@ -187,18 +213,24 @@ export default function DepotsClient({
       const data = (await res.json().catch(() => null)) as ApiResponse<Depot> | null;
 
       if (!res.ok || !data?.ok) {
-        throw new Error(getApiError(data, "Erreur lors de la modification du depot"));
+        throw new Error(getApiError(data, "Erreur lors de la modification du dépôt"));
       }
 
-      setDepots((prev) => sortDepots(prev.map((item) => (
-        item.id === id ? mergeDepotWithCounts(prev, data.data) : item
-      ))));
-      setForms((prev) => ({ ...prev, [id]: toDepotForm({
-        ...data.data,
-        vehicleCount: depots.find((item) => item.id === id)?.vehicleCount ?? 0,
-        userCount: depots.find((item) => item.id === id)?.userCount ?? 0,
-      }) }));
-      setSuccess("Depot mis a jour.");
+      setDepots((prev) =>
+        sortDepots(
+          prev.map((item) => (item.id === id ? mergeDepotWithCounts(prev, data.data) : item)),
+        ),
+      );
+      setForms((prev) => ({
+        ...prev,
+        [id]: toDepotForm({
+          ...data.data,
+          vehicleCount: depots.find((item) => item.id === id)?.vehicleCount ?? 0,
+          userCount: depots.find((item) => item.id === id)?.userCount ?? 0,
+        }),
+      }));
+      setIsEditing(false);
+      setSuccess("Dépôt mis à jour.");
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Erreur inconnue");
     } finally {
@@ -207,7 +239,7 @@ export default function DepotsClient({
   }
 
   async function handleArchive(id: string) {
-    const confirmed = window.confirm("Archiver ce depot ?");
+    const confirmed = window.confirm("Archiver ce dépôt ?");
     if (!confirmed) return;
 
     setArchivingId(id);
@@ -222,13 +254,16 @@ export default function DepotsClient({
       const data = (await res.json().catch(() => null)) as ApiResponse<Depot> | null;
 
       if (!res.ok || !data?.ok) {
-        throw new Error(getApiError(data, "Erreur lors de l'archivage du depot"));
+        throw new Error(getApiError(data, "Erreur lors de l'archivage du dépôt"));
       }
 
-      setDepots((prev) => sortDepots(prev.map((item) => (
-        item.id === id ? mergeDepotWithCounts(prev, data.data) : item
-      ))));
-      setSuccess("Depot archive.");
+      setDepots((prev) =>
+        sortDepots(
+          prev.map((item) => (item.id === id ? mergeDepotWithCounts(prev, data.data) : item)),
+        ),
+      );
+      setIsEditing(false);
+      setSuccess("Dépôt archivé.");
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Erreur inconnue");
     } finally {
@@ -236,41 +271,24 @@ export default function DepotsClient({
     }
   }
 
-  const depotStats = useMemo(() => {
-    let active = 0;
-    let archived = 0;
-    let attachedVehicles = 0;
-    let attachedUsers = 0;
-
-    for (const depot of depots) {
-      if (depot.isActive) {
-        active += 1;
-      } else {
-        archived += 1;
-      }
-      attachedVehicles += depot.vehicleCount;
-      attachedUsers += depot.userCount;
-    }
-
-    return {
-      total: depots.length,
-      active,
-      archived,
-      attachedVehicles,
-      attachedUsers,
-    };
-  }, [depots]);
-
   const filteredDepots = useMemo(() => {
-    return depots.filter((depot) => {
+    const matched = depots.filter((depot) => {
       if (!depotMatchesSearch(depot, searchInput)) return false;
-
       if (statusFilter === "ACTIVE" && !depot.isActive) return false;
       if (statusFilter === "ARCHIVED" && depot.isActive) return false;
-
       return true;
     });
-  }, [depots, searchInput, statusFilter]);
+
+    if (sortLabel === "NAME_ASC") {
+      return [...matched].sort((a, b) => a.name.localeCompare(b.name, "fr", { sensitivity: "base" }));
+    }
+
+    return matched;
+  }, [depots, searchInput, sortLabel, statusFilter]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchInput, statusFilter, sortLabel, pageSize]);
 
   const selectedDepot = useMemo(
     () => depots.find((depot) => depot.id === selectedDepotId) ?? null,
@@ -281,208 +299,214 @@ export default function DepotsClient({
 
   const columns: DataTableColumn<Depot>[] = [
     {
+      key: "selection",
+      header: "",
+      width: "48px",
+      align: "center",
+      render: (depot) => (
+        <input
+          type="checkbox"
+          checked={selectedDepotId === depot.id}
+          readOnly
+          aria-label={`Sélection ${depot.name}`}
+        />
+      ),
+    },
+    {
       key: "name",
       header: "Nom",
-      width: "300px",
+      width: "170px",
+      align: "left",
       render: (depot) => (
         <div className="depots-cell-main">
           <strong>{depot.name}</strong>
-          <span className="depots-table-cell-subtle">{depot.address || "Adresse non renseignee"}</span>
         </div>
       ),
     },
     {
+      key: "address",
+      header: "Adresse",
+      width: "196px",
+      align: "left",
+      render: (depot) => <span className="depots-table-cell-subtle">{depot.address || "Adresse non renseignée"}</span>,
+    },
+        {
       key: "status",
       header: "Statut",
-      width: "130px",
+      width: "92px",
+      align: "center",
       render: (depot) => (
-        <StatusBadge variant={depot.isActive ? "success" : "warning"}>
-          {depot.isActive ? "Actif" : "Archive"}
-        </StatusBadge>
+        <div className="depots-status-badge-cell">
+          <StatusBadge variant={depot.isActive ? "success" : "warning"}>
+            {depot.isActive ? "Actif" : "Archivé"}
+          </StatusBadge>
+        </div>
       ),
     },
     {
       key: "vehicles",
-      header: "Vehicules",
-      width: "120px",
+      header: "Véhicules",
+      width: "72px",
+      align: "center",
       render: (depot) => depot.vehicleCount,
     },
     {
       key: "users",
       header: "Utilisateurs",
-      width: "130px",
+      width: "84px",
+      align: "center",
       render: (depot) => depot.userCount,
     },
     {
       key: "updatedAt",
-      header: "Derniere modif.",
-      width: "190px",
-      render: (depot) => formatDateTime(depot.updatedAt),
+      header: "Dernière modif.",
+      width: "98px",
+      align: "left",
+      render: (depot) => {
+        const parts = formatDateParts(depot.updatedAt);
+        return (
+          <span className="depots-updated-cell">
+            <strong>{parts.date}</strong>
+            {parts.time ? <small>{parts.time}</small> : null}
+          </span>
+        );
+      },
     },
     {
       key: "actions",
       header: "Actions",
-      align: "right",
-      width: "220px",
-      render: (depot) => {
-        const isSaving = savingId === depot.id;
-        const isArchiving = archivingId === depot.id;
-        const isBusy = isSaving || isArchiving;
-
-        return (
-          <div className="depots-actions depots-actions--end depots-actions--wrap">
-            <ActionButton
-              size="sm"
-              variant="secondary"
-              disabled={isBusy}
-              onClick={() => setSelectedDepotId(depot.id)}
-            >
-              Modifier
-            </ActionButton>
-            {depot.isActive ? (
-              <ActionButton
-                size="sm"
-                variant="danger"
-                disabled={isBusy}
-                onClick={() => handleArchive(depot.id)}
-              >
-                {isArchiving ? "Archivage..." : "Archiver"}
-              </ActionButton>
-            ) : null}
-          </div>
-        );
-      },
+      align: "left",
+      width: "70px",
+      render: (depot) => (
+        <div className="depots-table-actions">
+          <span className="depots-table-actions__avatar" aria-hidden="true">
+            {(depot.name || "D").slice(0, 2).toUpperCase()}
+          </span>
+          <button type="button" className="depots-table-actions__menu" onClick={() => setSelectedDepotId(depot.id)} aria-label={`Actions ${depot.name}`}>
+            <MoreHorizontal size={16} />
+          </button>
+        </div>
+      ),
     },
   ];
 
+  const totalVisible = filteredDepots.length;
+  const totalPages = Math.max(1, Math.ceil(totalVisible / pageSize));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+  const firstRowIndex = totalVisible === 0 ? 0 : (safeCurrentPage - 1) * pageSize + 1;
+  const lastRowIndex = totalVisible === 0 ? 0 : Math.min(safeCurrentPage * pageSize, totalVisible);
+  const pagedDepots = totalVisible === 0 ? [] : filteredDepots.slice(firstRowIndex - 1, lastRowIndex);
+
   return (
     <section className="depots-module">
-      {error ? <ErrorMessage title="Erreur module depots" message={error} /> : null}
+      {error ? <ErrorMessage title="Erreur module dépôts" message={error} /> : null}
       {success ? <div className="depots-alert depots-alert--success">{success}</div> : null}
 
       <div className="depots-layout">
         <div className="depots-layout__main">
-          <section id="depots-create-form" className="depots-card">
-            <div className="depots-card__head">
-              <h2 className="depots-card__title">Creer un depot</h2>
-              <p className="depots-card__description">
-                Creation rapide d&apos;un depot avec nom et adresse.
-              </p>
-            </div>
-
-            <form onSubmit={handleCreate} className="depots-form">
-              <div className="depots-form-grid depots-form-grid--create">
-                <label className="depots-field">
-                  <span className="depots-field__label">Nom</span>
-                  <input
-                    value={createForm.name}
-                    onChange={(event) => updateCreateForm("name", event.target.value)}
-                    disabled={isCreating}
-                    required
-                  />
-                </label>
-
-                <label className="depots-field">
-                  <span className="depots-field__label">Adresse</span>
-                  <input
-                    value={createForm.address}
-                    onChange={(event) => updateCreateForm("address", event.target.value)}
-                    disabled={isCreating}
-                  />
-                </label>
-
-                <div className="depots-actions depots-actions--end depots-actions--align-end">
-                  <ActionButton type="submit" variant="primary" disabled={isCreating} leadingIcon={<Plus size={16} />}>
-                    {isCreating ? "Creation..." : "Creer un depot"}
-                  </ActionButton>
-                </div>
-              </div>
-            </form>
-          </section>
-
           <section className="depots-card">
-            <div className="depots-card__head">
-              <h2 className="depots-card__title">Liste des depots</h2>
-              <p className="depots-card__description">
-                Filtrage, consultation et selection d&apos;un depot pour edition.
-              </p>
-            </div>
-
-            <FilterBar
-              summary={`Depots ${depotStats.total} | Actifs ${depotStats.active} | Archives ${depotStats.archived} | Vehicules ${depotStats.attachedVehicles} | Utilisateurs ${depotStats.attachedUsers}`}
-              actions={(
-                <ActionButton size="sm" variant="ghost" onClick={resetFilters}>
-                  Reinitialiser
-                </ActionButton>
-              )}
-            >
+            <div className="depots-filters">
               <label className="depots-field">
-                <span className="depots-field__label">Recherche</span>
                 <div className="depots-input-with-icon">
                   <Search size={16} aria-hidden="true" />
                   <input
                     type="text"
                     value={searchInput}
                     onChange={(event) => setSearchInput(event.target.value)}
-                    placeholder="Rechercher un depot..."
+                    placeholder="Rechercher un dépôt..."
                   />
                 </div>
               </label>
 
               <label className="depots-field">
-                <span className="depots-field__label">Statut</span>
                 <select
                   value={statusFilter}
                   onChange={(event) => setStatusFilter(event.target.value as DepotStatusFilter)}
                 >
-                  <option value="">Tous les statuts</option>
+                  <option value="">Statut</option>
                   <option value="ACTIVE">Actif</option>
-                  <option value="ARCHIVED">Archive</option>
+                  <option value="ARCHIVED">Archivé</option>
+                </select>
+              </label>
+
+              <label className="depots-field depots-field--tri">
+                <select value={sortLabel} onChange={(event) => setSortLabel(event.target.value)}>
+                  <option value="NAME_ASC">Nom A → Z</option>
                 </select>
               </label>
 
               <div className="depots-field depots-field--filter-action">
-                <span className="depots-field__label">Actions</span>
                 <ActionButton size="md" variant="secondary" leadingIcon={<Filter size={16} />} onClick={resetFilters}>
                   Filtrer
                 </ActionButton>
               </div>
-            </FilterBar>
+            </div>
 
             <DataTable
               columns={columns}
-              rows={filteredDepots}
+              rows={pagedDepots}
               rowKey={(depot) => depot.id}
               selectedRowKey={selectedDepotId}
               onRowClick={(depot) => setSelectedDepotId(depot.id)}
-              emptyTitle="Aucun depot"
-              emptyMessage="Aucun depot ne correspond aux filtres selectionnes."
-              caption="Depots de la societe courante"
-              minWidth={1040}
+              emptyTitle="Aucun dépôt"
+              emptyMessage="Aucun dépôt ne correspond aux filtres sélectionnés."
+              caption="Dépôts de la société courante"
+              minWidth={860}
+              className="depots-table"
             />
+
+            <footer className="depots-table-footer">
+              <span>{firstRowIndex} - {lastRowIndex} sur {totalVisible} dépôts</span>
+              <div className="depots-table-footer__pager">
+                <button
+                  type="button"
+                  aria-label="Page précédente"
+                  disabled={safeCurrentPage <= 1}
+                  onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+                >
+                  ‹
+                </button>
+                <button type="button" className="is-active">
+                  {safeCurrentPage}
+                </button>
+                <button
+                  type="button"
+                  aria-label="Page suivante"
+                  disabled={safeCurrentPage >= totalPages}
+                  onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}
+                >
+                  ›
+                </button>
+              </div>
+              <label>
+                Lignes par page
+                <select value={String(pageSize)} onChange={(event) => setPageSize(Number(event.target.value))}>
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                </select>
+              </label>
+            </footer>
           </section>
         </div>
 
         <aside className="depots-detail-panel">
-          {selectedDepot && selectedDepotForm ? (
-            <section className="depots-detail-card">
+          {showCreateForm ? (
+            <section id="depots-create-form" className="depots-detail-card depots-create-panel">
               <div className="depots-detail-card__head">
-                <h2 className="depots-detail-card__title">{selectedDepot.name}</h2>
-                <StatusBadge variant={selectedDepot.isActive ? "success" : "warning"}>
-                  {selectedDepot.isActive ? "Actif" : "Archive"}
-                </StatusBadge>
+                <h2 className="depots-detail-card__title">Créer un dépôt</h2>
+                <button type="button" className="depots-detail-card__close" onClick={() => setShowCreateForm(false)}>
+                  <X size={20} />
+                </button>
               </div>
 
-              <div className="depots-detail-block">
-                <h3>Identite du depot</h3>
+              <form onSubmit={handleCreate} className="depots-form depots-create-disclosure__form">
                 <div className="depots-form-grid depots-form-grid--edit">
                   <label className="depots-field">
                     <span className="depots-field__label">Nom</span>
                     <input
-                      ref={selectedNameRef}
-                      value={selectedDepotForm.name}
-                      onChange={(event) => updateDepotForm(selectedDepot.id, "name", event.target.value)}
-                      disabled={savingId === selectedDepot.id || archivingId === selectedDepot.id}
+                      value={createForm.name}
+                      onChange={(event) => updateCreateForm("name", event.target.value)}
+                      disabled={isCreating}
                       required
                     />
                   </label>
@@ -490,12 +514,76 @@ export default function DepotsClient({
                   <label className="depots-field">
                     <span className="depots-field__label">Adresse</span>
                     <input
-                      value={selectedDepotForm.address}
-                      onChange={(event) => updateDepotForm(selectedDepot.id, "address", event.target.value)}
-                      disabled={savingId === selectedDepot.id || archivingId === selectedDepot.id}
+                      value={createForm.address}
+                      onChange={(event) => updateCreateForm("address", event.target.value)}
+                      disabled={isCreating}
                     />
                   </label>
                 </div>
+
+                <div className="depots-actions depots-actions--end depots-actions--footer">
+                  <ActionButton type="submit" variant="primary" disabled={isCreating}>
+                    {isCreating ? "Création..." : "Créer un dépôt"}
+                  </ActionButton>
+                </div>
+              </form>
+            </section>
+          ) : null}
+
+          {selectedDepot && selectedDepotForm ? (
+            <section className="depots-detail-card">
+              <div className="depots-detail-card__head">
+                <h2 className="depots-detail-card__title">{selectedDepot.name}</h2>
+                <div className="depots-detail-card__head-actions">
+                  <StatusBadge variant={selectedDepot.isActive ? "success" : "warning"}>
+                    {selectedDepot.isActive ? "Actif" : "Archivé"}
+                  </StatusBadge>
+                  <button type="button" className="depots-detail-card__close" onClick={() => setSelectedDepotId(null)}>
+                    <X size={20} />
+                  </button>
+                </div>
+              </div>
+
+              <div className="depots-detail-block">
+                <h3>Identité du dépôt</h3>
+                {isEditing ? (
+                  <div className="depots-form-grid depots-form-grid--edit">
+                    <label className="depots-field">
+                      <span className="depots-field__label">Nom</span>
+                      <input
+                        value={selectedDepotForm.name}
+                        onChange={(event) => updateDepotForm(selectedDepot.id, "name", event.target.value)}
+                        disabled={savingId === selectedDepot.id || archivingId === selectedDepot.id}
+                        required
+                      />
+                    </label>
+                  </div>
+                ) : (
+                  <div className="depots-detail-pair-list">
+                    <div><span>Nom</span><strong>{selectedDepot.name}</strong></div>
+                    <div><span>Statut</span><strong>{selectedDepot.isActive ? "Actif" : "Archivé"}</strong></div>
+                  </div>
+                )}
+              </div>
+
+              <div className="depots-detail-block">
+                <h3>Adresse</h3>
+                {isEditing ? (
+                  <div className="depots-form-grid depots-form-grid--edit">
+                    <label className="depots-field">
+                      <span className="depots-field__label">Adresse complète</span>
+                      <input
+                        value={selectedDepotForm.address}
+                        onChange={(event) => updateDepotForm(selectedDepot.id, "address", event.target.value)}
+                        disabled={savingId === selectedDepot.id || archivingId === selectedDepot.id}
+                      />
+                    </label>
+                  </div>
+                ) : (
+                    <div className="depots-detail-pair-list">
+                      <div><span>Adresse</span><strong>{selectedDepot.address || "Adresse non renseignée"}</strong></div>
+                    </div>
+                )}
               </div>
 
               <div className="depots-detail-block">
@@ -506,8 +594,8 @@ export default function DepotsClient({
                       <Ambulance size={16} />
                     </span>
                     <div>
-                      <strong>Vehicules rattaches</strong>
-                      <p>{selectedDepot.vehicleCount} vehicules</p>
+                      <strong>Véhicules rattachés</strong>
+                      <p>{selectedDepot.vehicleCount} véhicules</p>
                     </div>
                   </div>
                   <div>
@@ -515,24 +603,25 @@ export default function DepotsClient({
                       <UsersRound size={16} />
                     </span>
                     <div>
-                      <strong>Utilisateurs rattaches</strong>
+                      <strong>Utilisateurs rattachés</strong>
                       <p>{selectedDepot.userCount} utilisateurs</p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="depots-detail-note">
-                <Info size={16} aria-hidden="true" />
-                <p>
-                  Derniere modification: {formatDateTime(selectedDepot.updatedAt)}.
-                </p>
+              <div className="depots-detail-block">
+                <h3>Notes</h3>
+                <div className="depots-detail-note">
+                  <Info size={16} aria-hidden="true" />
+                  <p>Dernière mise à jour : {formatDateTime(selectedDepot.updatedAt)}.</p>
+                </div>
               </div>
 
               <div className="depots-danger-zone">
                 <h3>Zone danger</h3>
                 <p>
-                  Cette action est irreversible. Les donnees restent conservees, mais le depot devient inactif.
+                  Cette action est irréversible. Toutes les données restent conservées, mais le dépôt sera inaccessible.
                 </p>
                 <ActionButton
                   variant="danger"
@@ -540,19 +629,19 @@ export default function DepotsClient({
                   onClick={() => handleArchive(selectedDepot.id)}
                   disabled={!selectedDepot.isActive || savingId === selectedDepot.id || archivingId === selectedDepot.id}
                 >
-                  {archivingId === selectedDepot.id ? "Archivage..." : "Archiver le depot"}
+                  {archivingId === selectedDepot.id ? "Archivage..." : "Archiver le dépôt"}
                 </ActionButton>
               </div>
 
-              <div className="depots-actions depots-actions--between depots-actions--footer">
-                <ActionButton variant="secondary" onClick={focusSelectedNameField} leadingIcon={<Landmark size={16} />}>
+              <div className="depots-actions depots-actions--end depots-actions--footer">
+                <ActionButton variant="secondary" leadingIcon={<Landmark size={16} />} onClick={() => setIsEditing((v) => !v)}>
                   Modifier
                 </ActionButton>
                 <ActionButton
                   variant="primary"
                   leadingIcon={<Save size={16} />}
                   onClick={() => handleSave(selectedDepot.id)}
-                  disabled={savingId === selectedDepot.id || archivingId === selectedDepot.id}
+                  disabled={!isEditing || savingId === selectedDepot.id || archivingId === selectedDepot.id}
                 >
                   {savingId === selectedDepot.id ? "Enregistrement..." : "Enregistrer"}
                 </ActionButton>
@@ -560,8 +649,8 @@ export default function DepotsClient({
             </section>
           ) : (
             <EmptyState
-              title="Aucun depot selectionne"
-              message="Selectionnez une ligne de la liste pour afficher le panneau de detail."
+              title="Aucun dépôt sélectionné"
+              message="Sélectionnez une ligne de la liste pour afficher le panneau de détail."
             />
           )}
         </aside>
@@ -569,3 +658,5 @@ export default function DepotsClient({
     </section>
   );
 }
+
+
