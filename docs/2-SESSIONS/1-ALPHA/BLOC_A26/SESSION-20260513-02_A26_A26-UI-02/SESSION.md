@@ -1,4 +1,4 @@
-﻿# SESSION
+# SESSION
 
 ## ID SESSION
 
@@ -12,24 +12,37 @@ SESSION-20260513-02_A26_A26-UI-02
 
 Projet : Investissement  
 Sous-projet : Ambulance Manager  
-Maturite : 1-ALPHA  
+Maturité : 1-ALPHA  
 Bloc : A26  
-Type : CORRECTION+COMPLETION  
-Intitule : Shell global connecté
+Type : CORRECTION+COMPLÉTION  
+Intitulé : Shell global connecté
 
 ## Objectif de la session
 
-INFORMATION NON FOURNIE - A CONFIRMER
+Aligner le Shell global connecté avec la référence officielle afin d'en faire le socle visuel commun des pages connectées, puis sécuriser la fluidité responsive multi-écrans (1920×1080 et 2560×1440).
 
-## Perimetre exact traite
+## Périmètre exact traité
 
-INFORMATION NON FOURNIE - A CONFIRMER
+- Shell global connecté : `app/app-shell.tsx`, `app/layout.tsx`, `app/globals.css`.
+- Rythme visuel transverse : topbar, sidebar, conteneur principal, largeur utile.
+- Correctif complémentaire : visibilité verticale du bas de sidebar en 1920×1080 via overflow interne maîtrisé.
+- Gouvernance patch et documentation de session.
 
-## Resultat synthetique de session
+## Résultat synthétique de session
 
-INFORMATION NON FOURNIE - A CONFIRMER
+- Shell global réaligné visuellement (sidebar, topbar, déconnexion non primaire, labels accentués).
+- Fluidité responsive améliorée sans `zoom` ni `transform: scale()`.
+- Écart détecté après premier correctif responsive (sidebar bas coupé en 1920×1080) documenté, corrigé, puis validé manuellement par Nathan.
+- Validation manuelle Nathan confirmée :
+  - rendu 1920×1080 validé ;
+  - bas de sidebar visible ou atteignable ;
+  - bloc Thème non coupé ;
+  - carte utilisateur non coupée ;
+  - navigation sidebar utilisable ;
+  - rendu 2560×1440 validé ;
+  - aucune régression visuelle constatée.
 
-## Dossiers lies
+## Dossiers liés
 
-- Session : docs/2-sessions/1-ALPHA/BLOC_A26/SESSION-20260513-02_A26_A26-UI-02
-- PATCH   : docs/2-sessions/1-ALPHA/BLOC_A26/SESSION-20260513-02_A26_A26-UI-02/PATCH
+- Session : `docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-02_A26_A26-UI-02`
+- Patchs : `docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-02_A26_A26-UI-02/PATCH`

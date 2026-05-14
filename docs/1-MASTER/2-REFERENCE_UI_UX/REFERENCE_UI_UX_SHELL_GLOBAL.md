@@ -726,6 +726,26 @@ Les pages métiers ne doivent pas être limitées par un `max-width` trop faible
 
 Pour les pages avec panneau droit, le layout doit pouvoir utiliser toute la largeur disponible.
 
+### 11.3 Règle responsive transverse multi-écrans
+
+Une page visuellement proche en écran standard mais trop petite/centrée en 2560×1440, ou trop compressée en 1920×1080, n'est pas considérée comme pleinement conforme au 99 % visuel.
+
+Contrôle minimal obligatoire :
+
+```txt
+1920×1080
+2560×1440
+```
+
+Règles :
+
+- ne pas utiliser `zoom` ;
+- ne pas utiliser `transform: scale()` pour adapter globalement l'interface ;
+- privilégier `clamp()`, grilles fluides, paddings adaptatifs et largeurs max raisonnables ;
+- le Shell doit rester lisible et exploitable ;
+- la sidebar doit rester entièrement visible ou accessible via scroll interne maîtrisé ;
+- le contenu principal doit mieux exploiter les grands écrans sans devenir un mur de contenu.
+
 ---
 
 ## 12. Composants transversaux hérités du Shell

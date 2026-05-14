@@ -20,17 +20,17 @@ import { prisma } from "@/lib/prisma";
 
 const ROLE_LABELS: Record<string, string> = {
   ADMIN: "Administration",
-  GERANT: "Gerance",
+  GERANT: "Gérance",
   BUREAU: "Bureau",
-  ADE: "Ambulancier diplome d'Etat",
+  ADE: "Ambulancier diplômé d'État",
   AA: "Auxiliaire ambulancier",
   TAXI: "Taxi",
-  REGULATEUR: "Regulation",
+  REGULATEUR: "Régulation",
 };
 
 function getRoleLabel(role?: string | null, platformRole?: string | null): string {
   if (platformRole === "SUPPORT") return "Support global";
-  if (!role) return "Profil non renseigne";
+  if (!role) return "Profil non renseigné";
   return ROLE_LABELS[role] ?? role;
 }
 
@@ -48,8 +48,8 @@ async function getAppShellData(): Promise<{ navLinks: AppShellNavLink[]; context
   const user = session?.user;
 
   const fallbackContext: AppShellContext = {
-    companyLabel: "Session non connectee",
-    userLabel: "Non connecte",
+    companyLabel: "Session non connectée",
+    userLabel: "Non connecté",
     roleLabel: "Aucun profil",
     canLogout: false,
   };
@@ -91,15 +91,15 @@ async function getAppShellData(): Promise<{ navLinks: AppShellNavLink[]; context
 
   if (companyScopedSession && (planningSelfAllowed || planningGlobalAllowed)) navLinks.push({ href: "/planning", label: "Planning" });
   if (companyScopedSession && usersAllowed) navLinks.push({ href: "/users", label: "Utilisateurs / RH" });
-  if (companyScopedSession && vehiclesAllowed) navLinks.push({ href: "/vehicles", label: "Vehicules" });
+  if (companyScopedSession && vehiclesAllowed) navLinks.push({ href: "/vehicles", label: "Véhicules" });
   if (companyScopedSession && templatesAllowed) navLinks.push({ href: "/templates", label: "Templates" });
-  if (companyScopedSession && (companyProfileAllowed || companyRulesAllowed)) navLinks.push({ href: "/company", label: "Societe" });
-  if (companyScopedSession && companyProfileAllowed) navLinks.push({ href: "/depots", label: "Depots / bases" });
+  if (companyScopedSession && (companyProfileAllowed || companyRulesAllowed)) navLinks.push({ href: "/company", label: "Société" });
+  if (companyScopedSession && companyProfileAllowed) navLinks.push({ href: "/depots", label: "Dépôts / bases" });
   if (companyScopedSession && companyProfileAllowed) navLinks.push({ href: "/onboarding", label: "Onboarding" });
   if ((companyScopedSession || supportActor) && auditAllowed) navLinks.push({ href: "/audit", label: "Audit" });
 
   const context: AppShellContext = {
-    companyLabel: company?.name ?? (companyScopedSession ? "Societe courante" : "Societe non rattachee"),
+    companyLabel: company?.name ?? (companyScopedSession ? "Société courante" : "Société non rattachée"),
     userLabel: user.name ?? user.email ?? "Utilisateur",
     roleLabel: getRoleLabel(user.role, user.platformRole),
     canLogout: true,

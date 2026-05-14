@@ -1,5 +1,5 @@
 ﻿Structure du dossier pour le volume Windows
-Le numÚro de sÚrie du volume est 000000AF 123E:4DB7
+Le numÚro de sÚrie du volume est 123E-4DB7
 C:.
 |   .env
 |   .gitignore
@@ -59,6 +59,7 @@ C:.
 |   +---dev
 |   |   |   build-manifest.json
 |   |   |   fallback-build-manifest.json
+|   |   |   lock
 |   |   |   package.json
 |   |   |   prerender-manifest.json
 |   |   |   routes-manifest.json
@@ -1559,7 +1560,6 @@ C:.
 |   |   |               00001945.sst
 |   |   |               00001946.sst
 |   |   |               00001947.meta
-|   |   |               00001948.del
 |   |   |               00001949.sst
 |   |   |               00001950.sst
 |   |   |               00001951.sst
@@ -1590,6 +1590,220 @@ C:.
 |   |   |               00001976.meta
 |   |   |               00001977.meta
 |   |   |               00001978.meta
+|   |   |               00001979.sst
+|   |   |               00001980.sst
+|   |   |               00001981.sst
+|   |   |               00001982.meta
+|   |   |               00001983.meta
+|   |   |               00001984.meta
+|   |   |               00001985.sst
+|   |   |               00001986.sst
+|   |   |               00001987.sst
+|   |   |               00001988.sst
+|   |   |               00001989.sst
+|   |   |               00001990.meta
+|   |   |               00001991.meta
+|   |   |               00001992.meta
+|   |   |               00001993.meta
+|   |   |               00001994.meta
+|   |   |               00001995.sst
+|   |   |               00001996.sst
+|   |   |               00001997.sst
+|   |   |               00001998.sst
+|   |   |               00001999.sst
+|   |   |               00002000.meta
+|   |   |               00002001.meta
+|   |   |               00002002.meta
+|   |   |               00002003.meta
+|   |   |               00002004.meta
+|   |   |               00002005.sst
+|   |   |               00002006.sst
+|   |   |               00002007.sst
+|   |   |               00002008.sst
+|   |   |               00002009.sst
+|   |   |               00002010.meta
+|   |   |               00002011.meta
+|   |   |               00002012.meta
+|   |   |               00002013.meta
+|   |   |               00002014.meta
+|   |   |               00002015.sst
+|   |   |               00002016.sst
+|   |   |               00002017.sst
+|   |   |               00002018.sst
+|   |   |               00002019.sst
+|   |   |               00002020.meta
+|   |   |               00002021.meta
+|   |   |               00002022.meta
+|   |   |               00002023.meta
+|   |   |               00002024.meta
+|   |   |               00002025.sst
+|   |   |               00002026.sst
+|   |   |               00002027.sst
+|   |   |               00002028.sst
+|   |   |               00002029.sst
+|   |   |               00002030.meta
+|   |   |               00002031.meta
+|   |   |               00002032.meta
+|   |   |               00002033.meta
+|   |   |               00002034.meta
+|   |   |               00002035.sst
+|   |   |               00002036.sst
+|   |   |               00002037.sst
+|   |   |               00002038.meta
+|   |   |               00002039.meta
+|   |   |               00002040.meta
+|   |   |               00002041.sst
+|   |   |               00002042.sst
+|   |   |               00002043.sst
+|   |   |               00002044.meta
+|   |   |               00002045.meta
+|   |   |               00002046.meta
+|   |   |               00002047.sst
+|   |   |               00002048.sst
+|   |   |               00002049.sst
+|   |   |               00002050.meta
+|   |   |               00002051.meta
+|   |   |               00002052.meta
+|   |   |               00002053.sst
+|   |   |               00002054.sst
+|   |   |               00002055.sst
+|   |   |               00002056.meta
+|   |   |               00002057.meta
+|   |   |               00002058.meta
+|   |   |               00002059.sst
+|   |   |               00002060.sst
+|   |   |               00002061.sst
+|   |   |               00002062.meta
+|   |   |               00002063.meta
+|   |   |               00002064.meta
+|   |   |               00002065.sst
+|   |   |               00002066.sst
+|   |   |               00002067.sst
+|   |   |               00002068.meta
+|   |   |               00002069.meta
+|   |   |               00002070.meta
+|   |   |               00002071.sst
+|   |   |               00002072.sst
+|   |   |               00002073.sst
+|   |   |               00002074.meta
+|   |   |               00002075.meta
+|   |   |               00002076.meta
+|   |   |               00002077.sst
+|   |   |               00002078.sst
+|   |   |               00002079.sst
+|   |   |               00002080.meta
+|   |   |               00002081.meta
+|   |   |               00002082.meta
+|   |   |               00002083.sst
+|   |   |               00002084.sst
+|   |   |               00002085.sst
+|   |   |               00002086.meta
+|   |   |               00002087.meta
+|   |   |               00002088.meta
+|   |   |               00002089.sst
+|   |   |               00002090.sst
+|   |   |               00002091.sst
+|   |   |               00002092.meta
+|   |   |               00002093.meta
+|   |   |               00002094.meta
+|   |   |               00002095.sst
+|   |   |               00002096.sst
+|   |   |               00002097.sst
+|   |   |               00002098.meta
+|   |   |               00002099.meta
+|   |   |               00002100.meta
+|   |   |               00002101.sst
+|   |   |               00002102.sst
+|   |   |               00002103.sst
+|   |   |               00002104.meta
+|   |   |               00002105.meta
+|   |   |               00002106.meta
+|   |   |               00002107.sst
+|   |   |               00002108.sst
+|   |   |               00002109.sst
+|   |   |               00002110.meta
+|   |   |               00002111.meta
+|   |   |               00002112.meta
+|   |   |               00002113.sst
+|   |   |               00002114.sst
+|   |   |               00002115.sst
+|   |   |               00002116.meta
+|   |   |               00002117.meta
+|   |   |               00002118.meta
+|   |   |               00002119.sst
+|   |   |               00002120.sst
+|   |   |               00002121.sst
+|   |   |               00002122.meta
+|   |   |               00002123.meta
+|   |   |               00002124.meta
+|   |   |               00002125.sst
+|   |   |               00002126.sst
+|   |   |               00002127.sst
+|   |   |               00002128.meta
+|   |   |               00002129.meta
+|   |   |               00002130.meta
+|   |   |               00002131.sst
+|   |   |               00002132.sst
+|   |   |               00002133.sst
+|   |   |               00002134.sst
+|   |   |               00002135.sst
+|   |   |               00002136.meta
+|   |   |               00002137.meta
+|   |   |               00002138.meta
+|   |   |               00002139.meta
+|   |   |               00002140.meta
+|   |   |               00002141.sst
+|   |   |               00002142.sst
+|   |   |               00002143.sst
+|   |   |               00002144.sst
+|   |   |               00002145.sst
+|   |   |               00002146.meta
+|   |   |               00002147.meta
+|   |   |               00002148.meta
+|   |   |               00002149.meta
+|   |   |               00002150.meta
+|   |   |               00002151.sst
+|   |   |               00002152.sst
+|   |   |               00002153.sst
+|   |   |               00002154.meta
+|   |   |               00002155.meta
+|   |   |               00002156.meta
+|   |   |               00002157.sst
+|   |   |               00002158.sst
+|   |   |               00002159.sst
+|   |   |               00002160.meta
+|   |   |               00002161.meta
+|   |   |               00002162.meta
+|   |   |               00002163.sst
+|   |   |               00002164.sst
+|   |   |               00002165.sst
+|   |   |               00002166.meta
+|   |   |               00002167.meta
+|   |   |               00002168.meta
+|   |   |               00002169.sst
+|   |   |               00002170.sst
+|   |   |               00002171.sst
+|   |   |               00002172.meta
+|   |   |               00002173.meta
+|   |   |               00002174.meta
+|   |   |               00002175.sst
+|   |   |               00002176.sst
+|   |   |               00002177.sst
+|   |   |               00002178.meta
+|   |   |               00002179.meta
+|   |   |               00002180.meta
+|   |   |               00002181.sst
+|   |   |               00002182.sst
+|   |   |               00002183.sst
+|   |   |               00002184.meta
+|   |   |               00002185.meta
+|   |   |               00002186.meta
+|   |   |               00002187.sst
+|   |   |               00002188.sst
+|   |   |               00002189.sst
+|   |   |               00002190.meta
+|   |   |               00002191.meta
+|   |   |               00002192.meta
 |   |   |               CURRENT
 |   |   |               LOG
 |   |   |               
@@ -2191,6 +2405,8 @@ C:.
 |   |   |   |           node_modules_715db6d8._.js.map
 |   |   |   |           node_modules_bb185932._.js
 |   |   |   |           node_modules_bb185932._.js.map
+|   |   |   |           node_modules_c052f75d._.js
+|   |   |   |           node_modules_c052f75d._.js.map
 |   |   |   |           node_modules_e2d1c5df._.js
 |   |   |   |           node_modules_e2d1c5df._.js.map
 |   |   |   |           node_modules_f1e8c728._.js
@@ -2375,17 +2591,22 @@ C:.
 |   |   |   |   |   app_d4a86ba9._.js
 |   |   |   |   |   app_d4a86ba9._.js.map
 |   |   |   |   |   app_dashboard_page_tsx_060e85dd._.js
+|   |   |   |   |   app_dashboard_page_tsx_12264948._.js
 |   |   |   |   |   app_depots_page_tsx_060e85dd._.js
 |   |   |   |   |   app_favicon_ico_mjs_745fddaf._.js
 |   |   |   |   |   app_globals_css_bad6b30c._.single.css
 |   |   |   |   |   app_globals_css_bad6b30c._.single.css.map
 |   |   |   |   |   app_layout_tsx_1cf6b850._.js
 |   |   |   |   |   app_login_page_tsx_060e85dd._.js
+|   |   |   |   |   app_login_page_tsx_12264948._.js
 |   |   |   |   |   app_onboarding_page_tsx_060e85dd._.js
 |   |   |   |   |   app_planning_page_tsx_060e85dd._.js
+|   |   |   |   |   app_planning_page_tsx_12264948._.js
 |   |   |   |   |   app_templates_page_tsx_060e85dd._.js
 |   |   |   |   |   app_users_page_tsx_060e85dd._.js
 |   |   |   |   |   app_vehicles_page_tsx_060e85dd._.js
+|   |   |   |   |   node_modules_1145211e._.js
+|   |   |   |   |   node_modules_1145211e._.js.map
 |   |   |   |   |   node_modules_7f09fef0._.js
 |   |   |   |   |   node_modules_7f09fef0._.js.map
 |   |   |   |   |   node_modules_@swc_helpers_cjs_d80fb378._.js
@@ -3672,8 +3893,8 @@ C:.
 |   |           
 |   +---static
 |   |   +---chunks
-|   |   |       160b48e4bed3762e.js
 |   |   |       358d6bd68d08fdc9.js
+|   |   |       4e2936cd6d15ad83.js
 |   |   |       4ec4a34a20c4d8ad.js
 |   |   |       4fee5e0abb56af75.js
 |   |   |       52b032db1c1b6cf3.js
@@ -3684,8 +3905,8 @@ C:.
 |   |   |       a6dad97d9634a72d.js
 |   |   |       a6dad97d9634a72d.js.map
 |   |   |       af7027598a07baa5.js
+|   |   |       b5e3a59a9d31f20a.css
 |   |   |       b79e0f85eca6f17e.js
-|   |   |       bac4d7560cc399df.css
 |   |   |       bd5e4881cbed029c.js
 |   |   |       c39c052a804dfeea.js
 |   |   |       ceaa3af669abcc0f.js
@@ -3698,7 +3919,7 @@ C:.
 |   |   +---media
 |   |   |       favicon.0b3bf435.ico
 |   |   |       
-|   |   \---YFdk7hE_yBRkcsEWl5AX-
+|   |   \---v7jmEh1EgsClBV1ZtF5jv
 |   |           _buildManifest.js
 |   |           _clientMiddlewareManifest.json
 |   |           _ssgManifest.js
@@ -6621,6 +6842,9 @@ C:.
 |   |   |   |   |   |   SESSION.md
 |   |   |   |   |   |   
 |   |   |   |   |   \---PATCH
+|   |   |   |   |           PATCH__SESSION-20260513-02_A26_A26-UI-02.diff
+|   |   |   |   |           PATCH__SESSION-20260513-02_A26_A26-UI-02_FINAL_VALIDABLE.diff
+|   |   |   |   |           PATCH__SESSION-20260513-02_A26_A26-UI-02_FIX-01.diff
 |   |   |   |   |           README_PATCH.md
 |   |   |   |   |           
 |   |   |   |   +---SESSION-20260513-03_A26_A26-UI-03

@@ -31,6 +31,31 @@ Découpage actif :
 - `A26-UI-11` — Validation visuelle globale A26 ;
 - `CLOTURE_A26` — Clôture finale du bloc A26.
 
+## Addendum transversal obligatoire (toutes sessions A26)
+
+### Règle de contrôle ChatGPT — attente du retour Codex
+
+ChatGPT doit attendre le retour complet de Codex avant tout contrôle.
+
+Formulation obligatoire à intégrer dans les prompts de contrôle :
+
+```txt
+Tu attends le retour complet de Codex avant tout contrôle. Tant que le retour Codex, les patchs éventuels, les preuves terminales et les confirmations attendues ne sont pas fournis, tu réponds uniquement que tu attends les éléments de production.
+```
+
+### Règle de gouvernance des `.diff`
+
+À intégrer dans les prompts production et contrôle :
+
+- le patch principal doit être nommé clairement ;
+- si correction après patch principal, produire `FIX-01`, puis `FIX-02`, etc. ;
+- chaque patch FIX doit être minimal, ciblé et applicable après le patch précédent ;
+- ne pas remplacer silencieusement un patch déjà transmis avec le même nom ;
+- si un patch remplace les précédents, il doit être nommé `FINAL_VALIDABLE` et documenté comme tel ;
+- le contrôle ChatGPT doit vérifier quel patch est la source finale à prendre en compte ;
+- les anciens patchs remplacés ne doivent pas être utilisés comme preuve finale ;
+- `README_PATCH.md` doit expliquer la chronologie des patchs.
+
 ---
 
 # 1. A26-UI-02 — Shell global connecté
@@ -112,6 +137,11 @@ Si un patch code est produit :
 - fournir une preuve réelle `git apply --check` du patch principal ;
 - fournir les sorties complètes de `npm run lint` et `npm run build` avec codes retour ;
 - ne pas modifier Prisma, API, RBAC, autoschedule, matching ou logique métier lourde sauf nécessité bloquante explicitement justifiée.
+- gouvernance `.diff` obligatoire :
+  - si correction après patch principal, produire un patch `FIX-01`, puis `FIX-02`, etc. ;
+  - chaque patch FIX doit être minimal, ciblé et applicable après le patch précédent ;
+  - ne pas remplacer silencieusement un patch déjà transmis avec le même nom ;
+  - si un patch complet final remplace les précédents, le nommer explicitement `FINAL_VALIDABLE` et le documenter dans `README_PATCH.md`.
 
 Si aucun code n’est modifié :
 - ne pas créer de faux patch code ;
@@ -251,6 +281,7 @@ RÈGLES COMMUNES — CONTRÔLE CHATGPT
 
 Tu contrôles uniquement ce que Codex fournit.
 Tu ne dois pas rejouer la session, refaire l’audit complet du dépôt, inventer des preuves ou combler les manques par hypothèse.
+Tu attends le retour complet de Codex avant tout contrôle. Tant que le retour Codex, les patchs éventuels, les preuves terminales et les confirmations attendues ne sont pas fournis, tu réponds uniquement que tu attends les éléments de production.
 
 Avant autorisation documentaire, ton rôle est de décider :
 - `CODE VALIDABLE : OUI / NON`
@@ -267,6 +298,9 @@ Tu dois vérifier que Codex :
 - n’a pas recréé de dépendance au dossier `ICONE` / `ICONES` ;
 - n’a pas touché aux zones hors périmètre ;
 - n’a pas préparé la session suivante.
+- a identifié clairement le patch de référence final si plusieurs `.diff` existent ;
+- n’a pas remplacé silencieusement un patch déjà transmis ;
+- a documenté la chronologie des patchs dans `README_PATCH.md`.
 
 Si une information manque, écrire exactement :
 `INFORMATION NON FOURNIE — À CONFIRMER`

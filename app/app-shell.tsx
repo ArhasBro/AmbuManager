@@ -7,6 +7,7 @@ import {
   Ambulance,
   Building2,
   CalendarDays,
+  ChevronDown,
   FileText,
   GraduationCap,
   Landmark,
@@ -97,7 +98,8 @@ export default function AppShell({
             <Ambulance size={18} strokeWidth={2.2} />
           </span>
           <div className="app-shell__brand-copy">
-            <span className="app-shell__brand-title">Ambulance Manager</span>
+            <span className="app-shell__brand-title">Ambulance</span>
+            <span className="app-shell__brand-title">Manager</span>
             <span className="app-shell__chip">ALPHA</span>
           </div>
         </div>
@@ -128,22 +130,41 @@ export default function AppShell({
         </nav>
 
         <div className="app-shell__sidebar-footer">
-          <span className="app-shell__sidebar-note">Espace connecte</span>
-          <div className="app-shell__user-card" aria-label="Profil de session">
+          <button
+            type="button"
+            className="app-shell__sidebar-theme"
+            onClick={() => setTheme((currentTheme) => (currentTheme === "light" ? "dark" : "light"))}
+            aria-label={theme === "light" ? "Activer le mode sombre" : "Activer le mode clair"}
+          >
+            <span className="app-shell__sidebar-theme-label">Thème</span>
+            <span className="app-shell__sidebar-theme-icons" aria-hidden="true">
+              <SunMedium size={14} />
+              <span className={`app-shell__sidebar-theme-track${theme === "dark" ? " is-dark" : ""}`} />
+              <MoonStar size={14} />
+            </span>
+          </button>
+          <div className="app-shell__user-card" aria-label="Profil utilisateur">
+            <span className="app-shell__user-avatar" aria-hidden="true">
+              {context.userLabel.trim().charAt(0).toUpperCase()}
+            </span>
             <strong className="app-shell__user-name">{context.userLabel}</strong>
             <span className="app-shell__user-role">{context.roleLabel}</span>
+            <ChevronDown size={14} className="app-shell__user-chevron" aria-hidden="true" />
           </div>
         </div>
       </aside>
 
       <section className="app-shell__content">
         <header className="app-shell__topbar">
-          <div>
-            <p className="app-shell__topbar-eyebrow">Societe courante</p>
-            <p className="app-shell__topbar-title">{context.companyLabel}</p>
-          </div>
-
           <div className="app-shell__topbar-meta">
+            <button type="button" className="app-shell__company-selector" aria-label="Société courante">
+              <span className="app-shell__company-icon" aria-hidden="true">
+                <Building2 size={15} />
+              </span>
+              <span className="app-shell__company-text">{context.companyLabel}</span>
+              <ChevronDown size={14} aria-hidden="true" />
+            </button>
+
             <button
               type="button"
               className="app-shell__theme-toggle"
@@ -151,18 +172,17 @@ export default function AppShell({
               aria-label={theme === "light" ? "Activer le mode sombre" : "Activer le mode clair"}
             >
               {theme === "light" ? <MoonStar size={16} /> : <SunMedium size={16} />}
-              <span>{theme === "light" ? "Mode sombre" : "Mode clair"}</span>
             </button>
 
-            <div className="app-shell__meta-list">
-              <span className="app-shell__meta-chip">
-                <strong>Utilisateur</strong>
+            <div className="app-shell__topbar-user" aria-label="Utilisateur connecté">
+              <span className="app-shell__topbar-avatar" aria-hidden="true">
+                {context.userLabel.trim().charAt(0).toUpperCase()}
+              </span>
+              <span className="app-shell__topbar-user-copy">
                 <span>{context.userLabel}</span>
+                <small>{context.roleLabel}</small>
               </span>
-              <span className="app-shell__meta-chip">
-                <strong>Profil</strong>
-                <span>{context.roleLabel}</span>
-              </span>
+              <ChevronDown size={14} aria-hidden="true" />
             </div>
 
             {context.canLogout ? (
@@ -172,7 +192,7 @@ export default function AppShell({
                 onClick={() => signOut({ callbackUrl: "/login" })}
               >
                 <LogOut size={16} aria-hidden="true" />
-                Deconnexion
+                Déconnexion
               </button>
             ) : null}
           </div>

@@ -1,0 +1,591 @@
+diff --git a/app/globals.css b/app/globals.css
+index 6dbc3a6..36478c5 100644
+--- a/app/globals.css
++++ b/app/globals.css
+@@ -78,7 +78,7 @@ html {
+ body {
+   margin: 0;
+   min-height: 100vh;
+-  background: radial-gradient(circle at 0 0, rgba(90, 148, 255, 0.14), transparent 38%), var(--background);
++  background: var(--background);
+   color: var(--foreground);
+   font-family: Inter, "Segoe UI", Arial, sans-serif;
+   line-height: 1.45;
+@@ -154,8 +154,8 @@ pre {
+ .app-shell {
+   min-height: 100vh;
+   display: grid;
+-  grid-template-columns: 248px minmax(0, 1fr);
+-  background: linear-gradient(180deg, var(--ui-bg) 0%, color-mix(in srgb, var(--ui-bg), #ffffff 6%) 100%);
++  grid-template-columns: 262px minmax(0, 1fr);
++  background: var(--ui-bg);
+ }
+ 
+ .app-shell__sidebar {
+@@ -165,24 +165,24 @@ pre {
+   display: grid;
+   grid-template-rows: auto 1fr auto;
+   align-content: start;
+-  gap: 20px;
+-  padding: 20px 16px;
++  gap: 28px;
++  padding: 24px 18px 18px;
+   border-right: 1px solid var(--ui-border);
+   background: var(--ui-surface);
+ }
+ 
+ .app-shell__brand {
+   display: flex;
+-  align-items: center;
+-  gap: 12px;
++  align-items: flex-start;
++  gap: 13px;
+ }
+ 
+ .app-shell__brand-mark {
+-  width: 34px;
+-  height: 34px;
+-  border-radius: 11px;
+-  border: 1px solid #b8d3ff;
+-  background: #e7f1ff;
++  width: 36px;
++  height: 36px;
++  border-radius: 12px;
++  border: 1px solid #c4daff;
++  background: #eff5ff;
+   color: var(--ui-primary);
+   display: inline-flex;
+   align-items: center;
+@@ -192,11 +192,12 @@ pre {
+ 
+ .app-shell__brand-copy {
+   display: grid;
+-  gap: 4px;
++  gap: 1px;
+ }
+ 
+ .app-shell__brand-title {
+-  font-size: 17px;
++  font-size: 22px;
++  line-height: 1;
+   font-weight: 800;
+   color: #124491;
+ }
+@@ -206,39 +207,38 @@ pre {
+   align-items: center;
+   width: fit-content;
+   height: 22px;
+-  padding: 0 9px;
++  margin-top: 4px;
++  padding: 0 10px;
+   border-radius: 999px;
+-  border: 1px solid var(--ui-border);
+-  background: var(--ui-surface-soft);
+-  color: var(--ui-text-muted);
+-  font-size: 12px;
++  border: 1px solid #d3e3ff;
++  background: #f2f7ff;
++  color: #2a63be;
++  font-size: 11px;
+   font-weight: 700;
++  letter-spacing: 0.02em;
+ }
+ 
+ .app-shell__nav {
+   display: grid;
+-  gap: 8px;
++  gap: 10px;
+   align-content: start;
+ }
+ 
+ .app-shell__nav-link {
+   display: flex;
+   align-items: center;
+-  gap: 10px;
+-  min-height: 42px;
+-  padding: 0 12px;
++  gap: 15px;
++  min-height: 50px;
++  padding: 0 14px;
+   border-radius: 12px;
+   border: 1px solid transparent;
+   color: var(--ui-text-muted);
+-  font-weight: 650;
++  font-weight: 600;
+ }
+ 
+ .app-shell__nav-icon {
+-  width: 30px;
+-  height: 30px;
+-  border-radius: 11px;
+-  border: 1px solid #c4dbfb;
+-  background: #edf4ff;
++  width: 20px;
++  height: 20px;
+   color: var(--ui-primary);
+   display: inline-flex;
+   align-items: center;
+@@ -247,21 +247,19 @@ pre {
+ }
+ 
+ .app-shell__nav-link.is-active .app-shell__nav-icon {
+-  border-color: #8bb1ff;
+-  background: #dbeafe;
++  color: #0d56c7;
+ }
+ 
+ .app-shell__nav-link:hover {
+   text-decoration: none;
+-  border-color: var(--ui-border);
+-  background: var(--ui-surface-soft);
++  background: color-mix(in srgb, var(--ui-surface-soft), #ffffff 45%);
+   color: var(--ui-text);
+ }
+ 
+ .app-shell__nav-link.is-active {
+-  border-color: color-mix(in srgb, var(--ui-primary), #ffffff 35%);
+-  background: var(--ui-selected-row);
+-  color: #124491;
++  border-color: #cfe0fb;
++  background: #edf4ff;
++  color: #0f4eab;
+ }
+ 
+ .app-shell__sidebar-empty {
+@@ -272,38 +270,113 @@ pre {
+ 
+ .app-shell__sidebar-footer {
+   border-top: 1px solid var(--ui-border);
+-  padding-top: 12px;
++  padding-top: 14px;
+   display: grid;
+-  gap: 8px;
++  gap: 10px;
++}
++
++.app-shell__sidebar-theme {
++  min-height: 62px;
++  border: 1px solid var(--ui-border);
++  border-radius: 14px;
++  background: var(--ui-surface);
++  display: flex;
++  align-items: center;
++  justify-content: space-between;
++  gap: 12px;
++  padding: 0 12px;
++}
++
++.app-shell__sidebar-theme-label {
++  color: var(--ui-text);
++  font-size: 13px;
++  font-weight: 700;
+ }
+ 
+-.app-shell__sidebar-note {
++.app-shell__sidebar-theme-icons {
++  display: inline-flex;
++  align-items: center;
++  gap: 8px;
+   color: var(--ui-text-muted);
+-  font-size: 12px;
+-  font-weight: 600;
++}
++
++.app-shell__sidebar-theme-track {
++  width: 34px;
++  height: 18px;
++  border-radius: 999px;
++  border: 1px solid #bdd5fb;
++  background: #dbeafe;
++  position: relative;
++}
++
++.app-shell__sidebar-theme-track::after {
++  content: "";
++  position: absolute;
++  top: 1px;
++  left: 1px;
++  width: 14px;
++  height: 14px;
++  border-radius: 50%;
++  background: #1f6fe5;
++  transition: transform 0.2s ease;
++}
++
++.app-shell__sidebar-theme-track.is-dark::after {
++  transform: translateX(16px);
+ }
+ 
+ .app-shell__user-card {
+   border: 1px solid var(--ui-border);
+   border-radius: 14px;
+-  background: var(--ui-surface-soft);
+-  padding: 10px 11px;
++  background: var(--ui-surface);
++  padding: 10px 12px;
+   display: grid;
++  grid-template-columns: auto minmax(0, 1fr) auto;
++  grid-template-areas:
++    "avatar name chevron"
++    "avatar role chevron";
++  align-items: center;
++  column-gap: 10px;
+   gap: 2px;
+ }
+ 
++.app-shell__user-avatar {
++  grid-area: avatar;
++  width: 34px;
++  height: 34px;
++  border-radius: 50%;
++  border: 1px solid #d4deee;
++  background: #edf2f8;
++  color: #567096;
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  font-size: 13px;
++  font-weight: 700;
++}
++
+ .app-shell__user-name {
++  grid-area: name;
+   margin: 0;
+   font-size: 14px;
+   font-weight: 700;
+   color: var(--ui-text);
++  white-space: nowrap;
++  overflow: hidden;
++  text-overflow: ellipsis;
+ }
+ 
+ .app-shell__user-role {
++  grid-area: role;
+   color: var(--ui-text-muted);
+   font-size: 12px;
+ }
+ 
++.app-shell__user-chevron {
++  grid-area: chevron;
++  color: var(--ui-text-muted);
++}
++
+ .app-shell__content {
+   min-width: 0;
+   min-height: 100vh;
+@@ -317,109 +390,163 @@ pre {
+   z-index: 50;
+   display: flex;
+   align-items: center;
+-  justify-content: space-between;
+-  gap: 12px;
++  justify-content: flex-end;
++  gap: 10px;
+   flex-wrap: wrap;
+-  padding: 14px 24px;
++  padding: 12px clamp(22px, 2.2vw, 42px);
+   border-bottom: 1px solid var(--ui-border);
+   background: var(--ui-surface);
+ }
+ 
+-.app-shell__topbar-eyebrow {
+-  margin: 0;
+-  color: var(--ui-text-muted);
+-  font-size: 12px;
+-  font-weight: 700;
+-  text-transform: uppercase;
+-  letter-spacing: 0.05em;
++.app-shell__topbar-meta {
++  display: inline-flex;
++  align-items: center;
++  gap: 10px;
++  flex-wrap: wrap;
++  justify-content: flex-end;
+ }
+ 
+-.app-shell__topbar-title {
+-  margin: 2px 0 0 0;
+-  color: #124491;
+-  font-size: 21px;
+-  font-weight: 800;
++.app-shell__company-selector {
++  min-height: 44px;
++  max-width: min(100%, 230px);
++  border: 1px solid var(--ui-border);
++  border-radius: 11px;
++  background: var(--ui-surface);
++  padding: 0 10px;
++  display: inline-flex;
++  align-items: center;
++  gap: 10px;
+ }
+ 
+-.app-shell__topbar-meta {
++.app-shell__company-icon {
++  width: 24px;
++  height: 24px;
++  border-radius: 8px;
++  border: 1px solid #d5e4fb;
++  background: #f1f6ff;
++  color: #3a6eb6;
+   display: inline-flex;
+   align-items: center;
+-  gap: 10px;
+-  flex-wrap: wrap;
++  justify-content: center;
++}
++
++.app-shell__company-text {
++  color: #123f86;
++  font-size: 14px;
++  font-weight: 700;
++  white-space: nowrap;
++  overflow: hidden;
++  text-overflow: ellipsis;
+ }
+ 
+ .app-shell__theme-toggle {
+   display: inline-flex;
+   align-items: center;
+-  gap: 6px;
+-  min-height: 36px;
++  justify-content: center;
++  width: 44px;
++  min-height: 44px;
+   border: 1px solid var(--ui-border);
+-  background: var(--ui-surface-soft);
++  background: var(--ui-surface);
+   color: var(--ui-text);
+-  border-radius: 999px;
+-  padding: 0 12px;
+-  font-size: 13px;
+-  font-weight: 700;
++  border-radius: 11px;
++  padding: 0;
+ }
+ 
+ .app-shell__theme-toggle:hover:not(:disabled) {
+   border-color: var(--ui-border-strong);
+-  background: color-mix(in srgb, var(--ui-surface-soft), var(--ui-primary) 6%);
++  background: var(--ui-surface-soft);
+ }
+ 
+-.app-shell__meta-list {
++.app-shell__topbar-user {
++  min-height: 44px;
++  padding: 0 10px;
++  border: 1px solid var(--ui-border);
++  border-radius: 11px;
++  background: var(--ui-surface);
+   display: inline-flex;
+   align-items: center;
+-  gap: 8px;
+-  flex-wrap: wrap;
++  gap: 10px;
+ }
+ 
+-.app-shell__meta-chip {
++.app-shell__topbar-avatar {
++  width: 30px;
++  height: 30px;
++  border-radius: 50%;
++  border: 1px solid #d4deee;
++  background: #edf2f8;
++  color: #567096;
+   display: inline-flex;
+-  align-items: baseline;
+-  gap: 6px;
+-  border: 1px solid var(--ui-border);
+-  border-radius: 999px;
+-  padding: 5px 10px;
+-  background: var(--ui-surface-soft);
++  align-items: center;
++  justify-content: center;
++  font-size: 13px;
++  font-weight: 700;
++}
++
++.app-shell__topbar-user-copy {
++  display: grid;
++  gap: 0;
++  min-width: 0;
+   color: var(--ui-text);
+   font-size: 13px;
++  font-weight: 700;
+ }
+ 
+-.app-shell__meta-chip strong {
++.app-shell__topbar-user-copy span {
++  white-space: nowrap;
++  overflow: hidden;
++  text-overflow: ellipsis;
++}
++
++.app-shell__topbar-user-copy small {
+   color: var(--ui-text-muted);
+-  font-size: 12px;
+-  font-weight: 700;
++  font-size: 11px;
++  font-weight: 600;
+ }
+ 
+ .app-shell__logout {
+   display: inline-flex;
+   align-items: center;
+   gap: 6px;
+-  border-color: #1d4ed8;
+-  background: #1d4ed8;
+-  color: #ffffff;
+-  font-weight: 700;
++  min-height: 44px;
++  border-color: transparent;
++  background: transparent;
++  color: var(--ui-text-muted);
++  font-weight: 600;
+ }
+ 
+ .app-shell__logout:hover:not(:disabled) {
+-  border-color: #1e40af;
+-  background: #1e40af;
++  border-color: var(--ui-border);
++  background: var(--ui-surface-soft);
++  color: var(--ui-text);
+ }
+ 
+ .app-shell__main {
+-  padding: 26px 24px 24px;
++  padding: clamp(28px, 2.2vw, 36px) clamp(22px, 2.3vw, 44px) clamp(24px, 2vw, 32px);
+   display: grid;
+-  gap: 16px;
++  gap: clamp(14px, 1vw, 18px);
+   align-content: start;
+ }
+ 
+ .page-wrap {
+   width: 100%;
+-  max-width: 1320px;
++  max-width: clamp(1200px, calc(100vw - 560px), 1800px);
+   margin: 0 auto;
+   display: grid;
+-  gap: 16px;
++  gap: clamp(14px, 1vw, 18px);
++}
++
++@media (min-width: 2200px) {
++  .app-shell__topbar {
++    padding-inline: clamp(30px, 2.4vw, 52px);
++  }
++
++  .app-shell__main {
++    padding-inline: clamp(30px, 2.6vw, 56px);
++  }
++
++  .page-wrap {
++    max-width: clamp(1480px, calc(100vw - 620px), 1940px);
++  }
+ }
+ 
+ .page-head {
+@@ -2577,7 +2704,7 @@ pre {
+ 
+ @media (max-width: 1140px) {
+   .app-shell {
+-    grid-template-columns: 220px minmax(0, 1fr);
++    grid-template-columns: 238px minmax(0, 1fr);
+   }
+ 
+   .users-workspace {
+@@ -2626,11 +2753,11 @@ pre {
+   }
+ 
+   .app-shell__main {
+-    padding: 16px;
++    padding: 28px 20px 24px;
+   }
+ 
+   .app-shell__topbar {
+-    padding: 12px 16px;
++    padding: 12px 20px;
+   }
+ }
+ 
+@@ -2644,20 +2771,16 @@ pre {
+     height: auto;
+     border-right: 0;
+     border-bottom: 1px solid var(--ui-border);
+-    padding: 12px;
+-    gap: 12px;
++    padding: 16px;
++    gap: 16px;
+   }
+ 
+   .app-shell__nav {
+-    display: flex;
+-    align-items: center;
+-    gap: 8px;
+-    overflow-x: auto;
+-    padding-bottom: 4px;
++    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+   }
+ 
+   .app-shell__nav-link {
+-    white-space: nowrap;
++    min-height: 46px;
+   }
+ 
+   .app-shell__content {
+@@ -2666,7 +2789,8 @@ pre {
+ 
+   .app-shell__topbar {
+     position: static;
+-    padding: 12px;
++    justify-content: stretch;
++    padding: 12px 16px;
+   }
+ 
+   .app-shell__topbar-meta {
+@@ -2674,8 +2798,14 @@ pre {
+     justify-content: flex-start;
+   }
+ 
++  .app-shell__company-selector {
++    max-width: none;
++    width: 100%;
++    justify-content: flex-start;
++  }
++
+   .app-shell__main {
+-    padding: 12px;
++    padding: 22px 16px 20px;
+   }
+ 
+   .page-title {
+@@ -2756,21 +2886,15 @@ pre {
+     justify-content: stretch;
+   }
+ 
+-  .app-shell__theme-toggle {
+-    width: fit-content;
+-  }
+-
+-  .app-shell__meta-list {
+-    display: grid;
+-    gap: 8px;
+-  }
+-
+-  .app-shell__meta-chip {
+-    width: fit-content;
++  .app-shell__company-selector,
++  .app-shell__topbar-user,
++  .app-shell__logout {
++    width: 100%;
++    justify-content: flex-start;
+   }
+ 
+-  .app-shell__logout {
+-    width: fit-content;
++  .app-shell__theme-toggle {
++    width: 44px;
+   }
+ 
+   .dashboard-link-card {

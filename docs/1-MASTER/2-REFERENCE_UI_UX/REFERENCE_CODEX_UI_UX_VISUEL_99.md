@@ -119,6 +119,15 @@ Codex ne doit pas :
 - afficher `INFORMATION NON FOURNIE — À CONFIRMER` dans l’interface utilisateur ;
 - inventer des fonctionnalités absentes de la maquette.
 
+Règle responsive transverse complémentaire :
+
+- vérifier systématiquement le rendu au minimum en `1920×1080` et `2560×1440` ;
+- ne pas utiliser `zoom` ;
+- ne pas utiliser `transform: scale()` pour adapter globalement l'interface ;
+- privilégier `clamp()`, grilles fluides, paddings adaptatifs et largeurs max raisonnables ;
+- garantir un Shell lisible/exploitable avec sidebar entièrement visible ou accessible via scroll interne maîtrisé ;
+- éviter un contenu principal trop centré/petit sur grands écrans comme un contenu trop compressé sur 1920×1080.
+
 ---
 
 ## 7. Règles de chemins documentaires
