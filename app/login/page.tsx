@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  AlertTriangle,
   Ambulance,
   CalendarDays,
   Check,
@@ -49,22 +50,22 @@ function getSafeRouterTarget(value: string | null, fallback: string): string {
 const loginHighlights = [
   {
     title: "Planning intelligent",
-    description: "Organisez vos equipes et vos interventions en toute clarte.",
+    description: "Organisez vos équipes et vos interventions",
     Icon: CalendarDays,
   },
   {
-    title: "Flotte optimisee",
-    description: "Suivez vos vehicules et vos equipements sans perte d'information.",
+    title: "Flotte optimisée",
+    description: "Suivez vos véhicules et équipements",
     Icon: Ambulance,
   },
   {
-    title: "Equipes connectees",
-    description: "Coordonnez les profils, roles et depots avec une vue unifiee.",
+    title: "Équipes connectées",
+    description: "Gérez vos utilisateurs et compétences",
     Icon: UsersRound,
   },
   {
-    title: "Conformite et securite",
-    description: "Donnees tracees et acces reserves aux utilisateurs autorises.",
+    title: "Conformité & sécurité",
+    description: "Données sécurisées et tracées",
     Icon: ShieldCheck,
   },
 ] as const;
@@ -104,7 +105,7 @@ function LoginPageContent() {
     setLoading(false);
 
     if (!res?.ok) {
-      setError("Identifiants invalides.");
+      setError("L'adresse email ou le mot de passe est incorrect.");
       return;
     }
 
@@ -114,29 +115,35 @@ function LoginPageContent() {
 
   return (
     <main className="login-page">
-      <section className="login-page__showcase" aria-label="Presentation de la plateforme">
+      <section className="login-page__showcase" aria-label="Présentation de la plateforme">
         <div className="login-page__brand">
           <span className="login-page__brand-icon" aria-hidden="true">
-            <Ambulance size={22} strokeWidth={2.1} />
+            <Ambulance size={44} strokeWidth={2.1} />
           </span>
           <p className="login-page__brand-title">
-            Ambulance <span>Manager</span>
+            <span>Ambulance</span> <span>Manager</span>
           </p>
           <span className="login-page__brand-chip">ALPHA</span>
         </div>
 
         <div className="login-page__intro">
-          <h1 className="login-page__intro-title">Simplifiez la gestion operationnelle de votre societe de transport sanitaire.</h1>
-          <p className="login-page__intro-description">
-            Un espace clair et fiable pour piloter equipes, planning et conformite depuis une seule interface.
-          </p>
+          <h1 className="login-page__intro-title">
+            Simplifiez la gestion
+            <br />
+            opérationnelle de votre
+            <br />
+            société de transport
+            <br />
+            sanitaire.
+          </h1>
+          <span className="login-page__intro-rule" aria-hidden="true" />
         </div>
 
-        <ul className="login-page__highlights" aria-label="Points cles">
+        <ul className="login-page__highlights" aria-label="Points clés">
           {loginHighlights.map((item) => (
             <li key={item.title}>
               <span className="login-page__highlight-icon" aria-hidden="true">
-                <item.Icon size={18} strokeWidth={2.2} />
+                <item.Icon size={24} strokeWidth={2.05} />
               </span>
               <div>
                 <p className="login-page__highlight-title">{item.title}</p>
@@ -146,22 +153,30 @@ function LoginPageContent() {
           ))}
         </ul>
 
-        <p className="login-page__security-note">
+        <div className="login-page__security-note">
           <span className="login-page__security-icon" aria-hidden="true">
-            <LockKeyhole size={18} strokeWidth={2.2} />
+            <LockKeyhole size={20} strokeWidth={2.2} />
           </span>
-          Acces reserve aux utilisateurs autorises.
-        </p>
+          <div>
+            <p className="login-page__security-title">Accès réservé aux utilisateurs autorisés</p>
+            <p className="login-page__security-description">
+              Vos données sont hébergées en France
+              <br />
+              et protégées conformément au RGPD.
+            </p>
+          </div>
+        </div>
       </section>
 
       <section className="login-page__form-area" aria-label="Formulaire de connexion">
         <article className="login-card">
           <div className="login-card__icon" aria-hidden="true">
-            <Ambulance size={26} strokeWidth={2.2} />
+            <Ambulance size={56} strokeWidth={2.1} />
           </div>
 
           <h2 className="login-card__title">Connexion</h2>
-          <p className="login-card__subtitle">Accedez a votre espace Ambulance Manager.</p>
+          <p className="login-card__subtitle">Accédez à votre espace Ambulance Manager</p>
+          <span className="login-card__divider" aria-hidden="true" />
 
           <form onSubmit={onSubmit} className="login-form">
             <label className="login-field">
@@ -202,13 +217,6 @@ function LoginPageContent() {
               </span>
             </label>
 
-            {error ? (
-              <p className="login-error" role="alert">
-                <span className="login-error__title">Identifiants invalides</span>
-                <span className="login-error__description">{error}</span>
-              </p>
-            ) : null}
-
             <label className="login-checkbox">
               <input type="checkbox" defaultChecked />
               <span className="login-checkbox__mark" aria-hidden="true">
@@ -221,17 +229,35 @@ function LoginPageContent() {
               <LockKeyhole size={17} strokeWidth={2.2} aria-hidden="true" />
               {loading ? "Connexion..." : "Connexion"}
             </button>
+
+            {error ? (
+              <p className="login-error" role="alert">
+                <span className="login-error__icon" aria-hidden="true">
+                  <AlertTriangle size={18} strokeWidth={2.2} />
+                </span>
+                <span className="login-error__copy">
+                  <span className="login-error__title">Identifiants invalides</span>
+                  <span className="login-error__description">{error}</span>
+                </span>
+              </p>
+            ) : null}
           </form>
 
+          <span className="login-card__divider" aria-hidden="true" />
           <p className="login-card__privacy-note">
-            Consultez les <Link href="/privacy">mentions d&apos;information</Link>.
+            En vous connectant, vous acceptez les
+            <br />
+            <Link href="/privacy">Mentions d&apos;information</Link>
           </p>
         </article>
 
-        <p className="login-page__bottom-note">
-          <ShieldCheck size={14} strokeWidth={2.2} aria-hidden="true" />
-          Application professionnelle de transport sanitaire
-        </p>
+        <div className="login-page__bottom-note" role="note" aria-label="Conformité et hébergement">
+          <span className="login-page__badge-fr" aria-hidden="true" />
+          <span>Hébergé en France</span>
+          <span className="login-page__badge-divider" aria-hidden="true" />
+          <ShieldCheck size={16} strokeWidth={2.2} aria-hidden="true" />
+          <span>Conforme RGPD</span>
+        </div>
       </section>
     </main>
   );

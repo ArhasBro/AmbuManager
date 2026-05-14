@@ -1,0 +1,46 @@
+diff --git a/app/globals.css b/app/globals.css
+index d58f88a..74f12f3 100644
+--- a/app/globals.css
++++ b/app/globals.css
+@@ -1,4 +1,4 @@
+-﻿@import "tailwindcss";
++@import "tailwindcss";
+ 
+ :root {
+   --ui-bg: #f7faff;
+@@ -4439,10 +4439,10 @@ pre {
+     url("/assets/login/ambulance-login-bg.webp");
+   background-repeat: no-repeat;
+   background-size: cover;
+-  background-position: center center;
++  background-position: left center;
+ }
+ 
+-  .login-page__showcase::before {
++.login-page__showcase::before {
+   content: "";
+   position: absolute;
+   top: 76px;
+@@ -5181,6 +5181,7 @@ pre {
+     gap: 20px;
+     min-height: 620px;
+     padding-bottom: 26px;
++    background-position: left center;
+   }
+ 
+   .login-page__form-area {
+@@ -5214,6 +5215,7 @@ pre {
+   .login-page__showcase {
+     min-height: auto;
+     padding: 24px 16px;
++    background-position: left center;
+   }
+ 
+   .login-page__showcase::before {
+@@ -5268,6 +5270,3 @@ pre {
+   }
+ }
+ 
+-
+-
+-
