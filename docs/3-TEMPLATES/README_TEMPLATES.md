@@ -1,4 +1,4 @@
-﻿# README_TEMPLATES.md
+# README_TEMPLATES.md
 
 ## Rôle du dossier
 

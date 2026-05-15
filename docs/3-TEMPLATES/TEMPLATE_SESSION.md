@@ -1,4 +1,4 @@
-﻿# TEMPLATE_SESSION.md
+# TEMPLATE_SESSION.md
 
 ## Session
 
@@ -29,6 +29,8 @@
 - Maquettes : aucun déplacement sans décision explicite
 - Encodage : aucune correction massive sans preuve fichier par fichier
 - Séparation des rôles : production Codex / contrôle ChatGPT
+- Pour les sessions de production en deux temps : la documentation finale n'est rédigée qu'après autorisation explicite Nathan : `AUTORISÉ : DOCUMENTATION`
+- Pour les prompts de contrôle ChatGPT : attendre le retour complet de Codex avant tout contrôle ; tant que le retour Codex, les preuves terminales, les fichiers modifiés/diff attendus ou les confirmations demandées ne sont pas fournis, le contrôle reste en attente
 - Toute information non prouvée : `INFORMATION NON FOURNIE — À CONFIRMER`
 
 ## Fichiers à lire
@@ -74,6 +76,7 @@
 - Patch/diff uniquement si explicitement demandé
 - Aucun `.diff` créé par défaut dans le repo
 - Le `git diff` doit être fourni dans la réponse si modification
+- Si des fichiers nouveaux non suivis doivent apparaître dans le diff : `git add -N <fichiers nouveaux>` puis `git diff --find-renames -- docs/3-TEMPLATES` puis `git reset -- <fichiers nouveaux>`
 
 ## Format de réponse attendu
 

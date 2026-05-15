@@ -1,4 +1,4 @@
-﻿# TEMPLATE_DOD_SESSION.md
+# TEMPLATE_DOD_SESSION.md
 
 ## Identification
 
