@@ -1,0 +1,330 @@
+diff --git a/app/templates/templates-client.tsx b/app/templates/templates-client.tsx
+index f6c98bf..ae55ad6 100644
+--- a/app/templates/templates-client.tsx
++++ b/app/templates/templates-client.tsx
+@@ -70,8 +70,8 @@ const VEHICLE_TYPE_OPTIONS: VehicleTypeOption[] = ["AMBULANCE", "VSL", "TAXI"];
+ const DEFAULT_COLOR = "#1D4ED8";
+ 
+ const TEMPLATE_DETAIL_TABS: Array<{ id: TemplateDetailTab; label: string }> = [
+-  { id: "DETAILS", label: "DÃ©tails" },
+-  { id: "EQUIPE", label: "Ã‰quipe" },
++  { id: "DETAILS", label: "Détails" },
++  { id: "EQUIPE", label: "Équipe" },
+   { id: "HORAIRES", label: "Horaires" },
+   { id: "HISTORIQUE", label: "Historique" },
+ ];
+@@ -143,16 +143,16 @@ function getApiError<T>(payload: ApiResponse<T> | null, fallback: string) {
+ }
+ 
+ function formatDateShort(value: string | null) {
+-  if (!value) return "DonnÃ©e non renseignÃ©e";
++  if (!value) return "Donnée non renseignée";
+   const date = new Date(value);
+   if (Number.isNaN(date.getTime())) return value;
+   return date.toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric" });
+ }
+ 
+ function formatTimeShort(value: string | null) {
+-  if (!value) return "DonnÃ©e non renseignÃ©e";
++  if (!value) return "Donnée non renseignée";
+   const date = new Date(value);
+-  if (Number.isNaN(date.getTime())) return "DonnÃ©e non renseignÃ©e";
++  if (Number.isNaN(date.getTime())) return "Donnée non renseignée";
+   return date.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+ }
+ 
+@@ -162,8 +162,8 @@ function getTimeLabel(template: Template) {
+ }
+ 
+ function getStatusLabel(template: Template) {
+-  if (template.archivedAt) return "ArchivÃ©";
+-  return template.isActive ? "Actif" : "DÃ©sactivÃ©";
++  if (template.archivedAt) return "Archivé";
++  return template.isActive ? "Actif" : "Désactivé";
+ }
+ 
+ function getStatusVariant(template: Template): "success" | "warning" | "neutral" {
+@@ -552,6 +552,8 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
+     [filteredTemplates, selectedTemplate],
+   );
+ 
++  const selectedTemplateColor = selectedTemplate ? normalizeTemplateColor(selectedTemplate.color) ?? DEFAULT_COLOR : DEFAULT_COLOR;
++
+   function clearFeedback() {
+     setError(null);
+     setSuccessMessage(null);
+@@ -723,7 +725,7 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
+     {
+       key: "name",
+       header: "Nom du template",
+-      width: "240px",
++      width: "188px",
+       render: (template) => {
+         const rowIndex = filteredTemplates.findIndex((current) => current.id === template.id);
+         return (
+@@ -737,19 +739,19 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
+     {
+       key: "vehicle",
+       header: "Type véhicule",
+-      width: "130px",
++      width: "104px",
+       render: (template) => <StatusBadge variant="info">{getVehicleTypeLabel(template.requiredVehicleType)}</StatusBadge>,
+     },
+     {
+       key: "time",
+       header: "Horaire",
+-      width: "126px",
++      width: "96px",
+       render: (template) => getTimeLabel(template),
+     },
+     {
+       key: "crossesMidnight",
+       header: "Traverse minuit",
+-      width: "112px",
++      width: "92px",
+       render: (template) => (
+         <StatusBadge variant={template.crossesMidnight ? "danger" : "success"}>
+           {getCrossesMidnightLabel(template.crossesMidnight)}
+@@ -759,27 +761,27 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
+     {
+       key: "staffCount",
+       header: "Nb personnes",
+-      width: "98px",
++      width: "82px",
+       align: "center",
+       render: (template) => String(resolveTemplateMinStaffCount(template.minStaffCount, template.category)),
+     },
+     {
+       key: "requiredRole",
+       header: "Rôle slot 1",
+-      width: "100px",
++      width: "82px",
+       align: "center",
+       render: (template) => template.requiredRole ?? "Aucun",
+     },
+     {
+       key: "secondaryRoles",
+       header: "Rôles autorisés",
+-      width: "124px",
++      width: "102px",
+       render: (template) => template.secondaryAllowedRoles.join(", ") || "Aucun",
+     },
+     {
+       key: "updatedAt",
+       header: "Dernière modif.",
+-      width: "140px",
++      width: "116px",
+       render: (template) => (
+         <div className="templates-updated-cell">
+           <span>{formatDateShort(template.updatedAt)}</span>
+@@ -790,7 +792,7 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
+     {
+       key: "usage",
+       header: "Utilisé",
+-      width: "88px",
++      width: "70px",
+       align: "center",
+       render: () => "—",
+     },
+@@ -798,7 +800,7 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
+       key: "actions",
+       header: "Actions",
+       align: "center",
+-      width: "64px",
++      width: "52px",
+       render: (template) => (
+         <button
+           type="button"
+@@ -945,7 +947,7 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
+                 setSelectedTemplateId(template.id);
+                 setCheckedTemplateIds([template.id]);
+               }}
+-              minWidth={1450}
++              minWidth={1120}
+               caption="Templates de garde"
+               className="templates-table"
+             />
+@@ -1000,7 +1002,7 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
+                     <div><dt>Nom</dt><dd>{selectedTemplate.name}</dd></div>
+                     <div><dt>Code</dt><dd>{buildTemplateCode(selectedTemplate, selectedTemplateIndex >= 0 ? selectedTemplateIndex : 0)}</dd></div>
+                     <div><dt>Type véhicule</dt><dd>{getVehicleTypeLabel(selectedTemplate.requiredVehicleType)}</dd></div>
+-                    <div><dt>Couleur</dt><dd>{normalizeTemplateColor(selectedTemplate.color) ?? DEFAULT_COLOR}</dd></div>
++                    <div><dt>Couleur</dt><dd><span className="templates-color-swatch" style={{ backgroundColor: selectedTemplateColor }} aria-label={`Couleur ${selectedTemplateColor}`} title={selectedTemplateColor} /></dd></div>
+                     <div><dt>Actif</dt><dd>{selectedTemplate.isActive ? "Oui" : "Non"}</dd></div>
+                   </dl>
+                 </div>
+
+diff --git a/app/a24-vehicles-templates.css b/app/a24-vehicles-templates.css
+index 2ae0716..8a47de5 100644
+--- a/app/a24-vehicles-templates.css
++++ b/app/a24-vehicles-templates.css
+@@ -536,7 +536,7 @@
+ }
+ 
+ .templates-section--v2 .templates-layout {
+-  grid-template-columns: minmax(0, 1.56fr) minmax(390px, 0.94fr);
++  grid-template-columns: minmax(0, 1.72fr) minmax(360px, 0.78fr);
+ }
+ 
+ .templates-page-top {
+@@ -665,22 +665,36 @@
+ }
+ 
+ .templates-table .ui-data-table__head-cell {
+-  padding: 9px 8px;
++  padding: 8px 6px;
+   font-size: 11px;
+   text-transform: none;
+   letter-spacing: 0;
+   white-space: normal;
+   line-height: 1.2;
++  text-align: center;
+ }
+ 
+ .templates-table .ui-data-table__cell {
+-  padding: 9px 8px;
+-  font-size: 13px;
++  padding: 8px 6px;
++  font-size: 12px;
+   white-space: nowrap;
+   border-bottom: 1px solid color-mix(in srgb, var(--ui-border), #ffffff 18%);
+   vertical-align: middle;
+ }
+ 
++.templates-table .ui-data-table__head-cell.ui-data-table__cell--left {
++  text-align: center;
++}
++
++.templates-table .ui-data-table__row.is-selected .ui-data-table__cell {
++  background: color-mix(in srgb, var(--ui-selected-row), transparent 32%);
++  box-shadow: none;
++}
++
++.templates-table .ui-data-table__row.is-selected .ui-data-table__cell:first-child {
++  box-shadow: inset 3px 0 0 var(--ui-primary);
++}
++
+ .templates-row-checkbox {
+   display: inline-flex;
+   align-items: center;
+@@ -769,7 +783,118 @@
+ }
+ 
+ .templates-section--v2 .templates-detail-panel__title {
+-  font-size: 40px;
++  font-size: clamp(27px, 2vw, 33px);
++  line-height: 1.08;
++}
++
++.templates-section--v2 .templates-grid-stats .ui-stat-card {
++  min-height: 96px;
++  border-radius: 14px;
++  padding: 12px 13px;
++  background: var(--ui-surface);
++  border-color: color-mix(in srgb, var(--ui-border), #ffffff 22%);
++  box-shadow: 0 6px 14px rgba(20, 35, 70, 0.04);
++  display: grid;
++  grid-template-columns: auto minmax(0, 1fr);
++  grid-template-areas:
++    "head value"
++    "head hint";
++  column-gap: 10px;
++  row-gap: 2px;
++  align-items: center;
++}
++
++.templates-section--v2 .templates-grid-stats .ui-stat-card__head {
++  grid-area: head;
++  justify-content: flex-start;
++  align-items: center;
++  align-self: center;
++}
++
++.templates-section--v2 .templates-grid-stats .ui-stat-card__title {
++  display: none;
++}
++
++.templates-section--v2 .templates-grid-stats .ui-stat-card__icon {
++  width: 36px;
++  height: 36px;
++  border-radius: 11px;
++}
++
++.templates-section--v2 .templates-grid-stats .ui-stat-card__value {
++  grid-area: value;
++  margin: 0;
++  text-align: left;
++  font-size: clamp(33px, 2.2vw, 38px);
++  line-height: 1;
++}
++
++.templates-section--v2 .templates-grid-stats .ui-stat-card__hint {
++  grid-area: hint;
++  margin: 0;
++  text-align: left;
++  color: #4f6287;
++  font-size: 13px;
++  font-weight: 600;
++}
++
++.templates-section--v2 .templates-grid-stats .ui-stat-card--info,
++.templates-section--v2 .templates-grid-stats .ui-stat-card--success,
++.templates-section--v2 .templates-grid-stats .ui-stat-card--warning,
++.templates-section--v2 .templates-grid-stats .ui-stat-card--danger,
++.templates-section--v2 .templates-grid-stats .ui-stat-card--neutral {
++  background: var(--ui-surface);
++}
++
++.templates-section--v2 .templates-grid-stats .ui-stat-card--info .ui-stat-card__icon {
++  color: #1f6fe5;
++  border-color: #bfdbfe;
++  background: #eaf3ff;
++}
++
++.templates-section--v2 .templates-grid-stats .ui-stat-card--success .ui-stat-card__icon {
++  color: #19663d;
++  border-color: #9fdfb1;
++  background: #eaf8ef;
++}
++
++.templates-section--v2 .templates-grid-stats .ui-stat-card--warning .ui-stat-card__icon {
++  color: #8e6219;
++  border-color: #f3cd83;
++  background: #fff7e8;
++}
++
++.templates-section--v2 .templates-grid-stats .ui-stat-card--neutral .ui-stat-card__icon {
++  color: #7e55c7;
++  border-color: #dac7ff;
++  background: #f5efff;
++}
++
++.templates-section--v2 .ui-status-badge {
++  min-height: 23px;
++  padding: 2px 8px;
++  border-radius: 8px;
++  font-weight: 650;
++}
++
++.templates-color-swatch {
++  width: 14px;
++  height: 14px;
++  border-radius: 50%;
++  border: 1px solid rgba(19, 42, 82, 0.2);
++  display: inline-block;
++  vertical-align: middle;
++}
++
++.templates-detail-panel__actions .ui-action-button--danger {
++  border-color: #ef4444;
++  background: #ef4444;
++  color: #ffffff;
++}
++
++.templates-detail-panel__actions .ui-action-button--danger:hover:not(:disabled) {
++  border-color: #dc2626;
++  background: #dc2626;
+ }
+ 
+ .vehicles-section--v2 .vehicles-layout {
+

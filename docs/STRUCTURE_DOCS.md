@@ -2703,7 +2703,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |                   
 |   |   +---BLOC_A26
 |   |   |   |   PROMPTS_A26_PRODUCTION_CONTROLE_V1_0.md
-|   |   |   |   SESSION-20260513-06_A26_A26-UI-06.zip
+|   |   |   |   SESSION-20260513-07_A26_A26-UI-07.zip
 |   |   |   |   
 |   |   |   +---SESSION-20260513-01_A26_A26-UI-01
 |   |   |   |   |   EVIDENCES.md
@@ -2798,6 +2798,8 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
+|   |   |   |           PATCH__SESSION-20260513-07_A26_A26-UI-07.diff
+|   |   |   |           PATCH__SESSION-20260513-07_A26_A26-UI-07_FIX-01.diff
 |   |   |   |           README_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260513-08_A26_A26-UI-08

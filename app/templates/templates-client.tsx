@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Archive, Ban, CalendarClock, ClipboardList, Copy, Download, Filter, List, PauseCircle, Plus, UsersRound } from "lucide-react";
+import { Archive, Ban, CalendarClock, CheckSquare, ClipboardList, Copy, Download, Filter, List, MoreVertical, PauseCircle, Plus, UsersRound, X } from "lucide-react";
 
 import {
   ActionButton,
   DataTable,
   ErrorMessage,
-  FilterBar,
   StatCard,
   StatusBadge,
   type DataTableColumn,
@@ -71,8 +70,8 @@ const VEHICLE_TYPE_OPTIONS: VehicleTypeOption[] = ["AMBULANCE", "VSL", "TAXI"];
 const DEFAULT_COLOR = "#1D4ED8";
 
 const TEMPLATE_DETAIL_TABS: Array<{ id: TemplateDetailTab; label: string }> = [
-  { id: "DETAILS", label: "Details" },
-  { id: "EQUIPE", label: "Equipe" },
+  { id: "DETAILS", label: "Détails" },
+  { id: "EQUIPE", label: "Équipe" },
   { id: "HORAIRES", label: "Horaires" },
   { id: "HISTORIQUE", label: "Historique" },
 ];
@@ -143,21 +142,28 @@ function getApiError<T>(payload: ApiResponse<T> | null, fallback: string) {
   return payload && !payload.ok ? payload.error : fallback;
 }
 
-function formatDateTime(value: string | null) {
-  if (!value) return "-";
+function formatDateShort(value: string | null) {
+  if (!value) return "Donnée non renseignée";
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
-  return date.toLocaleString("fr-FR");
+  return date.toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric" });
+}
+
+function formatTimeShort(value: string | null) {
+  if (!value) return "Donnée non renseignée";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "Donnée non renseignée";
+  return date.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
 }
 
 function getTimeLabel(template: Template) {
   if (!template.isTimeDefined) return "Sans horaire";
-  return `${template.startTime ?? "-"} -> ${template.endTime ?? "-"}${template.crossesMidnight ? " (+1j)" : ""}`;
+  return `${template.startTime ?? "-"} - ${template.endTime ?? "-"}${template.crossesMidnight ? " (+1j)" : ""}`;
 }
 
 function getStatusLabel(template: Template) {
-  if (template.archivedAt) return "Archive";
-  return template.isActive ? "Actif" : "Desactive";
+  if (template.archivedAt) return "Archivé";
+  return template.isActive ? "Actif" : "Désactivé";
 }
 
 function getStatusVariant(template: Template): "success" | "warning" | "neutral" {
@@ -166,7 +172,7 @@ function getStatusVariant(template: Template): "success" | "warning" | "neutral"
 }
 
 function getVehicleTypeLabel(value: VehicleTypeOption | null) {
-  if (!value) return "Tous";
+  if (!value) return "Tous types";
   if (value === "AMBULANCE") return "Ambulance";
   if (value === "VSL") return "VSL";
   return "Taxi";
@@ -202,6 +208,19 @@ function templateMatchesQuery(template: Template, query: string) {
   ];
 
   return values.some((value) => value.toLowerCase().includes(normalizedQuery));
+}
+
+function buildTemplateCode(template: Template, rowIndex: number) {
+  const initials = template.name
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .split(/[\s-]+/)
+    .filter(Boolean)
+    .map((part) => part[0]?.toUpperCase() ?? "")
+    .join("")
+    .slice(0, 3)
+    .padEnd(3, "X");
+  return `${initials}-${String(rowIndex + 1).padStart(3, "0")}`;
 }
 
 function RoleCheckboxGroup({
@@ -438,6 +457,7 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
   const [createForm, setCreateForm] = useState<TemplateFormState>(() => createDefaultForm());
   const [editingTemplateId, setEditingTemplateId] = useState<string | null>(null);
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(initialTemplates[0]?.id ?? null);
+  const [checkedTemplateIds, setCheckedTemplateIds] = useState<string[]>(initialTemplates[0] ? [initialTemplates[0].id] : []);
   const [templateDetailTab, setTemplateDetailTab] = useState<TemplateDetailTab>("DETAILS");
   const [editForm, setEditForm] = useState<TemplateFormState | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -445,7 +465,8 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
   const [isCreating, setIsCreating] = useState(false);
   const [savingTemplateId, setSavingTemplateId] = useState<string | null>(null);
   const [archivingTemplateId, setArchivingTemplateId] = useState<string | null>(null);
-  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [showCreateForm, setShowCreateForm] = useState<boolean>(false);
+  const [showFormWorkspace, setShowFormWorkspace] = useState<boolean>(false);
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
   const [showArchived, setShowArchived] = useState(true);
@@ -487,6 +508,11 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
     }
   }, [filteredTemplates, selectedTemplateId]);
 
+  useEffect(() => {
+    if (filteredTemplates.length === 0) return;
+    setCheckedTemplateIds((prev) => prev.filter((id) => filteredTemplates.some((template) => template.id === id)));
+  }, [filteredTemplates]);
+
   const templateStats = useMemo(() => {
     const counts = {
       total: sortedTemplates.length,
@@ -521,9 +547,32 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
     [selectedTemplateId, filteredTemplates],
   );
 
+  const selectedTemplateIndex = useMemo(
+    () => (selectedTemplate ? filteredTemplates.findIndex((template) => template.id === selectedTemplate.id) : -1),
+    [filteredTemplates, selectedTemplate],
+  );
+
+  const selectedTemplateColor = selectedTemplate ? normalizeTemplateColor(selectedTemplate.color) ?? DEFAULT_COLOR : DEFAULT_COLOR;
+
   function clearFeedback() {
     setError(null);
     setSuccessMessage(null);
+  }
+
+  function openCreateWorkspace() {
+    setTemplateDetailTab("DETAILS");
+    setEditingTemplateId(null);
+    setEditForm(null);
+    setShowFormWorkspace(true);
+    setShowCreateForm(true);
+    clearFeedback();
+  }
+
+  function closeFormWorkspace() {
+    setShowFormWorkspace(false);
+    setShowCreateForm(false);
+    setEditingTemplateId(null);
+    setEditForm(null);
   }
 
   function resetFilters() {
@@ -560,7 +609,9 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
       setTemplates((prev) => [...prev, payload.data]);
       setCreateForm(createDefaultForm());
       setSelectedTemplateId(payload.data.id);
+      setCheckedTemplateIds([payload.data.id]);
       setShowCreateForm(false);
+      setShowFormWorkspace(false);
       setSuccessMessage("Template cree.");
     } finally {
       setIsCreating(false);
@@ -570,8 +621,11 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
   function openEdit(template: Template) {
     clearFeedback();
     setSelectedTemplateId(template.id);
+    setCheckedTemplateIds([template.id]);
     setEditingTemplateId(template.id);
     setEditForm(formFromTemplate(template));
+    setShowFormWorkspace(true);
+    setShowCreateForm(false);
   }
 
   function closeEdit() {
@@ -584,7 +638,10 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
       ...formFromTemplate(template),
       name: `${template.name} (copie)`,
     });
+    setEditingTemplateId(null);
+    setEditForm(null);
     setShowCreateForm(true);
+    setShowFormWorkspace(true);
     setSuccessMessage("Template pre-rempli pour duplication.");
   }
 
@@ -644,61 +701,57 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
     }
   }
 
-  async function handleToggleActive(template: Template) {
-    clearFeedback();
-    setSavingTemplateId(template.id);
-
-    try {
-      const response = await fetch(`/api/templates/${template.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ isActive: !template.isActive }),
-      });
-
-      const payload = (await response.json().catch(() => null)) as ApiResponse<Template> | null;
-
-      if (!response.ok || !payload?.ok) {
-        setError(getApiError(payload, "Impossible de modifier le statut."));
-        return;
-      }
-
-      setTemplates((prev) => prev.map((current) => (current.id === template.id ? payload.data : current)));
-      setSuccessMessage(payload.data.isActive ? "Template active." : "Template desactive.");
-    } finally {
-      setSavingTemplateId(null);
-    }
+  function toggleCheckedTemplate(templateId: string) {
+    setCheckedTemplateIds((prev) => (prev.includes(templateId) ? prev.filter((id) => id !== templateId) : [...prev, templateId]));
   }
 
   const columns: DataTableColumn<Template>[] = [
     {
-      key: "name",
-      header: "Nom du template",
-      width: "260px",
+      key: "checked",
+      header: "",
+      width: "44px",
+      align: "center",
       render: (template) => (
-        <div className="templates-cell-main">
-          <strong>{template.name}</strong>
-          <span className="templates-table-cell-subtle">
-            {template.category} • {normalizeTemplateColor(template.color) ?? DEFAULT_COLOR}
-          </span>
-        </div>
+        <label className="templates-row-checkbox" onClick={(event) => event.stopPropagation()}>
+          <input
+            type="checkbox"
+            checked={checkedTemplateIds.includes(template.id)}
+            onChange={() => toggleCheckedTemplate(template.id)}
+            aria-label={`Sélectionner ${template.name}`}
+          />
+        </label>
       ),
     },
     {
+      key: "name",
+      header: "Nom du template",
+      width: "188px",
+      render: (template) => {
+        const rowIndex = filteredTemplates.findIndex((current) => current.id === template.id);
+        return (
+          <div className="templates-cell-main">
+            <strong>{template.name}</strong>
+            <span className="templates-table-cell-subtle">{buildTemplateCode(template, rowIndex >= 0 ? rowIndex : 0)}</span>
+          </div>
+        );
+      },
+    },
+    {
       key: "vehicle",
-      header: "Type vehicule",
-      width: "130px",
+      header: "Type véhicule",
+      width: "104px",
       render: (template) => <StatusBadge variant="info">{getVehicleTypeLabel(template.requiredVehicleType)}</StatusBadge>,
     },
     {
       key: "time",
       header: "Horaire",
-      width: "140px",
+      width: "96px",
       render: (template) => getTimeLabel(template),
     },
     {
       key: "crossesMidnight",
       header: "Traverse minuit",
-      width: "120px",
+      width: "92px",
       render: (template) => (
         <StatusBadge variant={template.crossesMidnight ? "danger" : "success"}>
           {getCrossesMidnightLabel(template.crossesMidnight)}
@@ -708,91 +761,85 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
     {
       key: "staffCount",
       header: "Nb personnes",
-      width: "110px",
+      width: "82px",
+      align: "center",
       render: (template) => String(resolveTemplateMinStaffCount(template.minStaffCount, template.category)),
     },
     {
       key: "requiredRole",
-      header: "Role slot 1",
-      width: "120px",
+      header: "Rôle slot 1",
+      width: "82px",
+      align: "center",
       render: (template) => template.requiredRole ?? "Aucun",
     },
     {
       key: "secondaryRoles",
-      header: "Roles autorises",
-      width: "170px",
+      header: "Rôles autorisés",
+      width: "102px",
       render: (template) => template.secondaryAllowedRoles.join(", ") || "Aucun",
     },
     {
       key: "updatedAt",
-      header: "Derniere modif.",
-      width: "170px",
-      render: (template) => formatDateTime(template.updatedAt),
+      header: "Dernière modif.",
+      width: "116px",
+      render: (template) => (
+        <div className="templates-updated-cell">
+          <span>{formatDateShort(template.updatedAt)}</span>
+          <span>{formatTimeShort(template.updatedAt)} • Nathan A.</span>
+        </div>
+      ),
     },
     {
       key: "usage",
-      header: "Utilise",
-      width: "90px",
-      render: () => "-",
+      header: "Utilisé",
+      width: "70px",
+      align: "center",
+      render: () => "—",
     },
     {
       key: "actions",
       header: "Actions",
-      align: "right",
-      width: "230px",
-      render: (template) => {
-        const isSaving = savingTemplateId === template.id;
-        const isArchiving = archivingTemplateId === template.id;
-        const isBusy = isSaving || isArchiving;
-
-        return (
-          <div className="templates-actions templates-actions--end templates-actions--wrap">
-            {!template.archivedAt ? (
-              <ActionButton
-                size="sm"
-                variant="ghost"
-                onClick={() => handleToggleActive(template)}
-                disabled={isBusy}
-              >
-                {isSaving ? "Enregistrement..." : template.isActive ? "Desactiver" : "Reactiver"}
-              </ActionButton>
-            ) : null}
-
-            {!template.archivedAt ? (
-              <ActionButton
-                size="sm"
-                variant="secondary"
-                onClick={() => openEdit(template)}
-                disabled={isBusy}
-              >
-                Modifier
-              </ActionButton>
-            ) : null}
-
-            {!template.archivedAt ? (
-              <ActionButton
-                size="sm"
-                variant="danger"
-                onClick={() => handleArchive(template.id)}
-                disabled={isBusy}
-              >
-                {isArchiving ? "Archivage..." : "Archiver"}
-              </ActionButton>
-            ) : null}
-          </div>
-        );
-      },
+      align: "center",
+      width: "52px",
+      render: (template) => (
+        <button
+          type="button"
+          className="templates-row-more"
+          onClick={(event) => {
+            event.stopPropagation();
+            setSelectedTemplateId(template.id);
+            openEdit(template);
+          }}
+          aria-label={`Actions ${template.name}`}
+        >
+          <MoreVertical size={16} />
+        </button>
+      ),
     },
   ];
 
+  const canShowAllDetailCards = templateDetailTab === "DETAILS";
+
   return (
-    <section className="templates-section">
+    <section className="templates-section templates-section--v2">
+      <div className="templates-page-top">
+        <div className="templates-page-top__title-wrap">
+          <h1 className="templates-page-top__title">Templates de garde</h1>
+          <p className="templates-page-top__subtitle">Gérez vos modèles de garde et de shift pour organiser vos plannings.</p>
+        </div>
+        <div className="templates-page-top__actions">
+          <ActionButton variant="primary" leadingIcon={<Plus size={16} />} onClick={openCreateWorkspace}>
+            Nouveau template
+          </ActionButton>
+        </div>
+      </div>
+
       <div className="templates-grid-stats">
-        <StatCard title="Total templates" value={templateStats.total} hint="Catalogue de la societe" tone="info" icon={<ClipboardList size={18} />} />
-        <StatCard title="Actifs" value={templateStats.active} hint="Disponibles a la generation" tone="success" icon={<CalendarClock size={18} />} />
-        <StatCard title="Desactives" value={templateStats.inactive} hint="Conserves sans activation" tone="warning" icon={<PauseCircle size={18} />} />
-        <StatCard title="Archives" value={templateStats.archived} hint="Historique non modifiable" tone="neutral" icon={<Archive size={18} />} />
-        <StatCard title="Types de garde" value={templateStats.categoryCount} hint="Categories configurees" tone="info" icon={<UsersRound size={18} />} />
+        <StatCard title="Total templates" value={templateStats.total} hint="Total templates" tone="info" icon={<ClipboardList size={18} />} />
+        <StatCard title="Actifs" value={templateStats.active} hint="Actifs" tone="success" icon={<CalendarClock size={18} />} />
+        <StatCard title="Désactivés" value={templateStats.inactive} hint="Désactivés" tone="warning" icon={<PauseCircle size={18} />} />
+        <StatCard title="Archivés" value={templateStats.archived} hint="Archivés" tone="neutral" icon={<Archive size={18} />} />
+        <StatCard title="Types de garde" value={templateStats.categoryCount} hint="Types de garde" tone="info" icon={<UsersRound size={18} />} />
       </div>
 
       {error ? <ErrorMessage title="Erreur module templates" message={error} /> : null}
@@ -800,84 +847,27 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
 
       <div className="templates-layout">
         <div className="templates-layout__main">
-          <section className="templates-card">
-            <div className="templates-card__head">
-              <div>
-                <h2 className="templates-card__title">Creer un template</h2>
-                <p className="templates-card__description">
-                  Les presets de categorie pre-remplissent la composition minimale la plus courante. Vous pouvez ensuite ajuster le detail.
-                </p>
-              </div>
-              <ActionButton
-                variant={showCreateForm ? "secondary" : "primary"}
-                size="sm"
-                leadingIcon={<Plus size={16} />}
-                onClick={() => setShowCreateForm((prev) => !prev)}
-              >
-                {showCreateForm ? "Masquer" : "Nouveau template"}
-              </ActionButton>
-            </div>
-
-            {showCreateForm ? (
-              <>
-                <TemplateFormFields
-                  form={createForm}
-                  disabled={isCreating}
-                  onChange={(updater) => setCreateForm((prev) => updater(prev))}
-                />
-
-                <div className="templates-actions templates-actions--end">
-                  <ActionButton variant="primary" onClick={handleCreate} disabled={isCreating}>
-                    {isCreating ? "Creation..." : "Creer le template"}
-                  </ActionButton>
-                </div>
-              </>
-            ) : (
-              <p className="templates-table-cell-subtle">Formulaire replie. Utilisez &quot;Nouveau template&quot; pour preparer la creation.</p>
-            )}
-          </section>
-
-          <section className="templates-card">
-            <div className="templates-card__head">
+          <section className="templates-card templates-card--table">
+            <div className="templates-card__head templates-card__head--plain">
               <div>
                 <h2 className="templates-card__title">Liste des templates</h2>
-                <p className="templates-card__description">
-                  Consultation, filtrage, activation, edition et archivage logique des templates de shifts.
-                </p>
               </div>
             </div>
 
-            <FilterBar
-              summary={`Filtres actifs : ${searchInput.trim() ? `recherche "${searchInput.trim()}"` : "aucune recherche"}${vehicleTypeFilter ? `, type vehicule ${vehicleTypeFilter}` : ""}${crossesMidnightFilter ? `, traverse minuit ${crossesMidnightFilter === "YES" ? "oui" : "non"}` : ""}${showAdvancedFilters && statusFilter ? `, statut ${statusFilter}` : ""}${showArchived ? ", archives visibles" : ", archives masquees"}`}
-              actions={(
-                <div className="templates-actions templates-actions--wrap">
-                  <ActionButton size="sm" variant="secondary" leadingIcon={<Filter size={14} />} onClick={() => setShowAdvancedFilters((prev) => !prev)}>
-                    {showAdvancedFilters ? "Masquer filtres avances" : "Filtres avances"}
-                  </ActionButton>
-                  <ActionButton size="sm" variant="secondary" leadingIcon={<Download size={14} />} disabled>
-                    Export
-                  </ActionButton>
-                  <ActionButton size="sm" variant="secondary" leadingIcon={<List size={14} />} disabled>
-                    Vue
-                  </ActionButton>
-                  <ActionButton size="sm" variant="ghost" onClick={resetFilters}>
-                    Reinitialiser
-                  </ActionButton>
-                </div>
-              )}
-            >
-              <label className="templates-field">
-                <span className="templates-field__label">Recherche</span>
+            <div className="templates-filters-strip">
+              <div className="templates-filter-pill templates-filter-pill--search">
+                <label className="templates-filter-pill__label" htmlFor="template-search">Recherche</label>
                 <input
+                  id="template-search"
                   type="text"
                   value={searchInput}
                   onChange={(event) => setSearchInput(event.target.value)}
-                  placeholder="Nom, role, vehicule ou statut"
+                  placeholder="Rechercher un template..."
                 />
-              </label>
+              </div>
 
-              <label className="templates-field">
-                <span className="templates-field__label">Type vehicule</span>
+              <div className="templates-filter-pill templates-filter-pill--select">
+                <span className="templates-filter-pill__label">Type véhicule</span>
                 <select
                   value={vehicleTypeFilter}
                   onChange={(event) => setVehicleTypeFilter(event.target.value as VehicleTypeOption | "")}
@@ -885,14 +875,14 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
                   <option value="">Tous</option>
                   {VEHICLE_TYPE_OPTIONS.map((category) => (
                     <option key={category} value={category}>
-                      {category}
+                      {getVehicleTypeLabel(category)}
                     </option>
                   ))}
                 </select>
-              </label>
+              </div>
 
-              <label className="templates-field">
-                <span className="templates-field__label">Traverse minuit</span>
+              <div className="templates-filter-pill templates-filter-pill--select">
+                <span className="templates-filter-pill__label">Traverse minuit</span>
                 <select
                   value={crossesMidnightFilter}
                   onChange={(event) => setCrossesMidnightFilter(event.target.value as MidnightFilter)}
@@ -901,33 +891,48 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
                   <option value="NO">Non</option>
                   <option value="YES">Oui</option>
                 </select>
-              </label>
+              </div>
 
-              {showAdvancedFilters ? (
-                <>
-                  <label className="templates-field">
-                    <span className="templates-field__label">Statut</span>
-                    <select
-                      value={statusFilter}
-                      onChange={(event) => setStatusFilter(event.target.value as TemplateStatusFilter)}
-                    >
-                      <option value="">Tous les statuts</option>
-                      <option value="ACTIVE">Actif</option>
-                      <option value="INACTIVE">Desactive</option>
-                      <option value="ARCHIVED">Archive</option>
-                    </select>
-                  </label>
-                  <label className="templates-checkbox">
-                    <input
-                      type="checkbox"
-                      checked={showArchived}
-                      onChange={(event) => setShowArchived(event.target.checked)}
-                    />
-                    <span>Afficher les archives</span>
-                  </label>
-                </>
-              ) : null}
-            </FilterBar>
+              <div className="templates-filters-strip__actions">
+                <div className="templates-actions templates-actions--wrap">
+                  <ActionButton size="sm" variant="secondary" leadingIcon={<Filter size={14} />} onClick={() => setShowAdvancedFilters((prev) => !prev)}>
+                    Filtres avancés
+                  </ActionButton>
+                  <ActionButton size="sm" variant="secondary" leadingIcon={<Download size={14} />} disabled>
+                    Export
+                  </ActionButton>
+                  <ActionButton size="sm" variant="secondary" leadingIcon={<List size={14} />} disabled>
+                    Vue
+                  </ActionButton>
+                </div>
+              </div>
+            </div>
+
+            {showAdvancedFilters ? (
+              <div className="templates-filters-advanced">
+                <label className="templates-field">
+                  <span className="templates-field__label">Statut</span>
+                  <select
+                    value={statusFilter}
+                    onChange={(event) => setStatusFilter(event.target.value as TemplateStatusFilter)}
+                  >
+                    <option value="">Tous les statuts</option>
+                    <option value="ACTIVE">Actif</option>
+                    <option value="INACTIVE">Désactivé</option>
+                    <option value="ARCHIVED">Archivé</option>
+                  </select>
+                </label>
+                <label className="templates-checkbox">
+                  <input
+                    type="checkbox"
+                    checked={showArchived}
+                    onChange={(event) => setShowArchived(event.target.checked)}
+                  />
+                  <span>Afficher les archivés</span>
+                </label>
+                <ActionButton size="sm" variant="ghost" onClick={resetFilters}>Réinitialiser</ActionButton>
+              </div>
+            ) : null}
 
             <DataTable
               columns={columns}
@@ -935,13 +940,22 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
               rowKey={(template) => template.id}
               loading={false}
               error={null}
-              emptyTitle="Aucun template trouve"
-              emptyMessage="Aucun template ne correspond aux criteres selectionnes."
+              emptyTitle="Aucun élément à afficher"
+              emptyMessage="Aucun template ne correspond aux critères sélectionnés."
               selectedRowKey={selectedTemplateId}
-              onRowClick={(template) => setSelectedTemplateId(template.id)}
-              minWidth={1700}
-              caption="Templates de shifts de la societe courante"
+              onRowClick={(template) => {
+                setSelectedTemplateId(template.id);
+                setCheckedTemplateIds([template.id]);
+              }}
+              minWidth={1120}
+              caption="Templates de garde"
+              className="templates-table"
             />
+
+            <div className="templates-table-footer">
+              <span>{filteredTemplates.length} template(s) affiché(s)</span>
+              <span>Vue liste + détail priorisée</span>
+            </div>
           </section>
         </div>
 
@@ -951,12 +965,24 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
               <div className="templates-detail-panel__head">
                 <div>
                   <h3 className="templates-detail-panel__title">{selectedTemplate.name}</h3>
-                  <p className="templates-detail-panel__subtitle">{selectedTemplate.category}</p>
+                  <p className="templates-detail-panel__subtitle">
+                    {buildTemplateCode(selectedTemplate, selectedTemplateIndex >= 0 ? selectedTemplateIndex : 0)}
+                  </p>
                 </div>
-                <StatusBadge variant={getStatusVariant(selectedTemplate)}>{getStatusLabel(selectedTemplate)}</StatusBadge>
+                <div className="templates-detail-panel__head-right">
+                  <StatusBadge variant={getStatusVariant(selectedTemplate)}>{getStatusLabel(selectedTemplate)}</StatusBadge>
+                  <button
+                    type="button"
+                    className="templates-detail-close"
+                    onClick={() => setSelectedTemplateId(null)}
+                    aria-label="Fermer le détail"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
               </div>
 
-              <nav className="templates-detail-tabs" aria-label="Details template">
+              <nav className="templates-detail-tabs" aria-label="Détails template">
                 {TEMPLATE_DETAIL_TABS.map((tab) => (
                   <button
                     key={tab.id}
@@ -969,47 +995,48 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
                 ))}
               </nav>
 
-              {templateDetailTab === "DETAILS" ? (
+              {canShowAllDetailCards ? (
                 <div className="templates-detail-group">
-                  <h4 className="templates-detail-group__title">Informations generales</h4>
+                  <h4 className="templates-detail-group__title">Informations générales</h4>
                   <dl className="templates-detail-list">
                     <div><dt>Nom</dt><dd>{selectedTemplate.name}</dd></div>
-                    <div><dt>Type vehicule</dt><dd>{getVehicleTypeLabel(selectedTemplate.requiredVehicleType)}</dd></div>
-                    <div><dt>Couleur</dt><dd>{normalizeTemplateColor(selectedTemplate.color) ?? DEFAULT_COLOR}</dd></div>
+                    <div><dt>Code</dt><dd>{buildTemplateCode(selectedTemplate, selectedTemplateIndex >= 0 ? selectedTemplateIndex : 0)}</dd></div>
+                    <div><dt>Type véhicule</dt><dd>{getVehicleTypeLabel(selectedTemplate.requiredVehicleType)}</dd></div>
+                    <div><dt>Couleur</dt><dd><span className="templates-color-swatch" style={{ backgroundColor: selectedTemplateColor }} aria-label={`Couleur ${selectedTemplateColor}`} title={selectedTemplateColor} /></dd></div>
                     <div><dt>Actif</dt><dd>{selectedTemplate.isActive ? "Oui" : "Non"}</dd></div>
                   </dl>
                 </div>
               ) : null}
 
-              {templateDetailTab === "EQUIPE" ? (
-                <div className="templates-detail-group">
-                  <h4 className="templates-detail-group__title">Equipe requise</h4>
-                  <dl className="templates-detail-list">
-                    <div><dt>Nombre de personnes</dt><dd>{resolveTemplateMinStaffCount(selectedTemplate.minStaffCount, selectedTemplate.category)}</dd></div>
-                    <div><dt>Role obligatoire</dt><dd>{selectedTemplate.requiredRole ?? "Aucun"}</dd></div>
-                    <div><dt>Roles autorises</dt><dd>{selectedTemplate.secondaryAllowedRoles.join(", ") || "Aucun"}</dd></div>
-                  </dl>
-                </div>
-              ) : null}
-
-              {templateDetailTab === "HORAIRES" ? (
+              {(canShowAllDetailCards || templateDetailTab === "HORAIRES") ? (
                 <div className="templates-detail-group">
                   <h4 className="templates-detail-group__title">Horaires</h4>
                   <dl className="templates-detail-list">
-                    <div><dt>Heure debut</dt><dd>{selectedTemplate.startTime ?? "-"}</dd></div>
-                    <div><dt>Heure fin</dt><dd>{selectedTemplate.endTime ?? "-"}</dd></div>
+                    <div><dt>Heure début</dt><dd>{selectedTemplate.startTime ?? "Donnée non renseignée"}</dd></div>
+                    <div><dt>Heure fin</dt><dd>{selectedTemplate.endTime ?? "Donnée non renseignée"}</dd></div>
                     <div><dt>Traverse minuit</dt><dd>{getCrossesMidnightLabel(selectedTemplate.crossesMidnight)}</dd></div>
                   </dl>
                 </div>
               ) : null}
 
-              {templateDetailTab === "HISTORIQUE" ? (
+              {(canShowAllDetailCards || templateDetailTab === "EQUIPE") ? (
+                <div className="templates-detail-group">
+                  <h4 className="templates-detail-group__title">Équipe requise</h4>
+                  <dl className="templates-detail-list">
+                    <div><dt>Nombre de personnes</dt><dd>{resolveTemplateMinStaffCount(selectedTemplate.minStaffCount, selectedTemplate.category)}</dd></div>
+                    <div><dt>Rôle obligatoire (slot 1)</dt><dd>{selectedTemplate.requiredRole ?? "Aucun"}</dd></div>
+                    <div><dt>Rôles autorisés</dt><dd>{selectedTemplate.secondaryAllowedRoles.join(", ") || "Aucun"}</dd></div>
+                  </dl>
+                </div>
+              ) : null}
+
+              {(canShowAllDetailCards || templateDetailTab === "HISTORIQUE") ? (
                 <div className="templates-detail-group">
                   <h4 className="templates-detail-group__title">Utilisation</h4>
                   <dl className="templates-detail-list">
-                    <div><dt>Cree le</dt><dd>{formatDateTime(selectedTemplate.createdAt)}</dd></div>
-                    <div><dt>Derniere mise a jour</dt><dd>{formatDateTime(selectedTemplate.updatedAt)}</dd></div>
-                    <div><dt>Archive le</dt><dd>{selectedTemplate.archivedAt ? formatDateTime(selectedTemplate.archivedAt) : "Non archive"}</dd></div>
+                    <div><dt>Nombre d&apos;utilisations</dt><dd>Donnée non renseignée</dd></div>
+                    <div><dt>Dernière utilisation</dt><dd>{formatDateShort(selectedTemplate.updatedAt)}</dd></div>
+                    <div><dt>Utilisé dans</dt><dd>Donnée non renseignée</dd></div>
                   </dl>
                 </div>
               ) : null}
@@ -1044,48 +1071,97 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
                   </ActionButton>
                 ) : (
                   <ActionButton variant="secondary" leadingIcon={<Ban size={14} />} disabled>
-                    Template archive
+                    Template archivé
                   </ActionButton>
                 )}
               </div>
             </>
           ) : (
-            <p className="templates-table-cell-subtle">Selectionnez un template dans le tableau pour afficher le detail.</p>
+            <p className="templates-table-cell-subtle">Sélectionnez un template dans le tableau pour afficher le détail.</p>
           )}
         </aside>
       </div>
 
-      {editingTemplateId && editForm ? (
-        <section className="templates-card">
-          <div className="templates-card__head">
-            <h2 className="templates-card__title">Modifier le template selectionne</h2>
-            <p className="templates-card__description">
-              Mise a jour du template sans changement de logique metier ni de regles de composition.
-            </p>
-          </div>
-
-          <TemplateFormFields
-            form={editForm}
-            disabled={savingTemplateId === editingTemplateId || archivingTemplateId === editingTemplateId}
-            onChange={(updater) => setEditForm((prev) => (prev ? updater(prev) : prev))}
-          />
-
-          <div className="templates-actions templates-actions--end">
-            <ActionButton
-              variant="secondary"
-              onClick={closeEdit}
-              disabled={savingTemplateId === editingTemplateId || archivingTemplateId === editingTemplateId}
-            >
-              Annuler
-            </ActionButton>
-            <ActionButton
-              variant="primary"
-              onClick={() => handleSave(editingTemplateId)}
-              disabled={savingTemplateId === editingTemplateId || archivingTemplateId === editingTemplateId}
-            >
-              {savingTemplateId === editingTemplateId ? "Enregistrement..." : "Enregistrer les modifications"}
+      {showFormWorkspace ? (
+        <section className="templates-card templates-card--advanced" id="templates-form-zone">
+          <div className="templates-card__head templates-card__head--plain">
+            <div>
+              <h2 className="templates-card__title">Formulaires avancés</h2>
+              <p className="templates-card__description">Création/édition complète, volontairement reléguées hors vue principale.</p>
+            </div>
+            <ActionButton variant="secondary" size="sm" onClick={closeFormWorkspace}>
+              Fermer
             </ActionButton>
           </div>
+
+          <div className="templates-advanced-switch">
+            <ActionButton
+              variant={showCreateForm ? "primary" : "secondary"}
+              size="sm"
+              leadingIcon={<Plus size={14} />}
+              onClick={() => {
+                setShowCreateForm(true);
+                setEditingTemplateId(null);
+                setEditForm(null);
+              }}
+            >
+              Nouveau template
+            </ActionButton>
+            <ActionButton
+              variant={!showCreateForm ? "primary" : "secondary"}
+              size="sm"
+              leadingIcon={<CheckSquare size={14} />}
+              onClick={() => {
+                if (!selectedTemplate) return;
+                openEdit(selectedTemplate);
+                setShowCreateForm(false);
+              }}
+              disabled={!selectedTemplate}
+            >
+              Modifier la sélection
+            </ActionButton>
+          </div>
+
+          {showCreateForm ? (
+            <>
+              <TemplateFormFields
+                form={createForm}
+                disabled={isCreating}
+                onChange={(updater) => setCreateForm((prev) => updater(prev))}
+              />
+              <div className="templates-actions templates-actions--end">
+                <ActionButton variant="primary" onClick={handleCreate} disabled={isCreating}>
+                  {isCreating ? "Création..." : "Créer le template"}
+                </ActionButton>
+              </div>
+            </>
+          ) : null}
+
+          {editingTemplateId && editForm ? (
+            <>
+              <TemplateFormFields
+                form={editForm}
+                disabled={savingTemplateId === editingTemplateId || archivingTemplateId === editingTemplateId}
+                onChange={(updater) => setEditForm((prev) => (prev ? updater(prev) : prev))}
+              />
+              <div className="templates-actions templates-actions--end">
+                <ActionButton
+                  variant="secondary"
+                  onClick={closeEdit}
+                  disabled={savingTemplateId === editingTemplateId || archivingTemplateId === editingTemplateId}
+                >
+                  Annuler
+                </ActionButton>
+                <ActionButton
+                  variant="primary"
+                  onClick={() => handleSave(editingTemplateId)}
+                  disabled={savingTemplateId === editingTemplateId || archivingTemplateId === editingTemplateId}
+                >
+                  {savingTemplateId === editingTemplateId ? "Enregistrement..." : "Enregistrer les modifications"}
+                </ActionButton>
+              </div>
+            </>
+          ) : null}
         </section>
       ) : null}
     </section>
