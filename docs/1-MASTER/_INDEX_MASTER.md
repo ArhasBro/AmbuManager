@@ -1,111 +1,75 @@
-# _INDEX_MASTER.md
+# Index master — Ambulance Manager
 
-Projet: Investissement / Ambulance Manager  
-Mise Ã  jour: 2026-05-13  
-Statut: OFFICIEL - A CONSERVER
+## Rôle du dossier docs/1-MASTER
 
-## 1. Documents maÃ®tres officiels
+Le dossier `docs/1-MASTER` regroupe les documents de référence prioritaires du projet (cadre, plan officiel, état global, décisions, cadrage, structure, RGPD, suivi documentaire), ainsi que les sous-dossiers de maquettes et de références UI/UX.
 
-| Document | RÃ´le | Statut |
-|---|---|---|
-| `DOCUMENT_MAITRE.md` | Cadre global technique et mÃ©thodologique | OFFICIEL - A CONSERVER |
-| `PLAN_DE_DEVELOPPEMENT.md` | Plan officiel unique des blocs et sessions | OFFICIEL - A CONSERVER |
-| `DOCUMENT_CADRAGE_FONCTIONNEL.md` | Cadrage produit officiel (figÃ©) | OFFICIEL - A CONSERVER |
-| `ETAT_GLOBAL_PROJET.md` | Statut global officiel et prochaine Ã©tape | OFFICIEL - A CONSERVER |
-| `REGISTRE_DECISIONS.md` | Registre des dÃ©cisions validÃ©es | OFFICIEL - A CONSERVER |
-| `RECAP_DISCUSSIONS.md` | SynthÃ¨se tracÃ©e des Ã©changes et arbitrages | OFFICIEL - A CONSERVER |
-| `STRUCTURE_PROJET.md` | Structure documentaire officielle et cible | OFFICIEL - A CONSERVER |
-| `2-REFERENCE_UI_UX/REFERENCE_UI_UX_A24.md` | Contexte historique UI/UX A24 | CONTEXTE - NE PRIME PAS SUR LES RÃ‰FÃ‰RENCES PAGE |
-| `2-REFERENCE_UI_UX/REFERENCE_UI_UX_INDEX_MAQUETTES.md` | Table de vÃ©ritÃ© documentaire UI/UX transversale | OFFICIEL - UI/UX VISUEL |
-| `2-REFERENCE_UI_UX/REFERENCE_UI_UX_SHELL_GLOBAL.md` | RÃ©fÃ©rence visuelle du shell connectÃ© | OFFICIEL - UI/UX VISUEL |
-| `2-REFERENCE_UI_UX/REFERENCE_CODEX_UI_UX_VISUEL_99.md` | RÃ¨gles Codex pour les futures sessions UI visuelles | OFFICIEL - PRODUCTION CODEX |
+## Règle de priorité documentaire
 
-## 2. RÃ©fÃ©rence UI/UX officielle
+Ordre de lecture recommandé (du plus prioritaire au moins prioritaire) :
 
-La direction artistique officielle est exclusivement:
+1. Code réel du dépôt (état technique présent).
+2. `DOCUMENT_CADRAGE_FONCTIONNEL.md` (périmètre produit validé).
+3. `DOCUMENT_MAITRE.md` (principes globaux non négociables).
+4. `PLAN_DE_DEVELOPPEMENT.md` (seul plan officiel).
+5. `REGISTRE_DECISIONS.md` (décisions validées).
+6. `ETAT_GLOBAL_PROJET.md` (état courant synthétique).
+7. Références UI/UX (`2-REFERENCE_UI_UX/`).
+8. Maquettes PNG officielles (`1-MAQUETTE/`).
+9. Sessions historiques (`docs/2-SESSIONS/`) comme preuve, sans autorité supérieure aux documents master.
+10. `RECAP_DISCUSSIONS.md` (contexte).
+11. `docs/CMD.md` (brouillon personnel Nathan, non officiel).
 
-```txt
-docs/1-MASTER/1-MAQUETTE
-```
+## Documents officiels principaux
 
-RÃ¨gle prioritaire: en cas de contradiction visuelle, `MAQUETTES PNG OFFICIELLES` prime.
+| Document | Rôle | Statut | Autorité | Usage recommandé | Précaution |
+|---|---|---|---|---|---|
+| `docs/1-MASTER/DOCUMENT_CADRAGE_FONCTIONNEL.md` | Cadrage produit cible validé | OFFICIEL | Très haute | Définir ce qui doit exister côté produit | Document figé sauf validation explicite |
+| `docs/1-MASTER/DOCUMENT_MAITRE.md` | Cadre global et règles de pilotage | OFFICIEL | Très haute | Arbitrer les règles structurantes | Ne pas confondre avec un journal de session |
+| `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT.md` | Ordonnancement officiel des blocs/sessions | OFFICIEL | Très haute | Piloter l’avancement officiel | Reste le seul plan officiel |
+| `docs/1-MASTER/REGISTRE_DECISIONS.md` | Décisions validées et traçables | OFFICIEL | Haute | Vérifier les arbitrages actés | À lire avec le plan et le cadrage |
+| `docs/1-MASTER/ETAT_GLOBAL_PROJET.md` | Vision synthétique de l’état projet | OFFICIEL | Haute | Situer la situation courante | Peut être en décalage temporel si non mis à jour |
 
-Les documents `REFERENCE_UI_UX_<PAGE>.md` ne remplacent pas les images officielles : ils traduisent les images en consignes codables pour Codex.
+## Documents opérationnels / suivi
 
-## 3. RÃ¨gle racine `docs/`
+| Document | Rôle | Statut | Usage recommandé | Précaution |
+|---|---|---|---|---|
+| `docs/1-MASTER/RECAP_DISCUSSIONS.md` | Trace de contexte et discussions | OPÉRATIONNEL | Comprendre le contexte des arbitrages | Ne prime pas sur les décisions officielles |
+| `docs/1-MASTER/STRUCTURE_PROJET.md` | Référence principale de structure projet (niveau master) | GOUVERNANCE | Orienter la lecture de la structure documentaire | Peut recouvrir partiellement d’autres inventaires |
+| `docs/1-MASTER/RGPD_BASE_MINIMALE.md` | Base RGPD minimale projet | OPÉRATIONNEL | Vérifier socle conformité | INFORMATION NON FOURNIE — À CONFIRMER pour le niveau d’actualité détaillé |
+| `docs/1-MASTER/SUIVI_AUDIT_DOCUMENTAIRE_UI_UX_A26.md` | Suivi documentaire UI/UX A26 | SUIVI | Relire le contexte des corrections A26 | Historique de suivi, pas source de vérité unique |
+| `docs/1-MASTER/CADRAGE_UI_UX_ALPHA_MAQUETTE_V0.2.md` | Cadrage UI/UX Alpha lié maquettes | OPÉRATIONNEL | Comprendre le cadre visuel Alpha | À croiser avec références UI/UX par page |
 
-Ã‰lÃ©ments autorisÃ©s directement Ã  la racine:
+## Références UI/UX
 
-- `README_DOCS.md`
-- `README.md`
-- `CMD.md`
-- `1-MASTER/`
-- `2-SESSIONS/`
-- `3-TEMPLATES/`
-- `4-ARCHIVES/`
+| Dossier / document | Rôle | Usage | Lien avec maquettes/routes |
+|---|---|---|---|
+| `docs/1-MASTER/2-REFERENCE_UI_UX/` | Références UI/UX détaillées par page/zone | Guider l’implémentation visuelle et fonctionnelle page par page | À relier via `MATRICE_CANONIQUE_UI_UX.md` |
+| `docs/1-MASTER/2-REFERENCE_UI_UX/MATRICE_CANONIQUE_UI_UX.md` | Matrice unique de correspondance page -> PNG -> référence -> route -> fichier app | Lever les ambiguïtés de mapping UI/UX | Document pivot pour sessions UI/UX futures |
 
-## 4. Fichiers et dossiers Ã  ne pas dÃ©placer
+## Maquettes
 
-- `docs/1-MASTER/DOCUMENT_MAITRE.md`
-- `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT.md`
-- `docs/1-MASTER/DOCUMENT_CADRAGE_FONCTIONNEL.md`
-- `docs/1-MASTER/ETAT_GLOBAL_PROJET.md`
-- `docs/1-MASTER/REGISTRE_DECISIONS.md`
-- `docs/1-MASTER/RECAP_DISCUSSIONS.md`
-- `docs/1-MASTER/STRUCTURE_PROJET.md`
-- `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_A24.md`
-- `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_A25_PLANNING.md`
-- `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_INDEX_MAQUETTES.md`
-- `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_SHELL_GLOBAL.md`
-- `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_CODEX_UI_UX_VISUEL_99.md`
-- `docs/1-MASTER/1-MAQUETTE/`
-- `docs/1-MASTER/1-MAQUETTE/`
-- `docs/2-SESSIONS/`
-- `docs/3-TEMPLATES/`
-- `docs/4-ARCHIVES/`
+| Dossier | Rôle | Statut | Remarque |
+|---|---|---|---|
+| `docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/` | Base visuelle fondatrice | MAQUETTE / VISUEL | Ne pas déplacer pendant rebasage |
+| `docs/1-MASTER/1-MAQUETTE/MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/` | Compléments visuels | MAQUETTE / VISUEL | À relier aux pages via matrice canonique |
+| `docs/1-MASTER/1-MAQUETTE/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0/` | Finitions de pages simples | MAQUETTE / VISUEL | Peut contenir variantes à clarifier plus tard |
 
-## 5. Fichiers Ã  mettre Ã  jour seulement aprÃ¨s validation
+## Documents à ne pas confondre
 
-- `DOCUMENT_CADRAGE_FONCTIONNEL.md` (document figÃ©)
-- `DOCUMENT_MAITRE.md`
-- `PLAN_DE_DEVELOPPEMENT.md`
-- `ETAT_GLOBAL_PROJET.md`
-- `REGISTRE_DECISIONS.md`
-- `RECAP_DISCUSSIONS.md`
-- `REFERENCE_UI_UX_A24.md`
+- `docs/README.md` : accueil simple de `docs/`.
+- `docs/README_DOCS.md` : gouvernance documentaire globale.
+- `docs/CMD.md` : brouillon personnel Nathan, non source officielle.
+- `docs/STRUCTURE_DOCS.md` : inventaire technique / empreinte opérationnelle de `docs/`.
+- `docs/1-MASTER/STRUCTURE_PROJET.md` : référence principale structure projet niveau master.
+- `docs/2-SESSIONS/` : historique et preuves de sessions, sans autorité supérieure aux documents master.
 
-## RÃ¨gle officielle â€” casse des dossiers documentaires
+## Points à confirmer
 
-La casse officielle des dossiers documentaires du projet est la suivante :
+- Niveau d’actualisation détaillé de `RGPD_BASE_MINIMALE.md` : INFORMATION NON FOURNIE — À CONFIRMER.
+- Couverture exhaustive de toutes pages/références UI/UX dans les futures sessions : INFORMATION NON FOURNIE — À CONFIRMER.
+- Stratégie finale d’archivage des éléments historiques post-rebasage : INFORMATION NON FOURNIE — À CONFIRMER.
 
-```txt
-docs/1-MASTER/
-docs/2-SESSIONS/
-docs/3-TEMPLATES/
-docs/4-ARCHIVES/
-```
+## Prochaine étape recommandée
 
-Les anciennes variantes en minuscules ne doivent plus Ãªtre utilisÃ©es dans les nouveaux documents, prompts, preuves, rÃ©fÃ©rences ou livrables documentaires :
-
-```txt
-docs/1-MASTER/
-docs/2-SESSIONS/
-docs/3-templates/
-docs/4-archives/
-```
-
-Les chemins documentaires actifs doivent toujours utiliser la casse officielle.
-
-Exception : les anciens fichiers historiques, anciens patchs `.diff`, anciennes preuves terminales, anciens rapports de session et archives peuvent conserver les anciens chemins sâ€™ils dÃ©crivent lâ€™Ã©tat rÃ©el du projet au moment oÃ¹ ils ont Ã©tÃ© produits.
-
-Aucune correction rÃ©troactive massive ne doit Ãªtre faite dans les anciens livrables historiques si cela risque de dÃ©naturer la traÃ§abilitÃ©.
-
-## 7. RÃ¨gle de preuve
-
-Toute information non prouvÃ©e doit Ãªtre notÃ©e exactement:
-
-```txt
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
-```
-
-Cette formule est documentaire et QA uniquement. Elle ne doit jamais Ãªtre affichÃ©e dans lâ€™interface utilisateur finale.
+REBASAGE-11 : clarification finale de gouvernance documentaire transverse (master, sessions, archives) puis préparation de la reprise contrôlée du cycle de production, sans refonte non autorisée des documents officiels.
