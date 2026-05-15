@@ -2703,7 +2703,6 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |                   
 |   |   +---BLOC_A26
 |   |   |   |   PROMPTS_A26_PRODUCTION_CONTROLE_V1_0.md
-|   |   |   |   SESSION-20260513-07_A26_A26-UI-07.zip
 |   |   |   |   
 |   |   |   +---SESSION-20260513-01_A26_A26-UI-01
 |   |   |   |   |   EVIDENCES.md

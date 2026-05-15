@@ -1,5 +1,5 @@
 ﻿Structure du dossier pour le volume Windows
-Le numÚro de sÚrie du volume est 00000090 123E:4DB7
+Le numÚro de sÚrie du volume est 123E-4DB7
 C:.
 |   .env
 |   .gitignore
@@ -4332,6 +4332,18 @@ C:.
 |   |   |               00005232.meta
 |   |   |               00005233.meta
 |   |   |               00005234.meta
+|   |   |               00005235.sst
+|   |   |               00005236.sst
+|   |   |               00005237.sst
+|   |   |               00005238.meta
+|   |   |               00005239.meta
+|   |   |               00005240.meta
+|   |   |               00005241.sst
+|   |   |               00005242.sst
+|   |   |               00005243.sst
+|   |   |               00005244.meta
+|   |   |               00005245.meta
+|   |   |               00005246.meta
 |   |   |               CURRENT
 |   |   |               LOG
 |   |   |               
@@ -9479,7 +9491,6 @@ C:.
 |   |   |   |                   
 |   |   |   +---BLOC_A26
 |   |   |   |   |   PROMPTS_A26_PRODUCTION_CONTROLE_V1_0.md
-|   |   |   |   |   SESSION-20260513-07_A26_A26-UI-07.zip
 |   |   |   |   |   
 |   |   |   |   +---SESSION-20260513-01_A26_A26-UI-01
 |   |   |   |   |   |   EVIDENCES.md
