@@ -1,4 +1,4 @@
-﻿# Documentation Ambulance Manager (Accueil)
+# Documentation Ambulance Manager (Accueil)
 
 Ce fichier est l'accueil simple du dossier `docs/`.
 Le document de gouvernance détaillée est `docs/README_DOCS.md`.

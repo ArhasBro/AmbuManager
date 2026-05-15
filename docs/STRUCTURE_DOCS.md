@@ -62,6 +62,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |               Privacy_V1.0.png
 |   |               
 |   \---2-REFERENCE_UI_UX
+|           MATRICE_CANONIQUE_UI_UX.md
 |           README_PACK_REFERENCE_UI_UX.md
 |           REFERENCE_CODEX_UI_UX_VISUEL_99.md
 |           REFERENCE_UI_UX_A24.md
@@ -2928,10 +2929,10 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |           SESSION.md
 |           
 +---3-TEMPLATES
-|       TEMPLATE_DEBUT_SESSION.md
-|       TEMPLATE_DOD_4_4.md
-|       TEMPLATE_FIN_SESSION.md
+|       README_TEMPLATES.md
+|       TEMPLATE_DOD_SESSION.md
 |       TEMPLATE_RECAP_SESSION.md
+|       TEMPLATE_SESSION.md
 |       
 \---4-ARCHIVES
     |   .gitkeep

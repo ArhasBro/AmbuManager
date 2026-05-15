@@ -1,12 +1,12 @@
-﻿# RESULTATS
+# RESULTATS
 
-## RÃ©sultats obtenus
+## Résultats obtenus
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+INFORMATION NON FOURNIE — À CONFIRMER
 
 ---
 
-## Documents modifiÃ©s
+## Documents modifiés
 
-INFORMATION NON FOURNIE â€” Ã€ CONFIRMER
+INFORMATION NON FOURNIE — À CONFIRMER
 

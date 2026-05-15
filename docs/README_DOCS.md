@@ -1,4 +1,4 @@
-﻿# README_DOCS.md
+# README_DOCS.md
 
 Projet : Ambulance Manager  
 Mise à jour : 2026-05-15  
