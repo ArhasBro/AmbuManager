@@ -1,75 +1,75 @@
-# Index master — Ambulance Manager
+# Index master â€” Ambulance Manager
 
-## Rôle du dossier docs/1-MASTER
+## RÃ´le du dossier docs/1-MASTER
 
-Le dossier `docs/1-MASTER` regroupe les documents de référence prioritaires du projet (cadre, plan officiel, état global, décisions, cadrage, structure, RGPD, suivi documentaire), ainsi que les sous-dossiers de maquettes et de références UI/UX.
+Le dossier `docs/1-MASTER` regroupe les documents de rÃ©fÃ©rence prioritaires du projet (cadre, plan officiel, Ã©tat global, dÃ©cisions, cadrage, structure, RGPD, suivi documentaire), ainsi que les sous-dossiers de maquettes et de rÃ©fÃ©rences UI/UX.
 
-## Règle de priorité documentaire
+## RÃ¨gle de prioritÃ© documentaire
 
-Ordre de lecture recommandé (du plus prioritaire au moins prioritaire) :
+Ordre de lecture recommandÃ© (du plus prioritaire au moins prioritaire) :
 
-1. Code réel du dépôt (état technique présent).
-2. `DOCUMENT_CADRAGE_FONCTIONNEL.md` (périmètre produit validé).
-3. `DOCUMENT_MAITRE.md` (principes globaux non négociables).
+1. Code rÃ©el du dÃ©pÃ´t (Ã©tat technique prÃ©sent).
+2. `DOCUMENT_CADRAGE_FONCTIONNEL.md` (pÃ©rimÃ¨tre produit validÃ©).
+3. `DOCUMENT_MAITRE.md` (principes globaux non nÃ©gociables).
 4. `PLAN_DE_DEVELOPPEMENT.md` (seul plan officiel).
-5. `REGISTRE_DECISIONS.md` (décisions validées).
-6. `ETAT_GLOBAL_PROJET.md` (état courant synthétique).
-7. Références UI/UX (`2-REFERENCE_UI_UX/`).
+5. `REGISTRE_DECISIONS.md` (dÃ©cisions validÃ©es).
+6. `ETAT_GLOBAL_PROJET.md` (Ã©tat courant synthÃ©tique).
+7. RÃ©fÃ©rences UI/UX (`2-REFERENCE_UI_UX/`).
 8. Maquettes PNG officielles (`1-MAQUETTE/`).
-9. Sessions historiques (`docs/2-SESSIONS/`) comme preuve, sans autorité supérieure aux documents master.
+9. Sessions historiques (`docs/2-SESSIONS/`) comme preuve, sans autoritÃ© supÃ©rieure aux documents master.
 10. `RECAP_DISCUSSIONS.md` (contexte).
 11. `docs/CMD.md` (brouillon personnel Nathan, non officiel).
 
 ## Documents officiels principaux
 
-| Document | Rôle | Statut | Autorité | Usage recommandé | Précaution |
+| Document | RÃ´le | Statut | AutoritÃ© | Usage recommandÃ© | PrÃ©caution |
 |---|---|---|---|---|---|
-| `docs/1-MASTER/DOCUMENT_CADRAGE_FONCTIONNEL.md` | Cadrage produit cible validé | OFFICIEL | Très haute | Définir ce qui doit exister côté produit | Document figé sauf validation explicite |
-| `docs/1-MASTER/DOCUMENT_MAITRE.md` | Cadre global et règles de pilotage | OFFICIEL | Très haute | Arbitrer les règles structurantes | Ne pas confondre avec un journal de session |
-| `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT.md` | Ordonnancement officiel des blocs/sessions | OFFICIEL | Très haute | Piloter l’avancement officiel | Reste le seul plan officiel |
-| `docs/1-MASTER/REGISTRE_DECISIONS.md` | Décisions validées et traçables | OFFICIEL | Haute | Vérifier les arbitrages actés | À lire avec le plan et le cadrage |
-| `docs/1-MASTER/ETAT_GLOBAL_PROJET.md` | Vision synthétique de l’état projet | OFFICIEL | Haute | Situer la situation courante | Peut être en décalage temporel si non mis à jour |
+| `docs/1-MASTER/DOCUMENT_CADRAGE_FONCTIONNEL.md` | Cadrage produit cible validÃ© | OFFICIEL | TrÃ¨s haute | DÃ©finir ce qui doit exister cÃ´tÃ© produit | Document figÃ© sauf validation explicite |
+| `docs/1-MASTER/DOCUMENT_MAITRE.md` | Cadre global et rÃ¨gles de pilotage | OFFICIEL | TrÃ¨s haute | Arbitrer les rÃ¨gles structurantes | Ne pas confondre avec un journal de session |
+| `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT.md` | Ordonnancement officiel des blocs/sessions | OFFICIEL | TrÃ¨s haute | Piloter lâ€™avancement officiel | Reste le seul plan officiel |
+| `docs/1-MASTER/REGISTRE_DECISIONS.md` | DÃ©cisions validÃ©es et traÃ§ables | OFFICIEL | Haute | VÃ©rifier les arbitrages actÃ©s | Ã€ lire avec le plan et le cadrage |
+| `docs/1-MASTER/ETAT_GLOBAL_PROJET.md` | Vision synthÃ©tique de lâ€™Ã©tat projet | OFFICIEL | Haute | Situer la situation courante | Peut Ãªtre en dÃ©calage temporel si non mis Ã  jour |
 
-## Documents opérationnels / suivi
+## Documents opÃ©rationnels / suivi
 
-| Document | Rôle | Statut | Usage recommandé | Précaution |
+| Document | RÃ´le | Statut | Usage recommandÃ© | PrÃ©caution |
 |---|---|---|---|---|
-| `docs/1-MASTER/RECAP_DISCUSSIONS.md` | Trace de contexte et discussions | OPÉRATIONNEL | Comprendre le contexte des arbitrages | Ne prime pas sur les décisions officielles |
-| `docs/1-MASTER/STRUCTURE_PROJET.md` | Référence principale de structure projet (niveau master) | GOUVERNANCE | Orienter la lecture de la structure documentaire | Peut recouvrir partiellement d’autres inventaires |
-| `docs/1-MASTER/RGPD_BASE_MINIMALE.md` | Base RGPD minimale projet | OPÉRATIONNEL | Vérifier socle conformité | INFORMATION NON FOURNIE — À CONFIRMER pour le niveau d’actualité détaillé |
-| `docs/1-MASTER/SUIVI_AUDIT_DOCUMENTAIRE_UI_UX_A26.md` | Suivi documentaire UI/UX A26 | SUIVI | Relire le contexte des corrections A26 | Historique de suivi, pas source de vérité unique |
-| `docs/1-MASTER/CADRAGE_UI_UX_ALPHA_MAQUETTE_V0.2.md` | Cadrage UI/UX Alpha lié maquettes | OPÉRATIONNEL | Comprendre le cadre visuel Alpha | À croiser avec références UI/UX par page |
+| `docs/1-MASTER/RECAP_DISCUSSIONS.md` | Trace de contexte et discussions | OPÃ‰RATIONNEL | Comprendre le contexte des arbitrages | Ne prime pas sur les dÃ©cisions officielles |
+| `docs/1-MASTER/STRUCTURE_PROJET.md` | RÃ©fÃ©rence principale de structure projet (niveau master) | GOUVERNANCE | Orienter la lecture de la structure documentaire | Peut recouvrir partiellement dâ€™autres inventaires |
+| `docs/1-MASTER/RGPD_BASE_MINIMALE.md` | Base RGPD minimale projet | OPÃ‰RATIONNEL | VÃ©rifier socle conformitÃ© | INFORMATION NON FOURNIE â€” Ã€ CONFIRMER pour le niveau dâ€™actualitÃ© dÃ©taillÃ© |
+| `docs/1-MASTER/SUIVI_AUDIT_DOCUMENTAIRE_UI_UX_A26.md` | Suivi documentaire UI/UX A26 | SUIVI | Relire le contexte des corrections A26 | Historique de suivi, pas source de vÃ©ritÃ© unique |
+| `docs/1-MASTER/CADRAGE_UI_UX_ALPHA_MAQUETTE_V0.2.md` | Cadrage UI/UX Alpha liÃ© maquettes | OPÃ‰RATIONNEL | Comprendre le cadre visuel Alpha | Ã€ croiser avec rÃ©fÃ©rences UI/UX par page |
 
-## Références UI/UX
+## RÃ©fÃ©rences UI/UX
 
-| Dossier / document | Rôle | Usage | Lien avec maquettes/routes |
+| Dossier / document | RÃ´le | Usage | Lien avec maquettes/routes |
 |---|---|---|---|
-| `docs/1-MASTER/2-REFERENCE_UI_UX/` | Références UI/UX détaillées par page/zone | Guider l’implémentation visuelle et fonctionnelle page par page | À relier via `MATRICE_CANONIQUE_UI_UX.md` |
-| `docs/1-MASTER/2-REFERENCE_UI_UX/MATRICE_CANONIQUE_UI_UX.md` | Matrice unique de correspondance page -> PNG -> référence -> route -> fichier app | Lever les ambiguïtés de mapping UI/UX | Document pivot pour sessions UI/UX futures |
+| `docs/1-MASTER/2-REFERENCE_UI_UX/` | RÃ©fÃ©rences UI/UX dÃ©taillÃ©es par page/zone | Guider lâ€™implÃ©mentation visuelle et fonctionnelle page par page | Ã€ relier via `MATRICE_CANONIQUE_UI_UX.md` |
+| `docs/1-MASTER/2-REFERENCE_UI_UX/MATRICE_CANONIQUE_UI_UX.md` | Matrice unique de correspondance page -> PNG -> rÃ©fÃ©rence -> route -> fichier app | Lever les ambiguÃ¯tÃ©s de mapping UI/UX | Document pivot pour sessions UI/UX futures |
 
 ## Maquettes
 
-| Dossier | Rôle | Statut | Remarque |
+| Dossier | RÃ´le | Statut | Remarque |
 |---|---|---|---|
-| `docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/` | Base visuelle fondatrice | MAQUETTE / VISUEL | Ne pas déplacer pendant rebasage |
-| `docs/1-MASTER/1-MAQUETTE/MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/` | Compléments visuels | MAQUETTE / VISUEL | À relier aux pages via matrice canonique |
-| `docs/1-MASTER/1-MAQUETTE/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0/` | Finitions de pages simples | MAQUETTE / VISUEL | Peut contenir variantes à clarifier plus tard |
+| `docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/` | Base visuelle fondatrice | MAQUETTE / VISUEL | Ne pas dÃ©placer pendant rebasage |
+| `docs/1-MASTER/1-MAQUETTE/MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/` | ComplÃ©ments visuels | MAQUETTE / VISUEL | Ã€ relier aux pages via matrice canonique |
+| `docs/1-MASTER/1-MAQUETTE/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0/` | Finitions de pages simples | MAQUETTE / VISUEL | Peut contenir variantes Ã  clarifier plus tard |
 
-## Documents à ne pas confondre
+## Documents Ã  ne pas confondre
 
 - `docs/README.md` : accueil simple de `docs/`.
 - `docs/README_DOCS.md` : gouvernance documentaire globale.
 - `docs/CMD.md` : brouillon personnel Nathan, non source officielle.
-- `docs/STRUCTURE_DOCS.md` : inventaire technique / empreinte opérationnelle de `docs/`.
-- `docs/1-MASTER/STRUCTURE_PROJET.md` : référence principale structure projet niveau master.
-- `docs/2-SESSIONS/` : historique et preuves de sessions, sans autorité supérieure aux documents master.
+- `docs/STRUCTURE_DOCS.md` : inventaire technique / empreinte opÃ©rationnelle de `docs/`.
+- `docs/1-MASTER/STRUCTURE_PROJET.md` : rÃ©fÃ©rence principale structure projet niveau master.
+- `docs/2-SESSIONS/` : historique et preuves de sessions, sans autoritÃ© supÃ©rieure aux documents master.
 
-## Points à confirmer
+## Points Ã  confirmer
 
-- Niveau d’actualisation détaillé de `RGPD_BASE_MINIMALE.md` : INFORMATION NON FOURNIE — À CONFIRMER.
-- Couverture exhaustive de toutes pages/références UI/UX dans les futures sessions : INFORMATION NON FOURNIE — À CONFIRMER.
-- Stratégie finale d’archivage des éléments historiques post-rebasage : INFORMATION NON FOURNIE — À CONFIRMER.
+- Niveau dâ€™actualisation dÃ©taillÃ© de `RGPD_BASE_MINIMALE.md` : INFORMATION NON FOURNIE â€” Ã€ CONFIRMER.
+- Couverture exhaustive de toutes pages/rÃ©fÃ©rences UI/UX dans les futures sessions : INFORMATION NON FOURNIE â€” Ã€ CONFIRMER.
+- StratÃ©gie finale dâ€™archivage des Ã©lÃ©ments historiques post-rebasage : INFORMATION NON FOURNIE â€” Ã€ CONFIRMER.
 
-## Prochaine étape recommandée
+## Prochaine Ã©tape recommandÃ©e
 
-REBASAGE-11 : clarification finale de gouvernance documentaire transverse (master, sessions, archives) puis préparation de la reprise contrôlée du cycle de production, sans refonte non autorisée des documents officiels.
+REBASAGE-11 : clarification finale de gouvernance documentaire transverse (master, sessions, archives) puis prÃ©paration de la reprise contrÃ´lÃ©e du cycle de production, sans refonte non autorisÃ©e des documents officiels.
