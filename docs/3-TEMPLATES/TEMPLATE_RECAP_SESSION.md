@@ -1,17 +1,36 @@
 # TEMPLATE_RECAP_SESSION.md
 
-## Date
+## Session
 
-INFORMATION NON FOURNIE — À CONFIRMER
+- Session : `SESSION-YYYYMMDD-XX`
+- Type : `AUDIT | CORRECTION | COMPLÉTION | VALIDATION | CLOTURE | DOCUMENTAIRE | REBASAGE`
+- Objectif : à renseigner
 
----
+## Fichiers
 
-## ID SESSION
+- Fichiers lus : à renseigner
+- Fichiers modifiés : à renseigner / Aucun
+- Fichiers créés : à renseigner / Aucun
+- Fichiers supprimés : à renseigner / Aucun
+- Fichiers déplacés : à renseigner / Aucun
 
-INFORMATION NON FOURNIE — À CONFIRMER
+## Preuves terminales
 
----
+- Résumé des actions : à renseigner
+- `git status --short` : à renseigner
+- `git diff -- <chemins concernés>` : à renseigner / Sans objet
 
-## Contenu
+## Points à confirmer
 
-INFORMATION NON FOURNIE — À CONFIRMER
+- `INFORMATION NON FOURNIE — À CONFIRMER` : à renseigner / Aucun
+
+## Verdict final
+
+- `<SESSION> — <INTITULÉ> : OUI / NON`
+- Modifications limitées au périmètre autorisé : OUI / NON
+- Code applicatif modifié : OUI / NON
+- Plan officiel modifié : OUI / NON
+
+## Prochaine étape recommandée
+
+- À renseigner
