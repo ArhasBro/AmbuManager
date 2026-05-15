@@ -16,6 +16,7 @@ git commit -m "update"
 git push
 
 git status
+git diff -- <fichiers_modifiés>
 
 # GPT
 --------------------------
