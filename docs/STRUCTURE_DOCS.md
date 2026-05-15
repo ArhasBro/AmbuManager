@@ -1,4 +1,4 @@
-﻿Structure du dossier pour le volume Windows
+Structure du dossier pour le volume Windows
 Le numÚro de sÚrie du volume est 123E-4DB7
 C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   CMD.md
