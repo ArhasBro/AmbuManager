@@ -1,78 +1,48 @@
-# Documentation officielle - Ambulance Manager (README historique)
+﻿# Documentation Ambulance Manager (Accueil)
 
-Ce fichier reste à la racine de `docs/` comme point d'entrée historique.
-Le point d'entrée documentaire officiel courant est `docs/README_DOCS.md`.
+Ce fichier est l'accueil simple du dossier `docs/`.
+Le document de gouvernance détaillée est `docs/README_DOCS.md`.
 
-## Sources de vérité
+## Rôle du dossier `docs/`
 
-1. `docs/1-MASTER/DOCUMENT_CADRAGE_FONCTIONNEL.md`
-2. `docs/1-MASTER/DOCUMENT_MAITRE.md`
-3. `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT.md`
-4. `docs/1-MASTER/ETAT_GLOBAL_PROJET.md`
-5. `docs/1-MASTER/REGISTRE_DECISIONS.md`
-6. `docs/1-MASTER/RECAP_DISCUSSIONS.md`
-7. `docs/1-MASTER/STRUCTURE_PROJET.md`
+Le dossier `docs/` centralise la documentation projet :
+- documents maîtres ;
+- sessions ;
+- templates ;
+- archives.
 
-Rappel:
+## Structure principale
 
-- `DOCUMENT_CADRAGE_FONCTIONNEL.md` = base officielle produit
-- `CODE > DOCUMENTATION` en cas de contradiction fonctionnelle
-- `MAQUETTE_DA > documentation générale` en cas de contradiction visuelle UI/UX
-- aucune validation implicite sans preuve
+- `docs/1-MASTER/` : documents maîtres de référence.
+- `docs/2-SESSIONS/` : historique des sessions et preuves.
+- `docs/3-TEMPLATES/` : modèles de documents de session.
+- `docs/4-ARCHIVES/` : archives documentaires.
 
-## Arborescence courante
+## Fichiers racine
 
-- `docs/1-MASTER/` : documents maîtres
-- `docs/2-SESSIONS/` : historique des sessions
-- `docs/3-TEMPLATES/` : templates
-- `docs/4-ARCHIVES/` : archives documentaires
+- `docs/README_DOCS.md` : gouvernance documentaire détaillée (document racine de pilotage documentaire).
+- `docs/README.md` : accueil simple (ce fichier).
+- `docs/CMD.md` : brouillon personnel Nathan, non officiel produit.
+- `docs/STRUCTURE_DOCS.md` : inventaire structurel opérationnel, statut à confirmer.
 
-## Références UI/UX transversales
+## Règles clés
 
-Les références UI/UX codables sont centralisées ici :
+- `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT.md` reste le seul plan officiel.
+- `README.md` et `README_DOCS.md` ne doivent pas être fusionnés automatiquement.
+- `CMD.md` ne doit pas être utilisé comme source de vérité documentaire par Codex.
+- `STRUCTURE_DOCS.md` ne doit pas être supprimé automatiquement.
 
-```txt
-docs/1-MASTER/2-REFERENCE_UI_UX/
-```
+## Maquettes (rappel)
 
-Le chantier UI/UX transversal est visuel uniquement : la cible est une reproduction à environ 99 % des maquettes officielles. Le fonctionnel non visible ou gênant peut être masqué, déplacé, replié, simplifié ou supprimé visuellement ; les sujets fonctionnels seront traités dans des sessions applicatives ultérieures.
+Ne pas déplacer les maquettes pendant cette phase de rebasage.
+La structure réelle actuelle repose sur :
+- `docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0`
+- `docs/1-MASTER/1-MAQUETTE/MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0`
+- `docs/1-MASTER/1-MAQUETTE/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0`
 
-## Guides et documents historiques de racine
+Des références historiques à `MAQUETTE_DA` peuvent subsister dans des anciens documents/sessions.
 
-Les anciens documents de racine `docs/*.md` non autorisés à la racine ont été déplacés en archives.
-Emplacements principaux:
+## Encodage (rappel)
 
-- `docs/4-ARCHIVES/notes-historiques/`
-- `docs/4-ARCHIVES/a-confirmer/`
-- `docs/4-ARCHIVES/brouillons/`
-
-## Fichier CMD
-
-- `docs/CMD.md` reste à la racine comme aide opérationnelle de commandes.
-- Ce fichier n'est pas un document maître.
-
-## Règle officielle — casse des dossiers documentaires
-
-La casse officielle des dossiers documentaires du projet est la suivante :
-
-```txt
-docs/1-MASTER/
-docs/2-SESSIONS/
-docs/3-TEMPLATES/
-docs/4-ARCHIVES/
-```
-
-Les anciennes variantes en minuscules ne doivent plus être utilisées dans les nouveaux documents, prompts, preuves, références ou livrables documentaires :
-
-```txt
-docs/1-master/
-docs/2-sessions/
-docs/3-templates/
-docs/4-archives/
-```
-
-Les chemins documentaires actifs doivent toujours utiliser la casse officielle.
-
-Exception : les anciens fichiers historiques, anciens patchs `.diff`, anciennes preuves terminales, anciens rapports de session et archives peuvent conserver les anciens chemins s’ils décrivent l’état réel du projet au moment où ils ont été produits.
-
-Aucune correction rétroactive massive ne doit être faite dans les anciens livrables historiques si cela risque de dénaturer la traçabilité.
+Aucune correction massive d'encodage n'est lancée dans ce cadrage.
+Toute correction future devra être traitée par lot dédié, avec preuve fichier par fichier.

@@ -1,101 +1,119 @@
-# README_DOCS.md
+﻿# README_DOCS.md
 
-Projet: Investissement / Ambulance Manager  
-Mise à jour: 2026-05-13  
-Statut: OFFICIEL - A CONSERVER
+Projet : Ambulance Manager  
+Mise à jour : 2026-05-15  
+Statut : GOUVERNANCE DOCUMENTAIRE RACINE — OFFICIEL
 
-## 1. Rôle du dossier `docs/`
+## 1. Objet
 
-Ce dossier centralise la documentation de pilotage, de sessions, de templates et d'archives du projet.
+Ce document définit la gouvernance détaillée du dossier `docs/`.
+Il précise :
+- la structure autorisée ;
+- le rôle des fichiers racine ;
+- la hiérarchie documentaire ;
+- les règles de lecture pour Codex ;
+- les règles de prudence (maquettes, encodage, plan officiel).
 
-Il constitue l’espace documentaire officiel du projet Ambulance Manager.
+## 2. Structure autorisée à la racine de `docs/`
 
-## 2. Règle racine `docs/` (validée)
-
-Seuls les éléments suivants doivent rester directement à la racine de `docs/`:
-
+Éléments autorisés en racine :
 - `README_DOCS.md`
 - `README.md`
 - `CMD.md`
+- `STRUCTURE_DOCS.md`
 - `1-MASTER/`
 - `2-SESSIONS/`
 - `3-TEMPLATES/`
 - `4-ARCHIVES/`
 
-Tout autre fichier ou dossier racine doit être déplacé vers `docs/4-ARCHIVES/` selon son classement.
+Tout nouvel élément racine hors périmètre doit être validé avant ajout.
 
-## 3. Grands dossiers et rôle
+## 3. Rôle des fichiers racine
 
-- `docs/1-MASTER/`: documents maîtres officiels de référence.
-- `docs/2-SESSIONS/`: historique des sessions, preuves, patchs et clôtures.
-- `docs/3-TEMPLATES/`: templates de démarrage, récap et fin de session.
-- `docs/4-ARCHIVES/`: zone d'archivage documentaire.
-  - `brouillons/`
-  - `anciens-zips/`
-  - `notes-historiques/`
-  - `a-confirmer/`
+- `docs/README_DOCS.md` : gouvernance documentaire détaillée (document de pilotage documentaire racine).
+- `docs/README.md` : accueil simple du dossier `docs/` (résumé court, non redondant).
+- `docs/CMD.md` : brouillon personnel Nathan, non officiel produit.
+- `docs/STRUCTURE_DOCS.md` : inventaire structurel opérationnel ; statut temporaire à confirmer.
 
-## 4. Chemins officiels stables (ne pas déplacer)
+## 4. Règles explicites sur `CMD.md`
 
-- `docs/1-MASTER/DOCUMENT_MAITRE.md`
-- `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT.md`
-- `docs/1-MASTER/DOCUMENT_CADRAGE_FONCTIONNEL.md`
-- `docs/1-MASTER/ETAT_GLOBAL_PROJET.md`
-- `docs/1-MASTER/REGISTRE_DECISIONS.md`
-- `docs/1-MASTER/RECAP_DISCUSSIONS.md`
-- `docs/1-MASTER/STRUCTURE_PROJET.md`
-- `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_A24.md`
-- `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_INDEX_MAQUETTES.md`
-- `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_SHELL_GLOBAL.md`
-- `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_CODEX_UI_UX_VISUEL_99.md`
-- `docs/1-MASTER/1-MAQUETTE/`
-- `docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA/`
-- `docs/2-SESSIONS/`
-- `docs/3-TEMPLATES/`
-- `docs/4-ARCHIVES/`
+- `docs/CMD.md` est conservé en racine.
+- `docs/CMD.md` est un brouillon personnel Nathan.
+- `docs/CMD.md` n'a pas valeur de source officielle produit.
+- Codex ne doit pas l'utiliser comme source de vérité documentaire.
+- `docs/CMD.md` ne doit pas être modifié sans demande explicite Nathan.
 
-## 5. Règle de priorité UI/UX
+## 5. Règles explicites sur `STRUCTURE_DOCS.md`
 
-La direction artistique officielle est exclusivement:
+- `docs/STRUCTURE_DOCS.md` ne doit pas être supprimé automatiquement.
+- `docs/STRUCTURE_DOCS.md` ne doit pas être fusionné automatiquement.
+- Statut actuel : inventaire structurel / preuve opérationnelle / à confirmer.
+- Décision future possible (hors REBASAGE-02) : conserver, archiver, fusionner partiellement ou remplacer par un index plus propre.
 
-```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA
-```
+## 6. Distinction `README.md` vs `README_DOCS.md`
 
-En cas de contradiction entre anciens documents, anciennes captures, anciens prompts ou interprétations précédentes, `MAQUETTE_DA` prime comme source visuelle.
+- `README.md` : accueil simple.
+- `README_DOCS.md` : gouvernance détaillée.
+- Aucune fusion automatique entre les deux.
+- Les doublons doivent être réduits, mais les rôles doivent rester distincts.
 
-Pour le chantier documentaire transversal UI/UX :
+## 7. Priorité documentaire
 
-```txt
-Image officielle = vérité visuelle
-REFERENCE_UI_UX_<PAGE>.md = traduction codable pour Codex
-Code réel = vérité fonctionnelle
-```
+Hiérarchie de lecture/documentation à appliquer :
 
-La phase actuelle est strictement visuelle : l’objectif est la reproduction à environ 99 % des maquettes officielles. Le fonctionnel existant ne doit pas bloquer cette phase ; les éléments fonctionnels gênants peuvent être masqués, déplacés, repliés, simplifiés ou supprimés visuellement. Les arbitrages fonctionnels seront traités plus tard dans des sessions applicatives dédiées.
+1. Code réel du dépôt (état technique réellement présent).
+2. `docs/1-MASTER/DOCUMENT_CADRAGE_FONCTIONNEL.md` (périmètre produit validé).
+3. `docs/1-MASTER/DOCUMENT_MAITRE.md` (principes globaux et règles non négociables).
+4. `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT.md` (ordre officiel de développement).
+5. `docs/1-MASTER/REGISTRE_DECISIONS.md` (décisions validées).
+6. `docs/1-MASTER/ETAT_GLOBAL_PROJET.md` (état courant synthétique).
+7. `docs/1-MASTER/2-REFERENCE_UI_UX/` (références visuelles codables par page).
+8. Maquettes PNG officielles (`docs/1-MASTER/1-MAQUETTE/...`) pour la cible visuelle.
+9. `docs/2-SESSIONS/` (preuves et historique ; ne prime pas sur les documents maîtres).
+10. `docs/1-MASTER/RECAP_DISCUSSIONS.md` (contexte ; valeur inférieure aux décisions officielles).
+11. `docs/CMD.md` (brouillon personnel non officiel).
 
-## 6. Rôle de `README.md` et `CMD.md`
+## 8. Règles de lecture pour Codex
 
-- `docs/README.md`: README historique conservé pour compatibilité et contexte legacy.
-- `docs/CMD.md`: aide opérationnelle de commandes/documentation d'exécution.
-
-Ces deux fichiers ne sont pas des documents maîtres et ne remplacent pas `docs/1-MASTER/*`.
-
-## 7. Règle de prudence documentaire
-
-- Ne rien supprimer sans validation explicite.
-- En cas de doute de classement, classer en `docs/4-ARCHIVES/a-confirmer/`.
-- Toute information non prouvée doit être notée exactement:
+- Lire d'abord les documents maîtres selon la hiérarchie ci-dessus.
+- Utiliser les sessions historiques comme preuves/contextes, pas comme source d'autorité supérieure.
+- En cas d'information manquante, utiliser exactement :
 
 ```txt
 INFORMATION NON FOURNIE — À CONFIRMER
 ```
 
-Cette formule est réservée aux documents, audits et contrôles QA. Elle ne doit jamais être affichée telle quelle dans l’interface utilisateur finale.
+## 9. Règle maquettes
 
-## Règle officielle — casse des dossiers documentaires
+- Ne pas déplacer les maquettes pendant REBASAGE-02.
+- Des chemins historiques `MAQUETTE_DA` peuvent exister dans certains anciens textes/sessions.
+- La structure réelle actuelle des maquettes est portée par :
+  - `docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0`
+  - `docs/1-MASTER/1-MAQUETTE/MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0`
+  - `docs/1-MASTER/1-MAQUETTE/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0`
+- Une matrice future est attendue (hors REBASAGE-02) :
+  - `Page -> PNG officiel -> dossier réel -> référence UI/UX -> route app -> fichier app`
 
-La casse officielle des dossiers documentaires du projet est la suivante :
+## 10. Règle encodage
+
+- Pas de correction massive d'encodage pendant REBASAGE-02.
+- Toute correction future devra passer par un lot dédié, avec preuve fichier par fichier :
+  - fichier concerné ;
+  - exemple exact ;
+  - encodage constaté ;
+  - correction effectuée ;
+  - vérification après correction.
+
+## 11. Règle plan officiel
+
+- `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT.md` reste le seul plan officiel.
+- Ne pas refondre ce plan pendant REBASAGE-02.
+- Ne pas créer de plan de développement parallèle.
+- Les incohérences constatées sont notées pour traitement en fin de rebasage global.
+
+## 12. Règle de casse documentaire
+
+Casse officielle à utiliser dans les nouveaux documents :
 
 ```txt
 docs/1-MASTER/
@@ -104,29 +122,4 @@ docs/3-TEMPLATES/
 docs/4-ARCHIVES/
 ```
 
-Les anciennes variantes en minuscules ne doivent plus être utilisées dans les nouveaux documents, prompts, preuves, références ou livrables documentaires :
-
-```txt
-docs/1-master/
-docs/2-sessions/
-docs/3-templates/
-docs/4-archives/
-```
-
-Les chemins documentaires actifs doivent toujours utiliser la casse officielle.
-
-Exception : les anciens fichiers historiques, anciens patchs `.diff`, anciennes preuves terminales, anciens rapports de session et archives peuvent conserver les anciens chemins s’ils décrivent l’état réel du projet au moment où ils ont été produits.
-
-Aucune correction rétroactive massive ne doit être faite dans les anciens livrables historiques si cela risque de dénaturer la traçabilité.
-
-## 9. Référence Codex UI/UX visuelle
-
-Pour toute future production Codex visant l’alignement visuel d’une page avec sa maquette, lire prioritairement :
-
-```txt
-docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_INDEX_MAQUETTES.md
-docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_SHELL_GLOBAL.md
-docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_CODEX_UI_UX_VISUEL_99.md
-```
-
-Puis lire uniquement le document `REFERENCE_UI_UX_<PAGE>.md` de la page concernée et les fichiers code utiles à cette page.
+Les anciennes variantes en minuscules peuvent subsister dans l'historique sans réécriture massive rétroactive.
