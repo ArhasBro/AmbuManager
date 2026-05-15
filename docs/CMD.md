@@ -59,12 +59,12 @@ Identifiants:
 
 Admin
 admin@ambulance.local
-adminPasswordA
+admin123
 
 Planner 
 planner@ambulance.local
-userPassword
+user123
 
 Viewer
 viewer@ambulance.local
-userPassword
+user123
