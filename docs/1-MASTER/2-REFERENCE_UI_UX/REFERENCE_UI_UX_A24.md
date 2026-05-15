@@ -2,14 +2,14 @@
 
 Version : V1.0.0 (MASTER)  
 Date : 04/05/2026  
-Bloc concerné : `A24 — Réalignement UI/UX global sur MAQUETTE_DA`
+Bloc concerné : `A24 — Réalignement UI/UX global sur MAQUETTES PNG OFFICIELLES`
 
 ## Avertissement de statut — contexte uniquement
 
 Ce document est conservé dans `docs/1-MASTER/2-REFERENCE_UI_UX/` pour mémoire et contexte A24.
 
 Pour le chantier documentaire transversal UI/UX actuel, il ne prime pas sur :
-- les images officielles dans `docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA/` ;
+- les images officielles dans `docs/1-MASTER/1-MAQUETTE/` ;
 - les documents `REFERENCE_UI_UX_<PAGE>.md` ;
 - la règle actuelle : reproduction visuelle à 99 % des maquettes ;
 - la règle actuelle : le fonctionnel ne bloque pas la validation visuelle.
@@ -36,7 +36,7 @@ En cas de contradiction, ce document doit être lu comme contexte historique A24
 Ce document fixe la référence d’exécution du bloc :
 
 ```txt
-A24 — Réalignement UI/UX global sur MAQUETTE_DA
+A24 — Réalignement UI/UX global sur MAQUETTES PNG OFFICIELLES
 ```
 
 Il complète le plan de développement et évite de rediscuter la direction artistique à chaque session A24.
@@ -51,7 +51,9 @@ Il doit être utilisé par :
 La direction artistique officielle est exclusivement :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA
+docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0
+docs/1-MASTER/1-MAQUETTE/MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0
+docs/1-MASTER/1-MAQUETTE/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0
 ```
 
 En cas de contradiction entre :
@@ -66,10 +68,12 @@ En cas de contradiction entre :
 la référence prioritaire est toujours :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA
+docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0
+docs/1-MASTER/1-MAQUETTE/MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0
+docs/1-MASTER/1-MAQUETTE/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0
 ```
 
-Les autres fichiers du dossier `docs/1-MASTER/1-MAQUETTE/` peuvent servir de supports complémentaires, mais ils ne priment pas sur `MAQUETTE_DA`.
+Les autres fichiers du dossier `docs/1-MASTER/1-MAQUETTE/` peuvent servir de supports complémentaires, mais ils ne priment pas sur `MAQUETTES PNG OFFICIELLES`.
 
 ## 3. Objectif visuel A24
 A24 doit rapprocher l’application réelle de la maquette officielle avec un niveau d’exigence élevé.
@@ -152,7 +156,7 @@ Règles :
 - le libellé documentaire retenu est **mode sombre** ;
 - le mode clair reste la référence principale ;
 - un bouton visible clair/sombre est attendu ;
-- le mode sombre doit être une déclinaison sobre de `MAQUETTE_DA` ;
+- le mode sombre doit être une déclinaison sobre de `MAQUETTES PNG OFFICIELLES` ;
 - il ne doit pas créer une nouvelle direction artistique ;
 - il ne doit pas être une simple inversion automatique noir/blanc.
 
@@ -188,7 +192,7 @@ Les captures avant/après sont obligatoires pour les sessions de correction A24.
 Objectifs :
 - prouver l’état initial ;
 - prouver l’état final ;
-- comparer avec `MAQUETTE_DA` ;
+- comparer avec `MAQUETTES PNG OFFICIELLES` ;
 - éviter une conformité déclarative ;
 - éviter de reproduire les écarts UI déjà constatés.
 
@@ -257,7 +261,7 @@ A24 ne doit pas :
 
 ## 13. Critères de validation
 Une page A24 peut être validée uniquement si :
-- la structure générale est proche de `MAQUETTE_DA` ;
+- la structure générale est proche de `MAQUETTES PNG OFFICIELLES` ;
 - les composants sont cohérents ;
 - la densité est maîtrisée ;
 - la hiérarchie visuelle est claire ;
@@ -282,14 +286,14 @@ INFORMATION NON FOURNIE — À CONFIRMER
 
 ```txt
 La direction artistique officielle est exclusivement :
-docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA
+docs/1-MASTER/1-MAQUETTE
 
 Les maquettes ne sont pas une inspiration.
 Elles constituent la cible visuelle officielle.
 
 Objectif : interface pure, simple, lisible, professionnelle, proche maquette.
 
-Le mode sombre est intégré comme déclinaison sobre de MAQUETTE_DA.
+Le mode sombre est intégré comme déclinaison sobre de MAQUETTES PNG OFFICIELLES.
 Lucide React est autorisé pour les icônes génériques.
 Les captures avant/après sont obligatoires.
 Le planning profond est reporté en A25.

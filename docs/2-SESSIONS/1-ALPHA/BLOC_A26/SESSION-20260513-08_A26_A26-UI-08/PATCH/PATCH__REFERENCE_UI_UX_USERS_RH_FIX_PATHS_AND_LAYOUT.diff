@@ -1,0 +1,558 @@
+diff --git a/docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_INDEX_MAQUETTES.md b/docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_INDEX_MAQUETTES.md
+index 1bf6cd3..753f896 100644
+--- a/docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_INDEX_MAQUETTES.md
++++ b/docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_INDEX_MAQUETTES.md
+@@ -213,6 +213,12 @@ docs/1-MASTER/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_M
+ | Utilisateurs / RH | `3-Utilisateurs-RH/Utilisateurs-RH_V1.png` | `/users` | officielle |
+ | Véhicules | `4-Véhicules/Véhicules_V1.2.png` | `/vehicles` | officielle |
+ 
++Chemin officiel current à utiliser pour Users/RH :
++
++```txt
++docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/3-Utilisateurs-RH/Utilisateurs-RH_V1.png
++```
++
+ Note : selon le contexte ZIP ou système de fichiers, certains chemins peuvent apparaître sous forme encodée, par exemple `V#U00e9hicules`. Codex devra toujours lister le dossier réel avant lecture si le chemin accentué échoue.
+ 
+ ### 4.2 Maquettes complémentaires
+diff --git a/docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_USERS_RH.md b/docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_USERS_RH.md
+index 375455e..fe04c23 100644
+--- a/docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_USERS_RH.md
++++ b/docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_USERS_RH.md
+@@ -1,350 +1,273 @@
+-# Ambulance Manager — RÉFÉRENCE UI/UX UTILISATEURS / RH
++# Ambulance Manager — REFERENCE UI/UX UTILISATEURS / RH
+ 
+-Version : V1.0.0 — SPÉCIFICATION VISUELLE MAQUETTE 99 %  
+-Date : 13/05/2026  
+-Chantier concerné : `Documentation transversale UI/UX — hors bloc applicatif`  
+-Document cible à déposer dans le repo : `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_USERS_RH.md`
++Version : V1.1.0 — Spécification visuelle codable 99 %
++Date : 15/05/2026
++Statut : Référence UI/UX exploitable directement par Codex
++Page : Utilisateurs / RH
++Route : `/users`
+ 
+ ---
+ 
+-## 0. Statut du document
++## 1. Référence visuelle officielle
+ 
+-Ce document fait partie du chantier documentaire transversal UI/UX hors bloc applicatif.
++Maquette officielle prioritaire :
+ 
+-Il reprend la méthode validée sur `REFERENCE_UI_UX_A25_PLANNING.md` : partir de l'image officielle, décrire le rendu visible, traduire la maquette en consignes codables pour Codex, puis fournir une DoD visuelle contrôlable manuellement.
+-
+-Ce document ne doit pas être lu comme une inspiration générale. Il doit servir de spécification visuelle à reproduire au plus près.
+-
+-Objectif principal : permettre une future production Codex orientée uniquement vers la fidélité visuelle à environ 99 % de la maquette officielle, sans traiter le fonctionnel métier.
+-
+-
+-## 1. Règle d'autorité
+-
+-### 1.1 Autorité visuelle
+-
+-La vérité visuelle prioritaire est l'image officielle située dans `docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA`.
++```txt
++docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/3-Utilisateurs-RH/Utilisateurs-RH_V1.png
++```
+ 
+-Règle de priorité :
++Règle d’autorité :
+ 
+ ```txt
+-Image PNG officielle > REFERENCE_UI_UX_<PAGE>.md > documentation MAQUETTE générale > anciennes captures > récit de production
++PNG officiel > REFERENCE_UI_UX_USERS_RH.md > autres documents textuels
+ ```
+ 
+-En cas de contradiction visuelle, l'image officielle prévaut.
++En cas d’écart entre texte et image, le PNG officiel prévaut.
+ 
+-### 1.2 Autorité codable
++---
+ 
+-Ce document est la traduction codable de la maquette pour Codex.
++## 2. Périmètre et règles
+ 
+-Il doit guider :
++Objectif : guider une reproduction visuelle à environ 99 %, sans refonte métier.
+ 
+-- la structure visible ;
+-- les proportions approximatives ;
+-- les alignements ;
+-- les espacements ;
+-- les composants communs ;
+-- les éléments à masquer, déplacer ou simplifier si le code réel affiche trop de fonctionnel ;
+-- la checklist de contrôle manuel.
++Interdictions de cette phase visuelle :
+ 
+-### 1.3 Autorité fonctionnelle
++- ne pas modifier API, Prisma, RBAC, routes serveur, services métier, migrations, seed ;
++- ne pas transformer la session en refonte fonctionnelle ;
++- ne pas afficher `INFORMATION NON FOURNIE — À CONFIRMER` dans l’UI.
+ 
+-Le code réel reste la vérité fonctionnelle.
++---
+ 
+-Mais cette phase est strictement visuelle.
++## 3. Structure globale attendue
+ 
+-Règle verrouillée :
++La page doit être structurée comme suit :
+ 
+ ```txt
+-PRIORITÉ ACTUELLE = FIDÉLITÉ VISUELLE À 99 % AUX MAQUETTES OFFICIELLES.
++[SIDEBAR] [ZONE CENTRALE] [PANNEAU RH DROIT]
+ ```
+ 
+-Conséquences :
++Sous la topbar, la zone `/users` est composée de deux colonnes sœurs :
+ 
+-- le fonctionnel existant ne doit pas bloquer la reproduction visuelle ;
+-- si une action, un bouton, un formulaire, une donnée ou un bloc fonctionnel gêne la fidélité maquette, il peut être masqué, déplacé, replié, simplifié ou supprimé visuellement ;
+-- les arbitrages fonctionnels seront repris plus tard dans des sessions applicatives dédiées ;
+-- aucune API, Prisma, RBAC, moteur métier, logique serveur, autoschedule ou matching ne doit être modifié dans ce chantier documentaire ;
+-- les données visibles dans la maquette peuvent être remplacées par les données réelles, mais la structure visuelle doit rester la même.
++1. colonne centrale ;
++2. panneau RH droit.
+ 
+-### 1.4 Formule `INFORMATION NON FOURNIE — À CONFIRMER`
++Contraintes structurelles obligatoires :
+ 
+-La formule exacte `INFORMATION NON FOURNIE — À CONFIRMER` est réservée aux documents, audits et contrôles QA.
++- le panneau RH ne doit pas être enfant de la carte Utilisateurs ;
++- le panneau RH ne doit pas être en `position: absolute` ;
++- le panneau RH ne doit pas être superposé à la colonne centrale ;
++- la colonne centrale doit être `minmax(0, 1fr)` avec `min-width: 0` ;
++- la colonne RH doit avoir une largeur stable autour de `430px` à `460px` ;
++- l’écart central/panneau doit être réel (`gap` visuel, environ `20px` à `24px`) ;
++- aucun enfant de la colonne centrale (filtres, tableau, pagination, opérations avancées) ne doit passer sous le panneau RH.
+ 
+-Elle ne doit jamais être affichée telle quelle dans l'interface utilisateur finale.
++---
+ 
+-## 2. Page concernée
++## 4. Zone centrale — ordre exact
+ 
+-### 2.1 Route réelle
++Ordre de rendu attendu dans la colonne centrale :
+ 
+-```txt
+-/users
+-```
++1. header page ;
++2. KPI ;
++3. barre de filtres ;
++4. tableau utilisateurs ;
++5. pagination ;
++6. opérations avancées RH (repliées ou ouvertes).
+ 
+-### 2.2 Fichiers code probables
++Le header doit contenir :
+ 
+-```txt
+-app/users/page.tsx
+-app/users/users-list-client.tsx
+-app/users/users-side-panel-client.tsx
+-app/users/user-creation-client.tsx
+-app/users/user-edit-client.tsx
+-app/users/user-absence-client.tsx
+-app/users/user-archive-client.tsx
+-app/users/reset-password-client.tsx
+-app/users/user-depot-assignment-client.tsx
+-app/a24-users-rh.css
+-app/app-shell.tsx
+-app/globals.css
+-app/ui/*
+-```
++- titre : `Utilisateurs / RH` ;
++- sous-titre : `Gérez les salariés, rôles, permissions, rattachements, horaires et absences.` ;
++- CTA : `+ Créer un utilisateur`.
+ 
+-### 2.3 Maquette officielle
++Le CTA reste aligné à droite de la colonne centrale, pas au bord droit de l’écran.
+ 
+-```txt
+-docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/3-Utilisateurs-RH/Utilisateurs-RH_V1.png
+-```
+-
+-## 3. Nature visuelle de la page
++---
+ 
+-La page `Utilisateurs / RH` est une page dense mais très structurée.
++## 5. KPI — composition codable
+ 
+-La maquette montre :
++Les 4 KPI doivent rester sur une ligne desktop dans la colonne centrale :
+ 
+-- une liste utilisateurs principale ;
+-- des KPI RH ;
+-- des filtres ;
+-- un tableau de salariés ;
+-- un panneau droit détaillé avec onglets ;
+-- l'onglet actif `Absences` ;
+-- une zone de sécurité rouge en bas de panneau.
++1. Utilisateurs actifs ;
++2. Stagiaires ;
++3. Absences en cours ;
++4. Comptes archivés.
+ 
+-La page doit rester une console RH lisible, pas une accumulation de formulaires.
++Composition interne obligatoire de chaque carte :
+ 
+-## 4. Structure visible à reproduire
++- fond blanc ;
++- bordure fine ;
++- arrondi harmonisé ;
++- hauteur compacte ;
++- icône à gauche, centrée verticalement ;
++- bloc texte à droite de l’icône ;
++- titre KPI centré ;
++- chiffre centré ;
++- libellé bas centré ;
++- aucun texte doublonné.
+ 
+-### 4.1 Header
++Schéma attendu :
+ 
+-Éléments :
++```txt
++[icône]   titre KPI (centré)
++          chiffre (centré)
++          libellé bas (centré)
++```
+ 
+-- titre `Utilisateurs / RH` ;
+-- sous-titre `Gérez les salariés, rôles, permissions, rattachements, horaires et absences.` ;
+-- bouton primaire `Créer un utilisateur`.
++---
+ 
+-### 4.2 KPI
++## 6. Barre de filtres — rendu attendu
+ 
+-Quatre cartes :
++La barre de filtres doit être :
+ 
+-| KPI | Exemple |
+-|---|---|
+-| Utilisateurs actifs | 28 sur 34 utilisateurs |
+-| Stagiaires | 4 sur 34 utilisateurs |
+-| Absences en cours | 6 utilisateurs |
+-| Comptes archivés | 3 inactifs |
++- compacte ;
++- blanche / sobre ;
++- horizontale ;
++- faible hauteur ;
++- sans grands vides verticaux ;
++- visuellement proche de la maquette (pas un grand formulaire).
+ 
+-Couleurs : bleu, turquoise, orange, gris/bleu foncé.
++Ordre obligatoire :
+ 
+-### 4.3 Filtres
++1. Recherche ;
++2. Rôle ;
++3. Base ;
++4. Statut ;
++5. Stagiaire ;
++6. Réinitialiser.
+ 
+-Éléments visibles :
++Contraintes :
+ 
+-- recherche `Rechercher un nom, email, initiales...` ;
+-- filtre `Rôle` ;
+-- filtre `Base` ;
+-- filtre `Statut` ;
+-- filtre `Stagiaire` ;
+-- bouton `Réinitialiser`.
++- champs alignés sur une même ligne en desktop ;
++- labels discrets ;
++- `input/select` compacts ;
++- bouton `Réinitialiser` aligné à droite ;
++- la barre reste dans la colonne centrale ;
++- la barre ne passe jamais sous le panneau RH.
+ 
+-Règles : une seule ligne claire, sans filtres avancés ouverts.
++---
+ 
+-### 4.4 Tableau utilisateurs
++## 7. Tableau utilisateurs
+ 
+-Colonnes visibles :
++Colonnes attendues (ordre) :
+ 
+ ```txt
+-[checkbox]
+-Identité
+-Initiales
+-Email
+-Rôle
+-Base
+-Téléphone
+-Statut
+-Stagiaire
+-Horaires
+-Dernière modif.
+-Actions
++checkbox, Identité, Initiales, Email, Rôle, Base, Téléphone, Statut, Stagiaire, Horaires, Dernière modif., Actions
+ ```
+ 
+-Rendu attendu :
++Alignements attendus :
+ 
+-- première ligne sélectionnée ;
+-- fond bleu très pâle + contour/bord bleu ;
+-- avatar initiales ;
+-- identité sur deux lignes ;
+-- rôle en badge ;
+-- statut en badge ;
+-- horaires sur deux lignes ;
+-- actions icône crayon + menu `...` ;
+-- pagination en bas.
++- Identité : titre à gauche, cellules à gauche ;
++- Initiales : titre centré, cellules centrées ;
++- Email : titre centré, cellules à gauche ;
++- Rôle : titre centré, cellules centrées ;
++- Base : titre centré, cellules centrées ;
++- Téléphone : titre centré, cellules centrées ;
++- Statut : titre centré, cellules centrées.
+ 
+-### 4.5 Panneau droit utilisateur
++Contraintes visuelles :
+ 
+-Header :
++- badges `Rôle/Base/Statut` avec arrondi harmonisé (pas grosse pilule) ;
++- tableau contenu dans la colonne centrale ;
++- scroll horizontal uniquement dans le tableau si indispensable ;
++- sélection de ligne sobre (fond bleu pâle) ;
++- pas de séparateurs bleus verticaux agressifs.
+ 
+-- avatar initiales `NA` ;
+-- nom `Nathan Archenoul` ;
+-- badges `Admin` et `Actif` ;
+-- base `Siège` ;
+-- téléphone ;
+-- bouton `Enregistrer` ;
+-- icône fermer.
+-
+-Onglets :
+-
+-```txt
+-Identité
+-Rôle & permissions
+-RH
+-Absences
+-Sécurité
+-```
+-
+-Onglet actif visible : `Absences`.
+-
+-Contenu de l'onglet Absences :
++---
+ 
+-1. Carte `Absences enregistrées`
+-   - bouton `Ajouter une absence` ;
+-   - tableau avec colonnes : Motif, Début, Fin, Statut, Actions ;
+-   - exemples : Congé payé, Indisponibilité, Formation ;
+-   - badges `Validée`, `En attente` ;
+-   - icône corbeille discrète.
++## 8. Panneau RH droit
+ 
+-2. Carte `Récapitulatif`
+-   - absences à venir ;
+-   - jours d'absence validés ;
+-   - dernière absence.
++Le panneau RH doit être une vraie colonne droite intégrée :
+ 
+-3. `Zone de sécurité`
+-   - fond rouge pâle ;
+-   - action `Réinitialiser le mot de passe` ;
+-   - action `Archiver l'utilisateur` ;
+-   - boutons rouges contour.
++- aligné en haut de la zone utile ;
++- largeur stable ~430–460 px ;
++- hauteur utile visible ;
++- scroll interne possible ;
++- jamais superposé ;
++- jamais enfant du tableau.
+ 
+-## 5. Proportions et rythme visuel
++Contenu visible à conserver :
+ 
+-| Zone | Cible |
+-|---|---|
+-| Tableau principal | largeur majoritaire, environ 65–70 % |
+-| Panneau droit | environ 430–460 px |
+-| KPI | 4 cartes alignées |
+-| Filtres | une ligne |
+-| Panneau | hauteur complète, scroll interne si nécessaire |
++- fiche utilisateur ;
++- avatar, nom, email, badges ;
++- onglets (`Identité`, `Rôle & permissions`, `RH`, `Absences`, `Sécurité`) ;
++- onglet `Absences` actif ;
++- bloc `Absences enregistrées` ;
++- bloc `Récapitulatif` ;
++- bloc `Zone de sécurité`.
+ 
+-Le panneau droit est plus large que celui des dépôts, car il contient des onglets et des tables internes.
++---
+ 
+-## 6. Éléments à masquer, simplifier ou reporter
++## 9. Opérations avancées RH
+ 
+-Autorisé :
++Règles :
+ 
+-- formulaires de création utilisateur ouverts par défaut ;
+-- édition complète de permissions si l'onglet actif n'est pas concerné ;
+-- détails RH avancés ;
+-- blocs de reset password trop techniques ;
+-- détails de rattachement dépôt si non visibles ;
+-- messages d'erreur API ;
+-- contrôles fonctionnels qui cassent la mise en page.
++- repliées par défaut ;
++- si ouvertes, elles restent dans la colonne centrale ;
++- elles ne passent jamais sous le panneau RH ;
++- elles ne chevauchent pas le panneau RH ;
++- elles ne cassent pas la grille centrale/droite.
+ 
+-La page visible cible l'état `liste + détail utilisateur + onglet Absences`.
++---
+ 
+-## 7. Interdictions
++## 10. Règles d’encodage UI
+ 
+-Ne pas :
++Textes FR visibles à maintenir correctement :
+ 
+-- remplacer le tableau par des cards ;
+-- ouvrir la création utilisateur par défaut ;
+-- supprimer le panneau droit ;
+-- supprimer les onglets ;
+-- transformer l'onglet Absences en page séparée ;
+-- modifier les permissions, RBAC, API users ou Prisma ;
+-- afficher la formule documentaire dans l'interface.
++- `Gérant`
++- `Régulateur`
++- `Sélectionner`
++- `Identité`
++- `Salarié`
++- `Non renseigné`
++- `Rôle`
++- `Téléphone`
++- `Dernière modif.`
++- `Précédent`
++- `Réinitialiser`
++- `—`
+ 
+-## 8. DoD visuelle 99 %
++Interdits en UI :
+ 
+-La page est conforme si :
++- `Ã`
++- `Â`
++- `â€”`
+ 
+-- le header et le CTA correspondent ;
+-- les 4 KPI sont visibles ;
+-- la barre de filtres correspond ;
+-- le tableau contient les colonnes visibles ;
+-- la ligne sélectionnée est claire ;
+-- le panneau droit affiche les informations de l'utilisateur sélectionné ;
+-- les 5 onglets sont présents ;
+-- l'onglet `Absences` est actif ;
+-- les cartes Absences, Récapitulatif et Zone de sécurité sont visibles ;
+-- les actions rouges sont visuellement sobres ;
+-- aucun module fonctionnel parasite ne surcharge l'écran.
++---
+ 
+-## 9. Checklist de contrôle manuel Nathan
++## 11. Fichiers code ciblés pour les futures corrections visuelles
+ 
+ ```txt
+-[ ] Le titre Utilisateurs / RH est conforme.
+-[ ] Le bouton Créer un utilisateur est en haut à droite.
+-[ ] Les 4 KPI sont alignés.
+-[ ] Les filtres Rôle, Base, Statut et Stagiaire sont visibles.
+-[ ] Le tableau contient les colonnes visibles dans la maquette.
+-[ ] La ligne Nathan Archenoul est sélectionnée ou une ligne équivalente est sélectionnée.
+-[ ] Le panneau droit affiche l'utilisateur sélectionné.
+-[ ] Les onglets Identité, Rôle & permissions, RH, Absences, Sécurité sont présents.
+-[ ] L'onglet Absences est actif.
+-[ ] Le tableau des absences est visible.
+-[ ] La zone de sécurité rouge pâle est en bas du panneau.
+-[ ] Aucun formulaire de création utilisateur n'est ouvert par défaut.
++app/users/page.tsx
++app/users/users-list-client.tsx
++app/users/users-side-panel-client.tsx
++app/a24-users-rh.css
+ ```
+ 
+-## 10. Écarts connus à contrôler dans le code
+-
+-- la page contient plusieurs clients fonctionnels séparés ;
+-- la création, l'édition, l'archive, les absences et le reset password peuvent être trop présents visuellement ;
+-- il faut préserver l'état liste + panneau droit sans transformer la page en workflow complet ;
+-- le code réel peut avoir plus ou moins de champs que la maquette.
+-
+-## 11. Règles futures pour Codex
++Optionnel et justifié uniquement : composant UI partagé strictement nécessaire sans régression globale.
+ 
+-Lors d'une future session de production UI :
+-
+-- lire d'abord `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_INDEX_MAQUETTES.md` ;
+-- lire ensuite `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_SHELL_GLOBAL.md` ;
+-- lire ce document de page ;
+-- lire uniquement les fichiers code utiles à cette page ;
+-- ne pas scanner inutilement tout le dépôt ;
+-- ne pas produire de capture automatique ;
+-- fournir une checklist claire pour la vérification visuelle manuelle par Nathan ;
+-- ne pas transformer la session UI en session fonctionnelle ;
+-- ne pas modifier Prisma, API, RBAC, services métier ou logique serveur sauf nécessité explicitement demandée dans une session ultérieure.
+-
+-Livrable attendu lors d'une future production code : un patch visuel ciblé, sobre, contrôlable, aligné sur la maquette.
++---
+ 
+-## 12. Prompt court futur pour Codex
++## 12. Checklist de contrôle visuel Nathan
+ 
+ ```txt
+-Tu travailles sur Ambulance Manager.
+-
+-Objectif : réaligner uniquement le visuel de la page concernée avec sa maquette officielle à 99 %, sans traiter le fonctionnel métier.
++[ ] Le PNG officiel Users/RH a été utilisé comme vérité visuelle.
++[ ] La page suit la structure [SIDEBAR] [ZONE CENTRALE] [PANNEAU RH DROIT].
++[ ] Le panneau RH est une vraie colonne droite intégrée (non flottante, non superposée).
++[ ] Le panneau RH ne chevauche ni filtres, ni tableau, ni pagination, ni opérations avancées.
++[ ] Les KPI sont composés avec icône gauche centrée + texte centré.
++[ ] La barre de filtres est compacte, horizontale, sobre et bien ordonnée.
++[ ] Les colonnes du tableau et leurs alignements correspondent à la maquette.
++[ ] Les opérations avancées RH restent dans la colonne centrale, même ouvertes.
++[ ] Aucun texte FR corrompu n’est visible.
++```
+ 
+-Lis d'abord :
+-- docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_INDEX_MAQUETTES.md
+-- docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_SHELL_GLOBAL.md
+-- ce document REFERENCE_UI_UX_USERS_RH.md
++---
+ 
+-Puis lis uniquement les fichiers code utiles à cette page.
++## 13. Verdict documentaire
+ 
+-Règles :
+-- image officielle = vérité visuelle ;
+-- code réel = vérité fonctionnelle ;
+-- fonctionnel non bloquant pour cette phase ;
+-- masquer, déplacer, replier ou simplifier les éléments fonctionnels qui empêchent la fidélité maquette ;
+-- ne pas modifier API, Prisma, RBAC, services métier ou logique serveur ;
+-- ne pas produire de captures ;
+-- fournir une checklist de contrôle visuel manuel.
+-```
++```txt
++REFERENCE_UI_UX_USERS_RH : EXPLOITABLE POUR CORRECTION VISUELLE 99 %
++SOURCE PRIORITAIRE : Utilisateurs-RH_V1.png (chemin officiel current)
++PÉRIMÈTRE : UI/UX VISUEL UNIQUEMENT
++```
+\ No newline at end of file

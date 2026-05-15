@@ -89,7 +89,7 @@ BLOC A23 CLÔTURABLE DÉFINITIVEMENT : OUI
 ### 3.2.2 Ordre officiel post-A23 initial
 L’ordre officiel post-A23 initial était validé ainsi :
 
-1. **A24 — Réalignement UI/UX global sur `MAQUETTE_DA`**
+1. **A24 — Réalignement UI/UX global sur `MAQUETTES PNG OFFICIELLES`**
 2. **A25 — Planning UI/UX & ergonomie métier**
 3. **A26 — Stabilisation / non-régression post UI/UX**
 
@@ -102,16 +102,16 @@ A25 est réservé au planning comme sujet central.
 La direction artistique officielle est exclusivement :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA
+docs/1-MASTER/1-MAQUETTE
 ```
 
 En cas de contradiction entre anciens documents, anciennes captures, anciens prompts, anciens ZIP ou interprétations précédentes, la référence prioritaire est :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA
+docs/1-MASTER/1-MAQUETTE
 ```
 
-Les autres éléments du dossier `docs/1-MASTER/1-MAQUETTE/` peuvent servir de supports complémentaires, mais ils ne priment pas sur `MAQUETTE_DA`.
+Les autres éléments du dossier `docs/1-MASTER/1-MAQUETTE/` peuvent servir de supports complémentaires, mais ils ne priment pas sur `MAQUETTES PNG OFFICIELLES`.
 
 ### 3.2.4 Niveau d’exigence visuelle A24
 - A24 vise une fidélité forte à la maquette.
@@ -123,7 +123,7 @@ Les autres éléments du dossier `docs/1-MASTER/1-MAQUETTE/` peuvent servir de s
 - Le mode sombre est intégré dans A24.
 - Le libellé documentaire retenu est **mode sombre**.
 - Un bouton visible clair/sombre est attendu.
-- Le mode sombre doit être une déclinaison sobre de `MAQUETTE_DA`, pas une nouvelle direction artistique.
+- Le mode sombre doit être une déclinaison sobre des maquettes PNG officielles, pas une nouvelle direction artistique.
 - Le mode clair reste la référence principale sauf décision contraire explicite.
 
 ### 3.2.6 Icônes
@@ -162,8 +162,8 @@ Décision validée au 10/05/2026 : le bloc A25 ne doit plus être jugé uniqueme
 A25 doit viser une refonte globale de la page Planning en se rapprochant le plus possible des images officielles :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2.png
-docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2_INFO_DETAIL.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2_INFO_DETAIL.png
 ```
 
 La référence documentaire officielle du bloc A25 est :
@@ -197,8 +197,8 @@ docs/4-ARCHIVES/
 Les anciennes variantes en minuscules ne doivent plus être utilisées dans les nouveaux documents, prompts, preuves, références ou livrables documentaires :
 
 ```txt
-docs/1-master/
-docs/2-sessions/
+docs/1-MASTER/
+docs/2-SESSIONS/
 docs/3-templates/
 docs/4-archives/
 ```
@@ -381,7 +381,7 @@ Le point 1 de la séquence de préparation est considéré validable après int�
 
 Les points suivants sont explicitement sortis des décisions en attente :
 - ordre A24 / A25 / A26 / A27 ;
-- priorité de `MAQUETTE_DA` ;
+- priorité des maquettes PNG officielles ;
 - intégration du mode sombre dans A24 ;
 - autorisation de Lucide React pour les icônes génériques ;
 - neutralisation du dossier `ICONE` / `ICONES` ;
@@ -401,7 +401,7 @@ Les points suivants sont explicitement sortis des décisions en attente :
 - Les documents maîtres doivent utiliser la structure réelle :
   - `docs/1-MASTER/*`
   - `docs/1-MASTER/1-MAQUETTE/*`
-  - `docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA/*`
+  - `docs/1-MASTER/1-MAQUETTE/*`
   - `docs/1-MASTER/2-REFERENCE_UI_UX/*`
   - `docs/2-SESSIONS/*`
   - `docs/2-SESSIONS/*/SESSION-*/PATCH/*`

@@ -30,14 +30,14 @@ Objectif principal : permettre à Codex de reconstruire ensuite la page Planning
 Les références officielles du Planning A25 sont les images situées dans :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning
+docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning
 ```
 
 Images principales analysées :
 
 ```txt
-Planning_V1.2.png
-Planning_V1.2_INFO_DETAIL.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2_INFO_DETAIL.png
 ```
 
 `Planning_V1.2.png` est la référence visuelle propre.
@@ -115,7 +115,7 @@ L’ancien document contenait déjà :
 - l’objectif général A25 ;
 - le périmètre UI/UX Planning ;
 - les exclusions fonctionnelles ;
-- la référence à `MAQUETTE_DA` ;
+- la référence à `MAQUETTES PNG OFFICIELLES` ;
 - le principe `Visible / Déduction raisonnable / À vérifier dans le repo` ;
 - des sections sur header, filtres, toolbar, onglets, grille, panneaux, badges et actions ;
 - une recommandation de découpage A25.

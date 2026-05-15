@@ -15,7 +15,7 @@ Le bloc doit permettre de passer d’une interface fonctionnelle mais encore bru
 Emplacement proposé :
 
 ```text
-docs/2-sessions/1-ALPHA/BLOC_A21/
+docs/2-SESSIONS/1-ALPHA/BLOC_A21/
 ```
 
 Nom de fichier recommandé :
@@ -796,8 +796,7 @@ Ce document constitue le cadrage initial UI/UX.
 La référence finale UI/UX ALPHA validée pour une future intégration Codex est :
 
 ```text
-docs/2-sessions/1-ALPHA/BLOC_A21/SESSION-20260425-06_A21_UX-06/REFERENCE_UI_UX_ALPHA_V1.0.md
+docs/2-SESSIONS/1-ALPHA/BLOC_A21/SESSION-20260425-06_A21_UX-06/REFERENCE_UI_UX_ALPHA_V1.0.md
 ```
 
 Ce document ne doit donc pas être utilisé seul comme référence finale d’intégration.
-

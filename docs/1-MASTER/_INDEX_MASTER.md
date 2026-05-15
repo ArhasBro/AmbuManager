@@ -25,10 +25,10 @@ Statut: OFFICIEL - A CONSERVER
 La direction artistique officielle est exclusivement:
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA
+docs/1-MASTER/1-MAQUETTE
 ```
 
-Règle prioritaire: en cas de contradiction visuelle, `MAQUETTE_DA` prime.
+Règle prioritaire: en cas de contradiction visuelle, `MAQUETTES PNG OFFICIELLES` prime.
 
 Les documents `REFERENCE_UI_UX_<PAGE>.md` ne remplacent pas les images officielles : ils traduisent les images en consignes codables pour Codex.
 
@@ -59,7 +59,7 @@ Les documents `REFERENCE_UI_UX_<PAGE>.md` ne remplacent pas les images officiell
 - `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_SHELL_GLOBAL.md`
 - `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_CODEX_UI_UX_VISUEL_99.md`
 - `docs/1-MASTER/1-MAQUETTE/`
-- `docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA/`
+- `docs/1-MASTER/1-MAQUETTE/`
 - `docs/2-SESSIONS/`
 - `docs/3-TEMPLATES/`
 - `docs/4-ARCHIVES/`
@@ -88,8 +88,8 @@ docs/4-ARCHIVES/
 Les anciennes variantes en minuscules ne doivent plus être utilisées dans les nouveaux documents, prompts, preuves, références ou livrables documentaires :
 
 ```txt
-docs/1-master/
-docs/2-sessions/
+docs/1-MASTER/
+docs/2-SESSIONS/
 docs/3-templates/
 docs/4-archives/
 ```

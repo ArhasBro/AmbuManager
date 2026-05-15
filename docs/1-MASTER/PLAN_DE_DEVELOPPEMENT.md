@@ -1029,10 +1029,10 @@ A23 doit respecter l’ordre suivant :
 ---------------------------------------------------------------------------------------------------
 
 
-### BLOC A24 — Réalignement UI/UX global sur MAQUETTE_DA
+### BLOC A24 — Réalignement UI/UX global sur MAQUETTES PNG OFFICIELLES
 
 **Objectif du bloc**  
-Réaligner l’ensemble de l’interface intégrée sur la direction artistique officielle `MAQUETTE_DA`, afin d’obtenir une application plus pure, plus simple, plus lisible et visuellement cohérente avant de poursuivre les travaux métier avancés.
+Réaligner l’ensemble de l’interface intégrée sur la direction artistique officielle `MAQUETTES PNG OFFICIELLES`, afin d’obtenir une application plus pure, plus simple, plus lisible et visuellement cohérente avant de poursuivre les travaux métier avancés.
 
 Le bloc A24 intervient après la clôture A23.  
 A23 a stabilisé les anomalies post-test manuel ADMIN.  
@@ -1041,16 +1041,16 @@ A24 traite désormais le réalignement UI/UX global de l’application, sans tra
 **Référence UI/UX officielle**  
 La direction artistique officielle est exclusivement :
 
-`docs/1-MASTER/MAQUETTE/MAQUETTE_DA`
+`docs/1-MASTER/1-MAQUETTE`
 
 En cas de contradiction entre anciens documents, anciennes captures, anciens prompts, anciennes interprétations ou références partielles, la référence prioritaire est :
 
-`docs/1-MASTER/MAQUETTE/MAQUETTE_DA`
+`docs/1-MASTER/1-MAQUETTE`
 
-Les autres éléments du dossier `docs/1-MASTER/MAQUETTE/` peuvent servir de support d’analyse, de documentation, de mapping ou de référence complémentaire, mais ils ne doivent pas contredire `MAQUETTE_DA`.
+Les autres éléments du dossier `docs/1-MASTER/1-MAQUETTE/` peuvent servir de support d’analyse, de documentation, de mapping ou de référence complémentaire, mais ils ne doivent pas contredire `MAQUETTES PNG OFFICIELLES`.
 
 **Principe directeur**  
-A24 doit appliquer la DA officielle définie par `MAQUETTE_DA`.  
+A24 doit appliquer la DA officielle définie par `MAQUETTES PNG OFFICIELLES`.  
 Aucune autre direction artistique ne doit être inventée ou priorisée.
 
 Le travail doit viser :
@@ -1069,7 +1069,7 @@ Le mode sombre fait partie du périmètre A24.
 
 Il doit être traité en français sous le nom **mode sombre**.
 
-Le mode sombre doit être une déclinaison sobre de `MAQUETTE_DA` :
+Le mode sombre doit être une déclinaison sobre des maquettes PNG officielles :
 - fond général sombre ;
 - textes clairs ;
 - cartes et panneaux légèrement différenciés du fond ;
@@ -1137,7 +1137,7 @@ Le bloc A24 ne doit pas traiter :
 - préparation société pilote ;
 - déploiement.
 
-A24 peut réorganiser visuellement l’information pour se rapprocher de `MAQUETTE_DA`, mais il ne doit pas supprimer silencieusement une donnée métier, casser un flux validé ou ajouter une fonctionnalité métier.
+A24 peut réorganiser visuellement l’information pour se rapprocher des maquettes PNG officielles, mais il ne doit pas supprimer silencieusement une donnée métier, casser un flux validé ou ajouter une fonctionnalité métier.
 
 Si une page réelle contient plus d’informations que la maquette, la correction doit privilégier :
 - repli ;
@@ -1149,7 +1149,7 @@ Si une page réelle contient plus d’informations que la maquette, la correctio
 
 #### Sessions
 
-- **A24-UI-01 — AUDIT** — Audit global UI/UX et cadrage des références `MAQUETTE_DA`.  
+- **A24-UI-01 — AUDIT** — Audit global UI/UX et cadrage des références `MAQUETTES PNG OFFICIELLES`.  
   Objectif : officialiser les références UI/UX, vérifier les maquettes disponibles, classer les pages couvertes, auditer les icônes, cadrer le mode sombre, cadrer le responsive minimal et préparer l’ordre de correction.  
   Livrable attendu : rapport d’audit UI/UX avec matrice page → maquette → route → fichier code, classement des écarts, statut des icônes et recommandations de correction.  
   DoD : chaque page couverte possède un verdict visuel : conforme / non conforme / incomplet / à confirmer.
@@ -1157,12 +1157,12 @@ Si une page réelle contient plus d’informations que la maquette, la correctio
 - **A24-UI-02 — CORRECTION+COMPLÉTION** — Socle UI partagé, mode clair / mode sombre et icônes.  
   Périmètre : tokens CSS, fond global, AppShell, Sidebar, Topbar, PageHeader, boutons, cards, badges, tableaux, filtres, drawers, bouton mode clair / mode sombre et icônes génériques.  
   Livrable attendu : patch code ciblé du socle visuel partagé.  
-  DoD : les pages applicatives partagent une base visuelle cohérente avec `MAQUETTE_DA`, avec mode clair et mode sombre exploitables, sans nouvelle DA.
+  DoD : les pages applicatives partagent une base visuelle cohérente avec `MAQUETTES PNG OFFICIELLES`, avec mode clair et mode sombre exploitables, sans nouvelle DA.
 
 - **A24-UI-03 — CORRECTION+COMPLÉTION** — Login et Dashboard.  
   Périmètre : page login, dashboard, cartes d’accès, cards de synthèse, icônes, hiérarchie visuelle, fond, espacements, mode clair et mode sombre.  
   Livrable attendu : patch code ciblé Login + Dashboard.  
-  DoD : Login et Dashboard sont proches de `MAQUETTE_DA`, simples, lisibles et fonctionnels.
+  DoD : Login et Dashboard sont proches des maquettes PNG officielles, simples, lisibles et fonctionnels.
 
 - **A24-UI-04 — CORRECTION+COMPLÉTION** — Société et Dépôts.  
   Périmètre : page société, pages dépôts / bases, formulaires, cards, sections, tableaux, boutons, badges, panneaux et cohérence visuelle.  
@@ -1172,12 +1172,12 @@ Si une page réelle contient plus d’informations que la maquette, la correctio
 - **A24-UI-05 — CORRECTION+COMPLÉTION** — Véhicules et Templates.  
   Périmètre : pages véhicules, pages templates, tableaux, filtres, badges, formulaires, détails, états visuels, actions principales et secondaires.  
   Livrable attendu : patch code ciblé Véhicules + Templates.  
-  DoD : les pages référentielles métier sont propres, cohérentes et visuellement proches de `MAQUETTE_DA`.
+  DoD : les pages référentielles métier sont propres, cohérentes et visuellement proches des maquettes PNG officielles.
 
 - **A24-UI-06 — CORRECTION+COMPLÉTION** — Utilisateurs / RH visuel.  
   Périmètre : page utilisateurs, liste, filtres, création, édition, fiche utilisateur, badges rôles/statuts et cohérence RH visible.  
   Livrable attendu : patch code ciblé Users / RH visuel.  
-  DoD : la page Utilisateurs / RH est plus pure, plus lisible, alignée avec `MAQUETTE_DA`, sans ajout de RH avancée.
+  DoD : la page Utilisateurs / RH est plus pure, plus lisible, alignée avec `MAQUETTES PNG OFFICIELLES`, sans ajout de RH avancée.
 
 - **A24-UI-07 — CORRECTION+COMPLÉTION** — Audit, Onboarding, Privacy et pages simples.  
   Périmètre : audit, onboarding, privacy, pages simples, sections, cards, tableaux, filtres, textes, états et finitions globales.  
@@ -1190,7 +1190,7 @@ Si une page réelle contient plus d’informations que la maquette, la correctio
   DoD : le planning possède une cartographie claire des écarts UI/UX à traiter en A25.
 
 - **A24-UI-09 — VALIDATION** — Validation globale UI/UX post-réalignement.  
-  À vérifier : cohérence visuelle globale, respect de `MAQUETTE_DA`, mode clair, mode sombre, navigation connectée, captures avant/après, absence de régression fonctionnelle et pages sœurs cohérentes.  
+  À vérifier : cohérence visuelle globale, respect des maquettes PNG officielles, mode clair, mode sombre, navigation connectée, captures avant/après, absence de régression fonctionnelle et pages sœurs cohérentes.  
   Livrable attendu : rapport de validation UI/UX avec preuves terminales, captures et classement des résiduels.  
   DoD : toutes les pages A24 sont validées ou les résiduels sont classés explicitement bloquants / non bloquants.
 
@@ -1202,7 +1202,7 @@ Si une page réelle contient plus d’informations que la maquette, la correctio
   - `BLOC A24 CLÔTURABLE DÉFINITIVEMENT : NON`
 
 #### Résultat attendu
-- application réalignée visuellement avec `MAQUETTE_DA` ;
+- application réalignée visuellement avec `MAQUETTES PNG OFFICIELLES` ;
 - interface plus pure, simple et lisible ;
 - shell commun cohérent ;
 - composants UI harmonisés ;
@@ -1231,21 +1231,21 @@ Il ne doit pas être traité comme une page secondaire ni comme une accumulation
 Le bloc A25 intervient après :
 - le réalignement UI/UX global A24 ;
 - l'application du socle visuel commun ;
-- l'intégration de la direction artistique officielle `MAQUETTE_DA` ;
+- l'intégration de la direction artistique officielle `MAQUETTES PNG OFFICIELLES` ;
 - le constat manuel que les corrections A25 partielles ne suffisent pas si l'écran final ne ressemble pas à la maquette.
 
 **Références UI/UX officielles**  
 La direction artistique officielle reste exclusivement :
 
-`docs/1-MASTER/MAQUETTE/MAQUETTE_DA`
+`docs/1-MASTER/1-MAQUETTE`
 
 La référence Planning détaillée et prioritaire du bloc A25 est :
 
-`docs/1-MASTER/REFERENCE_UI_UX_A25_PLANNING.md`
+`docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_A25_PLANNING.md`
 
 Les images Planning à reproduire sont situées dans :
 
-`docs/1-MASTER/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning`
+`docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning`
 
 Images principales :
 - `Planning_V1.2.png` ;
@@ -1399,7 +1399,7 @@ A26 n’est pas un bloc documentaire.
 A26 applique en code les références visuelles officielles déjà préparées.
 
 A26 intervient après :
-- A24 — Réalignement UI/UX global sur `MAQUETTE_DA` ;
+- A24 — Réalignement UI/UX global sur `MAQUETTES PNG OFFICIELLES` ;
 - A25 — Planning UI/UX & ergonomie métier ;
 - le chantier documentaire transversal UI/UX hors bloc applicatif ;
 - la validation de `A26-UI-01 — AUDIT+CADRAGE`.

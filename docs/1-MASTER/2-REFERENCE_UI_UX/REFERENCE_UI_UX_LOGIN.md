@@ -34,7 +34,7 @@ La page Login doit donc être évaluée sur sa fidélité visuelle à la maquett
 La référence officielle de la page Login est l’image située dans :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0/A21-UX-05_PAGES_SIMPLES_FINITIONS_IMAGE_V1.0/1-Login/Login_V1.1.png
+docs/1-MASTER/1-MAQUETTE/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0/1-Login/Login_V1.1.png
 ```
 
 Image analysée :
@@ -88,7 +88,7 @@ Elle ne doit jamais être affichée dans l’interface utilisateur.
 
 ### 1.5 Dossier ICONE / ICONES
 
-Le dossier `ICONE` / `ICONES` de `MAQUETTE_DA` est neutralisé et ne doit pas être utilisé comme source de vérité.
+Le dossier historique `ICONE` / `ICONES` est neutralisé et ne doit pas être utilisé comme source de vérité.
 
 Pour la page Login, la référence visuelle reste uniquement :
 

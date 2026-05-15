@@ -5,6 +5,7 @@
 > Ce fichier peut contenir des commandes, notes, prompts ou règles anciennes.
 > Il ne constitue pas une source de vérité de gouvernance.
 > Avant toute décision, se référer aux documents maîtres et au protocole de session.
+> A NE PAS SUPPRIMER
 
 ---
 

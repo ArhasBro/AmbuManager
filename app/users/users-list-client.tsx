@@ -86,6 +86,19 @@ function roleStatusVariant(role: string): "neutral" | "info" | "success" | "warn
   return "neutral";
 }
 
+function roleLabel(role: string) {
+  const labels: Record<string, string> = {
+    ADMIN: "Admin",
+    GERANT: "Gérant",
+    BUREAU: "Bureau",
+    ADE: "ADE",
+    AA: "AA",
+    TAXI: "Taxi",
+    REGULATEUR: "Régulateur",
+  };
+  return labels[role] ?? role;
+}
+
 function depotStatusVariant(user: UserListRow): "neutral" | "success" | "warning" {
   if (!user.depot) return "neutral";
   return user.depot.isActive ? "success" : "warning";
@@ -100,9 +113,9 @@ function initialsLabel(user: UserListRow) {
 }
 
 function formatDateTimeLabel(value?: string | null) {
-  if (!value) return "Non renseignee";
+  if (!value) return "Non renseignée";
   const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "Non renseignee";
+  if (Number.isNaN(date.getTime())) return "Non renseignée";
   return date.toLocaleDateString("fr-FR", {
     day: "2-digit",
     month: "short",
@@ -205,7 +218,7 @@ export default function UsersListClient() {
           setRows(mapped);
           setPagination(nextPagination);
           setSelectedUserId((current) => {
-            if (current && mapped.some((user) => user.id === current)) return current;
+            if (current && mapped.some((row) => row.id === current)) return current;
             return mapped[0]?.id ?? "";
           });
         }
@@ -275,65 +288,66 @@ export default function UsersListClient() {
 
   const columns = useMemo<DataTableColumn<UserListRow>[]>(() => ([
     {
+      key: "selection",
+      header: "",
+      render: (user) => (
+        <input
+          type="checkbox"
+          className="users-table-checkbox"
+          checked={selectedUserId === user.id}
+          onClick={(event) => {
+            event.stopPropagation();
+            setSelectedUserId(user.id);
+          }}
+          onChange={() => undefined}
+          aria-label={`Sélectionner ${user.name}`}
+        />
+      ),
+      align: "center",
+      width: "40px",
+      className: "users-col-selection",
+    },
+    {
       key: "name",
-      header: "Identite",
+      header: "Identité",
       render: (user) => (
         <div className="users-table-identity">
           <span className="users-table-avatar" aria-hidden="true">{initialsLabel(user)}</span>
           <span>
             <strong>{user.name}</strong>
-            <span className="users-table-cell-subtle">{user.email || "Email non renseigne"}</span>
+            <span className="users-table-cell-subtle">{user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : "Salarié"}</span>
           </span>
         </div>
       ),
-      width: "220px",
+      align: "left",
+      width: "198px",
+      className: "users-col-identity",
     },
     {
       key: "initials",
       header: "Initiales",
-      render: (user) => user.initials || "-",
-      width: "110px",
+      render: (user) => user.initials || "—",
+      align: "center",
+      width: "62px",
+      className: "users-col-initials",
     },
     {
       key: "email",
       header: "Email",
-      render: (user) => user.email || "-",
-      width: "220px",
-    },
-    {
-      key: "phone",
-      header: "Telephone",
-      render: (user) => user.phone || "-",
-      width: "160px",
+      render: (user) => user.email || "Non renseigné",
+      align: "left",
+      width: "170px",
+      className: "users-col-email",
     },
     {
       key: "role",
-      header: "Role",
+      header: "Rôle",
       render: (user) => (
-        <StatusBadge variant={roleStatusVariant(user.role)}>{user.role}</StatusBadge>
+        <StatusBadge variant={roleStatusVariant(user.role)}>{roleLabel(user.role)}</StatusBadge>
       ),
-      width: "140px",
-    },
-    {
-      key: "status",
-      header: "Statut",
-      render: (user) => (
-        <StatusBadge variant={statusVariant(user)}>{user.isActive === false ? "Inactif" : "Actif"}</StatusBadge>
-      ),
-      width: "120px",
-    },
-    {
-      key: "rh",
-      header: "RH",
-      render: (user) => (
-        <div className="users-rh-cell">
-          <StatusBadge variant={user.isTrainee ? "warning" : "success"}>
-            {user.isTrainee ? "Stagiaire" : "Titulaire"}
-          </StatusBadge>
-          <span className="users-table-cell-subtle">{dailyScheduleLabel(user)}</span>
-        </div>
-      ),
-      width: "170px",
+      align: "center",
+      width: "92px",
+      className: "users-col-role",
     },
     {
       key: "depot",
@@ -341,20 +355,64 @@ export default function UsersListClient() {
       render: (user) => (
         <StatusBadge variant={depotStatusVariant(user)}>{depotLabel(user.depot)}</StatusBadge>
       ),
-      width: "160px",
+      align: "center",
+      width: "96px",
+      className: "users-col-depot",
+    },
+    {
+      key: "phone",
+      header: "Téléphone",
+      render: (user) => user.phone || "Non renseigné",
+      align: "center",
+      width: "108px",
+      className: "users-col-phone",
+    },
+    {
+      key: "status",
+      header: "Statut",
+      render: (user) => (
+        <StatusBadge variant={statusVariant(user)}>{user.isActive === false ? "Inactif" : "Actif"}</StatusBadge>
+      ),
+      align: "center",
+      width: "92px",
+      className: "users-col-status",
+    },
+    {
+      key: "trainee",
+      header: "Stagiaire",
+      render: (user) => (
+        <StatusBadge variant={user.isTrainee ? "warning" : "success"}>
+          {user.isTrainee ? "Oui" : "Non"}
+        </StatusBadge>
+      ),
+      align: "center",
+      width: "84px",
+      className: "users-col-trainee",
+    },
+    {
+      key: "schedule",
+      header: "Horaires",
+      render: (user) => (
+        <span className="users-rh-schedule">{dailyScheduleLabel(user)}</span>
+      ),
+      align: "center",
+      width: "98px",
+      className: "users-col-schedule",
     },
     {
       key: "updatedAt",
-      header: "Derniere modif",
+      header: "Dernière modif.",
       render: (user) => formatDateTimeLabel(user.updatedAt),
-      width: "150px",
+      align: "center",
+      width: "104px",
+      className: "users-col-updated",
     },
     {
       key: "actions",
       header: "Actions",
       render: (user) => (
         <div className="users-table-actions">
-          <button type="button" className="users-table-icon-button" title="Selectionner pour edition" onClick={(event) => { event.stopPropagation(); setSelectedUserId(user.id); }}>
+          <button type="button" className="users-table-icon-button" title="Sélectionner pour édition" onClick={(event) => { event.stopPropagation(); setSelectedUserId(user.id); }}>
             <Pencil size={15} />
           </button>
           <button type="button" className="users-table-icon-button" title="Actions utilisateur" onClick={(event) => { event.stopPropagation(); setSelectedUserId(user.id); }}>
@@ -362,12 +420,21 @@ export default function UsersListClient() {
           </button>
         </div>
       ),
-      width: "110px",
+      align: "center",
+      width: "74px",
+      className: "users-col-actions",
     },
-  ]), []);
+  ]), [selectedUserId]);
 
   useEffect(() => {
     dispatchUsersSelection(selectedUser);
+    if (!selectedUser) return;
+    const t1 = window.setTimeout(() => dispatchUsersSelection(selectedUser), 40);
+    const t2 = window.setTimeout(() => dispatchUsersSelection(selectedUser), 240);
+    return () => {
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
+    };
   }, [selectedUser]);
 
   function resetFilters() {
@@ -380,59 +447,38 @@ export default function UsersListClient() {
     setPage(1);
   }
 
-  const activeFilterParts: string[] = [];
-  if (search) activeFilterParts.push(`recherche "${search}"`);
-  if (role) activeFilterParts.push(`role ${role}`);
-  if (depot) {
-    const depotLabelMatch = depotFilterOptions.find((option) => option.value === depot)?.label ?? depot;
-    activeFilterParts.push(`base ${depotLabelMatch}`);
-  }
-  if (status) activeFilterParts.push(status === "ACTIVE" ? "statut actif" : "statut inactif");
-  if (trainee) activeFilterParts.push(trainee === "YES" ? "stagiaires" : "hors stagiaires");
-
   const hasFilter = Boolean(search || role || depot || status || trainee);
-  const summaryLabel = activeFilterParts.length > 0 ? activeFilterParts.join(", ") : "aucun filtre";
 
   return (
     <section className="users-section">
       <div className="users-card">
         <div className="users-card__head">
-          <h2 className="users-card__title">Liste utilisateurs</h2>
-          <p className="users-card__description">
-            Barre de filtres RH lisible, tableau structure et panneau droit relies a la selection.
-          </p>
+          <h2 className="users-card__title">Utilisateurs</h2>
         </div>
 
-        <FilterBar
-          summary={`Filtres actifs : ${summaryLabel}`}
-          actions={(
-            <ActionButton size="sm" leadingIcon={<RotateCcw size={14} />} onClick={resetFilters} disabled={!hasFilter || loading}>
-              Reinitialiser
-            </ActionButton>
-          )}
-        >
-          <label className="users-field">
+        <FilterBar summary={null}>
+          <label className="users-field users-field--search">
             <span className="users-field__label users-field__label--icon"><Search size={14} /> Recherche</span>
             <input
               type="text"
               value={searchInput}
               onChange={(event) => setSearchInput(event.target.value)}
-              placeholder="Nom, email, initiales ou telephone"
+              placeholder="Rechercher un nom, email, initiales..."
             />
           </label>
 
-          <label className="users-field">
-            <span className="users-field__label">Role</span>
+          <label className="users-field users-field--compact">
+            <span className="users-field__label">Rôle</span>
             <select value={role} onChange={(event) => setRole(event.target.value)}>
               {ROLE_FILTER_OPTIONS.map((value) => (
                 <option key={value || "ALL"} value={value}>
-                  {value || "Tous les roles"}
+                  {value ? roleLabel(value) : "Tous les rôles"}
                 </option>
               ))}
             </select>
           </label>
 
-          <label className="users-field">
+          <label className="users-field users-field--compact">
             <span className="users-field__label">Base</span>
             <select value={depot} onChange={(event) => setDepot(event.target.value)}>
               <option value="">Toutes les bases</option>
@@ -444,7 +490,7 @@ export default function UsersListClient() {
             </select>
           </label>
 
-          <label className="users-field">
+          <label className="users-field users-field--compact">
             <span className="users-field__label">Statut</span>
             <select value={status} onChange={(event) => setStatus(event.target.value)}>
               <option value="">Tous</option>
@@ -453,7 +499,7 @@ export default function UsersListClient() {
             </select>
           </label>
 
-          <label className="users-field">
+          <label className="users-field users-field--compact">
             <span className="users-field__label">Stagiaire</span>
             <select value={trainee} onChange={(event) => setTrainee(event.target.value)}>
               <option value="">Tous</option>
@@ -461,6 +507,12 @@ export default function UsersListClient() {
               <option value="NO">Non</option>
             </select>
           </label>
+
+          <div className="users-filter-reset">
+            <ActionButton size="sm" leadingIcon={<RotateCcw size={14} />} onClick={resetFilters} disabled={!hasFilter || loading}>
+              Réinitialiser
+            </ActionButton>
+          </div>
         </FilterBar>
 
         <DataTable
@@ -470,39 +522,57 @@ export default function UsersListClient() {
           loading={loading}
           error={error}
           loadingLabel="Chargement de la liste utilisateurs..."
-          emptyTitle="Aucun utilisateur trouve"
+          emptyTitle="Aucun utilisateur trouvé"
           emptyMessage="Aucun utilisateur ne correspond aux filtres actifs."
           selectedRowKey={selectedUserId || null}
           onRowClick={(user) => setSelectedUserId(user.id)}
-          minWidth={1320}
-          caption="Liste utilisateurs avec filtres role, base, statut et stagiaire"
+          minWidth={1080}
+          className="users-table-compact"
         />
 
         {!loading && !error ? (
-          <>
-            <div className="users-pagination">
-              <div className="users-table-cell-subtle">
-                {filteredRows.length} affiche{filteredRows.length > 1 ? "s" : ""} sur {pagination.total} utilisateur{pagination.total > 1 ? "s" : ""} - page {pagination.page} / {pagination.totalPages}
-              </div>
-
-              <div className="users-actions">
-                <ActionButton
-                  size="sm"
-                  onClick={() => setPage((current) => Math.max(1, current - 1))}
-                  disabled={loading || !pagination.hasPreviousPage}
-                >
-                  Precedent
-                </ActionButton>
-                <ActionButton
-                  size="sm"
-                  onClick={() => setPage((current) => current + 1)}
-                  disabled={loading || !pagination.hasNextPage}
-                >
-                  Suivant
-                </ActionButton>
-              </div>
+          <div className="users-pagination">
+            <div className="users-table-cell-subtle">
+              {Math.min((pagination.page - 1) * pagination.pageSize + 1, pagination.total)}-{Math.min(pagination.page * pagination.pageSize, pagination.total)} sur {pagination.total} utilisateur{pagination.total > 1 ? "s" : ""}
             </div>
-          </>
+
+            <div className="users-pagination__controls">
+              <ActionButton
+                size="sm"
+                onClick={() => setPage((current) => Math.max(1, current - 1))}
+                disabled={loading || !pagination.hasPreviousPage}
+              >
+                Précédent
+              </ActionButton>
+              <div className="users-pagination__pages" aria-label="Pages">
+                {Array.from({ length: Math.min(5, pagination.totalPages) }, (_, index) => {
+                  const pageNumber = index + 1;
+                  const isCurrent = pageNumber === pagination.page;
+                  return (
+                    <button
+                      key={pageNumber}
+                      type="button"
+                      className={`users-page-number${isCurrent ? " is-current" : ""}`}
+                      onClick={() => setPage(pageNumber)}
+                      disabled={isCurrent}
+                    >
+                      {pageNumber}
+                    </button>
+                  );
+                })}
+              </div>
+              <ActionButton
+                size="sm"
+                onClick={() => setPage((current) => current + 1)}
+                disabled={loading || !pagination.hasNextPage}
+              >
+                Suivant
+              </ActionButton>
+              <label className="users-page-size">
+                <span>10 / page</span>
+              </label>
+            </div>
+          </div>
         ) : null}
       </div>
     </section>

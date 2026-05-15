@@ -93,7 +93,7 @@ Les constats suivants sont officiellement retenus au titre de la campagne `2-TES
 ### 6.4 Suite prioritaire officielle
 Ordre officiel de suite, actualisé après clôture A23 et chantier documentaire UI/UX du 13/05/2026 :
 
-1. réalignement UI/UX global sur `MAQUETTE_DA` ;
+1. réalignement UI/UX global sur `MAQUETTES PNG OFFICIELLES` ;
 2. planning UI/UX & ergonomie métier ;
 3. exécution UI/UX visuelle 99 % sur références officielles ;
 4. stabilisation / non-régression post UI/UX A24-A25-A26 ;
@@ -140,7 +140,7 @@ Le verdict société pilote reste à traiter dans la logique de suite du projet.
 ### 6.7 Suite ALPHA officielle A24 à A27
 La suite officielle immédiatement validée dans `PLAN_DE_DEVELOPPEMENT.md` est :
 
-1. **A24 — Réalignement UI/UX global sur `MAQUETTE_DA`**  
+1. **A24 — Réalignement UI/UX global sur `MAQUETTES PNG OFFICIELLES`**  
    Objectif : réaligner l’application sur la direction artistique officielle, avec interface pure, simple, lisible, mode clair/sombre, icônes propres, captures ciblées aux étapes majeures et exclusion du planning profond.
 
 2. **A25 — Planning UI/UX & ergonomie métier**  
@@ -155,7 +155,7 @@ La suite officielle immédiatement validée dans `PLAN_DE_DEVELOPPEMENT.md` est 
 La direction artistique officielle pour A24, A25, A26 et A27 est exclusivement :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA
+docs/1-MASTER/1-MAQUETTE
 ```
 
 ### 6.8 Recadrage A25 Planning au 10/05/2026
@@ -223,7 +223,7 @@ Intitulé : `Audit d’exécution visuelle page par page`
 
 Ne sont plus des points à confirmer :
 - l’ordre A24 / A25 / A26 / A27 ;
-- la priorité de `MAQUETTE_DA` ;
+- la priorité des maquettes PNG officielles ;
 - le principe de captures non automatiques par Codex ;
 - l’intégration du mode sombre dans A24 ;
 - l’autorisation de Lucide React pour les icônes génériques ;

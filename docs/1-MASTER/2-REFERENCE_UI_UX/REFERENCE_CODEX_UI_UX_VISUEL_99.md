@@ -144,6 +144,7 @@ docs/4-ARCHIVES/
 Les nouveaux prompts, rapports, patchs et références ne doivent plus utiliser :
 
 ```txt
+FORMES OBSOLÈTES :
 docs/1-master/
 docs/2-sessions/
 docs/3-templates/

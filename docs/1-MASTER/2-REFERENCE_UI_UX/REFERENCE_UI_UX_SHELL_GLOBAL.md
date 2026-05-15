@@ -122,7 +122,7 @@ Les images officielles sont la vérité visuelle prioritaire.
 Source officielle :
 
 ```txt
-docs/1-MASTER/MAQUETTE/MAQUETTE_DA
+docs/1-MASTER/1-MAQUETTE
 ```
 
 Règle de priorité :
@@ -172,7 +172,7 @@ Le dossier d’icônes exportées est considéré comme supprimé ou inutile.
 
 Conséquences :
 
-- ne pas dépendre de `docs/1-MASTER/MAQUETTE/ICONES` ;
+- ne pas dépendre de `docs/1-MASTER/1-MAQUETTE/ICONES` ;
 - ne pas recréer un dossier `ICONE` ou `ICONES` ;
 - ne pas bloquer une production UI parce qu’un crop d’icône est absent ;
 - utiliser les icônes visibles dans les maquettes comme repères visuels ;
@@ -202,25 +202,25 @@ Le Shell global n’a pas une maquette isolée unique.
 Il est présent transversalement dans les maquettes officielles suivantes :
 
 ```txt
-docs/1-MASTER/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/1-Dashboard/Dashboard_V1.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/1-Dashboard/Dashboard_V1.png
 
-docs/1-MASTER/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2.png
 
-docs/1-MASTER/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/3-Utilisateurs-RH/Utilisateurs-RH_V1.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/3-Utilisateurs-RH/Utilisateurs-RH_V1.png
 
-docs/1-MASTER/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0/4-Véhicules/Véhicules_V1.2.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/4-Véhicules/Véhicules_V1.2.png
 
-docs/1-MASTER/MAQUETTE/MAQUETTE_DA/A21-UX-04_MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/1-Templates/Templates_V1.1.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/1-Templates/Templates_V1.1.png
 
-docs/1-MASTER/MAQUETTE/MAQUETTE_DA/A21-UX-04_MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/2-Société-paramètres-métier/Société_V1.0.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/2-Société-paramètres-métier/Société_V1.0.png
 
-docs/1-MASTER/MAQUETTE/MAQUETTE_DA/A21-UX-04_MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/3-Dépôts-bases/Dépôts-bases_V1.0.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/3-Dépôts-bases/Dépôts-bases_V1.0.png
 
-docs/1-MASTER/MAQUETTE/MAQUETTE_DA/A21-UX-04_MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/4-Onboarding société pilote/Onboarding_V1.2.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/4-Onboarding société pilote/Onboarding_V1.2.png
 
-docs/1-MASTER/MAQUETTE/MAQUETTE_DA/A21-UX-04_MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/5-Audit/Audit_V1.0.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/5-Audit/Audit_V1.0.png
 
-docs/1-MASTER/MAQUETTE/MAQUETTE_DA/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0/A21-UX-05_PAGES_SIMPLES_FINITIONS_IMAGE_V1.0/2-Privacy/Privacy_V1.0.png
+docs/1-MASTER/1-MAQUETTE/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0/2-Privacy/Privacy_V1.0.png
 ```
 
 Note chemin : dans certains ZIP, les caractères accentués peuvent apparaître encodés sous la forme `V#U00e9hicules`, `Soci#U00e9t#U00e9`, `D#U00e9p#U00f4ts-bases`. Codex devra lister le dossier réel si un chemin accentué échoue.
@@ -1005,7 +1005,7 @@ Ce document ne déclenche pas encore de production code.
 Quand une session Codex sera lancée pour le Shell global, elle devra respecter ces règles :
 
 1. Lire ce document avant modification.
-2. Lire les PNG officiels utiles dans `MAQUETTE_DA`.
+2. Lire les PNG officiels utiles dans `docs/1-MASTER/1-MAQUETTE/` (dossiers `MAQUETTES_FONDATRICES_IMAGES_V1.0`, `MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0`, `PAGES_SIMPLES_FINITIONS_IMAGE_V1.0`).
 3. Lire uniquement les fichiers code nécessaires au Shell.
 4. Ne pas scanner inutilement tout le dépôt.
 5. Ne pas générer de captures automatiquement.

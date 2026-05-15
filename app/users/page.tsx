@@ -49,66 +49,75 @@ export default async function UsersPage() {
   const activeUsers = usersStats.filter((item) => item.isActive).reduce((sum, item) => sum + item._count._all, 0);
   const trainees = usersStats.filter((item) => item.isActive && item.isTrainee).reduce((sum, item) => sum + item._count._all, 0);
   const archivedUsers = usersStats.filter((item) => !item.isActive).reduce((sum, item) => sum + item._count._all, 0);
+  const totalUsers = activeUsers + archivedUsers;
 
   return (
     <div className="page-wrap users-page">
-      <PageHeader
-        title="Utilisateurs / RH"
-        description="Gestion des salaries, roles, permissions, rattachements, horaires et absences."
-        actions={(
-          <ActionButton variant="primary" leadingIcon={<Plus size={16} />}>
-            Creer un utilisateur
-          </ActionButton>
-        )}
-      />
+      <section className="users-layout">
+        <div className="users-layout__main">
+          <PageHeader
+            className="users-page-header"
+            title="Utilisateurs / RH"
+            description="Gérez les salariés, rôles, permissions, rattachements, horaires et absences."
+            actions={(
+              <ActionButton variant="primary" leadingIcon={<Plus size={16} />}>
+                Créer un utilisateur
+              </ActionButton>
+            )}
+          />
 
-      <section className="users-kpi-grid users-kpi-grid--a24">
-        <StatCard
-          title="Utilisateurs actifs"
-          value={activeUsers}
-          hint="Comptes actifs"
-          tone="info"
-          icon={<UsersRound size={18} />}
-        />
-        <StatCard
-          title="Stagiaires"
-          value={trainees}
-          hint="Actifs"
-          tone="success"
-          icon={<GraduationCap size={18} />}
-        />
-        <StatCard
-          title="Absences en cours"
-          value={absencesCount}
-          hint="Dossier RH"
-          tone="warning"
-          icon={<CalendarX size={18} />}
-        />
-        <StatCard
-          title="Comptes archives"
-          value={archivedUsers}
-          hint="Inactifs"
-          tone="neutral"
-          icon={<Archive size={18} />}
-        />
-      </section>
+          <section className="users-kpi-grid users-kpi-grid--a24">
+            <StatCard
+              title="Utilisateurs actifs"
+              value={activeUsers}
+              hint={`sur ${totalUsers} utilisateurs`}
+              tone="info"
+              icon={<UsersRound size={18} />}
+            />
+            <StatCard
+              title="Stagiaires"
+              value={trainees}
+              hint={`sur ${totalUsers} utilisateurs`}
+              tone="success"
+              icon={<GraduationCap size={18} />}
+            />
+            <StatCard
+              title="Absences en cours"
+              value={absencesCount}
+              hint={`utilisateur${absencesCount > 1 ? "s" : ""}`}
+              tone="warning"
+              icon={<CalendarX size={18} />}
+            />
+            <StatCard
+              title="Comptes archivés"
+              value={archivedUsers}
+              hint="Inactifs"
+              tone="neutral"
+              icon={<Archive size={18} />}
+            />
+          </section>
 
-      <section className="users-workspace">
-        <UsersListClient />
-        <UsersSidePanelClient />
-      </section>
+          <section className="users-workspace">
+            <UsersListClient />
+          </section>
 
-      <details className="users-advanced" open>
-        <summary>Operations RH detaillees : creation, edition, absences, rattachement, securite</summary>
-        <div className="users-advanced__content">
-          <UserCreationClient canGovernCompanyRules={canGovernCompanyRules} availableDepots={depots} />
-          <UserAbsenceClient />
-          <UserEditClient canGovernCompanyRules={canGovernCompanyRules} />
-          <UserArchiveClient actorUserId={user.id} />
-          <UserDepotAssignmentClient availableDepots={depots} />
-          <ResetPasswordClient actorUserId={user.id} />
+          <details className="users-advanced">
+            <summary>Opérations avancées RH (repliées par défaut)</summary>
+            <div className="users-advanced__content">
+              <UserCreationClient canGovernCompanyRules={canGovernCompanyRules} availableDepots={depots} />
+              <UserAbsenceClient />
+              <UserEditClient canGovernCompanyRules={canGovernCompanyRules} />
+              <UserArchiveClient actorUserId={user.id} />
+              <UserDepotAssignmentClient availableDepots={depots} />
+              <ResetPasswordClient actorUserId={user.id} />
+            </div>
+          </details>
         </div>
-      </details>
+
+        <div className="users-layout__side">
+          <UsersSidePanelClient />
+        </div>
+      </section>
     </div>
   );
 }

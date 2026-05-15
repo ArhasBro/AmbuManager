@@ -2,7 +2,7 @@
 
 Projet : Investissement  
 Sous-projet : Ambulance Manager  
-Bloc concerné : A24 — Réalignement UI/UX global sur MAQUETTE_DA  
+Bloc concerné : A24 — Réalignement UI/UX global sur MAQUETTES PNG OFFICIELLES  
 Statut : Référence visuelle officielle pour A24  
 Version : V1.1  
 Date : 04/05/2026
@@ -14,7 +14,7 @@ Date : 04/05/2026
 La direction artistique officielle est exclusivement :
 
 ```txt
-docs/1-master/MAQUETTE/MAQUETTE_DA
+docs/1-MASTER/1-MAQUETTE
 ```
 
 Cette décision prime sur les anciens documents, anciennes captures, anciens prompts et anciennes interprétations.
@@ -49,9 +49,9 @@ Pour toute session A24, l’ordre de priorité des sources est le suivant :
 
 En cas de contradiction :
 
-`MAQUETTE_DA > SPEC UI/UX > ICONES > CAPTURE RÉELLE > DOCUMENTATION > RÉCIT`
+`MAQUETTES PNG OFFICIELLES > SPEC UI/UX > ICONES > CAPTURE RÉELLE > DOCUMENTATION > RÉCIT`
 
-Les autres fichiers du dossier `docs/1-master/MAQUETTE/` peuvent servir de références complémentaires, mais ils ne priment jamais sur `MAQUETTE_DA`.
+Les autres fichiers du dossier `docs/1-MASTER/1-MAQUETTE/` peuvent servir de références complémentaires, mais ils ne priment jamais sur `MAQUETTES PNG OFFICIELLES`.
 
 Toute information non prouvée doit être notée exactement :
 
@@ -234,8 +234,8 @@ Les captures réelles ne doivent pas être stockées directement dans ce dossier
 Elles doivent être produites dans les dossiers de session, par exemple :
 
 ```txt
-docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-.../CAPTURES_AVANT/
-docs/2-sessions/1-ALPHA/BLOC_A24/SESSION-.../CAPTURES_APRES/
+docs/2-SESSIONS/1-ALPHA/BLOC_A24/SESSION-.../CAPTURES_AVANT/
+docs/2-SESSIONS/1-ALPHA/BLOC_A24/SESSION-.../CAPTURES_APRES/
 ```
 
 Chaque session A24 doit produire les captures nécessaires à son périmètre.
@@ -350,7 +350,7 @@ Il signifie que leur rendu ne correspond pas encore suffisamment aux maquettes v
 Arborescence cible :
 
 ```txt
-docs/1-master/MAQUETTE/
+docs/1-MASTER/1-MAQUETTE/
 ├── README_MAQUETTES_A24.md
 ├── SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md
 ├── Dashboard_V1.png
@@ -399,7 +399,7 @@ Ne jamais remplacer silencieusement une maquette validée sans mettre à jour ce
 
 # 16. Décision finale
 
-Ce dossier documente les références officielles pour préparer et exécuter le bloc A24. La source prioritaire de direction artistique reste `docs/1-master/MAQUETTE/MAQUETTE_DA`.
+Ce dossier documente les références officielles pour préparer et exécuter le bloc A24. La source prioritaire de direction artistique reste `docs/1-MASTER/1-MAQUETTE`.
 
 Toute session A24 doit s’appuyer sur ce dossier avant de produire un audit, une correction, une validation ou une clôture.
 

@@ -1,0 +1,901 @@
+diff --git a/app/a24-users-rh.css b/app/a24-users-rh.css
+index 1827b3d..e97f9cf 100644
+--- a/app/a24-users-rh.css
++++ b/app/a24-users-rh.css
+@@ -14,10 +14,8 @@
+   min-height: 126px;
+   border-radius: 18px;
+   padding: 16px;
+-  background:
+-    linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0)),
+-    var(--ui-surface);
+-  box-shadow: 0 12px 24px rgba(22, 42, 81, 0.06);
++  background: var(--ui-surface);
++  box-shadow: 0 8px 18px rgba(22, 42, 81, 0.04);
+ }
+ 
+ .users-kpi-grid--a24 .ui-stat-card__value {
+@@ -26,15 +24,13 @@
+ 
+ .users-workspace {
+   gap: 16px;
+-  grid-template-columns: minmax(0, 1.62fr) minmax(360px, 0.92fr);
++  grid-template-columns: minmax(0, 1.68fr) minmax(420px, 0.9fr);
+ }
+ 
+ .users-card {
+   border-radius: 18px;
+   padding: 18px;
+-  background:
+-    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0)),
+-    var(--ui-surface);
++  background: var(--ui-surface);
+ }
+ 
+ .users-card__head {
+@@ -45,20 +41,6 @@
+   flex-wrap: wrap;
+ }
+ 
+-.users-card__head::before {
+-  content: "";
+-  width: 42px;
+-  height: 42px;
+-  border-radius: 14px;
+-  border: 1px solid #c9dcff;
+-  background:
+-    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.9), transparent 28%),
+-    linear-gradient(135deg, #eaf3ff, #dcecff);
+-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+-  flex: 0 0 auto;
+-  order: -1;
+-}
+-
+ .users-card__title {
+   color: #124491;
+   font-size: clamp(18px, 1.8vw, 22px);
+@@ -74,17 +56,12 @@
+ 
+ .users-card .ui-filter-bar {
+   border-radius: 16px;
+-  background:
+-    linear-gradient(180deg, color-mix(in srgb, var(--ui-surface-soft), #ffffff 46%), var(--ui-surface-soft));
+-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+-}
+-
+-.users-card .ui-filter-bar__summary {
+-  font-weight: 650;
++  background: var(--ui-surface-soft);
++  box-shadow: none;
+ }
+ 
+ .users-card .ui-filter-bar__controls {
+-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
++  grid-template-columns: minmax(260px, 1.6fr) repeat(4, minmax(130px, 1fr));
+ }
+ 
+ .users-card .ui-data-table__container {
+@@ -102,6 +79,7 @@
+   background: var(--ui-surface-soft);
+   color: var(--ui-text-muted);
+   font-size: 11px;
++  text-transform: none;
+ }
+ 
+ .users-card .ui-data-table__cell {
+@@ -117,6 +95,12 @@
+   box-shadow: inset 3px 0 0 var(--ui-primary);
+ }
+ 
++.users-table-checkbox {
++  width: 16px;
++  height: 16px;
++  cursor: pointer;
++}
++
+ .users-table-avatar {
+   width: 36px;
+   height: 36px;
+@@ -126,6 +110,12 @@
+   color: var(--ui-text);
+ }
+ 
++.users-rh-schedule {
++  display: inline-grid;
++  font-size: 12px;
++  color: var(--ui-text-muted);
++}
++
+ .users-rh-cell {
+   display: grid;
+   gap: 5px;
+@@ -148,15 +138,13 @@
+ 
+ .users-side-panel {
+   border-radius: 18px;
+-  padding: 14px;
+-  background:
+-    linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0)),
+-    var(--ui-surface);
++  padding: 16px;
++  background: var(--ui-surface);
+   overflow: hidden;
+ }
+ 
+ .users-side-panel__title {
+-  font-size: 33px;
++  font-size: 18px;
+   line-height: 1.1;
+ }
+ 
+@@ -164,11 +152,34 @@
+   border-radius: 14px;
+   padding: 12px;
+   background: var(--ui-surface);
++  border: 1px solid var(--ui-border);
++}
++
++.users-side-card__topbar {
++  display: flex;
++  align-items: center;
++  justify-content: space-between;
++  gap: 10px;
++}
++
++.users-side-close {
++  width: 32px;
++  height: 32px;
++  border-radius: 10px;
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  color: var(--ui-text-muted);
++  background: var(--ui-surface-soft);
++}
++
++.users-side-close:hover:not(:disabled) {
++  background: var(--ui-surface);
++  transform: none;
+ }
+ 
+ .users-side-card--identity {
+-  background:
+-    linear-gradient(180deg, color-mix(in srgb, var(--ui-surface-soft), #ffffff 30%), var(--ui-surface));
++  background: linear-gradient(180deg, color-mix(in srgb, var(--ui-surface-soft), #ffffff 30%), var(--ui-surface));
+ }
+ 
+ .users-side-card__identity {
+@@ -216,19 +227,87 @@
+ 
+ .users-side-panel__actions {
+   align-items: stretch;
++  width: 100%;
++}
++
++.users-side-panel__actions .ui-action-button {
++  flex: 1;
++}
++
++.users-side-panel__actions--danger .ui-action-button {
++  border-color: var(--ui-danger-border);
++  color: var(--ui-danger-text);
++  background: #fff8f8;
++}
++
++.users-side-panel__actions--danger .ui-action-button:hover:not(:disabled) {
++  border-color: #f9b8c0;
++  background: #fff2f3;
++}
++
++.users-side-card__row {
++  display: flex;
++  align-items: center;
++  justify-content: space-between;
++  gap: 10px;
++  flex-wrap: wrap;
++}
++
++.users-absences-table-wrap {
++  border: 1px solid var(--ui-border);
++  border-radius: 12px;
++  overflow-x: auto;
+ }
+ 
+-.users-side-panel__actions--primary {
++.users-absences-table {
+   width: 100%;
++  border-collapse: collapse;
++  min-width: 460px;
+ }
+ 
+-.users-side-panel__actions--primary .ui-action-button {
+-  flex: 1;
++.users-absences-table th,
++.users-absences-table td {
++  padding: 8px 10px;
++  border-bottom: 1px solid var(--ui-border);
++  text-align: left;
++  vertical-align: middle;
++}
++
++.users-absences-table th {
++  font-size: 12px;
++  color: var(--ui-text-muted);
++  background: var(--ui-surface-soft);
++}
++
++.users-absences-table tbody tr:last-child td {
++  border-bottom: 0;
++}
++
++.users-absences-table__empty {
++  color: var(--ui-text-muted);
++  font-style: italic;
++}
++
++.users-side-card--summary {
++  background: var(--ui-surface-soft);
++}
++
++.users-side-card--summary .users-side-list {
++  padding-left: 0;
++}
++
++.users-side-card--summary .users-side-list li {
++  display: grid;
++  gap: 2px;
++}
++
++.users-side-card--summary .users-side-list strong {
++  color: #124491;
+ }
+ 
+ .users-side-card--danger {
+-  border-color: var(--ui-danger-border);
+-  background: var(--ui-danger-bg);
++  border-color: #ffd6dc;
++  background: #fff3f5;
+ }
+ 
+ .users-side-card--danger .users-side-section-title,
+@@ -239,15 +318,15 @@
+ .users-advanced {
+   border-radius: 18px;
+   padding: 14px 16px;
+-  background:
+-    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0)),
+-    var(--ui-surface);
++  background: var(--ui-surface);
++  border: 1px solid var(--ui-border);
+ }
+ 
+ .users-advanced > summary {
+-  color: #124491;
++  color: var(--ui-text-muted);
+   font-size: 14px;
+   font-weight: 700;
++  cursor: pointer;
+ }
+ 
+ .users-advanced__content {
+@@ -275,9 +354,7 @@
+ :root[data-theme="dark"] .users-card,
+ :root[data-theme="dark"] .users-side-panel,
+ :root[data-theme="dark"] .users-advanced {
+-  background:
+-    linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0)),
+-    var(--ui-surface);
++  background: var(--ui-surface);
+ }
+ 
+ :root[data-theme="dark"] .users-card__title,
+@@ -285,13 +362,6 @@
+   color: #dcebff;
+ }
+ 
+-:root[data-theme="dark"] .users-card__head::before {
+-  border-color: var(--ui-border-strong);
+-  background:
+-    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.18), transparent 28%),
+-    linear-gradient(135deg, var(--ui-surface-strong), var(--ui-surface-soft));
+-}
+-
+ :root[data-theme="dark"] .users-card .ui-filter-bar,
+ :root[data-theme="dark"] .users-card .ui-data-table__head-cell {
+   background: var(--ui-surface-soft);
+@@ -302,6 +372,10 @@
+ }
+ 
+ @media (max-width: 1180px) {
++  .users-card .ui-filter-bar__controls {
++    grid-template-columns: repeat(2, minmax(0, 1fr));
++  }
++
+   .users-workspace {
+     grid-template-columns: 1fr;
+   }
+@@ -323,6 +397,10 @@
+     grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+ 
++  .users-card .ui-filter-bar__controls {
++    grid-template-columns: 1fr;
++  }
++
+   .users-advanced__content {
+     grid-template-columns: 1fr;
+   }
+diff --git a/app/users/page.tsx b/app/users/page.tsx
+index eef8417..326cf36 100644
+--- a/app/users/page.tsx
++++ b/app/users/page.tsx
+@@ -49,15 +49,16 @@ export default async function UsersPage() {
+   const activeUsers = usersStats.filter((item) => item.isActive).reduce((sum, item) => sum + item._count._all, 0);
+   const trainees = usersStats.filter((item) => item.isActive && item.isTrainee).reduce((sum, item) => sum + item._count._all, 0);
+   const archivedUsers = usersStats.filter((item) => !item.isActive).reduce((sum, item) => sum + item._count._all, 0);
++  const totalUsers = activeUsers + archivedUsers;
+ 
+   return (
+     <div className="page-wrap users-page">
+       <PageHeader
+         title="Utilisateurs / RH"
+-        description="Gestion des salaries, roles, permissions, rattachements, horaires et absences."
++        description="Gérez les salariés, rôles, permissions, rattachements, horaires et absences."
+         actions={(
+           <ActionButton variant="primary" leadingIcon={<Plus size={16} />}>
+-            Creer un utilisateur
++            Créer un utilisateur
+           </ActionButton>
+         )}
+       />
+@@ -66,26 +67,26 @@ export default async function UsersPage() {
+         <StatCard
+           title="Utilisateurs actifs"
+           value={activeUsers}
+-          hint="Comptes actifs"
++          hint={`${activeUsers} sur ${totalUsers} utilisateurs`}
+           tone="info"
+           icon={<UsersRound size={18} />}
+         />
+         <StatCard
+           title="Stagiaires"
+           value={trainees}
+-          hint="Actifs"
++          hint={`${trainees} sur ${totalUsers} utilisateurs`}
+           tone="success"
+           icon={<GraduationCap size={18} />}
+         />
+         <StatCard
+           title="Absences en cours"
+           value={absencesCount}
+-          hint="Dossier RH"
++          hint={`${absencesCount} utilisateur${absencesCount > 1 ? "s" : ""}`}
+           tone="warning"
+           icon={<CalendarX size={18} />}
+         />
+         <StatCard
+-          title="Comptes archives"
++          title="Comptes archivés"
+           value={archivedUsers}
+           hint="Inactifs"
+           tone="neutral"
+@@ -98,8 +99,8 @@ export default async function UsersPage() {
+         <UsersSidePanelClient />
+       </section>
+ 
+-      <details className="users-advanced" open>
+-        <summary>Operations RH detaillees : creation, edition, absences, rattachement, securite</summary>
++      <details className="users-advanced">
++        <summary>Opérations avancées RH (repliées par défaut)</summary>
+         <div className="users-advanced__content">
+           <UserCreationClient canGovernCompanyRules={canGovernCompanyRules} availableDepots={depots} />
+           <UserAbsenceClient />
+diff --git a/app/users/users-list-client.tsx b/app/users/users-list-client.tsx
+index a540d8f..2953e03 100644
+--- a/app/users/users-list-client.tsx
++++ b/app/users/users-list-client.tsx
+@@ -86,6 +86,19 @@ function roleStatusVariant(role: string): "neutral" | "info" | "success" | "warn
+   return "neutral";
+ }
+ 
++function roleLabel(role: string) {
++  const labels: Record<string, string> = {
++    ADMIN: "Admin",
++    GERANT: "Gérant",
++    BUREAU: "Bureau",
++    ADE: "ADE",
++    AA: "AA",
++    TAXI: "Taxi",
++    REGULATEUR: "Régulateur",
++  };
++  return labels[role] ?? role;
++}
++
+ function depotStatusVariant(user: UserListRow): "neutral" | "success" | "warning" {
+   if (!user.depot) return "neutral";
+   return user.depot.isActive ? "success" : "warning";
+@@ -100,9 +113,9 @@ function initialsLabel(user: UserListRow) {
+ }
+ 
+ function formatDateTimeLabel(value?: string | null) {
+-  if (!value) return "Non renseignee";
++  if (!value) return "Non renseignée";
+   const date = new Date(value);
+-  if (Number.isNaN(date.getTime())) return "Non renseignee";
++  if (Number.isNaN(date.getTime())) return "Non renseignée";
+   return date.toLocaleDateString("fr-FR", {
+     day: "2-digit",
+     month: "short",
+@@ -274,45 +287,72 @@ export default function UsersListClient() {
+   );
+ 
+   const columns = useMemo<DataTableColumn<UserListRow>[]>(() => ([
++    {
++      key: "selection",
++      header: "",
++      render: (user) => (
++        <input
++          type="checkbox"
++          className="users-table-checkbox"
++          checked={selectedUserId === user.id}
++          onClick={(event) => {
++            event.stopPropagation();
++            setSelectedUserId(user.id);
++          }}
++          onChange={() => undefined}
++          aria-label={`Sélectionner ${user.name}`}
++        />
++      ),
++      align: "center",
++      width: "52px",
++    },
+     {
+       key: "name",
+-      header: "Identite",
++      header: "Identité",
+       render: (user) => (
+         <div className="users-table-identity">
+           <span className="users-table-avatar" aria-hidden="true">{initialsLabel(user)}</span>
+           <span>
+             <strong>{user.name}</strong>
+-            <span className="users-table-cell-subtle">{user.email || "Email non renseigne"}</span>
++            <span className="users-table-cell-subtle">{user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : "Salarié"}</span>
+           </span>
+         </div>
+       ),
+-      width: "220px",
++      width: "235px",
+     },
+     {
+       key: "initials",
+       header: "Initiales",
+-      render: (user) => user.initials || "-",
+-      width: "110px",
++      render: (user) => user.initials || "—",
++      width: "95px",
+     },
+     {
+       key: "email",
+       header: "Email",
+-      render: (user) => user.email || "-",
+-      width: "220px",
++      render: (user) => user.email || "Non renseigné",
++      width: "230px",
+     },
+     {
+-      key: "phone",
+-      header: "Telephone",
+-      render: (user) => user.phone || "-",
+-      width: "160px",
++      key: "role",
++      header: "Rôle",
++      render: (user) => (
++        <StatusBadge variant={roleStatusVariant(user.role)}>{roleLabel(user.role)}</StatusBadge>
++      ),
++      width: "125px",
+     },
+     {
+-      key: "role",
+-      header: "Role",
++      key: "depot",
++      header: "Base",
+       render: (user) => (
+-        <StatusBadge variant={roleStatusVariant(user.role)}>{user.role}</StatusBadge>
++        <StatusBadge variant={depotStatusVariant(user)}>{depotLabel(user.depot)}</StatusBadge>
+       ),
+-      width: "140px",
++      width: "145px",
++    },
++    {
++      key: "phone",
++      header: "Téléphone",
++      render: (user) => user.phone || "Non renseigné",
++      width: "145px",
+     },
+     {
+       key: "status",
+@@ -320,34 +360,31 @@ export default function UsersListClient() {
+       render: (user) => (
+         <StatusBadge variant={statusVariant(user)}>{user.isActive === false ? "Inactif" : "Actif"}</StatusBadge>
+       ),
+-      width: "120px",
++      width: "115px",
+     },
+     {
+-      key: "rh",
+-      header: "RH",
++      key: "trainee",
++      header: "Stagiaire",
+       render: (user) => (
+-        <div className="users-rh-cell">
+-          <StatusBadge variant={user.isTrainee ? "warning" : "success"}>
+-            {user.isTrainee ? "Stagiaire" : "Titulaire"}
+-          </StatusBadge>
+-          <span className="users-table-cell-subtle">{dailyScheduleLabel(user)}</span>
+-        </div>
++        <StatusBadge variant={user.isTrainee ? "warning" : "success"}>
++          {user.isTrainee ? "Oui" : "Non"}
++        </StatusBadge>
+       ),
+-      width: "170px",
++      width: "105px",
+     },
+     {
+-      key: "depot",
+-      header: "Base",
++      key: "schedule",
++      header: "Horaires",
+       render: (user) => (
+-        <StatusBadge variant={depotStatusVariant(user)}>{depotLabel(user.depot)}</StatusBadge>
++        <span className="users-rh-schedule">{dailyScheduleLabel(user)}</span>
+       ),
+-      width: "160px",
++      width: "145px",
+     },
+     {
+       key: "updatedAt",
+-      header: "Derniere modif",
++      header: "Dernière modif.",
+       render: (user) => formatDateTimeLabel(user.updatedAt),
+-      width: "150px",
++      width: "130px",
+     },
+     {
+       key: "actions",
+@@ -362,9 +399,9 @@ export default function UsersListClient() {
+           </button>
+         </div>
+       ),
+-      width: "110px",
++      width: "98px",
+     },
+-  ]), []);
++  ]), [selectedUserId]);
+ 
+   useEffect(() => {
+     dispatchUsersSelection(selectedUser);
+@@ -380,18 +417,7 @@ export default function UsersListClient() {
+     setPage(1);
+   }
+ 
+-  const activeFilterParts: string[] = [];
+-  if (search) activeFilterParts.push(`recherche "${search}"`);
+-  if (role) activeFilterParts.push(`role ${role}`);
+-  if (depot) {
+-    const depotLabelMatch = depotFilterOptions.find((option) => option.value === depot)?.label ?? depot;
+-    activeFilterParts.push(`base ${depotLabelMatch}`);
+-  }
+-  if (status) activeFilterParts.push(status === "ACTIVE" ? "statut actif" : "statut inactif");
+-  if (trainee) activeFilterParts.push(trainee === "YES" ? "stagiaires" : "hors stagiaires");
+-
+   const hasFilter = Boolean(search || role || depot || status || trainee);
+-  const summaryLabel = activeFilterParts.length > 0 ? activeFilterParts.join(", ") : "aucun filtre";
+ 
+   return (
+     <section className="users-section">
+@@ -399,15 +425,15 @@ export default function UsersListClient() {
+         <div className="users-card__head">
+           <h2 className="users-card__title">Liste utilisateurs</h2>
+           <p className="users-card__description">
+-            Barre de filtres RH lisible, tableau structure et panneau droit relies a la selection.
++            Barre de filtres RH lisible et tableau aligné sur la maquette officielle.
+           </p>
+         </div>
+ 
+         <FilterBar
+-          summary={`Filtres actifs : ${summaryLabel}`}
++          summary={null}
+           actions={(
+             <ActionButton size="sm" leadingIcon={<RotateCcw size={14} />} onClick={resetFilters} disabled={!hasFilter || loading}>
+-              Reinitialiser
++              Réinitialiser
+             </ActionButton>
+           )}
+         >
+@@ -417,16 +443,16 @@ export default function UsersListClient() {
+               type="text"
+               value={searchInput}
+               onChange={(event) => setSearchInput(event.target.value)}
+-              placeholder="Nom, email, initiales ou telephone"
++              placeholder="Rechercher un nom, email, initiales..."
+             />
+           </label>
+ 
+           <label className="users-field">
+-            <span className="users-field__label">Role</span>
++            <span className="users-field__label">Rôle</span>
+             <select value={role} onChange={(event) => setRole(event.target.value)}>
+               {ROLE_FILTER_OPTIONS.map((value) => (
+                 <option key={value || "ALL"} value={value}>
+-                  {value || "Tous les roles"}
++                  {value ? roleLabel(value) : "Tous les rôles"}
+                 </option>
+               ))}
+             </select>
+@@ -474,8 +500,7 @@ export default function UsersListClient() {
+           emptyMessage="Aucun utilisateur ne correspond aux filtres actifs."
+           selectedRowKey={selectedUserId || null}
+           onRowClick={(user) => setSelectedUserId(user.id)}
+-          minWidth={1320}
+-          caption="Liste utilisateurs avec filtres role, base, statut et stagiaire"
++          minWidth={1550}
+         />
+ 
+         {!loading && !error ? (
+@@ -491,7 +516,7 @@ export default function UsersListClient() {
+                   onClick={() => setPage((current) => Math.max(1, current - 1))}
+                   disabled={loading || !pagination.hasPreviousPage}
+                 >
+-                  Precedent
++                  Précédent
+                 </ActionButton>
+                 <ActionButton
+                   size="sm"
+diff --git a/app/users/users-side-panel-client.tsx b/app/users/users-side-panel-client.tsx
+index 6325085..89b719d 100644
+--- a/app/users/users-side-panel-client.tsx
++++ b/app/users/users-side-panel-client.tsx
+@@ -1,7 +1,7 @@
+ "use client";
+ 
+ import { useEffect, useMemo, useState } from "react";
+-import { CalendarX, KeyRound, Save, Trash2 } from "lucide-react";
++import { CalendarX, KeyRound, Plus, Save, Trash2, X } from "lucide-react";
+ 
+ import { ActionButton, ErrorMessage, StatusBadge } from "@/app/ui";
+ 
+@@ -21,6 +21,26 @@ function formatDateLabel(iso: string) {
+   return date.toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric" });
+ }
+ 
++function parseDate(iso: string) {
++  const date = new Date(iso);
++  return Number.isNaN(date.getTime()) ? null : date;
++}
++
++function absenceStatus(absence: AbsenceItem) {
++  const now = Date.now();
++  const start = parseDate(absence.startAt)?.getTime() ?? now;
++  return start > now ? "En attente" : "Validée";
++}
++
++function absenceReasonLabel(reason: string) {
++  const normalized = reason.trim().toUpperCase();
++  if (!normalized) return "Absence";
++  if (normalized === "CONGE" || normalized === "CONGES_PAYES") return "Congé payé";
++  if (normalized === "TRAINING") return "Formation";
++  if (normalized === "UNAVAILABLE") return "Indisponibilité";
++  return reason;
++}
++
+ function roleVariant(role: string): "neutral" | "info" | "warning" {
+   if (role === "ADMIN" || role === "GERANT") return "info";
+   if (role === "BUREAU" || role === "REGULATEUR") return "warning";
+@@ -91,28 +111,64 @@ export default function UsersSidePanelClient() {
+ 
+   const absenceSummary = useMemo(() => {
+     if (absences.length === 0) return "Aucune absence";
+-    return `${absences.length} absence${absences.length > 1 ? "s" : ""} recensee${absences.length > 1 ? "s" : ""}`;
++    return `${absences.length} absence${absences.length > 1 ? "s" : ""} enregistrée${absences.length > 1 ? "s" : ""}`;
++  }, [absences]);
++
++  const absencesRecap = useMemo(() => {
++    const now = Date.now();
++    let upcoming = 0;
++    let validatedDays = 0;
++    let lastAbsenceLabel = "Aucune";
++
++    const sorted = [...absences].sort((a, b) => (parseDate(b.startAt)?.getTime() ?? 0) - (parseDate(a.startAt)?.getTime() ?? 0));
++    const latestPast = sorted.find((absence) => (parseDate(absence.startAt)?.getTime() ?? 0) <= now);
++    if (latestPast) {
++      lastAbsenceLabel = `${absenceReasonLabel(latestPast.reason)} (${formatDateLabel(latestPast.startAt)})`;
++    }
++
++    for (const absence of absences) {
++      const start = parseDate(absence.startAt);
++      const end = parseDate(absence.endAt);
++      if (!start || !end) continue;
++      if (start.getTime() > now) {
++        upcoming += 1;
++        continue;
++      }
++      const days = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / 86_400_000) + 1);
++      validatedDays += days;
++    }
++
++    return { upcoming, validatedDays, lastAbsenceLabel };
+   }, [absences]);
+ 
+   return (
+     <aside className="users-side-panel">
+       <div className="users-side-panel__head">
+-        <h2 className="users-side-panel__title">Fiche utilisateur</h2>
+-        <p className="users-side-panel__description">Selectionnez une ligne du tableau pour afficher le detail RH visible.</p>
++        <h2 className="users-side-panel__title">Panneau RH</h2>
++        <p className="users-side-panel__description">Sélectionnez une ligne du tableau pour afficher le détail RH.</p>
+       </div>
+ 
+       {!selectedUser ? (
+-        <div className="users-selection-card">Aucun utilisateur selectionne.</div>
++        <div className="users-selection-card">Aucun utilisateur sélectionné.</div>
+       ) : (
+         <>
+           <section className="users-side-card users-side-card--identity">
++            <div className="users-side-card__topbar">
++              <ActionButton size="sm" variant="primary" leadingIcon={<Save size={15} />}>
++                Enregistrer
++              </ActionButton>
++              <button type="button" className="users-side-close" aria-label="Fermer le panneau">
++                <X size={16} />
++              </button>
++            </div>
++
+             <div className="users-side-card__identity">
+               <div className="users-side-card__avatar" aria-hidden="true">
+                 {(selectedUser.initials || selectedUser.name.slice(0, 2)).toUpperCase()}
+               </div>
+               <div>
+                 <h3>{selectedUser.name}</h3>
+-                <p>{selectedUser.email ?? "Email non renseigne"}</p>
++                <p>{selectedUser.email ?? "Email non renseigné"}</p>
+               </div>
+             </div>
+ 
+@@ -127,63 +183,104 @@ export default function UsersSidePanelClient() {
+             </div>
+ 
+             <nav className="users-side-tabs" aria-label="Onglets fiche utilisateur">
+-              <span>Identite</span>
+-              <span>Role & permissions</span>
++              <span>Identité</span>
++              <span>Rôle & permissions</span>
+               <span>RH</span>
+               <span className="is-active">Absences</span>
+-              <span>Securite</span>
++              <span>Sécurité</span>
+             </nav>
+ 
+             <dl className="users-side-card__meta users-summary-grid">
+               <div><dt>Base</dt><dd>{depotLabel(selectedUser.depot)}</dd></div>
+-              <div><dt>Telephone</dt><dd>{selectedUser.phone || "Non renseigne"}</dd></div>
++              <div><dt>Téléphone</dt><dd>{selectedUser.phone || "Non renseigné"}</dd></div>
+               <div><dt>Horaires</dt><dd>{dailyScheduleLabel(selectedUser)}</dd></div>
+             </dl>
+-
+-            <div className="users-side-panel__actions users-side-panel__actions--primary">
+-              <ActionButton size="sm" variant="primary" leadingIcon={<Save size={15} />}>
+-                Enregistrer
+-              </ActionButton>
+-              <ActionButton size="sm" variant="secondary">
+-                Modifier
+-              </ActionButton>
+-            </div>
+           </section>
+ 
+           <section className="users-side-card">
+-            <h3 className="users-side-section-title"><CalendarX size={18} /> Absences</h3>
++            <div className="users-side-card__row">
++              <h3 className="users-side-section-title"><CalendarX size={18} /> Absences enregistrées</h3>
++              <ActionButton size="sm" variant="secondary" leadingIcon={<Plus size={14} />}>
++                Ajouter une absence
++              </ActionButton>
++            </div>
+             <p className="users-table-cell-subtle">{absenceSummary}</p>
+ 
+             {loadingAbsences ? <p className="users-table-cell-subtle">Chargement des absences...</p> : null}
+             {absenceError ? <ErrorMessage title="Erreur absences" message={absenceError} /> : null}
+ 
+             {!loadingAbsences && !absenceError ? (
+-              <ul className="users-side-list">
+-                {absences.length === 0 ? (
+-                  <li className="users-side-list__empty">Aucune absence pour cet utilisateur.</li>
+-                ) : (
+-                  absences.map((absence) => (
+-                    <li key={absence.id}>
+-                      <strong>{absence.reason}</strong>
+-                      <span>{formatDateLabel(absence.startAt)} - {formatDateLabel(absence.endAt)}</span>
+-                    </li>
+-                  ))
+-                )}
+-              </ul>
++              <div className="users-absences-table-wrap">
++                <table className="users-absences-table">
++                  <thead>
++                    <tr>
++                      <th>Motif</th>
++                      <th>Début</th>
++                      <th>Fin</th>
++                      <th>Statut</th>
++                      <th>Actions</th>
++                    </tr>
++                  </thead>
++                  <tbody>
++                    {absences.length === 0 ? (
++                      <tr>
++                        <td colSpan={5} className="users-absences-table__empty">Aucune absence pour cet utilisateur.</td>
++                      </tr>
++                    ) : (
++                      absences.map((absence) => {
++                        const status = absenceStatus(absence);
++                        return (
++                          <tr key={absence.id}>
++                            <td>{absenceReasonLabel(absence.reason)}</td>
++                            <td>{formatDateLabel(absence.startAt)}</td>
++                            <td>{formatDateLabel(absence.endAt)}</td>
++                            <td>
++                              <StatusBadge variant={status === "En attente" ? "warning" : "success"}>{status}</StatusBadge>
++                            </td>
++                            <td>
++                              <button type="button" className="users-table-icon-button" aria-label="Supprimer l'absence">
++                                <Trash2 size={14} />
++                              </button>
++                            </td>
++                          </tr>
++                        );
++                      })
++                    )}
++                  </tbody>
++                </table>
++              </div>
+             ) : null}
+           </section>
+ 
++          <section className="users-side-card users-side-card--summary">
++            <h3 className="users-side-section-title">Récapitulatif</h3>
++            <ul className="users-side-list">
++              <li>
++                <strong>{absencesRecap.upcoming}</strong>
++                <span>Absence{absencesRecap.upcoming > 1 ? "s" : ""} à venir</span>
++              </li>
++              <li>
++                <strong>{absencesRecap.validatedDays}</strong>
++                <span>Jour{absencesRecap.validatedDays > 1 ? "s" : ""} d’absence validé{absencesRecap.validatedDays > 1 ? "s" : ""}</span>
++              </li>
++              <li>
++                <strong>{absencesRecap.lastAbsenceLabel}</strong>
++                <span>Dernière absence</span>
++              </li>
++            </ul>
++          </section>
++
+           <section className="users-side-card users-side-card--danger">
+-            <h3 className="users-side-section-title">Zone de securite</h3>
++            <h3 className="users-side-section-title">Zone de sécurité</h3>
+             <p className="users-table-cell-subtle">
+-              Actions sensibles conservees dans la fiche utilisateur, sans ajout de logique RH avancee.
++              Actions sensibles conservées dans la fiche utilisateur.
+             </p>
+-            <div className="users-side-panel__actions">
+-              <ActionButton size="sm" variant="secondary" leadingIcon={<KeyRound size={15} />}>
+-                Reinitialiser mot de passe
++            <div className="users-side-panel__actions users-side-panel__actions--danger">
++              <ActionButton size="sm" variant="secondary" className="users-security-action" leadingIcon={<KeyRound size={15} />}>
++                Réinitialiser le mot de passe
+               </ActionButton>
+-              <ActionButton size="sm" variant="danger" leadingIcon={<Trash2 size={15} />}>
+-                Archiver
++              <ActionButton size="sm" variant="secondary" className="users-security-action" leadingIcon={<Trash2 size={15} />}>
++                Archiver l’utilisateur
+               </ActionButton>
+             </div>
+           </section>

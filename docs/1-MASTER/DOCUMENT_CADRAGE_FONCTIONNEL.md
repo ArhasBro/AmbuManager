@@ -1186,12 +1186,12 @@ Rappels :
 
 ### 20.3 Fichiers docs protégés existants confirmés
 - **Description** : fichiers protégés confirmés dans le ZIP actuel :
-  - `./docs/1-master/DOCUMENT_MAITRE.md`
-  - `./docs/1-master/PLAN_DE_DEVELOPPEMENT.md`
-  - `./docs/1-master/ETAT_GLOBAL_PROJET.md`
-  - `./docs/1-master/REGISTRE_DECISIONS.md`
-  - `./docs/1-master/RECAP_DISCUSSIONS.md`
-  - `./docs/1-master/STRUCTURE_PROJET.md`
+  - `./docs/1-MASTER/DOCUMENT_MAITRE.md`
+  - `./docs/1-MASTER/PLAN_DE_DEVELOPPEMENT.md`
+  - `./docs/1-MASTER/ETAT_GLOBAL_PROJET.md`
+  - `./docs/1-MASTER/REGISTRE_DECISIONS.md`
+  - `./docs/1-MASTER/RECAP_DISCUSSIONS.md`
+  - `./docs/1-MASTER/STRUCTURE_PROJET.md`
   - `./docs/PROTOCOLE_SESSION.md`
   - `./docs/STRUCTURE_DOCS.md`
   - `./docs/3-templates/TEMPLATE_DEBUT_SESSION.md`
@@ -1207,8 +1207,8 @@ Rappels :
 
 ### 20.4 Fichiers docs à protéger s’ils existent ou sont créés
 - **Description** :
-  - `./docs/1-master/README_PROJET.md`
-  - `./docs/1-master/CHANGELOG.md`
+  - `./docs/1-MASTER/README_PROJET.md`
+  - `./docs/1-MASTER/CHANGELOG.md`
 - **Objectif métier** : appliquer la même protection au noyau documentaire étendu.
 - **Utilisateur cible** : pilotage projet
 - **Priorité** : IMPORTANT MAIS NON BLOQUANT
@@ -1216,7 +1216,7 @@ Rappels :
 - **Dépendances** : gouvernance documentaire
 - **Arbitrages éventuels** : non trouvés dans le ZIP actuel, mais à protéger s’ils existent ou sont créés.
 
-### 20.5 Règle sur `./docs/2-sessions`
+### 20.5 Règle sur `./docs/2-SESSIONS`
 - **Description** :
   - sessions en cours = modifiables avec souplesse
   - sessions clôturées / validées = protégées

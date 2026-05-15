@@ -84,10 +84,10 @@ docs/4-ARCHIVES/
 Les anciennes variantes en minuscules ne doivent plus être utilisées dans les nouveaux documents, prompts, preuves, références ou livrables documentaires :
 
 ```txt
-docs/1-master/
-docs/2-sessions/
-docs/3-templates/
-docs/4-archives/
+docs/1-MASTER/
+docs/2-SESSIONS/
+docs/3-TEMPLATES/
+docs/4-ARCHIVES/
 ```
 
 Exception : les anciens fichiers historiques, anciens patchs `.diff`, anciennes preuves terminales, anciens rapports de session et archives peuvent conserver les anciens chemins s’ils décrivent l’état réel du projet au moment où ils ont été produits.
@@ -221,7 +221,7 @@ docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_A25_PLANNING.md
 Ce document constitue la référence opérationnelle du réalignement visuel Planning, en complément du plan de développement et des images Planning officielles conservées dans :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA
+docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning
 ```
 
 ### 10.2 Références UI/UX transversales

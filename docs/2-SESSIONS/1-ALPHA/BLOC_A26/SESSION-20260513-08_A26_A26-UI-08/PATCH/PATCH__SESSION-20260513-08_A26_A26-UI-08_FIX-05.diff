@@ -1,0 +1,312 @@
+diff --git a/app/a24-users-rh.css b/app/a24-users-rh.css
+index fc6ea33..1580067 100644
+--- a/app/a24-users-rh.css
++++ b/app/a24-users-rh.css
+@@ -19,6 +19,12 @@
+   min-width: 0;
+   display: grid;
+   gap: 12px;
++  align-content: start;
++}
++
++.users-layout__side {
++  min-width: 0;
++  align-self: stretch;
+ }
+ 
+ .users-kpi-grid--a24 {
+@@ -29,7 +35,7 @@
+ .users-kpi-grid--a24 .ui-stat-card {
+   min-height: 96px;
+   border-radius: 14px;
+-  padding: 10px 12px 10px 56px;
++  padding: 10px 12px;
+   border: 1px solid var(--ui-border);
+   background: var(--ui-surface);
+   box-shadow: none;
+@@ -40,8 +46,8 @@
+ }
+ 
+ .users-kpi-grid--a24 .ui-stat-card__head {
+-  justify-content: flex-start;
+-  gap: 8px;
++  justify-content: center;
++  gap: 6px;
+   min-height: 20px;
+ }
+ 
+@@ -54,7 +60,7 @@
+ .users-kpi-grid--a24 .ui-stat-card__title {
+   font-size: 12px;
+   margin: 0;
+-  text-align: left;
++  text-align: center;
+ }
+ 
+ .users-kpi-grid--a24 .ui-stat-card__icon {
+@@ -102,22 +108,47 @@
+ }
+ 
+ .users-card .ui-filter-bar {
+-  border-radius: 10px;
+-  background: var(--ui-surface);
++  border-radius: 12px;
++  background: #fff;
+   border: 1px solid var(--ui-border);
+-  padding: 10px;
++  padding: 8px 10px;
+   box-shadow: none;
+ }
+ 
+ .users-card .ui-filter-bar__controls {
+-  grid-template-columns: minmax(260px, 1.6fr) repeat(4, minmax(130px, 1fr));
++  grid-template-columns: minmax(260px, 1.8fr) repeat(4, minmax(112px, 0.92fr)) auto;
+   gap: 8px;
++  align-items: end;
+ }
+ 
+ .users-card .ui-filter-bar__meta {
+   margin-bottom: 2px;
+ }
+ 
++.users-card .ui-filter-bar .users-field {
++  gap: 3px;
++}
++
++.users-card .ui-filter-bar .users-field__label {
++  font-size: 10px;
++}
++
++.users-card .ui-filter-bar .users-field input,
++.users-card .ui-filter-bar .users-field select {
++  min-height: 32px;
++  padding: 5px 8px;
++}
++
++.users-filter-reset {
++  display: inline-flex;
++  justify-content: flex-end;
++  align-items: flex-end;
++}
++
++.users-filter-reset .ui-action-button {
++  min-height: 32px;
++}
++
+ .users-card .ui-data-table__container {
+   border-radius: 10px;
+   box-shadow: none;
+@@ -229,11 +260,11 @@
+   background: var(--ui-surface);
+   border: 1px solid var(--ui-border);
+   position: sticky;
+-  top: 12px;
++  top: 0;
+   max-height: calc(100vh - 104px);
+   min-height: calc(100vh - 104px);
+   overflow: auto;
+-  align-self: stretch;
++  width: 100%;
+   min-width: 0;
+ }
+ 
+@@ -621,6 +652,10 @@
+     grid-template-columns: 1fr;
+   }
+ 
++  .users-filter-reset {
++    justify-content: flex-start;
++  }
++
+   .users-advanced__content {
+     grid-template-columns: 1fr;
+   }
+diff --git a/app/users/page.tsx b/app/users/page.tsx
+index 4f717e9..84f6c21 100644
+--- a/app/users/page.tsx
++++ b/app/users/page.tsx
+@@ -112,7 +112,9 @@ export default async function UsersPage() {
+             </div>
+           </details>
+         </div>
+-        <UsersSidePanelClient />
++        <div className="users-layout__side">
++          <UsersSidePanelClient />
++        </div>
+       </section>
+     </div>
+   );
+diff --git a/app/users/users-list-client.tsx b/app/users/users-list-client.tsx
+index df82735..72b4ffe 100644
+--- a/app/users/users-list-client.tsx
++++ b/app/users/users-list-client.tsx
+@@ -1,4 +1,4 @@
+-"use client";
++﻿"use client";
+ 
+ import { useEffect, useMemo, useState } from "react";
+ import { MoreVertical, Pencil, RotateCcw, Search } from "lucide-react";
+@@ -89,12 +89,12 @@ function roleStatusVariant(role: string): "neutral" | "info" | "success" | "warn
+ function roleLabel(role: string) {
+   const labels: Record<string, string> = {
+     ADMIN: "Admin",
+-    GERANT: "Gérant",
++    GERANT: "GÃ©rant",
+     BUREAU: "Bureau",
+     ADE: "ADE",
+     AA: "AA",
+     TAXI: "Taxi",
+-    REGULATEUR: "Régulateur",
++    REGULATEUR: "RÃ©gulateur",
+   };
+   return labels[role] ?? role;
+ }
+@@ -113,9 +113,9 @@ function initialsLabel(user: UserListRow) {
+ }
+ 
+ function formatDateTimeLabel(value?: string | null) {
+-  if (!value) return "Non renseignée";
++  if (!value) return "Non renseignÃ©e";
+   const date = new Date(value);
+-  if (Number.isNaN(date.getTime())) return "Non renseignée";
++  if (Number.isNaN(date.getTime())) return "Non renseignÃ©e";
+   return date.toLocaleDateString("fr-FR", {
+     day: "2-digit",
+     month: "short",
+@@ -300,7 +300,7 @@ export default function UsersListClient() {
+             setSelectedUserId(user.id);
+           }}
+           onChange={() => undefined}
+-          aria-label={`Sélectionner ${user.name}`}
++          aria-label={`SÃ©lectionner ${user.name}`}
+         />
+       ),
+       align: "center",
+@@ -309,13 +309,13 @@ export default function UsersListClient() {
+     },
+     {
+       key: "name",
+-      header: "Identité",
++      header: "IdentitÃ©",
+       render: (user) => (
+         <div className="users-table-identity">
+           <span className="users-table-avatar" aria-hidden="true">{initialsLabel(user)}</span>
+           <span>
+             <strong>{user.name}</strong>
+-            <span className="users-table-cell-subtle">{user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : "Salarié"}</span>
++            <span className="users-table-cell-subtle">{user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : "SalariÃ©"}</span>
+           </span>
+         </div>
+       ),
+@@ -326,7 +326,7 @@ export default function UsersListClient() {
+     {
+       key: "initials",
+       header: "Initiales",
+-      render: (user) => user.initials || "—",
++      render: (user) => user.initials || "â€”",
+       align: "center",
+       width: "64px",
+       className: "users-col-initials",
+@@ -334,14 +334,14 @@ export default function UsersListClient() {
+     {
+       key: "email",
+       header: "Email",
+-      render: (user) => user.email || "Non renseigné",
++      render: (user) => user.email || "Non renseignÃ©",
+       align: "left",
+       width: "172px",
+       className: "users-col-email",
+     },
+     {
+       key: "role",
+-      header: "Rôle",
++      header: "RÃ´le",
+       render: (user) => (
+         <StatusBadge variant={roleStatusVariant(user.role)}>{roleLabel(user.role)}</StatusBadge>
+       ),
+@@ -361,8 +361,8 @@ export default function UsersListClient() {
+     },
+     {
+       key: "phone",
+-      header: "Téléphone",
+-      render: (user) => user.phone || "Non renseigné",
++      header: "TÃ©lÃ©phone",
++      render: (user) => user.phone || "Non renseignÃ©",
+       align: "center",
+       width: "108px",
+       className: "users-col-phone",
+@@ -399,7 +399,7 @@ export default function UsersListClient() {
+     },
+     {
+       key: "updatedAt",
+-      header: "Dernière modif.",
++      header: "DerniÃ¨re modif.",
+       render: (user) => formatDateTimeLabel(user.updatedAt),
+       width: "98px",
+     },
+@@ -452,14 +452,7 @@ export default function UsersListClient() {
+           <h2 className="users-card__title">Utilisateurs</h2>
+         </div>
+ 
+-        <FilterBar
+-          summary={null}
+-          actions={(
+-            <ActionButton size="sm" leadingIcon={<RotateCcw size={14} />} onClick={resetFilters} disabled={!hasFilter || loading}>
+-              Réinitialiser
+-            </ActionButton>
+-          )}
+-        >
++        <FilterBar summary={null}>
+           <label className="users-field">
+             <span className="users-field__label users-field__label--icon"><Search size={14} /> Recherche</span>
+             <input
+@@ -471,11 +464,11 @@ export default function UsersListClient() {
+           </label>
+ 
+           <label className="users-field">
+-            <span className="users-field__label">Rôle</span>
++            <span className="users-field__label">RÃ´le</span>
+             <select value={role} onChange={(event) => setRole(event.target.value)}>
+               {ROLE_FILTER_OPTIONS.map((value) => (
+                 <option key={value || "ALL"} value={value}>
+-                  {value ? roleLabel(value) : "Tous les rôles"}
++                  {value ? roleLabel(value) : "Tous les rÃ´les"}
+                 </option>
+               ))}
+             </select>
+@@ -510,6 +503,12 @@ export default function UsersListClient() {
+               <option value="NO">Non</option>
+             </select>
+           </label>
++
++          <div className="users-filter-reset">
++            <ActionButton size="sm" leadingIcon={<RotateCcw size={14} />} onClick={resetFilters} disabled={!hasFilter || loading}>
++              RÃ©initialiser
++            </ActionButton>
++          </div>
+         </FilterBar>
+ 
+         <DataTable
+@@ -523,7 +522,7 @@ export default function UsersListClient() {
+           emptyMessage="Aucun utilisateur ne correspond aux filtres actifs."
+           selectedRowKey={selectedUserId || null}
+           onRowClick={(user) => setSelectedUserId(user.id)}
+-          minWidth={920}
++          minWidth={860}
+           className="users-table-compact"
+         />
+ 
+@@ -540,7 +539,7 @@ export default function UsersListClient() {
+                   onClick={() => setPage((current) => Math.max(1, current - 1))}
+                   disabled={loading || !pagination.hasPreviousPage}
+                 >
+-                  Précédent
++                  PrÃ©cÃ©dent
+                 </ActionButton>
+                 <div className="users-pagination__pages" aria-label="Pages">
+                   {Array.from({ length: Math.min(5, pagination.totalPages) }, (_, index) => {
+@@ -577,3 +576,4 @@ export default function UsersListClient() {
+     </section>
+   );
+ }
++

@@ -22,7 +22,7 @@ Objectif principal : permettre une future production Codex orientée uniquement 
 
 ### 1.1 Autorité visuelle
 
-La vérité visuelle prioritaire est l'image officielle située dans `docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA`.
+La vérité visuelle prioritaire est le PNG officiel de la page, indiqué avec son chemin exact en section 2.2.
 
 Règle de priorité :
 
@@ -93,7 +93,7 @@ app/ui/*
 ### 2.3 Maquette officielle
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0/A21-UX-05_PAGES_SIMPLES_FINITIONS_IMAGE_V1.0/2-Privacy/Privacy_V1.0.png
+docs/1-MASTER/1-MAQUETTE/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0/2-Privacy/Privacy_V1.0.png
 ```
 
 ## 3. Nature visuelle de la page

@@ -38,7 +38,7 @@ Les images officielles sont la vérité visuelle prioritaire.
 Source officielle :
 
 ```txt
-docs/1-MASTER/MAQUETTE/MAQUETTE_DA
+docs/1-MASTER/1-MAQUETTE
 ```
 
 Les images `.png` présentes dans ce dossier sont la cible visuelle à reproduire au plus près.
@@ -89,7 +89,7 @@ Le dossier d’icônes exportées est considéré comme supprimé ou inutile pou
 
 Conséquence :
 
-- ne pas dépendre de `docs/1-MASTER/MAQUETTE/ICONES` ;
+- ne pas dépendre de `docs/1-MASTER/1-MAQUETTE/ICONES` ;
 - ne pas recréer de dépendance vers un dossier `ICONE` ou `ICONES` ;
 - ne pas bloquer une référence UI/UX à cause d’icônes exportées absentes ;
 - utiliser les icônes visibles dans les maquettes comme repères visuels uniquement ;
@@ -122,8 +122,8 @@ docs/4-ARCHIVES/
 Les anciennes variantes en minuscules ne doivent plus être utilisées dans les nouveaux documents, prompts, preuves ou références :
 
 ```txt
-docs/1-master/
-docs/2-sessions/
+docs/1-MASTER/
+docs/2-SESSIONS/
 docs/3-templates/
 docs/4-archives/
 ```
@@ -202,7 +202,7 @@ Le chantier exclut :
 Racine :
 
 ```txt
-docs/1-MASTER/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_MAQUETTES_FONDATRICES_IMAGES_V1.0
+docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0
 ```
 
 | Page | Maquette | Route concernée | Statut |
@@ -213,6 +213,12 @@ docs/1-MASTER/MAQUETTE/MAQUETTE_DA/MAQUETTES_FONDATRICES_IMAGES_V1.0/A21-UX-03_M
 | Utilisateurs / RH | `3-Utilisateurs-RH/Utilisateurs-RH_V1.png` | `/users` | officielle |
 | Véhicules | `4-Véhicules/Véhicules_V1.2.png` | `/vehicles` | officielle |
 
+Chemin officiel current à utiliser pour Users/RH :
+
+```txt
+docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/3-Utilisateurs-RH/Utilisateurs-RH_V1.png
+```
+
 Note : selon le contexte ZIP ou système de fichiers, certains chemins peuvent apparaître sous forme encodée, par exemple `V#U00e9hicules`. Codex devra toujours lister le dossier réel avant lecture si le chemin accentué échoue.
 
 ### 4.2 Maquettes complémentaires
@@ -220,7 +226,7 @@ Note : selon le contexte ZIP ou système de fichiers, certains chemins peuvent a
 Racine :
 
 ```txt
-docs/1-MASTER/MAQUETTE/MAQUETTE_DA/A21-UX-04_MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0
+docs/1-MASTER/1-MAQUETTE/MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0
 ```
 
 | Page | Maquette | Route concernée | Statut |
@@ -238,7 +244,7 @@ Note : selon le contexte ZIP ou système de fichiers, certains chemins peuvent a
 Racine :
 
 ```txt
-docs/1-MASTER/MAQUETTE/MAQUETTE_DA/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0/A21-UX-05_PAGES_SIMPLES_FINITIONS_IMAGE_V1.0
+docs/1-MASTER/1-MAQUETTE/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0
 ```
 
 | Page | Maquette | Route concernée | Statut |
@@ -273,8 +279,8 @@ docs/1-MASTER/MAQUETTE/MAQUETTE_DA/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0/A21-UX-05_
 |---|---|---|
 | `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_A24.md` | existant | Référence globale A24, utile comme contexte, mais trop large pour piloter Codex page par page. |
 | `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_A25_PLANNING.md` | existant | Référence page Planning déjà détaillée selon la méthode validée A25. |
-| `docs/1-MASTER/MAQUETTE/README_MAQUETTES_A24.md` | existant | Point d’entrée historique des maquettes A24. À lire comme contexte, avec neutralisation des références au dossier icônes supprimé. |
-| `docs/1-MASTER/MAQUETTE/SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md` | existant | Spécification générale utile, mais ne remplace pas les futures références page par page. |
+| `docs/1-MASTER/1-MAQUETTE/README_MAQUETTES_A24.md` | existant | Point d’entrée historique des maquettes A24. À lire comme contexte, avec neutralisation des références au dossier icônes supprimé. |
+| `docs/1-MASTER/1-MAQUETTE/SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md` | existant | Spécification générale utile, mais ne remplace pas les futures références page par page. |
 | `docs/1-MASTER/CADRAGE_UI_UX_ALPHA_MAQUETTE_V0.2.md` | existant | Contexte historique de conception. Ne prime pas sur les PNG officiels. |
 
 ---
@@ -467,7 +473,7 @@ CHANTIER DOCUMENTAIRE TRANSVERSAL UI/UX : CADRÉ
 NOUVEAU BLOC APPLICATIF : NON
 FICHIERS CODE À MODIFIER À CE STADE : NON
 DOSSIER ICONE / ICONES À UTILISER : NON
-MAQUETTE_DA = VÉRITÉ VISUELLE : OUI
+MAQUETTES PNG OFFICIELLES = VÉRITÉ VISUELLE : OUI
 REFERENCE_UI_UX_<PAGE>.md = TRADUCTION CODABLE : OUI
 CODE RÉEL = VÉRITÉ FONCTIONNELLE : OUI
 ORDRE DE TRAITEMENT DOCUMENTAIRE PROPOSÉ : OUI

@@ -131,19 +131,19 @@ BLOC A23 CLÔTURABLE DÉFINITIVEMENT : OUI
 
 - La suite immédiate du développement ne consiste pas à lancer directement les tests société pilote.
 - La suite officielle initiale était structurée en trois blocs :
-  1. `A24 — Réalignement UI/UX global sur MAQUETTE_DA` ;
+  1. `A24 — Réalignement UI/UX global sur MAQUETTES PNG OFFICIELLES` ;
   2. `A25 — Planning UI/UX & ergonomie métier` ;
   3. `A26 — Stabilisation / non-régression post UI/UX`.
 - Cette structuration initiale est ensuite actualisée le 13/05/2026 : A26 devient le bloc d’exécution UI/UX visuelle 99 %, et l’ancien rôle de filet de sécurité est décalé en A27.
 - La direction artistique officielle est exclusivement :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA
+docs/1-MASTER/1-MAQUETTE
 ```
 
-- Les anciennes interprétations UI/UX, anciens prompts, anciennes captures ou anciens documents ne priment pas sur `MAQUETTE_DA` en cas de contradiction.
+- Les anciennes interprétations UI/UX, anciens prompts, anciennes captures ou anciens documents ne priment pas sur `MAQUETTES PNG OFFICIELLES` en cas de contradiction.
 - Le bloc A24 doit viser une interface pure, simple, lisible et très proche des maquettes.
-- Le mode sombre est intégré dans A24 comme déclinaison sobre de `MAQUETTE_DA`, avec bouton clair/sombre visible.
+- Le mode sombre est intégré dans A24 comme déclinaison sobre des maquettes PNG officielles, avec bouton clair/sombre visible.
 - Lucide React est autorisé pour les icônes génériques, sous réserve d’un audit qualité des icônes.
 - Les captures restent utiles aux étapes majeures, mais Codex ne doit pas générer automatiquement des captures à chaque session.
 - Le planning est reconnu comme un sujet majeur et ne doit pas être noyé dans A24 : il est traité dans A25.

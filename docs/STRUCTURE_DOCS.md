@@ -16,6 +16,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   REGISTRE_DECISIONS.md
 |   |   RGPD_BASE_MINIMALE.md
 |   |   STRUCTURE_PROJET.md
+|   |   SUIVI_AUDIT_DOCUMENTAIRE_UI_UX_A26.md
 |   |   _INDEX_MASTER.md
 |   |   
 |   +---1-MAQUETTE
@@ -2772,6 +2773,7 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
+|   |   |   |           FIX-01__SESSION-20260513-05_A26_A26-UI-05.diff
 |   |   |   |           PATCH__SESSION-20260513-05_A26_A26-UI-05.diff
 |   |   |   |           README_PATCH.md
 |   |   |   |           
@@ -2809,6 +2811,15 @@ C:\USERS\ARCHE\AMBULANCE-MANAGER\DOCS
 |   |   |   |   |   SESSION.md
 |   |   |   |   |   
 |   |   |   |   \---PATCH
+|   |   |   |           PATCH__REFERENCE_UI_UX_USERS_RH_FIX_PATHS_AND_LAYOUT.diff
+|   |   |   |           PATCH__SESSION-20260513-08_A26_A26-UI-08.diff
+|   |   |   |           PATCH__SESSION-20260513-08_A26_A26-UI-08_FIX-01.diff
+|   |   |   |           PATCH__SESSION-20260513-08_A26_A26-UI-08_FIX-02.diff
+|   |   |   |           PATCH__SESSION-20260513-08_A26_A26-UI-08_FIX-03.diff
+|   |   |   |           PATCH__SESSION-20260513-08_A26_A26-UI-08_FIX-04.diff
+|   |   |   |           PATCH__SESSION-20260513-08_A26_A26-UI-08_FIX-05.diff
+|   |   |   |           PATCH__SESSION-20260513-08_A26_A26-UI-08_FIX-06.diff
+|   |   |   |           PATCH__SESSION-20260513-08_A26_A26-UI-08_FIX-07.diff
 |   |   |   |           README_PATCH.md
 |   |   |   |           
 |   |   |   +---SESSION-20260513-09_A26_A26-UI-09

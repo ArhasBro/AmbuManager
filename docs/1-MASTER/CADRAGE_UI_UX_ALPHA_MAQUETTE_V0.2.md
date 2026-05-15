@@ -2,7 +2,7 @@
 
 > Mise à jour documentaire — 13/05/2026  
 > Statut actuel : document de cadrage UI/UX historique et contextuel.  
-> Ce document ne prime pas sur les images officielles `MAQUETTE_DA`, ni sur les documents `REFERENCE_UI_UX_<PAGE>.md`, ni sur la référence Codex UI/UX visuel 99 %.
+> Ce document ne prime pas sur les images officielles `MAQUETTES PNG OFFICIELLES`, ni sur les documents `REFERENCE_UI_UX_<PAGE>.md`, ni sur la référence Codex UI/UX visuel 99 %.
 
 ## 0. Statut actuel et règles de priorité
 
@@ -13,7 +13,10 @@ Depuis le chantier documentaire transversal UI/UX du 13/05/2026, son rôle est t
 Hiérarchie actuelle à appliquer :
 
 ```txt
-1. Images officielles dans docs/1-MASTER/1-MAQUETTE/MAQUETTE_DA
+1. Images officielles dans :
+   - docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0
+   - docs/1-MASTER/1-MAQUETTE/MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0
+   - docs/1-MASTER/1-MAQUETTE/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0
 2. Documents docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_<PAGE>.md
 3. docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_CODEX_UI_UX_VISUEL_99.md
 4. docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_SHELL_GLOBAL.md
@@ -912,4 +915,3 @@ docs/2-SESSIONS/1-ALPHA/BLOC_A21/SESSION-20260425-06_A21_UX-06/REFERENCE_UI_UX_A
 ```
 
 Ce document ne doit donc pas être utilisé seul comme référence finale d’intégration.
-
