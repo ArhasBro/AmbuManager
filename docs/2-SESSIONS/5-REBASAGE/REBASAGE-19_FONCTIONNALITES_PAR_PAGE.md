@@ -5,12 +5,15 @@
 Ce document est une synthèse opérationnelle courte.
 Il sert à préparer et exécuter proprement les audits page par page, sans remplacer les documents maîtres.
 
+- Document temporaire de rebasage : support opérationnel de transition, non référence produit définitive.
+- Ce document ne remplace pas le cadrage produit ni le plan officiel.
+
 ## 2. Documents de référence
 
 - `docs/1-MASTER/DOCUMENT_MAITRE.md`
 - `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT.md`
 - `docs/1-MASTER/DOCUMENT_CADRAGE_FONCTIONNEL.md`
-- `docs/2-SESSIONS/REBASAGE-18_CADRAGE_AUDIT_PAGE_PAR_PAGE.md`
+- `docs/2-SESSIONS/5-REBASAGE/REBASAGE-18_CADRAGE_AUDIT_PAGE_PAR_PAGE.md`
 
 ## 3. Règles de lecture
 
@@ -228,3 +231,9 @@ Il sert à préparer et exécuter proprement les audits page par page, sans remp
 
 Prochaine étape logique :
 - `REBASAGE-20` — audit de la première page ou du premier groupe de pages, selon priorisation Nathan.
+## 8. Garde-fous méthodologiques
+
+- Un audit ne déclenche pas automatiquement une correction.
+- Toute correction doit passer par une session dédiée, explicitement autorisée.
+- Une dette détectée doit être qualifiée, documentée et priorisée avant toute correction.
+- En cas d'ambiguïté : À CONFIRMER PAR NATHAN.

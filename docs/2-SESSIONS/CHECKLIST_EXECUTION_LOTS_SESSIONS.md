@@ -13,6 +13,7 @@ Il prépare les actions futures lot par lot, sans exécuter de déplacement, sup
 - Aucune suppression.
 - Aucun archivage réel.
 - Validation Nathan obligatoire avant toute action future.
+- La chaîne REBASAGE-13 à REBASAGE-16 est une aide administrative de décision ; elle ne crée aucune obligation d'exécution immédiate.
 
 ## Synthèse des lots
 
