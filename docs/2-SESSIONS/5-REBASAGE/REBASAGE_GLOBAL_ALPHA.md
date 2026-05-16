@@ -512,7 +512,7 @@ Prochaine étape recommandée :
 ============================================================
 REBASAGE-39 — Synthese globale des audits page par page
 ============================================================
-Statut : VALIDE
+Statut : VALIDE DEFINITIVEMENT
 
 Livrable :
 - docs/2-SESSIONS/5-REBASAGE/REBASAGE-39_CONSOLIDATION_INVENTAIRE_PAGES_STATUTS.md
@@ -524,6 +524,22 @@ Verdict global :
 
 Prochaine étape recommandée :
 - REBASAGE-40 - Consolidation des fonctionnalités par page après audits.
+
+============================================================
+REBASAGE-40 — Consolidation des fonctionnalités par page après audits
+============================================================
+Statut : VALIDE
+
+Livrable :
+- docs/2-SESSIONS/5-REBASAGE/REBASAGE-40_CONSOLIDATION_FONCTIONNALITES_PAR_PAGE_APRES_AUDITS.md
+
+Verdict global :
+- consolidation des fonctionnalités par page réalisée ;
+- statut de consolidation : incomplet ;
+- aucune correction code appliquée.
+
+Prochaine étape recommandée :
+- REBASAGE-41 — Préparation de la future refonte du plan officiel.
 
 ============================================================
 REBASAGE-41 — Preparation de la future refonte du plan officiel
