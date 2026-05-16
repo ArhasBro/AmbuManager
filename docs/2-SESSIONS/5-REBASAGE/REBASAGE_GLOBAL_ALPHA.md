@@ -239,293 +239,143 @@ Le document est utile comme squelette, mais il ne suffit pas encore à démarrer
 Il doit être consolidé par une cartographie réelle du repo, des routes, pages, APIs, docs et maquettes.
 
 ============================================================
-REBASAGE-20 — Audit critique de cohérence méthodologique des documents de rebasage
+REBASAGE-20 ? Reclassement minimal des documents REBASAGE-18 et REBASAGE-19
 ============================================================
-Statut : À FAIRE
+Statut : VALIDE apres FIX-02
 
 Objectif :
-Relire les documents produits pendant le rebasage non pas seulement pour vérifier leur forme, mais pour vérifier le sens de leur contenu.
+Reclasser les documents REBASAGE-18 et REBASAGE-19 dans le dossier officiel du rebasage global Alpha, sans modifier leur fond documentaire.
 
-Contrôler :
-- logique ;
-- utilité réelle ;
-- cohérence avec l’objectif global ;
-- absence de plan parallèle ;
-- absence de doublons problématiques ;
-- documents trop vagues ou trop vides ;
-- documents temporaires vs documents durables ;
-- risques de mauvaise direction méthodologique.
-
-Documents prioritaires à relire :
-- `docs/README.md`
-- `docs/README_DOCS.md`
-- `docs/STRUCTURE_DOCS.md`
-- `docs/1-MASTER/STRUCTURE_PROJET.md`
-- `docs/1-MASTER/_INDEX_MASTER.md`
-- `docs/2-SESSIONS/_INDEX_SESSIONS.md`
-- `docs/2-SESSIONS/GOUVERNANCE_SESSIONS.md`
-- `docs/2-SESSIONS/CHECKLIST_EXECUTION_LOTS_SESSIONS.md`
-- `docs/2-SESSIONS/DOSSIER_DECISION_LOTS_SESSIONS.md`
-- `docs/2-SESSIONS/FORMULAIRE_VALIDATION_LOTS_SESSIONS.md`
-- `docs/2-SESSIONS/5-REBASAGE/REBASAGE-18_CADRAGE_AUDIT_PAGE_PAR_PAGE.md`
-- `docs/2-SESSIONS/5-REBASAGE/REBASAGE-19_FONCTIONNALITES_PAR_PAGE.md`
-- `docs/3-TEMPLATES/*`
-
-Livrable attendu :
-Un audit critique listant :
-- documents cohérents ;
-- documents à clarifier ;
-- documents à compléter ;
-- documents à corriger plus tard ;
-- documents à ne pas utiliser comme référence durable.
+Travaux realises :
+- deplacement de `docs/2-SESSIONS/REBASAGE-18_CADRAGE_AUDIT_PAGE_PAR_PAGE.md`
+  vers `docs/2-SESSIONS/5-REBASAGE/REBASAGE-18_CADRAGE_AUDIT_PAGE_PAR_PAGE.md` ;
+- deplacement/renommage de `docs/1-MASTER/FONCTIONNALITES_PAR_PAGE.md`
+  vers `docs/2-SESSIONS/5-REBASAGE/REBASAGE-19_FONCTIONNALITES_PAR_PAGE.md` ;
+- correction REBASAGE-20-FIX-01 : suppression du mojibake dans `REBASAGE_GLOBAL_ALPHA.md` ;
+- correction REBASAGE-20-FIX-02 : realignement logique de la sequence dans le fichier central.
 
 ============================================================
-REBASAGE-21 — Corrections documentaires ciblées si nécessaires
+REBASAGE-21 ? Audit critique de coherence methodologique des documents de rebasage
 ============================================================
-Statut : À FAIRE SI REBASAGE-20 LE JUSTIFIE
+Statut : A FAIRE
 
 Objectif :
-Corriger uniquement les incohérences méthodologiques détectées en REBASAGE-20.
-
-Règles :
-- corrections ciblées uniquement ;
-- pas de refonte massive ;
-- pas de suppression sans validation ;
-- pas de fusion sans justification ;
-- pas de modification du plan officiel sans demande explicite.
+Relire les documents produits pendant le rebasage pour verifier la coherence de fond, l'utilite reelle et l'absence de derive methodologique.
 
 ============================================================
-REBASAGE-22 — Cartographie globale repo / docs / pages / routes / APIs / maquettes
+REBASAGE-22 ? Corrections documentaires ciblees si necessaires
 ============================================================
-Statut : À FAIRE
+Statut : A FAIRE SI REBASAGE-21 LE JUSTIFIE
 
 Objectif :
-Créer une vision globale du projet réel.
-
-Cartographier :
-- pages existantes ;
-- routes applicatives ;
-- routes API ;
-- fichiers principaux liés ;
-- documents de référence associés ;
-- maquettes associées ;
-- fonctionnalités liées ;
-- zones stables ;
-- zones partielles ;
-- zones manquantes ;
-- zones à confirmer.
-
-But :
-Éviter les erreurs de chemin, les oublis, les doublons et les incohérences entre code, docs et maquettes.
+Corriger uniquement les incoherences methodologiques detectees en REBASAGE-21.
 
 ============================================================
-REBASAGE-23 — Matrice page / fonctionnalités / code / documentation / maquette
+REBASAGE-23 ? Cartographie globale repo / docs / pages / routes / APIs / maquettes
 ============================================================
-Statut : À FAIRE
+Statut : A FAIRE
 
 Objectif :
-Créer une matrice fiable reliant chaque page à ses références.
-
-Pour chaque page :
-- nom de la page ;
-- route applicative ;
-- fichiers code associés ;
-- fonctionnalités attendues ;
-- fonctionnalités présentes ;
-- documents liés ;
-- maquettes PNG associées ;
-- statut global ;
-- écarts constatés ;
-- actions recommandées.
+Produire une vision globale du projet reel (code, docs, pages, routes, APIs, maquettes).
 
 ============================================================
-REBASAGE-24 — Classement des dettes et priorités
+REBASAGE-24 ? Matrice page / fonctionnalites / code / documentation / maquette
 ============================================================
-Statut : À FAIRE
+Statut : A FAIRE
 
 Objectif :
-Classer les dettes détectées pendant la cartographie et les audits.
-
-Statuts possibles :
-- Bloquant
-- Important
-- Amélioration
-- À confirmer
-- Plus tard
-
-Distinguer :
-- à corriger maintenant ;
-- à documenter ;
-- à archiver ;
-- à traiter dans une future session de code ;
-- en attente de validation Nathan.
-
-Règle :
-Une dette détectée ne déclenche pas automatiquement une correction.
+Relier chaque page a ses fonctionnalites, fichiers code, references documentaires et maquettes.
 
 ============================================================
-REBASAGE-25 — Inventaire réel des pages/routes applicatives avant audit détaillé
+REBASAGE-25 ? Classement des dettes et priorites
 ============================================================
-Statut : À FAIRE
+Statut : A FAIRE
 
 Objectif :
-Confirmer précisément les pages et routes réellement présentes dans le code avant de lancer les audits page par page.
-
-But :
-Ne pas auditer une liste théorique ou incomplète.
+Classer les dettes detectees (bloquant, important, amelioration, a confirmer, plus tard).
 
 ============================================================
-REBASAGE-26 — Audit page Login
+REBASAGE-26 ? Inventaire reel des pages/routes applicatives avant audit detaille
 ============================================================
-Statut : À FAIRE
+Statut : A FAIRE
 
 Objectif :
-Auditer la page Login :
-- rôle réel ;
-- route ;
-- fichier code ;
-- logique présente ;
-- APIs liées ;
-- conformité au cadrage ;
-- cohérence UI/UX ;
-- dettes ;
-- actions recommandées.
+Confirmer la liste exacte des pages/routes reelles avant les audits page par page.
 
 ============================================================
-REBASAGE-27 — Audit page Dashboard
+REBASAGE-27 ? Audit page Login
 ============================================================
-Statut : À FAIRE
-
-Objectif :
-Auditer le Dashboard selon la même méthode.
+Statut : A FAIRE
 
 ============================================================
-REBASAGE-28 — Audit page Planning
+REBASAGE-28 ? Audit page Dashboard
 ============================================================
-Statut : À FAIRE
-
-Objectif :
-Auditer la page Planning selon la même méthode.
+Statut : A FAIRE
 
 ============================================================
-REBASAGE-29 — Audit page Utilisateurs / RH
+REBASAGE-29 ? Audit page Planning
 ============================================================
-Statut : À FAIRE
-
-Objectif :
-Auditer la page Utilisateurs / RH selon la même méthode.
+Statut : A FAIRE
 
 ============================================================
-REBASAGE-30 — Audit page Véhicules
+REBASAGE-30 ? Audit page Utilisateurs / RH
 ============================================================
-Statut : À FAIRE
-
-Objectif :
-Auditer la page Véhicules selon la même méthode.
+Statut : A FAIRE
 
 ============================================================
-REBASAGE-31 — Audit page Templates
+REBASAGE-31 ? Audit page Vehicules
 ============================================================
-Statut : À FAIRE
-
-Objectif :
-Auditer la page Templates selon la même méthode.
+Statut : A FAIRE
 
 ============================================================
-REBASAGE-32 — Audit page Société
+REBASAGE-32 ? Audit page Templates
 ============================================================
-Statut : À FAIRE
-
-Objectif :
-Auditer la page Société selon la même méthode.
+Statut : A FAIRE
 
 ============================================================
-REBASAGE-33 — Audit page Dépôts / Bases
+REBASAGE-33 ? Audit page Societe
 ============================================================
-Statut : À FAIRE
-
-Objectif :
-Auditer la page Dépôts / Bases selon la même méthode.
+Statut : A FAIRE
 
 ============================================================
-REBASAGE-34 — Audit page Onboarding
+REBASAGE-34 ? Audit page Depots / Bases
 ============================================================
-Statut : À FAIRE
-
-Objectif :
-Auditer la page Onboarding selon la même méthode.
+Statut : A FAIRE
 
 ============================================================
-REBASAGE-35 — Audit page Audit / Journal d’audit
+REBASAGE-35 ? Audit page Onboarding
 ============================================================
-Statut : À FAIRE
-
-Objectif :
-Auditer la page Audit / Journal d’audit selon la même méthode.
+Statut : A FAIRE
 
 ============================================================
-REBASAGE-36 — Audit page Privacy / Mentions d’information
+REBASAGE-36 ? Audit page Audit / Journal d'audit
 ============================================================
-Statut : À FAIRE
-
-Objectif :
-Auditer la page Privacy / Mentions d’information selon la même méthode.
+Statut : A FAIRE
 
 ============================================================
-REBASAGE-37 — Audit pages techniques / secondaires
+REBASAGE-37 ? Audit page Privacy / Mentions d'information
 ============================================================
-Statut : À FAIRE
-
-Objectif :
-Auditer les pages techniques ou secondaires détectées pendant l’inventaire :
-- pages d’erreur ;
-- pages internes ;
-- redirections ;
-- routes spéciales ;
-- pages non listées initialement.
+Statut : A FAIRE
 
 ============================================================
-REBASAGE-38 — Synthèse globale des audits page par page
+REBASAGE-38 ? Audit pages techniques / secondaires
 ============================================================
-Statut : À FAIRE
-
-Objectif :
-Regrouper les constats des audits page par page.
-
-Produire :
-- pages conformes ;
-- pages incomplètes ;
-- pages non conformes ;
-- pages à confirmer ;
-- fonctionnalités manquantes ;
-- fonctionnalités à masquer / reporter / supprimer ;
-- dettes principales ;
-- priorités de reprise.
+Statut : A FAIRE
 
 ============================================================
-REBASAGE-39 — Préparation de la future refonte du plan officiel
+REBASAGE-39 ? Synthese globale des audits page par page
 ============================================================
-Statut : À FAIRE PLUS TARD
+Statut : A FAIRE
 
-Objectif :
-Préparer les éléments nécessaires à une future reprise de `PLAN_DE_DEVELOPPEMENT.md`.
-
-Important :
-Ne pas créer de nouveau plan parallèle.
-Ne pas modifier le plan officiel tant que la cartographie, les audits et les dettes ne sont pas suffisamment clairs.
+============================================================
+REBASAGE-40 ? Preparation de la future refonte du plan officiel
+============================================================
+Statut : A FAIRE PLUS TARD
 
 ============================================================
 NOTE DE PILOTAGE
 ============================================================
-La séquence peut évoluer si un audit révèle une incohérence importante.
+La sequence peut evoluer si un audit revele une incoherence importante.
 
-Ordre actuel recommandé :
-1. sécuriser la cohérence documentaire ;
-2. cartographier le repo réel ;
-3. relier pages / fonctionnalités / code / docs / maquettes ;
-4. classer les dettes ;
-5. auditer les pages une par une ;
-6. seulement ensuite préparer la reprise du plan officiel.
-
-Prochain ZIP attendu après la prochaine session :
-AmbuManager-main (19).zip
+Prochain ZIP attendu apres la prochaine session :
+AmbuManager-main (21).zip
