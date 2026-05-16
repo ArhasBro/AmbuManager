@@ -304,7 +304,7 @@ Relier chaque page a ses fonctionnalites, fichiers code, references documentaire
 ============================================================
 REBASAGE-25 — Classement des dettes et priorites
 ============================================================
-Statut : VALIDE
+Statut : VALIDE DEFINITIVEMENT
 
 Objectif :
 Classer les dettes detectees (bloquant, important, amelioration, a confirmer, plus tard).
@@ -312,11 +312,19 @@ Classer les dettes detectees (bloquant, important, amelioration, a confirmer, pl
 ============================================================
 REBASAGE-26 — Inventaire reel des pages/routes applicatives avant audit detaille
 ============================================================
-Statut : A FAIRE
+Statut : VALIDE
 
 Objectif :
 Confirmer la liste exacte des pages/routes reelles avant les audits page par page.
+Livrable :
+- docs/2-SESSIONS/5-REBASAGE/REBASAGE-26_INVENTAIRE_PAGES_ROUTES_APPLICATIVES.md
 
+Verdict global :
+- inventaire pages/routes reel : VALIDE
+- audits page par page prets : OUI
+
+Prochaine etape recommandee :
+- REBASAGE-27 - Audit page par page : premiere page priorisee.
 ============================================================
 REBASAGE-27 — Audit page Login
 ============================================================
