@@ -391,3 +391,13 @@ Statut : A FAIRE PLUS TARD
 NOTE DE PILOTAGE
 ============================================================
 La sequence peut evoluer si un audit revele une incoherence importante.
+
+============================================================
+MISE A JOUR CIBLEE - REBASAGE-25
+============================================================
+REBASAGE-25 - Classement des dettes et priorites
+Statut : VALIDE
+Livrable : `docs/2-SESSIONS/5-REBASAGE/REBASAGE-25_CLASSEMENT_DETTES_PRIORITES.md`
+Resume court : dettes qualifiees et priorisees (important, amelioration, a confirmer, plus tard) sans correction automatique.
+Verdict global : classement exploitable pour preparer la suite.
+Prochaine etape recommandee : REBASAGE-26 - Inventaire reel des pages/routes applicatives avant audit detaille.
