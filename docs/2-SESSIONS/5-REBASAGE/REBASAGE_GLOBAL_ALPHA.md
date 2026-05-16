@@ -312,7 +312,7 @@ Classer les dettes detectees (bloquant, important, amelioration, a confirmer, pl
 ============================================================
 REBASAGE-26 — Inventaire reel des pages/routes applicatives avant audit detaille
 ============================================================
-Statut : VALIDE
+Statut : VALIDE DEFINITIVEMENT
 
 Objectif :
 Confirmer la liste exacte des pages/routes reelles avant les audits page par page.
@@ -328,8 +328,17 @@ Prochaine etape recommandee :
 ============================================================
 REBASAGE-27 — Audit page Login
 ============================================================
-Statut : A FAIRE
+Statut : VALIDE
+Livrable :
+- docs/2-SESSIONS/5-REBASAGE/REBASAGE-27_AUDIT_PAGE_LOGIN.md
 
+Verdict global :
+- audit login realise ;
+- statut d'audit login : incomplet ;
+- aucune correction appliquee.
+
+Prochaine etape recommandee :
+- REBASAGE-28 - Audit page Dashboard.
 ============================================================
 REBASAGE-28 — Audit page Dashboard
 ============================================================
