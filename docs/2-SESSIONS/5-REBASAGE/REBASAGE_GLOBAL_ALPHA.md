@@ -557,6 +557,37 @@ Verdict global :
 Prochaine etape recommandee :
 - REBASAGE-42 - Controle de coherence entre plan officiel, audits et consolidations avant modification.
 
+
+============================================================
+Point d’arrêt documentaire — réduction de complexité
+============================================================
+Décision :
+- arrêt des nouvelles consolidations documentaires ;
+- arrêt de la création systématique de nouveaux fichiers REBASAGE ;
+- passage à une logique de simplification, nettoyage et reprise concrète.
+
+Documents de rebasage à conserver comme références actives :
+- `REBASAGE_GLOBAL_ALPHA.md` ;
+- `REBASAGE-23_CARTOGRAPHIE_GLOBALE_PROJET.md` ;
+- `REBASAGE-24_MATRICE_PAGE_FONCTIONNALITES_CODE_DOCUMENTATION_MAQUETTE.md` ;
+- `REBASAGE-25_CLASSEMENT_DETTES_PRIORITES.md` ;
+- `REBASAGE-26_INVENTAIRE_PAGES_ROUTES_APPLICATIVES.md` ;
+- `REBASAGE-39_CONSOLIDATION_INVENTAIRE_PAGES_STATUTS.md` ;
+- `REBASAGE-40_CONSOLIDATION_FONCTIONNALITES_PAR_PAGE_APRES_AUDITS.md` ;
+- audits REBASAGE-27 à REBASAGE-38 conservés comme preuves historiques, pas comme pilotage quotidien.
+
+Documents à considérer comme historiques ou supports d’audit :
+- audits individuels REBASAGE-27 à REBASAGE-38 ;
+- pas de suppression maintenant ;
+- archivage ou regroupement possible plus tard uniquement après validation Nathan.
+
+Prochaine action concrète recommandée :
+- lancer un audit d’allègement du dossier `docs/` pour préparer un nettoyage contrôlé,
+  ou reprendre une première correction prioritaire sans créer de nouveaux documents inutiles.
+
+Règle future :
+- créer un nouveau fichier uniquement s’il remplace réellement de la confusion par de la clarté ;
+- sinon, mettre à jour un fichier existant ou ne rien créer.
 ============================================================
 NOTE DE PILOTAGE
 ============================================================
