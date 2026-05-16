@@ -560,3 +560,11 @@ Livrable : `docs/2-SESSIONS/5-REBASAGE/REBASAGE-25_CLASSEMENT_DETTES_PRIORITES.m
 Resume court : dettes qualifiees et priorisees (important, amelioration, a confirmer, plus tard) sans correction automatique.
 Verdict global : classement exploitable pour preparer la suite.
 Prochaine etape recommandee : REBASAGE-26 - Inventaire reel des pages/routes applicatives avant audit detaille.
+============================================================
+MISE A JOUR CIBLEE - REBASAGE-41
+============================================================
+Acte de validation precedente : REBASAGE-40 est VALIDE DEFINITIVEMENT.
+Livrable REBASAGE-41 : `docs/2-SESSIONS/5-REBASAGE/REBASAGE-41_PREPARATION_REFONTE_PLAN_OFFICIEL.md`
+Verdict preparation : conforme.
+Rappel de gouvernance : `PLAN_DE_DEVELOPPEMENT.md` reste le seul plan officiel et n'a pas ete modifie.
+Prochaine etape recommandee : REBASAGE-42 - Controle de coherence entre plan officiel, audits et consolidations avant modification.
