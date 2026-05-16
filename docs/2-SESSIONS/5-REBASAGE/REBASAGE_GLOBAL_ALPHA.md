@@ -496,7 +496,7 @@ Prochaine étape recommandée :
 ============================================================
 REBASAGE-38 — Audit pages techniques / secondaires
 ============================================================
-Statut : VALIDE
+Statut : VALIDE DEFINITIVEMENT
 
 Livrable :
 - docs/2-SESSIONS/5-REBASAGE/REBASAGE-38_AUDIT_PAGES_TECHNIQUES_SECONDAIRES.md
@@ -512,7 +512,18 @@ Prochaine étape recommandée :
 ============================================================
 REBASAGE-39 — Synthese globale des audits page par page
 ============================================================
-Statut : A FAIRE
+Statut : VALIDE
+
+Livrable :
+- docs/2-SESSIONS/5-REBASAGE/REBASAGE-39_CONSOLIDATION_INVENTAIRE_PAGES_STATUTS.md
+
+Verdict global :
+- consolidation de l'inventaire des pages et statuts réalisée ;
+- statut de consolidation : incomplet ;
+- aucune correction code appliquée.
+
+Prochaine étape recommandée :
+- REBASAGE-40 - Consolidation des fonctionnalités par page après audits.
 
 ============================================================
 REBASAGE-40 — Preparation de la future refonte du plan officiel
