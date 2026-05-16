@@ -1,252 +1,252 @@
-REBASAGE GLOBAL ALPHA — SÉQUENCE PRÉVISIONNELLE
+REBASAGE GLOBAL ALPHA â€” SÃ‰QUENCE PRÃ‰VISIONNELLE
 
-Objectif général :
-Repartir sur une base propre, claire, cohérente et durable avant de poursuivre le développement.
-Le but n’est pas d’aller vite, mais d’éviter d’empiler de nouveaux blocs sur une structure incertaine.
+Objectif gÃ©nÃ©ral :
+Repartir sur une base propre, claire, cohÃ©rente et durable avant de poursuivre le dÃ©veloppement.
+Le but nâ€™est pas dâ€™aller vite, mais dâ€™Ã©viter dâ€™empiler de nouveaux blocs sur une structure incertaine.
 
-Règles générales :
+RÃ¨gles gÃ©nÃ©rales :
 - pas de suppression sans validation claire ;
-- pas de fusion documentaire sans preuve que les documents se complètent réellement ;
-- pas de refonte massive sans session dédiée ;
+- pas de fusion documentaire sans preuve que les documents se complÃ¨tent rÃ©ellement ;
+- pas de refonte massive sans session dÃ©diÃ©e ;
 - pas de modification code pendant une session documentaire ;
-- pas de nouveau plan parallèle ;
+- pas de nouveau plan parallÃ¨le ;
 - PLAN_DE_DEVELOPPEMENT.md reste le seul plan officiel ;
 - DOCUMENT_CADRAGE_FONCTIONNEL.md reste la base produit officielle ;
-- chaque session doit rester courte, ciblée et contrôlable.
-Règle qualité du fichier central (à partir de REBASAGE-21-FIX-01) :
-- `REBASAGE_GLOBAL_ALPHA.md` ne doit plus être réécrit intégralement ;
-- toute mise à jour du fichier central doit être courte, ciblée et minimale ;
-- Codex doit éviter les réécritures globales qui peuvent réintroduire du mojibake ;
-- chaque modification de ce fichier doit être vérifiée en UTF-8 sans BOM ;
-- chaque modification doit vérifier l'absence de mojibake détectable (exemples : U+00C3, U+00E2, U+FFFD) ;
-- le fichier doit conserver un retour à la ligne final.
+- chaque session doit rester courte, ciblÃ©e et contrÃ´lable.
+RÃ¨gle qualitÃ© du fichier central (Ã  partir de REBASAGE-21-FIX-01) :
+- `REBASAGE_GLOBAL_ALPHA.md` ne doit plus Ãªtre rÃ©Ã©crit intÃ©gralement ;
+- toute mise Ã  jour du fichier central doit Ãªtre courte, ciblÃ©e et minimale ;
+- Codex doit Ã©viter les rÃ©Ã©critures globales qui peuvent rÃ©introduire du mojibake ;
+- chaque modification de ce fichier doit Ãªtre vÃ©rifiÃ©e en UTF-8 sans BOM ;
+- chaque modification doit vÃ©rifier l'absence de mojibake dÃ©tectable (exemples : U+00C3, U+00E2, U+FFFD) ;
+- le fichier doit conserver un retour Ã  la ligne final.
 
 ============================================================
-REBASAGE-01 — Audit global repo / docs
+REBASAGE-01 â€” Audit global repo / docs
 ============================================================
-Statut : VALIDÉ
-
-Objectif :
-Faire un premier état des lieux global du dépôt et de la documentation.
-
-============================================================
-REBASAGE-01-BIS — Complément audit ciblé
-============================================================
-Statut : VALIDÉ
+Statut : VALIDÃ‰
 
 Objectif :
-Compléter l’audit initial sur les zones insuffisamment couvertes.
+Faire un premier Ã©tat des lieux global du dÃ©pÃ´t et de la documentation.
 
 ============================================================
-REBASAGE-02 — Clarification docs racine + gouvernance
+REBASAGE-01-BIS â€” ComplÃ©ment audit ciblÃ©
 ============================================================
-Statut : VALIDÉ
-
-Objectif :
-Clarifier les documents présents à la racine de `docs/` et poser une première gouvernance documentaire.
-
-============================================================
-REBASAGE-03 — Classification documentaire détaillée
-============================================================
-Statut : VALIDÉ
+Statut : VALIDÃ‰
 
 Objectif :
-Classer les documents existants et identifier leur rôle réel.
+ComplÃ©ter lâ€™audit initial sur les zones insuffisamment couvertes.
 
 ============================================================
-REBASAGE-04 — Audit des templates de session `docs/3-TEMPLATES`
+REBASAGE-02 â€” Clarification docs racine + gouvernance
 ============================================================
-Statut : VALIDÉ
+Statut : VALIDÃ‰
 
 Objectif :
-Auditer les anciens templates de session avant réutilisation.
+Clarifier les documents prÃ©sents Ã  la racine de `docs/` et poser une premiÃ¨re gouvernance documentaire.
+
+============================================================
+REBASAGE-03 â€” Classification documentaire dÃ©taillÃ©e
+============================================================
+Statut : VALIDÃ‰
+
+Objectif :
+Classer les documents existants et identifier leur rÃ´le rÃ©el.
+
+============================================================
+REBASAGE-04 â€” Audit des templates de session `docs/3-TEMPLATES`
+============================================================
+Statut : VALIDÃ‰
+
+Objectif :
+Auditer les anciens templates de session avant rÃ©utilisation.
 
 Conclusion :
-Les templates étaient utiles mais anciens, donc à moderniser.
+Les templates Ã©taient utiles mais anciens, donc Ã  moderniser.
 
 ============================================================
-REBASAGE-05 — Mise à jour / consolidation des templates de session
+REBASAGE-05 â€” Mise Ã  jour / consolidation des templates de session
 ============================================================
-Statut : VALIDÉ
+Statut : VALIDÃ‰
 
 Objectif :
 Moderniser `docs/3-TEMPLATES`.
 
-Résultat validé :
+RÃ©sultat validÃ© :
 - `README_TEMPLATES.md`
 - `TEMPLATE_SESSION.md`
 - `TEMPLATE_DOD_SESSION.md`
 - `TEMPLATE_RECAP_SESSION.md`
 
-Anciens fichiers supprimés/remplacés :
+Anciens fichiers supprimÃ©s/remplacÃ©s :
 - `TEMPLATE_DEBUT_SESSION.md`
 - `TEMPLATE_FIN_SESSION.md`
 - `TEMPLATE_DOD_4_4.md`
 
 ============================================================
-REBASAGE-06 — Matrice canonique Page -> PNG -> référence UI/UX -> route -> fichier app
+REBASAGE-06 â€” Matrice canonique Page -> PNG -> rÃ©fÃ©rence UI/UX -> route -> fichier app
 ============================================================
-Statut : VALIDÉ / TRAITÉ DANS LA SÉQUENCE DE REBASAGE
+Statut : VALIDÃ‰ / TRAITÃ‰ DANS LA SÃ‰QUENCE DE REBASAGE
 
 Objectif :
-Préparer la logique de correspondance entre pages, maquettes, références UI/UX, routes et fichiers applicatifs.
+PrÃ©parer la logique de correspondance entre pages, maquettes, rÃ©fÃ©rences UI/UX, routes et fichiers applicatifs.
 
 Note :
-À reprendre plus largement dans les futures matrices page / fonctionnalités / code / documentation / maquette.
+Ã€ reprendre plus largement dans les futures matrices page / fonctionnalitÃ©s / code / documentation / maquette.
 
 ============================================================
-REBASAGE-07 — Audit encodage ciblé
+REBASAGE-07 â€” Audit encodage ciblÃ©
 ============================================================
-Statut : VALIDÉ
+Statut : VALIDÃ‰
 
 Objectif :
-Auditer les problèmes d’encodage sans correction massive.
+Auditer les problÃ¨mes dâ€™encodage sans correction massive.
 
 Conclusion :
-Correction ciblée nécessaire sur certains fichiers.
+Correction ciblÃ©e nÃ©cessaire sur certains fichiers.
 
 ============================================================
-REBASAGE-08 — Correction encodage ciblée
+REBASAGE-08 â€” Correction encodage ciblÃ©e
 ============================================================
-Statut : VALIDÉ
+Statut : VALIDÃ‰
 
 Objectif :
-Corriger uniquement les fichiers ciblés avec BOM ou encodage problématique.
+Corriger uniquement les fichiers ciblÃ©s avec BOM ou encodage problÃ©matique.
 
-Règle :
-Pas de correction massive de tout l’historique.
+RÃ¨gle :
+Pas de correction massive de tout lâ€™historique.
 
 ============================================================
-REBASAGE-09 — Décision gouvernance STRUCTURE_DOCS.md / STRUCTURE_PROJET.md
+REBASAGE-09 â€” DÃ©cision gouvernance STRUCTURE_DOCS.md / STRUCTURE_PROJET.md
 ============================================================
-Statut : VALIDÉ
+Statut : VALIDÃ‰
 
 Objectif :
-Clarifier le rôle de :
+Clarifier le rÃ´le de :
 - `docs/STRUCTURE_DOCS.md`
 - `docs/1-MASTER/STRUCTURE_PROJET.md`
 
 Sans suppression automatique.
 
 ============================================================
-REBASAGE-10 — Index consolidé `docs/1-MASTER`
+REBASAGE-10 â€” Index consolidÃ© `docs/1-MASTER`
 ============================================================
-Statut : VALIDÉ après correction encodage
+Statut : VALIDÃ‰ aprÃ¨s correction encodage
 
 Objectif :
-Créer / améliorer un index de lecture clair du corpus master.
+CrÃ©er / amÃ©liorer un index de lecture clair du corpus master.
 
-Fichier concerné :
+Fichier concernÃ© :
 - `docs/1-MASTER/_INDEX_MASTER.md`
 
 ============================================================
-REBASAGE-11 — Index des sessions historiques par bloc
+REBASAGE-11 â€” Index des sessions historiques par bloc
 ============================================================
-Statut : VALIDÉ
+Statut : VALIDÃ‰
 
 Objectif :
-Créer un index clair des sessions historiques `docs/2-SESSIONS`, bloc par bloc.
+CrÃ©er un index clair des sessions historiques `docs/2-SESSIONS`, bloc par bloc.
 
 Sans modifier les anciennes sessions.
 
 ============================================================
-REBASAGE-12 — Gouvernance de consultation / archivage futur des sessions
+REBASAGE-12 â€” Gouvernance de consultation / archivage futur des sessions
 ============================================================
-Statut : VALIDÉ
+Statut : VALIDÃ‰
 
 Objectif :
-Cadrer comment consulter, utiliser ou préparer l’archivage futur de `docs/2-SESSIONS`.
+Cadrer comment consulter, utiliser ou prÃ©parer lâ€™archivage futur de `docs/2-SESSIONS`.
 
-Fichier créé :
+Fichier crÃ©Ã© :
 - `docs/2-SESSIONS/GOUVERNANCE_SESSIONS.md`
 
 ============================================================
-REBASAGE-13 — Simulation d’archivage / matrice opérationnelle de consultation
+REBASAGE-13 â€” Simulation dâ€™archivage / matrice opÃ©rationnelle de consultation
 ============================================================
-Statut : VALIDÉ
+Statut : VALIDÃ‰
 
 Objectif :
-Préparer les futurs lots d’archivage/nettoyage sans déplacement, suppression ou renommage réel.
+PrÃ©parer les futurs lots dâ€™archivage/nettoyage sans dÃ©placement, suppression ou renommage rÃ©el.
 
 ============================================================
-REBASAGE-14 — Checklist d’exécution par lot A→F
+REBASAGE-14 â€” Checklist dâ€™exÃ©cution par lot Aâ†’F
 ============================================================
-Statut : VALIDÉ
+Statut : VALIDÃ‰
 
 Objectif :
-Créer une checklist d’exécution future par lots, avec critères GO / NO-GO et preuves nécessaires.
+CrÃ©er une checklist dâ€™exÃ©cution future par lots, avec critÃ¨res GO / NO-GO et preuves nÃ©cessaires.
 
-Fichier créé :
+Fichier crÃ©Ã© :
 - `docs/2-SESSIONS/CHECKLIST_EXECUTION_LOTS_SESSIONS.md`
 
 ============================================================
-REBASAGE-15 — Dossier de décision Nathan par lot A→F
+REBASAGE-15 â€” Dossier de dÃ©cision Nathan par lot Aâ†’F
 ============================================================
-Statut : VALIDÉ
+Statut : VALIDÃ‰
 
 Objectif :
-Préparer les décisions Nathan par lot avant toute action physique future.
+PrÃ©parer les dÃ©cisions Nathan par lot avant toute action physique future.
 
-Fichier créé :
+Fichier crÃ©Ã© :
 - `docs/2-SESSIONS/DOSSIER_DECISION_LOTS_SESSIONS.md`
 
 ============================================================
-REBASAGE-16 — Formulaire de validation Nathan par lot A→F
+REBASAGE-16 â€” Formulaire de validation Nathan par lot Aâ†’F
 ============================================================
-Statut : VALIDÉ
+Statut : VALIDÃ‰
 
 Objectif :
-Créer un formulaire prêt à remplir pour valider ou refuser les futurs lots.
+CrÃ©er un formulaire prÃªt Ã  remplir pour valider ou refuser les futurs lots.
 
-Fichier créé :
+Fichier crÃ©Ã© :
 - `docs/2-SESSIONS/FORMULAIRE_VALIDATION_LOTS_SESSIONS.md`
 
 ============================================================
-REBASAGE-17 — Audit fonctionnel global du produit
+REBASAGE-17 â€” Audit fonctionnel global du produit
 ============================================================
-Statut : VALIDÉ
+Statut : VALIDÃ‰
 
 Objectif :
-Faire une première cartographie fonctionnelle globale du produit existant.
+Faire une premiÃ¨re cartographie fonctionnelle globale du produit existant.
 
 Conclusion :
-Plusieurs modules sont présents, mais doivent être audités plus finement avant reprise.
+Plusieurs modules sont prÃ©sents, mais doivent Ãªtre auditÃ©s plus finement avant reprise.
 
 A26 :
 - non poursuivi comme bloc actif ;
 - devient historique / transitionnel.
 
 ============================================================
-REBASAGE-18 — Cadrage audit page par page
+REBASAGE-18 â€” Cadrage audit page par page
 ============================================================
-Statut : VALIDÉ définitivement après FIX-01
+Statut : VALIDÃ‰ dÃ©finitivement aprÃ¨s FIX-01
 
 Objectif :
-Cadrer la méthode d’audit page par page.
+Cadrer la mÃ©thode dâ€™audit page par page.
 
-Fichier créé :
+Fichier crÃ©Ã© :
 - `docs/2-SESSIONS/5-REBASAGE/REBASAGE-18_CADRAGE_AUDIT_PAGE_PAR_PAGE.md`
 
 Correction :
 - REBASAGE-18-FIX-01 : suppression BOM UTF-8.
 
 ============================================================
-REBASAGE-19 — Création du document “fonctionnalités par page”
+REBASAGE-19 â€” CrÃ©ation du document â€œfonctionnalitÃ©s par pageâ€
 ============================================================
-Statut : VALIDÉ, avec réserve méthodologique non bloquante
+Statut : VALIDÃ‰, avec rÃ©serve mÃ©thodologique non bloquante
 
 Objectif :
-Créer une synthèse opérationnelle courte pour préparer les audits page par page.
+CrÃ©er une synthÃ¨se opÃ©rationnelle courte pour prÃ©parer les audits page par page.
 
-Fichier créé :
+Fichier crÃ©Ã© :
 - `docs/2-SESSIONS/5-REBASAGE/REBASAGE-19_FONCTIONNALITES_PAR_PAGE.md`
 
 Remarque importante :
-Le document est utile comme squelette, mais il ne suffit pas encore à démarrer directement les audits page par page.
-Il doit être consolidé par une cartographie réelle du repo, des routes, pages, APIs, docs et maquettes.
+Le document est utile comme squelette, mais il ne suffit pas encore Ã  dÃ©marrer directement les audits page par page.
+Il doit Ãªtre consolidÃ© par une cartographie rÃ©elle du repo, des routes, pages, APIs, docs et maquettes.
 
 ============================================================
-REBASAGE-20 — Reclassement minimal des documents REBASAGE-18 et REBASAGE-19
+REBASAGE-20 â€” Reclassement minimal des documents REBASAGE-18 et REBASAGE-19
 ============================================================
 Statut : VALIDE apres FIX-02
 
@@ -278,7 +278,7 @@ Verdict global :
 - suite recommandee : REBASAGE-22
 
 ============================================================
-REBASAGE-22 — Corrections documentaires ciblees si necessaires
+REBASAGE-22 â€” Corrections documentaires ciblees si necessaires
 ============================================================
 Statut : A FAIRE SI REBASAGE-21 LE JUSTIFIE
 
@@ -286,7 +286,7 @@ Objectif :
 Corriger uniquement les incoherences methodologiques detectees en REBASAGE-21.
 
 ============================================================
-REBASAGE-23 — Cartographie globale repo / docs / pages / routes / APIs / maquettes
+REBASAGE-23 â€” Cartographie globale repo / docs / pages / routes / APIs / maquettes
 ============================================================
 Statut : A FAIRE
 
@@ -294,7 +294,7 @@ Objectif :
 Produire une vision globale du projet reel (code, docs, pages, routes, APIs, maquettes).
 
 ============================================================
-REBASAGE-24 — Matrice page / fonctionnalites / code / documentation / maquette
+REBASAGE-24 â€” Matrice page / fonctionnalites / code / documentation / maquette
 ============================================================
 Statut : A FAIRE
 
@@ -302,7 +302,7 @@ Objectif :
 Relier chaque page a ses fonctionnalites, fichiers code, references documentaires et maquettes.
 
 ============================================================
-REBASAGE-25 — Classement des dettes et priorites
+REBASAGE-25 â€” Classement des dettes et priorites
 ============================================================
 Statut : VALIDE DEFINITIVEMENT
 
@@ -310,7 +310,7 @@ Objectif :
 Classer les dettes detectees (bloquant, important, amelioration, a confirmer, plus tard).
 
 ============================================================
-REBASAGE-26 — Inventaire reel des pages/routes applicatives avant audit detaille
+REBASAGE-26 â€” Inventaire reel des pages/routes applicatives avant audit detaille
 ============================================================
 Statut : VALIDE DEFINITIVEMENT
 
@@ -326,7 +326,7 @@ Verdict global :
 Prochaine etape recommandee :
 - REBASAGE-27 - Audit page par page : premiere page priorisee.
 ============================================================
-REBASAGE-27 — Audit page Login
+REBASAGE-27 â€” Audit page Login
 ============================================================
 Statut : VALIDE DEFINITIVEMENT
 Livrable :
@@ -340,7 +340,7 @@ Verdict global :
 Prochaine etape recommandee :
 - REBASAGE-28 - Audit page Dashboard.
 ============================================================
-REBASAGE-28 — Audit page Dashboard
+REBASAGE-28 â€” Audit page Dashboard
 ============================================================
 Statut : VALIDE DEFINITIVEMENT
 Livrable :
@@ -354,7 +354,7 @@ Verdict global :
 Prochaine etape recommandee :
 - REBASAGE-29 - Audit page Planning.
 ============================================================
-REBASAGE-29 — Audit page Planning
+REBASAGE-29 â€” Audit page Planning
 ============================================================
 Statut : VALIDE DEFINITIVEMENT
 Livrable :
@@ -368,9 +368,9 @@ Verdict global :
 Prochaine etape recommandee :
 - REBASAGE-30 - Audit page Utilisateurs / RH.
 ============================================================
-REBASAGE-30 — Audit page Utilisateurs / RH
+REBASAGE-30 â€” Audit page Utilisateurs / RH
 ============================================================
-Statut : VALIDE
+Statut : VALIDE DEFINITIVEMENT
 Livrable :
 - docs/2-SESSIONS/5-REBASAGE/REBASAGE-30_AUDIT_PAGE_UTILISATEURS_RH.md
 
@@ -382,52 +382,63 @@ Verdict global :
 Prochaine etape recommandee :
 - REBASAGE-31 - Audit page Vehicules / Flotte.
 ============================================================
-REBASAGE-31 — Audit page Vehicules
+REBASAGE-31 â€” Audit page Vehicules
+============================================================
+Statut : VALIDE
+
+Livrable :
+- docs/2-SESSIONS/5-REBASAGE/REBASAGE-31_AUDIT_PAGE_VEHICULES_FLOTTE.md
+
+Verdict global :
+- audit vehicules / flotte realise ;
+- statut d'audit vehicules / flotte : incomplet ;
+- aucune correction appliquee.
+
+Prochaine etape recommandee :
+- REBASAGE-32 - Audit page Templates / Modeles de shifts.
+
+============================================================
+REBASAGE-32 â€” Audit page Templates
 ============================================================
 Statut : A FAIRE
 
 ============================================================
-REBASAGE-32 — Audit page Templates
+REBASAGE-33 â€” Audit page Societe
 ============================================================
 Statut : A FAIRE
 
 ============================================================
-REBASAGE-33 — Audit page Societe
+REBASAGE-34 â€” Audit page Depots / Bases
 ============================================================
 Statut : A FAIRE
 
 ============================================================
-REBASAGE-34 — Audit page Depots / Bases
+REBASAGE-35 â€” Audit page Onboarding
 ============================================================
 Statut : A FAIRE
 
 ============================================================
-REBASAGE-35 — Audit page Onboarding
+REBASAGE-36 â€” Audit page Audit / Journal d'audit
 ============================================================
 Statut : A FAIRE
 
 ============================================================
-REBASAGE-36 — Audit page Audit / Journal d'audit
+REBASAGE-37 â€” Audit page Privacy / Mentions d'information
 ============================================================
 Statut : A FAIRE
 
 ============================================================
-REBASAGE-37 — Audit page Privacy / Mentions d'information
+REBASAGE-38 â€” Audit pages techniques / secondaires
 ============================================================
 Statut : A FAIRE
 
 ============================================================
-REBASAGE-38 — Audit pages techniques / secondaires
+REBASAGE-39 â€” Synthese globale des audits page par page
 ============================================================
 Statut : A FAIRE
 
 ============================================================
-REBASAGE-39 — Synthese globale des audits page par page
-============================================================
-Statut : A FAIRE
-
-============================================================
-REBASAGE-40 — Preparation de la future refonte du plan officiel
+REBASAGE-40 â€” Preparation de la future refonte du plan officiel
 ============================================================
 Statut : A FAIRE PLUS TARD
 
