@@ -400,7 +400,7 @@ Prochaine etape recommandee :
 ============================================================
 REBASAGE-32 — Audit page Templates
 ============================================================
-Statut : VALIDE
+Statut : VALIDE DEFINITIVEMENT
 
 
 Livrable :
@@ -416,8 +416,19 @@ Prochaine etape recommandee :
 ============================================================
 REBASAGE-33 — Audit page Societe
 ============================================================
-Statut : A FAIRE
+Statut : VALIDE
 
+
+Livrable :
+- docs/2-SESSIONS/5-REBASAGE/REBASAGE-33_AUDIT_PAGE_SOCIETE_PROFIL_BASES_DEPOTS.md
+
+Verdict global :
+- audit société / profil société / bases-dépôts réalisé ;
+- statut d'audit société / profil société / bases-dépôts : incomplet ;
+- aucune correction code appliquée.
+
+Prochaine étape recommandée :
+- REBASAGE-34 - Audit page Dépôts / Bases (détail opérationnel et impacts inter-modules).
 ============================================================
 REBASAGE-34 — Audit page Depots / Bases
 ============================================================
