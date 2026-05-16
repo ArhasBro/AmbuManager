@@ -416,7 +416,7 @@ Prochaine etape recommandee :
 ============================================================
 REBASAGE-33 — Audit page Societe
 ============================================================
-Statut : VALIDE
+Statut : VALIDE DEFINITIVEMENT
 
 
 Livrable :
@@ -432,8 +432,19 @@ Prochaine étape recommandée :
 ============================================================
 REBASAGE-34 — Audit page Depots / Bases
 ============================================================
-Statut : A FAIRE
+Statut : VALIDE
 
+
+Livrable :
+- docs/2-SESSIONS/5-REBASAGE/REBASAGE-34_AUDIT_PAGE_DEPOTS_BASES.md
+
+Verdict global :
+- audit dépôts / bases réalisé ;
+- statut d'audit dépôts / bases : incomplet ;
+- aucune correction code appliquée.
+
+Prochaine étape recommandée :
+- REBASAGE-35 - Audit page Onboarding.
 ============================================================
 REBASAGE-35 — Audit page Onboarding
 ============================================================
