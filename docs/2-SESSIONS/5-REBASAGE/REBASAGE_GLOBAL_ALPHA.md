@@ -480,7 +480,7 @@ Prochaine étape recommandée :
 ============================================================
 REBASAGE-37 — Audit page Privacy / Mentions d'information
 ============================================================
-Statut : VALIDE
+Statut : VALIDE DEFINITIVEMENT
 
 Livrable :
 - docs/2-SESSIONS/5-REBASAGE/REBASAGE-37_AUDIT_PAGE_PRIVACY_MENTIONS_INFORMATION.md
@@ -496,7 +496,18 @@ Prochaine étape recommandée :
 ============================================================
 REBASAGE-38 — Audit pages techniques / secondaires
 ============================================================
-Statut : A FAIRE
+Statut : VALIDE
+
+Livrable :
+- docs/2-SESSIONS/5-REBASAGE/REBASAGE-38_AUDIT_PAGES_TECHNIQUES_SECONDAIRES.md
+
+Verdict global :
+- audit des pages techniques / secondaires réalisé ;
+- statut d'audit : incomplet ;
+- aucune correction code appliquée.
+
+Prochaine étape recommandée :
+- REBASAGE-39 - Consolidation de l'inventaire des pages et statuts après audits page par page.
 
 ============================================================
 REBASAGE-39 — Synthese globale des audits page par page
