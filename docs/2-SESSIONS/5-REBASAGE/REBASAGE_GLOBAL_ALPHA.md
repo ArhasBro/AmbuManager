@@ -304,7 +304,7 @@ Relier chaque page a ses fonctionnalites, fichiers code, references documentaire
 ============================================================
 REBASAGE-25 — Classement des dettes et priorites
 ============================================================
-Statut : A FAIRE
+Statut : VALIDE
 
 Objectif :
 Classer les dettes detectees (bloquant, important, amelioration, a confirmer, plus tard).
