@@ -448,7 +448,7 @@ Prochaine étape recommandée :
 ============================================================
 REBASAGE-35 — Audit page Onboarding
 ============================================================
-Statut : VALIDE
+Statut : VALIDE DEFINITIVEMENT
 
 Livrable :
 - docs/2-SESSIONS/5-REBASAGE/REBASAGE-35_AUDIT_PAGE_ONBOARDING.md
@@ -464,7 +464,18 @@ Prochaine étape recommandée :
 ============================================================
 REBASAGE-36 — Audit page Audit / Journal d'audit
 ============================================================
-Statut : A FAIRE
+Statut : VALIDE
+
+Livrable :
+- docs/2-SESSIONS/5-REBASAGE/REBASAGE-36_AUDIT_PAGE_AUDIT_TRACABILITE.md
+
+Verdict global :
+- audit page Audit / Traçabilité réalisé ;
+- statut d'audit : incomplet ;
+- aucune correction code appliquée.
+
+Prochaine étape recommandée :
+- REBASAGE-37 - Audit page Dashboard.
 
 ============================================================
 REBASAGE-37 — Audit page Privacy / Mentions d'information
