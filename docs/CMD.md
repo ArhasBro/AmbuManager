@@ -68,17 +68,3 @@ user123
 Viewer
 viewer@ambulance.local
 user123
-
-REBASAGE-01 — Audit global repo/docs
-REBASAGE-01-BIS — Complément audit ciblé
-REBASAGE-02 — Clarification docs racine + gouvernance
-REBASAGE-03 — Classification documentaire détaillée
-REBASAGE-04 — Audit des templates de session docs/3-TEMPLATES
-REBASAGE-05 — Correction / mise à jour des templates si nécessaire
-REBASAGE-06 — Matrice canonique Page -> PNG -> référence UI/UX -> route -> fichier app
-REBASAGE-07 — Audit encodage ciblé avec preuves fichier par fichier
-REBASAGE-08 — Correction encodage ciblée V1
-REBASAGE-09 — Décision STRUCTURE_DOCS.md / STRUCTURE_PROJET.md
-REBASAGE-10 — Index consolidé docs/1-MASTER
-REBASAGE-11 — Index sessions historiques par bloc
-REBASAGE-12 — Préparation du futur nettoyage/reclassement
