@@ -229,8 +229,12 @@ Il sert à préparer et exécuter proprement les audits page par page, sans remp
 
 ## 7. Prochaine étape recommandée
 
-Prochaine étape logique :
-- `REBASAGE-20` — audit de la première page ou du premier groupe de pages, selon priorisation Nathan.
+Ce document ne fixe pas à lui seul la prochaine session.
+La suite réelle du rebasage est pilotée par :
+`docs/2-SESSIONS/5-REBASAGE/REBASAGE_GLOBAL_ALPHA.md`
+
+À ce stade, ce document doit rester un support temporaire pour préparer les futurs audits page par page.
+Il sera exploité après la cartographie globale, la matrice page / fonctionnalités / code / documentation / maquette, le classement des dettes et l’inventaire réel des pages/routes.
 ## 8. Garde-fous méthodologiques
 
 - Un audit ne déclenche pas automatiquement une correction.
