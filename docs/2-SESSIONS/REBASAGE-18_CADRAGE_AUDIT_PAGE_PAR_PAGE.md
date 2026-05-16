@@ -1,4 +1,4 @@
-﻿# REBASAGE-18 — Cadrage audit page par page + futur document fonctionnalités par page
+# REBASAGE-18 — Cadrage audit page par page + futur document fonctionnalités par page
 
 ## 1) Résumé de la session
 
