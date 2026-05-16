@@ -356,7 +356,7 @@ Prochaine etape recommandee :
 ============================================================
 REBASAGE-29 — Audit page Planning
 ============================================================
-Statut : VALIDE
+Statut : VALIDE DEFINITIVEMENT
 Livrable :
 - docs/2-SESSIONS/5-REBASAGE/REBASAGE-29_AUDIT_PAGE_PLANNING.md
 
@@ -370,8 +370,17 @@ Prochaine etape recommandee :
 ============================================================
 REBASAGE-30 — Audit page Utilisateurs / RH
 ============================================================
-Statut : A FAIRE
+Statut : VALIDE
+Livrable :
+- docs/2-SESSIONS/5-REBASAGE/REBASAGE-30_AUDIT_PAGE_UTILISATEURS_RH.md
 
+Verdict global :
+- audit utilisateurs / RH realise ;
+- statut d'audit utilisateurs / RH : incomplet ;
+- aucune correction appliquee.
+
+Prochaine etape recommandee :
+- REBASAGE-31 - Audit page Vehicules / Flotte.
 ============================================================
 REBASAGE-31 — Audit page Vehicules
 ============================================================
