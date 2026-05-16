@@ -526,7 +526,7 @@ Prochaine étape recommandée :
 - REBASAGE-40 - Consolidation des fonctionnalités par page après audits.
 
 ============================================================
-REBASAGE-40 — Preparation de la future refonte du plan officiel
+REBASAGE-41 — Preparation de la future refonte du plan officiel
 ============================================================
 Statut : A FAIRE PLUS TARD
 
