@@ -1,26 +1,26 @@
-# Ambulance Manager — RECAP_DISCUSSIONS_V2
+# Ambulance Manager â€” RECAP_DISCUSSIONS_V2
 
 Version : V2.0.1  
 Date : 22/05/2026
 
-## 1. Rôle du document
+## 1. RÃ´le du document
 
-Ce document récapitule les éléments de reprise documentaire V2.
+Ce document rÃ©capitule les Ã©lÃ©ments de reprise documentaire V2.
 
-## 2. Synthèse
+## 2. SynthÃ¨se
 
-- la base documentaire active est en V2 et doit être stabilisée ;
-- les anciennes versions restent présentes à titre historique, non prioritaire ;
-- les fiches fonctionnalités restent actives comme référence fonctionnelle cible détaillée ;
+- la base documentaire active est en V2 et doit Ãªtre stabilisÃ©e ;
+- les anciennes versions restent prÃ©sentes Ã  titre historique, non prioritaire ;
+- les fiches fonctionnalitÃ©s restent actives comme rÃ©fÃ©rence fonctionnelle cible dÃ©taillÃ©e ;
 - cette base ne signifie pas validation finale globale des pages.
 
 ## 3. Statut fonctionnel
 
-- Login : validée, avec améliorations possibles.
-- Autres pages : à auditer, à cadrer, à confirmer ou à compléter, malgré des décisions partielles existantes.
-- Planning : non validé.
+- Login : validÃ©e, avec amÃ©liorations possibles.
+- Autres pages : Ã  auditer, Ã  cadrer, Ã  confirmer ou Ã  complÃ©ter, malgrÃ© des dÃ©cisions partielles existantes.
+- Planning : non validÃ©.
 
-## 4. Méthode retenue
+## 4. MÃ©thode retenue
 
 1. Stabilisation documentaire V2.
 2. Cadrage/audit par page.

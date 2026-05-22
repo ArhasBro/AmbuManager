@@ -1,24 +1,24 @@
-# Ambulance Manager — DOCUMENT_MAITRE_V2
+# Ambulance Manager â€” DOCUMENT_MAITRE_V2
 
 Version : V2.0.1  
 Date : 22/05/2026
 
 ## 1. Vision du projet
 
-Ambulance Manager est un SaaS métier de gestion opérationnelle pour sociétés de transport sanitaire.
+Ambulance Manager est un SaaS mÃ©tier de gestion opÃ©rationnelle pour sociÃ©tÃ©s de transport sanitaire.
 
-Le produit est en reprise méthodologique et n'est pas présenté comme terminé.
+Le produit est en reprise mÃ©thodologique et n'est pas prÃ©sentÃ© comme terminÃ©.
 
 ## 2. Statut actuel du projet
 
-Le projet ne repart pas de zéro techniquement.  
-Le projet repart de zéro méthodologiquement.
+Le projet ne repart pas de zÃ©ro techniquement.  
+Le projet repart de zÃ©ro mÃ©thodologiquement.
 
 La phase actuelle est une base de travail de stabilisation documentaire V2.
 
-## 3. Références actives du projet
+## 3. RÃ©fÃ©rences actives du projet
 
-Documents de gouvernance active à stabiliser :
+Documents de gouvernance active Ã  stabiliser :
 - `docs/1-MASTER/DOCUMENT_MAITRE_V2.md` ;
 - `docs/1-MASTER/DOCUMENT_CADRAGE_FONCTIONNEL_V2.md` ;
 - `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md` ;
@@ -27,40 +27,40 @@ Documents de gouvernance active à stabiliser :
 - `docs/1-MASTER/RECAP_DISCUSSIONS_V2.md` ;
 - `docs/1-MASTER/3-FONCTIONNALITES/`.
 
-Les versions sans suffixe V2 sont historiques, non prioritaires, et à archiver après validation V2.
+Les versions sans suffixe V2 sont historiques, non prioritaires, et Ã  archiver aprÃ¨s validation V2.
 
-## 4. Rôle des fiches fonctionnalités
+## 4. RÃ´le des fiches fonctionnalitÃ©s
 
 Les fiches de `docs/1-MASTER/3-FONCTIONNALITES/` restent actives.
 
-Elles constituent la référence détaillée de cadrage fonctionnel cible page par page.
+Elles constituent la rÃ©fÃ©rence dÃ©taillÃ©e de cadrage fonctionnel cible page par page.
 
-Leur présence ne signifie pas que les pages correspondantes sont déjà validées, finalisées ou codées.
+Leur prÃ©sence ne signifie pas que les pages correspondantes sont dÃ©jÃ  validÃ©es, finalisÃ©es ou codÃ©es.
 
 ## 5. Statut des pages
 
-- Login : page validée, avec améliorations possibles.
-- Toutes les autres pages : à auditer, à cadrer, à confirmer ou à compléter, avec décisions partielles existantes.
-- Planning : non validé, en cours de cadrage et à auditer.
+- Login : page validÃ©e, avec amÃ©liorations possibles.
+- Toutes les autres pages : Ã  auditer, Ã  cadrer, Ã  confirmer ou Ã  complÃ©ter, avec dÃ©cisions partielles existantes.
+- Planning : non validÃ©, en cours de cadrage et Ã  auditer.
 
 ## 6. Terminologie active
 
-- `Modèles horaires` (au lieu de `Templates`).
+- `ModÃ¨les horaires` (au lieu de `Templates`).
 - `Mise en route` (au lieu de `Onboarding`, hors mention historique/technique explicite).
 
-## 7. Méthode de reprise
+## 7. MÃ©thode de reprise
 
-Ordre méthodologique :
+Ordre mÃ©thodologique :
 1. Stabiliser la documentation V2.
 2. Cadrer puis auditer les pages non Login.
 3. Finaliser les maquettes.
-4. Produire des références UI/UX propres.
+4. Produire des rÃ©fÃ©rences UI/UX propres.
 5. Reprendre le codage.
 
-## 8. Règles documentaires
+## 8. RÃ¨gles documentaires
 
-- ne pas mélanger historique et actif ;
+- ne pas mÃ©langer historique et actif ;
 - conserver UTF-8 sans BOM ;
-- préserver les accents français ;
-- éviter les refontes massives non contrôlées ;
-- marquer toute incertitude : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- prÃ©server les accents franÃ§ais ;
+- Ã©viter les refontes massives non contrÃ´lÃ©es ;
+- marquer toute incertitude : `INFORMATION NON FOURNIE â€” Ã€ CONFIRMER`.

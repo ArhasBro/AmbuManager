@@ -1,28 +1,28 @@
-# Ambulance Manager — ETAT_GLOBAL_PROJET_V2
+# Ambulance Manager â€” ETAT_GLOBAL_PROJET_V2
 
 Version : V2.0.1  
 Date : 22/05/2026
 
-## 1. Rôle du document
+## 1. RÃ´le du document
 
-Ce document synthétise l'état actuel du projet pendant la stabilisation V2.
+Ce document synthÃ©tise l'Ã©tat actuel du projet pendant la stabilisation V2.
 
-## 2. État général
+## 2. Ã‰tat gÃ©nÃ©ral
 
 - documents V2 : actifs, en cours de stabilisation ;
 - versions non V2 : historiques et non prioritaires ;
-- fiches fonctionnalités : actives, référence fonctionnelle cible détaillée ;
-- code : non modifié dans cette phase documentaire.
+- fiches fonctionnalitÃ©s : actives, rÃ©fÃ©rence fonctionnelle cible dÃ©taillÃ©e ;
+- code : non modifiÃ© dans cette phase documentaire.
 
 ## 3. Statut des pages
 
-- Login : validée, avec améliorations possibles.
-- Toutes les autres pages : à auditer, à cadrer, à confirmer ou à compléter.
-- Planning : non validé, en cours de cadrage et à auditer.
+- Login : validÃ©e, avec amÃ©liorations possibles.
+- Toutes les autres pages : Ã  auditer, Ã  cadrer, Ã  confirmer ou Ã  complÃ©ter.
+- Planning : non validÃ©, en cours de cadrage et Ã  auditer.
 
-## 4. Suite immédiate
+## 4. Suite immÃ©diate
 
 1. Stabiliser les documents V2.
 2. Clarifier le statut page par page (hors Login).
 3. Finaliser ensuite les maquettes.
-4. Reprendre le codage sur base stabilisée.
+4. Reprendre le codage sur base stabilisÃ©e.

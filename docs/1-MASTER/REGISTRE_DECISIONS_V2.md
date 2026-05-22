@@ -1,32 +1,32 @@
-# Ambulance Manager — REGISTRE_DECISIONS_V2
+# Ambulance Manager â€” REGISTRE_DECISIONS_V2
 
 Version : V2.0.1  
 Date : 22/05/2026
 
-## 1. Rôle du registre
+## 1. RÃ´le du registre
 
-Ce document centralise les décisions V2 actives à stabiliser.
+Ce document centralise les dÃ©cisions V2 actives Ã  stabiliser.
 
-Les anciennes décisions restent consultables dans les documents historiques et sessions, mais elles sont non prioritaires face à la base V2 active.
+Les anciennes dÃ©cisions restent consultables dans les documents historiques et sessions, mais elles sont non prioritaires face Ã  la base V2 active.
 
-## 2. Décisions de gouvernance documentaire
+## 2. DÃ©cisions de gouvernance documentaire
 
-- les documents V2 sont la gouvernance active à stabiliser ;
-- les versions non V2 sont historiques, non prioritaires, et à archiver après validation V2 ;
-- les fiches de `docs/1-MASTER/3-FONCTIONNALITES/` restent actives comme référence détaillée de cadrage fonctionnel cible ;
-- les fichiers liés à REBASAGE sont supprimés du repo actif.
+- les documents V2 sont la gouvernance active Ã  stabiliser ;
+- les versions non V2 sont historiques, non prioritaires, et Ã  archiver aprÃ¨s validation V2 ;
+- les fiches de `docs/1-MASTER/3-FONCTIONNALITES/` restent actives comme rÃ©fÃ©rence dÃ©taillÃ©e de cadrage fonctionnel cible ;
+- les fichiers liÃ©s Ã  REBASAGE sont supprimÃ©s du repo actif.
 
-## 3. Décisions de statut fonctionnel
+## 3. DÃ©cisions de statut fonctionnel
 
-- Login : page validée, avec améliorations possibles ;
-- autres pages : décisions partielles existantes, mais statut global à auditer / à cadrer / à confirmer ;
-- Planning : non validé, en cours de cadrage.
+- Login : page validÃ©e, avec amÃ©liorations possibles ;
+- autres pages : dÃ©cisions partielles existantes, mais statut global Ã  auditer / Ã  cadrer / Ã  confirmer ;
+- Planning : non validÃ©, en cours de cadrage.
 
 ## 4. Terminologie active
 
-- utiliser `Modèles horaires` ;
+- utiliser `ModÃ¨les horaires` ;
 - utiliser `Mise en route`.
 
-## 5. Règle de mise à jour
+## 5. RÃ¨gle de mise Ã  jour
 
-- les ajouts doivent rester ciblés, cohérents avec la base V2 active et validés humainement.
+- les ajouts doivent rester ciblÃ©s, cohÃ©rents avec la base V2 active et validÃ©s humainement.

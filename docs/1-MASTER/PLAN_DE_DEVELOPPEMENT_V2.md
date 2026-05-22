@@ -1,28 +1,28 @@
 # PLAN_DE_DEVELOPPEMENT_V2
 
-Version : V2 (base préparatoire)  
+Version : V2 (base prÃ©paratoire)  
 Date : 2026-05-22
 
-## 1. Rôle du document
+## 1. RÃ´le du document
 
-Ce document constitue le plan de développement actif V2.
+Ce document constitue le plan de dÃ©veloppement actif V2.
 
-Il est en cours de cadrage et d'audit, et n'est pas considéré comme validé à ce stade.
+Il est en cours de cadrage et d'audit, et n'est pas considÃ©rÃ© comme validÃ© Ã  ce stade.
 
-## 2. Principe de reprise méthodologique
+## 2. Principe de reprise mÃ©thodologique
 
-Le produit existant n'est pas abandonné.
+Le produit existant n'est pas abandonnÃ©.
 
-La reprise se fait de manière contrôlée, document par document, à partir de la référence fonctionnelle cible portée par les fiches de `docs/1-MASTER/3-FONCTIONNALITES/`.
+La reprise se fait de maniÃ¨re contrÃ´lÃ©e, document par document, Ã  partir de la rÃ©fÃ©rence fonctionnelle cible portÃ©e par les fiches de `docs/1-MASTER/3-FONCTIONNALITES/`.
 
 ## 3. Ordre actuel de travail
 
 1. Stabilisation documentaire V2.
 2. Cadrage/audit des pages non Login.
 3. Finalisation des maquettes.
-4. Préparation des références UI/UX propres.
+4. PrÃ©paration des rÃ©fÃ©rences UI/UX propres.
 5. Reprise du codage.
 
-## 4. Règle de complétion
+## 4. RÃ¨gle de complÃ©tion
 
-Les détails de chaque étape seront complétés après validation humaine fichier par fichier.
+Les dÃ©tails de chaque Ã©tape seront complÃ©tÃ©s aprÃ¨s validation humaine fichier par fichier.

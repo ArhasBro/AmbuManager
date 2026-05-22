@@ -1,52 +1,52 @@
-# Ambulance Manager — DOCUMENT_CADRAGE_FONCTIONNEL_V2
+# Ambulance Manager â€” DOCUMENT_CADRAGE_FONCTIONNEL_V2
 
 Version : V2.0.1  
 Date : 22/05/2026
 
-## 1. Rôle du document
+## 1. RÃ´le du document
 
-Ce document est la référence fonctionnelle V2 de cadrage global à stabiliser.
+Ce document est la rÃ©fÃ©rence fonctionnelle V2 de cadrage global Ã  stabiliser.
 
-L'ancien `DOCUMENT_CADRAGE_FONCTIONNEL.md` reste historique, non prioritaire, et à archiver après validation V2.
+L'ancien `DOCUMENT_CADRAGE_FONCTIONNEL.md` reste historique, non prioritaire, et Ã  archiver aprÃ¨s validation V2.
 
-## 2. Référence détaillée
+## 2. RÃ©fÃ©rence dÃ©taillÃ©e
 
-La référence détaillée de cadrage fonctionnel cible est :
+La rÃ©fÃ©rence dÃ©taillÃ©e de cadrage fonctionnel cible est :
 - `docs/1-MASTER/3-FONCTIONNALITES/`.
 
-Ces fiches restent actives. Elles décrivent la cible fonctionnelle officielle, ou presque, sous réserve d'arbitrages futurs.
+Ces fiches restent actives. Elles dÃ©crivent la cible fonctionnelle officielle, ou presque, sous rÃ©serve d'arbitrages futurs.
 
 ## 3. Statut des pages
 
-- Login : validée, avec améliorations possibles.
-- Shell global / navigation : à cadrer et à auditer.
-- Tableau de bord : à cadrer et à auditer.
-- Utilisateurs : à cadrer et à auditer.
-- Véhicules : à cadrer et à auditer.
-- Suivi des véhicules : à cadrer et à auditer.
-- Modèles horaires : à cadrer et à auditer.
-- Société : à cadrer et à auditer.
-- Dépôts / Bases : à cadrer et à auditer.
-- Planning : non validé, à auditer et à confirmer.
-- Audit : à cadrer et à auditer.
-- Mise en route : à cadrer et à auditer.
-- Heures / Horaires : à cadrer.
+- Login : validÃ©e, avec amÃ©liorations possibles.
+- Shell global / navigation : Ã  cadrer et Ã  auditer.
+- Tableau de bord : Ã  cadrer et Ã  auditer.
+- Utilisateurs : Ã  cadrer et Ã  auditer.
+- VÃ©hicules : Ã  cadrer et Ã  auditer.
+- Suivi des vÃ©hicules : Ã  cadrer et Ã  auditer.
+- ModÃ¨les horaires : Ã  cadrer et Ã  auditer.
+- SociÃ©tÃ© : Ã  cadrer et Ã  auditer.
+- DÃ©pÃ´ts / Bases : Ã  cadrer et Ã  auditer.
+- Planning : non validÃ©, Ã  auditer et Ã  confirmer.
+- Audit : Ã  cadrer et Ã  auditer.
+- Mise en route : Ã  cadrer et Ã  auditer.
+- Heures / Horaires : Ã  cadrer.
 
-## 4. Règles transverses
+## 4. RÃ¨gles transverses
 
 Le cadrage V2 conserve comme base de travail :
 - multi-tenant strict ;
-- séparation par société ;
+- sÃ©paration par sociÃ©tÃ© ;
 - droits/permissions ;
-- traçabilité des actions sensibles ;
-- archivage logique privilégié.
+- traÃ§abilitÃ© des actions sensibles ;
+- archivage logique privilÃ©giÃ©.
 
 ## 5. Terminologie active
 
-- `Modèles horaires` (pas `Templates`).
+- `ModÃ¨les horaires` (pas `Templates`).
 - `Mise en route` (pas `Onboarding`, hors mention historique/technique explicite).
 
-## 6. Points à confirmer
+## 6. Points Ã  confirmer
 
-- statut final de certains rôles : INFORMATION NON FOURNIE — À CONFIRMER ;
-- arbitrages non tranchés : INFORMATION NON FOURNIE — À CONFIRMER.
+- statut final de certains rÃ´les : INFORMATION NON FOURNIE â€” Ã€ CONFIRMER ;
+- arbitrages non tranchÃ©s : INFORMATION NON FOURNIE â€” Ã€ CONFIRMER.

@@ -15,7 +15,8 @@
     "db:reset": "prisma migrate reset --force",
     "test:smoke": "node --test scripts/quality/smoke-api-critical-contracts.test.mjs",
     "test:targeted": "node --experimental-strip-types --test scripts/quality/targeted-sensitive-blocks.test.mjs",
-    "test:quality": "npm run test:smoke && npm run test:targeted"
+    "test:quality": "npm run test:smoke && npm run test:targeted",
+    "docs:encoding": "node scripts/check-doc-encoding.mjs"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
