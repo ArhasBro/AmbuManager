@@ -8,7 +8,7 @@ Date : 18/05/2026
 ## Sommaire
 
 - [1. Objectif de la page](#1-objectif-de-la-page)
-- [2. Périmètre V1 validé](#2-perimetre-v1-valide)
+- [2. Périmètre V1 cible](#2-perimetre-v1-valide)
 - [3. Utilisateurs concernés](#3-utilisateurs-concernes)
 - [4. Éléments visibles sur la page](#4-elements-visibles-sur-la-page)
 - [5. Fonctionnement de la connexion](#5-fonctionnement-de-la-connexion)
@@ -37,18 +37,18 @@ Son rôle est strictement limité à :
 - charger les informations nécessaires à l'accès applicatif ;
 - rediriger l'utilisateur vers le Tableau de bord.
 
-La page Login est considérée comme la seule page validée à 100 % à ce stade.
+La page Login est considérée comme la référence fonctionnelle cible à ce stade.
 
 ---
 
-## 2. Périmètre V1 validé
+## 2. Périmètre V1 cible
 
 Le Login V1 repose uniquement sur une connexion par :
 
 - adresse email ;
 - mot de passe.
 
-Fonctionnalités validées pour la V1 :
+Fonctionnalités attendues pour la V1 :
 
 - affichage d'un formulaire de connexion simple ;
 - saisie de l'adresse email ;
@@ -328,7 +328,7 @@ Ces éléments ne doivent pas être codés dans la V1 de cette page.
 
 Cette section sert de mémoire produit.
 
-Les éléments listés ici ne font pas partie du périmètre V1 validé.
+Les éléments listés ici ne font pas partie du Périmètre V1 cible.
 
 ### 11.1 Mot de passe oublié
 
@@ -415,7 +415,7 @@ L'expérience mobile n'est pas intégrée au périmètre V1 de cette page, sauf 
 
 ## 12. Points à confirmer
 
-Aucun point bloquant à confirmer pour le périmètre V1 validé de la page Login.
+Aucun point bloquant à confirmer pour le Périmètre V1 cible de la page Login.
 
 Les éléments listés dans les évolutions futures devront être cadrés dans des documents ou sessions dédiées avant toute implémentation.
 
