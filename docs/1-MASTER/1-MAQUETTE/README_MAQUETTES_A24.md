@@ -70,10 +70,10 @@ Les maquettes suivantes constituent le socle visuel validé pour A24 :
 | Planning | `/planning` | `Planning_V1.2.png` |
 | Utilisateurs / RH | `/users` | `Utilisateurs-RH_V1.png` |
 | Véhicules | `/vehicles` | `Véhicules_V1.2.png` |
-| Templates | `/templates` | `Templates_V1.1.png` |
+| Modèles horaires (ancien nom historique : Templates) | `/templates` | `Modèles_horaires_V1.1.png` |
 | Société | `/company` | `Société_V1.0.png` |
 | Dépôts / bases | `/depots` | `Dépôts-bases_V1.0.png` |
-| Onboarding | `/onboarding` | `Onboarding_V1.2.png` |
+| Mise en route (ancien nom historique : Onboarding) | `/onboarding` | `Onboarding_V1.2.png` |
 | Audit | `/audit` | `Audit_V1.0.png` |
 | Mentions d’information / Privacy | `/privacy` | `Privacy_V1.0.png` |
 
@@ -106,25 +106,9 @@ Ce fichier doit être lu avant toute correction A24.
 
 # 5. Dossier icônes
 
-Les icônes extraites des maquettes sont stockées dans :
+Le dossier `ICONES/` est traité comme historique/optionnel dans cette structure réorganisée.
 
-```txt
-ICONES/
-```
-
-Structure recommandée :
-
-```txt
-ICONES/
-├── CONTACT_SHEET_ICONES_V1_1.png
-├── LISTE_ICONES_EXPORTEES_V1_1.md
-├── TABLE_MAPPING_ICONES_V1_1.csv
-└── ICONES_MAQUETTES_V1_1/
-    ├── icon_login_brand_ambulance.png
-    ├── icon_sidebar_dashboard.png
-    ├── icon_kpi_users_active.png
-    └── ...
-```
+Pour ce chantier documentaire, les PNG de page dans `MAQUETTE_PNG/` restent la source visuelle principale.
 
 ## 5.1 Règle d’usage des icônes
 
@@ -256,7 +240,7 @@ A24-LOT-02 — Shell + Dashboard
 A24-LOT-03 — Pages référentielles simples
 A24-LOT-04 — Users / RH
 A24-LOT-05 — Planning
-A24-LOT-06 — Audit / Onboarding / Privacy
+A24-LOT-06 — Audit / Mise en route (Onboarding) / Privacy
 A24-VALIDATION — Validation globale UI/UX
 CLOTURE_A24 — Clôture finale du bloc UI/UX
 ```
@@ -345,37 +329,33 @@ Il signifie que leur rendu ne correspond pas encore suffisamment aux maquettes v
 
 ---
 
-# 14. Arborescence recommandée du dossier
+# 14. Arborescence actuelle du dossier
 
-Arborescence cible :
+Arborescence réelle actuelle :
 
 ```txt
 docs/1-MASTER/1-MAQUETTE/
 ├── README_MAQUETTES_A24.md
 ├── SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md
-├── Dashboard_V1.png
-├── Planning_V1.2.png
-├── Utilisateurs-RH_V1.png
-├── Véhicules_V1.2.png
-├── Templates_V1.1.png
-├── Société_V1.0.png
-├── Dépôts-bases_V1.0.png
-├── Onboarding_V1.2.png
-├── Audit_V1.0.png
-├── Login_V1.1.png
-├── Privacy_V1.0.png
-└── ICONES/
-    ├── CONTACT_SHEET_ICONES_V1_1.png
-    ├── LISTE_ICONES_EXPORTEES_V1_1.md
-    ├── TABLE_MAPPING_ICONES_V1_1.csv
-    └── ICONES_MAQUETTES_V1_1/
-        ├── icon_login_brand_ambulance.png
-        ├── icon_login_card_ambulance.png
-        ├── icon_sidebar_logo_ambulance.png
-        └── ...
+├── CADRAGE_UI_UX_ALPHA_MAQUETTE_V0.2.md
+└── MAQUETTE_PNG/
+    ├── 1-Login/
+    ├── 2-Dashboard/
+    ├── 3-Modèles-Horaire/
+    ├── 4-Planning/
+    ├── 5-Utilisateurs-RH/
+    ├── 6-Véhicules/
+    ├── 7-Dépôts-bases/
+    ├── 8-Société-paramètres-métier/
+    ├── 9-Onboarding société pilote/
+    ├── 10-Audit/
+    └── 11-Privacy/
 ```
 
-Si les maquettes sont réparties en sous-dossiers historiques, conserver les sous-dossiers existants, mais maintenir ce README comme point d’entrée officiel.
+Nomenclature de page à conserver dans la documentation :
+
+- Ancien nom historique : `Templates` ; nom fonctionnel actuel : `Modèles horaires`.
+- Ancien nom historique : `Onboarding` ; nom fonctionnel actuel : `Mise en route`.
 
 ---
 

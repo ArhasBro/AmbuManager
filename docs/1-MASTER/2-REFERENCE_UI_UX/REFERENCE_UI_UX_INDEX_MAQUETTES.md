@@ -166,6 +166,12 @@ docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_CODEX_UI_UX_VISUEL_99.md
 
 Puis uniquement le `REFERENCE_UI_UX_<PAGE>.md` de la page concernée et les fichiers code utiles.
 
+### 2.10 Nomenclature fonctionnelle validée
+
+- Ancien nom historique : `Templates` ; nom fonctionnel actuel : `Modèles horaires`.
+- Ancien nom historique : `Onboarding` ; nom fonctionnel actuel : `Mise en route`.
+- Les routes techniques restent `/templates` et `/onboarding`.
+
 ---
 
 ## 3. Périmètre du chantier
@@ -202,21 +208,21 @@ Le chantier exclut :
 Racine :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG
 ```
 
 | Page | Maquette | Route concernée | Statut |
 |---|---|---|---|
-| Dashboard | `1-Dashboard/Dashboard_V1.png` | `/dashboard` | officielle |
-| Planning | `2-Planning/Planning_V1.2.png` | `/planning` | officielle |
-| Planning — détail annoté | `2-Planning/Planning_V1.2_INFO_DETAIL.png` | `/planning` | support d’analyse |
-| Utilisateurs / RH | `3-Utilisateurs-RH/Utilisateurs-RH_V1.png` | `/users` | officielle |
-| Véhicules | `4-Véhicules/Véhicules_V1.2.png` | `/vehicles` | officielle |
+| Dashboard | `2-Dashboard/Dashboard_V1.png` | `/dashboard` | officielle |
+| Planning | `4-Planning/Planning_V1.2.png` | `/planning` | officielle |
+| Planning — détail annoté | `4-Planning/Planning_V1.2_INFO_DETAIL.png` | `/planning` | support d’analyse |
+| Utilisateurs / RH | `5-Utilisateurs-RH/Utilisateurs-RH_V1.png` | `/users` | officielle |
+| Véhicules | `6-Véhicules/Véhicules_V1.2.png` | `/vehicles` | officielle |
 
-Chemin officiel current à utiliser pour Users/RH :
+Chemin officiel actuel à utiliser pour Users/RH :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/3-Utilisateurs-RH/Utilisateurs-RH_V1.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/5-Utilisateurs-RH/Utilisateurs-RH_V1.png
 ```
 
 Note : selon le contexte ZIP ou système de fichiers, certains chemins peuvent apparaître sous forme encodée, par exemple `V#U00e9hicules`. Codex devra toujours lister le dossier réel avant lecture si le chemin accentué échoue.
@@ -226,16 +232,16 @@ Note : selon le contexte ZIP ou système de fichiers, certains chemins peuvent a
 Racine :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG
 ```
 
 | Page | Maquette | Route concernée | Statut |
 |---|---|---|---|
-| Templates | `1-Templates/Templates_V1.1.png` | `/templates` | officielle |
-| Société / paramètres métier | `2-Société-paramètres-métier/Société_V1.0.png` | `/company` | officielle |
-| Dépôts / bases | `3-Dépôts-bases/Dépôts-bases_V1.0.png` | `/depots` | officielle |
-| Onboarding société pilote | `4-Onboarding société pilote/Onboarding_V1.2.png` | `/onboarding` | officielle |
-| Audit | `5-Audit/Audit_V1.0.png` | `/audit` | officielle |
+| Modèles horaires (ancien nom historique : Templates) | `3-Modèles-Horaire/Modèles_horaires_V1.1.png` | `/templates` | officielle |
+| Société / paramètres métier | `8-Société-paramètres-métier/Société_V1.0.png` | `/company` | officielle |
+| Dépôts / bases | `7-Dépôts-bases/Dépôts-bases_V1.0.png` | `/depots` | officielle |
+| Mise en route (ancien nom historique : Onboarding) | `9-Onboarding société pilote/Onboarding_V1.2.png` | `/onboarding` | officielle |
+| Audit | `10-Audit/Audit_V1.0.png` | `/audit` | officielle |
 
 Note : selon le contexte ZIP ou système de fichiers, certains chemins peuvent apparaître sous forme encodée, par exemple `Soci#U00e9t#U00e9` ou `D#U00e9p#U00f4ts-bases`.
 
@@ -244,13 +250,13 @@ Note : selon le contexte ZIP ou système de fichiers, certains chemins peuvent a
 Racine :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG
 ```
 
 | Page | Maquette | Route concernée | Statut |
 |---|---|---|---|
 | Login | `1-Login/Login_V1.1.png` | `/login` | officielle |
-| Privacy / mentions d’information | `2-Privacy/Privacy_V1.0.png` | `/privacy` | officielle |
+| Privacy / mentions d’information | `11-Privacy/Privacy_V1.0.png` | `/privacy` | officielle |
 
 ---
 
@@ -265,9 +271,9 @@ docs/1-MASTER/1-MAQUETTE/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0
 | 4 | Société / paramètres métier | `/company` | `Société_V1.0.png` | `app/company/page.tsx`, `app/company/company-profile-form.tsx`, `app/company/company-rules-panel.tsx` | `REFERENCE_UI_UX_COMPANY.md` |
 | 5 | Dépôts / bases | `/depots` | `Dépôts-bases_V1.0.png` | `app/depots/page.tsx`, `app/depots/depots-client.tsx` | `REFERENCE_UI_UX_DEPOTS_BASES.md` |
 | 6 | Véhicules | `/vehicles` | `Véhicules_V1.2.png` | `app/vehicles/page.tsx`, `app/vehicles/vehicles-client.tsx`, `app/vehicles/add-vehicle-form.tsx` | `REFERENCE_UI_UX_VEHICLES.md` |
-| 7 | Templates | `/templates` | `Templates_V1.1.png` | `app/templates/page.tsx`, `app/templates/templates-client.tsx` | `REFERENCE_UI_UX_TEMPLATES.md` |
+| 7 | Modèles horaires (ancien nom historique : Templates) | `/templates` | `Modèles_horaires_V1.1.png` | `app/templates/page.tsx`, `app/templates/templates-client.tsx` | `REFERENCE_UI_UX_TEMPLATES.md` |
 | 8 | Utilisateurs / RH | `/users` | `Utilisateurs-RH_V1.png` | `app/users/page.tsx`, `app/users/*client*.tsx`, `app/a24-users-rh.css` | `REFERENCE_UI_UX_USERS_RH.md` |
-| 9 | Onboarding société pilote | `/onboarding` | `Onboarding_V1.2.png` | `app/onboarding/page.tsx`, `app/onboarding/onboarding-client.tsx` | `REFERENCE_UI_UX_ONBOARDING.md` |
+| 9 | Mise en route (ancien nom historique : Onboarding) | `/onboarding` | `Onboarding_V1.2.png` | `app/onboarding/page.tsx`, `app/onboarding/onboarding-client.tsx` | `REFERENCE_UI_UX_ONBOARDING.md` |
 | 10 | Audit | `/audit` | `Audit_V1.0.png` | `app/audit/page.tsx`, `app/audit/audit-client.tsx` | `REFERENCE_UI_UX_AUDIT.md` |
 | 11 | Privacy / mentions d’information | `/privacy` | `Privacy_V1.0.png` | `app/privacy/page.tsx` | `REFERENCE_UI_UX_PRIVACY.md` |
 
@@ -285,16 +291,18 @@ docs/1-MASTER/1-MAQUETTE/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0
 
 ---
 
-## 7. Documents à créer
+## 7. Documents du pack UI/UX actuel
 
-Documents transversaux :
+Documents transversaux actifs :
 
 ```txt
 docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_INDEX_MAQUETTES.md
 docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_SHELL_GLOBAL.md
+docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_CODEX_UI_UX_VISUEL_99.md
+docs/1-MASTER/2-REFERENCE_UI_UX/MATRICE_CANONIQUE_UI_UX.md
 ```
 
-Documents page par page :
+Documents page par page actifs :
 
 ```txt
 docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_LOGIN.md
@@ -307,11 +315,6 @@ docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_USERS_RH.md
 docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_ONBOARDING.md
 docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_AUDIT.md
 docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_PRIVACY.md
-```
-
-Document déjà existant à conserver :
-
-```txt
 docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_A25_PLANNING.md
 ```
 

@@ -34,7 +34,7 @@ La page Login doit donc être évaluée sur sa fidélité visuelle à la maquett
 La référence officielle de la page Login est l’image située dans :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0/1-Login/Login_V1.1.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/1-Login/Login_V1.1.png
 ```
 
 Image analysée :

@@ -93,7 +93,7 @@ app/ui/*
 ### 2.3 Maquette officielle
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0/2-Privacy/Privacy_V1.0.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/11-Privacy/Privacy_V1.0.png
 ```
 
 ## 3. Nature visuelle de la page

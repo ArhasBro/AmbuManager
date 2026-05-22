@@ -30,14 +30,14 @@ Objectif principal : permettre à Codex de reconstruire ensuite la page Planning
 Les références officielles du Planning A25 sont les images situées dans :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/4-Planning
 ```
 
 Images principales analysées :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2.png
-docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2_INFO_DETAIL.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/4-Planning/Planning_V1.2.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/4-Planning/Planning_V1.2_INFO_DETAIL.png
 ```
 
 `Planning_V1.2.png` est la référence visuelle propre.

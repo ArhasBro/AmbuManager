@@ -96,7 +96,7 @@ app/ui/*
 Chemin logique attendu :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/2-Société-paramètres-métier/Société_V1.0.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/8-Société-paramètres-métier/Société_V1.0.png
 ```
 
 Le chemin doit rester en français avec accents. Codex ne doit pas utiliser de variante non accentuée.

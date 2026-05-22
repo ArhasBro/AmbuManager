@@ -1245,7 +1245,7 @@ La référence Planning détaillée et prioritaire du bloc A25 est :
 
 Les images Planning à reproduire sont situées dans :
 
-`docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning`
+`docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/4-Planning`
 
 Images principales :
 - `Planning_V1.2.png` ;
@@ -1528,7 +1528,7 @@ Codex doit :
   Périmètre : `/templates`, KPI, filtres, tableau/liste, panneau détail, actions visibles, formulaires lourds non exposés par défaut.  
   Référence : `REFERENCE_UI_UX_TEMPLATES.md`.  
   Livrable attendu : patch code visuel ciblé Templates.  
-  DoD : la page Templates se rapproche à environ 99 % de `Templates_V1.1.png`.
+  DoD : la page Templates se rapproche à environ 99 % de `Modèles_horaires_V1.1.png`.
 
 - **A26-UI-08 — CORRECTION+COMPLÉTION** — Utilisateurs / RH.  
   Périmètre : `/users`, KPI RH, filtres, table, panneau RH, onglets absences, zone sécurité, opérations avancées masquées par défaut.  

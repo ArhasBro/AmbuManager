@@ -94,7 +94,7 @@ app/ui/*
 ### 2.3 Maquette officielle
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/5-Audit/Audit_V1.0.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/10-Audit/Audit_V1.0.png
 ```
 
 ## 3. Nature visuelle de la page

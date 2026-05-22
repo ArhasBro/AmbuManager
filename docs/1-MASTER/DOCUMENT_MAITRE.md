@@ -221,7 +221,7 @@ docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_A25_PLANNING.md
 Ce document constitue la référence opérationnelle du réalignement visuel Planning, en complément du plan de développement et des images Planning officielles conservées dans :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/4-Planning
 ```
 
 ### 10.2 Références UI/UX transversales

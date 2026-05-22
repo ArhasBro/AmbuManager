@@ -1,5 +1,8 @@
 # BLOC UI/UX ALPHA — Cadrage Maquette V0.2
 
+> Statut : copie historique conservée pour traçabilité.
+> Référence active prioritaire : `docs/1-MASTER/CADRAGE_UI_UX_ALPHA_MAQUETTE_V0.2.md`.
+
 ## 1. Objet du document
 
 Ce document cadre le travail UI/UX à réaliser pour Ambulance Manager avant intégration dans le code.

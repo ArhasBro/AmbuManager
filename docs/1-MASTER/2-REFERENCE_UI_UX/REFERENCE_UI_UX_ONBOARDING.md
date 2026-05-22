@@ -94,12 +94,18 @@ app/ui/*
 ### 2.3 Maquette officielle
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/4-Onboarding société pilote/Onboarding_V1.2.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/9-Onboarding société pilote/Onboarding_V1.2.png
 ```
+
+### 2.4 Nomenclature fonctionnelle
+
+- Ancien nom historique : `Onboarding`
+- Nom fonctionnel actuel : `Mise en route`
+- Nom de route conservé (historique technique) : `/onboarding`
 
 ## 3. Nature visuelle de la page
 
-La page `Onboarding société pilote` est un écran de préparation et d'import initial.
+La page `Mise en route` (ancien nom historique : `Onboarding`) est un écran de préparation et d'import initial.
 
 La maquette est structurée en trois colonnes :
 
@@ -115,7 +121,7 @@ L'objectif visuel est de montrer un workflow clair, guidé et rassurant, sans tr
 
 Éléments :
 
-- titre `Onboarding société pilote` ;
+- titre maquette `Onboarding société pilote` (libellé historique) ;
 - sous-titre `Préparez les données nécessaires avant la première exploitation réelle.`.
 
 Pas de bouton primaire dans le header ; l'action principale est dans la zone centrale et le panneau droit.

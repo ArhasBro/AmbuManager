@@ -13,7 +13,7 @@ Route : `/users`
 Maquette officielle prioritaire :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/3-Utilisateurs-RH/Utilisateurs-RH_V1.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/5-Utilisateurs-RH/Utilisateurs-RH_V1.png
 ```
 
 Règle d’autorité :
@@ -268,6 +268,6 @@ Optionnel et justifié uniquement : composant UI partagé strictement nécessair
 
 ```txt
 REFERENCE_UI_UX_USERS_RH : EXPLOITABLE POUR CORRECTION VISUELLE 99 %
-SOURCE PRIORITAIRE : Utilisateurs-RH_V1.png (chemin officiel current)
+SOURCE PRIORITAIRE : Utilisateurs-RH_V1.png (chemin officiel actuel)
 PÉRIMÈTRE : UI/UX VISUEL UNIQUEMENT
 ```

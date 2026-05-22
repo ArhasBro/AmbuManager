@@ -162,8 +162,8 @@ Décision validée au 10/05/2026 : le bloc A25 ne doit plus être jugé uniqueme
 A25 doit viser une refonte globale de la page Planning en se rapprochant le plus possible des images officielles :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2.png
-docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2_INFO_DETAIL.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/4-Planning/Planning_V1.2.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/4-Planning/Planning_V1.2_INFO_DETAIL.png
 ```
 
 La référence documentaire officielle du bloc A25 est :

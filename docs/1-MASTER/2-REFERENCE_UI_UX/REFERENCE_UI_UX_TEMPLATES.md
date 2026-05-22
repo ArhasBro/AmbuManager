@@ -94,12 +94,18 @@ app/ui/*
 ### 2.3 Maquette officielle
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/1-Templates/Templates_V1.1.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/3-Modèles-Horaire/Modèles_horaires_V1.1.png
 ```
+
+### 2.4 Nomenclature fonctionnelle
+
+- Ancien nom historique : `Templates`
+- Nom fonctionnel actuel : `Modèles horaires`
+- Nom de route conservé (historique technique) : `/templates`
 
 ## 3. Nature visuelle de la page
 
-La page `Templates de garde` est un référentiel de modèles de shifts.
+La page `Modèles horaires` (ancien nom historique : `Templates`) est un référentiel de modèles de shifts.
 
 La maquette montre une page de gestion structurée :
 
@@ -118,7 +124,7 @@ Le rendu doit être proche de la page Véhicules en densité et structure, mais 
 
 Éléments :
 
-- titre `Templates de garde` ;
+- titre maquette `Templates de garde` (libellé historique) ;
 - sous-titre `Gérez vos modèles de garde et de shift pour organiser vos plannings.` ;
 - bouton primaire `Nouveau template`.
 

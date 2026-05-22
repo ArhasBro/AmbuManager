@@ -202,25 +202,25 @@ Le Shell global n’a pas une maquette isolée unique.
 Il est présent transversalement dans les maquettes officielles suivantes :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/1-Dashboard/Dashboard_V1.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/2-Dashboard/Dashboard_V1.png
 
-docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/2-Planning/Planning_V1.2.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/4-Planning/Planning_V1.2.png
 
-docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/3-Utilisateurs-RH/Utilisateurs-RH_V1.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/5-Utilisateurs-RH/Utilisateurs-RH_V1.png
 
-docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/4-Véhicules/Véhicules_V1.2.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/6-Véhicules/Véhicules_V1.2.png
 
-docs/1-MASTER/1-MAQUETTE/MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/1-Templates/Templates_V1.1.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/3-Modèles-Horaire/Modèles_horaires_V1.1.png
 
-docs/1-MASTER/1-MAQUETTE/MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/2-Société-paramètres-métier/Société_V1.0.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/8-Société-paramètres-métier/Société_V1.0.png
 
-docs/1-MASTER/1-MAQUETTE/MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/3-Dépôts-bases/Dépôts-bases_V1.0.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/7-Dépôts-bases/Dépôts-bases_V1.0.png
 
-docs/1-MASTER/1-MAQUETTE/MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/4-Onboarding société pilote/Onboarding_V1.2.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/9-Onboarding société pilote/Onboarding_V1.2.png
 
-docs/1-MASTER/1-MAQUETTE/MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0/5-Audit/Audit_V1.0.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/10-Audit/Audit_V1.0.png
 
-docs/1-MASTER/1-MAQUETTE/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0/2-Privacy/Privacy_V1.0.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/11-Privacy/Privacy_V1.0.png
 ```
 
 Note chemin : dans certains ZIP, les caractères accentués peuvent apparaître encodés sous la forme `V#U00e9hicules`, `Soci#U00e9t#U00e9`, `D#U00e9p#U00f4ts-bases`. Codex devra lister le dossier réel si un chemin accentué échoue.
@@ -1005,7 +1005,7 @@ Ce document ne déclenche pas encore de production code.
 Quand une session Codex sera lancée pour le Shell global, elle devra respecter ces règles :
 
 1. Lire ce document avant modification.
-2. Lire les PNG officiels utiles dans `docs/1-MASTER/1-MAQUETTE/` (dossiers `MAQUETTES_FONDATRICES_IMAGES_V1.0`, `MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0`, `PAGES_SIMPLES_FINITIONS_IMAGE_V1.0`).
+2. Lire les PNG officiels utiles dans `docs/1-MASTER/1-MAQUETTE/` (dossiers `MAQUETTE_PNG`, `MAQUETTE_PNG`, `MAQUETTE_PNG`).
 3. Lire uniquement les fichiers code nécessaires au Shell.
 4. Ne pas scanner inutilement tout le dépôt.
 5. Ne pas générer de captures automatiquement.

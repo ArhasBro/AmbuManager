@@ -51,9 +51,9 @@ Il doit être utilisé par :
 La direction artistique officielle est exclusivement :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0
-docs/1-MASTER/1-MAQUETTE/MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0
-docs/1-MASTER/1-MAQUETTE/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG
 ```
 
 En cas de contradiction entre :
@@ -68,9 +68,9 @@ En cas de contradiction entre :
 la référence prioritaire est toujours :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0
-docs/1-MASTER/1-MAQUETTE/MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0
-docs/1-MASTER/1-MAQUETTE/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG
 ```
 
 Les autres fichiers du dossier `docs/1-MASTER/1-MAQUETTE/` peuvent servir de supports complémentaires, mais ils ne priment pas sur `MAQUETTES PNG OFFICIELLES`.

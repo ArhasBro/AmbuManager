@@ -38,7 +38,7 @@ Il ne doit pas être transformé en cockpit analytique complexe.
 La référence officielle de la page Dashboard est l’image située dans :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/1-Dashboard/Dashboard_V1.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/2-Dashboard/Dashboard_V1.png
 ```
 
 Image analysée :
@@ -1422,7 +1422,7 @@ Objectif : réaligner uniquement le visuel de la page Dashboard sur la maquette 
 Références à lire obligatoirement :
 - `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_SHELL_GLOBAL.md`
 - `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_DASHBOARD.md`
-- image officielle : `docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0/1-Dashboard/Dashboard_V1.png`
+- image officielle : `docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/2-Dashboard/Dashboard_V1.png`
 
 Fichiers probables :
 - `app/dashboard/page.tsx`
