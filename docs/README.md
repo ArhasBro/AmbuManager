@@ -20,27 +20,25 @@ Le dossier `docs/` centralise la documentation projet :
 
 ## Fichiers racine
 
-- `docs/README_DOCS.md` : gouvernance documentaire détaillée (document racine de pilotage documentaire).
+- `docs/README_DOCS.md` : gouvernance documentaire détaillée.
 - `docs/README.md` : accueil simple (ce fichier).
 - `docs/CMD.md` : brouillon personnel Nathan, non officiel produit.
-- `docs/STRUCTURE_DOCS.md` : inventaire structurel opérationnel, statut à confirmer.
+- `docs/STRUCTURE_DOCS.md` : archivé dans `docs/4-ARCHIVES/1-MASTER_HISTORIQUE/STRUCTURE_DOCS.md`.
 
 ## Règles clés
 
-- `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT.md` reste le seul plan officiel.
+- `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md` est le plan actif.
 - `README.md` et `README_DOCS.md` ne doivent pas être fusionnés automatiquement.
 - `CMD.md` ne doit pas être utilisé comme source de vérité documentaire par Codex.
-- `STRUCTURE_DOCS.md` ne doit pas être supprimé automatiquement.
+- Les archives documentaires sont centralisées dans `docs/4-ARCHIVES/1-MASTER_HISTORIQUE/`.
 
 ## Maquettes (rappel)
 
-Ne pas déplacer les maquettes pendant cette phase de rebasage.
-La structure réelle actuelle repose sur :
-- `docs/1-MASTER/1-MAQUETTE/MAQUETTES_FONDATRICES_IMAGES_V1.0`
-- `docs/1-MASTER/1-MAQUETTE/MAQUETTES_COMPLEMENTAIRES_IMAGES_V1.0`
-- `docs/1-MASTER/1-MAQUETTE/PAGES_SIMPLES_FINITIONS_IMAGE_V1.0`
+Ne pas déplacer les maquettes pendant cette phase.
+La structure active actuelle repose sur :
+- `docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/`
 
-Des références historiques à `MAQUETTE_DA` peuvent subsister dans des anciens documents/sessions.
+Ce dossier est conservé comme base de comparaison et mémoire visuelle, avec un statut transitoire / historique.
 
 ## Encodage (rappel)
 

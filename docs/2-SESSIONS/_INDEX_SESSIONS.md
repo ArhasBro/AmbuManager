@@ -1,5 +1,10 @@
 # Index sessions — Ambulance Manager
 
+## Clarification de gouvernance (post-audit)
+
+- Nouveau document de gouvernance : docs/2-SESSIONS/README_SESSIONS.md.
+- L'audit documentaire a recommandé une clarification de gouvernance avant toute réorganisation physique.
+
 ## Rôle du dossier docs/2-SESSIONS
 
 Le dossier `docs/2-SESSIONS` conserve l'historique des sessions, les preuves d'exécution, les notes, les résultats, les clôtures et les traces de patchs.
