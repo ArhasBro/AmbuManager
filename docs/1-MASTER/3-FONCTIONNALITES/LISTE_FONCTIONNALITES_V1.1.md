@@ -1,7 +1,7 @@
-# Ambulance Manager — LISTE_FONCTIONNALITES_V1.1
+# Ambulance Manager â€” LISTE_FONCTIONNALITES_V1.1
 
-> Statut : référence fonctionnelle cible — page non validée à ce stade.
-> Ce document est une synthèse fonctionnelle cible et ne vaut pas validation finale des pages.
+> Statut : rÃ©fÃ©rence fonctionnelle cible â€” page non validÃ©e Ã  ce stade.
+> Ce document est une synthÃ¨se fonctionnelle cible et ne vaut pas validation finale des pages.
 
 Version : V1.1 (MASTER)  
 Date : 18/05/2026
@@ -13,125 +13,125 @@ Date : 18/05/2026
 - [3. Tableau de bord](#3-tableau-de-bord)
 - [4. Planning](#4-planning)
 - [5. Utilisateurs](#5-utilisateurs)
-- [6. Véhicules](#6-véhicules)
-- [7. Suivi des véhicules](#7-suivi-des-véhicules)
-- [8. Modèles horaires](#8-modèles-horaires)
-- [9. Société](#9-société)
-- [10. Dépôts / Bases](#10-dépôts--bases)
+- [6. VÃ©hicules](#6-vÃ©hicules)
+- [7. Suivi des vÃ©hicules](#7-suivi-des-vÃ©hicules)
+- [8. ModÃ¨les horaires](#8-modÃ¨les-horaires)
+- [9. SociÃ©tÃ©](#9-sociÃ©tÃ©)
+- [10. DÃ©pÃ´ts / Bases](#10-dÃ©pÃ´ts--bases)
 - [11. Mise en route](#11-mise-en-route)
 - [12. Audit](#12-audit)
-- [13. Pages / modules futurs identifiés](#13-pages--modules-futurs-identifiés)
-- [14. Points à confirmer](#14-points-à -confirmer)
+- [13. Pages / modules futurs identifiÃ©s](#13-pages--modules-futurs-identifiÃ©s)
+- [14. Points Ã  confirmer](#14-points-Ã  -confirmer)
 
 ---
 
 ## 1. Vision du projet
 
-Ambulance Manager est un SaaS de gestion opérationnelle pour société de transport sanitaire.
+Ambulance Manager est un SaaS de gestion opÃ©rationnelle pour sociÃ©tÃ© de transport sanitaire.
 
-Le produit vise un fonctionnement multi-tenant strict, avec cloisonnement par société.
+Le produit vise un fonctionnement multi-tenant strict, avec cloisonnement par sociÃ©tÃ©.
 
-Le périmètre V1 / Alpha est centré sur :
+Le pÃ©rimÃ¨tre V1 / Alpha est centrÃ© sur :
 
 - authentification ;
 - tableau de bord ;
 - utilisateurs ;
-- véhicules ;
-- suivi des véhicules ;
-- modèles horaires ;
-- planning manuel métier ;
-- société ;
-- dépôts / bases ;
+- vÃ©hicules ;
+- suivi des vÃ©hicules ;
+- modÃ¨les horaires ;
+- planning manuel mÃ©tier ;
+- sociÃ©tÃ© ;
+- dÃ©pÃ´ts / bases ;
 - mise en route ;
-- audit / traçabilité.
+- audit / traÃ§abilitÃ©.
 
-Les modules avancés restent prévus plus tard lorsqu'ils sont explicitement indiqués comme Beta, version mobile, version finale ou très long terme.
+Les modules avancÃ©s restent prÃ©vus plus tard lorsqu'ils sont explicitement indiquÃ©s comme Beta, version mobile, version finale ou trÃ¨s long terme.
 
-Rôles fonctionnels à prendre en compte :
+RÃ´les fonctionnels Ã  prendre en compte :
 
 - Admin ;
-- Gérant ;
+- GÃ©rant ;
 - ADE ;
 - AA ;
 - PSC1 ;
 - TAXI ;
 - Bureau ;
-- Régulateur si utile plus tard ;
-- Support propriétaire si cadré techniquement.
+- RÃ©gulateur si utile plus tard ;
+- Support propriÃ©taire si cadrÃ© techniquement.
 
-Règle de prudence :
+RÃ¨gle de prudence :
 
-> Toute information non validée doit rester marquée : INFORMATION NON FOURNIE — À CONFIRMER.
+> Toute information non validÃ©e doit rester marquÃ©e : INFORMATION NON FOURNIE â€” Ã€ CONFIRMER.
 
 ---
 
 ## 2. Login
 
-La page **Login** permet l'accès sécurisé à l'application.
+La page **Login** permet l'accÃ¨s sÃ©curisÃ© Ã  l'application.
 
-Périmètre V1 / Alpha :
+PÃ©rimÃ¨tre V1 / Alpha :
 
 - connexion email + mot de passe ;
 - pas d'inscription libre ;
-- pas de mot de passe oublié en V1 ;
-- pas de choix manuel de rôle, société ou dépôt / base ;
-- redirection vers Tableau de bord après connexion ;
-- chargement de la session, du rôle principal, de la société et des permissions ;
-- erreurs sobres et sécurisées ;
-- blocage si compte inactif, absence de société valide ou absence de rôle valide ;
-- bouton de connexion désactivé si email ou mot de passe vide ;
-- champ mot de passe masqué avec option afficher / masquer ;
-- redirection vers Login si accès sans session.
+- pas de mot de passe oubliÃ© en V1 ;
+- pas de choix manuel de rÃ´le, sociÃ©tÃ© ou dÃ©pÃ´t / base ;
+- redirection vers Tableau de bord aprÃ¨s connexion ;
+- chargement de la session, du rÃ´le principal, de la sociÃ©tÃ© et des permissions ;
+- erreurs sobres et sÃ©curisÃ©es ;
+- blocage si compte inactif, absence de sociÃ©tÃ© valide ou absence de rÃ´le valide ;
+- bouton de connexion dÃ©sactivÃ© si email ou mot de passe vide ;
+- champ mot de passe masquÃ© avec option afficher / masquer ;
+- redirection vers Login si accÃ¨s sans session.
 
-Évolutions futures :
+Ã‰volutions futures :
 
-- mot de passe oublié ;
-- première connexion ;
+- mot de passe oubliÃ© ;
+- premiÃ¨re connexion ;
 - double authentification ;
 - SSO ;
-- accès support renforcé ;
-- sécurité avancée ;
-- multi-société avancée ;
-- expérience mobile.
+- accÃ¨s support renforcÃ© ;
+- sÃ©curitÃ© avancÃ©e ;
+- multi-sociÃ©tÃ© avancÃ©e ;
+- expÃ©rience mobile.
 
 ---
 
 ## 3. Tableau de bord
 
-La page **Tableau de bord** est la page d'accueil après connexion.
+La page **Tableau de bord** est la page d'accueil aprÃ¨s connexion.
 
-Périmètre V1 / Alpha :
+PÃ©rimÃ¨tre V1 / Alpha :
 
 - tableau de bord personnalisable simplement par utilisateur ;
-- widgets prédéfinis selon rôles et permissions ;
+- widgets prÃ©dÃ©finis selon rÃ´les et permissions ;
 - raccourcis vers les pages principales ;
 - KPI simples sous forme de tuiles ;
 - informations planning simples ;
 - widgets Planning personnel / terrain ;
-- widgets Planning global équipes ;
+- widgets Planning global Ã©quipes ;
 - widgets informations / alertes simples ;
-- possibilité de choisir les widgets visibles parmi une liste autorisée ;
-- possibilité de choisir des raccourcis favoris ;
-- retour à une disposition par défaut selon profil ;
-- préférences enregistrées par utilisateur.
+- possibilitÃ© de choisir les widgets visibles parmi une liste autorisÃ©e ;
+- possibilitÃ© de choisir des raccourcis favoris ;
+- retour Ã  une disposition par dÃ©faut selon profil ;
+- prÃ©fÃ©rences enregistrÃ©es par utilisateur.
 
 Exclusions Alpha :
 
 - graphiques complexes ;
-- reporting analytique avancé ;
-- centre de notifications avancé ;
+- reporting analytique avancÃ© ;
+- centre de notifications avancÃ© ;
 - moteur d'alertes complexe ;
-- prédictions.
+- prÃ©dictions.
 
 Pages accessibles en raccourci selon permissions :
 
 - Planning ;
 - Utilisateurs ;
-- Véhicules ;
-- Suivi des véhicules si disponible ;
-- Modèles horaires ;
-- Société ;
-- Dépôts / Bases ;
+- VÃ©hicules ;
+- Suivi des vÃ©hicules si disponible ;
+- ModÃ¨les horaires ;
+- SociÃ©tÃ© ;
+- DÃ©pÃ´ts / Bases ;
 - Mise en route ;
 - Audit.
 
@@ -139,131 +139,131 @@ Pages accessibles en raccourci selon permissions :
 
 ## 4. Planning
 
-La page **Planning** est un planning manuel métier, centré sur les affectations synthétiques.
+La page **Planning** est un planning manuel mÃ©tier, centrÃ© sur les affectations synthÃ©tiques.
 
-Périmètre V1 / Alpha :
+PÃ©rimÃ¨tre V1 / Alpha :
 
-- aucune vue détaillée heure par heure ;
-- fonctionnement par modèles horaires, types d'affectation, semaines et repères synthétiques ;
-- vue globale annuelle utilisateurs × semaines ;
-- affichage du modèle horaire ou type affecté dans chaque case ;
-- vue personnelle type agenda synthétique ;
+- aucune vue dÃ©taillÃ©e heure par heure ;
+- fonctionnement par modÃ¨les horaires, types d'affectation, semaines et repÃ¨res synthÃ©tiques ;
+- vue globale annuelle utilisateurs Ã— semaines ;
+- affichage du modÃ¨le horaire ou type affectÃ© dans chaque case ;
+- vue personnelle type agenda synthÃ©tique ;
 - vue mois claire pour l'organisation personnelle ;
-- vue semaine synthétique ;
-- vue jour synthétique ;
+- vue semaine synthÃ©tique ;
+- vue jour synthÃ©tique ;
 - distinction lecture simple / gestion selon permissions ;
-- annotations légères pour jour férié, samedi, dimanche et week-end complet ;
-- case avec fond blanc et libellé dans un badge coloré ;
-- états simples : REPOS, ABSENT, INDISPONIBLE, NON PLANIFIÉ, À AFFECTER ;
-- création par utilisateur + semaine + modèle / type / état ;
-- préparation hebdomadaire des besoins à couvrir ;
-- checklist des besoins : À couvrir, Couvert, Incomplet, Non affecté, À vérifier ;
+- annotations lÃ©gÃ¨res pour jour fÃ©riÃ©, samedi, dimanche et week-end complet ;
+- case avec fond blanc et libellÃ© dans un badge colorÃ© ;
+- Ã©tats simples : REPOS, ABSENT, INDISPONIBLE, NON PLANIFIÃ‰, Ã€ AFFECTER ;
+- crÃ©ation par utilisateur + semaine + modÃ¨le / type / Ã©tat ;
+- prÃ©paration hebdomadaire des besoins Ã  couvrir ;
+- checklist des besoins : Ã€ couvrir, Couvert, Incomplet, Non affectÃ©, Ã€ vÃ©rifier ;
 - affectation manuelle des utilisateurs ;
-- affectation manuelle des véhicules ;
+- affectation manuelle des vÃ©hicules ;
 - publication principale par semaine ;
-- modification après publication avec traçabilité obligatoire ;
-- annulation logique sans suppression physique après publication ;
-- motif obligatoire pour annulation après publication et modification sensible ;
-- filtres, recherche rapide et panneau de détail ;
-- alertes simples et conflits évidents en mode gestion ;
+- modification aprÃ¨s publication avec traÃ§abilitÃ© obligatoire ;
+- annulation logique sans suppression physique aprÃ¨s publication ;
+- motif obligatoire pour annulation aprÃ¨s publication et modification sensible ;
+- filtres, recherche rapide et panneau de dÃ©tail ;
+- alertes simples et conflits Ã©vidents en mode gestion ;
 - affichage du nombre d'utilisateurs terrain disponibles ;
 - audit des actions importantes.
 
-Termes français retenus :
+Termes franÃ§ais retenus :
 
-- Autoschedule → Planification automatique ;
-- Matching automatique → Affectation automatique optimisée.
+- Autoschedule â†’ Planification automatique ;
+- Matching automatique â†’ Affectation automatique optimisÃ©e.
 
-Ces fonctions avancées sont prévues pour la Beta, pas comme cœur du Planning Alpha.
+Ces fonctions avancÃ©es sont prÃ©vues pour la Beta, pas comme cÅ“ur du Planning Alpha.
 
-Points liés :
+Points liÃ©s :
 
-- distinction TPMR VSL / TPMR TAXI Ã  prendre en compte ;
-- gestion avancée des heures reportée à une page Heures / Horaires, prévue pour l'Alpha mobile.
+- distinction TPMR VSL / TPMR TAXI Ãƒ  prendre en compte ;
+- gestion avancÃ©e des heures reportÃ©e Ã  une page Heures / Horaires, prÃ©vue pour l'Alpha mobile.
 
 ---
 
 ## 5. Utilisateurs
 
-La page **Utilisateurs** permet de gérer les utilisateurs rattachés à une société.
+La page **Utilisateurs** permet de gÃ©rer les utilisateurs rattachÃ©s Ã  une sociÃ©tÃ©.
 
-Périmètre V1 / Alpha :
+PÃ©rimÃ¨tre V1 / Alpha :
 
-- création utilisateur ;
+- crÃ©ation utilisateur ;
 - modification utilisateur ;
 - nom ;
-- prénom ;
+- prÃ©nom ;
 - initiales d'avatar choisies manuellement ;
 - email ;
-- téléphone ;
-- rôle principal obligatoire ;
-- multi-rôle avec maximum 3 rôles ;
+- tÃ©lÃ©phone ;
+- rÃ´le principal obligatoire ;
+- multi-rÃ´le avec maximum 3 rÃ´les ;
 - permissions fines ;
 - statut actif / inactif ;
-- rattachement société automatique ;
-- base / dépôt si applicable ;
-- mot de passe initial défini manuellement par Admin / Gérant ;
-- action séparée de modification / réinitialisation du mot de passe ;
+- rattachement sociÃ©tÃ© automatique ;
+- base / dÃ©pÃ´t si applicable ;
+- mot de passe initial dÃ©fini manuellement par Admin / GÃ©rant ;
+- action sÃ©parÃ©e de modification / rÃ©initialisation du mot de passe ;
 - archivage logique ;
-- consultation des utilisateurs archivés via filtre ;
-- demandes d'absence / indisponibilité ;
-- statuts de demande : en attente, validée, refusée, annulée ;
-- validation / refus par Admin, Gérant ou utilisateur autorisé ;
-- actions sensibles tracées dans l'audit.
+- consultation des utilisateurs archivÃ©s via filtre ;
+- demandes d'absence / indisponibilitÃ© ;
+- statuts de demande : en attente, validÃ©e, refusÃ©e, annulÃ©e ;
+- validation / refus par Admin, GÃ©rant ou utilisateur autorisÃ© ;
+- actions sensibles tracÃ©es dans l'audit.
 
-Règles importantes :
+RÃ¨gles importantes :
 
-- une demande en attente ne modifie pas automatiquement l'état opérationnel ;
-- une demande validée peut rendre l'utilisateur absent ou indisponible ;
+- une demande en attente ne modifie pas automatiquement l'Ã©tat opÃ©rationnel ;
+- une demande validÃ©e peut rendre l'utilisateur absent ou indisponible ;
 - un utilisateur standard voit uniquement sa propre fiche pour le moment ;
-- Admin / Gérant et utilisateurs autorisés voient les utilisateurs selon périmètre société ;
-- les utilisateurs terrain peuvent avoir des types de véhicules affectables.
+- Admin / GÃ©rant et utilisateurs autorisÃ©s voient les utilisateurs selon pÃ©rimÃ¨tre sociÃ©tÃ© ;
+- les utilisateurs terrain peuvent avoir des types de vÃ©hicules affectables.
 
-Types de véhicules affectables Alpha :
+Types de vÃ©hicules affectables Alpha :
 
 - Ambulance ;
 - VSL ;
 - TAXI ;
 - TPMR.
 
-Évolutions futures :
+Ã‰volutions futures :
 
-- mot de passe temporaire avec première connexion ;
-- véhicules affectables + exceptions par véhicule ;
+- mot de passe temporaire avec premiÃ¨re connexion ;
+- vÃ©hicules affectables + exceptions par vÃ©hicule ;
 - formations / recyclage ;
-- visite médicale ;
-- gestion avancée des heures dans page dédiée ;
-- expérience mobile.
+- visite mÃ©dicale ;
+- gestion avancÃ©e des heures dans page dÃ©diÃ©e ;
+- expÃ©rience mobile.
 
 ---
 
-## 6. Véhicules
+## 6. VÃ©hicules
 
-La page **Véhicules** est le référentiel administratif de la flotte.
+La page **VÃ©hicules** est le rÃ©fÃ©rentiel administratif de la flotte.
 
-Périmètre V1 / Alpha :
+PÃ©rimÃ¨tre V1 / Alpha :
 
-- liste des véhicules ;
-- création véhicule ;
-- modification véhicule ;
-- fiche détail véhicule ;
+- liste des vÃ©hicules ;
+- crÃ©ation vÃ©hicule ;
+- modification vÃ©hicule ;
+- fiche dÃ©tail vÃ©hicule ;
 - nom interne personnalisable ;
 - marque ;
-- modèle ;
+- modÃ¨le ;
 - type obligatoire ;
 - immatriculation obligatoire ;
 - statut administratif actif / inactif ;
-- disponibilité générale disponible / indisponible ;
-- base / dépôt principal ;
+- disponibilitÃ© gÃ©nÃ©rale disponible / indisponible ;
+- base / dÃ©pÃ´t principal ;
 - commentaire interne simple si utile ;
-- désactivation ;
-- réactivation ;
+- dÃ©sactivation ;
+- rÃ©activation ;
 - archivage ;
-- consultation des archivés ;
-- désarchivage / restauration ;
+- consultation des archivÃ©s ;
+- dÃ©sarchivage / restauration ;
 - aucune suppression physique ;
 - lecture simple pour les utilisateurs terrain ;
-- actions sensibles tracées dans l'audit.
+- actions sensibles tracÃ©es dans l'audit.
 
 Types principaux :
 
@@ -272,197 +272,197 @@ Types principaux :
 - TAXI ;
 - TPMR.
 
-Pour TPMR, une distinction métier doit être prévue lorsque nécessaire :
+Pour TPMR, une distinction mÃ©tier doit Ãªtre prÃ©vue lorsque nÃ©cessaire :
 
 - TPMR VSL ;
 - TPMR TAXI.
 
-Règles importantes :
+RÃ¨gles importantes :
 
-- un véhicule inactif, indisponible ou archivé n'est pas proposé normalement au Planning ;
-- la base / dépôt du véhicule est une information de référence, pas une contrainte bloquante ;
-- un véhicule peut ne pas rentrer à sa base principale le soir ;
-- les workflows de vérification, désinfection, anomalies et entretiens relèvent de Suivi des véhicules.
+- un vÃ©hicule inactif, indisponible ou archivÃ© n'est pas proposÃ© normalement au Planning ;
+- la base / dÃ©pÃ´t du vÃ©hicule est une information de rÃ©fÃ©rence, pas une contrainte bloquante ;
+- un vÃ©hicule peut ne pas rentrer Ã  sa base principale le soir ;
+- les workflows de vÃ©rification, dÃ©sinfection, anomalies et entretiens relÃ¨vent de Suivi des vÃ©hicules.
 
 ---
 
-## 7. Suivi des véhicules
+## 7. Suivi des vÃ©hicules
 
-La page **Suivi des véhicules** centralise le suivi opérationnel de la flotte.
+La page **Suivi des vÃ©hicules** centralise le suivi opÃ©rationnel de la flotte.
 
 Onglets V1 / Alpha :
 
 - Vue d'ensemble ;
-- Vérifications ;
-- Désinfections ;
-- Anomalies des véhicules.
+- VÃ©rifications ;
+- DÃ©sinfections ;
+- Anomalies des vÃ©hicules.
 
-L'onglet **Entretiens des véhicules** est prévu au minimum pour la Beta, pas dans l'Alpha.
+L'onglet **Entretiens des vÃ©hicules** est prÃ©vu au minimum pour la Beta, pas dans l'Alpha.
 
-### Vérifications
+### VÃ©rifications
 
-Règles validées :
+RÃ¨gles validÃ©es :
 
-- ambulance : 2 vérificateurs ;
-- autres véhicules : 1 vérificateur ;
-- fréquence quotidienne ;
-- absence de vérification quotidienne → anomalie majeure d'office ;
-- résultats : Conforme, Non conforme, Sous réserve, À vérifier ;
-- Non conforme → anomalie bloquante ;
-- pas d'indisponibilité automatique ;
-- passage indisponible uniquement par action explicite autorisée.
+- ambulance : 2 vÃ©rificateurs ;
+- autres vÃ©hicules : 1 vÃ©rificateur ;
+- frÃ©quence quotidienne ;
+- absence de vÃ©rification quotidienne â†’ anomalie majeure d'office ;
+- rÃ©sultats : Conforme, Non conforme, Sous rÃ©serve, Ã€ vÃ©rifier ;
+- Non conforme â†’ anomalie bloquante ;
+- pas d'indisponibilitÃ© automatique ;
+- passage indisponible uniquement par action explicite autorisÃ©e.
 
-Règles ARS exactes :
+RÃ¨gles ARS exactes :
 
-- INFORMATION NON FOURNIE — À CONFIRMER.
+- INFORMATION NON FOURNIE â€” Ã€ CONFIRMER.
 
-### Désinfections
+### DÃ©sinfections
 
-Règles validées :
+RÃ¨gles validÃ©es :
 
-- formulaire avec type de produit utilisé ;
-- résultat "Réalisée avec réserve" → point à surveiller ;
-- résultat "Non réalisée" ou "À refaire" → motif obligatoire ;
-- fréquence / déclenchement : quotidienne, après utilisation / transport, après certains transports spécifiques, manuel selon besoin ;
-- contre-vérification par un tiers autre que la personne ayant réalisé la désinfection ;
-- pas d'indisponibilité automatique.
+- formulaire avec type de produit utilisÃ© ;
+- rÃ©sultat "RÃ©alisÃ©e avec rÃ©serve" â†’ point Ã  surveiller ;
+- rÃ©sultat "Non rÃ©alisÃ©e" ou "Ã€ refaire" â†’ motif obligatoire ;
+- frÃ©quence / dÃ©clenchement : quotidienne, aprÃ¨s utilisation / transport, aprÃ¨s certains transports spÃ©cifiques, manuel selon besoin ;
+- contre-vÃ©rification par un tiers autre que la personne ayant rÃ©alisÃ© la dÃ©sinfection ;
+- pas d'indisponibilitÃ© automatique.
 
-Règles ARS exactes :
+RÃ¨gles ARS exactes :
 
-- INFORMATION NON FOURNIE — À CONFIRMER.
+- INFORMATION NON FOURNIE â€” Ã€ CONFIRMER.
 
 ### Anomalies
 
-Règles validées :
+RÃ¨gles validÃ©es :
 
-- sources : déclaration manuelle, vérification, désinfection, vérification quotidienne non faite, autre ;
-- statuts : ouverte, en cours de traitement, résolue, annulée / classée sans suite ;
-- criticités : non bloquante, bloquante, majeure ;
-- utilisateurs terrain peuvent déclarer ;
-- clôture / classement / changement disponibilité soumis à permission ;
-- motif obligatoire pour rendre un véhicule indisponible ou disponible ;
+- sources : dÃ©claration manuelle, vÃ©rification, dÃ©sinfection, vÃ©rification quotidienne non faite, autre ;
+- statuts : ouverte, en cours de traitement, rÃ©solue, annulÃ©e / classÃ©e sans suite ;
+- criticitÃ©s : non bloquante, bloquante, majeure ;
+- utilisateurs terrain peuvent dÃ©clarer ;
+- clÃ´ture / classement / changement disponibilitÃ© soumis Ã  permission ;
+- motif obligatoire pour rendre un vÃ©hicule indisponible ou disponible ;
 - aucune suppression physique d'anomalie en Alpha.
 
 ---
 
-## 8. Modèles horaires
+## 8. ModÃ¨les horaires
 
-La page **Modèles horaires** remplace fonctionnellement l'ancien terme Templates.
+La page **ModÃ¨les horaires** remplace fonctionnellement l'ancien terme Templates.
 
-Périmètre V1 / Alpha :
+PÃ©rimÃ¨tre V1 / Alpha :
 
-- liste des modèles horaires ;
-- création ;
+- liste des modÃ¨les horaires ;
+- crÃ©ation ;
 - modification ;
 - duplication ;
-- désactivation ;
-- réactivation ;
+- dÃ©sactivation ;
+- rÃ©activation ;
 - archivage ;
-- consultation des archivés ;
-- désarchivage / restauration ;
+- consultation des archivÃ©s ;
+- dÃ©sarchivage / restauration ;
 - aucune suppression physique ;
 - nom complet de gestion ;
-- libellé court Planning ;
-- type de véhicule ;
+- libellÃ© court Planning ;
+- type de vÃ©hicule ;
 - horaires ;
 - composition attendue ;
-- base / dépôt facultative ;
+- base / dÃ©pÃ´t facultative ;
 - statut ;
-- compteur "Nb utilisé" ;
-- actions sensibles tracées dans l'audit.
+- compteur "Nb utilisÃ©" ;
+- actions sensibles tracÃ©es dans l'audit.
 
-Règles Planning :
+RÃ¨gles Planning :
 
-- un modèle sert de base de création pour une affectation Planning ;
-- une affectation créée reste indépendante du modèle ;
-- modifier un modèle ne modifie pas automatiquement les affectations déjà créées ;
-- seuls les modèles actifs et non archivés sont proposés normalement ;
-- le compteur "Nb utilisé" augmente quand une affectation est créée depuis le modèle.
+- un modÃ¨le sert de base de crÃ©ation pour une affectation Planning ;
+- une affectation crÃ©Ã©e reste indÃ©pendante du modÃ¨le ;
+- modifier un modÃ¨le ne modifie pas automatiquement les affectations dÃ©jÃ  crÃ©Ã©es ;
+- seuls les modÃ¨les actifs et non archivÃ©s sont proposÃ©s normalement ;
+- le compteur "Nb utilisÃ©" augmente quand une affectation est crÃ©Ã©e depuis le modÃ¨le.
 
 Jours actifs et horaires par jour :
 
-- un modèle peut définir facultativement les jours où il est actif ;
-- un modèle peut définir des horaires différents selon les jours ;
-- ces informations restent facultatives pour les modèles génériques ;
-- si un modèle avec jours actifs est appliqué à une semaine, les jours travaillés et repos peuvent être déduits automatiquement dans la vue semaine.
+- un modÃ¨le peut dÃ©finir facultativement les jours oÃ¹ il est actif ;
+- un modÃ¨le peut dÃ©finir des horaires diffÃ©rents selon les jours ;
+- ces informations restent facultatives pour les modÃ¨les gÃ©nÃ©riques ;
+- si un modÃ¨le avec jours actifs est appliquÃ© Ã  une semaine, les jours travaillÃ©s et repos peuvent Ãªtre dÃ©duits automatiquement dans la vue semaine.
 
 Exemple :
 
-- jeudi : 21h → 7h J+1 ;
-- vendredi : 21h → 7h J+1 ;
-- samedi : 19h → 5h J+1 ;
-- dimanche : 19h → 5h J+1 ;
-- lundi à mercredi : repos automatiquement déduit.
+- jeudi : 21h â†’ 7h J+1 ;
+- vendredi : 21h â†’ 7h J+1 ;
+- samedi : 19h â†’ 5h J+1 ;
+- dimanche : 19h â†’ 5h J+1 ;
+- lundi Ã  mercredi : repos automatiquement dÃ©duit.
 
-Distinction TPMR à prévoir :
+Distinction TPMR Ã  prÃ©voir :
 
 - TPMR VSL ;
 - TPMR TAXI.
 
-La couleur ne doit pas être définie rigidement par le modèle.  
-La couleur sert de repère visuel choisi par l'utilisateur qui fait le planning.
+La couleur ne doit pas Ãªtre dÃ©finie rigidement par le modÃ¨le.  
+La couleur sert de repÃ¨re visuel choisi par l'utilisateur qui fait le planning.
 
 ---
 
-## 9. Société
+## 9. SociÃ©tÃ©
 
-La page **Société** est le profil permanent de la société.
+La page **SociÃ©tÃ©** est le profil permanent de la sociÃ©tÃ©.
 
-Périmètre V1 / Alpha :
+PÃ©rimÃ¨tre V1 / Alpha :
 
-- consultation du profil société ;
-- mode consultation séparé du mode modification ;
-- informations générales ;
+- consultation du profil sociÃ©tÃ© ;
+- mode consultation sÃ©parÃ© du mode modification ;
+- informations gÃ©nÃ©rales ;
 - adresse principale ;
-- contacts société multiples ;
-- paramètres généraux ;
-- informations métier confirmées ;
-- résumé simple de configuration avec accès "Continuer la mise en route" ;
-- responsables applicatifs affichés automatiquement depuis les utilisateurs Admin / Gérant ;
-- contact administratif ou représentant légal renseigné manuellement ;
-- plusieurs contacts société dès l'Alpha ;
-- types de contacts possibles : représentant légal, contact administratif, contact facturation, responsable exploitation ou autre contact utile ;
-- modifications sensibles tracées dans l'audit.
+- contacts sociÃ©tÃ© multiples ;
+- paramÃ¨tres gÃ©nÃ©raux ;
+- informations mÃ©tier confirmÃ©es ;
+- rÃ©sumÃ© simple de configuration avec accÃ¨s "Continuer la mise en route" ;
+- responsables applicatifs affichÃ©s automatiquement depuis les utilisateurs Admin / GÃ©rant ;
+- contact administratif ou reprÃ©sentant lÃ©gal renseignÃ© manuellement ;
+- plusieurs contacts sociÃ©tÃ© dÃ¨s l'Alpha ;
+- types de contacts possibles : reprÃ©sentant lÃ©gal, contact administratif, contact facturation, responsable exploitation ou autre contact utile ;
+- modifications sensibles tracÃ©es dans l'audit.
 
-Règles importantes :
+RÃ¨gles importantes :
 
-- un contact société n'est pas automatiquement un utilisateur applicatif ;
-- responsables applicatifs non modifiés depuis Société ;
-- désactivation, suspension, archivage ou suppression d'une société exclus de l'Alpha ;
-- utilisateurs terrain sans accès par défaut à Société.
+- un contact sociÃ©tÃ© n'est pas automatiquement un utilisateur applicatif ;
+- responsables applicatifs non modifiÃ©s depuis SociÃ©tÃ© ;
+- dÃ©sactivation, suspension, archivage ou suppression d'une sociÃ©tÃ© exclus de l'Alpha ;
+- utilisateurs terrain sans accÃ¨s par dÃ©faut Ã  SociÃ©tÃ©.
 
 ---
 
-## 10. Dépôts / Bases
+## 10. DÃ©pÃ´ts / Bases
 
-La page **Dépôts / Bases** gère les lieux de référence de la société.
+La page **DÃ©pÃ´ts / Bases** gÃ¨re les lieux de rÃ©fÃ©rence de la sociÃ©tÃ©.
 
-Périmètre V1 / Alpha :
+PÃ©rimÃ¨tre V1 / Alpha :
 
-- notion simple base / dépôt ;
-- pas de distinction technique obligatoire entre Base, Dépôt, Point d'exploitation ou Autre ;
+- notion simple base / dÃ©pÃ´t ;
+- pas de distinction technique obligatoire entre Base, DÃ©pÃ´t, Point d'exploitation ou Autre ;
 - liste principale ;
-- création ;
+- crÃ©ation ;
 - modification ;
 - responsable local optionnel ;
-- compteur utilisateurs rattachés ;
-- compteur véhicules rattachés ;
+- compteur utilisateurs rattachÃ©s ;
+- compteur vÃ©hicules rattachÃ©s ;
 - statut actif / inactif ;
 - archivage ;
-- consultation des archivés ;
-- désarchivage / restauration ;
+- consultation des archivÃ©s ;
+- dÃ©sarchivage / restauration ;
 - aucune suppression physique ;
-- actions sensibles tracées dans l'audit.
+- actions sensibles tracÃ©es dans l'audit.
 
-Règles importantes :
+RÃ¨gles importantes :
 
-- nom obligatoire et unique dans la société ;
-- adresse recommandée mais non obligatoire ;
+- nom obligatoire et unique dans la sociÃ©tÃ© ;
+- adresse recommandÃ©e mais non obligatoire ;
 - responsable local = utilisateur existant, sans permissions automatiques ;
-- rattachements principalement gérés depuis Utilisateurs et Véhicules ;
-- modification d'un dépôt / base ne détache pas automatiquement les éléments rattachés ;
-- base / dépôt guide le Planning mais ne bloque pas automatiquement les affectations ;
-- archivage ou désactivation possible même avec rattachements, avec avertissement simple.
+- rattachements principalement gÃ©rÃ©s depuis Utilisateurs et VÃ©hicules ;
+- modification d'un dÃ©pÃ´t / base ne dÃ©tache pas automatiquement les Ã©lÃ©ments rattachÃ©s ;
+- base / dÃ©pÃ´t guide le Planning mais ne bloque pas automatiquement les affectations ;
+- archivage ou dÃ©sactivation possible mÃªme avec rattachements, avec avertissement simple.
 
 ---
 
@@ -470,118 +470,118 @@ Règles importantes :
 
 La page **Mise en route** remplace l'ancien nom Onboarding.
 
-Elle reste séparée de la page Société.
+Elle reste sÃ©parÃ©e de la page SociÃ©tÃ©.
 
-Périmètre V1 / Alpha :
+PÃ©rimÃ¨tre V1 / Alpha :
 
 - assistant / checklist de configuration initiale ;
 - suivi d'avancement ;
-- accès rapides vers les pages métier ;
-- profil société ;
-- dépôts / bases ;
+- accÃ¨s rapides vers les pages mÃ©tier ;
+- profil sociÃ©tÃ© ;
+- dÃ©pÃ´ts / bases ;
 - utilisateurs ;
-- véhicules ;
-- modèles horaires ;
+- vÃ©hicules ;
+- modÃ¨les horaires ;
 - planning initial ;
-- import éventuel non bloquant ;
-- vérification finale simple.
+- import Ã©ventuel non bloquant ;
+- vÃ©rification finale simple.
 
-Règles importantes :
+RÃ¨gles importantes :
 
-- Mise en route ne remplace pas les pages métier ;
-- Société reste le profil permanent ;
+- Mise en route ne remplace pas les pages mÃ©tier ;
+- SociÃ©tÃ© reste le profil permanent ;
 - Mise en route reste l'assistant de configuration initiale ;
-- les formulaires complets restent dans les pages concernées ;
-- Admin / Gérant par défaut ;
-- utilisateur autorisé si permission dédiée ;
-- utilisateurs terrain sans accès par défaut.
+- les formulaires complets restent dans les pages concernÃ©es ;
+- Admin / GÃ©rant par dÃ©faut ;
+- utilisateur autorisÃ© si permission dÃ©diÃ©e ;
+- utilisateurs terrain sans accÃ¨s par dÃ©faut.
 
 Statuts possibles :
 
-- À faire ;
+- Ã€ faire ;
 - En cours ;
-- Complété ;
-- À vérifier ;
-- Ignoré / reporté si utile.
+- ComplÃ©tÃ© ;
+- Ã€ vÃ©rifier ;
+- IgnorÃ© / reportÃ© si utile.
 
 ---
 
 ## 12. Audit
 
-La page **Audit** centralise la traçabilité des actions importantes.
+La page **Audit** centralise la traÃ§abilitÃ© des actions importantes.
 
-Périmètre V1 / Alpha :
+PÃ©rimÃ¨tre V1 / Alpha :
 
-- consultation des événements d'audit ;
-- filtre par période ;
+- consultation des Ã©vÃ©nements d'audit ;
+- filtre par pÃ©riode ;
 - filtre par module ;
 - filtre par action ;
 - filtre par auteur ;
-- filtre par élément concerné ;
+- filtre par Ã©lÃ©ment concernÃ© ;
 - recherche rapide ;
-- détail d'une entrée ;
-- contrôle d'accès par rôle et permission ;
-- cloisonnement société ;
+- dÃ©tail d'une entrÃ©e ;
+- contrÃ´le d'accÃ¨s par rÃ´le et permission ;
+- cloisonnement sociÃ©tÃ© ;
 - audit des actions sensibles ;
-- audit support renforcé si rôle support utilisé.
+- audit support renforcÃ© si rÃ´le support utilisÃ©.
 
-Actions tracées selon modules :
+Actions tracÃ©es selon modules :
 
-- connexions et accès si disponibles ;
+- connexions et accÃ¨s si disponibles ;
 - actions utilisateurs ;
-- actions véhicules ;
-- suivi des véhicules ;
-- modèles horaires ;
-- société ;
-- dépôts / bases ;
+- actions vÃ©hicules ;
+- suivi des vÃ©hicules ;
+- modÃ¨les horaires ;
+- sociÃ©tÃ© ;
+- dÃ©pÃ´ts / bases ;
 - planning ;
 - mise en route si applicable.
 
-Règles importantes :
+RÃ¨gles importantes :
 
-- Audit ne modifie pas les données métier ;
-- les pages métier peuvent afficher un historique minimal ;
-- Audit centralise la consultation plus complète ;
-- informations sensibles masquées selon permissions ;
-- accès par défaut Admin / Gérant ;
-- permission dédiée pour les autres profils.
+- Audit ne modifie pas les donnÃ©es mÃ©tier ;
+- les pages mÃ©tier peuvent afficher un historique minimal ;
+- Audit centralise la consultation plus complÃ¨te ;
+- informations sensibles masquÃ©es selon permissions ;
+- accÃ¨s par dÃ©faut Admin / GÃ©rant ;
+- permission dÃ©diÃ©e pour les autres profils.
 
 ---
 
-## 13. Pages / modules futurs identifiés
+## 13. Pages / modules futurs identifiÃ©s
 
-Modules ou pages futurs à garder en mémoire :
+Modules ou pages futurs Ã  garder en mÃ©moire :
 
 - Heures / Horaires ;
-- gestion avancée des heures pour Alpha mobile ;
+- gestion avancÃ©e des heures pour Alpha mobile ;
 - planification automatique en Beta ;
-- affectation automatique optimisée en Beta ;
-- scoring / équilibrage / optimisation plus tard ;
-- missions / courses / transports patients en très long terme ;
-- régulation opérationnelle temps réel en très long terme ;
-- facturation en très long terme ;
-- paie / RH avancée en long terme ;
-- notifications avancées ;
+- affectation automatique optimisÃ©e en Beta ;
+- scoring / Ã©quilibrage / optimisation plus tard ;
+- missions / courses / transports patients en trÃ¨s long terme ;
+- rÃ©gulation opÃ©rationnelle temps rÃ©el en trÃ¨s long terme ;
+- facturation en trÃ¨s long terme ;
+- paie / RH avancÃ©e en long terme ;
+- notifications avancÃ©es ;
 - confirmation de lecture ;
 - version mobile ;
-- signature électronique ;
+- signature Ã©lectronique ;
 - preuve mobile ;
-- maintenance avancée / entretiens véhicules.
+- maintenance avancÃ©e / entretiens vÃ©hicules.
 
 ---
 
-## 14. Points à confirmer
+## 14. Points Ã  confirmer
 
-Points transverses restant à confirmer :
+Points transverses restant Ã  confirmer :
 
-- INFORMATION NON FOURNIE — À CONFIRMER : gestion exacte des années avec semaine 53 et règle de numérotation des semaines.
-- INFORMATION NON FOURNIE — À CONFIRMER : comportement exact lors de la publication d'une semaine contenant encore un besoin obligatoire non couvert.
-- INFORMATION NON FOURNIE — À CONFIRMER : règles précises de compatibilité entre rôles utilisateurs, modèles horaires et types de véhicules.
-- INFORMATION NON FOURNIE — À CONFIRMER : règles exactes de traitement, suivi ou équilibrage des samedis, dimanches, week-ends complets et jours fériés.
-- INFORMATION NON FOURNIE — À CONFIRMER : détail exact des informations sensibles visibles ou masquées dans chaque vue Planning selon permissions.
-- INFORMATION NON FOURNIE — À CONFIRMER : règles ARS exactes pour vérifications et désinfections.
-- INFORMATION NON FOURNIE — À CONFIRMER : formalisation exacte du champ ou sous-type permettant de distinguer TPMR VSL et TPMR TAXI dans le référentiel Véhicules.
-- INFORMATION NON FOURNIE — À CONFIRMER : noms techniques définitifs des permissions par module.
-- INFORMATION NON FOURNIE — À CONFIRMER : durée de conservation des événements d'audit.
-- INFORMATION NON FOURNIE — À CONFIRMER : périmètre exact des imports en Alpha.
+- INFORMATION NON FOURNIE â€” Ã€ CONFIRMER : gestion exacte des annÃ©es avec semaine 53 et rÃ¨gle de numÃ©rotation des semaines.
+- INFORMATION NON FOURNIE â€” Ã€ CONFIRMER : comportement exact lors de la publication d'une semaine contenant encore un besoin obligatoire non couvert.
+- INFORMATION NON FOURNIE â€” Ã€ CONFIRMER : rÃ¨gles prÃ©cises de compatibilitÃ© entre rÃ´les utilisateurs, modÃ¨les horaires et types de vÃ©hicules.
+- INFORMATION NON FOURNIE â€” Ã€ CONFIRMER : rÃ¨gles exactes de traitement, suivi ou Ã©quilibrage des samedis, dimanches, week-ends complets et jours fÃ©riÃ©s.
+- INFORMATION NON FOURNIE â€” Ã€ CONFIRMER : dÃ©tail exact des informations sensibles visibles ou masquÃ©es dans chaque vue Planning selon permissions.
+- INFORMATION NON FOURNIE â€” Ã€ CONFIRMER : rÃ¨gles ARS exactes pour vÃ©rifications et dÃ©sinfections.
+- INFORMATION NON FOURNIE â€” Ã€ CONFIRMER : formalisation exacte du champ ou sous-type permettant de distinguer TPMR VSL et TPMR TAXI dans le rÃ©fÃ©rentiel VÃ©hicules.
+- INFORMATION NON FOURNIE â€” Ã€ CONFIRMER : noms techniques dÃ©finitifs des permissions par module.
+- INFORMATION NON FOURNIE â€” Ã€ CONFIRMER : durÃ©e de conservation des Ã©vÃ©nements d'audit.
+- INFORMATION NON FOURNIE â€” Ã€ CONFIRMER : pÃ©rimÃ¨tre exact des imports en Alpha.
 
