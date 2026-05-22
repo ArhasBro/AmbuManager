@@ -16,13 +16,13 @@ Maquette officielle prioritaire :
 docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/5-Utilisateurs-RH/Utilisateurs-RH_V1.png
 ```
 
-Règle d’autorité :
+Règle d'autorité :
 
 ```txt
 PNG officiel > REFERENCE_UI_UX_USERS_RH.md > autres documents textuels
 ```
 
-En cas d’écart entre texte et image, le PNG officiel prévaut.
+En cas d'écart entre texte et image, le PNG officiel prévaut.
 
 ---
 
@@ -34,7 +34,7 @@ Interdictions de cette phase visuelle :
 
 - ne pas modifier API, Prisma, RBAC, routes serveur, services métier, migrations, seed ;
 - ne pas transformer la session en refonte fonctionnelle ;
-- ne pas afficher `INFORMATION NON FOURNIE — À CONFIRMER` dans l’UI.
+- ne pas afficher `INFORMATION NON FOURNIE — À CONFIRMER` dans l'UI.
 
 ---
 
@@ -58,7 +58,7 @@ Contraintes structurelles obligatoires :
 - le panneau RH ne doit pas être superposé à la colonne centrale ;
 - la colonne centrale doit être `minmax(0, 1fr)` avec `min-width: 0` ;
 - la colonne RH doit avoir une largeur stable autour de `430px` à `460px` ;
-- l’écart central/panneau doit être réel (`gap` visuel, environ `20px` à `24px`) ;
+- l'écart central/panneau doit être réel (`gap` visuel, environ `20px` à `24px`) ;
 - aucun enfant de la colonne centrale (filtres, tableau, pagination, opérations avancées) ne doit passer sous le panneau RH.
 
 ---
@@ -80,7 +80,7 @@ Le header doit contenir :
 - sous-titre : `Gérez les salariés, rôles, permissions, rattachements, horaires et absences.` ;
 - CTA : `+ Créer un utilisateur`.
 
-Le CTA reste aligné à droite de la colonne centrale, pas au bord droit de l’écran.
+Le CTA reste aligné à droite de la colonne centrale, pas au bord droit de l'écran.
 
 ---
 
@@ -100,7 +100,7 @@ Composition interne obligatoire de chaque carte :
 - arrondi harmonisé ;
 - hauteur compacte ;
 - icône à gauche, centrée verticalement ;
-- bloc texte à droite de l’icône ;
+- bloc texte à droite de l'icône ;
 - titre KPI centré ;
 - chiffre centré ;
 - libellé bas centré ;
@@ -210,7 +210,7 @@ Règles :
 
 ---
 
-## 10. Règles d’encodage UI
+## 10. Règles d'encodage UI
 
 Textes FR visibles à maintenir correctement :
 
@@ -231,7 +231,7 @@ Interdits en UI :
 
 - `Ã`
 - `Â`
-- `â€”`
+- `—`
 
 ---
 
@@ -259,7 +259,7 @@ Optionnel et justifié uniquement : composant UI partagé strictement nécessair
 [ ] La barre de filtres est compacte, horizontale, sobre et bien ordonnée.
 [ ] Les colonnes du tableau et leurs alignements correspondent à la maquette.
 [ ] Les opérations avancées RH restent dans la colonne centrale, même ouvertes.
-[ ] Aucun texte FR corrompu n’est visible.
+[ ] Aucun texte FR corrompu n'est visible.
 ```
 
 ---

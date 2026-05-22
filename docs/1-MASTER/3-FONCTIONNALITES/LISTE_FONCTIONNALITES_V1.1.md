@@ -1,5 +1,8 @@
 # Ambulance Manager — LISTE_FONCTIONNALITES_V1.1
 
+> Statut : référence fonctionnelle cible — page non validée à ce stade.
+> Ce document est une synthèse fonctionnelle cible et ne vaut pas validation finale des pages.
+
 Version : V1.1 (MASTER)  
 Date : 18/05/2026
 
@@ -18,7 +21,7 @@ Date : 18/05/2026
 - [11. Mise en route](#11-mise-en-route)
 - [12. Audit](#12-audit)
 - [13. Pages / modules futurs identifiés](#13-pages--modules-futurs-identifiés)
-- [14. Points à confirmer](#14-points-à-confirmer)
+- [14. Points à confirmer](#14-points-à -confirmer)
 
 ---
 
@@ -42,7 +45,7 @@ Le périmètre V1 / Alpha est centré sur :
 - mise en route ;
 - audit / traçabilité.
 
-Les modules avancés restent prévus plus tard lorsqu’ils sont explicitement indiqués comme Beta, version mobile, version finale ou très long terme.
+Les modules avancés restent prévus plus tard lorsqu'ils sont explicitement indiqués comme Beta, version mobile, version finale ou très long terme.
 
 Rôles fonctionnels à prendre en compte :
 
@@ -64,12 +67,12 @@ Règle de prudence :
 
 ## 2. Login
 
-La page **Login** permet l’accès sécurisé à l’application.
+La page **Login** permet l'accès sécurisé à l'application.
 
 Périmètre V1 / Alpha :
 
 - connexion email + mot de passe ;
-- pas d’inscription libre ;
+- pas d'inscription libre ;
 - pas de mot de passe oublié en V1 ;
 - pas de choix manuel de rôle, société ou dépôt / base ;
 - redirection vers Tableau de bord après connexion ;
@@ -95,7 +98,7 @@ Périmètre V1 / Alpha :
 
 ## 3. Tableau de bord
 
-La page **Tableau de bord** est la page d’accueil après connexion.
+La page **Tableau de bord** est la page d'accueil après connexion.
 
 Périmètre V1 / Alpha :
 
@@ -117,7 +120,7 @@ Exclusions Alpha :
 - graphiques complexes ;
 - reporting analytique avancé ;
 - centre de notifications avancé ;
-- moteur d’alertes complexe ;
+- moteur d'alertes complexe ;
 - prédictions.
 
 Pages accessibles en raccourci selon permissions :
@@ -141,11 +144,11 @@ La page **Planning** est un planning manuel métier, centré sur les affectation
 Périmètre V1 / Alpha :
 
 - aucune vue détaillée heure par heure ;
-- fonctionnement par modèles horaires, types d’affectation, semaines et repères synthétiques ;
+- fonctionnement par modèles horaires, types d'affectation, semaines et repères synthétiques ;
 - vue globale annuelle utilisateurs × semaines ;
 - affichage du modèle horaire ou type affecté dans chaque case ;
 - vue personnelle type agenda synthétique ;
-- vue mois claire pour l’organisation personnelle ;
+- vue mois claire pour l'organisation personnelle ;
 - vue semaine synthétique ;
 - vue jour synthétique ;
 - distinction lecture simple / gestion selon permissions ;
@@ -163,7 +166,7 @@ Périmètre V1 / Alpha :
 - motif obligatoire pour annulation après publication et modification sensible ;
 - filtres, recherche rapide et panneau de détail ;
 - alertes simples et conflits évidents en mode gestion ;
-- affichage du nombre d’utilisateurs terrain disponibles ;
+- affichage du nombre d'utilisateurs terrain disponibles ;
 - audit des actions importantes.
 
 Termes français retenus :
@@ -175,8 +178,8 @@ Ces fonctions avancées sont prévues pour la Beta, pas comme cœur du Planning 
 
 Points liés :
 
-- distinction TPMR VSL / TPMR TAXI à prendre en compte ;
-- gestion avancée des heures reportée à une page Heures / Horaires, prévue pour l’Alpha mobile.
+- distinction TPMR VSL / TPMR TAXI Ã  prendre en compte ;
+- gestion avancée des heures reportée à une page Heures / Horaires, prévue pour l'Alpha mobile.
 
 ---
 
@@ -190,7 +193,7 @@ Périmètre V1 / Alpha :
 - modification utilisateur ;
 - nom ;
 - prénom ;
-- initiales d’avatar choisies manuellement ;
+- initiales d'avatar choisies manuellement ;
 - email ;
 - téléphone ;
 - rôle principal obligatoire ;
@@ -203,15 +206,15 @@ Périmètre V1 / Alpha :
 - action séparée de modification / réinitialisation du mot de passe ;
 - archivage logique ;
 - consultation des utilisateurs archivés via filtre ;
-- demandes d’absence / indisponibilité ;
+- demandes d'absence / indisponibilité ;
 - statuts de demande : en attente, validée, refusée, annulée ;
 - validation / refus par Admin, Gérant ou utilisateur autorisé ;
-- actions sensibles tracées dans l’audit.
+- actions sensibles tracées dans l'audit.
 
 Règles importantes :
 
-- une demande en attente ne modifie pas automatiquement l’état opérationnel ;
-- une demande validée peut rendre l’utilisateur absent ou indisponible ;
+- une demande en attente ne modifie pas automatiquement l'état opérationnel ;
+- une demande validée peut rendre l'utilisateur absent ou indisponible ;
 - un utilisateur standard voit uniquement sa propre fiche pour le moment ;
 - Admin / Gérant et utilisateurs autorisés voient les utilisateurs selon périmètre société ;
 - les utilisateurs terrain peuvent avoir des types de véhicules affectables.
@@ -260,7 +263,7 @@ Périmètre V1 / Alpha :
 - désarchivage / restauration ;
 - aucune suppression physique ;
 - lecture simple pour les utilisateurs terrain ;
-- actions sensibles tracées dans l’audit.
+- actions sensibles tracées dans l'audit.
 
 Types principaux :
 
@@ -276,7 +279,7 @@ Pour TPMR, une distinction métier doit être prévue lorsque nécessaire :
 
 Règles importantes :
 
-- un véhicule inactif, indisponible ou archivé n’est pas proposé normalement au Planning ;
+- un véhicule inactif, indisponible ou archivé n'est pas proposé normalement au Planning ;
 - la base / dépôt du véhicule est une information de référence, pas une contrainte bloquante ;
 - un véhicule peut ne pas rentrer à sa base principale le soir ;
 - les workflows de vérification, désinfection, anomalies et entretiens relèvent de Suivi des véhicules.
@@ -289,12 +292,12 @@ La page **Suivi des véhicules** centralise le suivi opérationnel de la flotte.
 
 Onglets V1 / Alpha :
 
-- Vue d’ensemble ;
+- Vue d'ensemble ;
 - Vérifications ;
 - Désinfections ;
 - Anomalies des véhicules.
 
-L’onglet **Entretiens des véhicules** est prévu au minimum pour la Beta, pas dans l’Alpha.
+L'onglet **Entretiens des véhicules** est prévu au minimum pour la Beta, pas dans l'Alpha.
 
 ### Vérifications
 
@@ -303,10 +306,10 @@ Règles validées :
 - ambulance : 2 vérificateurs ;
 - autres véhicules : 1 vérificateur ;
 - fréquence quotidienne ;
-- absence de vérification quotidienne → anomalie majeure d’office ;
+- absence de vérification quotidienne → anomalie majeure d'office ;
 - résultats : Conforme, Non conforme, Sous réserve, À vérifier ;
 - Non conforme → anomalie bloquante ;
-- pas d’indisponibilité automatique ;
+- pas d'indisponibilité automatique ;
 - passage indisponible uniquement par action explicite autorisée.
 
 Règles ARS exactes :
@@ -318,11 +321,11 @@ Règles ARS exactes :
 Règles validées :
 
 - formulaire avec type de produit utilisé ;
-- résultat “Réalisée avec réserve” → point à surveiller ;
-- résultat “Non réalisée” ou “À refaire” → motif obligatoire ;
+- résultat "Réalisée avec réserve" → point à surveiller ;
+- résultat "Non réalisée" ou "À refaire" → motif obligatoire ;
 - fréquence / déclenchement : quotidienne, après utilisation / transport, après certains transports spécifiques, manuel selon besoin ;
 - contre-vérification par un tiers autre que la personne ayant réalisé la désinfection ;
-- pas d’indisponibilité automatique.
+- pas d'indisponibilité automatique.
 
 Règles ARS exactes :
 
@@ -338,13 +341,13 @@ Règles validées :
 - utilisateurs terrain peuvent déclarer ;
 - clôture / classement / changement disponibilité soumis à permission ;
 - motif obligatoire pour rendre un véhicule indisponible ou disponible ;
-- aucune suppression physique d’anomalie en Alpha.
+- aucune suppression physique d'anomalie en Alpha.
 
 ---
 
 ## 8. Modèles horaires
 
-La page **Modèles horaires** remplace fonctionnellement l’ancien terme Templates.
+La page **Modèles horaires** remplace fonctionnellement l'ancien terme Templates.
 
 Périmètre V1 / Alpha :
 
@@ -365,8 +368,8 @@ Périmètre V1 / Alpha :
 - composition attendue ;
 - base / dépôt facultative ;
 - statut ;
-- compteur “Nb utilisé” ;
-- actions sensibles tracées dans l’audit.
+- compteur "Nb utilisé" ;
+- actions sensibles tracées dans l'audit.
 
 Règles Planning :
 
@@ -374,7 +377,7 @@ Règles Planning :
 - une affectation créée reste indépendante du modèle ;
 - modifier un modèle ne modifie pas automatiquement les affectations déjà créées ;
 - seuls les modèles actifs et non archivés sont proposés normalement ;
-- le compteur “Nb utilisé” augmente quand une affectation est créée depuis le modèle.
+- le compteur "Nb utilisé" augmente quand une affectation est créée depuis le modèle.
 
 Jours actifs et horaires par jour :
 
@@ -397,7 +400,7 @@ Distinction TPMR à prévoir :
 - TPMR TAXI.
 
 La couleur ne doit pas être définie rigidement par le modèle.  
-La couleur sert de repère visuel choisi par l’utilisateur qui fait le planning.
+La couleur sert de repère visuel choisi par l'utilisateur qui fait le planning.
 
 ---
 
@@ -414,18 +417,18 @@ Périmètre V1 / Alpha :
 - contacts société multiples ;
 - paramètres généraux ;
 - informations métier confirmées ;
-- résumé simple de configuration avec accès “Continuer la mise en route” ;
+- résumé simple de configuration avec accès "Continuer la mise en route" ;
 - responsables applicatifs affichés automatiquement depuis les utilisateurs Admin / Gérant ;
 - contact administratif ou représentant légal renseigné manuellement ;
-- plusieurs contacts société dès l’Alpha ;
+- plusieurs contacts société dès l'Alpha ;
 - types de contacts possibles : représentant légal, contact administratif, contact facturation, responsable exploitation ou autre contact utile ;
-- modifications sensibles tracées dans l’audit.
+- modifications sensibles tracées dans l'audit.
 
 Règles importantes :
 
-- un contact société n’est pas automatiquement un utilisateur applicatif ;
+- un contact société n'est pas automatiquement un utilisateur applicatif ;
 - responsables applicatifs non modifiés depuis Société ;
-- désactivation, suspension, archivage ou suppression d’une société exclus de l’Alpha ;
+- désactivation, suspension, archivage ou suppression d'une société exclus de l'Alpha ;
 - utilisateurs terrain sans accès par défaut à Société.
 
 ---
@@ -437,7 +440,7 @@ La page **Dépôts / Bases** gère les lieux de référence de la société.
 Périmètre V1 / Alpha :
 
 - notion simple base / dépôt ;
-- pas de distinction technique obligatoire entre Base, Dépôt, Point d’exploitation ou Autre ;
+- pas de distinction technique obligatoire entre Base, Dépôt, Point d'exploitation ou Autre ;
 - liste principale ;
 - création ;
 - modification ;
@@ -449,7 +452,7 @@ Périmètre V1 / Alpha :
 - consultation des archivés ;
 - désarchivage / restauration ;
 - aucune suppression physique ;
-- actions sensibles tracées dans l’audit.
+- actions sensibles tracées dans l'audit.
 
 Règles importantes :
 
@@ -457,7 +460,7 @@ Règles importantes :
 - adresse recommandée mais non obligatoire ;
 - responsable local = utilisateur existant, sans permissions automatiques ;
 - rattachements principalement gérés depuis Utilisateurs et Véhicules ;
-- modification d’un dépôt / base ne détache pas automatiquement les éléments rattachés ;
+- modification d'un dépôt / base ne détache pas automatiquement les éléments rattachés ;
 - base / dépôt guide le Planning mais ne bloque pas automatiquement les affectations ;
 - archivage ou désactivation possible même avec rattachements, avec avertissement simple.
 
@@ -465,14 +468,14 @@ Règles importantes :
 
 ## 11. Mise en route
 
-La page **Mise en route** remplace l’ancien nom Onboarding.
+La page **Mise en route** remplace l'ancien nom Onboarding.
 
 Elle reste séparée de la page Société.
 
 Périmètre V1 / Alpha :
 
 - assistant / checklist de configuration initiale ;
-- suivi d’avancement ;
+- suivi d'avancement ;
 - accès rapides vers les pages métier ;
 - profil société ;
 - dépôts / bases ;
@@ -487,7 +490,7 @@ Règles importantes :
 
 - Mise en route ne remplace pas les pages métier ;
 - Société reste le profil permanent ;
-- Mise en route reste l’assistant de configuration initiale ;
+- Mise en route reste l'assistant de configuration initiale ;
 - les formulaires complets restent dans les pages concernées ;
 - Admin / Gérant par défaut ;
 - utilisateur autorisé si permission dédiée ;
@@ -509,15 +512,15 @@ La page **Audit** centralise la traçabilité des actions importantes.
 
 Périmètre V1 / Alpha :
 
-- consultation des événements d’audit ;
+- consultation des événements d'audit ;
 - filtre par période ;
 - filtre par module ;
 - filtre par action ;
 - filtre par auteur ;
 - filtre par élément concerné ;
 - recherche rapide ;
-- détail d’une entrée ;
-- contrôle d’accès par rôle et permission ;
+- détail d'une entrée ;
+- contrôle d'accès par rôle et permission ;
 - cloisonnement société ;
 - audit des actions sensibles ;
 - audit support renforcé si rôle support utilisé.
@@ -572,12 +575,13 @@ Modules ou pages futurs à garder en mémoire :
 Points transverses restant à confirmer :
 
 - INFORMATION NON FOURNIE — À CONFIRMER : gestion exacte des années avec semaine 53 et règle de numérotation des semaines.
-- INFORMATION NON FOURNIE — À CONFIRMER : comportement exact lors de la publication d’une semaine contenant encore un besoin obligatoire non couvert.
+- INFORMATION NON FOURNIE — À CONFIRMER : comportement exact lors de la publication d'une semaine contenant encore un besoin obligatoire non couvert.
 - INFORMATION NON FOURNIE — À CONFIRMER : règles précises de compatibilité entre rôles utilisateurs, modèles horaires et types de véhicules.
 - INFORMATION NON FOURNIE — À CONFIRMER : règles exactes de traitement, suivi ou équilibrage des samedis, dimanches, week-ends complets et jours fériés.
 - INFORMATION NON FOURNIE — À CONFIRMER : détail exact des informations sensibles visibles ou masquées dans chaque vue Planning selon permissions.
 - INFORMATION NON FOURNIE — À CONFIRMER : règles ARS exactes pour vérifications et désinfections.
 - INFORMATION NON FOURNIE — À CONFIRMER : formalisation exacte du champ ou sous-type permettant de distinguer TPMR VSL et TPMR TAXI dans le référentiel Véhicules.
 - INFORMATION NON FOURNIE — À CONFIRMER : noms techniques définitifs des permissions par module.
-- INFORMATION NON FOURNIE — À CONFIRMER : durée de conservation des événements d’audit.
+- INFORMATION NON FOURNIE — À CONFIRMER : durée de conservation des événements d'audit.
 - INFORMATION NON FOURNIE — À CONFIRMER : périmètre exact des imports en Alpha.
+

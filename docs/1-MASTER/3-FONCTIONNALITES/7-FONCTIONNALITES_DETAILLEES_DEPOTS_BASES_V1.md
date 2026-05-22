@@ -1,5 +1,7 @@
 # Ambulance Manager — Fonctionnalités détaillées — Dépôts / Bases V1
 
+> Statut : référence fonctionnelle cible — page non validée à ce stade.
+
 Version : V1 (MASTER)  
 Date : 18/05/2026
 
@@ -7,10 +9,10 @@ Date : 18/05/2026
 
 - [1. Objectif de la page](#1-objectif-de-la-page)
 - [2. Positionnement fonctionnel](#2-positionnement-fonctionnel)
-- [3. Périmètre V1 / Alpha validé](#3-périmètre-v1--alpha-validé)
+- [3. Base de cadrage fonctionnel V1 / Alpha](#3-base-de-cadrage-fonctionnel-v1--alpha)
 - [4. Liste des dépôts / bases](#4-liste-des-dépôts--bases)
-- [5. Création d’un dépôt / base](#5-création-dun-dépôt--base)
-- [6. Modification d’un dépôt / base](#6-modification-dun-dépôt--base)
+- [5. Création d'un dépôt / base](#5-création-dun-dépôt--base)
+- [6. Modification d'un dépôt / base](#6-modification-dun-dépôt--base)
 - [7. Statuts, archivage et suppression](#7-statuts-archivage-et-suppression)
 - [8. Rattachements et liens avec les autres modules](#8-rattachements-et-liens-avec-les-autres-modules)
 - [9. Lien avec le Planning](#9-lien-avec-le-planning)
@@ -18,16 +20,16 @@ Date : 18/05/2026
 - [11. Audit et traçabilité](#11-audit-et-traçabilité)
 - [12. États de la page](#12-états-de-la-page)
 - [13. Éléments exclus du périmètre V1 / Alpha](#13-éléments-exclus-du-périmètre-v1--alpha)
-- [14. Évolutions futures / à ne pas oublier](#14-évolutions-futures--à-ne-pas-oublier)
-- [15. Points à confirmer](#15-points-à-confirmer)
+- [14. Évolutions futures / à ne pas oublier](#14-évolutions-futures--à -ne-pas-oublier)
+- [15. Points à confirmer](#15-points-à -confirmer)
 
 ---
 
 ## 1. Objectif de la page
 
-La page **Dépôts / Bases** permet de gérer les lieux d’exploitation de la société dans Ambulance Manager.
+La page **Dépôts / Bases** permet de gérer les lieux d'exploitation de la société dans Ambulance Manager.
 
-Elle sert à référencer les lieux utilisés pour organiser l’activité, rattacher certains utilisateurs, rattacher certains véhicules et faciliter la lecture opérationnelle du Planning.
+Elle sert à référencer les lieux utilisés pour organiser l'activité, rattacher certains utilisateurs, rattacher certains véhicules et faciliter la lecture opérationnelle du Planning.
 
 En V1 / Alpha, la page reste simple.
 
@@ -35,7 +37,7 @@ Elle ne distingue pas techniquement les notions suivantes :
 
 - Base ;
 - Dépôt ;
-- Point d’exploitation ;
+- Point d'exploitation ;
 - Autre.
 
 Ces distinctions pourront être étudiées plus tard, potentiellement en Beta.
@@ -47,7 +49,7 @@ La page doit permettre de :
 - modifier un dépôt / base ;
 - désactiver ou réactiver un dépôt / base ;
 - archiver ou restaurer un dépôt / base ;
-- consulter les compteurs d’utilisateurs rattachés ;
+- consulter les compteurs d'utilisateurs rattachés ;
 - consulter les compteurs de véhicules rattachés ;
 - définir un responsable local optionnel ;
 - servir de repère, filtre ou préremplissage dans les autres modules.
@@ -58,7 +60,7 @@ La page doit permettre de :
 
 ### 2.1 Page Dépôts / Bases
 
-La page **Dépôts / Bases** est le référentiel des lieux d’exploitation de la société.
+La page **Dépôts / Bases** est le référentiel des lieux d'exploitation de la société.
 
 En Alpha, elle gère une notion simple :
 
@@ -70,7 +72,7 @@ Un dépôt / base peut représenter :
 
 - une base principale ;
 - un dépôt secondaire ;
-- un lieu d’exploitation ;
+- un lieu d'exploitation ;
 - un lieu de départ habituel ;
 - un lieu de rattachement administratif ou opérationnel.
 
@@ -80,7 +82,7 @@ La page **Dépôts / Bases** ne remplace pas :
 
 ```text
 Société
-= profil permanent de l’entreprise
+= profil permanent de l'entreprise
 
 Utilisateurs
 = comptes, rôles, permissions et rattachement utilisateur
@@ -99,7 +101,7 @@ Planning
 
 La base / dépôt sert de repère, de filtre ou de préremplissage.
 
-Elle ne doit pas devenir une contrainte bloquante par défaut dans l’Alpha.
+Elle ne doit pas devenir une contrainte bloquante par défaut dans l'Alpha.
 
 Règle validée :
 
@@ -111,15 +113,14 @@ Les règles plus strictes seront cadrées plus tard dans la fiche **Planning** s
 
 ---
 
-## 3. Périmètre V1 / Alpha validé
-
-Fonctionnalités validées pour la page **Dépôts / Bases V1 / Alpha** :
+## 3. Base de cadrage fonctionnel V1 / Alpha
+Fonctionnalités cibles de référence pour la page **Dépôts / Bases V1 / Alpha** :
 
 - notion simple `Dépôt / Base` ;
 - absence de type de lieu distinct en Alpha ;
 - consultation de la liste des dépôts / bases ;
-- création d’un dépôt / base ;
-- modification d’un dépôt / base ;
+- création d'un dépôt / base ;
+- modification d'un dépôt / base ;
 - responsable local optionnel ;
 - responsable local sélectionné parmi les utilisateurs existants ;
 - responsable local sans permission automatique ;
@@ -136,7 +137,7 @@ Fonctionnalités validées pour la page **Dépôts / Bases V1 / Alpha** :
 - aucune suppression physique en Alpha ;
 - avertissement simple si archivage ou désactivation avec rattachements existants ;
 - rattachements principalement gérés depuis les pages concernées ;
-- actions sensibles tracées dans l’audit.
+- actions sensibles tracées dans l'audit.
 
 ---
 
@@ -144,7 +145,7 @@ Fonctionnalités validées pour la page **Dépôts / Bases V1 / Alpha** :
 
 ### 4.1 Objectif de la liste
 
-La liste des dépôts / bases doit permettre de voir rapidement les lieux d’exploitation de la société.
+La liste des dépôts / bases doit permettre de voir rapidement les lieux d'exploitation de la société.
 
 Elle doit rester lisible et simple.
 
@@ -189,7 +190,7 @@ Base principale de la société
 ```
 
 ```text
-Lieu d’exploitation secondaire
+Lieu d'exploitation secondaire
 ```
 
 ```text
@@ -198,7 +199,7 @@ Point de départ fréquent
 
 ### 4.4 Adresse
 
-La liste peut afficher l’adresse si elle est renseignée.
+La liste peut afficher l'adresse si elle est renseignée.
 
 Exemple :
 
@@ -208,19 +209,19 @@ Exemple :
 France
 ```
 
-Si l’adresse n’est pas renseignée, la liste affiche :
+Si l'adresse n'est pas renseignée, la liste affiche :
 
 ```text
 Adresse non renseignée
 ```
 
-L’adresse est recommandée mais non obligatoire en Alpha.
+L'adresse est recommandée mais non obligatoire en Alpha.
 
 ### 4.5 Responsable local
 
 Le responsable local est optionnel.
 
-S’il est renseigné, il doit être un utilisateur existant de la société.
+S'il est renseigné, il doit être un utilisateur existant de la société.
 
 Affichage possible :
 
@@ -253,7 +254,7 @@ Exemple :
 
 Le rattachement des utilisateurs reste principalement géré depuis la page **Utilisateurs**.
 
-La page **Dépôts / Bases** affiche le compteur, mais ne devient pas l’écran principal de gestion des utilisateurs.
+La page **Dépôts / Bases** affiche le compteur, mais ne devient pas l'écran principal de gestion des utilisateurs.
 
 ### 4.7 Véhicules rattachés
 
@@ -292,7 +293,7 @@ Actions disponibles selon permissions :
 - afficher les archivés ;
 - désarchiver / restaurer.
 
-Aucune suppression physique n’est prévue en Alpha.
+Aucune suppression physique n'est prévue en Alpha.
 
 ### 4.10 Recherche et filtres
 
@@ -307,11 +308,11 @@ Pas de filtre avancé en Alpha.
 
 ---
 
-## 5. Création d’un dépôt / base
+## 5. Création d'un dépôt / base
 
 ### 5.1 Objectif
 
-La création permet d’ajouter un lieu d’exploitation simple à la société.
+La création permet d'ajouter un lieu d'exploitation simple à la société.
 
 Un dépôt / base peut ensuite servir :
 
@@ -328,7 +329,7 @@ Le formulaire de création contient :
 - nom du dépôt / base ;
 - description courte ;
 - adresse ;
-- complément d’adresse ;
+- complément d'adresse ;
 - code postal ;
 - ville ;
 - pays ;
@@ -373,7 +374,7 @@ Base principale de la société
 ```
 
 ```text
-Lieu d’exploitation secondaire
+Lieu d'exploitation secondaire
 ```
 
 ```text
@@ -382,10 +383,10 @@ Point de départ fréquent
 
 ### 5.5 Adresse
 
-Champs d’adresse :
+Champs d'adresse :
 
 - adresse ;
-- complément d’adresse ;
+- complément d'adresse ;
 - code postal ;
 - ville ;
 - pays.
@@ -393,7 +394,7 @@ Champs d’adresse :
 Règle validée :
 
 ```text
-L’adresse est recommandée mais non obligatoire en Alpha.
+L'adresse est recommandée mais non obligatoire en Alpha.
 ```
 
 Le pays peut être prérempli avec :
@@ -415,7 +416,7 @@ Ces informations concernent le dépôt / base, pas forcément la société enti�
 
 Le responsable local est optionnel.
 
-S’il est renseigné, il doit être un utilisateur existant de la société.
+S'il est renseigné, il doit être un utilisateur existant de la société.
 
 Règles validées :
 
@@ -448,7 +449,7 @@ Utilisé surtout pour les gardes de nuit.
 ```
 
 ```text
-À compléter avec l’adresse exacte.
+À compléter avec l'adresse exacte.
 ```
 
 ```text
@@ -457,7 +458,7 @@ Lieu provisoire.
 
 ### 5.10 Règles de validation
 
-À la création, les règles suivantes s’appliquent :
+À la création, les règles suivantes s'appliquent :
 
 - nom obligatoire ;
 - nom unique dans la société ;
@@ -468,11 +469,11 @@ Lieu provisoire.
 
 ---
 
-## 6. Modification d’un dépôt / base
+## 6. Modification d'un dépôt / base
 
 ### 6.1 Objectif
 
-La modification permet de corriger ou compléter un lieu d’exploitation sans supprimer son historique.
+La modification permet de corriger ou compléter un lieu d'exploitation sans supprimer son historique.
 
 ### 6.2 Champs modifiables
 
@@ -481,7 +482,7 @@ Champs modifiables :
 - nom du dépôt / base ;
 - description courte ;
 - adresse ;
-- complément d’adresse ;
+- complément d'adresse ;
 - code postal ;
 - ville ;
 - pays ;
@@ -497,12 +498,12 @@ Règles validées :
 
 - le nom reste obligatoire ;
 - le nom doit rester unique dans la société ;
-- l’adresse reste recommandée mais non obligatoire ;
+- l'adresse reste recommandée mais non obligatoire ;
 - le responsable local reste optionnel ;
 - si responsable local renseigné, il doit être un utilisateur existant ;
 - modifier le responsable local ne modifie pas ses rôles ;
 - modifier le responsable local ne modifie pas ses permissions ;
-- les modifications sensibles doivent être tracées dans l’audit.
+- les modifications sensibles doivent être tracées dans l'audit.
 
 ### 6.4 Impact sur les utilisateurs déjà rattachés
 
@@ -511,7 +512,7 @@ Modifier un dépôt / base ne détache pas automatiquement les utilisateurs déj
 Exemple :
 
 ```text
-Le dépôt “Lamballe” est renommé “Base Lamballe”.
+Le dépôt "Lamballe" est renommé "Base Lamballe".
 
 Les utilisateurs rattachés restent rattachés à ce même dépôt / base.
 ```
@@ -595,7 +596,7 @@ Règles validées :
 - un dépôt / base archivé conserve son historique ;
 - il ne doit pas être proposé normalement pour de nouveaux rattachements ;
 - il ne doit pas être proposé normalement dans le Planning ;
-- il reste consultable via filtre si l’utilisateur est autorisé ;
+- il reste consultable via filtre si l'utilisateur est autorisé ;
 - désarchiver ne réactive pas automatiquement un dépôt / base inactif.
 
 ### 7.6 Désarchivage / restauration
@@ -604,8 +605,8 @@ Désarchiver un dépôt / base :
 
 - retire le statut archivé ;
 - rend le dépôt / base visible dans la liste principale ;
-- ne réactive pas automatiquement le dépôt / base s’il était inactif ;
-- conserve l’historique.
+- ne réactive pas automatiquement le dépôt / base s'il était inactif ;
+- conserve l'historique.
 
 Exemple :
 
@@ -616,7 +617,7 @@ Dépôt / base archivé + inactif
 
 ### 7.7 Suppression physique
 
-Aucune suppression physique d’un dépôt / base n’est prévue en Alpha.
+Aucune suppression physique d'un dépôt / base n'est prévue en Alpha.
 
 Si un dépôt / base ne doit plus être utilisé :
 
@@ -625,7 +626,7 @@ Si un dépôt / base ne doit plus être utilisé :
 
 ### 7.8 Dépôt / base encore utilisé
 
-Si un dépôt / base possède encore des rattachements, l’archivage ou la désactivation reste possible, mais doit afficher un avertissement simple.
+Si un dépôt / base possède encore des rattachements, l'archivage ou la désactivation reste possible, mais doit afficher un avertissement simple.
 
 Exemple :
 
@@ -635,10 +636,10 @@ Ce dépôt / base est encore rattaché à :
 - 4 véhicules ;
 - 3 modèles horaires.
 
-L’archivage conservera l’historique mais empêchera sa proposition normale pour de nouveaux usages.
+L'archivage conservera l'historique mais empêchera sa proposition normale pour de nouveaux usages.
 ```
 
-L’action reste possible en Alpha.
+L'action reste possible en Alpha.
 
 ---
 
@@ -674,7 +675,7 @@ La page **Dépôts / Bases** affiche un compteur des véhicules rattachés.
 Rappel important :
 
 ```text
-La base / dépôt d’un véhicule est une information de référence.
+La base / dépôt d'un véhicule est une information de référence.
 Elle ne bloque pas automatiquement les affectations planning.
 ```
 
@@ -684,7 +685,7 @@ Un modèle horaire peut avoir une base / dépôt facultative.
 
 Ce rattachement est surtout utile pour les modèles de gardes.
 
-Pour les modèles de transport programmé, le modèle peut rester sans base afin d’être utilisable depuis n’importe quelle base.
+Pour les modèles de transport programmé, le modèle peut rester sans base afin d'être utilisable depuis n'importe quelle base.
 
 ### 8.5 Planning
 
@@ -769,7 +770,7 @@ Exemples de profils possibles :
 
 ### 10.4 Utilisateurs terrain
 
-Les utilisateurs terrain n’ont pas accès à la page **Dépôts / Bases** par défaut.
+Les utilisateurs terrain n'ont pas accès à la page **Dépôts / Bases** par défaut.
 
 Ils ne peuvent pas :
 
@@ -780,9 +781,9 @@ Ils ne peuvent pas :
 - archiver ;
 - désarchiver ;
 - gérer le responsable local ;
-- modifier les informations d’adresse.
+- modifier les informations d'adresse.
 
-Ils peuvent voir l’information **base / dépôt** uniquement dans les pages où cela est utile à leur activité, selon leurs droits.
+Ils peuvent voir l'information **base / dépôt** uniquement dans les pages où cela est utile à leur activité, selon leurs droits.
 
 ### 10.5 Permissions dédiées à prévoir
 
@@ -795,7 +796,7 @@ Permissions fonctionnelles proposées :
 - archiver un dépôt / base ;
 - consulter les dépôts / bases archivés ;
 - désarchiver / restaurer un dépôt / base ;
-- consulter les rattachements d’un dépôt / base.
+- consulter les rattachements d'un dépôt / base.
 
 Les noms techniques exacts seront définis plus tard.
 
@@ -805,17 +806,17 @@ Les noms techniques exacts seront définis plus tard.
 
 ### 11.1 Principe
 
-Les actions sensibles de la page **Dépôts / Bases** doivent être tracées dans l’audit.
+Les actions sensibles de la page **Dépôts / Bases** doivent être tracées dans l'audit.
 
-La page peut afficher un historique récent si utile, mais l’audit complet reste dans la page **Audit**.
+La page peut afficher un historique récent si utile, mais l'audit complet reste dans la page **Audit**.
 
 ### 11.2 Actions à tracer
 
 Actions à tracer :
 
-- création d’un dépôt / base ;
+- création d'un dépôt / base ;
 - modification du nom ;
-- modification de l’adresse ;
+- modification de l'adresse ;
 - modification du téléphone ou email de contact ;
 - modification du responsable local ;
 - désactivation ;
@@ -823,7 +824,7 @@ Actions à tracer :
 - archivage ;
 - désarchivage / restauration ;
 - modification du commentaire interne ;
-- tentative d’action non autorisée si pertinent.
+- tentative d'action non autorisée si pertinent.
 
 ### 11.3 Historique récent
 
@@ -842,7 +843,7 @@ Exemple :
 Adresse modifiée
 ```
 
-L’historique complet reste dans **Audit**.
+L'historique complet reste dans **Audit**.
 
 ---
 
@@ -857,7 +858,7 @@ La page doit charger :
 - les compteurs utilisateurs rattachés ;
 - les compteurs véhicules rattachés ;
 - les responsables locaux si renseignés ;
-- les permissions de l’utilisateur connecté.
+- les permissions de l'utilisateur connecté.
 
 Message possible :
 
@@ -867,14 +868,14 @@ Chargement des dépôts / bases...
 
 ### 12.2 Liste vide
 
-Si aucun dépôt / base n’existe :
+Si aucun dépôt / base n'existe :
 
 ```text
 Aucun dépôt / base créé.
-Créez un premier lieu d’exploitation pour structurer la société.
+Créez un premier lieu d'exploitation pour structurer la société.
 ```
 
-L’action **Créer un dépôt / base** s’affiche uniquement si l’utilisateur est autorisé.
+L'action **Créer un dépôt / base** s'affiche uniquement si l'utilisateur est autorisé.
 
 ### 12.3 Aucun résultat après filtre
 
@@ -900,7 +901,7 @@ Ils apparaissent uniquement via un filtre :
 Afficher les dépôts / bases archivés
 ```
 
-Si aucun élément archivé n’existe :
+Si aucun élément archivé n'existe :
 
 ```text
 Aucun dépôt / base archivé.
@@ -908,23 +909,23 @@ Aucun dépôt / base archivé.
 
 ### 12.5 Adresse non renseignée
 
-Si l’adresse est vide :
+Si l'adresse est vide :
 
 ```text
 Adresse non renseignée.
 ```
 
-Ce n’est pas bloquant en Alpha.
+Ce n'est pas bloquant en Alpha.
 
 ### 12.6 Responsable local non renseigné
 
-Si aucun responsable local n’est défini :
+Si aucun responsable local n'est défini :
 
 ```text
 Aucun responsable local.
 ```
 
-Ce n’est pas bloquant.
+Ce n'est pas bloquant.
 
 ### 12.7 Avertissement avant désactivation / archivage
 
@@ -932,7 +933,7 @@ Si le dépôt / base possède encore des rattachements :
 
 ```text
 Ce dépôt / base est encore rattaché à des utilisateurs ou véhicules.
-L’action conservera l’historique, mais le dépôt / base ne sera plus proposé normalement pour de nouveaux usages.
+L'action conservera l'historique, mais le dépôt / base ne sera plus proposé normalement pour de nouveaux usages.
 ```
 
 Si possible, afficher le détail :
@@ -944,11 +945,11 @@ Modèles horaires rattachés : 3
 Créneaux Planning liés : à confirmer
 ```
 
-L’action reste possible en Alpha.
+L'action reste possible en Alpha.
 
 ### 12.8 Accès non autorisé
 
-Si l’utilisateur n’a pas accès :
+Si l'utilisateur n'a pas accès :
 
 ```text
 Accès non autorisé.
@@ -958,7 +959,7 @@ La page peut aussi être absente de la navigation.
 
 ### 12.9 Action non autorisée
 
-Si l’utilisateur peut consulter mais pas modifier :
+Si l'utilisateur peut consulter mais pas modifier :
 
 ```text
 Action non autorisée.
@@ -968,7 +969,7 @@ Selon les cas, les actions interdites peuvent être masquées.
 
 ### 12.10 Erreur de chargement
 
-En cas d’erreur technique :
+En cas d'erreur technique :
 
 ```text
 Impossible de charger les dépôts / bases.
@@ -984,7 +985,7 @@ Le nom du dépôt / base est obligatoire.
 ```
 
 ```text
-Un dépôt / base avec ce nom existe déjà.
+Un dépôt / base avec ce nom existe déjà .
 ```
 
 ```text
@@ -992,7 +993,7 @@ Le code postal est invalide.
 ```
 
 ```text
-L’email de contact est invalide.
+L'email de contact est invalide.
 ```
 
 ```text
@@ -1007,8 +1008,8 @@ Les éléments suivants ne sont pas intégrés au périmètre V1 / Alpha.
 
 Ils ne sont pas exclus de la version finale.
 
-- distinction technique entre Base, Dépôt, Point d’exploitation et Autre ;
-- suppression physique d’un dépôt / base ;
+- distinction technique entre Base, Dépôt, Point d'exploitation et Autre ;
+- suppression physique d'un dépôt / base ;
 - rattachement massif des utilisateurs depuis cette page ;
 - rattachement massif des véhicules depuis cette page ;
 - gestion complète des modèles horaires depuis cette page ;
@@ -1037,7 +1038,7 @@ Ces éléments pourront être réétudiés en Beta, version finale ou évolution
 
 - Base ;
 - Dépôt ;
-- Point d’exploitation ;
+- Point d'exploitation ;
 - Autre.
 
 En Alpha, on garde une notion simple :
@@ -1090,7 +1091,7 @@ Pas en Alpha.
 - coordonnées GPS ;
 - calcul de distance ;
 - aide au choix du dépôt le plus proche ;
-- secteurs d’intervention.
+- secteurs d'intervention.
 
 Pas en Alpha.
 
@@ -1113,7 +1114,7 @@ Pas en Alpha.
 
 - consultation simple du dépôt / base ;
 - adresse exploitable sur mobile ;
-- accès rapide à l’itinéraire ;
+- accès rapide à l'itinéraire ;
 - consultation des véhicules rattachés ;
 - consultation des contacts utiles.
 
@@ -1121,9 +1122,9 @@ Pas en Alpha.
 
 ## 15. Points à confirmer
 
-Les points suivants restent à confirmer dans les fiches futures ou lors d’un cadrage dédié :
+Les points suivants restent à confirmer dans les fiches futures ou lors d'un cadrage dédié :
 
-- distinction future ou non entre Base, Dépôt, Point d’exploitation et Autre ;
+- distinction future ou non entre Base, Dépôt, Point d'exploitation et Autre ;
 - règles exactes de rattachement utilisateur ↔ dépôt / base ;
 - règles exactes de rattachement véhicule ↔ dépôt / base ;
 - lien exact modèle horaire ↔ dépôt / base ;
@@ -1132,6 +1133,6 @@ Les points suivants restent à confirmer dans les fiches futures ou lors d’un 
 - comportement si un dépôt / base inactif est encore utilisé par des créneaux futurs ;
 - comportement si un dépôt / base archivé est encore référencé ;
 - noms techniques définitifs des permissions ;
-- niveau exact d’historique affiché dans la page ;
-- utilité future d’un responsable local avancé ;
+- niveau exact d'historique affiché dans la page ;
+- utilité future d'un responsable local avancé ;
 - règle future éventuelle de permissions par base / dépôt.

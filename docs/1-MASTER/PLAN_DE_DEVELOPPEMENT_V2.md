@@ -1,34 +1,28 @@
 # PLAN_DE_DEVELOPPEMENT_V2
 
-Version : V2 (base prÃ©paratoire)  
+Version : V2 (base préparatoire)  
 Date : 2026-05-22
 
-## Sommaire
+## 1. Rôle du document
 
-- [1. RÃ´le du document](#1-role-du-document)
-- [2. Principe de reprise mÃ©thodologique](#2-principe-de-reprise-methodologique)
-- [3. Ordre actuel de travail](#3-ordre-actuel-de-travail)
-- [4. RÃ¨gle de complÃ©tion](#4-regle-de-completion)
+Ce document constitue le plan de développement actif V2.
 
-## 1. RÃ´le du document
+Il est en cours de cadrage et d'audit, et n'est pas considéré comme validé à ce stade.
 
-Ce document constitue le plan de dÃ©veloppement actif, en version V2 prÃ©paratoire.  
-Il fixe l'ordre de reprise mÃ©thodologique sans rÃ©Ã©criture massive Ã  ce stade.
+## 2. Principe de reprise méthodologique
 
-## 2. Principe de reprise mÃ©thodologique
+Le produit existant n'est pas abandonné.
 
-Le produit existant n'est pas abandonnÃ©.  
-Il doit Ãªtre corrigÃ©, rÃ©alignÃ© et amÃ©liorÃ© Ã  partir des fiches fonctionnalitÃ©s validÃ©es.  
-La reprise se fait de maniÃ¨re contrÃ´lÃ©e, document par document, avec validation humaine prÃ©alable.
+La reprise se fait de manière contrôlée, document par document, à partir de la référence fonctionnelle cible portée par les fiches de `docs/1-MASTER/3-FONCTIONNALITES/`.
 
 ## 3. Ordre actuel de travail
 
-1. Finalisation / nettoyage documentaire.
-2. Reprise des documents maÃ®tres fichier par fichier.
-3. Finalisation des nouvelles maquettes.
-4. PrÃ©paration des rÃ©fÃ©rences UI/UX propres.
+1. Stabilisation documentaire V2.
+2. Cadrage/audit des pages non Login.
+3. Finalisation des maquettes.
+4. Préparation des références UI/UX propres.
 5. Reprise du codage.
 
-## 4. RÃ¨gle de complÃ©tion
+## 4. Règle de complétion
 
-Les dÃ©tails de chaque Ã©tape seront complÃ©tÃ©s aprÃ¨s validation humaine fichier par fichier.
+Les détails de chaque étape seront complétés après validation humaine fichier par fichier.

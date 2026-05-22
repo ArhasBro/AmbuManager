@@ -1,14 +1,16 @@
 # Ambulance Manager — Fonctionnalités détaillées — Tableau de bord V1
 
+> Statut : référence fonctionnelle cible — page non validée à ce stade.
+
 Version : V1 (MASTER)  
 Date : 18/05/2026
 
 ## Sommaire
 
 - [1. Objectif de la page](#1-objectif-de-la-page)
-- [2. Périmètre V1 validé](#2-perimetre-v1-valide)
+- [2. Base de cadrage fonctionnel V1](#2-base-de-cadrage-fonctionnel-v1)
 - [3. Utilisateurs concernés](#3-utilisateurs-concernes)
-- [4. Principe général d’affichage](#4-principe-general-daffichage)
+- [4. Principe général d'affichage](#4-principe-general-daffichage)
 - [5. Familles de widgets](#5-familles-de-widgets)
 - [6. Widgets raccourcis](#6-widgets-raccourcis)
 - [7. Widgets KPI Admin / Gérant](#7-widgets-kpi-admin--gerant)
@@ -16,7 +18,7 @@ Date : 18/05/2026
 - [9. Widgets Planning global / équipes](#9-widgets-planning-global--equipes)
 - [10. Widgets informations / alertes simples](#10-widgets-informations--alertes-simples)
 - [11. Personnalisation du Tableau de bord](#11-personnalisation-du-tableau-de-bord)
-- [12. Permissions et sécurité d’accès](#12-permissions-et-securite-dacces)
+- [12. Permissions et sécurité d'accès](#12-permissions-et-securite-dacces)
 - [13. États de la page](#13-etats-de-la-page)
 - [14. Éléments exclus du périmètre V1](#14-elements-exclus-du-perimetre-v1)
 - [15. Évolutions futures / à ne pas oublier](#15-evolutions-futures--a-ne-pas-oublier)
@@ -26,7 +28,7 @@ Date : 18/05/2026
 
 ## 1. Objectif de la page
 
-Le Tableau de bord est la page d’accueil après connexion à Ambulance Manager.
+Le Tableau de bord est la page d'accueil après connexion à Ambulance Manager.
 
 Son objectif est de donner à chaque utilisateur une vue claire, utile et immédiatement exploitable de son activité, selon son rôle, ses permissions et ses préférences.
 
@@ -38,7 +40,7 @@ Il doit permettre de :
 - consulter des indicateurs simples ;
 - visualiser des informations de planning utiles ;
 - voir des alertes simples ;
-- adapter l’affichage aux besoins de l’utilisateur.
+- adapter l'affichage aux besoins de l'utilisateur.
 
 Le Tableau de bord V1 ne doit pas devenir un cockpit analytique complexe.
 
@@ -46,21 +48,20 @@ Il ne doit pas intégrer de logique de régulation, de mission, de reporting ava
 
 ---
 
-## 2. Périmètre V1 validé
-
+## 2. Base de cadrage fonctionnel V1
 Le Tableau de bord V1 est validé comme :
 
-- page d’accueil après connexion ;
+- page d'accueil après connexion ;
 - page personnalisable simplement par utilisateur ;
 - page composée de widgets prédéfinis ;
 - page soumise aux rôles et permissions ;
-- page capable d’afficher des raccourcis, KPI simples et informations planning ;
+- page capable d'afficher des raccourcis, KPI simples et informations planning ;
 - page sans graphique complexe ;
 - page sans reporting analytique.
 
-Fonctionnalités validées pour la V1 :
+Fonctionnalités cibles de référence pour la V1 (à confirmer) :
 
-- affichage d’un tableau de bord propre à l’utilisateur connecté ;
+- affichage d'un tableau de bord propre à l'utilisateur connecté ;
 - affichage de widgets prédéfinis ;
 - affichage ou masquage de widgets autorisés ;
 - choix de raccourcis favoris ;
@@ -88,11 +89,11 @@ Les contenus affichés varient selon :
 - les permissions ;
 - les préférences personnelles ;
 - les modules disponibles ;
-- les données autorisées pour l’utilisateur.
+- les données autorisées pour l'utilisateur.
 
 ### 3.1 Admin
 
-L’Admin dispose d’une vue de pilotage complète.
+L'Admin dispose d'une vue de pilotage complète.
 
 Il peut accéder aux widgets de gestion globale autorisés :
 
@@ -105,7 +106,7 @@ Il peut accéder aux widgets de gestion globale autorisés :
 
 ### 3.2 Gérant
 
-Le Gérant dispose d’une vue de pilotage opérationnelle.
+Le Gérant dispose d'une vue de pilotage opérationnelle.
 
 Il peut accéder aux widgets utiles au suivi quotidien de la société, selon ses permissions :
 
@@ -119,7 +120,7 @@ Il peut accéder aux widgets utiles au suivi quotidien de la société, selon se
 
 ### 3.3 Bureau / Régulateur
 
-Les profils Bureau et Régulateur disposent d’une vue orientée exploitation quotidienne.
+Les profils Bureau et Régulateur disposent d'une vue orientée exploitation quotidienne.
 
 Ils doivent pouvoir accéder à une lecture personnelle et à une lecture globale des équipes, selon les permissions.
 
@@ -160,7 +161,7 @@ Widgets principaux possibles :
 
 ---
 
-## 4. Principe général d’affichage
+## 4. Principe général d'affichage
 
 Le Tableau de bord ne doit pas être codé comme une page différente pour chaque rôle.
 
@@ -168,18 +169,18 @@ La logique attendue est la suivante :
 
 - les widgets disponibles sont définis dans une liste prédéfinie ;
 - chaque widget est associé à des permissions ;
-- l’utilisateur ne voit que les widgets autorisés ;
-- l’utilisateur choisit ensuite les widgets qu’il souhaite afficher ;
-- les préférences sont propres à l’utilisateur ;
+- l'utilisateur ne voit que les widgets autorisés ;
+- l'utilisateur choisit ensuite les widgets qu'il souhaite afficher ;
+- les préférences sont propres à l'utilisateur ;
 - si une permission est retirée, le widget correspondant disparaît automatiquement.
 
-Le rôle permet d’orienter la disposition par défaut.
+Le rôle permet d'orienter la disposition par défaut.
 
-Les permissions restent la règle réelle d’accès.
+Les permissions restent la règle réelle d'accès.
 
 Règle validée :
 
-> Un widget n’est jamais affiché uniquement parce qu’un utilisateur a un rôle.  
+> Un widget n'est jamais affiché uniquement parce qu'un utilisateur a un rôle.  
 > Il doit aussi être autorisé par ses permissions.
 
 ---
@@ -190,7 +191,7 @@ Le Tableau de bord V1 est composé de quatre familles de widgets.
 
 ### 5.1 Widgets raccourcis
 
-Ils permettent d’accéder rapidement à une page autorisée.
+Ils permettent d'accéder rapidement à une page autorisée.
 
 ### 5.2 Widgets KPI Admin / Gérant
 
@@ -198,7 +199,7 @@ Ils affichent des indicateurs simples, utiles pour le pilotage quotidien.
 
 ### 5.3 Widgets Planning personnel / terrain
 
-Ils affichent les informations liées à l’utilisateur connecté : journée, semaine, heure de début ou prochains créneaux.
+Ils affichent les informations liées à l'utilisateur connecté : journée, semaine, heure de début ou prochains créneaux.
 
 ### 5.4 Widgets informations / alertes simples
 
@@ -212,13 +213,13 @@ Chaque widget peut comporter :
 - un pictogramme ;
 - un visuel cohérent avec sa fonction.
 
-Le design exact des pictogrammes et de l’identité graphique des widgets sera créé et validé plus tard.
+Le design exact des pictogrammes et de l'identité graphique des widgets sera créé et validé plus tard.
 
 ---
 
 ## 6. Widgets raccourcis
 
-Les widgets raccourcis permettent d’accéder rapidement aux pages principales de l’application.
+Les widgets raccourcis permettent d'accéder rapidement aux pages principales de l'application.
 
 Exemples de raccourcis possibles en V1 :
 
@@ -237,20 +238,20 @@ Les pages futures pourront également proposer des raccourcis si elles sont vali
 - Désinfection ;
 - Suivi des véhicules.
 
-Un raccourci ne doit apparaître que si l’utilisateur a le droit d’accéder à la page concernée.
+Un raccourci ne doit apparaître que si l'utilisateur a le droit d'accéder à la page concernée.
 
 Un raccourci doit contenir au minimum :
 
 - un libellé clair ;
 - un pictogramme ou logo simple ;
-- une action d’accès à la page ;
+- une action d'accès à la page ;
 - éventuellement un court sous-texte explicatif.
 
 Exemple :
 
 ```text
 Planning
-Consulter les créneaux et l’organisation des équipes.
+Consulter les créneaux et l'organisation des équipes.
 ```
 
 ---
@@ -261,7 +262,7 @@ Les KPI du Tableau de bord V1 sont affichés sous forme de tuiles simples.
 
 Ils doivent rester lisibles et directement exploitables.
 
-Un KPI peut être cliquable lorsqu’un accès filtré à une page est pertinent.
+Un KPI peut être cliquable lorsqu'un accès filtré à une page est pertinent.
 
 Exemple :
 
@@ -271,7 +272,7 @@ Véhicules indisponibles
 Voir les véhicules concernés
 ```
 
-### 7.1 Structure d’un KPI
+### 7.1 Structure d'un KPI
 
 Un KPI doit contenir :
 
@@ -292,7 +293,7 @@ KPI validés en principe :
 
 La logique `présent / absent` est préférée à `actif / inactif`, car elle correspond mieux à un besoin opérationnel quotidien.
 
-La définition exacte d’un utilisateur présent ou absent dépendra de la future fiche Utilisateurs / RH.
+La définition exacte d'un utilisateur présent ou absent dépendra de la future fiche Utilisateurs / RH.
 
 À confirmer plus tard :
 
@@ -336,7 +337,7 @@ Les KPI suivants ne sont pas retenus dans la V1 du Tableau de bord :
 - KPI Audit / Sécurité ;
 - reporting financier ;
 - statistiques RH avancées ;
-- taux d’absentéisme ;
+- taux d'absentéisme ;
 - analyse mensuelle ;
 - performance des équipes ;
 - rentabilité ;
@@ -349,7 +350,7 @@ Ces sujets pourront être envisagés en version finale ou plus tard.
 
 ## 8. Widgets Planning personnel
 
-Les widgets Planning personnel affichent les informations directement liées à l’utilisateur connecté.
+Les widgets Planning personnel affichent les informations directement liées à l'utilisateur connecté.
 
 Ils concernent notamment :
 
@@ -368,7 +369,7 @@ Widgets validés en V1 :
 
 ### 8.1 Widget Ma journée
 
-Le widget `Ma journée` doit afficher une synthèse simple de la journée de l’utilisateur.
+Le widget `Ma journée` doit afficher une synthèse simple de la journée de l'utilisateur.
 
 Informations possibles :
 
@@ -383,7 +384,7 @@ Le widget ne doit pas afficher de mission.
 
 ### 8.2 Widget Mon heure de début
 
-Le widget `Mon heure de début` doit afficher l’heure de démarrage prévue pour l’utilisateur.
+Le widget `Mon heure de début` doit afficher l'heure de démarrage prévue pour l'utilisateur.
 
 Il doit être lisible rapidement, notamment pour les profils terrain.
 
@@ -393,11 +394,11 @@ Le widget `Ma semaine` doit afficher une synthèse simple des créneaux de la se
 
 Il ne doit pas devenir une vue planning complète.
 
-Il doit permettre d’accéder au planning complet si l’utilisateur souhaite consulter le détail.
+Il doit permettre d'accéder au planning complet si l'utilisateur souhaite consulter le détail.
 
 ### 8.4 Widget Mes prochains créneaux
 
-Le widget `Mes prochains créneaux` affiche les prochains créneaux de l’utilisateur connecté.
+Le widget `Mes prochains créneaux` affiche les prochains créneaux de l'utilisateur connecté.
 
 Le nombre exact de créneaux affichés sera confirmé lors de la fiche Planning.
 
@@ -405,11 +406,11 @@ Le nombre exact de créneaux affichés sera confirmé lors de la fiche Planning.
 
 ## 9. Widgets Planning global / équipes
 
-Les widgets Planning global / équipes affichent une vue d’ensemble de l’organisation.
+Les widgets Planning global / équipes affichent une vue d'ensemble de l'organisation.
 
 Ils ne sont pas réservés aux Admin ou Gérant.
 
-Les utilisateurs terrain et Bureau doivent aussi pouvoir disposer d’une vue globale des équipes, selon les permissions.
+Les utilisateurs terrain et Bureau doivent aussi pouvoir disposer d'une vue globale des équipes, selon les permissions.
 
 Widgets validés en V1 :
 
@@ -422,9 +423,9 @@ Widgets validés en V1 :
 
 ### 9.1 Widget Planning global
 
-Le widget `Planning global` doit servir d’entrée rapide vers le planning complet.
+Le widget `Planning global` doit servir d'entrée rapide vers le planning complet.
 
-Il peut afficher une synthèse simple de l’organisation générale.
+Il peut afficher une synthèse simple de l'organisation générale.
 
 ### 9.2 Widget Équipes du jour
 
@@ -432,7 +433,7 @@ Le widget `Équipes du jour` doit afficher une lecture simple des équipes prév
 
 Informations possibles :
 
-- nombre d’équipes prévues ;
+- nombre d'équipes prévues ;
 - répartition simple par type de véhicule si disponible ;
 - bases concernées si disponible ;
 - accès au planning complet.
@@ -447,7 +448,7 @@ Le widget `Créneaux de la semaine` doit afficher une synthèse simple des crén
 
 ### 9.5 Widget Créneaux non affectés
 
-Le widget `Créneaux non affectés` est affiché uniquement si l’utilisateur est autorisé à voir ou traiter cette information.
+Le widget `Créneaux non affectés` est affiché uniquement si l'utilisateur est autorisé à voir ou traiter cette information.
 
 Ce widget peut être cliquable vers le Planning avec un filtre adapté.
 
@@ -458,7 +459,7 @@ Les widgets Planning ne doivent pas afficher :
 - de mission ;
 - de régulation ;
 - de données RH sensibles ;
-- d’informations administratives inutiles ;
+- d'informations administratives inutiles ;
 - de données non autorisées.
 
 Le détail exact dépendra de la fiche Planning.
@@ -484,7 +485,7 @@ Ils doivent rester :
 
 Widget validé en principe.
 
-Il peut afficher une information courte utile à l’utilisateur.
+Il peut afficher une information courte utile à l'utilisateur.
 
 Exemples possibles :
 
@@ -528,7 +529,7 @@ Le détail exact dépendra des fiches Véhicules, Suivi des véhicules, Vérific
 
 Widget validé en principe.
 
-Il doit rester une liste courte d’actions utiles.
+Il doit rester une liste courte d'actions utiles.
 
 Exemples possibles :
 
@@ -551,11 +552,11 @@ Ce point pourra être réévalué après la fiche Audit.
 
 Chaque utilisateur dispose de son propre Tableau de bord.
 
-Il peut choisir les widgets qu’il souhaite afficher parmi les widgets autorisés.
+Il peut choisir les widgets qu'il souhaite afficher parmi les widgets autorisés.
 
 ### 11.1 Actions autorisées en V1
 
-L’utilisateur peut :
+L'utilisateur peut :
 
 - afficher un widget autorisé ;
 - masquer un widget autorisé ;
@@ -592,9 +593,9 @@ Terrain :
 
 ### 11.3 Réinitialisation
 
-L’utilisateur doit pouvoir revenir à la disposition par défaut de son profil.
+L'utilisateur doit pouvoir revenir à la disposition par défaut de son profil.
 
-Exemple d’action :
+Exemple d'action :
 
 ```text
 Réinitialiser mon tableau de bord
@@ -606,24 +607,24 @@ Les préférences sont enregistrées par utilisateur.
 
 Elles ne modifient pas le Tableau de bord des autres utilisateurs.
 
-Si aucune préférence n’existe, l’application affiche la disposition par défaut.
+Si aucune préférence n'existe, l'application affiche la disposition par défaut.
 
 ### 11.5 Limites de personnalisation V1
 
-L’utilisateur ne peut pas :
+L'utilisateur ne peut pas :
 
 - créer librement un widget ;
-- modifier la logique d’un KPI ;
+- modifier la logique d'un KPI ;
 - créer un filtre avancé ;
 - choisir librement la taille des widgets ;
 - créer un graphique ;
 - importer un widget externe ;
-- modifier le Tableau de bord d’un autre utilisateur ;
+- modifier le Tableau de bord d'un autre utilisateur ;
 - afficher une donnée non autorisée.
 
 ---
 
-## 12. Permissions et sécurité d’accès
+## 12. Permissions et sécurité d'accès
 
 Le Tableau de bord doit respecter strictement les permissions.
 
@@ -639,7 +640,7 @@ Règles validées :
 Exemple :
 
 ```text
-Si un utilisateur perd l’accès au module Véhicules, le widget Véhicules disparaît de son Tableau de bord.
+Si un utilisateur perd l'accès au module Véhicules, le widget Véhicules disparaît de son Tableau de bord.
 ```
 
 Le Tableau de bord doit être cohérent avec la session utilisateur chargée après connexion.
@@ -652,7 +653,7 @@ Le Tableau de bord doit prévoir plusieurs états simples.
 
 ### 13.1 Chargement initial
 
-Au chargement de la page, l’application doit récupérer :
+Au chargement de la page, l'application doit récupérer :
 
 - la session utilisateur ;
 - les permissions ;
@@ -662,7 +663,7 @@ Au chargement de la page, l’application doit récupérer :
 
 ### 13.2 Tableau de bord vide
 
-Si aucun widget n’est sélectionné, la page doit proposer une action simple pour personnaliser ou réinitialiser le Tableau de bord.
+Si aucun widget n'est sélectionné, la page doit proposer une action simple pour personnaliser ou réinitialiser le Tableau de bord.
 
 Exemple :
 
@@ -673,7 +674,7 @@ Personnalisez votre tableau de bord ou revenez à la disposition par défaut.
 
 ### 13.3 Donnée indisponible
 
-Si une donnée de widget n’est pas disponible, le widget doit afficher un état sobre.
+Si une donnée de widget n'est pas disponible, le widget doit afficher un état sobre.
 
 Exemple :
 
@@ -685,7 +686,7 @@ Le widget ne doit pas afficher une valeur fausse ou inventée.
 
 ### 13.4 Erreur de chargement
 
-En cas d’erreur technique, la page doit afficher un message simple.
+En cas d'erreur technique, la page doit afficher un message simple.
 
 Exemple :
 
@@ -698,7 +699,7 @@ Veuillez réessayer.
 
 Un widget non autorisé ne doit pas apparaître.
 
-Il n’est pas nécessaire d’afficher un message indiquant que le widget est interdit.
+Il n'est pas nécessaire d'afficher un message indiquant que le widget est interdit.
 
 ---
 
@@ -713,7 +714,7 @@ Le Tableau de bord V1 ne doit pas intégrer :
 - score de performance ;
 - score de sécurité ;
 - centre de notifications avancé ;
-- moteur d’alertes complexe ;
+- moteur d'alertes complexe ;
 - surveillance sécurité avancée ;
 - création libre de widgets ;
 - glisser-déposer complexe obligatoire ;
@@ -750,9 +751,9 @@ Objectif futur :
 - renforcer la cohérence graphique ;
 - donner une identité visuelle claire au Tableau de bord.
 
-### 15.3 Version mobile de l’app web
+### 15.3 Version mobile de l'app web
 
-Une version mobile de l’application web est prévue en version finale.
+Une version mobile de l'application web est prévue en version finale.
 
 Pour le Tableau de bord, il faudra prévoir plus tard :
 
@@ -762,7 +763,7 @@ Pour le Tableau de bord, il faudra prévoir plus tard :
 - une navigation claire vers le Planning ;
 - une hiérarchie mobile entre vue personnelle et vue globale.
 
-Cette évolution n’est pas intégrée au périmètre V1 sauf validation explicite.
+Cette évolution n'est pas intégrée au périmètre V1 sauf validation explicite.
 
 ### 15.4 KPI avancés
 
@@ -785,8 +786,8 @@ Les points suivants restent à confirmer dans les fiches détaillées des pages 
 
 ### 16.1 Utilisateurs / RH
 
-- définition exacte d’un utilisateur présent ;
-- définition exacte d’un utilisateur absent ;
+- définition exacte d'un utilisateur présent ;
+- définition exacte d'un utilisateur absent ;
 - distinction entre absence et indisponibilité ;
 - source de calcul de la présence ;
 - lien éventuel avec la future page Heures.
@@ -794,7 +795,7 @@ Les points suivants restent à confirmer dans les fiches détaillées des pages 
 ### 16.2 Planning
 
 - calcul exact des créneaux planifiés ;
-- définition d’un créneau non affecté ;
+- définition d'un créneau non affecté ;
 - existence et statut des créneaux annulés ;
 - notion de planning publié ;
 - informations affichables dans `Ma journée` ;
@@ -803,8 +804,8 @@ Les points suivants restent à confirmer dans les fiches détaillées des pages 
 
 ### 16.3 Véhicules / Suivi des véhicules
 
-- définition d’un véhicule disponible ;
-- définition d’un véhicule indisponible ;
+- définition d'un véhicule disponible ;
+- définition d'un véhicule indisponible ;
 - contenu exact des alertes véhicules ;
 - règles de conformité à surveiller ;
 - lien avec la future page Suivi des véhicules.
@@ -813,8 +814,8 @@ Les points suivants restent à confirmer dans les fiches détaillées des pages 
 
 - présence ou non de widgets dédiés ;
 - séparation ou regroupement des pages Vérification et Désinfection ;
-- règles d’alerte liées aux vérifications ;
-- règles d’alerte liées aux désinfections.
+- règles d'alerte liées aux vérifications ;
+- règles d'alerte liées aux désinfections.
 
 ### 16.5 Informations importantes
 
@@ -822,11 +823,11 @@ Les points suivants restent à confirmer dans les fiches détaillées des pages 
 - qui peut la modifier ;
 - qui peut la supprimer ;
 - quels utilisateurs la voient ;
-- durée d’affichage éventuelle.
+- durée d'affichage éventuelle.
 
 ### 16.6 Audit
 
-- possibilité future d’afficher des dernières actions importantes ;
-- niveau d’information autorisé dans le Tableau de bord ;
+- possibilité future d'afficher des dernières actions importantes ;
+- niveau d'information autorisé dans le Tableau de bord ;
 - lien éventuel avec la page Audit.
 

@@ -23,7 +23,7 @@ Objectif principal : permettre à Codex de reconstruire ensuite la page Planning
 
 ---
 
-## 1. Règle d’autorité A25
+## 1. Règle d'autorité A25
 
 ### 1.1 Références visuelles officielles
 
@@ -42,25 +42,25 @@ docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/4-Planning/Planning_V1.2_INFO_DETAIL.png
 
 `Planning_V1.2.png` est la référence visuelle propre.
 
-`Planning_V1.2_INFO_DETAIL.png` est la même référence avec encadrements d’analyse :
+`Planning_V1.2_INFO_DETAIL.png` est la même référence avec encadrements d'analyse :
 
 - rouge : zone globale de contenu Planning ;
 - bleu : filtres, bascule de vue et exports ;
 - orange : onglets internes de navigation ;
-- violet : contenu principal piloté par l’onglet actif ;
-- vert : panneau latéral droit contextuel, lui aussi piloté par l’onglet actif.
+- violet : contenu principal piloté par l'onglet actif ;
+- vert : panneau latéral droit contextuel, lui aussi piloté par l'onglet actif.
 
-Point de cadrage majeur : l’encadré orange n’est pas un simple élément décoratif ou une navigation secondaire passive. Il contrôle le contenu affiché dans l’encadré violet et les informations affichées dans l’encadré vert. Dans l’image fournie, l’onglet actif est `Planning manuel`, donc l’encadré violet montre la matrice planning et l’encadré vert montre le détail de cellule correspondant. Les contenus des autres onglets ne sont pas visibles dans l’image.
+Point de cadrage majeur : l'encadré orange n'est pas un simple élément décoratif ou une navigation secondaire passive. Il contrôle le contenu affiché dans l'encadré violet et les informations affichées dans l'encadré vert. Dans l'image fournie, l'onglet actif est `Planning manuel`, donc l'encadré violet montre la matrice planning et l'encadré vert montre le détail de cellule correspondant. Les contenus des autres onglets ne sont pas visibles dans l'image.
 
-### 1.2 Règle d’autorité visuelle
+### 1.2 Règle d'autorité visuelle
 
 ```txt
 Images Planning_V1.2 > anciennes captures > descriptions textuelles anciennes
 ```
 
-Le document présent doit guider l’intégration, mais en cas de contradiction visuelle, l’image de référence prévaut.
+Le document présent doit guider l'intégration, mais en cas de contradiction visuelle, l'image de référence prévaut.
 
-### 1.3 Règle d’autorité fonctionnelle
+### 1.3 Règle d'autorité fonctionnelle
 
 ```txt
 CODE réel du repo > documentation produit > hypothèses
@@ -75,9 +75,9 @@ Conséquence :
 - les données visibles dans la maquette peuvent être remplacées par les données réelles du repo ;
 - aucune API, Prisma, RBAC, autoschedule ou matching ne doit être refondu sans nécessité explicite.
 
-### 1.4 Phrase obligatoire en cas d’incertitude
+### 1.4 Phrase obligatoire en cas d'incertitude
 
-Si une information n’est pas visible dans les images ou non confirmée dans le code, écrire exactement :
+Si une information n'est pas visible dans les images ou non confirmée dans le code, écrire exactement :
 
 ```txt
 INFORMATION NON FOURNIE — À CONFIRMER
@@ -93,26 +93,26 @@ La cible visible est une page complète, unifiée, structurée autour de :
 
 - un header Planning sobre ;
 - une barre de filtres horizontale ;
-- des actions d’export secondaires ;
+- des actions d'export secondaires ;
 - des onglets internes fins ;
-- une grande zone de contenu centrale pilotée par l’onglet actif ;
-- pour l’onglet `Planning manuel`, une matrice Planning centrale ;
-- un panneau droit fixe contextuel piloté par l’onglet actif ;
-- pour l’onglet `Planning manuel`, un détail de cellule ;
-- une barre basse d’actions groupées lorsqu’une sélection multiple existe dans l’onglet actif ;
+- une grande zone de contenu centrale pilotée par l'onglet actif ;
+- pour l'onglet `Planning manuel`, une matrice Planning centrale ;
+- un panneau droit fixe contextuel piloté par l'onglet actif ;
+- pour l'onglet `Planning manuel`, un détail de cellule ;
+- une barre basse d'actions groupées lorsqu'une sélection multiple existe dans l'onglet actif ;
 - une hiérarchie métier claire : lecture globale → sélection → détail → action.
 
-Le Planning A25 doit donc être évalué sur la fidélité globale à la maquette, pas uniquement sur la qualité technique d’un patch isolé.
+Le Planning A25 doit donc être évalué sur la fidélité globale à la maquette, pas uniquement sur la qualité technique d'un patch isolé.
 
 ---
 
-## 3. Ce que l’ancien document contenait déjà et ce qui est renforcé ici
+## 3. Ce que l'ancien document contenait déjà et ce qui est renforcé ici
 
 ### 3.1 Déjà présent dans la version précédente
 
-L’ancien document contenait déjà :
+L'ancien document contenait déjà :
 
-- l’objectif général A25 ;
+- l'objectif général A25 ;
 - le périmètre UI/UX Planning ;
 - les exclusions fonctionnelles ;
 - la référence à `MAQUETTES PNG OFFICIELLES` ;
@@ -134,7 +134,7 @@ Elle ne donnait pas suffisamment :
 - les détails précis des cellules ;
 - la logique de table salarié × semaines ;
 - la structure complète du panneau droit ;
-- la forme exacte de la barre d’actions groupées ;
+- la forme exacte de la barre d'actions groupées ;
 - les contraintes de reproduction proche à 99 %.
 
 ### 3.3 Renforcement apporté par cette V2
@@ -156,14 +156,14 @@ Cette version réécrit le document comme une spécification quasi exécutable :
 
 ### 4.1 Format de référence
 
-Les images fournies ont une dimension d’environ :
+Les images fournies ont une dimension d'environ :
 
 ```txt
 Largeur : 1586 px
 Hauteur : 992 px
 ```
 
-La maquette est une vue desktop large. Aucune maquette mobile équivalente n’est visible.
+La maquette est une vue desktop large. Aucune maquette mobile équivalente n'est visible.
 
 Responsive mobile :
 
@@ -185,9 +185,9 @@ Panneau droit = détail de la cellule sélectionnée
 Barre basse = actions groupées sur une sélection multiple
 ```
 
-C’est le point le plus important pour la suite du bloc A25.
+C'est le point le plus important pour la suite du bloc A25.
 
-Si le code reconstruit une page composée de grandes cards de shifts empilées ou d’un calendrier semaine classique, le rendu ne correspondra pas à la maquette.
+Si le code reconstruit une page composée de grandes cards de shifts empilées ou d'un calendrier semaine classique, le rendu ne correspondra pas à la maquette.
 
 ### 4.3 Organisation macro
 
@@ -211,9 +211,9 @@ La page complète est organisée ainsi :
 
 ## 5. Coordonnées et proportions générales
 
-Les coordonnées ci-dessous sont approximatives, basées sur l’image 1586 × 992.
+Les coordonnées ci-dessous sont approximatives, basées sur l'image 1586 × 992.
 
-Elles servent à guider l’intégration, pas à imposer une reproduction CSS au pixel strict.
+Elles servent à guider l'intégration, pas à imposer une reproduction CSS au pixel strict.
 
 ### 5.1 Shell global
 
@@ -221,11 +221,11 @@ Elles servent à guider l’intégration, pas à imposer une reproduction CSS au
 |---|---:|---:|---:|---:|---|
 | Sidebar | 0 | 0 | 262 px | 992 px | Navigation gauche existante |
 | Topbar | 262 px | 0 | 1324 px | 61–64 px | Barre supérieure globale |
-| Contenu Planning | 262 px | 61 px | 1317 px | 927 px | Encadré rouge dans l’image annotée |
+| Contenu Planning | 262 px | 61 px | 1317 px | 927 px | Encadré rouge dans l'image annotée |
 
 ### 5.2 Zones internes Planning
 
-| Zone | X approx. | Y approx. | Largeur approx. | Hauteur approx. | Couleur d’encadrement |
+| Zone | X approx. | Y approx. | Largeur approx. | Hauteur approx. | Couleur d'encadrement |
 |---|---:|---:|---:|---:|---|
 | Page Planning globale | 262 | 61 | 1317 | 927 | rouge |
 | Filtres / vue / exports | 289 | 170 | 1255 | 79 | bleu |
@@ -260,9 +260,9 @@ La maquette est :
 - très propre ;
 - professionnelle ;
 - dense mais respirante ;
-- proche d’un SaaS métier santé / transport ;
+- proche d'un SaaS métier santé / transport ;
 - non décorative ;
-- non “dashboard coloré”.
+- non "dashboard coloré".
 
 La page doit éviter :
 
@@ -322,7 +322,7 @@ Arrondis observés :
 
 ### 6.5 Ombres
 
-La maquette ne montre pas d’ombre forte.
+La maquette ne montre pas d'ombre forte.
 
 Ombre acceptable :
 
@@ -365,7 +365,7 @@ Style déductible : police sans-serif moderne, proche Inter / system UI.
 
 La sidebar appartient au shell global mais conditionne la cohérence visuelle.
 
-### 7.1 Visible dans l’image
+### 7.1 Visible dans l'image
 
 La sidebar contient :
 
@@ -385,7 +385,7 @@ La sidebar contient :
 - bloc `Thème` ;
 - bloc utilisateur `Nathan A. / Admin`.
 
-L’item `Planning` est actif :
+L'item `Planning` est actif :
 
 - fond bleu très pâle ;
 - icône bleue ;
@@ -409,7 +409,7 @@ Mais elle doit respecter la même direction :
 
 ## 8. Topbar visible
 
-### 8.1 Visible dans l’image
+### 8.1 Visible dans l'image
 
 Topbar horizontale, hauteur environ 60–64 px.
 
@@ -430,7 +430,7 @@ Le titre ne doit pas coller à la topbar.
 
 ## 9. Header Planning
 
-### 9.1 Visible dans l’image
+### 9.1 Visible dans l'image
 
 Le header contient :
 
@@ -497,7 +497,7 @@ Icône : `+`, fine, alignée verticalement.
 
 - Ne pas placer plusieurs boutons principaux dans le header.
 - Ne pas transformer le bouton en gros bloc pleine largeur.
-- Ne pas mettre les exports au même niveau visuel que l’ajout de shift.
+- Ne pas mettre les exports au même niveau visuel que l'ajout de shift.
 
 ---
 
@@ -505,7 +505,7 @@ Icône : `+`, fine, alignée verticalement.
 
 ### 10.1 Zone visible
 
-Cette zone correspond à l’encadré bleu de l’image annotée.
+Cette zone correspond à l'encadré bleu de l'image annotée.
 
 Elle est horizontale et se décompose en trois sous-zones :
 
@@ -671,7 +671,7 @@ Icônes :
 
 ## 11. Onglets internes Planning
 
-### 11.1 Visible dans l’image
+### 11.1 Visible dans l'image
 
 Onglets visibles :
 
@@ -684,7 +684,7 @@ Historique
 Exports
 ```
 
-L’onglet actif est `Planning manuel`.
+L'onglet actif est `Planning manuel`.
 
 ### 11.2 Dimensions et position
 
@@ -739,9 +739,9 @@ border-radius: 999px;
 
 La maquette montre un seul contenu principal : `Planning manuel`.
 
-Les autres onglets existent visuellement mais leur contenu n’est pas visible.
+Les autres onglets existent visuellement mais leur contenu n'est pas visible.
 
-Point important ajouté après clarification utilisateur : la zone d’onglets orange pilote les deux zones situées sous elle.
+Point important ajouté après clarification utilisateur : la zone d'onglets orange pilote les deux zones situées sous elle.
 
 Conséquence directe :
 
@@ -749,7 +749,7 @@ Conséquence directe :
 Onglet actif orange → contenu principal violet + panneau contextuel vert
 ```
 
-Pour l’image visible :
+Pour l'image visible :
 
 ```txt
 Planning manuel actif → matrice salariés × semaines + détail de cellule sélectionnée
@@ -761,10 +761,10 @@ Les autres onglets doivent donc être compris comme des états de contenu diffé
 
 Règle UI/UX obligatoire :
 
-- changer d’onglet doit modifier le contenu de l’encadré violet ;
-- changer d’onglet doit aussi modifier, vider ou adapter le panneau vert ;
-- le panneau vert ne doit pas afficher un détail de cellule `Planning manuel` si l’utilisateur consulte un autre onglet ;
-- la sélection courante doit être propre à l’onglet ou explicitement réinitialisée au changement d’onglet ;
+- changer d'onglet doit modifier le contenu de l'encadré violet ;
+- changer d'onglet doit aussi modifier, vider ou adapter le panneau vert ;
+- le panneau vert ne doit pas afficher un détail de cellule `Planning manuel` si l'utilisateur consulte un autre onglet ;
+- la sélection courante doit être propre à l'onglet ou explicitement réinitialisée au changement d'onglet ;
 - il ne faut pas afficher simultanément les contenus de tous les onglets sous forme de sections verticales.
 
 Comportement visible uniquement pour `Planning manuel` :
@@ -786,7 +786,7 @@ Historique : INFORMATION NON FOURNIE — À CONFIRMER
 Exports : INFORMATION NON FOURNIE — À CONFIRMER
 ```
 
-Ces contenus ne doivent pas être inventés à partir de la maquette. Codex doit seulement prévoir une architecture permettant au contenu violet et au panneau vert de changer selon l’onglet actif, sans créer de nouvelles fonctionnalités métier lourdes.
+Ces contenus ne doivent pas être inventés à partir de la maquette. Codex doit seulement prévoir une architecture permettant au contenu violet et au panneau vert de changer selon l'onglet actif, sans créer de nouvelles fonctionnalités métier lourdes.
 
 ### 11.6 À vérifier dans le repo
 
@@ -808,9 +808,9 @@ INFORMATION NON FOURNIE — À CONFIRMER
 
 ### 12.1 Organisation cible
 
-Le workspace principal correspond aux zones violette et verte. Il est directement dépendant de l’onglet actif dans la zone orange.
+Le workspace principal correspond aux zones violette et verte. Il est directement dépendant de l'onglet actif dans la zone orange.
 
-Le cœur de la page est un layout à deux colonnes lorsque l’onglet `Planning manuel` est actif :
+Le cœur de la page est un layout à deux colonnes lorsque l'onglet `Planning manuel` est actif :
 
 ```txt
 ┌──────────────────────────────────────────────────┬──────────────────────┐
@@ -865,7 +865,7 @@ CSS cible :
 
 La grille principale est une table métier.
 
-Elle n’est pas :
+Elle n'est pas :
 
 - une liste de cards ;
 - une grille horaire jour ;
@@ -880,7 +880,7 @@ une matrice salariés × semaines
 
 ### 13.2 Colonnes visibles
 
-Colonnes dans l’ordre :
+Colonnes dans l'ordre :
 
 ```txt
 Sélection
@@ -919,7 +919,7 @@ border-radius: 8px;
 overflow: hidden;
 ```
 
-La table n’a pas d’ombre forte.
+La table n'a pas d'ombre forte.
 
 ### 13.5 Header table
 
@@ -1007,7 +1007,7 @@ border: 1px solid #e5eaf3;
 
 La sélection multiple est reliée à la barre basse `3 shifts sélectionnés`.
 
-Le nombre visible ne correspond pas seulement aux lignes cochées de l’image. Il indique le nombre de shifts sélectionnés, pas nécessairement le nombre de salariés.
+Le nombre visible ne correspond pas seulement aux lignes cochées de l'image. Il indique le nombre de shifts sélectionnés, pas nécessairement le nombre de salariés.
 
 À vérifier dans le repo :
 
@@ -1216,7 +1216,7 @@ text-align: center;
 
 ### 20.1 Style commun
 
-Les cellules n’affichent pas de grandes cards. Elles affichent des badges compacts.
+Les cellules n'affichent pas de grandes cards. Elles affichent des badges compacts.
 
 ```css
 min-width: 94px;
@@ -1310,7 +1310,7 @@ Ces données sont visibles dans la maquette, mais ne doivent pas être hardcodé
 
 ### 22.1 Position et dimensions
 
-Le panneau droit correspond à l’encadré vert.
+Le panneau droit correspond à l'encadré vert.
 
 | Élément | Valeur approx. |
 |---|---:|
@@ -1331,9 +1331,9 @@ box-shadow: 0 12px 32px rgba(15, 23, 42, 0.04);
 
 ### 22.2 Rôle du panneau
 
-Le panneau affiche le détail de la cellule sélectionnée dans la grille uniquement lorsque l’onglet actif est `Planning manuel`.
+Le panneau affiche le détail de la cellule sélectionnée dans la grille uniquement lorsque l'onglet actif est `Planning manuel`.
 
-Clarification importante : ce panneau est contextuel à l’onglet actif. Il ne doit pas être considéré comme un panneau fixe affichant toujours un détail de cellule quelle que soit la navigation. Si l’utilisateur change d’onglet, le panneau doit changer de contenu, se vider ou afficher un état adapté.
+Clarification importante : ce panneau est contextuel à l'onglet actif. Il ne doit pas être considéré comme un panneau fixe affichant toujours un détail de cellule quelle que soit la navigation. Si l'utilisateur change d'onglet, le panneau doit changer de contenu, se vider ou afficher un état adapté.
 
 Pour `Planning manuel`, il doit permettre de garder la grille compacte tout en montrant :
 
@@ -1441,7 +1441,7 @@ Affectations (5)
 
 Puis une card interne listant plusieurs journées.
 
-L’image affiche :
+L'image affiche :
 
 ```txt
 Lun. 13 mai    Ambulance      07h - 19h
@@ -1640,7 +1640,7 @@ font-weight: 600;
 color: #65758e;
 ```
 
-Le premier segment n’a pas de border-left.
+Le premier segment n'a pas de border-left.
 
 ### 23.4 Résumé sélection
 
@@ -1660,7 +1660,7 @@ padding-left: 16px;
 
 Petit check visible à droite du texte.
 
-### 23.5 Actions d’affectation groupée
+### 23.5 Actions d'affectation groupée
 
 Actions visibles :
 
@@ -1688,7 +1688,7 @@ color: #ef4444;
 
 Icône corbeille rouge.
 
-Attention : pour éviter l’ambiguïté métier, le code peut utiliser :
+Attention : pour éviter l'ambiguïté métier, le code peut utiliser :
 
 ```txt
 Texte visible : Vider
@@ -1732,7 +1732,7 @@ Non visibles dans les images :
 - permission refusée ;
 - formulaire ajout shift ;
 - formulaire modification ;
-- drawer d’affectation ouvert ;
+- drawer d'affectation ouvert ;
 - modal annulation ;
 - vue jour ;
 - vue mois détaillée ;
@@ -1753,7 +1753,7 @@ A25 peut les harmoniser si le repo les contient, mais ne doit pas inventer une m
 
 ### 25.1 Visible dans les images
 
-Le mode sombre n’est pas visible dans les deux images Planning fournies.
+Le mode sombre n'est pas visible dans les deux images Planning fournies.
 
 Donc :
 
@@ -1969,14 +1969,14 @@ Ne pas produire :
 - une grille jour/semaine si la maquette demande une matrice personnel × semaines ;
 - des cards de shifts trop grosses dans la grille ;
 - un panneau droit transformé en modal plein écran ;
-- une barre d’actions groupées intégrée dans le panneau droit.
+- une barre d'actions groupées intégrée dans le panneau droit.
 
 ### 29.3 Éviter les inventions métier
 
 Ne pas créer :
 
 - nouveau moteur planning ;
-- nouveau modèle d’affectation ;
+- nouveau modèle d'affectation ;
 - nouvelle API lourde ;
 - nouveau RBAC ;
 - nouveau Prisma ;
@@ -1990,11 +1990,11 @@ Ne pas créer :
 
 Une correction A25 est conforme visuellement si :
 
-1. Le header ressemble à l’image : titre, sous-titre, bouton principal bleu.
+1. Le header ressemble à l'image : titre, sous-titre, bouton principal bleu.
 2. Les filtres sont alignés horizontalement en petites cartes blanches.
 3. Le toggle `Personnel / Vue dépôt` est compact et intégré.
-4. Les exports sont des boutons secondaires blancs, à droite.
-5. Les onglets sont fins, avec underline bleu pour l’actif.
+4. Les exports sont des boutons secondaires blancs, Ã  droite.
+5. Les onglets sont fins, avec underline bleu pour l'actif.
 6. La grille principale est une matrice salariés × semaines.
 7. Les colonnes visibles correspondent à la maquette.
 8. Les lignes salariés utilisent avatar + nom + rôle + base + statut.
@@ -2002,14 +2002,14 @@ Une correction A25 est conforme visuellement si :
 10. Les couleurs de pills restent douces.
 11. La cellule sélectionnée a une bordure bleue sobre.
 12. Le panneau droit est fixe, blanc, arrondi, étroit.
-13. Le panneau droit affiche l’identité, la semaine, les affectations, absences, conflits et actions.
+13. Le panneau droit affiche l'identité, la semaine, les affectations, absences, conflits et actions.
 14. Les actions du panneau respectent la hiérarchie secondaire / primaire.
-15. La barre basse d’actions groupées est horizontale, sous la grille.
-16. L’action `Vider` est rouge douce, non dominante.
+15. La barre basse d'actions groupées est horizontale, sous la grille.
+16. L'action `Vider` est rouge douce, non dominante.
 17. Les espacements sont proches de la maquette.
 18. Les bordures sont fines.
 19. Les ombres sont absentes ou très discrètes.
-20. La page n’introduit pas de nouvelle direction artistique.
+20. La page n'introduit pas de nouvelle direction artistique.
 
 ---
 
@@ -2047,9 +2047,9 @@ INFORMATION NON FOURNIE — À CONFIRMER
 
 Le bloc A25 ne doit pas repartir en micro-corrections.
 
-Les sessions restantes doivent couvrir l’intégralité de ce document, pas uniquement quelques zones isolées. Si un point de ce document n’est pas traité dans une session de correction, il doit être contrôlé en validation et classé explicitement.
+Les sessions restantes doivent couvrir l'intégralité de ce document, pas uniquement quelques zones isolées. Si un point de ce document n'est pas traité dans une session de correction, il doit être contrôlé en validation et classé explicitement.
 
-### 32.1 Règle d’autorité du découpage
+### 32.1 Règle d'autorité du découpage
 
 ```txt
 REFERENCE_UI_UX_A25_PLANNING.md définit la cible à couvrir.
@@ -2079,9 +2079,9 @@ La formule suivante est réservée à la documentation, aux rapports, aux prompt
 INFORMATION NON FOURNIE — À CONFIRMER
 ```
 
-Elle ne doit jamais être affichée telle quelle dans l’interface utilisateur finale.
+Elle ne doit jamais être affichée telle quelle dans l'interface utilisateur finale.
 
-Côté interface, si un contenu n’est pas disponible, utiliser un libellé métier sobre, par exemple :
+Côté interface, si un contenu n'est pas disponible, utiliser un libellé métier sobre, par exemple :
 
 ```txt
 Aucun élément à afficher
@@ -2096,7 +2096,7 @@ Type : `AUDIT+CADRAGE`
 
 Objectif :
 
-- vérifier la cohérence entre `PLAN_DE_DEVELOPPEMENT.md`, `DOCUMENT_MAITRE.md`, ce document, les images Planning officielles, les prompts A25 et le code réel ;
+- vérifier la cohérence entre `PLAN_DE_DEVELOPPEMENT_V2.md`, `DOCUMENT_MAITRE_V2.md`, ce document, les images Planning officielles, les prompts A25 et le code réel ;
 - confirmer que les images `Planning_V1.2.png` et `Planning_V1.2_INFO_DETAIL.png` sont bien les références visuelles prioritaires ;
 - produire une matrice de faisabilité code pour la reproduction de la maquette ;
 - identifier les écarts entre le code actuel et la cible maquette ;
@@ -2105,13 +2105,13 @@ Objectif :
 Livrable :
 
 ```txt
-Rapport d’audit/cadrage A25-PLAN-UI-06 + matrice de faisabilité code + checklist visuelle manuelle.
+Rapport d'audit/cadrage A25-PLAN-UI-06 + matrice de faisabilité code + checklist visuelle manuelle.
 ```
 
 DoD :
 
 ```txt
-La cible Planning 99 % maquette est cohérente, les risques d’intégration sont identifiés, et Codex dispose d’un plan clair pour les corrections suivantes.
+La cible Planning 99 % maquette est cohérente, les risques d'intégration sont identifiés, et Codex dispose d'un plan clair pour les corrections suivantes.
 ```
 
 ### A25-PLAN-UI-07 — STRUCTURE GLOBALE, HEADER, FILTRES, EXPORTS ET ONGLETS
@@ -2123,10 +2123,10 @@ Objectif :
 - reconstruire le layout global visible dans la maquette ;
 - traiter le header Planning ;
 - traiter la toolbar filtres / vue / exports ;
-- traiter l’encadré orange comme une vraie navigation d’onglets ;
+- traiter l'encadré orange comme une vraie navigation d'onglets ;
 - préparer le workspace deux colonnes : encadré violet + encadré vert ;
 - éviter le double header Planning ;
-- faire en sorte que l’onglet actif pilote ensemble le contenu principal et le panneau contextuel.
+- faire en sorte que l'onglet actif pilote ensemble le contenu principal et le panneau contextuel.
 
 DoD :
 
@@ -2164,9 +2164,9 @@ Objectif :
 - reproduire le panneau droit `Détail de la cellule` ;
 - traiter les sections salarié, période, affectations, absences, conflits/alertes et actions ;
 - reproduire la barre basse de sélection multiple ;
-- traiter les actions d’affectation employé 1 / employé 2 / véhicule / base ;
-- clarifier l’action `Vider` sans créer une nouvelle logique métier ;
-- garantir que le panneau vert reste cohérent avec l’onglet actif.
+- traiter les actions d'affectation employé 1 / employé 2 / véhicule / base ;
+- clarifier l'action `Vider` sans créer une nouvelle logique métier ;
+- garantir que le panneau vert reste cohérent avec l'onglet actif.
 
 DoD :
 
@@ -2205,10 +2205,10 @@ Objectif :
 - vérifier que tout le contenu de `REFERENCE_UI_UX_A25_PLANNING.md` a été couvert ou classé ;
 - vérifier le retour visuel manuel de Nathan ;
 - vérifier lint/build ;
-- vérifier l’absence de dérive métier ;
+- vérifier l'absence de dérive métier ;
 - classer les résiduels bloquants / non bloquants / à confirmer.
 
-La capture après peut être fournie manuellement par Nathan si utile. Elle n’est pas produite automatiquement par Codex.
+La capture après peut être fournie manuellement par Nathan si utile. Elle n'est pas produite automatiquement par Codex.
 
 DoD :
 

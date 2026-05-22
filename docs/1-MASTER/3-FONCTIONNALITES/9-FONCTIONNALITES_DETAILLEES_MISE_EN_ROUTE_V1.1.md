@@ -1,5 +1,7 @@
 # Ambulance Manager — Fonctionnalités détaillées — Mise en route V1
 
+> Statut : référence fonctionnelle cible — page non validée à ce stade.
+
 Version : V1.1 (MASTER)  
 Date : 18/05/2026
 
@@ -10,26 +12,26 @@ Date : 18/05/2026
 - [3. Utilisateurs concernés](#3-utilisateurs-concernés)
 - [4. Structure générale de la page](#4-structure-générale-de-la-page)
 - [5. Checklist de configuration initiale](#5-checklist-de-configuration-initiale)
-- [6. Statuts d’avancement](#6-statuts-davancement)
+- [6. Statuts d'avancement](#6-statuts-davancement)
 - [7. Actions et accès rapides](#7-actions-et-accès-rapides)
-- [8. Règles d’affichage et de validation](#8-règles-daffichage-et-de-validation)
+- [8. Règles d'affichage et de validation](#8-règles-daffichage-et-de-validation)
 - [9. Permissions et accès](#9-permissions-et-accès)
 - [10. Audit et traçabilité](#10-audit-et-traçabilité)
-- [11. Éléments exclus de l’Alpha](#11-éléments-exclus-de-lalpha)
-- [12. Évolutions futures / à ne pas oublier](#12-évolutions-futures--à-ne-pas-oublier)
-- [13. Points à confirmer](#13-points-à-confirmer)
+- [11. Éléments exclus de l'Alpha](#11-éléments-exclus-de-lalpha)
+- [12. Évolutions futures / à ne pas oublier](#12-évolutions-futures--à -ne-pas-oublier)
+- [13. Points à confirmer](#13-points-à -confirmer)
 
 ---
 
 ## 1. Objectif de la page
 
-La page **Mise en route** est l’assistant de configuration initiale d’une société dans Ambulance Manager.
+La page **Mise en route** est l'assistant de configuration initiale d'une société dans Ambulance Manager.
 
-Elle sert à guider Admin, Gérant ou utilisateur autorisé dans les premières étapes nécessaires pour rendre la société exploitable dans l’application.
+Elle sert à guider Admin, Gérant ou utilisateur autorisé dans les premières étapes nécessaires pour rendre la société exploitable dans l'application.
 
 La page doit répondre à une question simple :
 
-> Qu’est-ce qu’il reste à configurer pour que la société puisse commencer à utiliser Ambulance Manager correctement ?
+> Qu'est-ce qu'il reste à configurer pour que la société puisse commencer à utiliser Ambulance Manager correctement 
 
 La page **Mise en route** ne remplace pas les pages métier.  
 Elle centralise une checklist de démarrage et renvoie vers les pages concernées.
@@ -54,7 +56,7 @@ Elle contient les informations stables ou administratives de la société :
 La page **Mise en route** est différente.
 
 Elle ne sert pas à stocker durablement toutes les informations société.  
-Elle sert à afficher l’avancement de la configuration initiale et à guider l’utilisateur vers les actions restantes.
+Elle sert à afficher l'avancement de la configuration initiale et à guider l'utilisateur vers les actions restantes.
 
 Règle validée :
 
@@ -77,13 +79,13 @@ Le détail complet de la checklist reste dans la page **Mise en route**.
 
 La page **Mise en route** doit être :
 
-- une page d’assistance ;
+- une page d'assistance ;
 - une checklist initiale ;
 - un guide de démarrage ;
 - un point de contrôle simple ;
 - un accès rapide vers les pages métier.
 
-Elle doit aider l’utilisateur à ne pas oublier les éléments essentiels avant la première utilisation réelle.
+Elle doit aider l'utilisateur à ne pas oublier les éléments essentiels avant la première utilisation réelle.
 
 ### 2.4 Ce que Mise en route ne doit pas être
 
@@ -94,7 +96,7 @@ La page **Mise en route** ne doit pas devenir :
 - une deuxième page Véhicules ;
 - une deuxième page Modèles horaires ;
 - une deuxième page Planning ;
-- un module d’import complexe ;
+- un module d'import complexe ;
 - un assistant commercial self-service complet ;
 - une page de paramétrage avancé.
 
@@ -110,11 +112,11 @@ La page **Mise en route** concerne principalement :
 - Gérant ;
 - utilisateur autorisé à configurer la société.
 
-Ces profils peuvent consulter l’état de configuration et accéder aux actions de mise en route selon leurs permissions.
+Ces profils peuvent consulter l'état de configuration et accéder aux actions de mise en route selon leurs permissions.
 
 ### 3.2 Utilisateurs terrain
 
-Les utilisateurs terrain n’ont pas besoin d’accéder à la page **Mise en route** par défaut.
+Les utilisateurs terrain n'ont pas besoin d'accéder à la page **Mise en route** par défaut.
 
 Ils ne sont pas concernés par la configuration initiale de la société.
 
@@ -134,14 +136,14 @@ Elle peut être structurée autour de trois zones principales.
 
 ### 4.1 En-tête de progression
 
-L’en-tête affiche une synthèse de l’avancement.
+L'en-tête affiche une synthèse de l'avancement.
 
 Informations possibles :
 
 - nom de la société ;
 - statut global de mise en route ;
-- nombre d’étapes complétées ;
-- nombre d’étapes restantes ;
+- nombre d'étapes complétées ;
+- nombre d'étapes restantes ;
 - dernière mise à jour si utile.
 
 Exemple :
@@ -164,9 +166,9 @@ Chaque étape doit afficher :
 - une action principale ;
 - éventuellement un lien vers la page métier concernée.
 
-### 4.3 Bloc d’aide ou résumé
+### 4.3 Bloc d'aide ou résumé
 
-Un bloc complémentaire peut rappeler l’objectif de la page.
+Un bloc complémentaire peut rappeler l'objectif de la page.
 
 Exemple :
 
@@ -202,13 +204,13 @@ Lien principal :
 - paramètres généraux utiles.
 
 La page Mise en route ne doit pas dupliquer tout le formulaire Société.  
-Elle doit seulement indiquer si l’étape est complétée ou à compléter.
+Elle doit seulement indiquer si l'étape est complétée ou à compléter.
 
 ### 5.2 Dépôts / Bases
 
 Objectif :
 
-> Vérifier qu’au moins une base / dépôt utile à l’exploitation a été créée si nécessaire.
+> Vérifier qu'au moins une base / dépôt utile à l'exploitation a été créée si nécessaire.
 
 Lien principal :
 
@@ -217,19 +219,19 @@ Lien principal :
 Éléments suivis possibles :
 
 - nombre de bases / dépôts créés ;
-- présence d’au moins un lieu actif ;
+- présence d'au moins un lieu actif ;
 - statut des bases / dépôts.
 
 Rappel fonctionnel :
 
 - en Alpha, la notion reste simple : base / dépôt ;
-- pas de distinction technique obligatoire entre Base, Dépôt, Point d’exploitation ou Autre.
+- pas de distinction technique obligatoire entre Base, Dépôt, Point d'exploitation ou Autre.
 
 ### 5.3 Utilisateurs
 
 Objectif :
 
-> Vérifier que les utilisateurs nécessaires à l’exploitation initiale ont été créés.
+> Vérifier que les utilisateurs nécessaires à l'exploitation initiale ont été créés.
 
 Lien principal :
 
@@ -237,8 +239,8 @@ Lien principal :
 
 Éléments suivis possibles :
 
-- nombre d’utilisateurs actifs ;
-- présence d’au moins un Admin ou Gérant ;
+- nombre d'utilisateurs actifs ;
+- présence d'au moins un Admin ou Gérant ;
 - utilisateurs terrain créés si nécessaire ;
 - rôles principaux renseignés ;
 - utilisateurs rattachés à une base / dépôt si applicable.
@@ -249,7 +251,7 @@ La page Mise en route ne remplace pas la gestion des utilisateurs.
 
 Objectif :
 
-> Vérifier que les véhicules nécessaires à l’exploitation initiale ont été créés.
+> Vérifier que les véhicules nécessaires à l'exploitation initiale ont été créés.
 
 Lien principal :
 
@@ -306,7 +308,7 @@ Point à reprendre lors de la relecture globale :
 
 Objectif :
 
-> Vérifier qu’un premier planning ou une première préparation de semaine peut être réalisée.
+> Vérifier qu'un premier planning ou une première préparation de semaine peut être réalisée.
 
 Lien principal :
 
@@ -315,7 +317,7 @@ Lien principal :
 Éléments suivis possibles :
 
 - accès au Planning ;
-- préparation d’une première semaine ;
+- préparation d'une première semaine ;
 - besoins hebdomadaires définis ;
 - modèles nécessaires disponibles ;
 - utilisateurs et véhicules affectables.
@@ -330,7 +332,7 @@ Objectif :
 
 > Permettre un accès éventuel aux imports si cette logique est disponible.
 
-En Alpha, l’import ne doit pas être bloquant.
+En Alpha, l'import ne doit pas être bloquant.
 
 Imports potentiels à prévoir plus tard ou selon périmètre :
 
@@ -342,7 +344,7 @@ Imports potentiels à prévoir plus tard ou selon périmètre :
 
 Règle V1 :
 
-> L’import peut être utile, mais la mise en route doit rester possible manuellement.
+> L'import peut être utile, mais la mise en route doit rester possible manuellement.
 
 ### 5.8 Vérification finale
 
@@ -362,7 +364,7 @@ Elle ne doit pas devenir un verrou technique trop complexe sans règle validée.
 
 ---
 
-## 6. Statuts d’avancement
+## 6. Statuts d'avancement
 
 Chaque étape de mise en route doit avoir un statut simple.
 
@@ -376,7 +378,7 @@ Statuts proposés pour la V1 / Alpha :
 
 ### 6.1 À faire
 
-L’étape n’a pas encore été commencée ou aucune donnée minimale n’est détectée.
+L'étape n'a pas encore été commencée ou aucune donnée minimale n'est détectée.
 
 Exemple :
 
@@ -386,7 +388,7 @@ Véhicules — À faire
 
 ### 6.2 En cours
 
-L’étape contient déjà des informations, mais semble incomplète.
+L'étape contient déjà des informations, mais semble incomplète.
 
 Exemple :
 
@@ -406,7 +408,7 @@ Dépôts / Bases — Complété
 
 ### 6.4 À vérifier
 
-L’étape contient des informations, mais une incohérence ou un manque possible doit être contrôlé.
+L'étape contient des informations, mais une incohérence ou un manque possible doit être contrôlé.
 
 Exemple :
 
@@ -416,7 +418,7 @@ Modèles horaires — À vérifier
 
 ### 6.5 Ignoré / reporté
 
-Ce statut peut être utile lorsqu’une étape n’est pas nécessaire immédiatement.
+Ce statut peut être utile lorsqu'une étape n'est pas nécessaire immédiatement.
 
 Exemple :
 
@@ -430,7 +432,7 @@ Ce statut ne doit pas masquer une étape réellement obligatoire.
 
 ## 7. Actions et accès rapides
 
-La page **Mise en route** doit faciliter l’accès aux pages métier.
+La page **Mise en route** doit faciliter l'accès aux pages métier.
 
 Chaque étape peut proposer une action principale.
 
@@ -473,7 +475,7 @@ La saisie détaillée reste dans les pages métier.
 
 ---
 
-## 8. Règles d’affichage et de validation
+## 8. Règles d'affichage et de validation
 
 ### 8.1 Principe général
 
@@ -500,7 +502,7 @@ La page peut signaler :
 - étape à vérifier ;
 - configuration incomplète.
 
-Mais elle ne doit pas bloquer toute l’application sans règle explicitement validée.
+Mais elle ne doit pas bloquer toute l'application sans règle explicitement validée.
 
 ### 8.3 Cohérence avec le multi-tenant
 
@@ -510,7 +512,7 @@ Règle :
 
 > Les données de mise en route doivent respecter le cloisonnement strict par société.
 
-Aucune information d’une autre société ne doit être visible.
+Aucune information d'une autre société ne doit être visible.
 
 ---
 
@@ -534,7 +536,7 @@ Permission possible :
 
 ### 9.3 Utilisateurs terrain
 
-Les utilisateurs terrain n’ont pas accès à la page Mise en route par défaut.
+Les utilisateurs terrain n'ont pas accès à la page Mise en route par défaut.
 
 Ils peuvent être concernés indirectement par les données créées, mais ils ne participent pas à la configuration initiale.
 
@@ -561,11 +563,11 @@ La page Mise en route peut générer ou afficher des actions importantes.
 
 À tracer si elles existent :
 
-- changement manuel de statut d’une étape ;
+- changement manuel de statut d'une étape ;
 - étape marquée comme ignorée / reportée ;
 - étape marquée comme vérifiée ;
 - accès à une action sensible si nécessaire ;
-- modification d’un paramètre de mise en route.
+- modification d'un paramètre de mise en route.
 
 ### 10.2 Actions métier
 
@@ -573,12 +575,12 @@ Les créations ou modifications réelles restent tracées dans les modules conce
 
 Exemples :
 
-- création d’un utilisateur → audit Utilisateurs ;
-- création d’un véhicule → audit Véhicules ;
-- création d’un modèle horaire → audit Modèles horaires ;
-- création d’une base / dépôt → audit Dépôts / Bases.
+- création d'un utilisateur → audit Utilisateurs ;
+- création d'un véhicule → audit Véhicules ;
+- création d'un modèle horaire → audit Modèles horaires ;
+- création d'une base / dépôt → audit Dépôts / Bases.
 
-La page Mise en route ne doit pas dupliquer l’audit complet des pages métier.
+La page Mise en route ne doit pas dupliquer l'audit complet des pages métier.
 
 ### 10.3 Historique simple
 
@@ -595,20 +597,20 @@ Ce point reste secondaire en Alpha.
 
 ---
 
-## 11. Éléments exclus de l’Alpha
+## 11. Éléments exclus de l'Alpha
 
 Sont exclus de la V1 / Alpha :
 
 - assistant commercial self-service complet ;
-- création autonome d’une société par un client externe ;
-- tunnel d’inscription libre ;
+- création autonome d'une société par un client externe ;
+- tunnel d'inscription libre ;
 - configuration automatique complète ;
 - recommandations intelligentes avancées ;
 - import complexe obligatoire ;
-- mapping avancé d’import ;
+- mapping avancé d'import ;
 - assistant conversationnel de configuration ;
 - règles automatiques complexes de conformité ;
-- blocage strict de l’application tant que chaque étape n’est pas terminée ;
+- blocage strict de l'application tant que chaque étape n'est pas terminée ;
 - duplication complète des formulaires Société, Utilisateurs, Véhicules, Dépôts / Bases, Modèles horaires ou Planning.
 
 Ces éléments ne sont pas abandonnés.  
@@ -623,8 +625,8 @@ Ils pourront être réétudiés en Beta, version finale ou évolution ultérieur
 - assistant de mise en route plus avancé ;
 - checklist personnalisable selon la société ;
 - import guidé avec aperçu avant import ;
-- rapport d’erreurs d’import ;
-- validation manuelle d’import ;
+- rapport d'erreurs d'import ;
+- validation manuelle d'import ;
 - recommandations automatiques ;
 - détection plus fine des incohérences ;
 - score de complétude de configuration ;
@@ -634,7 +636,7 @@ Ils pourront être réétudiés en Beta, version finale ou évolution ultérieur
 - aide contextuelle page par page ;
 - modèle de société préconfiguré ;
 - génération automatique de modèles horaires de base ;
-- préparation guidée d’une première semaine de planning ;
+- préparation guidée d'une première semaine de planning ;
 - notifications de configuration incomplète ;
 - version mobile ou affichage responsive simplifié si utile.
 
@@ -647,5 +649,5 @@ Les points suivants restent à confirmer :
 - INFORMATION NON FOURNIE — À CONFIRMER : nom exact des permissions dédiées à la page Mise en route.
 - INFORMATION NON FOURNIE — À CONFIRMER : liste exacte des conditions minimales permettant de considérer chaque étape comme complétée.
 - INFORMATION NON FOURNIE — À CONFIRMER : comportement exact si une étape obligatoire reste incomplète.
-- INFORMATION NON FOURNIE — À CONFIRMER : périmètre exact de l’import en Alpha.
+- INFORMATION NON FOURNIE — À CONFIRMER : périmètre exact de l'import en Alpha.
 - INFORMATION NON FOURNIE — À CONFIRMER : niveau de traçabilité spécifique de la page Mise en route, hors audit des pages métier.

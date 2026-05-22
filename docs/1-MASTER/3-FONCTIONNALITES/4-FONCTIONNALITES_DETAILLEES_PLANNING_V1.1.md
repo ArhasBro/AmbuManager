@@ -1,5 +1,7 @@
 # Ambulance Manager — Fonctionnalités détaillées — Planning V1
 
+> Statut : référence fonctionnelle cible — page non validée à ce stade.
+
 Version : V1 (MASTER)  
 Date : 18/05/2026
 
@@ -7,11 +9,11 @@ Date : 18/05/2026
 
 - [1. Objectif de la page](#1-objectif-de-la-page)
 - [2. Positionnement fonctionnel](#2-positionnement-fonctionnel)
-- [3. Périmètre V1 / Alpha validé](#3-périmètre-v1--alpha-validé)
+- [3. Base de cadrage fonctionnel V1 / Alpha](#3-base-de-cadrage-fonctionnel-v1--alpha)
 - [4. Principes structurants du Planning](#4-principes-structurants-du-planning)
 - [5. Types de vues Planning](#5-types-de-vues-planning)
-- [6. Structure d’une case Planning](#6-structure-dune-case-planning)
-- [7. Création d’une affectation Planning](#7-création-dune-affectation-planning)
+- [6. Structure d'une case Planning](#6-structure-dune-case-planning)
+- [7. Création d'une affectation Planning](#7-création-dune-affectation-planning)
 - [8. Préparation hebdomadaire des besoins](#8-préparation-hebdomadaire-des-besoins)
 - [9. Utilisation des modèles horaires](#9-utilisation-des-modèles-horaires)
 - [10. Affectation des utilisateurs](#10-affectation-des-utilisateurs)
@@ -25,20 +27,20 @@ Date : 18/05/2026
 - [18. États de la page](#18-états-de-la-page)
 - [19. Impacts sur les autres fiches](#19-impacts-sur-les-autres-fiches)
 - [20. Éléments exclus du périmètre V1 / Alpha](#20-éléments-exclus-du-périmètre-v1--alpha)
-- [21. Évolutions futures / à ne pas oublier](#21-évolutions-futures--à-ne-pas-oublier)
-- [22. Points à confirmer](#22-points-à-confirmer)
+- [21. Évolutions futures / à ne pas oublier](#21-évolutions-futures--à -ne-pas-oublier)
+- [22. Points à confirmer](#22-points-à -confirmer)
 
 ---
 
 ## 1. Objectif de la page
 
-La page **Planning** permet d’organiser l’activité opérationnelle de la société sous forme d’affectations synthétiques.
+La page **Planning** permet d'organiser l'activité opérationnelle de la société sous forme d'affectations synthétiques.
 
-Elle sert à préparer, visualiser, publier et modifier l’organisation des semaines, des jours, des utilisateurs, des véhicules et des besoins à couvrir.
+Elle sert à préparer, visualiser, publier et modifier l'organisation des semaines, des jours, des utilisateurs, des véhicules et des besoins à couvrir.
 
 La page doit permettre de répondre rapidement aux questions suivantes :
 
-- quel modèle ou type d’activité est prévu pour chaque utilisateur sur une semaine donnée ;
+- quel modèle ou type d'activité est prévu pour chaque utilisateur sur une semaine donnée ;
 - quels besoins obligatoires doivent être couverts sur une semaine ;
 - quels utilisateurs sont affectés ;
 - quels véhicules sont affectés ;
@@ -66,9 +68,9 @@ Elle ne doit pas devenir en Alpha :
 - une régulation opérationnelle en temps réel ;
 - un module de facturation ;
 - un module de paie ;
-- un calculateur complet d’heures travaillées ;
+- un calculateur complet d'heures travaillées ;
 - un moteur de planification automatique avancée ;
-- un moteur d’affectation automatique optimisée avancée.
+- un moteur d'affectation automatique optimisée avancée.
 
 ---
 
@@ -76,7 +78,7 @@ Elle ne doit pas devenir en Alpha :
 
 ### 2.1 Planning manuel métier
 
-La page **Planning** est la page centrale d’organisation des affectations.
+La page **Planning** est la page centrale d'organisation des affectations.
 
 En Alpha, elle repose sur une logique principalement manuelle :
 
@@ -91,7 +93,7 @@ Tracer les modifications importantes
 
 Le Planning doit aider le planificateur, mais il ne doit pas décider automatiquement à sa place.
 
-### 2.2 Ce que le Planning n’est pas
+### 2.2 Ce que le Planning n'est pas
 
 Le Planning ne doit pas être confondu avec :
 
@@ -100,7 +102,7 @@ Missions / courses / transports patients
 = gestion opérationnelle détaillée des transports
 
 Régulation temps réel
-= suivi et adaptation en direct de l’activité
+= suivi et adaptation en direct de l'activité
 
 Heures / Horaires
 = saisie, calcul et suivi avancé du temps de travail
@@ -112,7 +114,7 @@ Paie
 = module RH / paie dédié
 ```
 
-Ces sujets pourront exister dans d’autres pages ou modules, mais ils ne doivent pas être mélangés au Planning Alpha.
+Ces sujets pourront exister dans d'autres pages ou modules, mais ils ne doivent pas être mélangés au Planning Alpha.
 
 ### 2.3 Préparation de la Beta
 
@@ -125,20 +127,19 @@ Planification automatique
 Affectation automatique optimisée
 ```
 
-La **planification automatique** et l’**affectation automatique optimisée** sont prévues pour la Beta.
+La **planification automatique** et l'**affectation automatique optimisée** sont prévues pour la Beta.
 
 Elles ne font pas partie du cœur fonctionnel du Planning Alpha.
 
 ---
 
-## 3. Périmètre V1 / Alpha validé
-
-Fonctionnalités validées pour la page **Planning V1 / Alpha** :
+## 3. Base de cadrage fonctionnel V1 / Alpha
+Fonctionnalités cibles de référence pour la page **Planning V1 / Alpha** :
 
 - planning manuel métier ;
 - vue globale annuelle utilisateurs × semaines ;
 - vue personnelle type agenda synthétique ;
-- vue mois claire pour l’organisation personnelle ;
+- vue mois claire pour l'organisation personnelle ;
 - vue semaine synthétique ;
 - vue jour synthétique ;
 - distinction entre lecture simple et gestion ;
@@ -157,7 +158,7 @@ Fonctionnalités validées pour la page **Planning V1 / Alpha** :
 - préparation hebdomadaire des besoins à couvrir ;
 - états de couverture des besoins : **À couvrir**, **Couvert**, **Incomplet**, **Non affecté**, **À vérifier** ;
 - utilisation des modèles horaires comme base de création ;
-- indépendance de l’affectation Planning après création ;
+- indépendance de l'affectation Planning après création ;
 - affectation manuelle des utilisateurs ;
 - affectation manuelle des véhicules ;
 - distinction **TPMR VSL** et **TPMR TAXI** ;
@@ -167,11 +168,11 @@ Fonctionnalités validées pour la page **Planning V1 / Alpha** :
 - annulation logique sans suppression physique après publication ;
 - motif obligatoire pour annulation après publication ;
 - motif obligatoire pour modification sensible après publication ;
-- filtres par période, utilisateur, rôle, base / dépôt, modèle, type d’affectation, véhicule, statut et état de couverture ;
+- filtres par période, utilisateur, rôle, base / dépôt, modèle, type d'affectation, véhicule, statut et état de couverture ;
 - recherche rapide en mode gestion ;
 - panneau de détail selon permissions ;
 - alertes simples et conflits évidents en mode gestion ;
-- affichage du nombre d’utilisateurs terrain disponibles sur la période ;
+- affichage du nombre d'utilisateurs terrain disponibles sur la période ;
 - permissions Planning dédiées ;
 - audit et traçabilité des actions importantes.
 
@@ -190,7 +191,7 @@ Aucune vue du Planning V1 / Alpha ne doit être une vue détaillée heure par he
 Le Planning fonctionne principalement par :
 
 - modèles horaires ;
-- types d’affectation ;
+- types d'affectation ;
 - semaines ;
 - jours synthétiques ;
 - besoins à couvrir ;
@@ -200,7 +201,7 @@ Les horaires précis pouvant être connus seulement la veille pour le lendemain,
 
 ### 4.2 Sens du mot créneau dans cette fiche
 
-Dans cette fiche, lorsqu’un terme comme **créneau** est utilisé, il doit être compris comme une affectation Planning ou un élément synthétique d’organisation.
+Dans cette fiche, lorsqu'un terme comme **créneau** est utilisé, il doit être compris comme une affectation Planning ou un élément synthétique d'organisation.
 
 Il ne signifie pas une grille complète heure par heure.
 
@@ -244,7 +245,7 @@ Règle validée :
 ```text
 La case reste avec un fond blanc.
 Le libellé principal est affiché dans un encadré / badge de couleur.
-La couleur est définie par l’utilisateur qui fait le planning.
+La couleur est définie par l'utilisateur qui fait le planning.
 ```
 
 Le libellé reste obligatoire.
@@ -295,22 +296,22 @@ La vue doit être synchronisée avec :
 - les années ;
 - les numéros de semaine.
 
-La période cible couvre l’année civile du **01/01/AAAA au 31/12/AAAA**.
+La période cible couvre l'année civile du **01/01/AAAA au 31/12/AAAA**.
 
 La gestion exacte des années avec semaine 53 reste à confirmer.
 
 ### 5.3 Vue personnelle
 
-La vue personnelle est destinée à l’utilisateur connecté.
+La vue personnelle est destinée à l'utilisateur connecté.
 
-Elle doit avoir une logique visuelle proche d’un agenda synthétique.
+Elle doit avoir une logique visuelle proche d'un agenda synthétique.
 
 Elle affiche notamment :
 
 - mes semaines ;
 - mes jours ;
 - mes modèles affectés ;
-- mes types d’affectation ;
+- mes types d'affectation ;
 - mon véhicule si connu ;
 - mon équipe / binôme si connu ;
 - mes informations visibles selon permissions.
@@ -321,7 +322,7 @@ Elle ne devient pas une vue détaillée heure par heure.
 
 La vue mois est importante pour les utilisateurs terrain.
 
-Elle permet aux salariés de s’organiser dans leur vie personnelle.
+Elle permet aux salariés de s'organiser dans leur vie personnelle.
 
 Elle doit être :
 
@@ -331,7 +332,7 @@ Elle doit être :
 - utile pour anticiper ;
 - navigable vers une semaine ou une journée.
 
-Elle n’est pas une vue principale de gestion détaillée.
+Elle n'est pas une vue principale de gestion détaillée.
 
 Elle peut afficher :
 
@@ -374,7 +375,7 @@ Elle ne doit pas devenir une grille horaire complète.
 
 ### 5.7 Annotations calendaires particulières
 
-Les différentes vues du Planning doivent prévoir une annotation visuelle simple lorsqu’un utilisateur est planifié sur une période particulière :
+Les différentes vues du Planning doivent prévoir une annotation visuelle simple lorsqu'un utilisateur est planifié sur une période particulière :
 
 - jour férié ;
 - samedi ;
@@ -398,7 +399,7 @@ Le niveau de détail affiché dépend du contexte de la vue et des permissions.
 
 ---
 
-## 6. Structure d’une case Planning
+## 6. Structure d'une case Planning
 
 ### 6.1 Principe général
 
@@ -407,7 +408,7 @@ Une case Planning affiche une information synthétique.
 Elle répond rapidement à la question :
 
 ```text
-Qu’est-ce qui est prévu pour cette personne sur cette période ?
+Qu'est-ce qui est prévu pour cette personne sur cette période 
 ```
 
 Elle ne doit pas devenir une fiche détaillée complète.
@@ -416,9 +417,9 @@ Elle ne doit pas devenir une fiche détaillée complète.
 
 Le libellé prioritaire est le **libellé court Planning** du modèle horaire.
 
-Si aucun libellé court n’est disponible, la case peut afficher :
+Si aucun libellé court n'est disponible, la case peut afficher :
 
-- le type d’affectation ;
+- le type d'affectation ;
 - le type de véhicule ;
 - le nom du modèle horaire ;
 - un état simple.
@@ -461,10 +462,10 @@ Le libellé principal est affiché dans un encadré / badge de couleur intégré
 
 La couleur :
 
-- est définie par l’utilisateur qui fait le planning ;
+- est définie par l'utilisateur qui fait le planning ;
 - sert de repère visuel ;
 - doit rester esthétique ;
-- ne doit jamais être le seul élément porteur d’une information métier critique.
+- ne doit jamais être le seul élément porteur d'une information métier critique.
 
 ### 6.5 Informations secondaires possibles
 
@@ -487,7 +488,7 @@ Les détails complets doivent être affichés dans le panneau de détail.
 
 ---
 
-## 7. Création d’une affectation Planning
+## 7. Création d'une affectation Planning
 
 ### 7.1 Principe général
 
@@ -525,10 +526,10 @@ Exemple :
 Nathan / S21
 ```
 
-L’utilisateur autorisé choisit ensuite :
+L'utilisateur autorisé choisit ensuite :
 
 - un modèle horaire ;
-- un type d’affectation ;
+- un type d'affectation ;
 - un état simple.
 
 ### 7.3 Précision par jour
@@ -557,7 +558,7 @@ Elle reprend notamment :
 - les jours actifs si définis ;
 - les horaires par jour si définis.
 
-La couleur du badge est définie par l’utilisateur qui fait le planning.
+La couleur du badge est définie par l'utilisateur qui fait le planning.
 
 ### 7.5 Création sans modèle horaire
 
@@ -587,7 +588,7 @@ Actions simples à prévoir en Alpha :
 - mettre NON PLANIFIÉ ;
 - mettre À AFFECTER.
 
-Ces actions évitent de remplir l’année case par case.
+Ces actions évitent de remplir l'année case par case.
 
 ### 7.7 Contrôles simples à la création
 
@@ -612,13 +613,13 @@ En Alpha, le Planning doit permettre une préparation hebdomadaire manuelle des 
 
 Pour chaque semaine, Admin, Gérant ou utilisateur autorisé peut définir les modèles horaires obligatoires ou attendus.
 
-Ces modèles servent de checklist de couverture avant ou pendant l’affectation des utilisateurs.
+Ces modèles servent de checklist de couverture avant ou pendant l'affectation des utilisateurs.
 
-Cette logique aide à éviter les oublis, notamment pour les gardes variables d’une semaine à l’autre, sans devenir une planification automatique avancée.
+Cette logique aide à éviter les oublis, notamment pour les gardes variables d'une semaine à l'autre, sans devenir une planification automatique avancée.
 
 ### 8.2 Besoins de la semaine
 
-Avant d’affecter les utilisateurs, la personne qui fait le planning doit pouvoir définir les modèles / besoins obligatoires de la semaine.
+Avant d'affecter les utilisateurs, la personne qui fait le planning doit pouvoir définir les modèles / besoins obligatoires de la semaine.
 
 Exemple :
 
@@ -658,7 +659,7 @@ La préparation hebdomadaire des besoins est visible en mode gestion pour :
 - Gérant ;
 - utilisateur autorisé.
 
-Elle n’est pas destinée aux utilisateurs en lecture simple.
+Elle n'est pas destinée aux utilisateurs en lecture simple.
 
 ---
 
@@ -678,7 +679,7 @@ Ils peuvent préremplir :
 - les horaires par jour ;
 - les annotations utiles comme nuit ou `J+1`.
 
-### 9.2 Indépendance de l’affectation créée
+### 9.2 Indépendance de l'affectation créée
 
 Règle validée :
 
@@ -689,7 +690,7 @@ Une affectation créée depuis un modèle reste indépendante du modèle.
 Conséquences :
 
 - modifier un modèle horaire plus tard ne modifie pas automatiquement les affectations Planning déjà créées ;
-- l’affectation Planning conserve ses propres informations ;
+- l'affectation Planning conserve ses propres informations ;
 - le modèle reste une base de création, pas une dépendance permanente bloquante.
 
 ### 9.3 Modèles actifs, inactifs et archivés
@@ -749,9 +750,9 @@ Exemples :
 
 Dans le Planning, cette composition sert à :
 
-- guider l’affectation ;
+- guider l'affectation ;
 - signaler une affectation incomplète ;
-- préparer l’affectation automatique optimisée en Beta.
+- préparer l'affectation automatique optimisée en Beta.
 
 En Alpha, elle ne devient pas un moteur automatique avancé.
 
@@ -770,13 +771,13 @@ La distinction **TPMR VSL** / **TPMR TAXI** doit être prise en compte dans les 
 
 ### 9.7 Compteur Nb utilisé
 
-Le compteur **Nb utilisé** augmente lorsqu’une affectation est créée depuis le modèle.
+Le compteur **Nb utilisé** augmente lorsqu'une affectation est créée depuis le modèle.
 
-Ce compteur mesure l’utilisation du modèle comme base de création.
+Ce compteur mesure l'utilisation du modèle comme base de création.
 
 Il ne sert pas de preuve métier stricte.
 
-Il ne diminue pas automatiquement si l’affectation est ensuite modifiée.
+Il ne diminue pas automatiquement si l'affectation est ensuite modifiée.
 
 ---
 
@@ -784,7 +785,7 @@ Il ne diminue pas automatiquement si l’affectation est ensuite modifiée.
 
 ### 10.1 Principe général
 
-L’affectation des utilisateurs reste manuelle en Alpha.
+L'affectation des utilisateurs reste manuelle en Alpha.
 
 Elle est guidée par :
 
@@ -796,14 +797,14 @@ Elle est guidée par :
 
 ### 10.2 Utilisateurs proposés normalement
 
-Les utilisateurs suivants ne sont pas proposés normalement à l’affectation :
+Les utilisateurs suivants ne sont pas proposés normalement à l'affectation :
 
 - utilisateurs inactifs ;
 - utilisateurs archivés ;
 - utilisateurs absents sur la période ;
 - utilisateurs indisponibles sur la période.
 
-Une demande d’absence en attente ne bloque pas automatiquement l’affectation.
+Une demande d'absence en attente ne bloque pas automatiquement l'affectation.
 
 ### 10.3 Affectation depuis la checklist des besoins
 
@@ -839,9 +840,9 @@ Exemple :
 Nathan / S21 → VSL
 ```
 
-### 10.5 Composition d’équipe
+### 10.5 Composition d'équipe
 
-Les compositions d’équipe doivent gérer les états :
+Les compositions d'équipe doivent gérer les états :
 
 - **Complet** ;
 - **Incomplet** ;
@@ -874,7 +875,7 @@ Les règles précises de compatibilité entre rôles, modèles horaires et types
 
 ### 11.1 Principe général
 
-L’affectation des véhicules reste manuelle en Alpha.
+L'affectation des véhicules reste manuelle en Alpha.
 
 Elle est guidée par :
 
@@ -900,21 +901,21 @@ Les véhicules suivants ne sont pas proposés normalement :
 - véhicules archivés ;
 - véhicules indisponibles ;
 - véhicules dont le type ne correspond pas au besoin ;
-- véhicules déjà affectés sur une période incompatible, si l’information est connue.
+- véhicules déjà affectés sur une période incompatible, si l'information est connue.
 
 ### 11.3 Base / dépôt du véhicule
 
 La base / dépôt du véhicule sert de repère.
 
-Elle ne bloque pas automatiquement l’affectation.
+Elle ne bloque pas automatiquement l'affectation.
 
 Règle validée :
 
 ```text
-Un véhicule peut être affecté même s’il est rattaché à une autre base / dépôt.
+Un véhicule peut être affecté même s'il est rattaché à une autre base / dépôt.
 ```
 
-Cette règle existe parce qu’un véhicule peut ne pas rentrer à sa base principale le soir.
+Cette règle existe parce qu'un véhicule peut ne pas rentrer à sa base principale le soir.
 
 ### 11.4 Distinction TPMR
 
@@ -941,7 +942,7 @@ Il peut être visible :
 - dans le panneau de détail ;
 - dans la vue semaine ;
 - dans la vue jour ;
-- dans la vue personnelle si utile pour l’utilisateur ;
+- dans la vue personnelle si utile pour l'utilisateur ;
 - selon permissions.
 
 ### 11.6 Anomalies, vérifications et désinfections
@@ -997,22 +998,22 @@ La publication principale se fait par semaine en Alpha.
 
 ### 12.4 Modifié après publication
 
-Le statut **Modifié après publication** permet d’identifier qu’un planning publié a changé.
+Le statut **Modifié après publication** permet d'identifier qu'un planning publié a changé.
 
 Il peut concerner :
 
 - changement de modèle ;
-- changement d’utilisateur ;
+- changement d'utilisateur ;
 - changement de véhicule ;
-- changement d’état ;
-- modification d’un besoin hebdomadaire ;
-- ajout d’une affectation après publication.
+- changement d'état ;
+- modification d'un besoin hebdomadaire ;
+- ajout d'une affectation après publication.
 
 ### 12.5 Annulé
 
 Le statut **Annulé** correspond à une annulation logique.
 
-Il n’y a aucune suppression physique après publication.
+Il n'y a aucune suppression physique après publication.
 
 Le motif est obligatoire pour une annulation après publication.
 
@@ -1059,7 +1060,7 @@ Il est possible de modifier :
 - composition ;
 - information interne.
 
-La suppression ou le vidage d’une case est possible en brouillon.
+La suppression ou le vidage d'une case est possible en brouillon.
 
 ### 13.2 Modification après publication
 
@@ -1068,14 +1069,14 @@ Après publication, toute modification importante doit être tracée.
 Exemples :
 
 - changement de modèle ;
-- changement d’utilisateur ;
+- changement d'utilisateur ;
 - changement de véhicule ;
-- changement d’état ;
-- remplacement d’une affectation ;
-- modification d’un besoin obligatoire ;
+- changement d'état ;
+- remplacement d'une affectation ;
+- modification d'un besoin obligatoire ;
 - annulation logique.
 
-Le statut **Modifié après publication** doit permettre d’identifier qu’un planning publié a changé.
+Le statut **Modifié après publication** doit permettre d'identifier qu'un planning publié a changé.
 
 ### 13.3 Motifs
 
@@ -1084,7 +1085,7 @@ Le motif est obligatoire pour :
 - une annulation après publication ;
 - une modification sensible après publication.
 
-Le motif n’est pas forcément obligatoire pour toute modification mineure après publication, afin de ne pas alourdir l’usage.
+Le motif n'est pas forcément obligatoire pour toute modification mineure après publication, afin de ne pas alourdir l'usage.
 
 ### 13.4 Annulation logique
 
@@ -1092,17 +1093,17 @@ Une affectation publiée annulée passe en annulation logique.
 
 Elle conserve :
 
-- l’affectation initiale ;
+- l'affectation initiale ;
 - la date ;
-- l’auteur ;
+- l'auteur ;
 - le motif ;
 - le statut précédent.
 
-Aucune suppression physique n’est autorisée après publication.
+Aucune suppression physique n'est autorisée après publication.
 
-### 13.5 Remplacement d’une affectation
+### 13.5 Remplacement d'une affectation
 
-Le remplacement d’une affectation publiée ne doit pas écraser l’ancienne sans trace.
+Le remplacement d'une affectation publiée ne doit pas écraser l'ancienne sans trace.
 
 Exemple :
 
@@ -1115,10 +1116,10 @@ Motif : remplacement organisationnel
 
 ### 13.6 Historique minimal
 
-L’historique minimal doit permettre de savoir :
+L'historique minimal doit permettre de savoir :
 
 ```text
-Qui a fait quoi, quand, et sur quelle affectation ?
+Qui a fait quoi, quand, et sur quelle affectation 
 ```
 
 Il conserve notamment :
@@ -1127,15 +1128,15 @@ Il conserve notamment :
 - publication ;
 - modification après publication ;
 - annulation ;
-- changement d’utilisateur ;
+- changement d'utilisateur ;
 - changement de véhicule ;
 - changement de modèle ;
-- changement d’état ;
-- modification d’un besoin hebdomadaire.
+- changement d'état ;
+- modification d'un besoin hebdomadaire.
 
-L’historique minimal est visible dans le détail Planning en mode gestion.
+L'historique minimal est visible dans le détail Planning en mode gestion.
 
-L’historique plus complet relève de la page **Audit** si l’utilisateur y est autorisé.
+L'historique plus complet relève de la page **Audit** si l'utilisateur y est autorisé.
 
 ---
 
@@ -1154,9 +1155,9 @@ Le Planning doit permettre une navigation par :
 
 La matrice annuelle doit permettre :
 
-- de choisir l’année ;
+- de choisir l'année ;
 - de revenir rapidement à la période courante ;
-- d’ouvrir le détail d’une case ;
+- d'ouvrir le détail d'une case ;
 - de lire clairement les semaines ;
 - de garder les utilisateurs identifiables.
 
@@ -1171,7 +1172,7 @@ Les filtres Alpha incluent :
 - rôle ;
 - base / dépôt ;
 - modèle horaire ;
-- type d’affectation ;
+- type d'affectation ;
 - véhicule ;
 - statut Planning ;
 - état de couverture.
@@ -1202,7 +1203,7 @@ La matrice annuelle doit rester lisible avec :
 - détails limités ;
 - panneau de détail au clic.
 
-Le véhicule, l’historique, les conflits et les détails ne doivent pas surcharger la case.
+Le véhicule, l'historique, les conflits et les détails ne doivent pas surcharger la case.
 
 ### 14.6 Panneau de détail
 
@@ -1229,7 +1230,7 @@ En gestion, il affiche les détails et actions autorisées.
 
 ### 14.7 Indicateurs visuels
 
-Les annotations visuelles doivent rester légères et toujours accompagnées d’un libellé clair.
+Les annotations visuelles doivent rester légères et toujours accompagnées d'un libellé clair.
 
 Exemples :
 
@@ -1273,7 +1274,7 @@ Alertes validées :
 - rôle incompatible ;
 - utilisateur déjà affecté.
 
-Les demandes d’absence en attente ne retirent pas automatiquement l’utilisateur du total disponible.
+Les demandes d'absence en attente ne retirent pas automatiquement l'utilisateur du total disponible.
 
 ### 15.4 Alertes véhicules
 
@@ -1306,9 +1307,9 @@ Les conflits et alertes de gestion sont visibles uniquement pour :
 
 Ils ne sont pas affichés aux utilisateurs en lecture simple.
 
-### 15.7 Nombre d’utilisateurs terrain disponibles
+### 15.7 Nombre d'utilisateurs terrain disponibles
 
-Le Planning doit afficher en mode gestion le nombre d’utilisateurs terrain disponibles pour la période consultée.
+Le Planning doit afficher en mode gestion le nombre d'utilisateurs terrain disponibles pour la période consultée.
 
 Ce nombre doit tenir compte des utilisateurs :
 
@@ -1377,16 +1378,16 @@ Les autres profils, dont **Bureau**, passent par des permissions dédiées.
 Le mode gestion permet selon permissions :
 
 - préparation des besoins hebdomadaires ;
-- création d’affectation ;
-- modification d’affectation ;
-- affectation d’utilisateurs ;
+- création d'affectation ;
+- modification d'affectation ;
+- affectation d'utilisateurs ;
 - affectation de véhicules ;
-- publication d’une semaine ;
+- publication d'une semaine ;
 - modification après publication ;
 - annulation logique ;
 - consultation des conflits ;
 - consultation des alertes ;
-- consultation de l’historique minimal.
+- consultation de l'historique minimal.
 
 ### 16.4 Permissions Planning prévues
 
@@ -1406,18 +1407,18 @@ Permissions fonctionnelles prévues :
 - affecter des véhicules ;
 - consulter les conflits ;
 - consulter les alertes de gestion ;
-- consulter l’historique Planning ;
+- consulter l'historique Planning ;
 - consulter les éléments annulés ;
 - consulter les brouillons ;
 - consulter les informations sensibles liées aux absences / indisponibilités.
 
-Les noms techniques définitifs des permissions pourront être définis au moment de l’implémentation.
+Les noms techniques définitifs des permissions pourront être définis au moment de l'implémentation.
 
 ### 16.5 Informations sensibles
 
 Les informations sensibles liées aux absences / indisponibilités sont masquées selon permissions.
 
-En lecture simple, un utilisateur ne voit pas forcément la raison précise de l’absence d’un autre utilisateur.
+En lecture simple, un utilisateur ne voit pas forcément la raison précise de l'absence d'un autre utilisateur.
 
 En mode gestion, Admin, Gérant ou utilisateur autorisé voient les informations nécessaires à la planification, selon permissions.
 
@@ -1425,14 +1426,14 @@ En mode gestion, Admin, Gérant ou utilisateur autorisé voient les informations
 
 Actions sensibles à tracer :
 
-- publication d’une semaine ;
+- publication d'une semaine ;
 - modification après publication ;
 - annulation après publication ;
-- changement d’utilisateur après publication ;
+- changement d'utilisateur après publication ;
 - changement de véhicule après publication ;
 - passage en ABSENT ;
 - passage en INDISPONIBLE ;
-- modification d’un besoin obligatoire après publication ;
+- modification d'un besoin obligatoire après publication ;
 - action touchant un planning déjà publié.
 
 ---
@@ -1445,8 +1446,8 @@ Les actions importantes du Planning doivent être tracées.
 
 La traçabilité doit permettre de savoir :
 
-- qui a fait l’action ;
-- quand l’action a été faite ;
+- qui a fait l'action ;
+- quand l'action a été faite ;
 - sur quelle affectation ;
 - ce qui a été modifié ;
 - ancienne valeur si utile ;
@@ -1463,9 +1464,9 @@ Actions à tracer :
 - modification après publication ;
 - annulation logique ;
 - changement de modèle ;
-- changement d’utilisateur ;
+- changement d'utilisateur ;
 - changement de véhicule ;
-- changement d’état ;
+- changement d'état ;
 - changement de statut ;
 - modification des besoins hebdomadaires.
 
@@ -1475,7 +1476,7 @@ Avant publication, la traçabilité peut rester simple.
 
 Le Planning est encore en brouillon.
 
-Les micro-ajustements ne doivent pas alourdir inutilement l’usage.
+Les micro-ajustements ne doivent pas alourdir inutilement l'usage.
 
 ### 17.4 Après publication
 
@@ -1502,13 +1503,13 @@ Historique récent
 
 ### 17.6 Audit complet
 
-L’audit complet relève de la page **Audit**, si l’utilisateur y est autorisé.
+L'audit complet relève de la page **Audit**, si l'utilisateur y est autorisé.
 
 La page Audit pourra permettre une consultation plus détaillée des actions Planning.
 
 ### 17.7 Lecture simple
 
-Les utilisateurs en lecture simple ne voient pas l’audit détaillé.
+Les utilisateurs en lecture simple ne voient pas l'audit détaillé.
 
 Ils peuvent éventuellement voir une information simple si leur planning publié a changé.
 
@@ -1529,7 +1530,7 @@ Les actions support sur le Planning devront être tracées de manière renforcé
 - utilisateur concerné ;
 - contexte ou motif ;
 - date / heure ;
-- type d’action.
+- type d'action.
 
 ---
 
@@ -1547,13 +1548,13 @@ Chargement du planning...
 
 ### 18.2 Aucun planning disponible
 
-Si aucun élément Planning n’existe pour la période sélectionnée :
+Si aucun élément Planning n'existe pour la période sélectionnée :
 
 ```text
 Aucun planning disponible pour cette période.
 ```
 
-En mode gestion, si l’utilisateur est autorisé, une action peut être proposée :
+En mode gestion, si l'utilisateur est autorisé, une action peut être proposée :
 
 ```text
 Préparer la semaine
@@ -1581,13 +1582,13 @@ Réinitialiser les filtres
 
 ### 18.4 Besoins hebdomadaires absents
 
-Si aucun besoin n’a encore été défini pour la semaine :
+Si aucun besoin n'a encore été défini pour la semaine :
 
 ```text
 Aucun besoin hebdomadaire défini pour cette semaine.
 ```
 
-En mode gestion, si l’utilisateur est autorisé :
+En mode gestion, si l'utilisateur est autorisé :
 
 ```text
 Définir les besoins de la semaine
@@ -1595,13 +1596,13 @@ Définir les besoins de la semaine
 
 ### 18.5 Accès non autorisé
 
-Si un utilisateur tente d’accéder à une vue ou une action non autorisée :
+Si un utilisateur tente d'accéder à une vue ou une action non autorisée :
 
 ```text
 Accès non autorisé.
 ```
 
-Selon les cas, l’action peut être masquée plutôt qu’affichée.
+Selon les cas, l'action peut être masquée plutôt qu'affichée.
 
 ### 18.6 Action non autorisée
 
@@ -1613,7 +1614,7 @@ Action non autorisée.
 
 ### 18.7 Erreur de chargement
 
-En cas d’erreur technique :
+En cas d'erreur technique :
 
 ```text
 Impossible de charger le planning.
@@ -1625,11 +1626,11 @@ Veuillez réessayer.
 Messages à prévoir selon les cas :
 
 ```text
-Le modèle ou l’état est obligatoire.
+Le modèle ou l'état est obligatoire.
 ```
 
 ```text
-L’utilisateur est obligatoire pour cette affectation.
+L'utilisateur est obligatoire pour cette affectation.
 ```
 
 ```text
@@ -1691,7 +1692,7 @@ La gestion avancée des heures ne fait pas partie du Planning Alpha web actuel.
 
 Elle doit être prévue dans une page dédiée **Heures / Horaires**.
 
-Cette partie est prévue pour l’Alpha de la version mobile.
+Cette partie est prévue pour l'Alpha de la version mobile.
 
 ---
 
@@ -1733,7 +1734,7 @@ Les compteurs RH avancés sont également exclus du Planning Alpha.
 
 Le calcul complet des heures travaillées est exclu du Planning Alpha.
 
-Il relève d’une future page **Heures / Horaires**.
+Il relève d'une future page **Heures / Horaires**.
 
 Le Planning Alpha peut préparer des repères, mais ne calcule pas :
 
@@ -1751,13 +1752,13 @@ Elle ne fait pas partie du cœur fonctionnel du Planning Alpha.
 
 ### 20.7 Affectation automatique optimisée avancée
 
-L’affectation automatique optimisée avancée est prévue pour la Beta.
+L'affectation automatique optimisée avancée est prévue pour la Beta.
 
 Elle ne fait pas partie du cœur fonctionnel du Planning Alpha.
 
 ### 20.8 Scoring, équilibrage et optimisation
 
-Sont exclus de l’Alpha :
+Sont exclus de l'Alpha :
 
 - scoring ;
 - équilibrage automatique ;
@@ -1768,7 +1769,7 @@ Sont exclus de l’Alpha :
 
 ### 20.9 Géolocalisation et suivi temps réel
 
-Sont exclus de l’Alpha :
+Sont exclus de l'Alpha :
 
 - géolocalisation ;
 - suivi temps réel des véhicules ;
@@ -1777,13 +1778,13 @@ Sont exclus de l’Alpha :
 
 ### 20.10 Maintenance avancée intégrée au Planning
 
-La maintenance avancée intégrée au Planning est exclue de l’Alpha.
+La maintenance avancée intégrée au Planning est exclue de l'Alpha.
 
 Elle relève plutôt de la page **Suivi des véhicules**, notamment via un futur onglet **Entretiens des véhicules**.
 
 ### 20.11 Notifications avancées et preuves
 
-Sont exclus de l’Alpha :
+Sont exclus de l'Alpha :
 
 - notifications avancées ;
 - confirmations de lecture ;
@@ -1793,10 +1794,10 @@ Sont exclus de l’Alpha :
 
 ### 20.12 Versioning complet
 
-Sont exclus de l’Alpha :
+Sont exclus de l'Alpha :
 
 - versioning complet ;
-- restauration d’ancienne version ;
+- restauration d'ancienne version ;
 - comparaison visuelle avant / après.
 
 ---
@@ -1807,7 +1808,7 @@ Sont exclus de l’Alpha :
 
 À prévoir en Beta :
 
-- génération automatique d’une semaine ;
+- génération automatique d'une semaine ;
 - génération à partir des besoins hebdomadaires ;
 - prise en compte des modèles horaires ;
 - prise en compte des absences / indisponibilités ;
@@ -1819,7 +1820,7 @@ Sont exclus de l’Alpha :
 
 À prévoir en Beta :
 
-- proposition automatique d’utilisateurs ;
+- proposition automatique d'utilisateurs ;
 - proposition automatique de véhicules ;
 - prise en compte des rôles ;
 - prise en compte des types de véhicules ;
@@ -1834,14 +1835,14 @@ Sont exclus de l’Alpha :
 - équilibrage des week-ends ;
 - équilibrage des jours fériés ;
 - équilibrage des charges entre utilisateurs ;
-- score de pertinence d’une affectation ;
+- score de pertinence d'une affectation ;
 - aide à la décision pour le planificateur.
 
 ### 21.4 Gestion avancée des heures
 
 À prévoir dans une page dédiée **Heures / Horaires**.
 
-Cette partie est prévue pour l’Alpha de la version mobile, pas pour le Planning Alpha web actuel.
+Cette partie est prévue pour l'Alpha de la version mobile, pas pour le Planning Alpha web actuel.
 
 À traiter plus tard :
 
@@ -1876,8 +1877,8 @@ Ne pas mélanger avec le Planning Alpha.
 
 À prévoir plus tard :
 
-- notification d’un planning publié ;
-- notification d’une modification après publication ;
+- notification d'un planning publié ;
+- notification d'une modification après publication ;
 - confirmation de lecture par salarié ;
 - rappel automatique ;
 - notification mobile ;
@@ -1892,7 +1893,7 @@ Ne pas mélanger avec le Planning Alpha.
 - notification de modification ;
 - confirmation de lecture ;
 - affichage clair des week-ends / jours fériés ;
-- accès rapide au véhicule et à l’équipe.
+- accès rapide au véhicule et à l'équipe.
 
 ### 21.11 Versioning complet et restauration
 
@@ -1900,7 +1901,7 @@ Ne pas mélanger avec le Planning Alpha.
 
 - historique complet de chaque case ou affectation ;
 - comparaison avant / après ;
-- restauration d’une ancienne version ;
+- restauration d'une ancienne version ;
 - version publiée précédente ;
 - preuve de modification.
 
@@ -1912,7 +1913,7 @@ Ne pas mélanger avec le Planning Alpha.
 - validation mobile ;
 - preuve de lecture ;
 - preuve de modification ;
-- preuve d’acceptation d’un changement.
+- preuve d'acceptation d'un changement.
 
 ### 21.13 Optimisation véhicules
 
@@ -1937,12 +1938,12 @@ Le cœur de la maintenance reste dans **Suivi des véhicules**.
 
 ## 22. Points à confirmer
 
-Les points suivants restent à confirmer dans les fiches futures ou lors d’un cadrage dédié.
+Les points suivants restent à confirmer dans les fiches futures ou lors d'un cadrage dédié.
 
 Ils ne doivent pas être présentés comme validés.
 
 - INFORMATION NON FOURNIE — À CONFIRMER : gestion exacte des années avec semaine 53 et règle de numérotation des semaines.
-- INFORMATION NON FOURNIE — À CONFIRMER : comportement exact lors de la publication d’une semaine contenant encore un besoin obligatoire non couvert.
+- INFORMATION NON FOURNIE — À CONFIRMER : comportement exact lors de la publication d'une semaine contenant encore un besoin obligatoire non couvert.
 - INFORMATION NON FOURNIE — À CONFIRMER : règles précises de compatibilité entre rôles utilisateurs, modèles horaires et types de véhicules.
 - INFORMATION NON FOURNIE — À CONFIRMER : règles exactes de traitement, suivi ou équilibrage des samedis, dimanches, week-ends complets et jours fériés.
 - INFORMATION NON FOURNIE — À CONFIRMER : détail exact des informations sensibles visibles ou masquées dans chaque vue Planning selon permissions.

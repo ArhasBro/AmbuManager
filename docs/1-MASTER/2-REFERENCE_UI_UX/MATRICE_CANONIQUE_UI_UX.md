@@ -27,9 +27,9 @@ Objectif : réduire les ambiguïtés entre maquettes, références UI/UX et impl
 ## Règle de priorité
 
 1. Code réel du dépôt pour l'état technique présent.
-2. `docs/1-MASTER/DOCUMENT_CADRAGE_FONCTIONNEL.md` pour le périmètre produit validé.
-3. `docs/1-MASTER/DOCUMENT_MAITRE.md` pour les principes globaux.
-4. `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT.md` pour l'ordre officiel.
+2. `docs/1-MASTER/DOCUMENT_CADRAGE_FONCTIONNEL_V2.md` pour le périmètre produit validé.
+3. `docs/1-MASTER/DOCUMENT_MAITRE_V2.md` pour les principes globaux.
+4. `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md` pour l'ordre officiel.
 5. Références UI/UX (`docs/1-MASTER/2-REFERENCE_UI_UX/`) pour le codable visuel.
 6. PNG officiels (`docs/1-MASTER/1-MAQUETTE/...`) pour la vérité visuelle.
 7. Sessions historiques comme preuve, sans autorité supérieure.
@@ -64,8 +64,8 @@ Objectif : réduire les ambiguïtés entre maquettes, références UI/UX et impl
 |---|---|---|---|---|
 | Historique maquettes | Ancien chemin MAQUETTE_DA encore présent dans sessions | `docs/2-SESSIONS/**` (multiples occurrences `MAQUETTE_DA`) | Risque de confusion de chemin pour Codex | Normaliser les prompts futurs vers `docs/1-MASTER/1-MAQUETTE/...` uniquement. |
 | Shell global | Pas de PNG unique dédié | `REFERENCE_UI_UX_SHELL_GLOBAL.md` + index maquettes | Ambiguïté possible sur la source visuelle prioritaire | Conserver règle « shell transversal » + liste de PNG de référence. |
-| Imports/Exports/Autoschedule/Matching | Présence API sans route UI canonique explicite | `app/api/imports/route.ts`, `app/api/planning/exports/route.ts`, `app/api/planning/autoschedule/**` | Difficile de relier UI/UX aux fonctions techniques | Créer matrice complémentaire UI-vers-API en session dédiée après REBASAGE-07. |
-| Documentation de gouvernance | Encodage hétérogène dans certains docs maîtres/références | Sorties terminal montrant mojibake ponctuel | Risque d'interprétation sur accents/casse | Traiter dans audit encodage ciblé REBASAGE-07, fichier par fichier. |
+| Imports/Exports/Autoschedule/Matching | Présence API sans route UI canonique explicite | `app/api/imports/route.ts`, `app/api/planning/exports/route.ts`, `app/api/planning/autoschedule/**` | Difficile de relier UI/UX aux fonctions techniques | Créer matrice complémentaire UI-vers-API en session dédiée dans une session dédiée ultérieure (historique REBASAGE). |
+| Documentation de gouvernance | Encodage hétérogène dans certains docs maîtres/références | Sorties terminal montrant mojibake ponctuel | Risque d'interprétation sur accents/casse | Traiter dans audit encodage ciblé session historique d'audit encodage, fichier par fichier. |
 | Casse historique | Variantes `docs/1-master` encore présentes en historique | Sessions A24/A25/BLOC_DOCS | Risque de copier-coller de mauvais chemins | Conserver l'historique, imposer la casse officielle dans nouveaux documents. |
 
 ## Pages sans maquette claire
@@ -86,4 +86,4 @@ Objectif : réduire les ambiguïtés entre maquettes, références UI/UX et impl
 
 ## Prochaine étape recommandée
 
-`REBASAGE-07` : audit encodage ciblé, avec preuves fichier par fichier (fichier, exemple, encodage constaté, correction éventuelle, vérification après correction), sans correction massive.
+`session historique d'audit encodage` : audit encodage ciblé, avec preuves fichier par fichier (fichier, exemple, encodage constaté, correction éventuelle, vérification après correction), sans correction massive.

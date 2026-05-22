@@ -31,20 +31,22 @@ Le fichier historique `STRUCTURE_DOCS.md` est archivé dans :
 ## 4. Priorité documentaire
 
 1. Code réel du dépôt.
-2. `docs/1-MASTER/DOCUMENT_CADRAGE_FONCTIONNEL.md`.
-3. `docs/1-MASTER/DOCUMENT_MAITRE.md`.
+2. `docs/1-MASTER/DOCUMENT_CADRAGE_FONCTIONNEL_V2.md`.
+3. `docs/1-MASTER/DOCUMENT_MAITRE_V2.md`.
 4. `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md`.
-5. `docs/1-MASTER/REGISTRE_DECISIONS.md`.
-6. `docs/1-MASTER/ETAT_GLOBAL_PROJET.md`.
-7. `docs/1-MASTER/2-REFERENCE_UI_UX/`.
-8. `docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/`.
-9. `docs/2-SESSIONS/`.
-10. `docs/1-MASTER/RECAP_DISCUSSIONS.md`.
-11. `docs/CMD.md`.
+5. `docs/1-MASTER/REGISTRE_DECISIONS_V2.md`.
+6. `docs/1-MASTER/ETAT_GLOBAL_PROJET_V2.md`.
+7. `docs/1-MASTER/RECAP_DISCUSSIONS_V2.md`.
+8. `docs/1-MASTER/3-FONCTIONNALITES/`.
+9. `docs/1-MASTER/2-REFERENCE_UI_UX/`.
+10. `docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/`.
+11. `docs/2-SESSIONS/`.
+12. `docs/CMD.md`.
 
 ## 5. Règles explicites
 
-- Aucune suppression physique sans archivage.
+- Les documents V2 sont la gouvernance active à stabiliser.
+- Les anciennes versions `.md` sans suffixe V2 sont historiques, non prioritaires, et à archiver après validation V2.
 - En cas d'information manquante, utiliser exactement : `INFORMATION NON FOURNIE — À CONFIRMER`.
 - `docs/2-SESSIONS/` ne doit pas être modifié pendant ce nettoyage structurel.
 
@@ -57,12 +59,11 @@ Le fichier historique `STRUCTURE_DOCS.md` est archivé dans :
   - `docs/1-MASTER/2-REFERENCE_UI_UX/`
 - Ils sont conservés comme base de comparaison et mémoire visuelle.
 - Ils ne doivent pas être archivés maintenant.
-- Après validation des nouvelles maquettes, ils serviront à produire des références UI/UX propres pour guider le codage.
 
 ## 7. Règle plan actif
 
 - Plan actif : `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md`.
-- Ancien plan archivé : `docs/4-ARCHIVES/1-MASTER_HISTORIQUE/PLAN_DE_DEVELOPPEMENT_ARCHIVE.md`.
+- Ancien plan : `docs/4-ARCHIVES/1-MASTER_HISTORIQUE/PLAN_DE_DEVELOPPEMENT_ARCHIVE.md` (historique, non prioritaire).
 - Ne pas créer de plan concurrent.
 
 ## 8. Règle de casse documentaire

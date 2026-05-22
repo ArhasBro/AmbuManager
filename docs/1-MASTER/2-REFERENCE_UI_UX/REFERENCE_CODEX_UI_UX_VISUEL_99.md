@@ -9,7 +9,7 @@ Périmètre : visuel uniquement, hors bloc documentaire, hors refonte fonctionne
 
 ## 1. Objet du document
 
-Ce document sert de référence courte et opérationnelle pour Codex lors des futures sessions de production visant à rapprocher une page d’Ambulance Manager de sa maquette officielle à environ 99 %.
+Ce document sert de référence courte et opérationnelle pour Codex lors des futures sessions de production visant à rapprocher une page d'Ambulance Manager de sa maquette officielle à environ 99 %.
 
 Il ne remplace pas :
 
@@ -19,7 +19,7 @@ Il ne remplace pas :
 - le `REFERENCE_UI_UX_<PAGE>.md` de la page concernée ;
 - le code réel comme vérité fonctionnelle.
 
-Il sert à éviter les dérives classiques : audit trop large, scan inutile du dépôt, ajout fonctionnel non demandé, captures automatiques, ou blocage à cause d’un élément fonctionnel non visible dans la maquette.
+Il sert à éviter les dérives classiques : audit trop large, scan inutile du dépôt, ajout fonctionnel non demandé, captures automatiques, ou blocage à cause d'un élément fonctionnel non visible dans la maquette.
 
 ---
 
@@ -28,8 +28,8 @@ Il sert à éviter les dérives classiques : audit trop large, scan inutile du d
 Pour une session UI/UX visuelle, Codex doit lire dans cet ordre :
 
 ```txt
-docs/1-MASTER/DOCUMENT_MAITRE.md
-docs/1-MASTER/PLAN_DE_DEVELOPPEMENT.md
+docs/1-MASTER/DOCUMENT_MAITRE_V2.md
+docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md
 docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_INDEX_MAQUETTES.md
 docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_SHELL_GLOBAL.md
 docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_CODEX_UI_UX_VISUEL_99.md
@@ -71,7 +71,7 @@ La phase actuelle est strictement visuelle.
 
 Objectif : reproduire la maquette officielle à environ 99 %.
 
-Ce n’est pas une phase de :
+Ce n'est pas une phase de :
 
 - refonte fonctionnelle ;
 - ajout métier ;
@@ -95,7 +95,7 @@ Si un bouton, un formulaire, une donnée, une action, un onglet ou un bloc fonct
 - le déplacer ;
 - le replier ;
 - le simplifier ;
-- le supprimer de l’affichage par défaut ;
+- le supprimer de l'affichage par défaut ;
 - le reporter dans un panneau ou une zone secondaire si cohérent avec la maquette.
 
 Codex ne doit pas supprimer la vérité fonctionnelle sous-jacente sans demande explicite.
@@ -116,7 +116,7 @@ Codex ne doit pas :
 - faire un audit global du dépôt ;
 - lire des fichiers non utiles à la page ;
 - recréer le dossier `ICONE` ou `ICONES` ;
-- afficher `INFORMATION NON FOURNIE — À CONFIRMER` dans l’interface utilisateur ;
+- afficher `INFORMATION NON FOURNIE — À CONFIRMER` dans l'interface utilisateur ;
 - inventer des fonctionnalités absentes de la maquette.
 
 Règle responsive transverse complémentaire :
@@ -151,7 +151,7 @@ docs/3-templates/
 docs/4-archives/
 ```
 
-Exception : anciens livrables historiques et anciens patchs qui décrivent l’état réel du projet au moment de leur production.
+Exception : anciens livrables historiques et anciens patchs qui décrivent l'état réel du projet au moment de leur production.
 
 ---
 
@@ -169,7 +169,7 @@ Si un patch code est produit, Codex doit fournir :
 - checklist de contrôle visuel manuel Nathan.
 ```
 
-Si aucun code n’est modifié :
+Si aucun code n'est modifié :
 
 ```txt
 NO_PATCH_CODE
@@ -189,8 +189,8 @@ Toute production UI/UX visuelle doit finir par une checklist Nathan du type :
 [ ] La topbar est alignée avec les maquettes.
 [ ] Le titre et le sous-titre de page sont conformes.
 [ ] Les cartes / tableaux / filtres / badges respectent la maquette.
-[ ] Les éléments fonctionnels non visibles dans la maquette ne surchargent pas l’écran.
-[ ] Aucun texte documentaire n’est visible dans l’interface.
+[ ] Les éléments fonctionnels non visibles dans la maquette ne surchargent pas l'écran.
+[ ] Aucun texte documentaire n'est visible dans l'interface.
 [ ] Les accents français sont présents dans les libellés visibles.
 [ ] La page se rapproche à environ 99 % de la maquette officielle.
 ```
@@ -205,8 +205,8 @@ Tu travailles sur Ambulance Manager.
 Objectif : réaligner uniquement le visuel de la page concernée avec sa maquette officielle à environ 99 %, sans traiter le fonctionnel métier.
 
 Lis d'abord :
-- docs/1-MASTER/DOCUMENT_MAITRE.md
-- docs/1-MASTER/PLAN_DE_DEVELOPPEMENT.md
+- docs/1-MASTER/DOCUMENT_MAITRE_V2.md
+- docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md
 - docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_INDEX_MAQUETTES.md
 - docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_SHELL_GLOBAL.md
 - docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_CODEX_UI_UX_VISUEL_99.md

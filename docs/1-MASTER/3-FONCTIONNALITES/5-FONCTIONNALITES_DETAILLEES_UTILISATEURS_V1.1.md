@@ -1,5 +1,7 @@
 # Ambulance Manager — Fonctionnalités détaillées — Utilisateurs V1
 
+> Statut : référence fonctionnelle cible — page non validée à ce stade.
+
 Version : V1 (MASTER)  
 Date : 18/05/2026
 
@@ -8,18 +10,18 @@ Date : 18/05/2026
 - [1. Objectif de la page](#1-objectif-de-la-page)
 - [2. Principes généraux validés](#2-principes-généraux-validés)
 - [3. Liste des utilisateurs](#3-liste-des-utilisateurs)
-- [4. Création d’un utilisateur](#4-création-dun-utilisateur)
-- [5. Modification d’un utilisateur](#5-modification-dun-utilisateur)
+- [4. Création d'un utilisateur](#4-création-dun-utilisateur)
+- [5. Modification d'un utilisateur](#5-modification-dun-utilisateur)
 - [6. Statuts utilisateur](#6-statuts-utilisateur)
 - [7. Rôles, multi-rôle et permissions](#7-rôles-multi-rôle-et-permissions)
-- [8. Demandes d’absence / indisponibilité](#8-demandes-dabsence--indisponibilité)
+- [8. Demandes d'absence / indisponibilité](#8-demandes-dabsence--indisponibilité)
 - [9. Fiche détail utilisateur](#9-fiche-détail-utilisateur)
 - [10. Véhicules affectables aux utilisateurs terrain](#10-véhicules-affectables-aux-utilisateurs-terrain)
 - [11. Accès et permissions de la page Utilisateurs](#11-accès-et-permissions-de-la-page-utilisateurs)
 - [12. Actions disponibles](#12-actions-disponibles)
-- [13. Éléments exclus de l’Alpha](#13-éléments-exclus-de-lalpha)
-- [14. Évolutions futures / à ne pas oublier](#14-évolutions-futures--à-ne-pas-oublier)
-- [15. Points à confirmer](#15-points-à-confirmer)
+- [13. Éléments exclus de l'Alpha](#13-éléments-exclus-de-lalpha)
+- [14. Évolutions futures / à ne pas oublier](#14-évolutions-futures--à -ne-pas-oublier)
+- [15. Points à confirmer](#15-points-à -confirmer)
 
 ---
 
@@ -36,9 +38,9 @@ Elle doit permettre de :
 - gérer le multi-rôle ;
 - gérer les permissions fines ;
 - gérer le statut du compte ;
-- gérer l’archivage ;
+- gérer l'archivage ;
 - gérer le rattachement à une base / dépôt ;
-- gérer les demandes d’absence ou d’indisponibilité ;
+- gérer les demandes d'absence ou d'indisponibilité ;
 - gérer les véhicules affectables pour les utilisateurs terrain.
 
 La page doit rester orientée gestion opérationnelle.  
@@ -53,12 +55,12 @@ La page Utilisateurs V1 / Alpha repose sur les principes suivants :
 - un utilisateur appartient à une société ;
 - la société de rattachement est liée automatiquement au contexte courant ;
 - un utilisateur possède un rôle principal obligatoire ;
-- le multi-rôle est intégré dès l’Alpha ;
+- le multi-rôle est intégré dès l'Alpha ;
 - un utilisateur peut avoir au maximum 3 rôles ;
 - les permissions fines sont modifiables par les profils autorisés ;
-- il n’y a pas de suppression physique d’un utilisateur ;
+- il n'y a pas de suppression physique d'un utilisateur ;
 - les actions sensibles sont soumises à permissions ;
-- les actions sensibles doivent être traçables dans l’audit ;
+- les actions sensibles doivent être traçables dans l'audit ;
 - Admin et Gérant peuvent gérer toutes les permissions dédiées au module Utilisateurs en Alpha.
 
 ---
@@ -67,7 +69,7 @@ La page Utilisateurs V1 / Alpha repose sur les principes suivants :
 
 ### 3.1 Objectif de la liste
 
-La liste des utilisateurs doit permettre d’identifier rapidement les personnes de la société, leur rôle, leur état, leur rattachement et les actions disponibles.
+La liste des utilisateurs doit permettre d'identifier rapidement les personnes de la société, leur rôle, leur état, leur rattachement et les actions disponibles.
 
 Elle doit rester lisible et exploitable.
 
@@ -85,7 +87,7 @@ La liste Utilisateurs V1 affiche les informations suivantes :
 
 ### 3.3 Identité
 
-L’identité est affichée avec :
+L'identité est affichée avec :
 
 - un avatar à initiales ;
 - le nom ;
@@ -115,9 +117,9 @@ Exemple :
 La liste doit afficher :
 
 - le rôle principal ;
-- les rôles complémentaires si l’utilisateur en possède.
+- les rôles complémentaires si l'utilisateur en possède.
 
-Le multi-rôle est prévu dès l’Alpha.
+Le multi-rôle est prévu dès l'Alpha.
 
 Exemple :
 
@@ -137,7 +139,7 @@ Un utilisateur inactif ne peut pas se connecter.
 
 ### 3.6 État opérationnel
 
-La liste affiche l’état opérationnel :
+La liste affiche l'état opérationnel :
 
 - présent ;
 - absent ;
@@ -148,7 +150,7 @@ Le calcul exact de cet état sera confirmé avec les fiches Planning, Heures et 
 
 ### 3.7 Base / dépôt
 
-La liste affiche la base ou le dépôt de rattachement de l’utilisateur si applicable.
+La liste affiche la base ou le dépôt de rattachement de l'utilisateur si applicable.
 
 Les règles exactes de rattachement restent à confirmer :
 
@@ -159,7 +161,7 @@ Les règles exactes de rattachement restent à confirmer :
 
 ### 3.8 Contact
 
-L’email et le téléphone sont affichés dans une même colonne.
+L'email et le téléphone sont affichés dans une même colonne.
 
 Affichage attendu :
 
@@ -168,7 +170,7 @@ email@exemple.fr
 06 XX XX XX XX
 ```
 
-L’email sert à la connexion.
+L'email sert à la connexion.
 
 ### 3.9 Actions
 
@@ -183,7 +185,7 @@ Actions principales :
 - réactiver ;
 - archiver ;
 - désarchiver / restaurer ;
-- gérer les demandes d’absence / indisponibilité selon permissions.
+- gérer les demandes d'absence / indisponibilité selon permissions.
 
 ### 3.10 Recherche et filtres
 
@@ -202,21 +204,21 @@ Pas de filtre complexe en Alpha.
 
 ---
 
-## 4. Création d’un utilisateur
+## 4. Création d'un utilisateur
 
 ### 4.1 Objectif
 
 La création utilisateur permet à un Admin, Gérant ou utilisateur autorisé de créer un compte exploitable dans Ambulance Manager.
 
-Il n’y a pas d’inscription libre.
+Il n'y a pas d'inscription libre.
 
-### 4.2 Champs d’identité
+### 4.2 Champs d'identité
 
 Champs validés :
 
 - nom ;
 - prénom ;
-- initiales d’avatar.
+- initiales d'avatar.
 
 Les initiales sont choisies manuellement.
 
@@ -227,21 +229,21 @@ Champs validés :
 - email ;
 - téléphone.
 
-L’email est obligatoire, car il sert à la connexion.
+L'email est obligatoire, car il sert à la connexion.
 
 ### 4.4 Rôles
 
 La création utilisateur doit permettre de définir :
 
 - un rôle principal obligatoire ;
-- jusqu’à 2 rôles complémentaires ;
+- jusqu'à 2 rôles complémentaires ;
 - maximum 3 rôles au total.
 
 Un utilisateur ne peut pas être créé sans rôle principal.
 
 ### 4.5 Permissions fines
 
-La création doit permettre de gérer les permissions fines si l’utilisateur créateur est autorisé.
+La création doit permettre de gérer les permissions fines si l'utilisateur créateur est autorisé.
 
 Les permissions doivent être compréhensibles et regroupées par module.
 
@@ -267,15 +269,15 @@ En Alpha, le mot de passe initial est défini manuellement par Admin / Gérant.
 
 Règles :
 
-- aucun utilisateur ne s’inscrit seul ;
-- l’utilisateur se connecte ensuite avec email + mot de passe ;
+- aucun utilisateur ne s'inscrit seul ;
+- l'utilisateur se connecte ensuite avec email + mot de passe ;
 - le mot de passe ne doit jamais être affiché en clair après création.
 
-L’option de mot de passe temporaire généré automatiquement est reportée en évolution future.
+L'option de mot de passe temporaire généré automatiquement est reportée en évolution future.
 
 ---
 
-## 5. Modification d’un utilisateur
+## 5. Modification d'un utilisateur
 
 ### 5.1 Objectif
 
@@ -287,7 +289,7 @@ Les éléments suivants peuvent être modifiés par un profil autorisé :
 
 - nom ;
 - prénom ;
-- initiales d’avatar ;
+- initiales d'avatar ;
 - email ;
 - téléphone ;
 - rôle principal ;
@@ -299,14 +301,14 @@ Les éléments suivants peuvent être modifiés par un profil autorisé :
 
 ### 5.3 Email
 
-L’email sert d’identifiant de connexion.
+L'email sert d'identifiant de connexion.
 
 Règles :
 
-- l’email peut être modifié uniquement par un utilisateur autorisé ;
-- le nouvel email devient l’identifiant de connexion ;
-- l’email ne doit pas créer de doublon ;
-- la modification doit être traçable dans l’audit.
+- l'email peut être modifié uniquement par un utilisateur autorisé ;
+- le nouvel email devient l'identifiant de connexion ;
+- l'email ne doit pas créer de doublon ;
+- la modification doit être traçable dans l'audit.
 
 ### 5.4 Rôles et permissions
 
@@ -314,10 +316,10 @@ La modification doit respecter les règles suivantes :
 
 - rôle principal obligatoire ;
 - maximum 3 rôles ;
-- jusqu’à 2 rôles complémentaires ;
+- jusqu'à 2 rôles complémentaires ;
 - permissions fines modifiables ;
 - modifications réservées aux profils autorisés ;
-- modifications sensibles traçables dans l’audit.
+- modifications sensibles traçables dans l'audit.
 
 ### 5.5 Statut actif / inactif
 
@@ -336,10 +338,10 @@ Un utilisateur peut être archivé.
 
 Règles validées :
 
-- un utilisateur archivé n’apparaît plus dans la liste courante ;
-- il reste visible uniquement via le filtre “utilisateurs archivés” ;
-- l’archivage conserve l’historique ;
-- l’archivage ne supprime pas les anciennes données ;
+- un utilisateur archivé n'apparaît plus dans la liste courante ;
+- il reste visible uniquement via le filtre "utilisateurs archivés" ;
+- l'archivage conserve l'historique ;
+- l'archivage ne supprime pas les anciennes données ;
 - un utilisateur archivé ne doit pas être proposé pour de nouvelles affectations.
 
 ### 5.7 Mot de passe
@@ -358,7 +360,7 @@ Règles :
 - réservée aux utilisateurs autorisés ;
 - ancien mot de passe jamais affiché ;
 - nouveau mot de passe défini manuellement en Alpha ;
-- action traçable dans l’audit.
+- action traçable dans l'audit.
 
 ---
 
@@ -383,7 +385,7 @@ Règle :
 
 ### 6.2 Archivage
 
-L’archivage concerne la visibilité dans la liste.
+L'archivage concerne la visibilité dans la liste.
 
 Statuts :
 
@@ -394,12 +396,12 @@ Règles :
 
 - un utilisateur non archivé est visible dans la liste principale ;
 - un utilisateur archivé est masqué de la liste principale ;
-- un utilisateur archivé est visible uniquement via le filtre “utilisateurs archivés” ;
+- un utilisateur archivé est visible uniquement via le filtre "utilisateurs archivés" ;
 - un utilisateur archivé conserve son historique.
 
 ### 6.3 État opérationnel
 
-L’état opérationnel concerne l’activité, le planning, les absences ou les indisponibilités.
+L'état opérationnel concerne l'activité, le planning, les absences ou les indisponibilités.
 
 États validés :
 
@@ -411,9 +413,9 @@ L’état opérationnel concerne l’activité, le planning, les absences ou les
 Règles :
 
 - un utilisateur actif peut être absent ;
-- un utilisateur non planifié n’est pas automatiquement absent ;
-- une demande en attente ne modifie pas l’état opérationnel ;
-- une demande validée peut rendre l’utilisateur absent ou indisponible ;
+- un utilisateur non planifié n'est pas automatiquement absent ;
+- une demande en attente ne modifie pas l'état opérationnel ;
+- une demande validée peut rendre l'utilisateur absent ou indisponible ;
 - le calcul précis sera confirmé avec Planning, Heures et Absences / indisponibilités.
 
 ---
@@ -427,20 +429,20 @@ Chaque utilisateur possède obligatoirement un rôle principal.
 Le rôle principal sert à :
 
 - identifier la fonction principale ;
-- orienter l’affichage ;
+- orienter l'affichage ;
 - proposer des permissions par défaut ;
 - adapter le tableau de bord ;
 - faciliter la lecture dans les listes.
 
 ### 7.2 Multi-rôle
 
-Le multi-rôle est intégré dès l’Alpha.
+Le multi-rôle est intégré dès l'Alpha.
 
 Règles validées :
 
 - maximum 3 rôles par utilisateur ;
 - 1 rôle principal obligatoire ;
-- jusqu’à 2 rôles complémentaires.
+- jusqu'à 2 rôles complémentaires.
 
 Exemples :
 
@@ -468,9 +470,9 @@ Règles validées :
 
 - la modification des rôles est réservée aux profils autorisés ;
 - la modification des permissions fines est réservée aux profils autorisés ;
-- aucun utilisateur ne peut s’accorder seul des droits supérieurs ;
+- aucun utilisateur ne peut s'accorder seul des droits supérieurs ;
 - les permissions doivent être appliquées côté serveur / accès réel ;
-- les changements sensibles doivent être tracés dans l’audit.
+- les changements sensibles doivent être tracés dans l'audit.
 
 ### 7.5 Admin / Gérant en Alpha
 
@@ -487,7 +489,7 @@ Cela inclut :
 - réactivation ;
 - archivage ;
 - consultation des archivés ;
-- demandes d’absence / indisponibilité ;
+- demandes d'absence / indisponibilité ;
 - validation / refus des demandes ;
 - accès aux informations sensibles.
 
@@ -498,16 +500,16 @@ Les règles exactes de conflit entre rôles et permissions restent à confirmer 
 Principe provisoire :
 
 - les rôles donnent une base ;
-- les permissions fines permettent d’ajouter ou retirer des droits ;
+- les permissions fines permettent d'ajouter ou retirer des droits ;
 - les permissions finales réellement enregistrées déterminent les accès.
 
 ---
 
-## 8. Demandes d’absence / indisponibilité
+## 8. Demandes d'absence / indisponibilité
 
 ### 8.1 Principe général
 
-La page Utilisateurs prévoit un workflow de demande d’absence ou d’indisponibilité.
+La page Utilisateurs prévoit un workflow de demande d'absence ou d'indisponibilité.
 
 Un utilisateur peut créer une demande.  
 La demande doit ensuite être validée ou refusée par Admin, Gérant ou utilisateur autorisé.
@@ -525,7 +527,7 @@ Une demande peut concerner :
 - une période ;
 - un créneau horaire.
 
-### 8.3 Statuts d’une demande
+### 8.3 Statuts d'une demande
 
 Statuts validés :
 
@@ -534,14 +536,14 @@ Statuts validés :
 - refusée ;
 - annulée.
 
-### 8.4 Effet sur l’état opérationnel
+### 8.4 Effet sur l'état opérationnel
 
 Règles :
 
-- une demande en attente ne modifie pas l’état opérationnel ;
-- une demande refusée n’impacte pas l’état opérationnel ;
-- une demande annulée n’impacte pas l’état opérationnel ;
-- une demande validée peut rendre l’utilisateur absent ou indisponible.
+- une demande en attente ne modifie pas l'état opérationnel ;
+- une demande refusée n'impacte pas l'état opérationnel ;
+- une demande annulée n'impacte pas l'état opérationnel ;
+- une demande validée peut rendre l'utilisateur absent ou indisponible.
 
 ### 8.5 Validation
 
@@ -565,10 +567,10 @@ Une demande validée doit être prise en compte par le planning.
 À confirmer dans la fiche Planning :
 
 - blocage strict ou alerte ;
-- comportement si l’utilisateur est déjà planifié ;
+- comportement si l'utilisateur est déjà planifié ;
 - comportement si le planning est déjà publié ;
 - affichage du conflit ;
-- traçabilité de l’impact.
+- traçabilité de l'impact.
 
 ### 8.7 Limites Alpha
 
@@ -586,7 +588,7 @@ Non prévu en Alpha :
 
 ### 9.1 Principe
 
-La fiche détail utilisateur permet de consulter les informations d’un utilisateur sans être directement en mode modification.
+La fiche détail utilisateur permet de consulter les informations d'un utilisateur sans être directement en mode modification.
 
 La fiche distingue :
 
@@ -597,7 +599,7 @@ Le mode modification est accessible uniquement si autorisé.
 
 ### 9.2 En-tête de fiche
 
-L’en-tête affiche :
+L'en-tête affiche :
 
 - avatar avec initiales ;
 - nom ;
@@ -624,7 +626,7 @@ La fiche affiche :
 - état opérationnel.
 
 La société est affichée comme information de contexte.  
-Elle n’est pas modifiée librement depuis la fiche utilisateur.
+Elle n'est pas modifiée librement depuis la fiche utilisateur.
 
 ### 9.4 Rôles et permissions
 
@@ -646,7 +648,7 @@ La fiche doit afficher séparément :
 
 Ces statuts doivent rester visuellement distincts.
 
-### 9.6 Demandes d’absence / indisponibilité
+### 9.6 Demandes d'absence / indisponibilité
 
 La fiche utilisateur affiche une section dédiée aux demandes.
 
@@ -675,14 +677,14 @@ La fiche peut proposer :
 
 - un résumé du planning utilisateur ;
 - les prochains créneaux ;
-- l’état non planifié si aucun créneau ;
+- l'état non planifié si aucun créneau ;
 - un accès rapide au planning personnel.
 
 La fiche ne doit pas reproduire toute la page Planning.
 
 ### 9.9 Historique récent
 
-La fiche peut afficher un résumé d’historique récent si l’utilisateur connecté est autorisé.
+La fiche peut afficher un résumé d'historique récent si l'utilisateur connecté est autorisé.
 
 Exemples :
 
@@ -693,9 +695,9 @@ Exemples :
 - désactivation ;
 - réactivation ;
 - archivage ;
-- validation ou refus d’une demande.
+- validation ou refus d'une demande.
 
-L’audit complet reste dans la page Audit.
+L'audit complet reste dans la page Audit.
 
 ---
 
@@ -703,7 +705,7 @@ L’audit complet reste dans la page Audit.
 
 ### 10.1 Principe Alpha
 
-Pour les utilisateurs terrain, Admin / Gérant ou utilisateur autorisé peut choisir les types de véhicules sur lesquels l’utilisateur peut être affecté.
+Pour les utilisateurs terrain, Admin / Gérant ou utilisateur autorisé peut choisir les types de véhicules sur lesquels l'utilisateur peut être affecté.
 
 Option retenue en Alpha :
 
@@ -749,7 +751,7 @@ Le planning devra tenir compte de ces types de véhicules affectables.
 
 ### 10.5 Évolution future
 
-En version finale, l’Option C est prévue :
+En version finale, l'Option C est prévue :
 
 ```text
 Types de véhicules + exceptions par véhicule.
@@ -803,7 +805,7 @@ La page Utilisateurs doit prévoir des permissions dédiées pour :
 - archiver ;
 - consulter les utilisateurs archivés ;
 - désarchiver / restaurer ;
-- créer une demande d’absence / indisponibilité ;
+- créer une demande d'absence / indisponibilité ;
 - consulter les demandes ;
 - valider les demandes ;
 - refuser les demandes ;
@@ -821,7 +823,7 @@ Exemples :
 
 - permissions fines ;
 - historique récent ;
-- demandes d’absence des autres utilisateurs ;
+- demandes d'absence des autres utilisateurs ;
 - futures pièces jointes ;
 - futures visites médicales ;
 - futurs recyclages de formation.
@@ -842,7 +844,7 @@ Les actions Utilisateurs V1 / Alpha sont :
 - archiver un utilisateur ;
 - afficher les utilisateurs archivés ;
 - désarchiver / restaurer un utilisateur ;
-- créer une demande d’absence / indisponibilité ;
+- créer une demande d'absence / indisponibilité ;
 - valider une demande ;
 - refuser une demande ;
 - annuler une demande selon statut et permissions.
@@ -854,20 +856,20 @@ Règles validées :
 - aucune suppression physique ;
 - toutes les actions sensibles sont soumises à permissions ;
 - Admin / Gérant gèrent toutes les permissions Utilisateurs en Alpha ;
-- les actions sensibles sont tracées dans l’audit ;
+- les actions sensibles sont tracées dans l'audit ;
 - désarchiver ne réactive pas automatiquement un compte inactif ;
-- une demande en attente n’impacte pas l’état opérationnel.
+- une demande en attente n'impacte pas l'état opérationnel.
 
 ### 12.3 Désarchiver / restaurer
 
-L’action de désarchivage / restauration est prévue en Alpha.
+L'action de désarchivage / restauration est prévue en Alpha.
 
 Règles :
 
 - retire le statut archivé ;
-- rend l’utilisateur visible dans la liste principale ;
+- rend l'utilisateur visible dans la liste principale ;
 - ne réactive pas automatiquement le compte ;
-- conserve l’historique.
+- conserve l'historique.
 
 Exemple :
 
@@ -878,12 +880,12 @@ Utilisateur archivé + inactif
 
 ---
 
-## 13. Éléments exclus de l’Alpha
+## 13. Éléments exclus de l'Alpha
 
-Ne sont pas prévus dans l’Alpha de la page Utilisateurs :
+Ne sont pas prévus dans l'Alpha de la page Utilisateurs :
 
-- suppression physique d’un utilisateur ;
-- suppression définitive d’historique ;
+- suppression physique d'un utilisateur ;
+- suppression définitive d'historique ;
 - inscription libre ;
 - mot de passe temporaire généré automatiquement ;
 - première connexion obligatoire ;
@@ -905,7 +907,7 @@ Ne sont pas prévus dans l’Alpha de la page Utilisateurs :
 
 ### 14.1 Pièces jointes dématérialisées
 
-Pour tous les utilisateurs, prévoir plus tard la possibilité d’ajouter des pièces jointes dématérialisées.
+Pour tous les utilisateurs, prévoir plus tard la possibilité d'ajouter des pièces jointes dématérialisées.
 
 Exemples :
 
@@ -920,9 +922,9 @@ Accès soumis aux permissions.
 
 À prévoir plus tard :
 
-- génération automatique d’un mot de passe temporaire ;
+- génération automatique d'un mot de passe temporaire ;
 - obligation de changer le mot de passe à la première connexion ;
-- lien d’activation éventuel ;
+- lien d'activation éventuel ;
 - expiration du mot de passe temporaire.
 
 ### 14.3 Gestion RH avancée
@@ -966,7 +968,7 @@ Pour les utilisateurs terrain, prévoir potentiellement en Beta :
 
 ### 14.7 Véhicules affectables avancés
 
-En version finale, prévoir l’Option C :
+En version finale, prévoir l'Option C :
 
 - types de véhicules affectables ;
 - exceptions par véhicule précis.
@@ -975,12 +977,12 @@ En version finale, prévoir l’Option C :
 
 La gestion mobile interviendra probablement après clôture de la Beta.
 
-Elle sera vraisemblablement traitée comme une Alpha dédiée à l’application mobile ou à l’app web mobile.
+Elle sera vraisemblablement traitée comme une Alpha dédiée à l'application mobile ou à l'app web mobile.
 
 Points à prévoir plus tard :
 
 - consultation de sa fiche utilisateur sur mobile ;
-- création de demande d’absence / indisponibilité depuis mobile ;
+- création de demande d'absence / indisponibilité depuis mobile ;
 - lecture simplifiée des informations personnelles ;
 - accès rapide au planning personnel ;
 - interface adaptée terrain.
@@ -989,18 +991,18 @@ Points à prévoir plus tard :
 
 ## 15. Points à confirmer
 
-Les points suivants restent à confirmer dans les fiches futures ou lors d’un cadrage dédié :
+Les points suivants restent à confirmer dans les fiches futures ou lors d'un cadrage dédié :
 
-- calcul exact de l’état présent / absent / indisponible / non planifié ;
+- calcul exact de l'état présent / absent / indisponible / non planifié ;
 - lien exact entre état opérationnel, Planning, Heures et Absences ;
 - règle de rattachement base / dépôt : unique ou multiple ;
 - impact exact de la base / dépôt sur les droits et le planning ;
 - règles exactes de conflit entre rôles et permissions ;
 - noms techniques définitifs des permissions ;
-- comportement planning en cas d’absence ou d’indisponibilité validée ;
-- blocage strict ou alerte en cas d’affectation incompatible ;
-- comportement si l’utilisateur est déjà planifié au moment d’une demande validée ;
+- comportement planning en cas d'absence ou d'indisponibilité validée ;
+- blocage strict ou alerte en cas d'affectation incompatible ;
+- comportement si l'utilisateur est déjà planifié au moment d'une demande validée ;
 - comportement si le planning est déjà publié ;
 - impact exact des véhicules affectables dans le Planning ;
-- impact exact des véhicules affectables dans la planification automatique ou l’affectation automatique optimisée ;
+- impact exact des véhicules affectables dans la planification automatique ou l'affectation automatique optimisée ;
 - nom définitif de la future page Heure / Horaires.

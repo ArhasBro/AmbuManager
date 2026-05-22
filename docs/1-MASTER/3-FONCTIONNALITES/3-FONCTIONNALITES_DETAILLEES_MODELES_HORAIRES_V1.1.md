@@ -1,5 +1,7 @@
 # Ambulance Manager — Fonctionnalités détaillées — Modèles horaires V1
 
+> Statut : référence fonctionnelle cible — page non validée à ce stade.
+
 Version : V1 (MASTER)  
 Date : 18/05/2026
 
@@ -7,19 +9,19 @@ Date : 18/05/2026
 
 - [1. Objectif de la page](#1-objectif-de-la-page)
 - [2. Positionnement fonctionnel](#2-positionnement-fonctionnel)
-- [3. Périmètre V1 / Alpha validé](#3-périmètre-v1--alpha-validé)
+- [3. Base de cadrage fonctionnel V1 / Alpha](#3-base-de-cadrage-fonctionnel-v1--alpha)
 - [4. Liste des modèles horaires](#4-liste-des-modèles-horaires)
-- [5. Création d’un modèle horaire](#5-création-dun-modèle-horaire)
-- [6. Modification d’un modèle horaire](#6-modification-dun-modèle-horaire)
-- [7. Duplication d’un modèle horaire](#7-duplication-dun-modèle-horaire)
+- [5. Création d'un modèle horaire](#5-création-dun-modèle-horaire)
+- [6. Modification d'un modèle horaire](#6-modification-dun-modèle-horaire)
+- [7. Duplication d'un modèle horaire](#7-duplication-dun-modèle-horaire)
 - [8. Statuts, archivage et suppression](#8-statuts-archivage-et-suppression)
 - [9. Lien avec le Planning](#9-lien-avec-le-planning)
 - [10. Accès et permissions](#10-accès-et-permissions)
 - [11. Audit et traçabilité](#11-audit-et-traçabilité)
 - [12. États de la page](#12-états-de-la-page)
 - [13. Éléments exclus du périmètre V1 / Alpha](#13-éléments-exclus-du-périmètre-v1--alpha)
-- [14. Évolutions futures / à ne pas oublier](#14-évolutions-futures--à-ne-pas-oublier)
-- [15. Points à confirmer](#15-points-à-confirmer)
+- [14. Évolutions futures / à ne pas oublier](#14-évolutions-futures--à -ne-pas-oublier)
+- [15. Points à confirmer](#15-points-à -confirmer)
 
 ---
 
@@ -27,9 +29,9 @@ Date : 18/05/2026
 
 La page **Modèles horaires** permet de gérer des modèles réutilisables de créneaux horaires destinés au **Planning**.
 
-Elle remplace fonctionnellement l’ancien terme anglais **Templates** afin de rester dans une terminologie 100 % française.
+Elle remplace fonctionnellement l'ancien terme anglais **Templates** afin de rester dans une terminologie 100 % française.
 
-Un modèle horaire sert à préparer rapidement la création d’un créneau dans le Planning.
+Un modèle horaire sert à préparer rapidement la création d'un créneau dans le Planning.
 
 Il peut définir :
 
@@ -47,7 +49,7 @@ Il peut définir :
 - un nombre de personnes attendues ;
 - une base / dépôt facultative ;
 - un statut ;
-- un compteur d’utilisation.
+- un compteur d'utilisation.
 
 La page doit permettre de :
 
@@ -57,7 +59,7 @@ La page doit permettre de :
 - dupliquer un modèle horaire ;
 - désactiver ou réactiver un modèle horaire ;
 - archiver ou restaurer un modèle horaire ;
-- préparer l’utilisation des modèles dans le Planning.
+- préparer l'utilisation des modèles dans le Planning.
 
 La page **Modèles horaires** ne concerne pas les modèles de documents, contrats, emails, PDF ou exports.
 
@@ -93,7 +95,7 @@ Rôle principal : ADE
 Rôles autorisés : AA, PSC1, TAXI si PSC1
 ```
 
-### 2.2 Ce que le modèle horaire n’est pas
+### 2.2 Ce que le modèle horaire n'est pas
 
 Un modèle horaire ne doit pas être confondu avec :
 
@@ -116,20 +118,19 @@ Modifier un modèle horaire ne modifie pas automatiquement les créneaux déjà 
 
 ---
 
-## 3. Périmètre V1 / Alpha validé
-
-Fonctionnalités validées pour la page **Modèles horaires V1 / Alpha** :
+## 3. Base de cadrage fonctionnel V1 / Alpha
+Fonctionnalités cibles de référence pour la page **Modèles horaires V1 / Alpha** :
 
 - affichage de la liste des modèles horaires ;
-- création d’un modèle horaire ;
-- modification d’un modèle horaire ;
-- duplication d’un modèle horaire ;
-- désactivation d’un modèle horaire ;
-- réactivation d’un modèle horaire ;
-- archivage d’un modèle horaire ;
+- création d'un modèle horaire ;
+- modification d'un modèle horaire ;
+- duplication d'un modèle horaire ;
+- désactivation d'un modèle horaire ;
+- réactivation d'un modèle horaire ;
+- archivage d'un modèle horaire ;
 - affichage des modèles horaires archivés via filtre dédié ;
-- désarchivage / restauration d’un modèle horaire ;
-- utilisation d’un modèle horaire dans le Planning si autorisé ;
+- désarchivage / restauration d'un modèle horaire ;
+- utilisation d'un modèle horaire dans le Planning si autorisé ;
 - compteur simple **Nb utilisé** ;
 - distinction entre nom complet et libellé court Planning ;
 - rattachement facultatif à une base / dépôt ;
@@ -150,7 +151,7 @@ Le rôle **PSC1** est confirmé et doit être ajouté aux rôles applicatifs.
 
 ### 4.1 Objectif de la liste
 
-La liste des modèles horaires doit permettre d’identifier rapidement les modèles disponibles pour la préparation du Planning.
+La liste des modèles horaires doit permettre d'identifier rapidement les modèles disponibles pour la préparation du Planning.
 
 Elle doit afficher les informations utiles sans devenir un écran de reporting avancé.
 
@@ -205,7 +206,7 @@ Pour les besoins Planning, la distinction suivante doit être prise en compte lo
 
 Règle de prudence :
 
-> Le type principal peut rester **TPMR**, mais le modèle horaire doit permettre de préciser l’usage Planning attendu lorsque la distinction **TPMR VSL** / **TPMR TAXI** est nécessaire.
+> Le type principal peut rester **TPMR**, mais le modèle horaire doit permettre de préciser l'usage Planning attendu lorsque la distinction **TPMR VSL** / **TPMR TAXI** est nécessaire.
 
 Cette distinction doit être harmonisée lors de la relecture globale avec les fiches **Planning** et **Véhicules**.
 
@@ -217,7 +218,7 @@ Si le modèle possède un horaire simple défini, la liste affiche :
 08:00 → 20:00
 ```
 
-Si le modèle passe sur la nuit, l’affichage doit indiquer `J+1`.
+Si le modèle passe sur la nuit, l'affichage doit indiquer `J+1`.
 
 Exemple :
 
@@ -281,7 +282,7 @@ GARDE AMBULANCE LAMBALLE
 Base : Lamballe
 ```
 
-Pour les modèles de transport programmé, la base peut rester vide afin que le modèle soit utilisable depuis n’importe quelle base.
+Pour les modèles de transport programmé, la base peut rester vide afin que le modèle soit utilisable depuis n'importe quelle base.
 
 Affichages possibles :
 
@@ -302,13 +303,13 @@ Statuts possibles :
 - actif ;
 - inactif.
 
-L’archivage est une notion séparée.
+L'archivage est une notion séparée.
 
 Les modèles archivés ne sont pas visibles dans la liste principale, sauf filtre dédié.
 
 ### 4.9 Nb utilisé
 
-La colonne **Nb utilisé** affiche le nombre de fois où un modèle horaire a été utilisé comme base de création d’une affectation Planning.
+La colonne **Nb utilisé** affiche le nombre de fois où un modèle horaire a été utilisé comme base de création d'une affectation Planning.
 
 Objectifs :
 
@@ -344,13 +345,13 @@ Filtres prévus en Alpha :
 Pas de filtre avancé en Alpha.
 
 ---
-## 5. Création d’un modèle horaire
+## 5. Création d'un modèle horaire
 
 ### 5.1 Objectif
 
 La création permet à un Admin, Gérant ou utilisateur autorisé de créer un modèle réutilisable dans le Planning.
 
-Le modèle horaire permet de préremplir rapidement certaines informations d’une affectation Planning.
+Le modèle horaire permet de préremplir rapidement certaines informations d'une affectation Planning.
 
 ### 5.2 Champs du formulaire
 
@@ -399,9 +400,9 @@ Le nom du modèle horaire doit être unique dans la société.
 
 ### 5.4 Libellé court Planning
 
-Le champ **Libellé court Planning** permet d’afficher un nom plus court dans le Planning lorsque le nom complet du modèle est trop long.
+Le champ **Libellé court Planning** permet d'afficher un nom plus court dans le Planning lorsque le nom complet du modèle est trop long.
 
-Il sert uniquement à l’affichage compact dans le Planning.
+Il sert uniquement à l'affichage compact dans le Planning.
 
 Exemple :
 
@@ -429,13 +430,13 @@ Règles :
 - le libellé court Planning est optionnel ;
 - si le libellé court est vide, le Planning affiche le nom complet ;
 - le libellé court ne remplace pas le nom de gestion du modèle ;
-- le libellé court sert uniquement à l’affichage planning.
+- le libellé court sert uniquement à l'affichage planning.
 
 ### 5.5 Description courte
 
 La description courte est optionnelle.
 
-Elle permet d’expliquer l’usage du modèle.
+Elle permet d'expliquer l'usage du modèle.
 
 Exemples :
 
@@ -482,7 +483,7 @@ Base : Lamballe
 
 Un modèle de type **Transport programmé** est généralement utilisable plus largement.
 
-Il peut rester sans base afin d’être utilisé depuis n’importe quelle base.
+Il peut rester sans base afin d'être utilisé depuis n'importe quelle base.
 
 Exemple :
 
@@ -549,7 +550,7 @@ Exemples :
 20:00 → 08:00 J+1
 ```
 
-Le `J+1` doit être affiché automatiquement quand l’horaire passe sur le lendemain.
+Le `J+1` doit être affiché automatiquement quand l'horaire passe sur le lendemain.
 
 ### 5.10 Modèle avec jours actifs et horaires par jour
 
@@ -585,9 +586,9 @@ Règles :
 - les jours actifs sont facultatifs ;
 - les horaires par jour sont facultatifs ;
 - les horaires par jour peuvent être différents selon les jours ;
-- le passage `J+1` doit être affiché si l’horaire passe sur le lendemain ;
+- le passage `J+1` doit être affiché si l'horaire passe sur le lendemain ;
 - les jours non actifs peuvent être automatiquement déduits comme repos dans la vue semaine Planning ;
-- cette déduction sert à l’affichage et à la préparation du Planning, sans transformer le Planning en grille détaillée heure par heure.
+- cette déduction sert à l'affichage et à la préparation du Planning, sans transformer le Planning en grille détaillée heure par heure.
 
 ### 5.11 Modèle sans horaire défini
 
@@ -654,7 +655,7 @@ Les règles exactes par type de véhicule restent à confirmer dans les points d
 
 La base / dépôt est facultative.
 
-Un modèle horaire peut être rattaché à une base / dépôt, mais ce n’est pas obligatoire.
+Un modèle horaire peut être rattaché à une base / dépôt, mais ce n'est pas obligatoire.
 
 Usage recommandé :
 
@@ -662,13 +663,13 @@ Usage recommandé :
 - modèles de transport programmé : base / dépôt souvent vide ;
 - modèles génériques : base / dépôt optionnel.
 
-Le rattachement à une base / dépôt ne doit pas bloquer automatiquement l’utilisation du modèle dans une autre base en Alpha.
+Le rattachement à une base / dépôt ne doit pas bloquer automatiquement l'utilisation du modèle dans une autre base en Alpha.
 
 ### 5.17 Couleurs
 
 Les couleurs ne sont pas définies de manière rigide dans le modèle horaire.
 
-L’utilisateur qui fait son Planning doit pouvoir choisir lui-même ses couleurs.
+L'utilisateur qui fait son Planning doit pouvoir choisir lui-même ses couleurs.
 
 Règles validées :
 
@@ -676,7 +677,7 @@ Règles validées :
 - pas de couleur imposée par type de véhicule ;
 - pas de couleur imposée par rôle ;
 - couleur = repère visuel libre ;
-- choix laissé à l’utilisateur qui organise son Planning.
+- choix laissé à l'utilisateur qui organise son Planning.
 
 La couleur ne doit pas devenir une règle métier.
 
@@ -687,7 +688,7 @@ La couleur ne doit pas devenir une règle métier.
 - actif ;
 - inactif.
 
-Par défaut, le modèle est actif, sauf choix contraire de l’utilisateur autorisé.
+Par défaut, le modèle est actif, sauf choix contraire de l'utilisateur autorisé.
 
 ### 5.19 Commentaire interne
 
@@ -711,7 +712,7 @@ Modèle provisoire.
 
 ### 5.20 Règles de validation
 
-À la création, les règles suivantes s’appliquent :
+À la création, les règles suivantes s'appliquent :
 
 - nom obligatoire ;
 - nom unique dans la société ;
@@ -728,7 +729,7 @@ Modèle provisoire.
 - libellé court Planning optionnel.
 
 ---
-## 6. Modification d’un modèle horaire
+## 6. Modification d'un modèle horaire
 
 ### 6.1 Objectif
 
@@ -768,7 +769,7 @@ Règles :
 - si jours actifs renseignés : les jours sélectionnés doivent être explicites ;
 - si horaires par jour renseignés : les horaires doivent être cohérents pour chaque jour concerné ;
 - si horaire non défini : période générique obligatoire ;
-- les modifications importantes doivent être tracées dans l’audit.
+- les modifications importantes doivent être tracées dans l'audit.
 
 ### 6.4 Impact sur les affectations Planning déjà créées
 
@@ -777,20 +778,20 @@ Modifier un modèle horaire ne modifie pas automatiquement les affectations Plan
 Règle validée :
 
 ```text
-Le modèle horaire sert de base au moment de la création de l’affectation Planning.
+Le modèle horaire sert de base au moment de la création de l'affectation Planning.
 
-Une fois l’affectation créée, elle conserve ses propres informations.
+Une fois l'affectation créée, elle conserve ses propres informations.
 ```
 
 Exemple :
 
 ```text
-Un modèle “AMBULANCE JOUR” était 08:00 → 20:00.
+Un modèle "AMBULANCE JOUR" était 08:00 → 20:00.
 
 Une affectation Planning a été créée avec ce modèle.
 
 Si le modèle est ensuite modifié en 07:00 → 19:00,
-l’affectation déjà créée ne change pas automatiquement.
+l'affectation déjà créée ne change pas automatiquement.
 ```
 
 Même règle pour les jours actifs :
@@ -801,17 +802,17 @@ Un modèle de garde était actif du jeudi au dimanche.
 Une affectation Planning a été créée pour la semaine 21.
 
 Si le modèle est ensuite modifié pour ajouter le mercredi,
-l’affectation Planning déjà créée en semaine 21 ne change pas automatiquement.
+l'affectation Planning déjà créée en semaine 21 ne change pas automatiquement.
 ```
 
 Cette règle évite les effets de bord sur des plannings déjà construits.
 
 ---
-## 7. Duplication d’un modèle horaire
+## 7. Duplication d'un modèle horaire
 
 ### 7.1 Objectif
 
-La duplication permet de créer rapidement un nouveau modèle horaire à partir d’un modèle existant.
+La duplication permet de créer rapidement un nouveau modèle horaire à partir d'un modèle existant.
 
 Action validée en Alpha :
 
@@ -827,7 +828,7 @@ Règles validées :
 - les champs sont préremplis avec les données du modèle source ;
 - le nouveau modèle doit avoir un nom différent ;
 - le compteur **Nb utilisé** du nouveau modèle démarre à 0 ;
-- le modèle dupliqué ne reprend pas l’historique d’utilisation du modèle source ;
+- le modèle dupliqué ne reprend pas l'historique d'utilisation du modèle source ;
 - le modèle dupliqué appartient à la même société ;
 - le modèle dupliqué peut ensuite être modifié avant validation.
 
@@ -884,7 +885,7 @@ Il ne doit pas être proposé normalement pour créer de nouveaux créneaux dans
 Il conserve :
 
 - son historique ;
-- son nombre d’utilisations ;
+- son nombre d'utilisations ;
 - ses anciens liens avec des créneaux déjà créés.
 
 ### 8.4 Non archivé
@@ -909,8 +910,8 @@ Désarchiver un modèle :
 
 - retire le statut archivé ;
 - rend le modèle visible dans la liste principale ;
-- ne réactive pas automatiquement le modèle s’il était inactif ;
-- conserve l’historique.
+- ne réactive pas automatiquement le modèle s'il était inactif ;
+- conserve l'historique.
 
 Exemple :
 
@@ -921,7 +922,7 @@ Modèle archivé + inactif
 
 ### 8.7 Suppression physique
 
-Aucune suppression physique d’un modèle horaire n’est prévue en Alpha.
+Aucune suppression physique d'un modèle horaire n'est prévue en Alpha.
 
 Si un modèle ne doit plus être utilisé :
 
@@ -956,7 +957,7 @@ Il peut préremplir :
 
 Quand un utilisateur crée une affectation Planning depuis un modèle horaire, le Planning récupère les informations du modèle.
 
-Mais ensuite, l’affectation vit indépendamment.
+Mais ensuite, l'affectation vit indépendamment.
 
 Règle validée :
 
@@ -1012,18 +1013,18 @@ Règles :
 - les jours non actifs peuvent être affichés comme repos ;
 - les horaires par jour servent de repères si connus ;
 - cette logique ne transforme pas le Planning en planning détaillé heure par heure ;
-- l’affectation Planning conserve ses propres informations après création.
+- l'affectation Planning conserve ses propres informations après création.
 
 ### 9.5 Base / dépôt dans le Planning
 
-Si le modèle horaire possède une base / dépôt, elle peut préremplir l’affectation Planning.
+Si le modèle horaire possède une base / dépôt, elle peut préremplir l'affectation Planning.
 
-Si le modèle horaire n’a pas de base / dépôt, l’utilisateur choisit la base au moment de créer l’affectation, si nécessaire.
+Si le modèle horaire n'a pas de base / dépôt, l'utilisateur choisit la base au moment de créer l'affectation, si nécessaire.
 
 Règle validée :
 
 ```text
-Le rattachement d’un modèle horaire à une base / dépôt ne doit pas bloquer automatiquement son utilisation ailleurs en Alpha.
+Le rattachement d'un modèle horaire à une base / dépôt ne doit pas bloquer automatiquement son utilisation ailleurs en Alpha.
 ```
 
 ### 9.6 Composition et affectation
@@ -1032,9 +1033,9 @@ Le modèle horaire définit une composition attendue.
 
 Dans le Planning, cela doit aider à :
 
-- afficher l’équipe attendue ;
+- afficher l'équipe attendue ;
 - filtrer ou proposer les utilisateurs compatibles ;
-- signaler si la composition n’est pas respectée ;
+- signaler si la composition n'est pas respectée ;
 - préparer la future planification automatique ;
 - préparer la future affectation automatique optimisée.
 
@@ -1062,9 +1063,9 @@ Le détail exact de cette distinction devra être harmonisé avec la fiche **Vé
 
 ### 9.8 Compteur Nb utilisé
 
-Le compteur **Nb utilisé** augmente lorsqu’une affectation Planning est créée à partir du modèle horaire.
+Le compteur **Nb utilisé** augmente lorsqu'une affectation Planning est créée à partir du modèle horaire.
 
-Il mesure l’utilisation du modèle comme base de création, pas l’état actuel de l’affectation.
+Il mesure l'utilisation du modèle comme base de création, pas l'état actuel de l'affectation.
 
 Exemple :
 
@@ -1072,7 +1073,7 @@ Exemple :
 Une affectation Planning est créée depuis AMBULANCE JOUR.
 Le compteur augmente de 1.
 
-Même si l’affectation est ensuite modifiée manuellement,
+Même si l'affectation est ensuite modifiée manuellement,
 le modèle a bien été utilisé comme base de création.
 ```
 
@@ -1083,7 +1084,7 @@ le modèle a bien été utilisé comme base de création.
 
 La page **Modèles horaires** est soumise aux permissions.
 
-Elle n’est pas accessible à tous les utilisateurs par défaut.
+Elle n'est pas accessible à tous les utilisateurs par défaut.
 
 ### 10.2 Admin / Gérant
 
@@ -1116,7 +1117,7 @@ Exemples possibles :
 
 ### 10.4 Utilisateurs terrain
 
-Les utilisateurs terrain ne voient pas la page **Modèles horaires** et n’y ont pas accès par défaut.
+Les utilisateurs terrain ne voient pas la page **Modèles horaires** et n'y ont pas accès par défaut.
 
 Ils peuvent y accéder uniquement si une permission dédiée leur est attribuée.
 
@@ -1144,17 +1145,17 @@ Les noms techniques exacts des permissions seront définis plus tard.
 
 ### 11.1 Principe
 
-Les actions sensibles de la page **Modèles horaires** doivent être tracées dans l’audit.
+Les actions sensibles de la page **Modèles horaires** doivent être tracées dans l'audit.
 
-L’audit complet reste consultable dans la page **Audit** selon permissions.
+L'audit complet reste consultable dans la page **Audit** selon permissions.
 
 ### 11.2 Actions à tracer
 
 Actions à tracer :
 
-- création d’un modèle horaire ;
-- modification d’un modèle horaire ;
-- duplication d’un modèle horaire ;
+- création d'un modèle horaire ;
+- modification d'un modèle horaire ;
+- duplication d'un modèle horaire ;
 - désactivation ;
 - réactivation ;
 - archivage ;
@@ -1162,18 +1163,18 @@ Actions à tracer :
 - changement de base / dépôt ;
 - changement de type de véhicule ;
 - changement de composition ;
-- changement d’horaires ;
+- changement d'horaires ;
 - changement de statut.
 
 ### 11.3 Utilisation dans le Planning
 
-L’utilisation d’un modèle horaire dans le Planning est principalement visible via :
+L'utilisation d'un modèle horaire dans le Planning est principalement visible via :
 
 - le créneau Planning créé ;
 - le compteur **Nb utilisé** ;
-- l’historique du Planning si prévu.
+- l'historique du Planning si prévu.
 
-Il n’est pas nécessaire de créer un audit détaillé depuis la page **Modèles horaires** pour chaque utilisation simple du modèle.
+Il n'est pas nécessaire de créer un audit détaillé depuis la page **Modèles horaires** pour chaque utilisation simple du modèle.
 
 ---
 
@@ -1181,14 +1182,14 @@ Il n’est pas nécessaire de créer un audit détaillé depuis la page **Modèl
 
 ### 12.1 Chargement initial
 
-Au chargement de la page, l’application récupère :
+Au chargement de la page, l'application récupère :
 
 - les modèles horaires actifs et non archivés ;
 - les modèles horaires inactifs ;
 - les bases / dépôts disponibles ;
 - les types de véhicules ;
 - les rôles applicatifs ;
-- les permissions de l’utilisateur connecté ;
+- les permissions de l'utilisateur connecté ;
 - le compteur **Nb utilisé** pour chaque modèle.
 
 Message possible :
@@ -1199,14 +1200,14 @@ Chargement des modèles horaires...
 
 ### 12.2 Liste vide
 
-Si aucun modèle horaire n’existe encore :
+Si aucun modèle horaire n'existe encore :
 
 ```text
 Aucun modèle horaire créé.
 Créez un premier modèle pour faciliter la création des créneaux dans le Planning.
 ```
 
-L’action **Créer un modèle horaire** s’affiche uniquement si l’utilisateur est autorisé.
+L'action **Créer un modèle horaire** s'affiche uniquement si l'utilisateur est autorisé.
 
 ### 12.3 Aucun résultat après filtre
 
@@ -1226,13 +1227,13 @@ Réinitialiser les filtres
 
 Les modèles archivés ne sont pas visibles par défaut.
 
-Ils apparaissent uniquement si l’utilisateur active un filtre dédié :
+Ils apparaissent uniquement si l'utilisateur active un filtre dédié :
 
 ```text
 Afficher les modèles horaires archivés
 ```
 
-Si aucun modèle archivé n’existe :
+Si aucun modèle archivé n'existe :
 
 ```text
 Aucun modèle horaire archivé.
@@ -1242,7 +1243,7 @@ Aucun modèle horaire archivé.
 
 Les utilisateurs terrain ne voient pas la page **Modèles horaires** par défaut.
 
-Si un utilisateur sans permission tente d’accéder à la page :
+Si un utilisateur sans permission tente d'accéder à la page :
 
 ```text
 Accès non autorisé.
@@ -1258,11 +1259,11 @@ Si un utilisateur peut consulter mais pas modifier :
 Action non autorisée.
 ```
 
-Selon les cas, l’action peut être masquée.
+Selon les cas, l'action peut être masquée.
 
 ### 12.7 Erreur de chargement
 
-En cas d’erreur technique :
+En cas d'erreur technique :
 
 ```text
 Impossible de charger les modèles horaires.
@@ -1278,7 +1279,7 @@ Le nom du modèle horaire est obligatoire.
 ```
 
 ```text
-Un modèle horaire avec ce nom existe déjà.
+Un modèle horaire avec ce nom existe déjà .
 ```
 
 ```text
@@ -1294,7 +1295,7 @@ Le nombre de personnes attendues est obligatoire.
 ```
 
 ```text
-L’heure de début et l’heure de fin sont obligatoires pour un modèle avec horaire défini.
+L'heure de début et l'heure de fin sont obligatoires pour un modèle avec horaire défini.
 ```
 
 ```text
@@ -1313,15 +1314,15 @@ Les éléments suivants ne sont pas intégrés au périmètre V1 / Alpha.
 
 Ils ne sont pas exclus de la version finale.
 
-- suppression physique d’un modèle horaire ;
-- modification automatique des créneaux déjà créés lorsqu’un modèle change ;
+- suppression physique d'un modèle horaire ;
+- modification automatique des créneaux déjà créés lorsqu'un modèle change ;
 - couleurs imposées par le modèle horaire ;
 - règles de couleur obligatoires par type de véhicule ;
-- reporting avancé d’utilisation des modèles ;
+- reporting avancé d'utilisation des modèles ;
 - statistiques détaillées par période ;
 - modèles récurrents hebdomadaires complexes ;
 - automatisation avancée du planning depuis les modèles ;
-- blocage strict des affectations si la composition n’est pas respectée ;
+- blocage strict des affectations si la composition n'est pas respectée ;
 - règles avancées de compatibilité utilisateur / véhicule ;
 - gestion avancée des exceptions ;
 - validation multi-niveaux ;
@@ -1340,7 +1341,7 @@ Les couleurs ne doivent pas être imposées par le modèle horaire.
 
 À prévoir plus tard côté Planning :
 
-- choix libre des couleurs par l’utilisateur qui organise le planning ;
+- choix libre des couleurs par l'utilisateur qui organise le planning ;
 - préférences visuelles par utilisateur ;
 - couleurs par vue planning ;
 - couleurs par affectation ;
@@ -1352,7 +1353,7 @@ Le compteur **Nb utilisé** est prévu en Alpha comme indicateur simple.
 
 Plus tard, il pourra être enrichi avec :
 
-- nombre d’utilisations par période ;
+- nombre d'utilisations par période ;
 - modèles les plus utilisés ;
 - modèles inutilisés ;
 - évolution mensuelle ;
@@ -1376,11 +1377,11 @@ La récurrence avancée reste une évolution future.
 
 À harmoniser avec la fiche **Planning** lors de la relecture globale :
 
-- comportement si la composition attendue n’est pas respectée ;
+- comportement si la composition attendue n'est pas respectée ;
 - comportement si le type de véhicule affecté ne correspond pas ;
-- comportement si l’utilisateur affecté n’a pas le bon rôle ;
+- comportement si l'utilisateur affecté n'a pas le bon rôle ;
 - utilisation des modèles dans la planification automatique ;
-- utilisation des modèles dans l’affectation automatique optimisée ;
+- utilisation des modèles dans l'affectation automatique optimisée ;
 - impact des modèles sur les affectations publiées.
 
 La distinction TPMR VSL / TPMR TAXI doit également être harmonisée avec les fiches **Planning** et **Véhicules**.
@@ -1402,23 +1403,23 @@ Pas prioritaire en Alpha web, mais à garder en mémoire :
 - consultation simple des modèles horaires ;
 - utilisation dans un planning mobile ;
 - affichage simplifié ;
-- choix rapide d’un modèle pendant la création d’une affectation Planning.
+- choix rapide d'un modèle pendant la création d'une affectation Planning.
 
 ---
 ## 15. Points à confirmer
 
-Les points suivants restent à confirmer dans les fiches futures ou lors d’un cadrage dédié :
+Les points suivants restent à confirmer dans les fiches futures ou lors d'un cadrage dédié :
 
 - règles exactes de composition pour AMBULANCE ;
 - règles exactes de composition pour VSL ;
 - règles exactes de composition pour TAXI ;
 - règles exactes de composition pour TPMR ;
 - distinction exacte entre TPMR VSL et TPMR TAXI dans les modèles horaires, les véhicules et le Planning ;
-- comportement exact du Planning si la composition attendue n’est pas respectée ;
+- comportement exact du Planning si la composition attendue n'est pas respectée ;
 - comportement exact du Planning si le type de véhicule affecté ne correspond pas ;
 - comportement exact avec les rôles autorisés ;
 - lien exact avec la planification automatique ;
-- lien exact avec l’affectation automatique optimisée ;
+- lien exact avec l'affectation automatique optimisée ;
 - statut exact des modèles génériques Matin / Journée / Soir ;
 - règles exactes du compteur **Nb utilisé** ;
 - noms techniques définitifs des permissions ;

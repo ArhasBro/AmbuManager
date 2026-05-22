@@ -1,5 +1,7 @@
 # Ambulance Manager — Fonctionnalités détaillées — Véhicules V1
 
+> Statut : référence fonctionnelle cible — page non validée à ce stade.
+
 Version : V1 (MASTER)  
 Date : 18/05/2026
 
@@ -8,16 +10,16 @@ Date : 18/05/2026
 - [1. Objectif de la page](#1-objectif-de-la-page)
 - [2. Positionnement fonctionnel](#2-positionnement-fonctionnel)
 - [3. Liste des véhicules](#3-liste-des-véhicules)
-- [4. Création d’un véhicule](#4-création-dun-véhicule)
-- [5. Modification d’un véhicule](#5-modification-dun-véhicule)
+- [4. Création d'un véhicule](#4-création-dun-véhicule)
+- [5. Modification d'un véhicule](#5-modification-dun-véhicule)
 - [6. Statuts, disponibilité et archivage](#6-statuts-disponibilité-et-archivage)
 - [7. Fiche détail véhicule](#7-fiche-détail-véhicule)
 - [8. Actions et permissions](#8-actions-et-permissions)
 - [9. Règles liées au planning](#9-règles-liées-au-planning)
 - [10. Lien avec Suivi des véhicules](#10-lien-avec-suivi-des-véhicules)
 - [11. Exclusions V1 / Alpha](#11-exclusions-v1--alpha)
-- [12. Évolutions futures / à ne pas oublier](#12-évolutions-futures--à-ne-pas-oublier)
-- [13. Points à confirmer](#13-points-à-confirmer)
+- [12. Évolutions futures / à ne pas oublier](#12-évolutions-futures--à -ne-pas-oublier)
+- [13. Points à confirmer](#13-points-à -confirmer)
 
 ---
 
@@ -37,7 +39,7 @@ La page doit permettre de :
 - gérer la disponibilité générale ;
 - archiver ou restaurer un véhicule ;
 - rattacher un véhicule à une base / dépôt principal ;
-- préparer l’utilisation des véhicules dans le planning.
+- préparer l'utilisation des véhicules dans le planning.
 
 La page **Véhicules** ne doit pas devenir une page de suivi opérationnel complet.
 
@@ -112,7 +114,7 @@ La liste contient les colonnes suivantes :
 
 8. **Actions disponibles**
 
-### 3.2 Affichage de l’identité véhicule
+### 3.2 Affichage de l'identité véhicule
 
 Le nom interne est personnalisable.
 
@@ -140,7 +142,7 @@ Pour **TPMR**, une distinction métier doit être prévue lorsque nécessaire :
 - **TPMR TAXI**.
 
 Cette distinction ne remplace pas forcément le type principal **TPMR** dans le référentiel Véhicules.  
-Elle sert à préciser l’usage attendu du véhicule, notamment pour les besoins Planning et les modèles horaires.
+Elle sert à préciser l'usage attendu du véhicule, notamment pour les besoins Planning et les modèles horaires.
 
 Règle de prudence :
 
@@ -161,9 +163,9 @@ Le détail exact du résumé dépendra de la future page **Suivi des véhicules*
 
 ---
 
-## 4. Création d’un véhicule
+## 4. Création d'un véhicule
 
-La création d’un véhicule permet d’ajouter un véhicule dans le référentiel de la société.
+La création d'un véhicule permet d'ajouter un véhicule dans le référentiel de la société.
 
 Elle est réservée aux profils autorisés.
 
@@ -199,12 +201,12 @@ Pour un véhicule **TPMR**, une précision métier peut être nécessaire afin d
 - **TPMR VSL** ;
 - **TPMR TAXI**.
 
-Cette précision permet d’éviter une ambiguïté dans le Planning et les Modèles horaires.  
+Cette précision permet d'éviter une ambiguïté dans le Planning et les Modèles horaires.  
 Elle ne doit pas casser la logique déjà validée des types principaux de véhicules.
 
 ### 4.3 Immatriculation
 
-L’immatriculation est obligatoire.
+L'immatriculation est obligatoire.
 
 Elle sert à identifier officiellement le véhicule dans la flotte.
 
@@ -212,7 +214,7 @@ Elle sert à identifier officiellement le véhicule dans la flotte.
 
 Le véhicule appartient automatiquement à la société courante.
 
-L’utilisateur ne choisit pas librement une autre société lors de la création.
+L'utilisateur ne choisit pas librement une autre société lors de la création.
 
 ### 4.5 Base / dépôt principal
 
@@ -240,9 +242,9 @@ Un véhicule inactif ou indisponible ne doit pas être proposé normalement au p
 
 ---
 
-## 5. Modification d’un véhicule
+## 5. Modification d'un véhicule
 
-La modification véhicule permet de mettre à jour les informations d’un véhicule sans supprimer son historique.
+La modification véhicule permet de mettre à jour les informations d'un véhicule sans supprimer son historique.
 
 Elle est réservée aux profils autorisés.
 
@@ -262,13 +264,13 @@ Les champs modifiables sont :
 
 ### 5.2 Règles de modification
 
-L’immatriculation reste obligatoire.
+L'immatriculation reste obligatoire.
 
 Le type de véhicule reste obligatoire.
 
-L’immatriculation doit être unique dans la société.
+L'immatriculation doit être unique dans la société.
 
-Les modifications sensibles doivent être traçables dans l’audit.
+Les modifications sensibles doivent être traçables dans l'audit.
 
 Les informations de suivi détaillé ne sont pas modifiées directement depuis cette page.
 
@@ -285,7 +287,7 @@ Elle ne doit pas affecter automatiquement :
 
 Un véhicule peut ne pas rentrer à la même base le soir.
 
-Le rattachement base / dépôt ne doit donc pas devenir une contrainte stricte d’affectation planning par défaut.
+Le rattachement base / dépôt ne doit donc pas devenir une contrainte stricte d'affectation planning par défaut.
 
 ---
 
@@ -335,11 +337,11 @@ Le véhicule peut être proposé au planning si les autres conditions sont valid
 
 Le véhicule ne doit pas être proposé normalement au planning.
 
-L’indisponibilité peut être liée à un problème, une immobilisation ou un état temporaire à préciser dans le suivi.
+L'indisponibilité peut être liée à un problème, une immobilisation ou un état temporaire à préciser dans le suivi.
 
 ### 6.3 Archivage
 
-L’archivage peut être :
+L'archivage peut être :
 
 - non archivé ;
 - archivé.
@@ -370,21 +372,21 @@ Les actions validées sont :
 
 Un véhicule inactif, indisponible ou archivé ne doit pas être proposé normalement au planning.
 
-Aucune suppression physique n’est prévue en V1 / Alpha.
+Aucune suppression physique n'est prévue en V1 / Alpha.
 
 Désarchiver un véhicule ne le réactive pas automatiquement.
 
 Désarchiver un véhicule ne le rend pas automatiquement disponible.
 
-L’historique du véhicule est conservé.
+L'historique du véhicule est conservé.
 
-Les actions sensibles doivent être traçables dans l’audit.
+Les actions sensibles doivent être traçables dans l'audit.
 
 ---
 
 ## 7. Fiche détail véhicule
 
-La fiche détail véhicule permet de consulter les informations principales d’un véhicule.
+La fiche détail véhicule permet de consulter les informations principales d'un véhicule.
 
 Elle ne remplace pas la page **Suivi des véhicules**.
 
@@ -397,11 +399,11 @@ La fiche détail distingue :
 
 Le mode consultation permet de lire les informations du véhicule.
 
-Le mode modification permet de modifier les champs autorisés, uniquement si l’utilisateur connecté dispose des permissions nécessaires.
+Le mode modification permet de modifier les champs autorisés, uniquement si l'utilisateur connecté dispose des permissions nécessaires.
 
 ### 7.2 En-tête de la fiche
 
-L’en-tête affiche :
+L'en-tête affiche :
 
 - nom interne personnalisable ;
 - marque ;
@@ -499,7 +501,7 @@ Raison : véhicule archivé
 
 ### 7.8 Historique récent
 
-La fiche peut afficher un historique récent si l’utilisateur est autorisé.
+La fiche peut afficher un historique récent si l'utilisateur est autorisé.
 
 Exemples :
 
@@ -510,7 +512,7 @@ Exemples :
 - archivage ;
 - restauration.
 
-L’audit complet reste dans la page **Audit**.
+L'audit complet reste dans la page **Audit**.
 
 ---
 
@@ -527,13 +529,13 @@ En Alpha :
 - les autres profils accèdent selon permissions ;
 - les utilisateurs terrain peuvent consulter la liste des véhicules en lecture simple.
 
-Les actions sensibles doivent être traçables dans l’audit.
+Les actions sensibles doivent être traçables dans l'audit.
 
 ### 8.2 Consultation
 
 Les utilisateurs terrain doivent pouvoir consulter la liste des véhicules en lecture simple.
 
-Ils peuvent voir les informations utiles à l’exploitation.
+Ils peuvent voir les informations utiles à l'exploitation.
 
 Ils ne peuvent pas administrer les véhicules sans permission dédiée.
 
@@ -564,7 +566,7 @@ Elle permet de passer rapidement :
 
 Cette action est soumise à permission.
 
-Elle doit être tracée dans l’audit.
+Elle doit être tracée dans l'audit.
 
 Elle ne remplace pas le suivi détaillé des anomalies, vérifications ou désinfections.
 
@@ -585,7 +587,7 @@ Les utilisateurs terrain ne peuvent pas, sans permission dédiée :
 
 ## 9. Règles liées au planning
 
-La page Véhicules prépare l’utilisation des véhicules dans le planning.
+La page Véhicules prépare l'utilisation des véhicules dans le planning.
 
 ### 9.1 Proposition au planning
 
@@ -593,7 +595,7 @@ Un véhicule peut être proposé normalement au planning seulement si :
 
 - il est actif ;
 - il est disponible ;
-- il n’est pas archivé.
+- il n'est pas archivé.
 
 Un véhicule inactif, indisponible ou archivé ne doit pas être proposé normalement au planning.
 
@@ -603,15 +605,15 @@ La base / dépôt principal du véhicule ne bloque pas automatiquement les affec
 
 Elle est une information de référence.
 
-Elle ne doit pas empêcher d’affecter un véhicule hors de sa base principale.
+Elle ne doit pas empêcher d'affecter un véhicule hors de sa base principale.
 
 ### 9.3 Règles liées au Planning validées
 
 Les règles suivantes sont à prendre en compte pour la cohérence avec la fiche **Planning** :
 
-- l’affectation des véhicules reste manuelle en Alpha ;
+- l'affectation des véhicules reste manuelle en Alpha ;
 - seuls les véhicules actifs, non archivés et disponibles sont proposés normalement ;
-- la base / dépôt du véhicule guide le planificateur mais ne bloque pas automatiquement l’affectation ;
+- la base / dépôt du véhicule guide le planificateur mais ne bloque pas automatiquement l'affectation ;
 - le véhicule exact ne doit pas surcharger la vue globale annuelle du Planning ;
 - le véhicule peut être visible dans le détail, la vue semaine ou la vue jour selon permissions ;
 - les anomalies, vérifications ou désinfections ne rendent pas automatiquement un véhicule indisponible dans le Planning ;
@@ -621,12 +623,12 @@ Les règles suivantes sont à prendre en compte pour la cohérence avec la fiche
 
 ### 9.4 Règles restant à confirmer côté Planning
 
-Certains détails restent à confirmer lors de l’implémentation ou de la relecture transversale :
+Certains détails restent à confirmer lors de l'implémentation ou de la relecture transversale :
 
 - comportement exact si un véhicule indisponible est affecté manuellement ;
-- comportement si un véhicule devient indisponible alors qu’il est déjà planifié ;
+- comportement si un véhicule devient indisponible alors qu'il est déjà planifié ;
 - impact exact sur les plannings publiés ;
-- niveau exact de blocage ou d’alerte selon le type de conflit véhicule.
+- niveau exact de blocage ou d'alerte selon le type de conflit véhicule.
 
 ---
 
@@ -665,10 +667,10 @@ Les détails seront cadrés lors de la fiche **Suivi des véhicules**.
 
 Les éléments suivants ne sont pas intégrés à la page Véhicules V1 / Alpha :
 
-- suppression physique d’un véhicule ;
+- suppression physique d'un véhicule ;
 - workflow complet de vérification ;
 - workflow complet de désinfection ;
-- déclaration détaillée d’anomalie véhicule ;
+- déclaration détaillée d'anomalie véhicule ;
 - maintenance avancée ;
 - onglet entretien ;
 - historique technique complet ;
@@ -699,7 +701,7 @@ Sujets prévus :
 
 ### 12.2 Entretien / maintenance avancée
 
-La maintenance avancée n’est pas intégrée à la page Véhicules V1 / Alpha.
+La maintenance avancée n'est pas intégrée à la page Véhicules V1 / Alpha.
 
 Elle pourra être étudiée plus tard dans **Suivi des véhicules**, potentiellement via un onglet **Entretien**.
 
@@ -721,7 +723,7 @@ Elle pourra être étudiée plus tard dans **Suivi des véhicules**, potentielle
 
 À prévoir plus tard :
 
-- dates d’expiration des documents ;
+- dates d'expiration des documents ;
 - statut conforme / bientôt expiré / expiré ;
 - alertes avant échéance ;
 - tableau de suivi documentaire ;
@@ -739,7 +741,7 @@ Elle pourra être étudiée plus tard dans **Suivi des véhicules**, potentielle
 - proposition automatique du véhicule le plus adapté ;
 - distinction avancée des usages **AMBULANCE**, **VSL**, **TAXI**, **TPMR VSL** et **TPMR TAXI**.
 
-En Alpha, l’affectation des véhicules reste manuelle.  
+En Alpha, l'affectation des véhicules reste manuelle.  
 Les alertes simples et conflits évidents peuvent guider le planificateur, sans moteur automatique avancé.
 
 ### 12.6 Expérience mobile
@@ -749,8 +751,8 @@ Les alertes simples et conflits évidents peuvent guider le planificateur, sans 
 - consultation rapide des véhicules sur mobile ;
 - vérification véhicule depuis mobile ;
 - désinfection depuis mobile ;
-- déclaration d’anomalie véhicule depuis mobile ;
-- lecture simple de l’état du véhicule par les équipes terrain.
+- déclaration d'anomalie véhicule depuis mobile ;
+- lecture simple de l'état du véhicule par les équipes terrain.
 
 ---
 
@@ -760,13 +762,13 @@ Les points suivants restent à confirmer lors des fiches concernées :
 
 - détail exact du résumé de suivi affiché dans la liste Véhicules ;
 - détail exact du résumé de suivi affiché dans la fiche véhicule ;
-- règles exactes de blocage ou d’alerte au planning ;
+- règles exactes de blocage ou d'alerte au planning ;
 - comportement si un véhicule indisponible est affecté manuellement ;
-- comportement si un véhicule devient indisponible alors qu’il est déjà planifié ;
+- comportement si un véhicule devient indisponible alors qu'il est déjà planifié ;
 - impact sur les plannings publiés ;
 - contenu exact de la page Suivi des véhicules ;
 - champs détaillés des onglets Vérifications, Désinfections et Anomalies véhicules ;
-- ajout ou non d’un onglet Entretien dans Suivi des véhicules ;
+- ajout ou non d'un onglet Entretien dans Suivi des véhicules ;
 - règles de consultation du suivi par les utilisateurs terrain ;
 - éventuelle conformité documentaire avancée ;
 - future gestion mobile du suivi terrain ;
