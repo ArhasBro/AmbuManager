@@ -16,7 +16,7 @@ Ce document récapitule les éléments de reprise documentaire V2.
 
 ## 3. Statut fonctionnel
 
-- Login : validée, avec améliorations possibles.
+- Login : non validée à ce stade, à auditer, cadrer, confirmer puis valider explicitement.
 - Autres pages : à auditer, à cadrer, à confirmer ou à compléter, malgré des décisions partielles existantes.
 - Planning : non validé.
 

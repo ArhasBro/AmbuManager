@@ -16,13 +16,13 @@ Ce document synthétise l'état actuel du projet pendant la stabilisation V2.
 
 ## 3. Statut des pages
 
-- Login : validée, avec améliorations possibles.
+- Login : non validée à ce stade, à auditer, cadrer, confirmer puis valider explicitement.
 - Toutes les autres pages : à auditer, à cadrer, à confirmer ou à compléter.
 - Planning : non validé, en cours de cadrage et à auditer.
 
 ## 4. Suite immédiate
 
 1. Stabiliser les documents V2.
-2. Clarifier le statut page par page (hors Login).
+2. Clarifier le statut page par page, y compris Login.
 3. Finaliser ensuite les maquettes.
 4. Reprendre le codage sur base stabilisée.

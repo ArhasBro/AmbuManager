@@ -12,13 +12,13 @@ Les anciennes décisions restent consultables dans les documents historiques et 
 ## 2. Décisions de gouvernance documentaire
 
 - les documents V2 sont la gouvernance active à stabiliser ;
-- les versions non V2 sont historiques, non prioritaires, et à archiver après validation V2 ;
+- les versions non V2 sont historiques, archivées et non prioritaires ;
 - les fiches de `docs/1-MASTER/3-FONCTIONNALITES/` restent actives comme référence détaillée de cadrage fonctionnel cible ;
 - les fichiers liés à REBASAGE sont supprimés du repo actif.
 
 ## 3. Décisions de statut fonctionnel
 
-- Login : page validée, avec améliorations possibles ;
+- Login : non validée à ce stade, à auditer, cadrer, confirmer puis valider explicitement ;
 - autres pages : décisions partielles existantes, mais statut global à auditer / à cadrer / à confirmer ;
 - Planning : non validé, en cours de cadrage.
 

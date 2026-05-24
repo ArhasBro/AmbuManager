@@ -18,7 +18,7 @@ La reprise se fait de manière contrôlée, document par document, à partir de 
 ## 3. Ordre actuel de travail
 
 1. Stabilisation documentaire V2.
-2. Cadrage/audit des pages non Login.
+2. Cadrage/audit des toutes les pages.
 3. Finalisation des maquettes.
 4. Préparation des références UI/UX propres.
 5. Reprise du codage.

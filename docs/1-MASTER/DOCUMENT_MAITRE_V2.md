@@ -27,7 +27,7 @@ Documents de gouvernance active à stabiliser :
 - `docs/1-MASTER/RECAP_DISCUSSIONS_V2.md` ;
 - `docs/1-MASTER/3-FONCTIONNALITES/`.
 
-Les versions sans suffixe V2 sont historiques, non prioritaires, et à archiver après validation V2.
+Les versions sans suffixe V2 sont historiques, archivées et non prioritaires.
 
 ## 4. Rôle des fiches fonctionnalités
 
@@ -39,7 +39,7 @@ Leur présence ne signifie pas que les pages correspondantes sont déjà validé
 
 ## 5. Statut des pages
 
-- Login : page validée, avec améliorations possibles.
+- Login : non validée à ce stade, à auditer, cadrer, confirmer puis valider explicitement.
 - Toutes les autres pages : à auditer, à cadrer, à confirmer ou à compléter, avec décisions partielles existantes.
 - Planning : non validé, en cours de cadrage et à auditer.
 
@@ -52,7 +52,7 @@ Leur présence ne signifie pas que les pages correspondantes sont déjà validé
 
 Ordre méthodologique :
 1. Stabiliser la documentation V2.
-2. Cadrer puis auditer les pages non Login.
+2. Cadrer puis auditer les toutes les pages.
 3. Finaliser les maquettes.
 4. Produire des références UI/UX propres.
 5. Reprendre le codage.

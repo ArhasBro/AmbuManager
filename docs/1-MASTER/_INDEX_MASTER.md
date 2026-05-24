@@ -34,7 +34,7 @@ Le dossier `docs/1-MASTER` regroupe les documents de gouvernance active V2 à st
 | `docs/1-MASTER/RECAP_DISCUSSIONS_V2.md` | Récapitulatif V2 actif à stabiliser |
 | `docs/4-ARCHIVES/1-MASTER_HISTORIQUE/DOCUMENT_MAITRE_ARCHIVE.md` | Version historique archivée (non prioritaire) |
 | `docs/4-ARCHIVES/1-MASTER_HISTORIQUE/DOCUMENT_CADRAGE_FONCTIONNEL_ARCHIVE.md` | Version historique archivée (non prioritaire) |
-| `docs/4-ARCHIVES/1-MASTER_HISTORIQUE/PLAN_DE_DEVELOPPEMENT_ARCHIVE.md` | Version historique, non prioritaire (à archiver après validation V2) |
+| `docs/4-ARCHIVES/1-MASTER_HISTORIQUE/PLAN_DE_DEVELOPPEMENT_ARCHIVE.md` | Version historique archivée (non prioritaire) |
 | `docs/4-ARCHIVES/1-MASTER_HISTORIQUE/ETAT_GLOBAL_PROJET_ARCHIVE.md` | Version historique archivée (non prioritaire) |
 | `docs/4-ARCHIVES/1-MASTER_HISTORIQUE/REGISTRE_DECISIONS_ARCHIVE.md` | Version historique archivée (non prioritaire) |
 | `docs/4-ARCHIVES/1-MASTER_HISTORIQUE/RECAP_DISCUSSIONS_ARCHIVE.md` | Version historique archivée (non prioritaire) |
@@ -50,7 +50,7 @@ Le dossier `docs/1-MASTER` regroupe les documents de gouvernance active V2 à st
 - Les fiches de `docs/1-MASTER/3-FONCTIONNALITES/` restent actives.
 - Elles constituent la référence détaillée de cadrage fonctionnel cible page par page.
 - Leur présence ne signifie pas que les pages sont déjà validées, finalisées ou codées.
-- À ce stade, seule la page Login est considérée comme validée (améliorations possibles).
+- À ce stade, aucune page n'est validée, y compris Login.
 
 ## Statut UI/UX et maquettes
 

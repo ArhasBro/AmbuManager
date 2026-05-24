@@ -7,7 +7,7 @@ Date : 22/05/2026
 
 Ce document est la référence fonctionnelle V2 de cadrage global à stabiliser.
 
-L'ancien `DOCUMENT_CADRAGE_FONCTIONNEL.md` reste historique, non prioritaire, et à archiver après validation V2.
+L'ancien `DOCUMENT_CADRAGE_FONCTIONNEL.md` reste historique, archivé et non prioritaire.
 
 ## 2. Référence détaillée
 
@@ -18,7 +18,7 @@ Ces fiches restent actives. Elles décrivent la cible fonctionnelle officielle, 
 
 ## 3. Statut des pages
 
-- Login : validée, avec améliorations possibles.
+- Login : non validée à ce stade, à auditer, cadrer, confirmer puis valider explicitement.
 - Shell global / navigation : à cadrer et à auditer.
 - Tableau de bord : à cadrer et à auditer.
 - Utilisateurs : à cadrer et à auditer.
