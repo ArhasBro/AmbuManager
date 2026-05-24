@@ -171,6 +171,9 @@ Puis uniquement le `REFERENCE_UI_UX_<PAGE>.md` de la page concernée et les fich
 - Ancien nom historique : `Templates` ; nom fonctionnel actuel : `Modèles horaires`.
 - Ancien nom historique : `Onboarding` ; nom fonctionnel actuel : `Mise en route`.
 - Les routes techniques restent `/templates` et `/onboarding`.
+- Les libellés affichés dans l'interface doivent suivre la nomenclature fonctionnelle V2.
+- Les routes techniques ou historiques peuvent conserver leurs anciens noms si nécessaire.
+- Libellés UI attendus : `Modèles horaires`, `Mise en route`, `Dépôts`, `Dépôts / Bases` selon le niveau de module affiché.
 
 ---
 
@@ -287,7 +290,7 @@ docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG
 | `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_A25_PLANNING.md` | existant | Référence page Planning déjà détaillée selon la méthode validée A25. |
 | `docs/1-MASTER/1-MAQUETTE/README_MAQUETTES_A24.md` | existant | Point d’entrée historique des maquettes A24. À lire comme contexte, avec neutralisation des références au dossier icônes supprimé. |
 | `docs/1-MASTER/1-MAQUETTE/SPEC_UI_UX_MAQUETTES_AMBULANCE_MANAGER.md` | existant | Spécification générale utile, mais ne remplace pas les futures références page par page. |
-| `docs/1-MASTER/CADRAGE_UI_UX_ALPHA_MAQUETTE_V0.2.md` | existant | Contexte historique de conception. Ne prime pas sur les PNG officiels. |
+| `docs/4-ARCHIVES/1-MASTER_HISTORIQUE/CADRAGE_UI_UX_ALPHA_MAQUETTE_V0.2_ARCHIVE.md` | archivé (historique non actif) | Contexte historique de conception. Ne prime pas sur les PNG officiels ni sur la gouvernance V2 active. |
 
 ---
 

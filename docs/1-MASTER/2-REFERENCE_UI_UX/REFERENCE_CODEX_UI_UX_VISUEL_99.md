@@ -63,6 +63,12 @@ En cas de contradiction fonctionnelle :
 Code réel > documentation
 ```
 
+Règle de nomenclature UI visible :
+
+- Les libellés affichés dans l'interface doivent suivre la nomenclature fonctionnelle V2.
+- Les routes techniques ou historiques peuvent conserver leurs anciens noms si nécessaire.
+- Appliquer en priorité les libellés UI : `Modèles horaires`, `Mise en route`, `Dépôts`, `Dépôts / Bases` selon le niveau de module attendu.
+
 ---
 
 ## 4. Objectif de la phase
@@ -176,6 +182,11 @@ NO_PATCH_CODE
 ```
 
 et ne pas lancer artificiellement lint/build.
+
+Note Privacy :
+
+- La page Privacy reste à confirmer sur le plan de conformité.
+- Ce point n'est pas bloquant pour les maquettes métier immédiates.
 
 ---
 

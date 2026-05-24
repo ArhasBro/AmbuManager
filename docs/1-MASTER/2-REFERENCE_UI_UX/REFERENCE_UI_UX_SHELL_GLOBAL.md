@@ -66,6 +66,12 @@ Image officielle de la page > REFERENCE_UI_UX_<PAGE>.md > REFERENCE_UI_UX_SHELL_
 
 Règle de priorité actuelle : le fonctionnel existant est non bloquant pour cette phase visuelle. Si un élément fonctionnel affiché gêne la fidélité à la maquette, il peut être masqué, déplacé, replié, simplifié ou supprimé visuellement, sans modifier la vérité fonctionnelle du code ni les API / Prisma / RBAC / services métier.
 
+Règle de nomenclature UI visible :
+
+- Les libellés affichés dans l'interface doivent suivre la nomenclature fonctionnelle V2.
+- Les routes techniques ou historiques peuvent conserver leurs anciens noms si nécessaire.
+- Libellés UI attendus : `Modèles horaires`, `Mise en route`, `Dépôts`, `Dépôts / Bases` selon le niveau de module affiché.
+
 ---
 
 ## 1. Définition du Shell global
@@ -483,10 +489,10 @@ Tableau de bord
 Planning
 Utilisateurs / RH
 Véhicules
-Templates
+Modèles horaires
 Société
-Dépôts
-Onboarding
+Dépôts / Bases
+Mise en route
 Audit
 ```
 
@@ -496,6 +502,9 @@ Libellés cible avec accents :
 - `Société`, pas `Societe` ;
 - `Dépôts`, pas `Depots` ;
 - `Déconnexion`, pas `Deconnexion`.
+- `Modèles horaires`, pas `Templates` en libellé UI final ;
+- `Mise en route`, pas `Onboarding` en libellé UI final ;
+- `Dépôts / Bases` quand le libellé de module complet est attendu.
 
 Si le code conserve des libellés sans accents, c’est un écart visuel et qualitatif à corriger lors de la production UI.
 
@@ -1068,7 +1077,7 @@ Le Shell global pourra être considéré visuellement conforme seulement si les 
 - [ ] pas de gradient visible gênant ;
 - [ ] padding de contenu proche des maquettes ;
 - [ ] pages larges non comprimées ;
-- [ ] continuité visuelle entre Dashboard, Planning, Templates, Audit et autres pages.
+- [ ] continuité visuelle entre Dashboard, Planning, Modèles horaires, Audit et autres pages.
 
 ### 15.4 Composants communs
 
@@ -1190,7 +1199,7 @@ docs/1-MASTER/2-REFERENCE_UI_UX/
 ## 20. Verdict documentaire initial
 
 ```txt
-DOCUMENT SHELL GLOBAL PRÊT POUR VALIDATION : OUI
+Document Shell global exploitable comme référence UI/UX transitoire, non validé fonctionnellement à ce stade.
 PÉRIMÈTRE VISUEL UNIQUEMENT : OUI
 NOUVEAU BLOC APPLICATIF CRÉÉ : NON
 MODIFICATION CODE DEMANDÉE MAINTENANT : NON
