@@ -5,6 +5,15 @@
 Version : V1.1 (MASTER)  
 Date : 18/05/2026
 
+## D?cision visuelle et statut (mise ? jour)
+
+- R?f?rence visuelle valid?e : `Login_V2.png`.
+- Ancienne r?f?rence `Login_V1.1.png` : remplac?e, non retenue comme r?f?rence finale.
+- Checkbox `Se souvenir de moi` : pr?sente et fonctionnelle.
+- Le code actuel contient d?j? cette fonctionnalit? selon l'utilisateur.
+- R?gle maintenue : Login reste une r?f?rence fonctionnelle cible et n'est pas valid?e fonctionnellement ? ce stade (audit, cadrage, confirmation puis validation explicite requis avant codage final).
+
+
 ## Sommaire
 
 - [1. Objectif de la page](#1-objectif-de-la-page)
@@ -53,6 +62,7 @@ Fonctionnalités attendues pour la V1 :
 - affichage d'un formulaire de connexion simple ;
 - saisie de l'adresse email ;
 - saisie du mot de passe ;
+- checkbox `Se souvenir de moi` (pr?sente et fonctionnelle) ;
 - mot de passe masqué par défaut ;
 - possibilité d'afficher ou masquer le mot de passe ;
 - bouton de connexion ;

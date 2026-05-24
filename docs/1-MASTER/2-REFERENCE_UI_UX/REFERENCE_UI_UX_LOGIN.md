@@ -34,13 +34,13 @@ La page Login doit donc être évaluée sur sa fidélité visuelle à la maquett
 La référence officielle de la page Login est l’image située dans :
 
 ```txt
-docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/1-Login/Login_V1.1.png
+docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/1-Login/Login_V2.png
 ```
 
 Image analysée :
 
 ```txt
-Login_V1.1.png
+Login_V2.png
 ```
 
 Cette image est la vérité visuelle de la page Login.
@@ -48,7 +48,7 @@ Cette image est la vérité visuelle de la page Login.
 ### 1.2 Règle d’autorité visuelle
 
 ```txt
-Image Login_V1.1.png > documents généraux MAQUETTE > anciennes captures > code actuel
+Image Login_V2.png > documents généraux MAQUETTE > anciennes captures > code actuel
 ```
 
 La page doit être reproduite en priorité selon l’image officielle.
@@ -93,7 +93,7 @@ Le dossier historique `ICONE` / `ICONES` est neutralisé et ne doit pas être ut
 Pour la page Login, la référence visuelle reste uniquement :
 
 ```txt
-Login_V1.1.png
+Login_V2.png
 ```
 
 Si des icônes sont nécessaires côté code, Codex doit utiliser les icônes déjà disponibles dans le projet ou des composants existants, mais uniquement pour reproduire le rendu visible de la maquette.
@@ -172,7 +172,7 @@ La page doit rester une page d’entrée simple, premium, centrée sur la connex
 
 ### 3.1 Format de référence
 
-L’image officielle `Login_V1.1.png` mesure approximativement :
+L’image officielle `Login_V2.png` mesure approximativement :
 
 ```txt
 Largeur : 1536 px
@@ -987,7 +987,7 @@ Après production Codex future, Nathan devra vérifier visuellement :
 La page Login pourra être considérée conforme visuellement si :
 
 ```txt
-- le rendu desktop est fidèle à Login_V1.1.png à environ 99 % ;
+- le rendu desktop est fidèle à Login_V2.png à environ 99 % ;
 - la division gauche/droite est respectée ;
 - le panneau gauche est immersif, bleu, ambulance, sécurité ;
 - la carte de connexion est centrée, claire et conforme ;
@@ -1004,7 +1004,7 @@ La page Login pourra être considérée conforme visuellement si :
 À utiliser plus tard, dans une session de production code dédiée :
 
 ```txt
-Tu dois réaligner uniquement le visuel de la page Login sur la maquette officielle Login_V1.1.png.
+Tu dois réaligner uniquement le visuel de la page Login sur la maquette officielle Login_V2.png.
 
 Référence obligatoire :
 docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_LOGIN.md
