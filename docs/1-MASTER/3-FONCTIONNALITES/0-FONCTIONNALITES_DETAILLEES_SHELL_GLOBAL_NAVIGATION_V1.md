@@ -1,4 +1,4 @@
-# Ambulance Manager — Fonctionnalités détaillées — Shell global / navigation V1
+# Ambulance Manager — Fonctionnalités détaillées — Shell Global / navigation V1
 
 > Statut : référence fonctionnelle cible — page non validée à ce stade.
 
