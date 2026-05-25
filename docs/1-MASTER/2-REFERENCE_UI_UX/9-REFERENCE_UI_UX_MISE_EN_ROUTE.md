@@ -142,7 +142,7 @@ La maquette affiche 12 étapes ordonnées :
 4. Configuration des véhicules.
 5. Modèles horaires.
 6. Règles métier.
-7. Templates d’affectation.
+7. Modèles horaires / modèles d’affectation.
 8. Alertes et notifications.
 9. Paramètres de sécurité.
 10. Import initial de données.
@@ -193,7 +193,7 @@ Modules explicitement visibles ou imposés par la fiche :
 
 Modules complémentaires visibles dans la checklist maquette :
 - Règles métier.
-- Templates d’affectation.
+- Modèles horaires / modèles d’affectation.
 - Alertes et notifications.
 - Paramètres de sécurité.
 - Vérification et tests.

@@ -60,8 +60,7 @@ Ce document décrit la référence UI/UX codable de la page **Utilisateurs / RH*
 Il sert à préparer un développement fidèle visuellement (objectif 99 %) sans déclarer la fonctionnalité comme validée définitivement sur le plan métier.
 
 ## 2. Sources utilisées
-- Source visuelle demandée : `docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/5-Utilisateurs/Utilisateurs_V2.png`.
-- Source visuelle disponible dans le dépôt actuel : `docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/5-Utilisateurs-RH/Utilisateurs_V2.png`.
+- Source visuelle : `docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/5-Utilisateurs-RH/Utilisateurs_V2.png`.
 - Source fonctionnelle : `docs/1-MASTER/3-FONCTIONNALITES/5-FONCTIONNALITES_DETAILLEES_UTILISATEURS_V1.1.md`.
 - Source exclue : aucun code applicatif existant n’est utilisé comme source visuelle.
 
