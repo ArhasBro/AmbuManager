@@ -1,187 +1,205 @@
-# Ambulance Manager — Checklist opérationnelle Codex (UI/UX)
+# Ambulance Manager — Checklist opérationnelle Codex UI/UX
 
-Version : V2
-Statut : checklist de session de codage UI
-Périmètre : application des références du dossier `docs/1-MASTER/2-REFERENCE_UI_UX/`
+Version : V2  
+Statut : checklist d’exécution pour futures sessions Codex UI  
+Objectif : garantir une intégration UI fidèle à 99 % aux références autorisées
 
 ## Sommaire
-- [Objectif du fichier](#objectif-du-fichier)
-- [Checklist avant codage](#checklist-avant-codage)
-- [Checklist pendant codage](#checklist-pendant-codage)
-- [Checklist après codage](#checklist-apres-codage)
-- [Règles de ressemblance visuelle 99 %](#regles-de-ressemblance-visuelle-99)
-- [Règles de respect des maquettes](#regles-de-respect-des-maquettes)
-- [Règles de respect des fiches fonctionnalités](#regles-de-respect-des-fiches-fonctionnalites)
-- [Règles `components/` futures](#regles-components-futures)
-- [Règles `tailwind.config.*` futures](#regles-tailwindconfig-futures)
-- [Interdictions de dérive](#interdictions-de-derive)
-- [Vérifications page par page](#verifications-page-par-page)
-- [Vérifications des composants communs](#verifications-des-composants-communs)
-- [Vérifications du Shell](#verifications-du-shell)
-- [Vérifications des cards](#verifications-des-cards)
-- [Vérifications des tableaux](#verifications-des-tableaux)
-- [Vérifications des filtres](#verifications-des-filtres)
-- [Vérifications des badges](#verifications-des-badges)
-- [Vérifications des boutons](#verifications-des-boutons)
-- [Vérifications des onglets](#verifications-des-onglets)
-- [Vérifications des panneaux de détail](#verifications-des-panneaux-de-detail)
-- [Vérifications responsive futures](#verifications-responsive-futures)
-- [Vérifications accessibilité minimale](#verifications-accessibilite-minimale)
-- [Vérifications non-régression visuelle](#verifications-non-regression-visuelle)
-- [Éléments à ne jamais coder s’ils sont absents des fiches](#elements-a-ne-jamais-coder-sils-sont-absents-des-fiches)
-- [Éléments à ne jamais modifier sans validation explicite](#elements-a-ne-jamais-modifier-sans-validation-explicite)
+- [1. Objectif de la checklist](#1-objectif-de-la-checklist)
+- [2. Règles avant codage](#2-règles-avant-codage)
+- [3. Règles pendant codage](#3-règles-pendant-codage)
+- [4. Règles après codage](#4-règles-après-codage)
+- [5. Checklist de lecture des sources](#5-checklist-de-lecture-des-sources)
+- [6. Checklist de fidélité 99 %](#6-checklist-de-fidélité-99-)
+- [7. Checklist Shell](#7-checklist-shell)
+- [8. Checklist pages](#8-checklist-pages)
+- [9. Checklist composants](#9-checklist-composants)
+- [10. Checklist Tailwind](#10-checklist-tailwind)
+- [11. Checklist permissions visibles](#11-checklist-permissions-visibles)
+- [12. Checklist tableaux](#12-checklist-tableaux)
+- [13. Checklist cards](#13-checklist-cards)
+- [14. Checklist badges](#14-checklist-badges)
+- [15. Checklist boutons](#15-checklist-boutons)
+- [16. Checklist filtres](#16-checklist-filtres)
+- [17. Checklist onglets](#17-checklist-onglets)
+- [18. Checklist panneaux de détail](#18-checklist-panneaux-de-détail)
+- [19. Checklist états UI](#19-checklist-états-ui)
+- [20. Checklist responsive futur](#20-checklist-responsive-futur)
+- [21. Checklist accessibilité minimale](#21-checklist-accessibilité-minimale)
+- [22. Checklist anti-dérive](#22-checklist-anti-dérive)
+- [23. Checklist de contrôle final](#23-checklist-de-contrôle-final)
+- [24. Commandes de contrôle recommandées pour futures sessions](#24-commandes-de-contrôle-recommandées-pour-futures-sessions)
+- [25. Interdictions de modifier hors périmètre](#25-interdictions-de-modifier-hors-périmètre)
+- [26. Interdictions d’inventer des fonctionnalités](#26-interdictions-dinventer-des-fonctionnalités)
+- [27. Interdictions liées au code existant comme source visuelle](#27-interdictions-liées-au-code-existant-comme-source-visuelle)
 
-## Objectif du fichier
-Fournir une checklist exécutable avant/pendant/après codage pour garantir une conformité visuelle et fonctionnelle de 99 % avec les maquettes validées et les fiches détaillées.
+## 1. Objectif de la checklist
+Cette checklist est l’outil opérationnel Codex avant, pendant et après une session de codage UI. Elle aligne les décisions sur les maquettes V2, les fiches détaillées et les références UI/UX actives, sans se substituer à la validation fonctionnelle finale.
 
-## Checklist avant codage
-- Lire `REFERENCE_UI_UX_GLOBALE.md`.
-- Lire `0-REFERENCE_UI_UX_SHELL_GLOBAL.md`.
-- Lire la référence de la page ciblée.
-- Vérifier la maquette V2.x exacte utilisée.
-- Vérifier la fiche fonctionnalités détaillée associée.
-- Lister les sections `INFORMATION NON FOURNIE — À CONFIRMER`.
-- Vérifier que le nom métier affiché est conforme (`Modèles horaires`, `Mise en route`, etc.).
+## 2. Règles avant codage
+- [ ] Définir la page concernée et son périmètre exact.
+- [ ] Identifier la maquette V2 au versionnage le plus élevé.
+- [ ] Identifier la fiche fonctionnalité détaillée correspondante.
+- [ ] Lire la référence UI/UX de la page ciblée.
+- [ ] Lire `REFERENCE_UI_UX_GLOBALE.md`.
+- [ ] Confirmer les libellés actifs (`Modèles horaires`, `Mise en route`, etc.).
+- [ ] Lister les points `INFORMATION NON FOURNIE — À CONFIRMER` impactants.
 
-## Checklist pendant codage
-- Respect strict du layout de la maquette (ordre, blocs, densité, hiérarchie).
-- Respect strict des composants visibles décrits.
-- Respect strict des statuts/badges/criticités textuels.
-- Respect strict des permissions visibles (masquage actions/modules).
-- Aucun ajout de fonctionnalité hors fiche.
-- Aucun retrait de fonctionnalité présente dans la fiche.
-- Aucune substitution de vocabulaire métier validé.
+## 3. Règles pendant codage
+- [ ] Respecter la hiérarchie visuelle et l’ordre des blocs de la maquette.
+- [ ] Respecter les permissions visibles décrites dans les fiches.
+- [ ] Respecter les états UI obligatoires de la page.
+- [ ] Ne pas ajouter de fonctionnalité non documentée.
+- [ ] Ne pas remplacer un libellé métier validé.
+- [ ] Ne pas dériver vers une DA différente du pack V2.
 
-## Checklist après codage
-- Comparaison écran par écran avec la maquette V2.
-- Vérification des états visuels (empty/loading/error/disabled/actif).
-- Vérification des actions critiques sous permission.
-- Vérification de la non-régression visuelle du Shell.
-- Vérification de cohérence inter-pages (cards, badges, filtres, tableaux).
+## 4. Règles après codage
+- [ ] Vérifier la fidélité visuelle de chaque section majeure.
+- [ ] Vérifier les états UI (empty/loading/error/disabled/active/focus/hover).
+- [ ] Vérifier les droits visibles (actions présentes/absentes).
+- [ ] Vérifier la cohérence avec Shell et composants transverses.
+- [ ] Vérifier que les écarts restants sont explicitement documentés.
 
-## Règles de ressemblance visuelle 99 %
-- Même structure globale et mêmes regroupements.
-- Même ordre vertical/horizontal des zones.
-- Même hiérarchie de tailles visuelles.
-- Même logique de contraste primaire/secondaire.
-- Même densité d’information.
-- Écart maximal toléré : micro-ajustements techniques, sans impact perceptible métier.
+## 5. Checklist de lecture des sources
+- [ ] `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_GLOBALE.md`
+- [ ] `docs/1-MASTER/2-REFERENCE_UI_UX/0-REFERENCE_UI_UX_SHELL_GLOBAL.md`
+- [ ] Référence UI/UX de la page ciblée (`1` à `10`, `6.1` selon cas).
+- [ ] Maquette(s) V2 de la page ciblée dans `docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/`.
+- [ ] Fiche détaillée correspondante dans `docs/1-MASTER/3-FONCTIONNALITES/`.
+- [ ] `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_INDEX.md` pour contrôle d’autorité.
 
-## Règles de respect des maquettes
-- Toujours utiliser la version la plus élevée de la maquette.
-- Ne pas mixer des éléments d’anciennes versions si contradiction.
-- Toute divergence volontaire doit être explicitement validée.
+## 6. Checklist de fidélité 99 %
+- [ ] Structure générale identique à la maquette.
+- [ ] Positionnement relatif des blocs conservé.
+- [ ] Densité d’information équivalente.
+- [ ] Hiérarchie de contraste conservée.
+- [ ] Typographie et espacements perçus cohérents.
+- [ ] États et statuts visuels cohérents.
 
-## Règles de respect des fiches fonctionnalités
-- Les fiches détaillées pilotent les comportements et permissions.
-- Les maquettes pilotent le rendu visuel cible.
-- En cas d’ambiguïté : conserver `INFORMATION NON FOURNIE — À CONFIRMER` dans la doc de travail, jamais en libellé UI.
+## 7. Checklist Shell
+- [ ] Sidebar gauche persistante et cohérente.
+- [ ] Topbar et contexte société/session visibles.
+- [ ] Item de navigation actif explicite.
+- [ ] Masquage des modules non autorisés.
 
-## Règles `components/` futures
-- Prévoir une architecture réutilisable :
-  - `components/shell/`
-  - `components/ui/`
-  - `components/business/`
-  - `components/planning/`
-  - `components/vehicles/`
-  - `components/users/`
-- Ne pas créer/modifier ces dossiers dans une session documentaire pure.
+## 8. Checklist pages
+- [ ] Login.
+- [ ] Tableau de bord.
+- [ ] Modèles horaires.
+- [ ] Planning.
+- [ ] Utilisateurs / RH.
+- [ ] Véhicules.
+- [ ] Suivi des véhicules.
+- [ ] Dépôts / Bases.
+- [ ] Société.
+- [ ] Mise en route.
+- [ ] Audit.
 
-## Règles `tailwind.config.*` futures
-- Centraliser les tokens : couleurs marque/métier/état, typo, radius, shadows, spacing, dimensions Shell, largeurs standards, z-index structurants.
-- Ne pas créer/modifier `tailwind.config.*` dans une session documentaire pure.
+## 9. Checklist composants
+- [ ] Cohérence des primitives transverses (cards, badges, boutons, filtres, tableaux).
+- [ ] Cohérence des blocs métier récurrents (KPI, panneaux de détail, barres d’actions).
+- [ ] Pas de création de patterns visuels non présents dans le référentiel.
 
-## Interdictions de dérive
-- Ne pas coder `Templates` comme libellé actif (utiliser `Modèles horaires`).
-- Ne pas coder `Onboarding` comme libellé actif (utiliser `Mise en route`).
-- Ne pas introduire `Privacy` comme entrée métier principale.
-- Ne pas transformer le Planning Alpha en horaire détaillé global.
-- Ne pas fusionner Société et Mise en route.
+## 10. Checklist Tailwind
+- [ ] Toute décision de token reste alignée sur la cible documentaire future.
+- [ ] Aucune création/modification `tailwind.config.*` dans une session strictement documentaire.
+- [ ] Cohérence visuelle maintenue sans token inventé non justifié.
 
-## Vérifications page par page
-- Shell global : navigation, header, session, permissions visibles.
-- Login : split layout, formulaire, états connexion.
-- Dashboard : KPI/widgets/raccourcis selon droits.
-- Société : profil permanent + résumé configuration.
-- Dépôts / Bases : liste, filtres, statuts, compteurs.
-- Modèles horaires : KPI + table modèles + statuts.
-- Utilisateurs / RH : table + rôles + statuts + actions.
-- Véhicules : référentiel flotte + disponibilité.
-- Suivi des véhicules : 4 onglets + criticités + actions sensibles.
-- Planning : 5 vues + publication + couverture + synthèse.
-- Audit : filtres + table + détail entrée.
-- Mise en route : progression + checklist + détail étape.
+## 11. Checklist permissions visibles
+- [ ] Actions sensibles visibles uniquement pour les rôles autorisés.
+- [ ] Modules masqués selon droits.
+- [ ] États désactivés utilisés seulement quand le masquage n’est pas la règle définie.
 
-## Vérifications des composants communs
-- Cohérence des cartes KPI.
-- Cohérence des barres filtres.
-- Cohérence des badges statut.
-- Cohérence des boutons primaires/secondaires.
+## 12. Checklist tableaux
+- [ ] Colonnes conformes à la référence de page.
+- [ ] Statuts métiers lisibles dans les cellules critiques.
+- [ ] Colonne d’actions conforme.
+- [ ] Pagination/volume présents si prévus.
 
-## Vérifications du Shell
-- Sidebar, header, item actif, identité session.
-- Masquage des modules non autorisés.
-- Absence des éléments exclus (recherche globale, notif globale, etc.).
+## 13. Checklist cards
+- [ ] Cards blanches, bordures fines, hiérarchie lisible.
+- [ ] Valeurs KPI et sous-libellés correctement ordonnés.
+- [ ] Actions de card cohérentes avec permissions.
 
-## Vérifications des cards
-- Rayon/bordure/espacements cohérents.
-- Titres et sous-titres lisibles.
-- Iconographie alignée avec contexte métier.
+## 14. Checklist badges
+- [ ] Libellé texte systématique.
+- [ ] Couleur cohérente avec statut/criticité.
+- [ ] Aucun statut critique porté uniquement par couleur.
 
-## Vérifications des tableaux
-- Colonnes conformes à la maquette.
-- Densité et alignement cohérents.
-- Pagination et lignes/page présentes si prévues.
+## 15. Checklist boutons
+- [ ] Bouton primaire identifiable.
+- [ ] Actions secondaires/tertiaires hiérarchisées.
+- [ ] Actions destructives ou sensibles distinguées.
+- [ ] États `disabled` cohérents.
 
-## Vérifications des filtres
-- Ordre logique recherche puis filtres.
-- Bouton `Réinitialiser` cohérent.
-- États `aucun résultat` traités.
+## 16. Checklist filtres
+- [ ] Barre de recherche/filtres conforme à la page.
+- [ ] Ordre logique des filtres conservé.
+- [ ] Action de réinitialisation disponible si prévue.
 
-## Vérifications des badges
-- Libellé texte toujours présent.
-- Couleur cohérente avec statut/criticité.
-- Aucune info critique portée uniquement par couleur.
+## 17. Checklist onglets
+- [ ] Onglets présents uniquement sur les pages prévues.
+- [ ] Ordre des onglets conforme aux références.
+- [ ] Onglet actif visuellement explicite.
 
-## Vérifications des boutons
-- CTA primaire conforme.
-- Actions destructives explicitement distinguées.
-- Actions interdites non affichées ou bloquées proprement.
+## 18. Checklist panneaux de détail
+- [ ] Présence sur pages complexes qui le demandent.
+- [ ] Informations clés + statut + actions autorisées.
+- [ ] Densité maîtrisée, sans surcharge.
 
-## Vérifications des onglets
-- Onglet actif visuellement net.
-- Ordre des onglets conforme à la référence.
-- Aucun onglet hors périmètre Alpha.
+## 19. Checklist états UI
+- [ ] `empty`.
+- [ ] `loading`.
+- [ ] `error`.
+- [ ] `disabled`.
+- [ ] `hover`.
+- [ ] `focus`.
+- [ ] `active`.
 
-## Vérifications des panneaux de détail
-- Présence sur pages qui le requièrent.
-- Contenu contextuel (statut, historique court, actions).
-- Différenciation lecture/gestion selon droits.
+## 20. Checklist responsive futur
+- [ ] Aucune régression desktop.
+- [ ] Anticipation mobile/tablette sans inversion de priorité métier.
+- [ ] Prévoir adaptation future des tableaux denses.
 
-## Vérifications responsive futures
-- Préparer des comportements sans casser la lisibilité desktop.
-- Prévoir empilement/blocs mobiles sans perte du sens métier.
+## 21. Checklist accessibilité minimale
+- [ ] Contraste texte/fond suffisant.
+- [ ] Focus clavier visible.
+- [ ] Libellés explicites sur actions/champs.
+- [ ] Information critique disponible hors code couleur.
 
-## Vérifications accessibilité minimale
-- Contrastes texte/fond.
-- Focus visible.
-- Labels explicites.
-- Alternative textuelle systématique aux codes couleur.
+## 22. Checklist anti-dérive
+- [ ] Ne pas utiliser `Templates` comme libellé actif.
+- [ ] Ne pas utiliser `Onboarding` comme libellé actif.
+- [ ] Ne pas faire de `Privacy` une entrée métier principale.
+- [ ] Ne pas fusionner `Société` et `Mise en route`.
+- [ ] Ne pas ajouter de logique fonctionnelle hors fiches.
 
-## Vérifications non-régression visuelle
-- Contrôle visuel comparatif avant/après par capture.
-- Contrôle de cohérence inter-pages (espacements, typo, styles).
-- Contrôle de stabilité des états critiques (alertes, erreurs, publication).
+## 23. Checklist de contrôle final
+- [ ] La maquette de référence est la bonne version.
+- [ ] La fiche fonctionnelle correspondante est respectée.
+- [ ] La référence de page UI/UX est respectée.
+- [ ] Les trois documents transversaux (globale, index, checklist) restent cohérents.
+- [ ] Les points incertains restent marqués `INFORMATION NON FOURNIE — À CONFIRMER`.
 
-## Éléments à ne jamais coder s’ils sont absents des fiches
-- Fonctions analytiques avancées non cadrées.
-- Automatisations métier avancées non validées (planification auto, scoring, etc.).
-- Suppressions physiques d’entités explicitement exclues en Alpha.
-- Flux réglementaires détaillés non fournis (ARS) sans validation explicite.
+## 24. Commandes de contrôle recommandées pour futures sessions
+- `git status --short`
+- `git diff -- docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_GLOBALE.md`
+- `git diff -- docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_INDEX.md`
+- `git diff -- docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_CHECKLIST_CODEX.md`
+- `Get-ChildItem -Recurse -File docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2 | Select-Object -ExpandProperty FullName`
+- `Get-ChildItem -File docs/1-MASTER/3-FONCTIONNALITES | Select-Object -ExpandProperty Name`
 
-## Éléments à ne jamais modifier sans validation explicite
-- Noms métier validés des modules.
-- Ordre et structure des vues/onglets complexes.
-- Règles de permissions visibles.
-- Règles de publication Planning et traçabilité.
-- Règles de disponibilité véhicule (action explicite obligatoire).
+## 25. Interdictions de modifier hors périmètre
+- Interdiction de modifier un autre fichier que ceux explicitement autorisés par la session.
+- Interdiction de modifier les références UI/UX page déjà densifiées si le périmètre ne le prévoit pas.
+- Interdiction de modifier les dossiers applicatifs (`app/`, `components/`, `lib/`, `prisma/`, `public/`).
+
+## 26. Interdictions d’inventer des fonctionnalités
+- Interdiction d’ajouter des actions métier absentes des fiches détaillées.
+- Interdiction de simuler des workflows non validés.
+- Interdiction de conclure à une règle fonctionnelle définitive depuis la seule UI/UX.
+
+## 27. Interdictions liées au code existant comme source visuelle
+- Interdiction d’utiliser le code existant comme source d’autorité visuelle quand il contredit maquettes/fiches.
+- Interdiction de corriger la référence UI/UX pour s’aligner sur l’existant technique.
+- Obligation de conserver la distinction : référence UI/UX codable versus validation fonctionnelle définitive.

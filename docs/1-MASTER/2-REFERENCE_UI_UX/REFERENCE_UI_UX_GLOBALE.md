@@ -1,269 +1,242 @@
-# Ambulance Manager — Référence UI/UX Globale
+# Ambulance Manager — Référence UI/UX globale
 
-Version : V2.2
-Statut : référence UI/UX codable
-Objectif : reproduction visuelle 99 % des maquettes validées
+Version : V2  
+Statut : référence UI/UX codable globale  
+Objectif : cadrage global pour reproduction visuelle 99 %
 
 ## Sommaire
 - [1. Objectif du document](#1-objectif-du-document)
-- [2. Sources utilisées](#2-sources-utilisees)
-- [3. Règle d’autorité](#3-regle-dautorite)
-- [4. DA globale validée](#4-da-globale-validee)
-- [5. Structure générale desktop](#5-structure-generale-desktop)
-- [6. Rôle du Shell global](#6-role-du-shell-global)
-- [7. Principes de layout](#7-principes-de-layout)
-- [8. Système de grille](#8-systeme-de-grille)
-- [9. Espacements](#9-espacements)
-- [10. Rayons](#10-rayons)
-- [11. Bordures](#11-bordures)
-- [12. Ombres](#12-ombres)
-- [13. Typographie](#13-typographie)
-- [14. Couleurs principales](#14-couleurs-principales)
-- [15. Couleurs secondaires](#15-couleurs-secondaires)
-- [16. Couleurs d’état](#16-couleurs-detat)
-- [17. Cartes](#17-cartes)
-- [18. Tableaux](#18-tableaux)
-- [19. Filtres](#19-filtres)
-- [20. Boutons](#20-boutons)
-- [21. Badges](#21-badges)
-- [22. Onglets](#22-onglets)
-- [23. Panneaux de détail](#23-panneaux-de-detail)
-- [24. Alertes](#24-alertes)
-- [25. Empty states](#25-empty-states)
-- [26. Loading states](#26-loading-states)
-- [27. États disabled](#27-etats-disabled)
-- [28. États actifs](#28-etats-actifs)
-- [29. Règles de hiérarchie visuelle](#29-regles-de-hierarchie-visuelle)
-- [30. Règles de densité](#30-regles-de-densite)
-- [31. Règles responsive futures](#31-regles-responsive-futures)
-- [32. Règles accessibilité minimales](#32-regles-accessibilite-minimales)
-- [33. Stratégie `components/` future](#33-strategie-components-future)
-- [34. Stratégie `tailwind.config.*` future](#34-strategie-tailwindconfig-future)
-- [35. Interdictions de dérive](#35-interdictions-de-derive)
-- [36. Checklist globale de conformité 99 %](#36-checklist-globale-de-conformite-99)
+- [2. Sources utilisées](#2-sources-utilisées)
+- [3. Règle d’autorité globale](#3-règle-dautorité-globale)
+- [4. Direction artistique validée](#4-direction-artistique-validée)
+- [5. Principes généraux de layout](#5-principes-généraux-de-layout)
+- [6. Shell global](#6-shell-global)
+- [7. Structure desktop](#7-structure-desktop)
+- [8. Grilles et largeurs](#8-grilles-et-largeurs)
+- [9. Espacements et densité](#9-espacements-et-densité)
+- [10. Couleurs globales](#10-couleurs-globales)
+- [11. Typographie globale](#11-typographie-globale)
+- [12. Icônes et pictogrammes](#12-icônes-et-pictogrammes)
+- [13. Cards](#13-cards)
+- [14. Tableaux](#14-tableaux)
+- [15. Filtres et recherche](#15-filtres-et-recherche)
+- [16. Boutons et actions](#16-boutons-et-actions)
+- [17. Badges et statuts](#17-badges-et-statuts)
+- [18. Onglets](#18-onglets)
+- [19. Panneaux de détail](#19-panneaux-de-détail)
+- [20. Alertes et messages](#20-alertes-et-messages)
+- [21. États visuels communs](#21-états-visuels-communs)
+- [22. Permissions visibles](#22-permissions-visibles)
+- [23. Responsive futur](#23-responsive-futur)
+- [24. Accessibilité minimale](#24-accessibilité-minimale)
+- [25. Architecture components/ future](#25-architecture-components-future)
+- [26. Stratégie tailwind.config.* future](#26-stratégie-tailwindconfig-future)
+- [27. Règles page par page](#27-règles-page-par-page)
+- [28. Ce qui doit être codé plus tard](#28-ce-qui-doit-être-codé-plus-tard)
+- [29. Ce qui ne doit pas être codé](#29-ce-qui-ne-doit-pas-être-codé)
+- [30. Interdictions de dérive](#30-interdictions-de-dérive)
+- [31. Checklist globale de conformité 99 %](#31-checklist-globale-de-conformité-99-)
 
 ## 1. Objectif du document
-Ce document fixe les règles UI/UX communes à toutes les pages du produit pour préparer un futur codage React/Next.js + Tailwind avec un écart visuel maximal de 1 % par rapport aux maquettes V2.
+Ce document fixe la référence transversale UI/UX codable du pack V2 pour préparer une intégration frontend fidèle à 99 % des maquettes métier, sans valider à lui seul le fonctionnel définitif.
 
 ## 2. Sources utilisées
-- Maquettes actives V2 dans `docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/`.
+Sources autorisées :
+- Maquettes V2 dans `docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/`.
 - Fiches détaillées dans `docs/1-MASTER/3-FONCTIONNALITES/`.
+- Références UI/UX page déjà densifiées dans `docs/1-MASTER/2-REFERENCE_UI_UX/` (Shell + pages 1 à 10).
 
-## 3. Règle d’autorité
-1. Maquette au versionnage le plus élevé.
-2. Fiche fonctionnalités détaillées correspondante.
-3. Liste globale des fonctionnalités uniquement en complément.
-4. Aucun ancien fichier `REFERENCE_UI_UX` comme source de vérité.
-5. Aucun code existant comme source de vérité visuelle.
+## 3. Règle d’autorité globale
+Ordre d’autorité obligatoire :
+1. Maquettes V2 au versionnage le plus élevé.
+2. Fiches fonctionnalités détaillées.
+3. Références UI/UX page déjà densifiées.
+4. Aucune hypothèse non documentée.
+5. Aucun ancien fichier UI/UX supprimé comme référence active.
+6. Aucun code existant comme source visuelle.
 
-## 4. DA globale validée
-- Direction visuelle : SaaS B2B médical/transport sanitaire, sobre, lisible, non décorative.
-- Ambiance : fond clair, cartes blanches, accent bleu principal, statuts colorés explicites.
-- Niveau de densité : intermédiaire, orienté exploitation quotidienne desktop.
-- Rendu attendu : hiérarchie forte des titres, informations métier très scannables, actions primaires évidentes.
+## 4. Direction artistique validée
+Direction validée : SaaS B2B métier, clair, dense mais lisible, orienté exploitation.
+- Fond global clair.
+- Surfaces de travail en cartes blanches.
+- Bordures fines et séparation nette des blocs.
+- Accents bleus pour actions primaires et états d’information.
+- Pictogrammes sobres, fonctionnels, non décoratifs.
+- Rendu attendu : robuste, professionnel, codable, sans style marketing lourd.
 
-## 5. Structure générale desktop
-- Shell fixe : sidebar gauche + header haut + contenu principal à droite.
-- Sidebar : colonne dédiée à la navigation transverse.
-- Header : contexte société + identité utilisateur + actions de session.
-- Zone contenu : succession de sections en cartes, tableaux et panneaux latéraux selon page.
-- Format cible principal : desktop large (maquettes en largeur pleine).
+## 5. Principes généraux de layout
+- Priorité desktop.
+- Lecture verticale explicite : en-tête de page, actions, synthèse, filtres, données détaillées.
+- Groupement strict par blocs métier.
+- Pas d’effet visuel gratuit qui détourne des actions opérationnelles.
 
-## 6. Rôle du Shell global
-- Garantir une ossature unique sur toutes les pages connectées.
-- Stabiliser la navigation, l’identité de session et les actions globales.
-- Masquer les modules non autorisés selon permissions.
-- Ne pas contenir de logique métier de page.
+## 6. Shell global
+- Sidebar gauche persistante pour navigation principale.
+- Topbar persistante pour contexte société/session.
+- Zone de contenu principale dédiée à la page active.
+- Masquage des modules/actions selon permissions visibles décrites dans les fiches.
 
-## 7. Principes de layout
-- Lecture de haut en bas : titre de page, actions, KPI/état, filtres, données détaillées.
-- Alignement strict en colonnes de cartes et tableaux.
-- Séparation visuelle par blocs blancs bordés sur fond très clair.
-- Panneau de détail latéral utilisé sur les pages complexes.
+## 7. Structure desktop
+- Zone Shell stable commune à toutes les pages connectées.
+- Pages métier structurées en sections : KPI/cards, filtres, tableaux/listes/grilles, panneau de détail si nécessaire.
+- Pages multi-vues : onglets ou sélecteurs de vue en tête de contenu.
 
-## 8. Système de grille
-- Grille desktop recommandée : 12 colonnes logiques.
-- Gouttières régulières entre blocs.
-- Blocs KPI alignés en rangées homogènes.
-- Tableaux en pleine largeur de zone, avec colonne d’actions compacte.
+## 8. Grilles et largeurs
+- Grille desktop logique homogène entre pages.
+- Largeurs de blocs alignées par section pour éviter les ruptures visuelles.
+- Tableaux et grilles utilisent la largeur utile disponible du contenu.
+- INFORMATION NON FOURNIE — À CONFIRMER : valeurs numériques exactes (colonnes, px, max-width).
 
-## 9. Espacements
-- Rythme principal régulier entre sections et sous-sections.
-- Espacements internes de cartes cohérents entre titre, contenu, actions.
-- Espacements verticaux renforcés entre grands blocs (KPI, filtres, tableau, footer de page).
+## 9. Espacements et densité
+- Densité cible : métier, intermédiaire à soutenue, lisible sur poste desktop.
+- Espacements réguliers entre sections et à l’intérieur des cards.
+- Éviter les zones vides excessives qui dégradent la lecture opérationnelle.
+- INFORMATION NON FOURNIE — À CONFIRMER : échelle chiffrée d’espacement (ex. 4/8/12/16).
 
-## 10. Rayons
-- Cartes et conteneurs : angles arrondis visibles.
-- Inputs, selects, boutons : rayons cohérents avec les cartes.
-- Badges : rayon plus marqué, style pilule.
+## 10. Couleurs globales
+- Couleurs de surface : clair + blanc.
+- Couleur d’accent primaire : bleu.
+- États : succès, avertissement, erreur, information, neutre.
+- Interdiction de faire porter une information critique uniquement par la couleur.
+- INFORMATION NON FOURNIE — À CONFIRMER : codes hex exacts de la palette finale.
 
-## 11. Bordures
-- Bordures fines et peu contrastées sur cartes, champs et tableaux.
-- Séparateurs horizontaux légers dans les listes et panneaux détail.
-- Aucune bordure épaisse décorative.
+## 11. Typographie globale
+- Hiérarchie textuelle explicite : titre page, titre section, corps, meta.
+- Lisibilité prioritaire pour tableaux et formulaires denses.
+- Cohérence des poids et tailles entre pages.
+- INFORMATION NON FOURNIE — À CONFIRMER : famille de police officielle et échelle typographique chiffrée.
 
-## 12. Ombres
-- Ombres discrètes, principalement sur cartes importantes ou zones focus.
-- Pas d’ombre agressive ni d’effets flottants inutiles.
+## 12. Icônes et pictogrammes
+- Iconographie utilitaire, discrète, cohérente entre modules.
+- Icônes d’action standard : voir, éditer, plus, filtre, recherche, export, statut.
+- Pas d’illustrations décoratives intrusives dans les zones de production.
 
-## 13. Typographie
-- Hiérarchie cible :
-  - Titre page : très visible, gras.
-  - Sous-titre page : descriptif, ton neutre.
-  - Titre de section/carte : intermédiaire.
-  - Corps tableau/formulaire : lisibilité prioritaire.
-- INFORMATION NON FOURNIE — À CONFIRMER : famille typographique exacte à verrouiller (nom de police, fallbacks, chargement).
+## 13. Cards
+- Cards blanches à bordure fine pour KPI, synthèses et blocs de formulaire.
+- Titres courts et actions explicites.
+- Alignement cohérent des icônes, valeurs, sous-libellés et badges.
 
-## 14. Couleurs principales
-- Bleu marque pour actions primaires et onglets actifs.
-- Blanc pour surfaces de contenu.
-- Fond global clair bleuté/gris très léger.
-- Texte principal bleu nuit / gris foncé.
+## 14. Tableaux
+- Colonnes alignées et lisibles à densité métier.
+- Colonne d’actions compacte et explicite.
+- Badges de statut dans les colonnes critiques.
+- Pagination/volume affichés quand la page le prévoit.
 
-## 15. Couleurs secondaires
-- Variantes douces pour pictogrammes de modules.
-- Teintes neutres pour textes secondaires, placeholders et aides contextuelles.
+## 15. Filtres et recherche
+- Barre de filtres placée avant le contenu tabulaire/grille.
+- Ordre cible : recherche texte puis filtres métier puis reset.
+- États “aucun résultat” documentés et actionnables.
 
-## 16. Couleurs d’état
-- Succès : vert.
-- Avertissement : orange/ambre.
-- Erreur critique : rouge.
-- Information : bleu.
-- Neutre/inactif : gris.
-- Règle absolue : ne jamais porter une information métier critique par la couleur seule ; toujours afficher un libellé texte.
+## 16. Boutons et actions
+- Bouton primaire : accent bleu, action principale claire.
+- Boutons secondaires et tertiaires : hiérarchie visuelle conservée.
+- Actions destructives ou sensibles : distinction explicite.
+- Actions interdites : masquées ou désactivées selon permissions.
 
-## 17. Cartes
-- Cartes KPI : icône ronde ou carrée douce + métrique principale + sous-texte.
-- Cartes module : titre, description courte, badge disponibilité, CTA clair.
-- Cartes récapitulatives : statut global + indicateurs synthétiques.
+## 17. Badges et statuts
+- Badge = texte + couleur, jamais couleur seule.
+- Lexique de statuts conservé tel que défini par page.
+- Cohérence transversale des couleurs de criticité.
 
-## 18. Tableaux
-- En-tête clair, lignes denses mais aérées.
-- Colonne Actions systématique (icône œil, édition, menu contextuel).
-- Badges de statut dans cellules clés.
-- Pagination et sélecteur lignes par page en bas de tableau.
+## 18. Onglets
+- Onglets utilisés sur vues multiples et pages multi-contextes.
+- Onglet actif immédiatement identifiable.
+- Ordre des onglets strictement aligné aux maquettes/fiches.
 
-## 19. Filtres
-- Barre filtres en ligne avant les tableaux.
-- Ordre type : recherche texte, filtres métier, bouton `Filtres`/`Réinitialiser`.
-- Réinitialisation visible et standardisée.
+## 19. Panneaux de détail
+- Panneau de détail contextuel sur pages complexes (planning, utilisateurs, véhicules, audit, suivi).
+- Contenu structuré : identité, statut, informations clés, historique court, actions autorisées.
+- Pas de surcharge : la vue liste/grille reste l’entrée principale.
 
-## 20. Boutons
-- Primaire : bleu plein, contraste fort.
-- Secondaire : fond blanc, bordure fine.
-- Tertiaire/icône : discret, utilisé pour actions locales.
-- Actions destructives : style rouge explicite.
+## 20. Alertes et messages
+- Alertes métiers visibles mais non bloquantes hors cas critique.
+- Messages explicites orientés action.
+- Niveau visuel cohérent entre information, avertissement, erreur.
 
-## 21. Badges
-- Badge de type/état court et lisible.
-- Codes métiers récurrents : `Actif`, `Inactif`, `Publié`, `Brouillon`, `À vérifier`, `Couvert`, `Incomplet`, `Indisponible`, etc.
-- Badges toujours accompagnés du contexte (ligne, colonne, section).
+## 21. États visuels communs
+États à traiter sur chaque écran et composant :
+- `empty`: bloc sans donnée avec action de sortie.
+- `loading`: chargement lisible sans rupture de layout.
+- `error`: erreur explicite avec piste d’action.
+- `disabled`: action/champ non actif clairement identifiable.
+- `hover`: retour visuel subtil et cohérent.
+- `focus`: focus visible pour clavier/accessibilité.
+- `active/selected`: état actif sans ambiguïté.
 
-## 22. Onglets
-- Onglets horizontaux sous titre de page sur vues multi-contenus.
-- Onglet actif : souligné/bleu, non ambigu.
-- Onglets inactifs : texte neutre.
+## 22. Permissions visibles
+- Les fiches pilotent la visibilité des actions/modules.
+- Pas de simulation de droits non documentés.
+- Les actions sensibles suivent la logique “explicite et traçable”.
 
-## 23. Panneaux de détail
-- Position majoritaire : latérale droite.
-- Contenu : résumé objet, statut, métadonnées, historique court, actions autorisées.
-- Version lecture vs version gestion selon permissions.
+## 23. Responsive futur
+- La cible actuelle reste desktop.
+- Le responsive sera ajouté sans casser la hiérarchie métier desktop.
+- Tableaux denses : adaptation future par priorisation/empilement/panneaux, sans perte sémantique.
 
-## 24. Alertes
-- Alertes informatives simples, lisibles, non intrusives.
-- Alertes critiques visibles en rouge/orange selon gravité.
-- Les alertes métier ne doivent pas déclencher d’action automatique non validée fonctionnellement.
-
-## 25. Empty states
-- Message explicite + action utile possible.
-- Ton opérationnel, jamais générique.
-- Exemple de structure : `Aucun élément` + `Action recommandée`.
-
-## 26. Loading states
-- Indication de chargement par bloc (page, tableau, panneau).
-- Boutons d’action protégés contre double soumission.
-- Pas de saut de layout brutal entre chargement et rendu.
-
-## 27. États disabled
-- Disabled visuellement atténué et non cliquable.
-- Justification implicite via contexte (champ obligatoire manquant, permission absente, etc.).
-
-## 28. États actifs
-- Navigation active visible en sidebar.
-- Onglet actif clairement identifiable.
-- Ligne sélectionnée dans tableau/panneau détail explicitement différenciée.
-
-## 29. Règles de hiérarchie visuelle
-- Priorité 1 : titre page + action primaire.
-- Priorité 2 : KPI/statut global.
-- Priorité 3 : filtres et données.
-- Priorité 4 : détails secondaires et historique.
-
-## 30. Règles de densité
-- Densité intermédiaire orientée exploitation B2B.
-- Éviter la surcharge textuelle dans les cases planning et cellules tableau.
-- Détails riches déplacés dans panneaux latéraux.
-
-## 31. Règles responsive futures
-- Priorité actuelle : desktop.
-- Futur responsive :
-  - passage en pile des cartes,
-  - simplification des tableaux,
-  - tiroirs/accordéons pour détails,
-  - conservation stricte des libellés métiers.
-- Ne pas dégrader la lisibilité métier pour “faire rentrer” toutes les données en mobile.
-
-## 32. Règles accessibilité minimales
+## 24. Accessibilité minimale
 - Contrastes suffisants texte/fond.
-- Focus visible sur éléments interactifs.
-- Labels explicites pour champs et boutons.
-- Ne jamais coder une information critique uniquement via couleur/icone.
+- Focus clavier visible.
+- Labels clairs pour champs/actions.
+- Informations critiques accessibles hors couleur seule.
 
-## 33. Stratégie `components/` future
-Cible d’architecture documentaire (à implémenter plus tard, sans création immédiate) :
+## 25. Architecture components/ future
+Cible documentaire (future, non à implémenter dans ce fix) :
+- `components/shell/`
+- `components/ui/`
+- `components/business/`
+- `components/planning/`
+- `components/vehicles/`
+- `components/users/`
 
-```text
-components/
-  shell/
-  ui/
-  business/
-  planning/
-  vehicles/
-  users/
-```
+Objectif : isoler primitives UI, blocs métier transverses, et composants de domaine.
 
-- `shell/` : sidebar, header, wrappers de page.
-- `ui/` : primitives visuelles (button, input, badge, tabs, card, table, panel).
-- `business/` : blocs transverses métier (kpi cards, filtres standards, status strips).
-- `planning/`, `vehicles/`, `users/` : composants spécifiques de domaine.
+## 26. Stratégie tailwind.config.* future
+Cible documentaire (future, non à implémenter dans ce fix) :
+- Centraliser tokens de couleur, typo, spacing, radius, shadow.
+- Centraliser dimensions Shell et largeurs utiles desktop.
+- Centraliser règles d’états (`hover`, `focus`, `active`, `disabled`) et couches (`z-index`) structurantes.
 
-## 34. Stratégie `tailwind.config.*` future
-Centralisation obligatoire des tokens visuels (à implémenter plus tard, sans création/modification immédiate) :
-- couleurs marque ;
-- couleurs métier ;
-- couleurs d’état ;
-- font sizes ;
-- border radius ;
-- shadows ;
-- spacing ;
-- dimensions du Shell ;
-- largeurs standards ;
-- z-index structurants si nécessaire.
+## 27. Règles page par page
+- `0-Shell global` : structure commune et permissions de navigation.
+- `1-Login` : écran d’entrée, identité produit, formulaire et états d’authentification.
+- `2-Tableau de bord` : KPI et synthèses métier.
+- `3-Modèles horaires` : référentiel et statuts des modèles.
+- `4-Planning` : page la plus complexe, 5 vues et logique de publication/couverture.
+- `5-Utilisateurs / RH` : gestion identité, rôles, statuts et disponibilité.
+- `6-Véhicules` : référentiel flotte et disponibilité.
+- `6.1-Suivi des véhicules` : 4 onglets et criticités opérationnelles.
+- `7-Dépôts / Bases` : gestion des lieux et rattachements.
+- `8-Société` : configuration et informations société.
+- `9-Mise en route` : progression et checklist de démarrage.
+- `10-Audit` : traçabilité des actions.
 
-## 35. Interdictions de dérive
-- Ne pas réintroduire `Templates` comme libellé actif ; utiliser `Modèles horaires`.
-- Ne pas réintroduire `Onboarding` comme libellé actif ; utiliser `Mise en route`.
-- Ne pas faire de `Privacy` une entrée métier principale.
-- Ne pas ajouter des modules/fonctions absents des fiches détaillées.
-- Ne pas transformer le Planning Alpha en grille heure par heure exhaustive.
-- Ne pas fusionner Société et Mise en route.
+## 28. Ce qui doit être codé plus tard
+- Déclinaison responsive complète validée.
+- Consolidation des tokens finaux dans `tailwind.config.*`.
+- Industrialisation des composants dans `components/` selon architecture cible.
 
-## 36. Checklist globale de conformité 99 %
-- Shell, sidebar et header conformes au placement de maquette.
-- Titres, sous-titres, KPI et actions dans le même ordre visuel que la maquette.
-- Couleurs d’état, badges et niveaux de criticité conformes.
-- Structure des filtres, tableaux, panneaux détail respectée.
-- Permissions visibles/masquages conformes aux fiches.
-- États vides/chargement/erreur/disabled prévus.
-- Aucune fonctionnalité ajoutée hors périmètre Alpha.
-- Toute donnée non fournie conservée sous la mention : `INFORMATION NON FOURNIE — À CONFIRMER`.
+## 29. Ce qui ne doit pas être codé
+- Nouvelles fonctionnalités hors fiches détaillées.
+- Refonte visuelle libre non couverte par maquettes V2.
+- Libellés non validés en remplacement des libellés actifs métier.
+
+## 30. Interdictions de dérive
+- Ne pas utiliser `Templates` comme libellé actif (utiliser `Modèles horaires`).
+- Ne pas utiliser `Onboarding` comme libellé actif (utiliser `Mise en route`).
+- Ne pas promouvoir `Privacy` en entrée métier principale.
+- Ne pas fusionner `Société` et `Mise en route`.
+- Ne pas transformer le Planning en vision détaillée non prévue par les maquettes/fiches.
+- Ne pas traiter les références UI/UX comme validation fonctionnelle définitive.
+
+## 31. Checklist globale de conformité 99 %
+- [ ] Version de maquette la plus élevée utilisée pour la page concernée.
+- [ ] Fiche fonctionnalité détaillée associée consultée avant implémentation.
+- [ ] Structure Shell + layout desktop conformes.
+- [ ] Ordre visuel des sections conforme à la maquette.
+- [ ] Cards, tableaux, filtres, badges, boutons, onglets, panneaux de détail conformes.
+- [ ] États `empty/loading/error/disabled/hover/focus/active` couverts.
+- [ ] Permissions visibles respectées.
+- [ ] Aucun libellé actif interdit (`Templates`, `Onboarding`).
+- [ ] Aucune invention fonctionnelle.
+- [ ] Aucune décision visuelle basée sur le code existant contre maquettes/fiches.
+- [ ] Les points manquants restent marqués `INFORMATION NON FOURNIE — À CONFIRMER`.
