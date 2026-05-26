@@ -18,7 +18,7 @@ Date : 26/05/2026
 - 11. Documentation de fin de session
 - 12. Clôture de session
 - 13. Interdictions strictes
-- 14. Documents concurrents à archiver plus tard
+- 14. Documents concurrents archivés
 - 15. Conclusion
 - 16. Contrôle de conformité de cette proposition
 
@@ -169,9 +169,9 @@ Format de verdict attendu :
 - ne pas modifier le code applicatif dans une session documentaire ;
 - ne pas supprimer/déplacer des éléments historiques sans validation explicite.
 
-## 14. Documents concurrents à archiver plus tard
+## 14. Documents concurrents archivés
 
-Les documents suivants sont concurrents de gouvernance et seront archivés plus tard, après validation du présent `README_SESSIONS.md` :
+Les documents suivants sont des documents concurrents de gouvernance déjà archivés dans `docs/4-ARCHIVES/2-SESSIONS_HISTORIQUE/` :
 
 - `docs/2-SESSIONS/README.md`
 - `docs/2-SESSIONS/GOUVERNANCE_SESSIONS.md`
@@ -181,7 +181,7 @@ Les documents suivants sont concurrents de gouvernance et seront archivés plus 
 - `docs/2-SESSIONS/FORMULAIRE_VALIDATION_LOTS_SESSIONS.md`
 - `docs/2-SESSIONS/SIMULATION_ARCHIVAGE_SESSIONS.md`
 
-Aucun archivage n’est effectué à cette étape.
+Ces documents archivés ne sont plus des documents actifs de gouvernance des sessions.
 
 ## 15. Conclusion
 
@@ -196,7 +196,7 @@ Ce document définit une gouvernance de session simple, courte et exploitable po
 
 Ce document est le document actif de gouvernance des sessions Codex.
 
-Il remplace les anciens documents concurrents listés en section 14, qui doivent être archivés après validation humaine.
+Il remplace les anciens documents concurrents listés en section 14, qui sont archivés.
 
 Règles :
 - ce document doit rester court, clair et opérationnel ;

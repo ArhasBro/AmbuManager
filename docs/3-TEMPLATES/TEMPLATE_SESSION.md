@@ -19,7 +19,7 @@
 - 1 DoD
 - 1 validation
 - Ne pas créer de plan parallèle
-- Ne pas modifier `PLAN_DE_DEVELOPPEMENT.md` sans autorisation explicite
+- Ne pas modifier `PLAN_DE_DEVELOPPEMENT_V2.md` sans autorisation explicite
 - Si session documentaire : ne pas modifier le code applicatif
 - Ne pas générer de patch par défaut
 - Ne pas créer de fichier `.diff` par défaut

@@ -1,46 +1,40 @@
 # Documentation Ambulance Manager (Accueil)
 
-Ce fichier est l'accueil simple du dossier `docs/`.
-Le document de gouvernance détaillée est `docs/README_DOCS.md`.
+Le dossier `docs/` contient la documentation projet utilisée pour piloter la reprise Phase 6.
 
-## Rôle du dossier `docs/`
+## Structure du dossier `docs/`
 
-Le dossier `docs/` centralise la documentation projet :
-- documents maîtres ;
-- sessions ;
-- templates ;
-- archives.
+- `docs/1-MASTER/` : documentation MASTER active (références de pilotage).
+- `docs/2-SESSIONS/` : gouvernance et traçabilité des sessions.
+- `docs/3-TEMPLATES/` : modèles documentaires de session.
+- `docs/4-ARCHIVES/` : documents historiques hors périmètre actif.
 
-## Structure principale
+## Points d'entrée recommandés
 
-- `docs/1-MASTER/` : documents maîtres de référence.
-- `docs/2-SESSIONS/` : historique des sessions et preuves.
-- `docs/3-TEMPLATES/` : modèles de documents de session.
-- `docs/4-ARCHIVES/` : archives documentaires.
+- `docs/1-MASTER/_INDEX_MASTER.md` (index de lecture MASTER).
+- `docs/README_DOCS.md` (règles de gouvernance documentaire de `docs/`).
 
-## Fichiers racine
+## Références MASTER actives
 
-- `docs/README_DOCS.md` : gouvernance documentaire détaillée.
-- `docs/README.md` : accueil simple (ce fichier).
-- `docs/CMD.md` : brouillon personnel Nathan, non officiel produit.
-- `docs/STRUCTURE_DOCS.md` : archivé dans `docs/4-ARCHIVES/1-MASTER_HISTORIQUE/STRUCTURE_DOCS.md`.
+- `docs/1-MASTER/DOCUMENT_MAITRE_V2.md`
+- `docs/1-MASTER/DOCUMENT_CADRAGE_FONCTIONNEL_V2.md`
+- `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md`
+- `docs/1-MASTER/REGISTRE_DECISIONS_V2.md`
 
-## Règles clés
+Références temporaires utiles avant Phase 6 :
+- `docs/1-MASTER/ETAT_GLOBAL_PROJET_V2.md`
+- `docs/1-MASTER/AUDIT_CODE_EXISTANT_ALPHA_V2.md`
 
-- `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md` est le plan actif.
-- `README.md` et `README_DOCS.md` ne doivent pas être fusionnés automatiquement.
-- `CMD.md` ne doit pas être utilisé comme source de vérité documentaire par Codex.
-- Les archives documentaires sont centralisées dans `docs/4-ARCHIVES/1-MASTER_HISTORIQUE/`.
+## Sessions
 
-## Maquettes (rappel)
+- Document actif unique : `docs/2-SESSIONS/README_SESSIONS.md`.
+- Modèle de session : `docs/2-SESSIONS/SESSION-YYYYMMDD-XX`.
+- Les anciens documents concurrents sont archivés dans `docs/4-ARCHIVES/2-SESSIONS_HISTORIQUE/`.
 
-Ne pas déplacer les maquettes pendant cette phase.
-La structure active actuelle repose sur :
-- `docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG/`
+## Règle de priorité documentaire
 
-Ce dossier est conservé comme base de comparaison et mémoire visuelle, avec un statut transitoire / historique.
-
-## Encodage (rappel)
-
-Aucune correction massive d'encodage n'est lancée dans ce cadrage.
-Toute correction future devra être traitée par lot dédié, avec preuve fichier par fichier.
+En cas de contradiction :
+- les documents normatifs actifs de `docs/1-MASTER` priment ;
+- les documents temporaires servent de preuve ou de contexte ;
+- les documents mémoriels ne tranchent pas une décision ;
+- les archives ne sont pas des références actives.

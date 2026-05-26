@@ -1,75 +1,40 @@
 # Ambulance Manager
 
-Ambulance Manager est un SaaS ALPHA de gestion opérationnelle pour société de transport sanitaire.
-Le dépôt courant couvre surtout les modules suivants :
-- utilisateurs
-- véhicules
-- templates de shifts
-- planning manuel
-- autoschedule / matching
-- audit et exports planning
+Ambulance Manager est une application SaaS métier pour société de transport sanitaire.
+Le projet est en préparation de reprise du code en **Phase 6**.
 
-## État du dépôt
+## Point d'entrée documentaire
 
-- **maturité ciblée** : `1-ALPHA`
-- **base produit officielle** : `docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
-- **pilotage projet** : `docs/1-master/*`
-- **historique des sessions** : `docs/2-sessions/*`
-- **patchs officiels** : `docs/2-sessions/*/SESSION-*/PATCH/*`
+Documents actifs principaux :
+- `docs/1-MASTER/_INDEX_MASTER.md`
+- `docs/1-MASTER/DOCUMENT_MAITRE_V2.md`
+- `docs/1-MASTER/DOCUMENT_CADRAGE_FONCTIONNEL_V2.md`
+- `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md`
+- `docs/1-MASTER/REGISTRE_DECISIONS_V2.md`
 
-Le `README.md` racine sert d’entrée rapide au dépôt. La documentation d’usage produit est fournie séparément dans `docs/`.
+Documents actifs temporaires utiles avant Phase 6 :
+- `docs/1-MASTER/ETAT_GLOBAL_PROJET_V2.md`
+- `docs/1-MASTER/AUDIT_CODE_EXISTANT_ALPHA_V2.md`
 
-Convention actuelle : les patchs d'une session sont rangés dans le sous-dossier `PATCH/` du dossier de session correspondant. Le dossier `docs/3-patches/` peut subsister comme historique legacy tant qu'il n'a pas été migré.
+## Gouvernance des sessions
 
-## Documentation utile
+- Document actif de gouvernance des sessions : `docs/2-SESSIONS/README_SESSIONS.md`.
+- Modèle de session : `docs/2-SESSIONS/SESSION-YYYYMMDD-XX`.
+- Les anciens documents concurrents de sessions sont archivés dans `docs/4-ARCHIVES/2-SESSIONS_HISTORIQUE/`.
 
-### Guides d’usage ALPHA
-- `docs/USAGE_USERS.md`
-- `docs/USAGE_VEHICLES.md`
-- `docs/USAGE_TEMPLATES.md`
-- `docs/USAGE_PLANNING_AUTOSCHEDULE.md`
-- `docs/SCENARIOS_MANUELS_ALPHA.md`
-- `docs/QUALITY_TESTS.md`
+## Règle courte de reprise
 
-### Gouvernance / référence
-- `docs/README.md`
-- `docs/PROTOCOLE_SESSION.md`
-- `docs/SOURCES_AUTORISEES.md`
-- `docs/STRUCTURE_DOCS.md`
-- `docs/1-master/DOCUMENT_MAITRE.md`
-- `docs/1-master/DOCUMENT_CADRAGE_FONCTIONNEL.md`
-- `docs/1-master/PLAN_DE_DEVELOPPEMENT.md`
-- `docs/1-master/ETAT_GLOBAL_PROJET.md`
-- `docs/1-master/REGISTRE_DECISIONS.md`
-- `docs/1-master/RECAP_DISCUSSIONS.md`
-- `docs/1-master/STRUCTURE_PROJET.md`
+Avant toute session de code :
+- lire au minimum les documents actifs nécessaires au lot traité ;
+- suivre `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md` ;
+- respecter `docs/2-SESSIONS/README_SESSIONS.md` pour l'ouverture et la clôture des sessions ;
+- ne pas modifier la documentation MASTER sans décision explicite.
 
-## Mise en route locale
+## Démarrage local
 
 ```bash
 npm install
 npm run dev
 ```
 
-L’application utilise Next.js, Prisma et NextAuth.
-Selon le contexte local, une base PostgreSQL et des variables d’environnement peuvent être nécessaires pour les routes authentifiées et les flux Prisma.
-
-## Commandes qualité utiles
-
-```bash
-npm run lint
-npm run build
-npm run test:smoke
-npm run test:targeted
-npm run test:quality
-```
-
-Les scripts `test:smoke` et `test:targeted` sont volontairement légers :
-- smoke tests contractuels sur routes API critiques ;
-- tests automatisés ciblés sur blocs stables et sensibles.
-
-## Périmètre ALPHA important
-
-- la documentation d’usage produit ne remplace pas la documentation de gouvernance ;
-- les comptes support globaux ne doivent pas être exposés dans les flux client standards ;
-- la gestion véhicule courante repose sur **l’archivage logique**, pas sur une suppression destructrice depuis l’UI standard.
+Stack principale : Next.js, React, Prisma, TypeScript.
