@@ -753,5 +753,5 @@ La validation reste séquentielle, explicite et pilotée par preuves de contrôl
 - ordre des blocs DEV-V2 : conservé sans modification ;
 - périmètre fonctionnel : conservé sans extension ;
 - validations de pages : aucune validation automatique ;
-- stratégie : inchangée, reprise par blocs courts, traçables et validables ;
+- stratégie : inchangée, reprise par blocs cohérents et structurés, avec sessions courtes, traçables et validables ;
 - points de vigilance : suivis dans les blocs DEV-V2 concernés.
