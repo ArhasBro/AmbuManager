@@ -95,7 +95,8 @@ Justification : ce séquencement réduit les régressions, car planning/dashboar
 ### BLOC DEV-V2-01 — Shell global / navigation / nomenclature V2 / accès refusé
 
 #### Objectif du bloc
-Stabiliser le socle visuel commun et la terminologie V2 (`Modèles horaires`, `Mise en route`) avec une stratégie claire d’état `Accès refusé`.
+Stabiliser le socle visuel commun et la terminologie V2 (`Modèles horaires`, `Mise en route`) avec une stratégie claire d’état `Accès refusé`.  
+Ce bloc sert de préparation technique initiale avant l’enchaînement des blocs fonctionnels.
 
 #### Pourquoi ce bloc existe
 L’audit signale ce point comme transverse, non conforme et prioritaire.
@@ -108,6 +109,7 @@ Correction métier fine des modules.
 
 #### Sessions prévues
 - DEV-V2-01-01 — AUDIT ciblé — Cartographier shell actuel, libellés legacy et cas non autorisés.
+- DEV-V2-01-01B — CADRAGE technique léger — Poser les garde-fous anti-refonte (pas de bibliothèque UI complète imposée, factorisation progressive uniquement au besoin des blocs suivants, pas de changement de périmètre métier).
 - DEV-V2-01-02 — AUDIT ciblé / CADRAGE technique léger — Confirmer la structure frontend partagée (`app/ui` et existence/absence de `components/`), puis valider la cible de structure à conserver ou à créer selon le repo réel.
 - DEV-V2-01-03 — AUDIT ciblé / CADRAGE technique léger — Fixer les conventions d’usage des composants partagés et identifier les composants réutilisables prioritaires (shell/layout, navigation, bouton, badge, tableau, filtres, état vide, état erreur/accès refusé, panneau de détail), avec factorisation progressive uniquement si utile aux blocs DEV-V2.
 - DEV-V2-01-04 — AUDIT ciblé / CADRAGE technique léger — Confirmer la stratégie Tailwind v4 en place (`@tailwindcss/postcss`, `@import "tailwindcss"`), décider si `tailwind.config.*` est utile ou non, et cadrer les tokens/classes utilitaires minimaux pour la cohérence UI sans refonte graphique.
@@ -145,17 +147,17 @@ RBAC/guards, contrôles d’accès API, cohérence messages d’erreur et non-co
 Évolutions fonctionnelles métier non liées aux droits.
 
 #### Sessions prévues
-- DEV-V2-02-01 — AUDIT ciblé — Cartographier permissions par module critique (RH, Véhicules, Planning).
+- DEV-V2-02-01 — AUDIT ciblé — Cartographier permissions par module critique (RH, Véhicules, Planning) et formaliser une matrice de contrôle UI/API (rôle -> action UI -> route API -> résultat attendu).
 - DEV-V2-02-02 — CORRECTION — Aligner restrictions API avec actions réellement exposées.
 - DEV-V2-02-03 — CORRECTION — Aligner états UI (boutons/menus/actions) avec droits réels.
-- DEV-V2-02-04 — VALIDATION — Contrôles manuels multi-rôles sur parcours sensibles.
+- DEV-V2-02-04 — VALIDATION — Contrôles manuels multi-rôles sur parcours sensibles, avec vérification explicite des écarts UI autorisée/API refusée et UI masquée/API accessible.
 - CLOTURE_DEV-V2-02 — VALIDATION — clôture finale du bloc.
 
 #### Livrables attendus
-Base permissionnelle transverse fiable pour les blocs métier.
+Base permissionnelle transverse fiable pour les blocs métier, avec matrice RBAC UI/API exploitable en validation de session.
 
 #### Contrôles obligatoires
-`npm run lint`, `npm run build`, tests manuels par rôle, vérification UI/API non contournable.
+`npm run lint`, `npm run build`, `npm run test:quality` si script disponible et périmètre pertinent, tests manuels par rôle, vérification UI/API non contournable, matrice RBAC contrôlée sur les actions sensibles.
 
 #### Critère de validation du bloc
 Aucune action sensible accessible en UI si interdite en API.
@@ -184,7 +186,8 @@ Fonctionnalités du module `Suivi des véhicules` dédiées.
 - DEV-V2-03-02 — CORRECTION — Corriger permissions front/API incohérentes.
 - DEV-V2-03-03 — CORRECTION — Corriger données affichées et statuts non conformes.
 - DEV-V2-03-04 — COMPLÉTION — Compléter actions manquantes de cycle de vie validées en V2.
-- DEV-V2-03-05 — VALIDATION — Vérifier non-régression CRUD/permissions/états.
+- DEV-V2-03-05 — CORRECTION technique légère — Factoriser seulement les duplications immédiatement bloquantes (helpers/hooks/utilities/types) liées au module.
+- DEV-V2-03-06 — VALIDATION — Vérifier non-régression CRUD/permissions/états.
 - CLOTURE_DEV-V2-03 — VALIDATION — clôture finale du bloc.
 
 #### Livrables attendus
@@ -401,17 +404,19 @@ Refonte profonde moteur avancé hors besoins Alpha.
 - DEV-V2-09-01 — AUDIT ciblé — Cartographier flux actifs vs legacy et priorités de correction.
 - DEV-V2-09-02 — CORRECTION — Corriger le flux Publication/Annulation (cas critiques).
 - DEV-V2-09-03 — CORRECTION — Nettoyer les éléments legacy bloquants (routes, handlers, panneaux) si nécessaire.
-- DEV-V2-09-04 — COMPLÉTION — Finaliser les flux Autoschedule/Matching réellement actifs au périmètre Alpha.
-- DEV-V2-09-05 — COMPLÉTION — Finaliser les flux Export/Affectation réellement actifs au périmètre Alpha.
-- DEV-V2-09-06 — CORRECTION — Uniformiser permissions/états UI sur les flux planning actifs.
-- DEV-V2-09-07 — VALIDATION — Vérifier non-régression publication/annulation/export et flux planning actifs validés.
+- DEV-V2-09-04 — CORRECTION — Aligner progressivement le contrat API standard sur les endpoints planning/autoschedule/matching réellement actifs, sans normalisation massive hors périmètre.
+- DEV-V2-09-05 — COMPLÉTION — Finaliser les flux Autoschedule/Matching réellement actifs au périmètre Alpha.
+- DEV-V2-09-06 — COMPLÉTION — Finaliser les flux Export/Affectation réellement actifs au périmètre Alpha.
+- DEV-V2-09-07 — CORRECTION — Uniformiser permissions/états UI sur les flux planning actifs.
+- DEV-V2-09-08 — CORRECTION technique légère — Réduire les duplications bloquantes côté client (helpers/hooks/utilities/couche API partagée) strictement utiles au module.
+- DEV-V2-09-09 — VALIDATION — Vérifier non-régression publication/annulation/export et flux planning actifs validés.
 - CLOTURE_DEV-V2-09 — VALIDATION — clôture finale du bloc.
 
 #### Livrables attendus
 Planning Alpha V2 stabilisé sans dette critique ouverte.
 
 #### Contrôles obligatoires
-`lint`, `build`, preuve terminale de session, contrôle visuel manuel, contrôle API si route modifiée, contrôle permissions, contrôle non-régression, contrôle interactions modules dépendants, documentation de session.
+`lint`, `build`, `test:quality` si script disponible et périmètre pertinent, preuve terminale de session, contrôle visuel manuel, contrôle API si route modifiée, contrôle permissions, contrôle non-régression, contrôle interactions modules dépendants, documentation de session.
 
 #### Critère de validation du bloc
 Parcours planning critiques exécutables de bout en bout.
@@ -598,6 +603,7 @@ Aucun écart critique ouvert bloquant l’exploitation Alpha V2.
 - preuve terminale obligatoire à chaque session de correction/complétion ;
 - `npm run lint` obligatoire ;
 - `npm run build` obligatoire ;
+- `npm run test:quality` en complément si script disponible et périmètre de session pertinent ;
 - `npx prisma validate` si Prisma/schema/migrations touchés ;
 - `npx prisma generate` si Prisma/schema/migrations touchés ;
 - contrôle visuel manuel si UI modifiée ;
@@ -630,6 +636,7 @@ Contrôles :
 Contrôles :
 - `npm run lint` ;
 - `npm run build` ;
+- `npm run test:quality` si script disponible et périmètre pertinent ;
 - contrôle visuel manuel ;
 - conformité maquette/référence UI/UX ;
 - responsive si concerné.
@@ -638,7 +645,9 @@ Contrôles :
 Contrôles :
 - `npm run lint` ;
 - `npm run build` ;
+- `npm run test:quality` si script disponible et périmètre pertinent ;
 - vérification format API `{ ok:true, data }` / `{ ok:false, error, details? }` si applicable ;
+- harmonisation progressive du contrat API standard dans le bloc concerné (pas de normalisation globale en une session) ;
 - contrôle permissions ;
 - contrôle multi-tenant `companyId`.
 
@@ -653,6 +662,7 @@ Contrôles :
 ### Permissions/RBAC
 Contrôles :
 - cohérence front/API ;
+- matrice RBAC UI/API tenue à jour sur les actions sensibles du bloc ;
 - tests manuels par rôle si possible ;
 - vérification non-contournement UI/API ;
 - audit des actions sensibles.
@@ -661,6 +671,8 @@ Contrôles :
 Contrôles :
 - `npm run lint` ;
 - `npm run build` ;
+- `npm run test:quality` si script disponible et périmètre pertinent ;
+- vérification contrat API standard sur endpoints planning/autoschedule/matching touchés ;
 - non-régression publication/annulation/export ;
 - contrôle permissions ;
 - contrôle interactions utilisateurs/véhicules/modèles/dépôts.
@@ -713,6 +725,10 @@ Hors Phase 6 immédiate, sauf validation contraire :
 - facturation / abonnement ;
 - multi-agence avancé ;
 - imports avancés non nécessaires à l’Alpha ;
+- restauration/unarchive avancés non nécessaires au périmètre Alpha immédiat ;
+Cette exclusion concerne uniquement les logiques avancées : workflows multi-étapes, historique enrichi, validations avancées ou règles Beta. Les actions simples Alpha (archivage logique, désarchivage/restauration simple, réactivation si applicable, permissions associées et audit des actions sensibles) restent traitées dans les blocs DEV-V2 métier concernés.
+- refactorisation transverse complète des clients lourds (au-delà des découpages techniques légers traités dans les blocs concernés) ;
+- industrialisation exhaustive d’une couche API client unique pour tout le repo ;
 - toute évolution non nécessaire à la stabilisation Alpha V2.
 
 Ces éléments restent tracés comme backlog Beta et ne deviennent pas des blocs actifs DEV-V2 de reprise Alpha.
