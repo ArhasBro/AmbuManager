@@ -1,80 +1,205 @@
-# README Sessions - Gouvernance
+# Ambulance Manager — README_SESSIONS
 
-## Rôle du dossier `docs/2-SESSIONS/`
+Version : V2.0  
+Date : 26/05/2026
 
-Le dossier `docs/2-SESSIONS/` est :
+## Sommaire
 
-- un dossier de traçabilité des sessions ;
-- une base de preuve historique des travaux ;
-- un support de reprise méthodologique ;
-- une base de préparation des prochaines sessions.
+- 1. Rôle du dossier `docs/2-SESSIONS`
+- 2. Principe général des sessions
+- 3. Modèle de session `SESSION-YYYYMMDD-XX`
+- 4. Ouverture d’une session Codex
+- 5. Documents à lire au début d’une session
+- 6. Règles de lecture documentaire limitée
+- 7. Règles de travail pendant une session
+- 8. Règles de patch
+- 9. Contrôles obligatoires
+- 10. Preuves attendues
+- 11. Documentation de fin de session
+- 12. Clôture de session
+- 13. Interdictions strictes
+- 14. Documents concurrents à archiver plus tard
+- 15. Conclusion
+- 16. Contrôle de conformité de cette proposition
 
-Ce dossier ne remplace pas les documents maîtres. Il complète l'historique et la preuve d'exécution.
+## 1. Rôle du dossier docs/2-SESSIONS
 
-## Statut des dossiers existants
+Le dossier `docs/2-SESSIONS` sert à conserver :
+- l’historique des sessions ;
+- les preuves d’exécution ;
+- les notes et résultats de session ;
+- les clôtures de session.
 
-### `docs/2-SESSIONS/1-ALPHA/`
+Ce dossier est une base de traçabilité.  
+Il ne remplace pas `docs/1-MASTER`.
 
-Statut : historique Alpha principal et preuves de réalisation.  
-Règle : ne pas déplacer sans validation spécifique.
+## 2. Principe général des sessions
 
-### `docs/2-SESSIONS/2-TEST-ALPHA/`
+Document unique actif de gouvernance des sessions :
+- `docs/2-SESSIONS/README_SESSIONS.md`
 
-Statut : tests et expérimentations Alpha.  
-Règle : à conserver comme historique ; tri possible plus tard.
+Règles de base :
+- 1 session = 1 objectif unique ;
+- lecture documentaire minimale ;
+- patch minimal et ciblé ;
+- preuves terminales obligatoires ;
+- clôture explicite.
 
-### `docs/2-SESSIONS/2-BETA/`
+## 3. Modèle de session SESSION-YYYYMMDD-XX
 
-Statut : placeholder historique / futur.  
-Règle : à confirmer avant utilisation.
+Le dossier `docs/2-SESSIONS/SESSION-YYYYMMDD-XX` est conservé comme modèle opérationnel utilisé par le script de création de session.
 
-### `docs/2-SESSIONS/3-VERSION_OFFICIELLE/`
+Rôle :
+- standardiser la structure de session ;
+- garantir les fichiers de suivi :
+  - `SESSION.md`
+  - `NOTES.md`
+  - `EVIDENCES.md`
+  - `RESULTATS.md`
+  - `FIN_SESSION.md`
 
-Statut : placeholder historique / futur.  
-Règle : à confirmer avant utilisation.
+## 4. Ouverture d’une session Codex
 
-### `docs/2-SESSIONS/5-REBASAGE/`
+À l’ouverture :
+1. définir le type de session ;
+2. définir l’objectif unique ;
+3. fixer le périmètre exact ;
+4. lister les fichiers autorisés ;
+5. lister les fichiers interdits ;
+6. annoncer les contrôles à exécuter ;
+7. exécuter la session sans élargir le périmètre.
 
-Statut : rebasage et reprise méthodologique récente.  
-Règle : à conserver accessible pour comprendre la phase actuelle.
+## 5. Documents à lire au début d’une session
 
-### `docs/2-SESSIONS/SESSION-YYYYMMDD-XX/`
+Documents obligatoires par défaut :
+- `docs/1-MASTER/_INDEX_MASTER.md`
+- `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md`
+- `docs/1-MASTER/DOCUMENT_MAITRE_V2.md`
+- `docs/2-SESSIONS/README_SESSIONS.md`
 
-Statut : modèle ou gabarit historique de session.  
-Règle : à confirmer par rapport à `docs/3-TEMPLATES/`.
+Documents à lire selon le bloc :
+- `docs/1-MASTER/DOCUMENT_CADRAGE_FONCTIONNEL_V2.md`
+- `docs/1-MASTER/REGISTRE_DECISIONS_V2.md`
+- `docs/1-MASTER/AUDIT_CODE_EXISTANT_ALPHA_V2.md` (si audit/écarts code)
+- `docs/1-MASTER/ETAT_GLOBAL_PROJET_V2.md` (si statut global)
+- `docs/1-MASTER/RGPD_BASE_MINIMALE.md` (si impact données/permissions)
+- dossiers ciblés de `docs/2-SESSIONS/1-ALPHA/` (uniquement si preuve/historique nécessaire)
 
-## Règles de tri futures
+Documents à ne pas lire sauf demande explicite :
+- lecture exhaustive de `docs/2-SESSIONS/1-ALPHA/1-VALIDE`
+- anciens documents concurrents listés en section 14
+- tout dossier non lié à l’objectif de la session
 
-- Ne jamais supprimer une session historique sans archive.
-- Ne jamais déplacer un bloc Alpha complet sans validation humaine.
-- Ne jamais corriger le mojibake dans les historiques sans session dédiée.
-- Ne pas melanger sessions actives et historiques.
-- Les futures sessions doivent avoir un emplacement clair.
-- Les preuves `EVIDENCES.md`, `RESULTATS.md`, `FIN_SESSION.md` doivent rester traçables.
-- Les patchs historiques doivent rester liés à leur session d'origine.
+## 6. Règles de lecture documentaire limitée
 
-## Emplacement recommandé pour les prochaines sessions
+- lire d’abord les documents obligatoires ;
+- ouvrir uniquement les fichiers utiles à l’objectif ;
+- ne pas lire tout le repo par défaut ;
+- ne pas utiliser les historiques comme source active sans validation master ;
+- en cas de doute : `INFORMATION NON FOURNIE — À CONFIRMER`.
 
-Emplacement recommandé (proposition, non créée dans cette session) :
+## 7. Règles de travail pendant une session
 
-- `docs/2-SESSIONS/0-SESSIONS_ACTUELLES/`
+- garder un objectif unique ;
+- éviter le mélange code + refonte documentaire + tri documentaire ;
+- appliquer un périmètre strict ;
+- modifier seulement les fichiers autorisés ;
+- signaler immédiatement tout blocage.
 
-Rôle : recevoir les prochaines sessions de reprise documentaire, maquettes, puis codage.
+## 8. Règles de patch
 
-Ce dossier ne doit être créé que lors d'une session suivante validée.
+- patch minimal, ciblé, traçable ;
+- aucun patch hors périmètre ;
+- aucun fichier `.diff` créé par défaut ;
+- patch/diff seulement si demandé explicitement dans la session ;
+- ne jamais rejouer un ancien patch historique sans contrôle explicite.
 
-## Stratégie recommandée
+## 9. Contrôles obligatoires
 
-1. Conserver l'historique existant.
-2. Créer une zone claire pour les nouvelles sessions.
-3. Ne déplacer les anciens blocs que plus tard, après validation.
-4. Traiter le mojibake historique dans une session séparée si nécessaire.
-5. Reprendre les documents maîtres V2 fichier par fichier.
+Contrôles minimum :
+- `git status --short`
+- contrôles techniques adaptés au périmètre (lint, build, tests) si code modifié
+- vérification des fichiers réellement touchés
+- vérification des fichiers interdits non modifiés
 
-## Mojibake
+## 10. Preuves attendues
 
-Du mojibake existe dans certains historiques de `docs/2-SESSIONS/`.
+En fin de session, fournir :
+- résumé des actions réalisées ;
+- liste des fichiers lus ;
+- liste des fichiers modifiés ;
+- liste des fichiers créés/supprimés/déplacés ;
+- sortie `git status --short` ;
+- sortie `git diff -- <chemins concernés>` si modification ;
+- points à confirmer restants.
 
-Il ne doit pas être corrigé dans cette session.
+## 11. Documentation de fin de session
 
-INFORMATION NON FOURNIE — À CONFIRMER
+La documentation de session doit être mise à jour dans la structure session concernée :
+- `SESSION.md`
+- `NOTES.md`
+- `EVIDENCES.md`
+- `RESULTATS.md`
+- `FIN_SESSION.md`
+
+Règle :
+- documenter uniquement ce qui a été réellement fait et vérifié.
+
+## 12. Clôture de session
+
+Une session est clôturable si :
+- objectif unique traité ;
+- périmètre respecté ;
+- contrôles exécutés ;
+- preuves fournies ;
+- verdict final explicite.
+
+Format de verdict attendu :
+- `<SESSION> — <INTITULÉ> : OUI / NON`
+- `PASSAGE À LA SESSION SUIVANTE RECOMMANDÉ : OUI / NON / À CONFIRMER`
+
+## 13. Interdictions strictes
+
+- ne pas transformer `docs/2-SESSIONS` en plan de développement parallèle ;
+- ne pas relire tout l’historique par défaut ;
+- ne pas mélanger plusieurs objectifs majeurs dans une session ;
+- ne pas faire de refonte documentaire massive pendant une session de code ;
+- ne pas modifier `docs/1-MASTER` hors besoin validé ;
+- ne pas modifier `docs/3-TEMPLATES` hors besoin validé ;
+- ne pas modifier le code applicatif dans une session documentaire ;
+- ne pas supprimer/déplacer des éléments historiques sans validation explicite.
+
+## 14. Documents concurrents à archiver plus tard
+
+Les documents suivants sont concurrents de gouvernance et seront archivés plus tard, après validation du présent `README_SESSIONS.md` :
+
+- `docs/2-SESSIONS/README.md`
+- `docs/2-SESSIONS/GOUVERNANCE_SESSIONS.md`
+- `docs/2-SESSIONS/_INDEX_SESSIONS.md`
+- `docs/2-SESSIONS/CHECKLIST_EXECUTION_LOTS_SESSIONS.md`
+- `docs/2-SESSIONS/DOSSIER_DECISION_LOTS_SESSIONS.md`
+- `docs/2-SESSIONS/FORMULAIRE_VALIDATION_LOTS_SESSIONS.md`
+- `docs/2-SESSIONS/SIMULATION_ARCHIVAGE_SESSIONS.md`
+
+Aucun archivage n’est effectué à cette étape.
+
+## 15. Conclusion
+
+Ce document définit une gouvernance de session simple, courte et exploitable pour la Phase 6 :
+- un document actif unique ;
+- une lecture documentaire minimale ;
+- une exécution par objectif unique ;
+- des contrôles et preuves obligatoires ;
+- une clôture explicite de chaque session.
+
+## 16. Statut du document
+
+Ce document est le document actif de gouvernance des sessions Codex.
+
+Il remplace les anciens documents concurrents listés en section 14, qui doivent être archivés après validation humaine.
+
+Règles :
+- ce document doit rester court, clair et opérationnel ;
+- il ne doit pas redevenir un plan de développement parallèle ;
+- il doit être modifié uniquement si le fonctionnement réel des sessions change ;
+- toute modification importante doit être validée humainement.
