@@ -5,15 +5,17 @@ Date : 22/05/2026
 
 ## 1. Rôle du registre
 
-Ce document centralise les décisions V2 actives à stabiliser.
+Ce document centralise les décisions V2 actives et validées pour la reprise, selon le périmètre documenté.
 
 Les anciennes décisions restent consultables dans les documents historiques et sessions, mais elles sont non prioritaires face à la base V2 active.
 
 ## 2. Décisions de gouvernance documentaire
 
-- les documents V2 sont la gouvernance active à stabiliser ;
+- les documents V2 constituent la gouvernance active de référence pour la reprise ;
 - les versions non V2 sont historiques, archivées et non prioritaires ;
 - les fiches de `docs/1-MASTER/3-FONCTIONNALITES/` restent actives comme référence détaillée de cadrage fonctionnel cible ;
+- `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md` est le plan actif de reprise en Phase 6 ;
+- `docs/1-MASTER/RECAP_DISCUSSIONS_V2.md` est contextuel / mémoriel et non normatif ;
 - les fichiers liés à REBASAGE sont supprimés du repo actif.
 
 ## 3. Décisions de statut fonctionnel
@@ -29,4 +31,4 @@ Les anciennes décisions restent consultables dans les documents historiques et 
 
 ## 5. Règle de mise à jour
 
-- les ajouts doivent rester ciblés, cohérents avec la base V2 active et validés humainement.
+- les ajouts doivent rester ciblés, cohérents avec la base V2 active et ajoutés uniquement après validation humaine.

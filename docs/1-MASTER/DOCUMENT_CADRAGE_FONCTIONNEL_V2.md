@@ -5,7 +5,7 @@ Date : 22/05/2026
 
 ## 1. Rôle du document
 
-Ce document est la référence fonctionnelle V2 de cadrage global à stabiliser.
+Ce document est la référence fonctionnelle globale active de cadrage V2 pour la reprise en Phase 6.
 
 L'ancien `DOCUMENT_CADRAGE_FONCTIONNEL.md` reste historique, archivé et non prioritaire.
 
@@ -14,7 +14,7 @@ L'ancien `DOCUMENT_CADRAGE_FONCTIONNEL.md` reste historique, archivé et non pri
 La référence détaillée de cadrage fonctionnel cible est :
 - `docs/1-MASTER/3-FONCTIONNALITES/`.
 
-Ces fiches restent actives. Elles décrivent la cible fonctionnelle officielle, ou presque, sous réserve d'arbitrages futurs.
+Ces fiches restent actives. Elles décrivent la cible fonctionnelle détaillée de référence, sous réserve d'arbitrages futurs validés.
 
 ## 3. Statut des pages
 

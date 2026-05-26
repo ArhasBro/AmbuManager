@@ -5,11 +5,11 @@ Date : 22/05/2026
 
 ## 1. Rôle du document
 
-Ce document synthétise l'état actuel du projet pendant la stabilisation V2.
+Ce document synthétise l'état courant du projet juste avant l'exécution de la Phase 6.
 
 ## 2. État général
 
-- documents V2 : actifs, en cours de stabilisation ;
+- documents MASTER V2 : actifs, finalisés pour la reprise après levée des réserves ;
 - versions non V2 : historiques et non prioritaires ;
 - fiches fonctionnalités : actives, référence fonctionnelle cible détaillée ;
 - code : non modifié dans cette phase documentaire.
@@ -22,7 +22,7 @@ Ce document synthétise l'état actuel du projet pendant la stabilisation V2.
 
 ## 4. Suite immédiate
 
-1. Stabiliser les documents V2.
-2. Clarifier le statut page par page, y compris Login.
-3. Finaliser ensuite les maquettes.
-4. Reprendre le codage sur base stabilisée.
+1. Exécuter la Phase 6 selon `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md`.
+2. Clarifier et confirmer les points de vigilance dans les blocs DEV-V2 concernés.
+3. Finaliser les maquettes selon les besoins des blocs actifs.
+4. Reprendre le codage sur base documentaire MASTER V2 finalisée.

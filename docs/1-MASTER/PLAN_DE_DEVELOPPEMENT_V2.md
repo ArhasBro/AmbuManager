@@ -19,9 +19,9 @@ Date : 26/05/2026
 - 12. Documents MASTER à mettre à jour
 - 13. Éléments hors périmètre immédiat / Beta
 - 14. Règles de session Codex en Phase 6
-- 15. Points à valider humainement avant Phase 6
+- 15. Points de vigilance à confirmer pendant la Phase 6
 - 16. Conclusion
-- 17. Contrôle de conformité de cette proposition
+- 17. Statut documentaire et contrôle final du document
 
 ## 1. Rôle du document
 
@@ -31,7 +31,7 @@ Il sert de cadre opérationnel pour exécuter la Phase 6 par blocs courts, traç
 ## 2. Références utilisées
 
 - `docs/1-MASTER/AUDIT_CODE_EXISTANT_ALPHA_V2.md`
-- `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md` — version existante à consolider/remplacer après validation humaine.
+- `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md` — plan actif de pilotage de la reprise Phase 6.
 - `docs/1-MASTER/DOCUMENT_MAITRE_V2.md`
 - `docs/1-MASTER/_INDEX_MASTER.md`
 - `docs/1-MASTER/2-REFERENCE_UI_UX/` (références V2 par module, en appui)
@@ -61,8 +61,13 @@ La Phase 6 doit :
 ## 5. Principes de découpage
 
 - découpage logique par dépendances réelles ;
-- blocs courts et cohérents ;
-- sessions petites, ciblées, sans fourre-tout ;
+- blocs cohérents, logiques, structurés et centrés sur un objectif clair ;
+- sessions courtes, ciblées, contrôlables et exécutables ;
+- ne pas créer de bloc artificiellement court ;
+- éviter les sessions fourre-tout ;
+- conserver un livrable principal clair par session ;
+- limiter le risque de dérive Codex ;
+- traiter la dette technique utile à la reprise (duplications évidentes, factorisation ciblée, lisibilité, maintenabilité) sans créer de refonte technique globale ;
 - `AUDIT ciblé` avant correction quand le périmètre exact est incertain ;
 - `CORRECTION` avant `COMPLÉTION` si l’existant est erroné ;
 - `VALIDATION` systématique avant bloc suivant ;
@@ -103,19 +108,22 @@ Correction métier fine des modules.
 
 #### Sessions prévues
 - DEV-V2-01-01 — AUDIT ciblé — Cartographier shell actuel, libellés legacy et cas non autorisés.
-- DEV-V2-01-02 — CORRECTION — Aligner nomenclature V2 dans navigation et entêtes.
-- DEV-V2-01-03 — CORRECTION — Harmoniser le pattern `Accès refusé` pour utilisateur authentifié non autorisé.
-- DEV-V2-01-04 — VALIDATION — Vérifier cohérence routes/navigation/labels sur toutes pages visibles.
+- DEV-V2-01-02 — AUDIT ciblé / CADRAGE technique léger — Confirmer la structure frontend partagée (`app/ui` et existence/absence de `components/`), puis valider la cible de structure à conserver ou à créer selon le repo réel.
+- DEV-V2-01-03 — AUDIT ciblé / CADRAGE technique léger — Fixer les conventions d’usage des composants partagés et identifier les composants réutilisables prioritaires (shell/layout, navigation, bouton, badge, tableau, filtres, état vide, état erreur/accès refusé, panneau de détail), avec factorisation progressive uniquement si utile aux blocs DEV-V2.
+- DEV-V2-01-04 — AUDIT ciblé / CADRAGE technique léger — Confirmer la stratégie Tailwind v4 en place (`@tailwindcss/postcss`, `@import "tailwindcss"`), décider si `tailwind.config.*` est utile ou non, et cadrer les tokens/classes utilitaires minimaux pour la cohérence UI sans refonte graphique.
+- DEV-V2-01-05 — CORRECTION — Aligner nomenclature V2 dans navigation et entêtes.
+- DEV-V2-01-06 — CORRECTION — Harmoniser le pattern `Accès refusé` pour utilisateur authentifié non autorisé.
+- DEV-V2-01-07 — VALIDATION — Vérifier cohérence routes/navigation/labels, application du socle frontend validé et absence de dérive vers refonte UI massive.
 - CLOTURE_DEV-V2-01 — VALIDATION — clôture finale du bloc.
 
 #### Livrables attendus
-Shell cohérent V2, terminologie unifiée, comportement non autorisé homogène.
+Shell cohérent V2, terminologie unifiée, comportement non autorisé homogène, conventions frontend partagées validées et base de composants réutilisables cadrée.
 
 #### Contrôles obligatoires
-`npm run lint`, `npm run build`, contrôle visuel manuel navigation + états non autorisés.
+`npm run lint`, `npm run build`, contrôle visuel manuel navigation + états non autorisés, vérification documentaire de la décision `app/ui` vs `components/` et de la décision Tailwind v4 (`tailwind.config.*` créé ou non).
 
 #### Critère de validation du bloc
-Aucun libellé legacy résiduel dans le shell actif ; pattern d’accès refusé appliqué.
+Aucun libellé legacy résiduel dans le shell actif ; pattern d’accès refusé appliqué ; conventions de socle frontend explicites et réutilisables pour les blocs suivants.
 
 #### Documentation à mettre à jour si nécessaire
 `PLAN_DE_DEVELOPPEMENT_V2.md`, référence UI/UX shell si ajustement validé.
@@ -209,18 +217,21 @@ Optimisations avancées de maintenance prédictive (Beta).
 
 #### Sessions prévues
 - DEV-V2-04-01 — AUDIT ciblé — Confirmer périmètre exact cible et existant réutilisable.
-- DEV-V2-04-02 — COMPLÉTION — Structurer la vue d’ensemble.
-- DEV-V2-04-03 — COMPLÉTION — Structurer le flux vérifications.
-- DEV-V2-04-04 — COMPLÉTION — Structurer le flux désinfections.
-- DEV-V2-04-05 — COMPLÉTION — Structurer le flux anomalies.
-- DEV-V2-04-06 — VALIDATION — Vérifier cohérence permissions, données et navigation.
+- DEV-V2-04-02 — COMPLÉTION — Structurer la vue d’ensemble côté UI/navigation (écran, sections, états).
+- DEV-V2-04-03 — COMPLÉTION — Structurer la vue d’ensemble côté données/API minimal validé.
+- DEV-V2-04-04 — COMPLÉTION — Structurer le sous-flux Vérifications côté UI/états.
+- DEV-V2-04-05 — COMPLÉTION — Structurer le sous-flux Vérifications côté API/permissions.
+- DEV-V2-04-06 — COMPLÉTION — Structurer le sous-flux Désinfections côté UI/états.
+- DEV-V2-04-07 — COMPLÉTION — Structurer le sous-flux Désinfections côté API/permissions.
+- DEV-V2-04-08 — COMPLÉTION — Structurer le sous-flux Anomalies (UI/API/permissions) avec traçabilité minimale si action sensible.
+- DEV-V2-04-09 — VALIDATION — Vérifier cohérence permissions, données et navigation.
 - CLOTURE_DEV-V2-04 — VALIDATION — clôture finale du bloc.
 
 #### Livrables attendus
 Module `Suivi des véhicules` opérationnel au périmètre Alpha V2 validé.
 
 #### Contrôles obligatoires
-`lint`, `build`, contrôle visuel, contrôle permissions, contrôle API.
+`lint`, `build`, preuve terminale de session, contrôle visuel, contrôle API si route modifiée, contrôle permissions, contrôle non-régression ciblé, documentation de session.
 
 #### Critère de validation du bloc
 Les 4 sous-vues cibles sont accessibles, cohérentes et non contournables.
@@ -256,7 +267,7 @@ Nouveaux workflows RH non prévus Alpha.
 Module RH lisible, fiable et aligné avec l’API.
 
 #### Contrôles obligatoires
-`lint`, `build`, tests manuels par rôle, vérification permissions UI/API.
+`lint`, `build`, tests manuels par rôle, vérification permissions UI/API, contrôle explicite restore/unarchive (API existante ou à créer, UI associée, permissions, audit si action sensible).
 
 #### Critère de validation du bloc
 Lecture et action RH cohérentes pour tous statuts affichés.
@@ -291,7 +302,7 @@ Refonte d’architecture des dépôts.
 Cycle de vie Dépôts/Bases maîtrisé et traçable.
 
 #### Contrôles obligatoires
-`lint`, `build`, contrôle API, contrôle permissions.
+`lint`, `build`, contrôle API, contrôle permissions, contrôle explicite restore/unarchive (API existante ou à créer, UI associée, permissions, audit si action sensible).
 
 #### Critère de validation du bloc
 Archive/restauration fonctionnels sans rupture dépendante.
@@ -327,7 +338,7 @@ Nouveaux algorithmes avancés de modèle horaire.
 Module Modèles horaires stable et prêt pour planning.
 
 #### Contrôles obligatoires
-`lint`, `build`, contrôle visuel, contrôle API/permissions.
+`lint`, `build`, contrôle visuel, contrôle API/permissions, contrôle explicite restore/unarchive (API existante ou à créer, UI associée, permissions, audit si action sensible).
 
 #### Critère de validation du bloc
 Aucun point bloquant restant côté planning dépendant.
@@ -388,17 +399,19 @@ Refonte profonde moteur avancé hors besoins Alpha.
 
 #### Sessions prévues
 - DEV-V2-09-01 — AUDIT ciblé — Cartographier flux actifs vs legacy et priorités de correction.
-- DEV-V2-09-02 — CORRECTION — Corriger flux non conformes critiques.
-- DEV-V2-09-03 — COMPLÉTION — Compléter flux incomplets validés.
-- DEV-V2-09-04 — CORRECTION — Uniformiser permissions/états UI.
-- DEV-V2-09-05 — VALIDATION — Vérifier non-régression publication/annulation/export.
+- DEV-V2-09-02 — CORRECTION — Corriger le flux Publication/Annulation (cas critiques).
+- DEV-V2-09-03 — CORRECTION — Nettoyer les éléments legacy bloquants (routes, handlers, panneaux) si nécessaire.
+- DEV-V2-09-04 — COMPLÉTION — Finaliser les flux Autoschedule/Matching réellement actifs au périmètre Alpha.
+- DEV-V2-09-05 — COMPLÉTION — Finaliser les flux Export/Affectation réellement actifs au périmètre Alpha.
+- DEV-V2-09-06 — CORRECTION — Uniformiser permissions/états UI sur les flux planning actifs.
+- DEV-V2-09-07 — VALIDATION — Vérifier non-régression publication/annulation/export et flux planning actifs validés.
 - CLOTURE_DEV-V2-09 — VALIDATION — clôture finale du bloc.
 
 #### Livrables attendus
 Planning Alpha V2 stabilisé sans dette critique ouverte.
 
 #### Contrôles obligatoires
-`lint`, `build`, contrôle permissions, contrôle interactions modules dépendants.
+`lint`, `build`, preuve terminale de session, contrôle visuel manuel, contrôle API si route modifiée, contrôle permissions, contrôle non-régression, contrôle interactions modules dépendants, documentation de session.
 
 #### Critère de validation du bloc
 Parcours planning critiques exécutables de bout en bout.
@@ -716,7 +729,10 @@ Ces éléments restent tracés comme backlog Beta et ne deviennent pas des blocs
 - mettre à jour la documentation de session en fin de session importante ;
 - ne jamais mélanger grosse correction code et refonte documentaire.
 
-## 15. Points à valider humainement avant Phase 6
+## 15. Points de vigilance à confirmer pendant la Phase 6
+
+Ces points sont traités dans les blocs DEV-V2 concernés, en priorité pendant les audits ciblés et validations de bloc.  
+Ils ne bloquent pas l'ouverture de la Phase 6 si le présent plan est validé.
 
 - comportement exact de `Se souvenir de moi` ;
 - stratégie `Accès refusé` ;
@@ -724,29 +740,18 @@ Ces éléments restent tracés comme backlog Beta et ne deviennent pas des blocs
 - politique de restauration/désarchivage ;
 - matrice permissions officielle ;
 - place exacte de `Mise en route` et des imports ;
-- règles audit/support ;
-- ordre final des blocs DEV-V2 ;
-- documents MASTER réellement actifs avec suffixe `_V2`.
+- règles audit/support.
 
 ## 16. Conclusion
 
 Ce plan cadre la reprise du code en Phase 6 par blocs maîtrisés, sans valider automatiquement les pages ni relancer une refonte globale.  
 La validation reste séquentielle, explicite et pilotée par preuves de contrôle.
 
-## 17. Contrôle de conformité de cette proposition
+## 17. Statut documentaire et contrôle final du document
 
-- aucun fichier modifié ;
-- aucun fichier créé ;
-- aucun patch généré ;
-- proposition produite uniquement en réponse ;
-- documents lus :
-  - `docs/1-MASTER/AUDIT_CODE_EXISTANT_ALPHA_V2.md`
-  - `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md`
-  - `docs/1-MASTER/DOCUMENT_MAITRE_V2.md`
-  - `docs/1-MASTER/_INDEX_MASTER.md`
-- points non vérifiés ou à confirmer :
-  - matrice permissions officielle finale par rôle ;
-  - périmètre exact validé de `Suivi des véhicules` ;
-  - comportement final validé de `Se souvenir de moi` ;
-  - politique officielle support/audit (`supportReason`) ;
-  - liste finale des documents MASTER actifs à figer pour la Phase 6.
+- statut : document actif de pilotage de la reprise Phase 6 ;
+- ordre des blocs DEV-V2 : conservé sans modification ;
+- périmètre fonctionnel : conservé sans extension ;
+- validations de pages : aucune validation automatique ;
+- stratégie : inchangée, reprise par blocs courts, traçables et validables ;
+- points de vigilance : suivis dans les blocs DEV-V2 concernés.

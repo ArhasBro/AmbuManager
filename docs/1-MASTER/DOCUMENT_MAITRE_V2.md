@@ -14,18 +14,22 @@ Le produit est en reprise méthodologique et n'est pas présenté comme terminé
 Le projet ne repart pas de zéro techniquement.  
 Le projet repart de zéro méthodologiquement.
 
-La phase actuelle est une base de travail de stabilisation documentaire V2.
+La base documentaire MASTER V2 constitue la base opérationnelle de lancement de la Phase 6.
 
 ## 3. Références actives du projet
 
-Documents de gouvernance active à stabiliser :
+Documents MASTER V2 actifs pour la reprise Phase 6 :
 - `docs/1-MASTER/DOCUMENT_MAITRE_V2.md` ;
 - `docs/1-MASTER/DOCUMENT_CADRAGE_FONCTIONNEL_V2.md` ;
 - `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md` ;
 - `docs/1-MASTER/ETAT_GLOBAL_PROJET_V2.md` ;
 - `docs/1-MASTER/REGISTRE_DECISIONS_V2.md` ;
-- `docs/1-MASTER/RECAP_DISCUSSIONS_V2.md` ;
 - `docs/1-MASTER/3-FONCTIONNALITES/`.
+
+Document contextuel / mémoriel (non normatif) :
+- `docs/1-MASTER/RECAP_DISCUSSIONS_V2.md` ;
+- utile pour le contexte ;
+- non source de vérité principale en cas de contradiction.
 
 Les versions sans suffixe V2 sont historiques, archivées et non prioritaires.
 
