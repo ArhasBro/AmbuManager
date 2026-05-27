@@ -10,3 +10,4 @@ Le dossier `docs/3-TEMPLATES/` regroupe les templates de session utilisés penda
 ## Templates complémentaires
 - `TEMPLATE_DOD_SESSION.md`
 - `TEMPLATE_RECAP_SESSION.md`
+- `TEMPLATE_BLOC_SESSIONS_PROMPTS.md` : préparation des blocs, création des sessions et génération des prompts de lancement/contrôle.
