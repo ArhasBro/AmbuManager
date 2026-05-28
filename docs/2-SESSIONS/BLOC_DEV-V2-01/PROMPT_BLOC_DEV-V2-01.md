@@ -48,6 +48,17 @@ Version corrigée — fonctionnement Codex / ChatGPT contrôle
 
 Ces règles corrigent les erreurs constatées pendant le lancement du bloc DEV-V2-01.
 
+### Continuité documentaire du bloc
+
+- Avant d’agir, chaque session doit relire les sessions précédentes utiles du même bloc lorsque cela est nécessaire pour comprendre ce qui a déjà été fait, les décisions prises, les garde-fous validés, les limites posées, les écarts déjà identifiés et les validations obtenues.
+- Cette relecture est obligatoire dès qu’une session dépend d’un cadrage, d’une décision, d’un garde-fou ou d’un résultat produit dans une session précédente.
+- La relecture doit rester ciblée et utile :
+  - ne pas relire tout le repo inutilement ;
+  - ne pas refaire l’audit complet du bloc ;
+  - ne pas refaire un cadrage déjà validé ;
+  - ne pas contredire une session précédente validée sans preuve explicite ;
+  - signaler toute contradiction détectée avant toute modification.
+
 ### ChatGPT contrôle
 
 - ChatGPT contrôle ne doit pas contrôler le ZIP, le repo ou les fichiers joints dès l’ouverture.

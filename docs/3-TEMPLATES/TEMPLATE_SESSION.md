@@ -78,9 +78,16 @@
 
 ## R?gles officielles Codex / ChatGPT contr?le
 
+## R?gle de continuit? documentaire du bloc
+
+- Avant d'agir, relire les sessions pr?c?dentes utiles du m?me bloc quand c'est n?cessaire.
+- Objectif : comprendre ce qui est d?j? fait, les d?cisions prises, les garde-fous valid?s, les limites pos?es, les ?carts identifi?s et les validations obtenues.
+- Relecture obligatoire si la session d?pend d'un cadrage, d'une d?cision, d'un garde-fou ou d'un r?sultat ant?rieur.
+- Relecture cibl?e : ne pas relire tout le repo, ne pas refaire un audit complet, ne pas refaire un cadrage valid?, ne pas contredire une session valid?e sans preuve, signaler toute contradiction avant modification.
 - ChatGPT contr?le : si aucun retour brut Codex n?est fourni, r?pondre uniquement : `EN ATTENTE DU RETOUR CODEX ? CONTR?LE NON D?MARR?`.
 - Cr?ation de session : utiliser `create_session.ps1` et v?rifier la pr?sence de `SESSION.md`, `NOTES.md`, `EVIDENCES.md`, `RESULTATS.md`, `FIN_SESSION.md`, `PATCH/`.
 - Retour Codex : ne pas recopier int?gralement les `.md` ou `.diff` ; fournir un r?sum? court et des preuves command?es.
 - Session documentaire : pas de `.diff` obligatoire.
 - Session code : `.diff` obligatoire dans `PATCH/` + preuve `git apply --check <chemin_du_patch>`.
 - Validation : Codex ne s?auto-valide jamais.
+

@@ -56,9 +56,13 @@ Points de contr?le :
 
 ## C) R?gles op?rationnelles officielles
 
+- Continuit? documentaire du bloc : avant d'agir, chaque session relit les sessions pr?c?dentes utiles du m?me bloc si n?cessaire.
+- Relecture obligatoire d?s qu'une session d?pend d'un cadrage, d'une d?cision, d'un garde-fou ou d'un r?sultat d?j? produit.
+- Relecture cibl?e et utile : ne pas relire tout le repo, ne pas refaire l'audit complet du bloc, ne pas refaire un cadrage valid?, signaler toute contradiction avant modification.
 - ChatGPT contr?le ne contr?le rien avant le retour brut Codex.
 - Si retour brut absent : `EN ATTENTE DU RETOUR CODEX ? CONTR?LE NON D?MARR?`.
 - Session documentaire : pas de `.diff` obligatoire.
 - Session code : `.diff` obligatoire dans `PATCH/` + `git apply --check`.
 - Codex ne recopie pas int?gralement les fichiers/diffs dans son retour.
 - Codex ne s?auto-valide jamais.
+
