@@ -18,9 +18,6 @@ git push
 git status
 git diff -- <fichiers_modifiés>
 
-# GPT
---------------------------
-
 ------------------------------------
 
 git apply --check ".\"
