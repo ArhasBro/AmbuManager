@@ -1,13 +1,14 @@
 # FIN_SESSION
 
-## Clôture
+## Cloture
 
-INFORMATION NON FOURNIE — À CONFIRMER
+Session corrective executee dans le perimetre autorise.
 
 ## Validation
 
-INFORMATION NON FOURNIE — À CONFIRMER
+Codex ne s'auto-valide pas.
 
 ## Verdict final
 
-INFORMATION NON FOURNIE — À CONFIRMER
+Session corrective preparée pour contrôle externe.
+Verdict final réservé au contrôle ChatGPT / utilisateur.

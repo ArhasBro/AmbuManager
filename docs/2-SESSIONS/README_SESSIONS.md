@@ -247,3 +247,12 @@ Règles :
 - Codex ne s'auto-valide jamais.
 - Formule autoris?e : `Travail termin? c?t? Codex, en attente de contr?le ChatGPT / validation humaine.`
 - La validation appartient ? ChatGPT contr?le et ? la validation humaine.
+
+### 17.7 Preuves obligatoires des sessions code
+
+- Si code modifi? : pr?sence obligatoire d'un patch `.diff` dans `PATCH/`, commen?ant par `diff --git`.
+- La commande exacte `git apply --check <chemin_du_patch>` doit ?tre ex?cut?e et sa sortie terminale compl?te copi?e dans `EVIDENCES.md`.
+- `git status --short`, `npm run lint`, `npm run build` et `npm run docs:encoding` (si disponible) doivent ?tre ex?cut?s avec sorties compl?tes copi?es.
+- Si une commande ?choue ou n'existe pas : copier la sortie compl?te d'?chec.
+- Un simple r?sum? ("OK", "succ?s", "exit 0") ne constitue jamais une preuve suffisante.
+- Codex ne s'auto-valide jamais ; le verdict final appartient au contr?le externe.

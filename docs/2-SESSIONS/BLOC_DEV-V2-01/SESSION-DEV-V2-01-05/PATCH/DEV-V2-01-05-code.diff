@@ -1,0 +1,131 @@
+diff --git a/app/dashboard/page.tsx b/app/dashboard/page.tsx
+index beca140..40fa513 100644
+--- a/app/dashboard/page.tsx
++++ b/app/dashboard/page.tsx
+@@ -211,7 +211,7 @@ export default async function DashboardPage() {
+         { label: "Utilisateurs actifs", value: activeUsersCount, total: totalUsersCount, Icon: UsersRound, hintLabel: "utilisateurs" },
+         { label: "Véhicules actifs", value: activeVehiclesCount, total: totalVehiclesCount, Icon: Ambulance, hintLabel: "véhicules" },
+         { label: "Dépôts actifs", value: activeDepotsCount, total: totalDepotsCount, Icon: Landmark, hintLabel: "dépôts" },
+-        { label: "Templates actifs", value: activeTemplatesCount, total: totalTemplatesCount, Icon: FileText, hintLabel: "templates" },
++        { label: "Modèles horaires actifs", value: activeTemplatesCount, total: totalTemplatesCount, Icon: FileText, hintLabel: "modèles horaires" },
+       ]
+     : [];
+ 
+@@ -258,8 +258,8 @@ export default async function DashboardPage() {
+   if (companyScopedSession && templatesAllowed) {
+     adminLinks.push({
+       href: "/templates",
+-      title: "Templates",
+-      description: "Gérez les modèles de shifts disponibles.",
++      title: "Modèles horaires",
++      description: "Gérez les modèles horaires disponibles.",
+       Icon: FileText,
+       tone: "amber",
+       statusLabel: "Disponible",
+@@ -294,8 +294,8 @@ export default async function DashboardPage() {
+   if (companyScopedSession && companyProfileAllowed) {
+     adminLinks.push({
+       href: "/onboarding",
+-      title: "Onboarding",
+-      description: "Parcours et guides pour les nouveaux collaborateurs.",
++      title: "Mise en route",
++      description: "Parcours guidé de démarrage de la société.",
+       Icon: GraduationCap,
+       tone: "violet",
+       statusLabel: "Selon permissions",
+diff --git a/app/layout.tsx b/app/layout.tsx
+index 3d6eec5..676a9e4 100644
+--- a/app/layout.tsx
++++ b/app/layout.tsx
+@@ -92,10 +92,10 @@ async function getAppShellData(): Promise<{ navLinks: AppShellNavLink[]; context
+   if (companyScopedSession && (planningSelfAllowed || planningGlobalAllowed)) navLinks.push({ href: "/planning", label: "Planning" });
+   if (companyScopedSession && usersAllowed) navLinks.push({ href: "/users", label: "Utilisateurs / RH" });
+   if (companyScopedSession && vehiclesAllowed) navLinks.push({ href: "/vehicles", label: "Véhicules" });
+-  if (companyScopedSession && templatesAllowed) navLinks.push({ href: "/templates", label: "Templates" });
++  if (companyScopedSession && templatesAllowed) navLinks.push({ href: "/templates", label: "Modèles horaires" });
+   if (companyScopedSession && (companyProfileAllowed || companyRulesAllowed)) navLinks.push({ href: "/company", label: "Société" });
+   if (companyScopedSession && companyProfileAllowed) navLinks.push({ href: "/depots", label: "Dépôts / bases" });
+-  if (companyScopedSession && companyProfileAllowed) navLinks.push({ href: "/onboarding", label: "Onboarding" });
++  if (companyScopedSession && companyProfileAllowed) navLinks.push({ href: "/onboarding", label: "Mise en route" });
+   if ((companyScopedSession || supportActor) && auditAllowed) navLinks.push({ href: "/audit", label: "Audit" });
+ 
+   const context: AppShellContext = {
+diff --git a/app/onboarding/onboarding-client.tsx b/app/onboarding/onboarding-client.tsx
+index c5475a3..96adc96 100644
+--- a/app/onboarding/onboarding-client.tsx
++++ b/app/onboarding/onboarding-client.tsx
+@@ -77,7 +77,7 @@ const DOMAIN_OPTIONS: Array<{ value: ImportDomain; label: string; help: string;
+   },
+   {
+     value: "templates",
+-    label: "Templates",
++    label: "Modeles horaires",
+     help: "Ajout simple de templates. Colonnes minimales : nom, categorie. Horaires et contraintes optionnels.",
+     columns: ["nom", "categorie", "requiredRole", "secondaryAllowedRoles", "minStaffCount", "requiredVehicleType", "isActive", "isTimeDefined", "startTime", "endTime", "crossesMidnight", "color"],
+   },
+@@ -163,8 +163,8 @@ export default function OnboardingClient({ checklist, links }: { checklist: Chec
+       },
+       {
+         href: links.templates,
+-        title: "Templates",
+-        description: "Configurer les modeles de shifts de depart.",
++        title: "Modeles horaires",
++        description: "Configurer les modeles horaires de depart.",
+         status: getStepStatus(checklist.templatesCount > 0, checklist.templatesCount),
+         done: checklist.templatesCount > 0,
+         countLabel: `${checklist.templatesCount}`,
+@@ -233,7 +233,7 @@ export default function OnboardingClient({ checklist, links }: { checklist: Chec
+     <section className="onboarding-layout onboarding-layout--triple">
+       <section className="panel onboarding-card onboarding-card--timeline">
+         <div className="onboarding-card__head">
+-          <h2 className="onboarding-card__title">Progression de l&apos;onboarding</h2>
++          <h2 className="onboarding-card__title">Progression de la mise en route</h2>
+           <p className="onboarding-card__description">Preparer les donnees de demarrage avant la premiere exploitation reelle.</p>
+         </div>
+ 
+@@ -472,7 +472,7 @@ export default function OnboardingClient({ checklist, links }: { checklist: Chec
+             <li>Depots</li>
+             <li>Utilisateurs</li>
+             <li>Vehicules</li>
+-            <li>Templates</li>
++            <li>Modeles horaires</li>
+           </ol>
+         </section>
+ 
+diff --git a/app/onboarding/page.tsx b/app/onboarding/page.tsx
+index 25ce061..e523a0e 100644
+--- a/app/onboarding/page.tsx
++++ b/app/onboarding/page.tsx
+@@ -40,7 +40,7 @@ export default async function OnboardingPage() {
+   return (
+     <section className="page-wrap onboarding-page">
+       <PageHeader
+-        title="Onboarding societe pilote"
++        title="Mise en route societe pilote"
+         description="Preparez les donnees necessaires avant la premiere exploitation reelle."
+       />
+ 
+diff --git a/app/templates/templates-client.tsx b/app/templates/templates-client.tsx
+index ae55ad6..9d0fc3e 100644
+--- a/app/templates/templates-client.tsx
++++ b/app/templates/templates-client.tsx
+@@ -824,8 +824,8 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
+     <section className="templates-section templates-section--v2">
+       <div className="templates-page-top">
+         <div className="templates-page-top__title-wrap">
+-          <h1 className="templates-page-top__title">Templates de garde</h1>
+-          <p className="templates-page-top__subtitle">Gérez vos modèles de garde et de shift pour organiser vos plannings.</p>
++          <h1 className="templates-page-top__title">Modeles horaires</h1>
++          <p className="templates-page-top__subtitle">Gerez vos modeles horaires de garde et de shift pour organiser vos plannings.</p>
+         </div>
+         <div className="templates-page-top__actions">
+           <ActionButton variant="primary" leadingIcon={<Plus size={16} />} onClick={openCreateWorkspace}>
+@@ -850,7 +850,7 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
+           <section className="templates-card templates-card--table">
+             <div className="templates-card__head templates-card__head--plain">
+               <div>
+-                <h2 className="templates-card__title">Liste des templates</h2>
++                <h2 className="templates-card__title">Liste des modeles horaires</h2>
+               </div>
+             </div>
+ 

@@ -40,8 +40,8 @@ export default async function OnboardingPage() {
   return (
     <section className="page-wrap onboarding-page">
       <PageHeader
-        title="Onboarding societe pilote"
-        description="Preparez les donnees necessaires avant la premiere exploitation reelle."
+        title="Mise en route société pilote"
+        description="Préparez les données nécessaires avant la première exploitation réelle."
       />
 
       <OnboardingClient

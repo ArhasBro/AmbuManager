@@ -92,10 +92,10 @@ async function getAppShellData(): Promise<{ navLinks: AppShellNavLink[]; context
   if (companyScopedSession && (planningSelfAllowed || planningGlobalAllowed)) navLinks.push({ href: "/planning", label: "Planning" });
   if (companyScopedSession && usersAllowed) navLinks.push({ href: "/users", label: "Utilisateurs / RH" });
   if (companyScopedSession && vehiclesAllowed) navLinks.push({ href: "/vehicles", label: "Véhicules" });
-  if (companyScopedSession && templatesAllowed) navLinks.push({ href: "/templates", label: "Templates" });
+  if (companyScopedSession && templatesAllowed) navLinks.push({ href: "/templates", label: "Modèles horaires" });
   if (companyScopedSession && (companyProfileAllowed || companyRulesAllowed)) navLinks.push({ href: "/company", label: "Société" });
   if (companyScopedSession && companyProfileAllowed) navLinks.push({ href: "/depots", label: "Dépôts / bases" });
-  if (companyScopedSession && companyProfileAllowed) navLinks.push({ href: "/onboarding", label: "Onboarding" });
+  if (companyScopedSession && companyProfileAllowed) navLinks.push({ href: "/onboarding", label: "Mise en route" });
   if ((companyScopedSession || supportActor) && auditAllowed) navLinks.push({ href: "/audit", label: "Audit" });
 
   const context: AppShellContext = {

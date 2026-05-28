@@ -824,8 +824,8 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
     <section className="templates-section templates-section--v2">
       <div className="templates-page-top">
         <div className="templates-page-top__title-wrap">
-          <h1 className="templates-page-top__title">Templates de garde</h1>
-          <p className="templates-page-top__subtitle">Gérez vos modèles de garde et de shift pour organiser vos plannings.</p>
+          <h1 className="templates-page-top__title">Modèles horaires</h1>
+          <p className="templates-page-top__subtitle">Gérez vos modèles horaires de garde et de shift pour organiser vos plannings.</p>
         </div>
         <div className="templates-page-top__actions">
           <ActionButton variant="primary" leadingIcon={<Plus size={16} />} onClick={openCreateWorkspace}>
@@ -850,7 +850,7 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
           <section className="templates-card templates-card--table">
             <div className="templates-card__head templates-card__head--plain">
               <div>
-                <h2 className="templates-card__title">Liste des templates</h2>
+                <h2 className="templates-card__title">Liste des modèles horaires</h2>
               </div>
             </div>
 

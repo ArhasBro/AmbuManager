@@ -14,7 +14,7 @@ Documents ? lire :
 - docs/3-TEMPLATES/TEMPLATE_SESSION.md
 
 Travail demand? :
-- Cr?er les sessions via `create_session.ps1` (pas de cr?ation manuelle alternative).
+- Créer les sessions via `create_session.ps1` (pas de cr?ation manuelle alternative).
 - V?rifier la structure de chaque session : SESSION.md, NOTES.md, EVIDENCES.md, RESULTATS.md, FIN_SESSION.md, PATCH/.
 - Pr?parer les ouvertures de session sans ex?cuter le travail m?tier.
 
@@ -63,6 +63,7 @@ Points de contr?le :
 - Si retour brut absent : `EN ATTENTE DU RETOUR CODEX ? CONTR?LE NON D?MARR?`.
 - Session documentaire : pas de `.diff` obligatoire.
 - Session code : `.diff` obligatoire dans `PATCH/` + `git apply --check`.
+- Session code : copier dans `EVIDENCES.md` les sorties terminales compl?tes de `git status --short`, `git apply --check <patch>`, `npm run lint`, `npm run build`, `npm run docs:encoding` (si disponible). Un r?sum? seul n'est pas une preuve.
 - Codex ne recopie pas int?gralement les fichiers/diffs dans son retour.
 - Codex ne s?auto-valide jamais.
 

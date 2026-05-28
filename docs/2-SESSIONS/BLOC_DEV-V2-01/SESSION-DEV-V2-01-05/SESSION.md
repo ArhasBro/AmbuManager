@@ -2,24 +2,26 @@
 
 ## ID SESSION
 
-SESSION-YYYYMMDD-XX
+SESSION-DEV-V2-01-05
 
 ## Date
 
-INFORMATION NON FOURNIE — À CONFIRMER
+2026-05-28
 
 ## Contexte
 
-INFORMATION NON FOURNIE — À CONFIRMER
+Bloc DEV-V2-01 - correction ciblee des libelles visibles du shell actif (session corrective apres controle ChatGPT).
 
 ## Objectif de la session
 
-INFORMATION NON FOURNIE — À CONFIRMER
+Aligner la nomenclature V2 dans la navigation et les en-tetes visibles, sans changer les routes.
 
-## Périmètre exact traité
+## Perimetre exact traite
 
-INFORMATION NON FOURNIE — À CONFIRMER
+- Navigation shell (`/templates`, `/onboarding`).
+- En-tetes et libelles visibles associes dans dashboard, onboarding et module templates.
+- Mise a jour documentaire de la session.
 
-## Résultat synthétique de session
+## Resultat synthetique de session
 
-INFORMATION NON FOURNIE — À CONFIRMER
+Libelles visibles concernes alignes avec accents en nomenclature V2, preuves terminales completees dans `EVIDENCES.md`, sans changement de routes.

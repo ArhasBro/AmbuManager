@@ -77,7 +77,7 @@ const DOMAIN_OPTIONS: Array<{ value: ImportDomain; label: string; help: string; 
   },
   {
     value: "templates",
-    label: "Templates",
+    label: "Modèles horaires",
     help: "Ajout simple de templates. Colonnes minimales : nom, categorie. Horaires et contraintes optionnels.",
     columns: ["nom", "categorie", "requiredRole", "secondaryAllowedRoles", "minStaffCount", "requiredVehicleType", "isActive", "isTimeDefined", "startTime", "endTime", "crossesMidnight", "color"],
   },
@@ -163,8 +163,8 @@ export default function OnboardingClient({ checklist, links }: { checklist: Chec
       },
       {
         href: links.templates,
-        title: "Templates",
-        description: "Configurer les modeles de shifts de depart.",
+        title: "Modèles horaires",
+        description: "Configurer les modèles horaires de départ.",
         status: getStepStatus(checklist.templatesCount > 0, checklist.templatesCount),
         done: checklist.templatesCount > 0,
         countLabel: `${checklist.templatesCount}`,
@@ -233,7 +233,7 @@ export default function OnboardingClient({ checklist, links }: { checklist: Chec
     <section className="onboarding-layout onboarding-layout--triple">
       <section className="panel onboarding-card onboarding-card--timeline">
         <div className="onboarding-card__head">
-          <h2 className="onboarding-card__title">Progression de l&apos;onboarding</h2>
+          <h2 className="onboarding-card__title">Progression de la mise en route</h2>
           <p className="onboarding-card__description">Preparer les donnees de demarrage avant la premiere exploitation reelle.</p>
         </div>
 
@@ -472,7 +472,7 @@ export default function OnboardingClient({ checklist, links }: { checklist: Chec
             <li>Depots</li>
             <li>Utilisateurs</li>
             <li>Vehicules</li>
-            <li>Templates</li>
+            <li>Modèles horaires</li>
           </ol>
         </section>
 

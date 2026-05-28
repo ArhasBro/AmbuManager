@@ -211,7 +211,7 @@ export default async function DashboardPage() {
         { label: "Utilisateurs actifs", value: activeUsersCount, total: totalUsersCount, Icon: UsersRound, hintLabel: "utilisateurs" },
         { label: "Véhicules actifs", value: activeVehiclesCount, total: totalVehiclesCount, Icon: Ambulance, hintLabel: "véhicules" },
         { label: "Dépôts actifs", value: activeDepotsCount, total: totalDepotsCount, Icon: Landmark, hintLabel: "dépôts" },
-        { label: "Templates actifs", value: activeTemplatesCount, total: totalTemplatesCount, Icon: FileText, hintLabel: "templates" },
+        { label: "Modèles horaires actifs", value: activeTemplatesCount, total: totalTemplatesCount, Icon: FileText, hintLabel: "modèles horaires" },
       ]
     : [];
 
@@ -258,8 +258,8 @@ export default async function DashboardPage() {
   if (companyScopedSession && templatesAllowed) {
     adminLinks.push({
       href: "/templates",
-      title: "Templates",
-      description: "Gérez les modèles de shifts disponibles.",
+      title: "Modèles horaires",
+      description: "Gérez les modèles horaires disponibles.",
       Icon: FileText,
       tone: "amber",
       statusLabel: "Disponible",
@@ -294,8 +294,8 @@ export default async function DashboardPage() {
   if (companyScopedSession && companyProfileAllowed) {
     adminLinks.push({
       href: "/onboarding",
-      title: "Onboarding",
-      description: "Parcours et guides pour les nouveaux collaborateurs.",
+      title: "Mise en route",
+      description: "Parcours guidé de démarrage de la société.",
       Icon: GraduationCap,
       tone: "violet",
       statusLabel: "Selon permissions",
