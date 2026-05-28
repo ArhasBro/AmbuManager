@@ -1,89 +1,77 @@
-# TEMPLATE_SESSION.md - OUVERTURE
+# SESSION
 
-## Identite de session
-- Session : DEV-V2-01-01
-- Type : AUDIT
-- Responsable : Codex
-- Statut : PREPAREE - NON DEMARREE
-- Date de preparation : 2026-05-28
+## ID SESSION
 
-## Role attendu de Codex
-- Produire dans le repo, strictement dans le perimetre autorise.
-- Appliquer 1 session = 1 objectif unique.
-- Ne jamais conclure par validation implicite.
+DEV-V2-01-01
 
-## Objectif unique
-- Objectif : Cartographier le shell actuel, les libelles legacy et les cas non autorises pour etablir un diagnostic exploitable du bloc DEV-V2-01.
+## Date
 
-## Documents a lire
-- Obligatoires :
+28/05/2026
+
+## Contexte
+
+Projet : Investissement  
+Sous-projet : Ambulance Manager  
+Maturite : DEV-V2  
+Bloc : DEV-V2-01  
+Type : AUDIT  
+Intitule : Cartographie shell/navigation, libelles legacy et cas non autorises UI
+
+## Objectif de la session
+
+Cartographier l'etat actuel du shell prive, des routes visibles, des libelles legacy et des comportements UI pour utilisateur authentifie non autorise, afin de preparer les sessions de correction du bloc DEV-V2-01.
+
+## Perimetre exact traite
+
+Perimetre reellement audite :
+
+- documents de gouvernance session demands :
   - docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md
   - docs/2-SESSIONS/README_SESSIONS.md
   - docs/3-TEMPLATES/TEMPLATE_SESSION.md
-- Complementaires (si necessaires) :
-  - docs/1-MASTER/_INDEX_MASTER.md
-  - docs/1-MASTER/DOCUMENT_MAITRE_V2.md
-
-## Perimetre autorise
-- Fichiers autorises a modifier :
   - docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-01/SESSION.md
-- Limites :
-  - Inclus :
-  - Lecture et analyse du code frontend lie au shell/navigation.
-  - Production du cadrage d ecarts dans les livrables de session.
-  - Exclu :
-  - Aucune correction fonctionnelle metier.
-  - Aucune modification MASTER ou template.
+- lecture frontend shell/navigation :
+  - app/layout.tsx
+  - app/app-shell.tsx
+  - app/page.tsx
+  - app/dashboard/page.tsx
+  - app/planning/page.tsx
+  - app/users/page.tsx
+  - app/vehicles/page.tsx
+  - app/templates/page.tsx
+  - app/templates/templates-client.tsx
+  - app/company/page.tsx
+  - app/depots/page.tsx
+  - app/onboarding/page.tsx
+  - app/onboarding/onboarding-client.tsx
+  - app/audit/page.tsx
+  - app/login/page.tsx
+  - app/privacy/page.tsx
+  - app/planning/manual-planning-panel.tsx
+  - app/ui/error-message.tsx
+  - lib/permissions.ts
 
-## Interdits stricts
-- Modifier un fichier hors perimetre autorise.
-- Changer l objectif de session.
-- Lancer une refonte globale.
-- Valider sans preuves.
-- Modifier les documents MASTER sauf autorisation explicite.
-- Modifier le code si la session est documentaire.
-- Creer un fichier non demande.
-- Proposer une amelioration hors perimetre ailleurs que dans Points a confirmer.
-- Omettre une information manquante : ecrire INFORMATION NON FOURNIE - A CONFIRMER.
+Hors perimetre volontaire :
 
-## Travail demande
-- Taches :
-  - Inventorier le shell prive actuel (layout, navigation, header, sidebar, routes visibles).
-  - Lister tous les libelles legacy encore presents vs nomenclature V2 cible.
-  - Recenser les cas UI utilisateur authentifie non autorise (etats, messages, redirections).
-  - Produire une matrice d ecarts priorisee pour les sessions suivantes du bloc.
-- Contraintes specifiques :
-  - Session documentaire/audit uniquement : aucun patch code applicatif.
-  - Ne pas elargir vers permissions API profondes (traitees bloc DEV-V2-02).
+- toute correction de code applicatif ;
+- toute modification docs MASTER ;
+- toute modification template ;
+- toute modification hors dossier session DEV-V2-01-01.
 
-## Controles a executer
-- git status --short
-- Controles techniques selon le perimetre : npm run lint, npm run build (uniquement si code modifie)
-- Controle de diff : git diff -- docs/2-SESSIONS/BLOC_DEV-V2-01
-- Controle encodage docs : npm run docs:encoding si disponible
+## Resultat synthetique de session
 
-## Preuves attendues
-- Liste des fichiers lus.
-- Liste des fichiers modifies/crees/supprimes.
-- Resultat des commandes executees.
-- Extrait de diff des fichiers concernes.
-- Signalement explicite des informations non fournies.
+Decision patch : NO_PATCH (code applicatif).
 
-## Format de reponse obligatoire
-1. Resume court
-2. Fichiers lus
-3. Fichiers modifies
-4. Fichiers crees
-5. Fichiers non modifies
-6. Changements realises
-7. Controles executes avec resultats
-8. Sequences suspectes restantes (mojibake) avec fichier/ligne
-9. git status --short
-10. Points a confirmer
-11. Verdict final
+Verdict formel d'audit : incomplet.
 
-## Verdict final obligatoire
-- OBJECTIF UNIQUE ATTEINT : OUI / NON
-- PERIMETRE RESPECTE : OUI / NON
-- PREUVES FOURNIES ET VERIFIABLES : OUI / NON
-- VALIDATION EXPLICITE (AUCUNE IMPLICITE) : OUI / NON
+Constat principal :
+
+- shell prive en place (sidebar/topbar/navigation conditionnelle) ;
+- nomenclature legacy encore exposee (Templates, Onboarding) au lieu de la cible V2 (Modeles horaires, Mise en route) ;
+- gestion non autorisee non homogene (redirect /login, redirect /dashboard, message inline uniquement sur planning) ;
+- matrice d'ecarts priorisee produite pour DEV-V2-01-05/06/07.
+
+## Dossiers lies
+
+- Session : docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-01
+- PATCH   : docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-01/PATCH
