@@ -1,67 +1,64 @@
 # TEMPLATE_BLOC_SESSIONS_PROMPTS.md
 
-## A) Prompt Codex — Créer les sessions d’un bloc demandé
+## A) Prompt Codex ? Cr?er les sessions d?un bloc demand?
 ```text
 Tu es expert en documentation technique, gouvernance de sessions et prompts Codex.
 
-Objectif unique : créer les sessions du bloc demandé, sans démarrer leur exécution.
+Objectif unique : cr?er les sessions du bloc demand?, sans d?marrer leur ex?cution.
 
-Bloc demandé : <BLOC_DEV-V2-XX>
+Bloc demand? : <BLOC_DEV-V2-XX>
 
-Documents à lire :
+Documents ? lire :
 - docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md (plan actif)
 - docs/2-SESSIONS/README_SESSIONS.md
 - docs/3-TEMPLATES/TEMPLATE_SESSION.md
 
-Travail demandé :
-- Identifier les sessions prévues du bloc demandé.
-- Créer uniquement les dossiers/fichiers nécessaires dans docs/2-SESSIONS.
-- Rédiger chaque ouverture de session en utilisant TEMPLATE_SESSION.md comme base.
-- Préparer les sessions, sans les démarrer.
+Travail demand? :
+- Cr?er les sessions via `create_session.ps1` (pas de cr?ation manuelle alternative).
+- V?rifier la structure de chaque session : SESSION.md, NOTES.md, EVIDENCES.md, RESULTATS.md, FIN_SESSION.md, PATCH/.
+- Pr?parer les ouvertures de session sans ex?cuter le travail m?tier.
 
 Interdits stricts :
 - Ne pas coder.
 - Ne pas modifier les documents MASTER.
-- Ne pas modifier d’autres templates.
-- Ne pas créer de fichier hors besoin du bloc.
-- Ne pas lancer l’exécution des sessions.
+- Ne pas cr?er de fichier hors besoin du bloc.
 
 Preuves attendues :
-- Liste des sessions identifiées.
-- Liste des dossiers/fichiers créés.
-- Vérification UTF-8 sans BOM.
-- Vérification absence de séquences suspectes (mojibake) : `U+00C3`, `U+00C2`, `U+00E2 U+20AC`, `U+FFFD`.
-- `npm run docs:encoding` si disponible.
+- Liste des sessions identifi?es.
+- Liste des dossiers/fichiers cr??s.
 - `git status --short`.
-- Diff ciblé docs/2-SESSIONS.
+- `npm run docs:encoding` si disponible.
 
-Verdict final obligatoire :
-- SESSIONS DU BLOC CRÉÉES ET PRÊTES AU LANCEMENT : OUI / NON
+Verdict final attendu :
+- SESSIONS DU BLOC CR??ES ET PR?TES AU LANCEMENT : OUI / NON
 ```
 
-## B) Prompt ChatGPT — Générer les prompts de lancement et de contrôle
+## B) Prompt ChatGPT contr?le ? Contr?ler le retour Codex
 ```text
-Tu es expert en contrôle qualité ChatGPT et prompts de session.
+Tu es expert en contr?le qualit? ChatGPT.
 
-Contexte d’entrée :
-- Bloc : <BLOC_DEV-V2-XX>
-- Sessions créées :
-  - <SESSION-YYYYMMDD-XX — intitulé>
-  - <SESSION-YYYYMMDD-XX — intitulé>
+R?gle d?entr?e :
+- Si aucun retour brut Codex n?est fourni, r?pondre uniquement :
+  EN ATTENTE DU RETOUR CODEX ? CONTR?LE NON D?MARR?
 
-Travail demandé :
-Pour chaque session, génère :
-1) Un prompt Codex de lancement (production dans le repo, objectif unique, périmètre fermé, contrôles et preuves obligatoires).
-2) Un prompt ChatGPT de contrôle du retour Codex (contrôle uniquement sur preuves fournies, aucune validation implicite).
+R?gle de contr?le :
+- ChatGPT contr?le ne contr?le pas le repo directement.
+- ChatGPT contr?le v?rifie uniquement le retour brut Codex et les pi?ces transmises apr?s ce retour.
 
-Contraintes :
-- Format court, strict, directement copiable.
-- Une commande non montrée = non prouvée.
-- Toute information manquante : INFORMATION NON FOURNIE — À CONFIRMER.
-
-Format de sortie :
-- Session <id>
-- Prompt Codex (bloc texte)
-- Prompt ChatGPT (bloc texte)
-- Verdict de contrôlabilité : OUI / NON
+Points de contr?le :
+- Respect du p?rim?tre.
+- Preuves commandes/r?sultats.
+- `git status --short`.
+- Encodage si requis.
+- Session documentaire : pas de `.diff` obligatoire.
+- Session code : `.diff` dans PATCH/ + preuve `git apply --check`.
 ```
+
+## C) R?gles op?rationnelles officielles
+
+- ChatGPT contr?le ne contr?le rien avant le retour brut Codex.
+- Si retour brut absent : `EN ATTENTE DU RETOUR CODEX ? CONTR?LE NON D?MARR?`.
+- Session documentaire : pas de `.diff` obligatoire.
+- Session code : `.diff` obligatoire dans `PATCH/` + `git apply --check`.
+- Codex ne recopie pas int?gralement les fichiers/diffs dans son retour.
+- Codex ne s?auto-valide jamais.

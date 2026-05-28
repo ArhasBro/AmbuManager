@@ -1,78 +1,86 @@
 # TEMPLATE_SESSION.md
 
-## Identité de session
+## Identit? de session
 - Session : `SESSION-YYYYMMDD-XX`
-- Type : `AUDIT | CORRECTION | COMPLÉTION | VALIDATION | CLOTURE | DOCUMENTATION`
+- Type : `AUDIT | CORRECTION | CORRECTION_DOCUMENTAIRE | COMPLETION | VALIDATION | CLOTURE | DOCUMENTATION`
 - Responsable : `Codex`
 
-## Rôle attendu de Codex
-- Produire dans le repo, strictement dans le périmètre autorisé.
+## R?le attendu de Codex
+- Produire dans le repo, strictement dans le p?rim?tre autoris?.
 - Appliquer `1 session = 1 objectif unique`.
-- Ne jamais conclure par validation implicite.
+- Ne pas s?auto-valider.
 
 ## Objectif unique
-- Objectif : `<à renseigner, unique et testable>`
+- Objectif : `<? renseigner, unique et testable>`
 
-## Documents à lire
+## Documents ? lire
 - Obligatoires :
   - `<fichier 1>`
   - `<fichier 2>`
-- Complémentaires (si nécessaires) :
+- Compl?mentaires (si n?cessaires) :
   - `<fichier n>`
 
-## Périmètre autorisé
-- Fichiers autorisés à modifier :
+## P?rim?tre autoris?
+- Fichiers autoris?s ? modifier :
   - `<liste explicite>`
 - Limites :
   - `<ce qui est inclus>`
   - `<ce qui est exclu>`
 
 ## Interdits stricts
-- Modifier un fichier hors périmètre autorisé.
-- Changer l’objectif de session.
+- Modifier un fichier hors p?rim?tre autoris?.
+- Changer l?objectif de session.
 - Lancer une refonte globale.
 - Valider sans preuves.
 - Modifier les documents MASTER sauf autorisation explicite.
 - Modifier le code si la session est documentaire.
-- Créer un fichier non demandé.
-- Proposer une amélioration hors périmètre ailleurs que dans `Points à confirmer`.
-- Omettre une information manquante : écrire `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Cr?er un fichier non demand?.
+- Proposer une am?lioration hors p?rim?tre ailleurs que dans `Points ? confirmer`.
+- Omettre une information manquante : ?crire `INFORMATION NON FOURNIE ? ? CONFIRMER`.
 
-## Travail demandé
-- Tâches :
-  - `<tâche 1>`
-  - `<tâche 2>`
-- Contraintes spécifiques :
+## Travail demand?
+- T?ches :
+  - `<t?che 1>`
+  - `<t?che 2>`
+- Contraintes sp?cifiques :
   - `<contrainte 1>`
 
-## Contrôles à exécuter
+## Contr?les ? ex?cuter
 - `git status --short`
-- Contrôles techniques selon le périmètre : `<commande(s)>` (exemples : `npm run lint`, `npm run build`, `npx prisma validate` si Prisma concerné, `npx prisma generate` si Prisma concerné)
-- Contrôle de diff : `git diff -- <chemins concernés>`
-- Contrôle encodage docs : `npm run docs:encoding` si disponible
+- Contr?les techniques selon le p?rim?tre : `<commande(s)>` (exemples : `npm run lint`, `npm run build`, `npx prisma validate` si Prisma concern?, `npx prisma generate` si Prisma concern?)
+- Contr?le de diff :
+  - Session documentaire : non obligatoire.
+  - Session code : `git diff -- <chemins concernes>` + patch `.diff` dans `PATCH/` + `git apply --check <chemin_du_patch>`.
+- Contr?le encodage docs : `npm run docs:encoding` si disponible
 
 ## Preuves attendues
 - Liste des fichiers lus.
-- Liste des fichiers modifiés/créés/supprimés.
-- Résultat des commandes exécutées.
-- Extrait de diff des fichiers concernés.
+- Liste des fichiers modifi?s/cr??s/supprim?s.
+- R?sultat des commandes ex?cut?es.
+- Extrait de diff des fichiers concern?s (session code uniquement).
 - Signalement explicite des informations non fournies.
 
-## Format de réponse obligatoire
-1. Résumé court
+## Format de r?ponse obligatoire
+1. R?sum? court
 2. Fichiers lus
-3. Fichiers modifiés
-4. Fichiers créés
-5. Fichiers non modifiés
-6. Changements réalisés
-7. Contrôles exécutés avec résultats
-8. Séquences suspectes restantes (mojibake) avec fichier/ligne
+3. Fichiers modifi?s
+4. Fichiers cr??s
+5. Fichiers non modifi?s
+6. Changements r?alis?s
+7. Contr?les ex?cut?s avec r?sultats
+8. S?quences suspectes restantes (mojibake) avec fichier/ligne
 9. `git status --short`
-10. Points à confirmer
-11. Verdict final
+10. Points ? confirmer
+11. Conclusion
 
-## Verdict final obligatoire
-- `OBJECTIF UNIQUE ATTEINT : OUI / NON`
-- `PÉRIMÈTRE RESPECTÉ : OUI / NON`
-- `PREUVES FOURNIES ET VÉRIFIABLES : OUI / NON`
-- `VALIDATION EXPLICITE (AUCUNE IMPLICITE) : OUI / NON`
+## Conclusion attendue
+- `Travail termin? c?t? Codex, en attente de contr?le ChatGPT / validation humaine.`
+
+## R?gles officielles Codex / ChatGPT contr?le
+
+- ChatGPT contr?le : si aucun retour brut Codex n?est fourni, r?pondre uniquement : `EN ATTENTE DU RETOUR CODEX ? CONTR?LE NON D?MARR?`.
+- Cr?ation de session : utiliser `create_session.ps1` et v?rifier la pr?sence de `SESSION.md`, `NOTES.md`, `EVIDENCES.md`, `RESULTATS.md`, `FIN_SESSION.md`, `PATCH/`.
+- Retour Codex : ne pas recopier int?gralement les `.md` ou `.diff` ; fournir un r?sum? court et des preuves command?es.
+- Session documentaire : pas de `.diff` obligatoire.
+- Session code : `.diff` obligatoire dans `PATCH/` + preuve `git apply --check <chemin_du_patch>`.
+- Validation : Codex ne s?auto-valide jamais.

@@ -16,10 +16,10 @@ $ErrorActionPreference = "Stop"
 
 # --- CONFIG ---
 $DocsRoot            = ".\docs"
-$DocsSessionsRoot    = Join-Path $DocsRoot "2-sessions"
+$DocsSessionsRoot    = Join-Path $DocsRoot "2-SESSIONS"
 $PatchSubDirName     = "PATCH"
 $SessionTemplateDir  = Join-Path $DocsSessionsRoot "SESSION-YYYYMMDD-XX"
-$DefaultOpenInVSCode = $true
+$DefaultOpenInVSCode = $false
 
 $AlphaBlockMin = 1
 $AlphaBlockMax = 99
@@ -29,6 +29,8 @@ $BetaBlockMax  = 99
 $AllowedTypeTokens = @(
     'AUDIT',
     'CORRECTION',
+    'CORRECTION_DOCUMENTAIRE',
+    'DOCUMENTATION',
     'COMPLETION',
     'VALIDATION',
     'CADRAGE',
@@ -119,7 +121,10 @@ function Get-CanonicalStage {
         "2-BETA"  { return "2-BETA" }
         "BETA"    { return "2-BETA" }
         "B"       { return "2-BETA" }
-        default   { throw "Stage invalide. Valeurs autorisees : 1-ALPHA, 2-BETA, ALPHA, BETA." }
+        "DEV-V2"  { return "DEV-V2" }
+        "DEVV2"   { return "DEV-V2" }
+        "V2"      { return "DEV-V2" }
+        default   { throw "Stage invalide. Valeurs autorisees : 1-ALPHA, 2-BETA, DEV-V2, ALPHA, BETA." }
     }
 }
 
@@ -140,6 +145,11 @@ function Test-BlockAllowedForStage {
             $pattern = Get-BlockRegexPattern -Prefix "B" -Min $BetaBlockMin -Max $BetaBlockMax
             if ($BlockValue -notmatch $pattern) {
                 throw "Bloc invalide pour 2-BETA. Valeurs autorisees : $(Get-BlockRangeLabel -Prefix 'B' -Min $BetaBlockMin -Max $BetaBlockMax)."
+            }
+        }
+        "DEV-V2" {
+            if ($BlockValue -notmatch '^DEV-V2-\d{2}$') {
+                throw "Bloc invalide pour DEV-V2. Valeur attendue : DEV-V2-XX."
             }
         }
         default {
@@ -168,6 +178,10 @@ function Get-CanonicalBlock {
         return $clean
     }
 
+    if ($clean -match '^DEV-V2-\d{2}$') {
+        return $clean
+    }
+
     throw "Bloc invalide. Valeurs autorisees : $(Get-BlockRangeLabel -Prefix 'A' -Min $AlphaBlockMin -Max $AlphaBlockMax), $(Get-BlockRangeLabel -Prefix 'B' -Min $BetaBlockMin -Max $BetaBlockMax) (ou BLOC_A1 a BLOC_A21, BLOC_B1 a BLOC_B4)."
 }
 
@@ -176,6 +190,11 @@ function Get-CanonicalType {
 
     $normalized = Convert-ToPlainLabel -Value $Value
     $allowedTypesLabel = ($AllowedTypeTokens -join ', ')
+
+    switch ($normalized) {
+        "CORRECTIONDOCUMENTAIRE" { return "CORRECTION_DOCUMENTAIRE" }
+        "DOCUMENTAIRE"           { return "DOCUMENTATION" }
+    }
 
     if ([string]::IsNullOrWhiteSpace($normalized)) {
         throw "Type invalide. Tokens autorises : $allowedTypesLabel. Combinaisons acceptees avec '+', par exemple AUDIT+VALIDATION ou AUDIT+CORRECTION+COMPLETION+VALIDATION."
@@ -441,17 +460,31 @@ if ($SessionCode -notmatch '^[A-Z0-9_-]+$') {
 Test-PathOrThrow $DocsSessionsRoot
 Test-PathOrThrow $SessionTemplateDir
 
-$stageSessionsRoot = Join-Path $DocsSessionsRoot $Stage
-$blockDirName      = "BLOC_{0}" -f $Block
-$blockSessionsRoot = Join-Path $stageSessionsRoot $blockDirName
+$blockDirName = "BLOC_{0}" -f $Block
+if ($Stage -eq "DEV-V2") {
+    $stageSessionsRoot = $DocsSessionsRoot
+    $blockSessionsRoot = Join-Path $DocsSessionsRoot $blockDirName
+}
+else {
+    $stageSessionsRoot = Join-Path $DocsSessionsRoot $Stage
+    $blockSessionsRoot = Join-Path $stageSessionsRoot $blockDirName
+}
 
 New-DirectoryIfMissing -Path $stageSessionsRoot
 New-DirectoryIfMissing -Path $blockSessionsRoot
 
 $dateToken   = Get-Date -Format "yyyyMMdd"
 $dateDisplay = Get-Date -Format "dd/MM/yyyy"
-$nextOrdinal = Get-NextSessionOrdinal -StageSessionsRoot $stageSessionsRoot -DateToken $dateToken
-$sessionId   = "SESSION-{0}-{1:D2}_{2}_{3}" -f $dateToken, $nextOrdinal, $Block, $SessionCode
+if ($Stage -eq "DEV-V2") {
+    if ($SessionCode -notmatch '^\d{2}$') {
+        throw "Pour DEV-V2, le code session doit etre sur 2 chiffres (ex: 01, 02)."
+    }
+    $sessionId = "SESSION-{0}-{1}" -f $Block, $SessionCode
+}
+else {
+    $nextOrdinal = Get-NextSessionOrdinal -StageSessionsRoot $stageSessionsRoot -DateToken $dateToken
+    $sessionId   = "SESSION-{0}-{1:D2}_{2}_{3}" -f $dateToken, $nextOrdinal, $Block, $SessionCode
+}
 
 $newSessionDir = Join-Path $blockSessionsRoot $sessionId
 $newPatchDir   = Join-Path $newSessionDir $PatchSubDirName
@@ -465,7 +498,12 @@ if (Test-Path $newPatchDir) {
 
 Copy-Item -Recurse -Force $SessionTemplateDir $newSessionDir
 
-$sessionRelativePath = (Join-Path "docs/2-sessions/$Stage/$blockDirName" $sessionId) -replace '\\','/'
+$sessionRelativePath = if ($Stage -eq "DEV-V2") {
+    (Join-Path "docs/2-SESSIONS/$blockDirName" $sessionId) -replace '\\','/'
+}
+else {
+    (Join-Path "docs/2-SESSIONS/$Stage/$blockDirName" $sessionId) -replace '\\','/'
+}
 $patchRelativePath   = (Join-Path $sessionRelativePath $PatchSubDirName) -replace '\\','/'
 
 Initialize-SessionFiles `

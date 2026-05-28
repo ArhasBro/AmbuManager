@@ -203,3 +203,47 @@ Règles :
 - il ne doit pas redevenir un plan de développement parallèle ;
 - il doit être modifié uniquement si le fonctionnement réel des sessions change ;
 - toute modification importante doit être validée humainement.
+
+## 17. R?gles officielles Codex / ChatGPT contr?le
+
+### 17.1 ChatGPT contr?le
+
+- ChatGPT contr?le ne doit pas d?marrer de contr?le repo/ZIP ? l'ouverture.
+- Tant que le retour brut Codex n'est pas fourni, il doit r?pondre uniquement :
+  - `EN ATTENTE DU RETOUR CODEX ? CONTR?LE NON D?MARR?`
+- ChatGPT contr?le contr?le uniquement le retour brut Codex et les pi?ces transmises ensuite.
+
+### 17.2 Cr?ation de session
+
+- Toute session doit ?tre cr??e via `create_session.ps1`.
+- La structure doit ?tre pr?sente d?s l'ouverture :
+  - `SESSION.md`
+  - `NOTES.md`
+  - `EVIDENCES.md`
+  - `RESULTATS.md`
+  - `FIN_SESSION.md`
+  - `PATCH/`
+- Si le script ?choue, afficher l'erreur exacte et s'arr?ter sans cr?ation manuelle alternative.
+
+### 17.3 Retour Codex
+
+- Ne pas recopier int?gralement les `.md`, les `.diff` et les gros contenus.
+- Fournir seulement : r?sum? court, chemins des fichiers, commandes ex?cut?es, preuves, `git status --short`, justification des commandes non lanc?es.
+
+### 17.4 Session documentaire
+
+- Pas de `.diff` obligatoire.
+- Pas de `git diff` complet obligatoire dans le retour.
+- `git status --short` et contr?le d'encodage restent obligatoires.
+
+### 17.5 Session code
+
+- Si patch code : `.diff` obligatoire.
+- Le `.diff` doit ?tre dans `PATCH/` et commencer par `diff --git`.
+- Preuve obligatoire : `git apply --check <chemin_du_patch>`.
+
+### 17.6 Validation
+
+- Codex ne s'auto-valide jamais.
+- Formule autoris?e : `Travail termin? c?t? Codex, en attente de contr?le ChatGPT / validation humaine.`
+- La validation appartient ? ChatGPT contr?le et ? la validation humaine.
