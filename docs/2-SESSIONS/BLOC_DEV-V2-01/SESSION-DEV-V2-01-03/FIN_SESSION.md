@@ -1,13 +1,14 @@
 # FIN_SESSION
 
-## Clôture
+## Cloture
 
-INFORMATION NON FOURNIE — À CONFIRMER
+Objectif documentaire traite dans le perimetre autorise, sans modification du code applicatif.
 
 ## Validation
 
-INFORMATION NON FOURNIE — À CONFIRMER
+Codex ne s auto-valide pas. Controle ChatGPT puis validation humaine requis.
 
 ## Verdict final
 
-INFORMATION NON FOURNIE — À CONFIRMER
+- `DEV-V2-01-03 - AUDIT conventions composants partages : OUI`
+- `PASSAGE A LA SESSION SUIVANTE RECOMMANDE : OUI`
