@@ -20,7 +20,8 @@ Date : 26/05/2026
 - 13. Interdictions strictes
 - 14. Documents concurrents archivés
 - 15. Conclusion
-- 16. Contrôle de conformité de cette proposition
+- 16. Statut du document
+- 17. Règles officielles Codex / ChatGPT contrôle
 
 ## 1. Rôle du dossier docs/2-SESSIONS
 
@@ -204,55 +205,55 @@ Règles :
 - il doit être modifié uniquement si le fonctionnement réel des sessions change ;
 - toute modification importante doit être validée humainement.
 
-## 17. R?gles officielles Codex / ChatGPT contr?le
+## 17. Règles officielles Codex / ChatGPT contrôle
 
-### 17.1 ChatGPT contr?le
+### 17.1 ChatGPT contrôle
 
-- ChatGPT contr?le ne doit pas d?marrer de contr?le repo/ZIP ? l'ouverture.
-- Tant que le retour brut Codex n'est pas fourni, il doit r?pondre uniquement :
-  - `EN ATTENTE DU RETOUR CODEX ? CONTR?LE NON D?MARR?`
-- ChatGPT contr?le contr?le uniquement le retour brut Codex et les pi?ces transmises ensuite.
+- ChatGPT contrôle ne doit pas démarrer de contrôle repo/ZIP à l’ouverture.
+- Tant que le retour brut Codex n’est pas fourni, il doit répondre uniquement :
+  - `EN ATTENTE DU RETOUR CODEX — CONTRÔLE NON DÉMARRÉ`
+- ChatGPT contrôle contrôle uniquement le retour brut Codex et les pièces transmises ensuite.
 
-### 17.2 Cr?ation de session
+### 17.2 Création de session
 
-- Toute session doit ?tre cr??e via `create_session.ps1`.
-- La structure doit ?tre pr?sente d?s l'ouverture :
+- Toute session doit être créée via `create_session.ps1`.
+- La structure doit être présente dès l’ouverture :
   - `SESSION.md`
   - `NOTES.md`
   - `EVIDENCES.md`
   - `RESULTATS.md`
   - `FIN_SESSION.md`
   - `PATCH/`
-- Si le script ?choue, afficher l'erreur exacte et s'arr?ter sans cr?ation manuelle alternative.
+- Si le script échoue, afficher l’erreur exacte et s’arrêter sans création manuelle alternative.
 
 ### 17.3 Retour Codex
 
-- Ne pas recopier int?gralement les `.md`, les `.diff` et les gros contenus.
-- Fournir seulement : r?sum? court, chemins des fichiers, commandes ex?cut?es, preuves, `git status --short`, justification des commandes non lanc?es.
+- Ne pas recopier intégralement les `.md`, les `.diff` et les gros contenus.
+- Fournir seulement : résumé court, chemins des fichiers, commandes exécutées, preuves, `git status --short`, justification des commandes non lancées.
 
 ### 17.4 Session documentaire
 
 - Pas de `.diff` obligatoire.
 - Pas de `git diff` complet obligatoire dans le retour.
-- `git status --short` et contr?le d'encodage restent obligatoires.
+- `git status --short` et contrôle d’encodage restent obligatoires.
 
 ### 17.5 Session code
 
 - Si patch code : `.diff` obligatoire.
-- Le `.diff` doit ?tre dans `PATCH/` et commencer par `diff --git`.
+- Le `.diff` doit être dans `PATCH/` et commencer par `diff --git`.
 - Preuve obligatoire : `git apply --check <chemin_du_patch>`.
 
 ### 17.6 Validation
 
-- Codex ne s'auto-valide jamais.
-- Formule autoris?e : `Travail termin? c?t? Codex, en attente de contr?le ChatGPT / validation humaine.`
-- La validation appartient ? ChatGPT contr?le et ? la validation humaine.
+- Codex ne s’auto-valide jamais.
+- Formule autorisée : `Travail terminé côté Codex, en attente de contrôle ChatGPT / validation humaine.`
+- La validation appartient à ChatGPT contrôle et à la validation humaine.
 
 ### 17.7 Preuves obligatoires des sessions code
 
-- Si code modifi? : pr?sence obligatoire d'un patch `.diff` dans `PATCH/`, commen?ant par `diff --git`.
-- La commande exacte `git apply --check <chemin_du_patch>` doit ?tre ex?cut?e et sa sortie terminale compl?te copi?e dans `EVIDENCES.md`.
-- `git status --short`, `npm run lint`, `npm run build` et `npm run docs:encoding` (si disponible) doivent ?tre ex?cut?s avec sorties compl?tes copi?es.
-- Si une commande ?choue ou n'existe pas : copier la sortie compl?te d'?chec.
-- Un simple r?sum? ("OK", "succ?s", "exit 0") ne constitue jamais une preuve suffisante.
-- Codex ne s'auto-valide jamais ; le verdict final appartient au contr?le externe.
+- Si code modifié : présence obligatoire d’un patch `.diff` dans `PATCH/`, commençant par `diff --git`.
+- La commande exacte `git apply --check <chemin_du_patch>` doit être exécutée et sa sortie terminale complète copiée dans `EVIDENCES.md`.
+- `git status --short`, `npm run lint`, `npm run build` et `npm run docs:encoding` (si disponible) doivent être exécutés avec sorties complètes copiées.
+- Si une commande échoue ou n’existe pas : copier la sortie complète d’échec.
+- Un simple résumé (`OK`, `succès`, `exit 0`) ne constitue jamais une preuve suffisante.
+- Codex ne s’auto-valide jamais ; le verdict final appartient au contrôle externe.

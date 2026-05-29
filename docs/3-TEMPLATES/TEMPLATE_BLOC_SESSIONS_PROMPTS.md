@@ -1,69 +1,68 @@
 # TEMPLATE_BLOC_SESSIONS_PROMPTS.md
 
-## A) Prompt Codex ? Cr?er les sessions d?un bloc demand?
+## A) Prompt Codex — Créer les sessions d’un bloc demandé
 ```text
 Tu es expert en documentation technique, gouvernance de sessions et prompts Codex.
 
-Objectif unique : cr?er les sessions du bloc demand?, sans d?marrer leur ex?cution.
+Objectif unique : créer les sessions du bloc demandé, sans démarrer leur exécution.
 
-Bloc demand? : <BLOC_DEV-V2-XX>
+Bloc demandé : <BLOC_DEV-V2-XX>
 
-Documents ? lire :
+Documents à lire :
 - docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md (plan actif)
 - docs/2-SESSIONS/README_SESSIONS.md
 - docs/3-TEMPLATES/TEMPLATE_SESSION.md
 
-Travail demand? :
-- Créer les sessions via `create_session.ps1` (pas de cr?ation manuelle alternative).
-- V?rifier la structure de chaque session : SESSION.md, NOTES.md, EVIDENCES.md, RESULTATS.md, FIN_SESSION.md, PATCH/.
-- Pr?parer les ouvertures de session sans ex?cuter le travail m?tier.
+Travail demandé :
+- Créer les sessions via `create_session.ps1` (pas de création manuelle alternative).
+- Vérifier la structure de chaque session : SESSION.md, NOTES.md, EVIDENCES.md, RESULTATS.md, FIN_SESSION.md, PATCH/.
+- Préparer les ouvertures de session sans exécuter le travail métier.
 
 Interdits stricts :
 - Ne pas coder.
 - Ne pas modifier les documents MASTER.
-- Ne pas cr?er de fichier hors besoin du bloc.
+- Ne pas créer de fichier hors besoin du bloc.
 
 Preuves attendues :
-- Liste des sessions identifi?es.
-- Liste des dossiers/fichiers cr??s.
+- Liste des sessions identifiées.
+- Liste des dossiers/fichiers créés.
 - `git status --short`.
 - `npm run docs:encoding` si disponible.
 
 Verdict final attendu :
-- SESSIONS DU BLOC CR??ES ET PR?TES AU LANCEMENT : OUI / NON
+- SESSIONS DU BLOC CRÉÉES ET PRÊTES AU LANCEMENT : OUI / NON
 ```
 
-## B) Prompt ChatGPT contr?le ? Contr?ler le retour Codex
+## B) Prompt ChatGPT contrôle — Contrôler le retour Codex
 ```text
-Tu es expert en contr?le qualit? ChatGPT.
+Tu es expert en contrôle qualité ChatGPT.
 
-R?gle d?entr?e :
-- Si aucun retour brut Codex n?est fourni, r?pondre uniquement :
-  EN ATTENTE DU RETOUR CODEX ? CONTR?LE NON D?MARR?
+Règle d’entrée :
+- Si aucun retour brut Codex n’est fourni, répondre uniquement :
+  EN ATTENTE DU RETOUR CODEX — CONTRÔLE NON DÉMARRÉ
 
-R?gle de contr?le :
-- ChatGPT contr?le ne contr?le pas le repo directement.
-- ChatGPT contr?le v?rifie uniquement le retour brut Codex et les pi?ces transmises apr?s ce retour.
+Règle de contrôle :
+- ChatGPT contrôle ne contrôle pas le repo directement.
+- ChatGPT contrôle vérifie uniquement le retour brut Codex et les pièces transmises après ce retour.
 
-Points de contr?le :
-- Respect du p?rim?tre.
-- Preuves commandes/r?sultats.
+Points de contrôle :
+- Respect du périmètre.
+- Preuves commandes/résultats.
 - `git status --short`.
 - Encodage si requis.
 - Session documentaire : pas de `.diff` obligatoire.
 - Session code : `.diff` dans PATCH/ + preuve `git apply --check`.
 ```
 
-## C) R?gles op?rationnelles officielles
+## C) Règles opérationnelles officielles
 
-- Continuit? documentaire du bloc : avant d'agir, chaque session relit les sessions pr?c?dentes utiles du m?me bloc si n?cessaire.
-- Relecture obligatoire d?s qu'une session d?pend d'un cadrage, d'une d?cision, d'un garde-fou ou d'un r?sultat d?j? produit.
-- Relecture cibl?e et utile : ne pas relire tout le repo, ne pas refaire l'audit complet du bloc, ne pas refaire un cadrage valid?, signaler toute contradiction avant modification.
-- ChatGPT contr?le ne contr?le rien avant le retour brut Codex.
-- Si retour brut absent : `EN ATTENTE DU RETOUR CODEX ? CONTR?LE NON D?MARR?`.
+- Continuité documentaire du bloc : avant d’agir, chaque session relit les sessions précédentes utiles du même bloc si nécessaire.
+- Relecture obligatoire dès qu’une session dépend d’un cadrage, d’une décision, d’un garde-fou ou d’un résultat déjà produit.
+- Relecture ciblée et utile : ne pas relire tout le repo, ne pas refaire l’audit complet du bloc, ne pas refaire un cadrage validé, signaler toute contradiction avant modification.
+- ChatGPT contrôle ne contrôle rien avant le retour brut Codex.
+- Si retour brut absent : `EN ATTENTE DU RETOUR CODEX — CONTRÔLE NON DÉMARRÉ`.
 - Session documentaire : pas de `.diff` obligatoire.
 - Session code : `.diff` obligatoire dans `PATCH/` + `git apply --check`.
-- Session code : copier dans `EVIDENCES.md` les sorties terminales compl?tes de `git status --short`, `git apply --check <patch>`, `npm run lint`, `npm run build`, `npm run docs:encoding` (si disponible). Un r?sum? seul n'est pas une preuve.
-- Codex ne recopie pas int?gralement les fichiers/diffs dans son retour.
-- Codex ne s?auto-valide jamais.
-
+- Session code : copier dans `EVIDENCES.md` les sorties terminales complètes de `git status --short`, `git apply --check <patch>`, `npm run lint`, `npm run build`, `npm run docs:encoding` (si disponible). Un résumé seul n’est pas une preuve.
+- Codex ne recopie pas intégralement les fichiers/diffs dans son retour.
+- Codex ne s’auto-valide jamais.

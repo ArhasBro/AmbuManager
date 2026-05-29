@@ -1,62 +1,20 @@
-# EVIDENCES
+# EVIDENCES — DEV-V2-01-05 (correction finale)
 
-Elements factuels utilises pendant la session corrective.
+Sorties terminales complètes recopiées ci-dessous.
 
----
-
-## Sources utilisees
-
-- `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md`
-- `docs/2-SESSIONS/README_SESSIONS.md`
-- `docs/3-TEMPLATES/TEMPLATE_SESSION.md`
-- `docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/SESSION.md`
-- `app/layout.tsx`
-- `app/dashboard/page.tsx`
-- `app/onboarding/page.tsx`
-- `app/onboarding/onboarding-client.tsx`
-- `app/templates/templates-client.tsx`
-- `docs/2-SESSIONS/README_SESSIONS.md`
-- `docs/3-TEMPLATES/TEMPLATE_BLOC_SESSIONS_PROMPTS.md`
-
-## Commandes executees et sorties terminales completes
-
-### Commande
-```bash
-git status --short
+## Commande
+```powershell
+git status --short --untracked-files=all
 ```
 Sortie :
 ```text
- M app/dashboard/page.tsx
- M app/layout.tsx
- M app/onboarding/onboarding-client.tsx
- M app/onboarding/page.tsx
- M app/templates/templates-client.tsx
  M docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/EVIDENCES.md
- M docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/FIN_SESSION.md
- M docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/NOTES.md
- M docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/RESULTATS.md
- M docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/SESSION.md
  M docs/2-SESSIONS/README_SESSIONS.md
  M docs/3-TEMPLATES/TEMPLATE_BLOC_SESSIONS_PROMPTS.md
-?? docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/PATCH/
 ```
 
-### Commande
-```bash
-git apply --check docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/PATCH/DEV-V2-01-05_FIX-01-code.diff
-```
-Sortie :
-```text
-error: patch failed: app/onboarding/page.tsx:40
-error: app/onboarding/page.tsx: patch does not apply
-error: patch failed: app/onboarding/onboarding-client.tsx:77
-error: app/onboarding/onboarding-client.tsx: patch does not apply
-error: patch failed: app/templates/templates-client.tsx:824
-error: app/templates/templates-client.tsx: patch does not apply
-```
-
-### Commande
-```bash
+## Commande
+```powershell
 npm run docs:encoding
 ```
 Sortie :
@@ -72,8 +30,8 @@ UTF-8 without BOM: OK
 No active mojibake sequence found.
 ```
 
-### Commande
-```bash
+## Commande
+```powershell
 npm run lint
 ```
 Sortie :
@@ -106,8 +64,8 @@ C:\Users\arche\ambulance-manager\app\planning\planning-client.tsx
 ✖ 18 problems (0 errors, 18 warnings)
 ```
 
-### Commande
-```bash
+## Commande
+```powershell
 npm run build
 ```
 Sortie :
@@ -120,14 +78,14 @@ Sortie :
 - Environments: .env
 
   Creating an optimized production build ...
-✓ Compiled successfully in 12.4s
+✓ Compiled successfully in 7.1s
   Running TypeScript ...
   Collecting page data using 15 workers ...
   Generating static pages using 15 workers (0/29) ...
   Generating static pages using 15 workers (7/29) 
   Generating static pages using 15 workers (14/29) 
   Generating static pages using 15 workers (21/29) 
-✓ Generating static pages using 15 workers (29/29) in 739.4ms
+✓ Generating static pages using 15 workers (29/29) in 417.9ms
   Finalizing page optimization ...
 
 Route (app)
@@ -188,45 +146,196 @@ Route (app)
 ƒ  (Dynamic)  server-rendered on demand
 ```
 
-### Commande
-```bash
-Controle mojibake (motifs: Ã, Â, â€, �) sur fichiers modifies
+## Commande
+```powershell
+git worktree add --detach "C:\Users\arche\AppData\Local\Temp\am-dev-v2-01-05-proof-final2-20260529090234" 936c69fabe54f1a5b445aa6e74f66bbb644b1efa
 ```
 Sortie :
 ```text
-docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/EVIDENCES.md => SEQUENCE_SUSPECTE_DETECTEE
+cmd.exe : Preparing worktree (detached HEAD 936c69f)
+Au caractère Ligne:14 : 8
++   $out=cmd.exe /d /c $full 2>&1 | Out-String
++        ~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Preparing workt...d HEAD 936c69f):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Updating files:  53% (1102/2070)
+Updating files:  54% (1118/2070)
+Updating files:  55% (1139/2070)
+Updating files:  56% (1160/2070)
+Updating files:  57% (1180/2070)
+Updating files:  58% (1201/2070)
+Updating files:  59% (1222/2070)
+Updating files:  60% (1242/2070)
+Updating files:  61% (1263/2070)
+Updating files:  62% (1284/2070)
+Updating files:  63% (1305/2070)
+Updating files:  64% (1325/2070)
+Updating files:  65% (1346/2070)
+Updating files:  66% (1367/2070)
+Updating files:  67% (1387/2070)
+Updating files:  68% (1408/2070)
+Updating files:  69% (1429/2070)
+Updating files:  70% (1449/2070)
+Updating files:  71% (1470/2070)
+Updating files:  72% (1491/2070)
+Updating files:  73% (1512/2070)
+Updating files:  74% (1532/2070)
+Updating files:  75% (1553/2070)
+Updating files:  76% (1574/2070)
+Updating files:  77% (1594/2070)
+Updating files:  78% (1615/2070)
+Updating files:  79% (1636/2070)
+Updating files:  80% (1656/2070)
+Updating files:  81% (1677/2070)
+Updating files:  82% (1698/2070)
+Updating files:  83% (1719/2070)
+Updating files:  84% (1739/2070)
+Updating files:  85% (1760/2070)
+Updating files:  86% (1781/2070)
+Updating files:  87% (1801/2070)
+Updating files:  88% (1822/2070)
+Updating files:  89% (1843/2070)
+Updating files:  90% (1863/2070)
+Updating files:  91% (1884/2070)
+Updating files:  92% (1905/2070)
+Updating files:  93% (1926/2070)
+Updating files:  94% (1946/2070)
+Updating files:  95% (1967/2070)
+Updating files:  96% (1988/2070)
+Updating files:  97% (2008/2070)
+Updating files:  98% (2029/2070)
+Updating files:  99% (2050/2070)
+Updating files: 100% (2070/2070)
+Updating files: 100% (2070/2070), done.
+HEAD is now at 936c69f update
 ```
 
-### Commande
-```bash
-Controle points d'interrogation dans libelles entre guillemets
+## Commande
+```powershell
+git -C "C:\Users\arche\AppData\Local\Temp\am-dev-v2-01-05-proof-final2-20260529090234" apply --check "C:\Users\arche\ambulance-manager/docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/PATCH/DEV-V2-01-05-code.diff" && echo EXIT_CODE:0
 ```
 Sortie :
 ```text
-app/onboarding/onboarding-client.tsx:115:if (typeof value === "boolean") return value ? "Oui" : "Non";
-app/onboarding/onboarding-client.tsx:259:<span className="onboarding-step__action">{step.done ? "Ouvrir" : "Configurer"}</span>
-app/onboarding/onboarding-client.tsx:276:<li className={preview?.invalidRows ? "is-warning" : preview ? "is-active" : ""}><span>4</span><small>Erreurs</small></li>
-app/templates/templates-client.tsx:161:return `${template.startTime ?? "-"} - ${template.endTime ?? "-"}${template.crossesMidnight ? " (+1j)" : ""}`;
-app/templates/templates-client.tsx:681:const confirmed = window.confirm("Archiver ce template ? Il restera visible dans l'historique mais ne sera plus actif.");
+EXIT_CODE:0
 ```
 
-### Commande
-```bash
-Controle UTF-8 sans BOM + newline final
+## Commande
+```powershell
+git -C "C:\Users\arche\AppData\Local\Temp\am-dev-v2-01-05-proof-final2-20260529090234" apply "C:\Users\arche\ambulance-manager/docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/PATCH/DEV-V2-01-05-code.diff" && echo EXIT_CODE:0
 ```
 Sortie :
 ```text
-app/layout.tsx => BOM:False ; FinalNewline:True
-app/dashboard/page.tsx => BOM:False ; FinalNewline:True
-app/onboarding/page.tsx => BOM:False ; FinalNewline:True
-app/onboarding/onboarding-client.tsx => BOM:False ; FinalNewline:True
-app/templates/templates-client.tsx => BOM:False ; FinalNewline:True
-docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/SESSION.md => BOM:False ; FinalNewline:True
-docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/NOTES.md => BOM:False ; FinalNewline:True
-docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/EVIDENCES.md => BOM:False ; FinalNewline:True
-docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/RESULTATS.md => BOM:False ; FinalNewline:True
-docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/FIN_SESSION.md => BOM:False ; FinalNewline:True
-docs/2-SESSIONS/README_SESSIONS.md => BOM:False ; FinalNewline:True
-docs/3-TEMPLATES/TEMPLATE_BLOC_SESSIONS_PROMPTS.md => BOM:False ; FinalNewline:True
+EXIT_CODE:0
+```
+
+## Commande
+```powershell
+git -C "C:\Users\arche\AppData\Local\Temp\am-dev-v2-01-05-proof-final2-20260529090234" apply --check "C:\Users\arche\ambulance-manager/docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/PATCH/DEV-V2-01-05_FIX-01-code.diff" && echo EXIT_CODE:0
+```
+Sortie :
+```text
+EXIT_CODE:0
+```
+
+## Commande
+```powershell
+git -C "C:\Users\arche\AppData\Local\Temp\am-dev-v2-01-05-proof-final2-20260529090234" status --short --untracked-files=all
+```
+Sortie :
+```text
+ M app/dashboard/page.tsx
+ M app/layout.tsx
+ M app/onboarding/onboarding-client.tsx
+ M app/onboarding/page.tsx
+ M app/templates/templates-client.tsx
+```
+
+## Commande
+```powershell
+git worktree remove --force "C:\Users\arche\AppData\Local\Temp\am-dev-v2-01-05-proof-final2-20260529090234"
+```
+Sortie :
+```text
+[aucune sortie]
+```
+
+## Commande
+```powershell
+git status --short --untracked-files=all docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/PATCH
+```
+Sortie :
+```text
+[aucune sortie]
+```
+
+## Commande
+```powershell
+dir /a docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/PATCH
+```
+Sortie :
+```text
+cmd.exe : Option non valide - "2-SESSIONS".
+Au caractère Ligne:14 : 8
++   $out=cmd.exe /d /c $full 2>&1 | Out-String
++        ~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Option non valide - "2-SESSIONS".:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+```
+
+## Commande
+```powershell
+Contrôle mojibake Unicode (script interne)
+```
+Sortie :
+```text
+Unicode suspects contrôlés: U+00C3, U+00C2, séquence U+00E2 U+20AC, U+FFFD
+docs/2-SESSIONS/README_SESSIONS.md => OK
+docs/3-TEMPLATES/TEMPLATE_BLOC_SESSIONS_PROMPTS.md => OK
+docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/EVIDENCES.md => OK
+docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/FIN_SESSION.md => OK
+docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/RESULTATS.md => OK
+docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/NOTES.md => OK
+docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/SESSION.md => OK
+```
+
+## Commande
+```powershell
+Contrôle des points d interrogation (U+003F)
+```
+Sortie :
+```text
+Contrôle caractère U+003F dans les fichiers ciblés (sans reprise des lignes):
+docs/2-SESSIONS/README_SESSIONS.md => U+003F_COUNT=0
+docs/3-TEMPLATES/TEMPLATE_BLOC_SESSIONS_PROMPTS.md => U+003F_COUNT=0
+docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/EVIDENCES.md => U+003F_COUNT=0
+docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/FIN_SESSION.md => U+003F_COUNT=0
+docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/RESULTATS.md => U+003F_COUNT=0
+docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/NOTES.md => U+003F_COUNT=0
+docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/SESSION.md => U+003F_COUNT=0
+```
+
+## Commande
+```powershell
+Contrôle UTF-8 sans BOM et newline final
+```
+Sortie :
+```text
+UTF-8 sans BOM + newline final (fichiers modifiés):
+docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/EVIDENCES.md => BOM=False ; FINAL_LF=True
+docs/2-SESSIONS/README_SESSIONS.md => BOM=False ; FINAL_LF=True
+docs/3-TEMPLATES/TEMPLATE_BLOC_SESSIONS_PROMPTS.md => BOM=False ; FINAL_LF=True
+```
+
+## Commande
+```powershell
+git status --short --untracked-files=all
+```
+Sortie :
+```text
+ M docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/EVIDENCES.md
+ M docs/2-SESSIONS/README_SESSIONS.md
+ M docs/3-TEMPLATES/TEMPLATE_BLOC_SESSIONS_PROMPTS.md
 ```
 
