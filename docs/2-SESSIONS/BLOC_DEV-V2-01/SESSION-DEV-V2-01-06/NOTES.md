@@ -24,3 +24,9 @@ Notes de travail de la session.
 - Session limitee a la correction frontend de l'etat acces refuse.
 - Aucun changement RBAC backend/API.
 - Aucune refonte UI globale.
+
+## Correctif controle externe (FIX-01)
+
+- Ecart corrige: le composant `app/ui/access-denied-state.tsx`, necessaire au build et utilise par le patch principal, est maintenant integre dans un patch correctif dedie.
+- Patch correctif minimal produit: `PATCH/DEV-V2-01-06_FIX-01.diff`.
+- Portee du correctif: creation du fichier `app/ui/access-denied-state.tsx` avec le composant `AccessDeniedState` et libelles harmonises.

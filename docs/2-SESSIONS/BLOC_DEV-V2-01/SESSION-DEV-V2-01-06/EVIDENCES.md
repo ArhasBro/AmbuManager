@@ -1,62 +1,29 @@
 # EVIDENCES
 
-Elements factuels utilises pendant la session.
+Elements factuels du correctif `DEV-V2-01-06_FIX-01`.
 
 ---
 
-## Sources utilisees
+## Sources lues (correctif)
 
-### Documents obligatoires lus
+- `app/ui/access-denied-state.tsx`
+- `docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-06/FIN_SESSION.md`
+- `docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-06/RESULTATS.md`
+- `docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-06/NOTES.md`
 
-- `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md`
-- `docs/2-SESSIONS/README_SESSIONS.md`
-- `docs/3-TEMPLATES/TEMPLATE_SESSION.md`
-- `docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-06/SESSION.md`
+## Commandes executees et sorties brutes
 
-### Continuité bloc DEV-V2-01 (relecture ciblee)
-
-- `docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-01B/RESULTATS.md`
-- `docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-03/RESULTATS.md`
-- `docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-05/RESULTATS.md`
-
-### Fichiers frontend inspectes et/ou modifies
-
-- `app/planning/page.tsx`
-- `app/depots/page.tsx`
-- `app/vehicles/page.tsx`
-- `app/templates/page.tsx`
-- `app/users/page.tsx`
-- `app/company/page.tsx`
-- `app/audit/page.tsx`
-- `app/onboarding/page.tsx`
-- `app/ui/error-message.tsx`
-- `app/ui/index.ts`
-
----
-
-## Commandes executees et sorties
-
-### 1) git status --short
+### git status --short
 
 ```text
- M app/audit/page.tsx
- M app/company/page.tsx
- M app/depots/page.tsx
- M app/onboarding/page.tsx
- M app/planning/page.tsx
- M app/templates/page.tsx
- M app/ui/index.ts
- M app/users/page.tsx
- M app/vehicles/page.tsx
+ M app/ui/access-denied-state.tsx
  M docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-06/FIN_SESSION.md
  M docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-06/NOTES.md
  M docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-06/RESULTATS.md
- M docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-06/SESSION.md
-?? app/ui/access-denied-state.tsx
-?? docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-06/PATCH/
+?? docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-06/PATCH/DEV-V2-01-06_FIX-01.diff
 ```
 
-### 2) npm run docs:encoding
+### npm run docs:encoding
 
 ```text
 > ambulance-manager@0.1.0 docs:encoding
@@ -69,7 +36,7 @@ UTF-8 without BOM: OK
 No active mojibake sequence found.
 ```
 
-### 3) npm run lint
+### npm run lint
 
 ```text
 > ambulance-manager@0.1.0 lint
@@ -98,7 +65,7 @@ C:\Users\arche\ambulance-manager\app\planning\planning-client.tsx
 ✖ 18 problems (0 errors, 18 warnings)
 ```
 
-### 4) npm run build
+### npm run build
 
 ```text
 > ambulance-manager@0.1.0 build
@@ -108,14 +75,14 @@ C:\Users\arche\ambulance-manager\app\planning\planning-client.tsx
 - Environments: .env
 
   Creating an optimized production build ...
-✓ Compiled successfully in 7.6s
+✓ Compiled successfully in 9.6s
   Running TypeScript ...
   Collecting page data using 15 workers ...
   Generating static pages using 15 workers (0/29) ...
-  Generating static pages using 15 workers (7/29) 
-  Generating static pages using 15 workers (14/29) 
-  Generating static pages using 15 workers (21/29) 
-✓ Generating static pages using 15 workers (29/29) in 648.8ms
+  Generating static pages using 15 workers (7/29)
+  Generating static pages using 15 workers (14/29)
+  Generating static pages using 15 workers (21/29)
+✓ Generating static pages using 15 workers (29/29) in 366.2ms
   Finalizing page optimization ...
 
 Route (app)
@@ -175,38 +142,11 @@ Route (app)
 ƒ  (Dynamic)  server-rendered on demand
 ```
 
-### 5) Controle mojibake / points d'interrogation / UTF-8-BOM / newline (Markdown modifies)
-
-```text
-=== MOJIBAKE_SCAN ===
-NO_MOJIBAKE_SEQUENCE_FOUND
-=== SUSPICIOUS_QUESTION_MARK_SCAN ===
-C:\Users\arche\ambulance-manager\docs\2-SESSIONS\BLOC_DEV-V2-01\SESSION-DEV-V2-01-06\EVIDENCES.md:55:?? app/ui/access-denied-state.tsx
-C:\Users\arche\ambulance-manager\docs\2-SESSIONS\BLOC_DEV-V2-01\SESSION-DEV-V2-01-06\EVIDENCES.md:56:?? docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-06/PATCH/
-=== UTF8_BOM_AND_FINAL_NEWLINE_CHECK ===
-docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-06/SESSION.md | BOM=False | FINAL_LF=True
-docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-06/NOTES.md | BOM=False | FINAL_LF=True
-docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-06/EVIDENCES.md | BOM=False | FINAL_LF=True
-docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-06/RESULTATS.md | BOM=False | FINAL_LF=True
-docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-06/FIN_SESSION.md | BOM=False | FINAL_LF=True
-```
-
-### 6) Patch code et controle git apply --check
-
-Patch genere:
-- `docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-06/PATCH/DEV-V2-01-06-code.diff`
-
-Controle execute:
-
-```text
-git apply --check C:/Users/arche/ambulance-manager/docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-06/PATCH/DEV-V2-01-06-code.diff
-```
-
-Sortie:
+### git apply --check docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-06/PATCH/DEV-V2-01-06_FIX-01.diff
 
 ```text
 (exit code 0, aucune sortie)
 ```
 
-Contexte de preuve:
-- execution de `git apply --check` dans un worktree propre base sur `HEAD` (`C:/Users/arche/ambulance-manager-patchcheck`) pour verifier l'applicabilite du patch sur une base non modifiee.
+Contexte de verification:
+- verification executee dans un worktree propre prepare sans `app/ui/access-denied-state.tsx` pour valider l'ajout explicite du fichier par le patch de creation.

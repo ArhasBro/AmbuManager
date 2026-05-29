@@ -2,13 +2,8 @@
 
 ## Cloture
 
-Objectif unique traite: harmonisation du pattern frontend `Acces refuse` pour utilisateur authentifie non autorise.
+Correctif ciblé fourni sur l'écart de patch: ajout explicite du composant `app/ui/access-denied-state.tsx` dans `PATCH/DEV-V2-01-06_FIX-01.diff`.
 
-## Validation
+## Constat
 
-Codex ne s'auto-valide pas. Controle ChatGPT puis validation humaine requis.
-
-## Verdict final
-
-SESSION-DEV-V2-01-06 - Harmoniser le pattern Acces refuse frontend: OUI
-PASSAGE A LA SESSION SUIVANTE RECOMMANDE: OUI
+Le correctif reste soumis au contrôle externe ChatGPT et à la validation humaine.

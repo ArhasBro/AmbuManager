@@ -6,16 +6,16 @@ type AccessDeniedStateProps = {
   message?: string;
 };
 
-const DEFAULT_MESSAGE = "Vous etes authentifie, mais vous n'avez pas les autorisations necessaires pour acceder a cette page.";
+const DEFAULT_MESSAGE = "Vous êtes connecté, mais vous ne disposez pas des permissions nécessaires pour accéder à cette page.";
 
 export default function AccessDeniedState({ message = DEFAULT_MESSAGE }: AccessDeniedStateProps) {
   return (
     <ErrorMessage
-      title="Acces refuse"
+      title="Accès refusé"
       message={message}
       details={(
         <Link href="/dashboard">
-          Retourner au dashboard
+          Retour au tableau de bord
         </Link>
       )}
     />

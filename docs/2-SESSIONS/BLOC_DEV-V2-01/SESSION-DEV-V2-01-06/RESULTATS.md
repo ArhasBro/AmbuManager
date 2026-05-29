@@ -6,6 +6,7 @@
 - Composant partage ajoute: `AccessDeniedState`.
 - Pages harmonisees: `planning`, `depots`, `vehicles`, `templates`, `users`, `company`, `audit`, `onboarding`.
 - Redirections `/login` conservees uniquement pour utilisateur non authentifie / session invalide.
+- Correctif controle externe applique: patch minimal `DEV-V2-01-06_FIX-01.diff` contenant explicitement la creation de `app/ui/access-denied-state.tsx`.
 
 ---
 
@@ -27,3 +28,4 @@
 - `docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-06/RESULTATS.md`
 - `docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-06/FIN_SESSION.md`
 - `docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-06/PATCH/DEV-V2-01-06-code.diff`
+- `docs/2-SESSIONS/BLOC_DEV-V2-01/SESSION-DEV-V2-01-06/PATCH/DEV-V2-01-06_FIX-01.diff`
