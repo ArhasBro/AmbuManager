@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 
-import { PageHeader } from "@/app/ui";
+import { AccessDeniedState, PageHeader } from "@/app/ui";
 import { authOptions } from "@/lib/auth";
 import { canViewAudit } from "@/lib/permissions";
 
@@ -12,7 +12,13 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
   const user = session?.user;
 
   if (!user?.id) redirect("/login");
-  if (!(await canViewAudit(user.id, user.role, user.platformRole))) redirect("/login");
+  if (!(await canViewAudit(user.id, user.role, user.platformRole))) {
+    return (
+      <main className="page-wrap">
+        <AccessDeniedState />
+      </main>
+    );
+  }
 
   const params = await searchParams;
   const companyIdParam = params.companyId;

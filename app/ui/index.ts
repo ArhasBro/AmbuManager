@@ -1,4 +1,5 @@
 export { default as ActionButton } from "./action-button";
+export { default as AccessDeniedState } from "./access-denied-state";
 export { default as DataTable } from "./data-table";
 export { default as EmptyState } from "./empty-state";
 export { default as ErrorMessage } from "./error-message";

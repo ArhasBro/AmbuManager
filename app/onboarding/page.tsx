@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 
-import { PageHeader } from "@/app/ui";
+import { AccessDeniedState, PageHeader } from "@/app/ui";
 import { authOptions } from "@/lib/auth";
 import { canManageTemplates, canManageUsers, canManageVehicles } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
@@ -17,7 +17,13 @@ export default async function OnboardingPage() {
   const user = session?.user;
 
   if (!user?.id || !user.companyId) redirect("/login");
-  if (!canManageCompanyProfile(user.role)) redirect("/dashboard");
+  if (!canManageCompanyProfile(user.role)) {
+    return (
+      <main className="page-wrap">
+        <AccessDeniedState />
+      </main>
+    );
+  }
 
   const [company, depotsCount, usersCount, vehiclesCount, templatesCount, absencesCount, usersAllowed, vehiclesAllowed, templatesAllowed] = await Promise.all([
     prisma.company.findUnique({

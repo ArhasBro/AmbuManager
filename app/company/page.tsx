@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 import { Ambulance, Building2, CalendarDays, Landmark, Save, UsersRound } from "lucide-react";
 
-import { ActionButton, PageHeader } from "@/app/ui";
+import { AccessDeniedState, ActionButton, PageHeader } from "@/app/ui";
 import { authOptions } from "@/lib/auth";
 import { canManageCompanyRules } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
@@ -32,7 +32,13 @@ export default async function CompanyPage() {
   const canManageProfile = canManageCompanyProfile(user.role);
   const canManageRules = await canManageCompanyRules(user.id, user.role, user.platformRole);
 
-  if (!canManageProfile && !canManageRules) redirect("/login");
+  if (!canManageProfile && !canManageRules) {
+    return (
+      <main className="page-wrap">
+        <AccessDeniedState />
+      </main>
+    );
+  }
 
   let company: CompanyProfileRow | null = null;
   let companyKpis = {

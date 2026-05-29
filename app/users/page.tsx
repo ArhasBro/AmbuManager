@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 import { Archive, CalendarX, GraduationCap, Plus, UsersRound } from "lucide-react";
 
+import { AccessDeniedState } from "@/app/ui";
 import { authOptions } from "@/lib/auth";
 import { canGovernCompanyRulesDelegation } from "@/lib/company-rules/governance";
 import { canManageUsers } from "@/lib/permissions";
@@ -22,7 +23,13 @@ export default async function UsersPage() {
   const user = session?.user;
 
   if (!user?.id || !user.companyId) redirect("/login");
-  if (!(await canManageUsers(user.id, user.role, user.platformRole))) redirect("/login");
+  if (!(await canManageUsers(user.id, user.role, user.platformRole))) {
+    return (
+      <main className="page-wrap">
+        <AccessDeniedState />
+      </main>
+    );
+  }
 
   const canGovernCompanyRules = canGovernCompanyRulesDelegation(user.role, user.platformRole);
 

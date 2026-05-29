@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 
+import { AccessDeniedState } from "@/app/ui";
 import { authOptions } from "@/lib/auth";
 import { canManageVehicles } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
@@ -15,8 +16,14 @@ export default async function VehiclesPage() {
 
   const user = session.user;
 
-  if (!user.id || !(await canManageVehicles(user.id, user.role, user.platformRole))) redirect("/login");
-  if (!user.companyId) redirect("/login");
+  if (!user.id || !user.companyId) redirect("/login");
+  if (!(await canManageVehicles(user.id, user.role, user.platformRole))) {
+    return (
+      <main className="page-wrap">
+        <AccessDeniedState />
+      </main>
+    );
+  }
 
   const companyId = user.companyId;
 

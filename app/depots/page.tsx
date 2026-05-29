@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 import { Ambulance, FileArchive, Landmark, Plus, UsersRound, type LucideIcon } from "lucide-react";
 
-import { PageHeader } from "@/app/ui";
+import { AccessDeniedState, PageHeader } from "@/app/ui";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
@@ -25,7 +25,13 @@ export default async function DepotsPage() {
   const user = session?.user;
 
   if (!user?.id || !user.companyId) redirect("/login");
-  if (!canManageDepots(user.role)) redirect("/login");
+  if (!canManageDepots(user.role)) {
+    return (
+      <main className="page-wrap">
+        <AccessDeniedState />
+      </main>
+    );
+  }
 
   const depots = await prisma.depot.findMany({
     where: { companyId: user.companyId },

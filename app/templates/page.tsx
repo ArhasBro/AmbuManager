@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 
+import { AccessDeniedState } from "@/app/ui";
 import { authOptions } from "@/lib/auth";
 import { canManageTemplates } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
@@ -13,7 +14,13 @@ export default async function TemplatesPage() {
   const user = session?.user;
 
   if (!user?.id || !user.companyId) redirect("/login");
-  if (!(await canManageTemplates(user.id, user.role, user.platformRole))) redirect("/login");
+  if (!(await canManageTemplates(user.id, user.role, user.platformRole))) {
+    return (
+      <main className="page-wrap">
+        <AccessDeniedState />
+      </main>
+    );
+  }
 
   const templates = await prisma.shiftTemplate.findMany({
     where: { companyId: user.companyId },

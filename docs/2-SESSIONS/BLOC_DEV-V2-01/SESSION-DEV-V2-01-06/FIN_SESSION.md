@@ -1,13 +1,14 @@
 # FIN_SESSION
 
-## Clôture
+## Cloture
 
-INFORMATION NON FOURNIE — À CONFIRMER
+Objectif unique traite: harmonisation du pattern frontend `Acces refuse` pour utilisateur authentifie non autorise.
 
 ## Validation
 
-INFORMATION NON FOURNIE — À CONFIRMER
+Codex ne s'auto-valide pas. Controle ChatGPT puis validation humaine requis.
 
 ## Verdict final
 
-INFORMATION NON FOURNIE — À CONFIRMER
+SESSION-DEV-V2-01-06 - Harmoniser le pattern Acces refuse frontend: OUI
+PASSAGE A LA SESSION SUIVANTE RECOMMANDE: OUI

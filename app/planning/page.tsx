@@ -12,7 +12,7 @@ import {
   canViewSelfPlanning,
 } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
-import { ErrorMessage } from "@/app/ui";
+import { AccessDeniedState } from "@/app/ui";
 
 import PlanningClient from "./planning-client";
 
@@ -48,10 +48,7 @@ export default async function PlanningPage() {
   if (!canViewSelf && !canViewGlobal) {
     return (
       <main className="page-wrap">
-        <ErrorMessage
-          title="Acces non autorise"
-          message="Acces non autorise a la consultation du planning."
-        />
+        <AccessDeniedState message="Vous etes authentifie, mais vous n'avez pas les autorisations necessaires pour consulter le planning." />
       </main>
     );
   }
