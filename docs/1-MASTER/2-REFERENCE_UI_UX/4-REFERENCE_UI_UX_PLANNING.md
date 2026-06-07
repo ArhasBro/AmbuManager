@@ -4,11 +4,11 @@ Version : V2.2
 Statut : référence UI/UX codable  
 Objectif : reproduction visuelle 99 %  
 Sources visuelles :
-- docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/4-Planning/Planning_Vue-Global_V2.2.png
-- docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/4-Planning/Planning_Vue-Personnelle_V2.1.png
-- docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/4-Planning/Planning_Vue-Mois_V2.1.png
-- docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/4-Planning/Planning_Vue-Semaine_V2.2.png
-- docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/4-Planning/Planning_Vue-Jour_V2.png
+- docs/1-MASTER/1-MAQUETTE/4-Planning/Planning_Vue-Global_V2.2.png
+- docs/1-MASTER/1-MAQUETTE/4-Planning/Planning_Vue-Personnelle_V2.1.png
+- docs/1-MASTER/1-MAQUETTE/4-Planning/Planning_Vue-Mois_V2.1.png
+- docs/1-MASTER/1-MAQUETTE/4-Planning/Planning_Vue-Semaine_V2.2.png
+- docs/1-MASTER/1-MAQUETTE/4-Planning/Planning_Vue-Jour_V2.png
 Source fonctionnelle : docs/1-MASTER/3-FONCTIONNALITES/4-FONCTIONNALITES_DETAILLEES_PLANNING_V1.1.md  
 
 ## Sommaire

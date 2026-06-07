@@ -3,7 +3,7 @@
 Version : V2  
 Statut : référence UI/UX codable  
 Objectif : reproduction visuelle 99 %  
-Source visuelle : docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/7-Dépôts-bases/Dépôts -Bases_V2.png  
+Source visuelle : docs/1-MASTER/1-MAQUETTE/7-Dépôts-bases/Dépôts -Bases_V2.png  
 Source fonctionnelle : docs/1-MASTER/3-FONCTIONNALITES/7-FONCTIONNALITES_DETAILLEES_DEPOTS_BASES_V1.md  
 
 ## Sommaire
@@ -56,7 +56,7 @@ Ce document est une référence UI/UX codable, destinée à guider une implémen
 Il ne constitue pas une validation fonctionnelle définitive. Il formalise uniquement ce qui doit être reproduit visuellement et ergonomiquement, en respectant le cadrage Alpha de la fiche fonctionnalités.
 
 ## 2. Sources utilisées
-- Source visuelle prioritaire : `docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/7-Dépôts-bases/Dépôts -Bases_V2.png`.
+- Source visuelle prioritaire : `docs/1-MASTER/1-MAQUETTE/7-Dépôts-bases/Dépôts -Bases_V2.png`.
 - Source fonctionnelle : `docs/1-MASTER/3-FONCTIONNALITES/7-FONCTIONNALITES_DETAILLEES_DEPOTS_BASES_V1.md`.
 - Aucune autre source UI/UX ou code applicatif n’est utilisée comme autorité visuelle.
 

@@ -42,7 +42,7 @@ Ce document fixe la référence transversale UI/UX codable du pack V2 pour prép
 
 ## 2. Sources utilisées
 Sources autorisées :
-- Maquettes V2 dans `docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/`.
+- Maquettes V2 dans `docs/1-MASTER/1-MAQUETTE/`.
 - Fiches détaillées dans `docs/1-MASTER/3-FONCTIONNALITES/`.
 - Références UI/UX page déjà densifiées dans `docs/1-MASTER/2-REFERENCE_UI_UX/` (Shell + pages 1 à 10).
 

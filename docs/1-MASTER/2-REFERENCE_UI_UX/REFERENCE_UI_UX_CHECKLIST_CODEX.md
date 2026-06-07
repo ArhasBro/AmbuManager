@@ -64,7 +64,7 @@ Cette checklist est l’outil opérationnel Codex avant, pendant et après une s
 - [ ] `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_GLOBALE.md`
 - [ ] `docs/1-MASTER/2-REFERENCE_UI_UX/0-REFERENCE_UI_UX_SHELL_GLOBAL.md`
 - [ ] Référence UI/UX de la page ciblée (`1` à `10`, `6.1` selon cas).
-- [ ] Maquette(s) V2 de la page ciblée dans `docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/`.
+- [ ] Maquette(s) V2 de la page ciblée dans `docs/1-MASTER/1-MAQUETTE/`.
 - [ ] Fiche détaillée correspondante dans `docs/1-MASTER/3-FONCTIONNALITES/`.
 - [ ] `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_INDEX.md` pour contrôle d’autorité.
 
@@ -186,7 +186,7 @@ Cette checklist est l’outil opérationnel Codex avant, pendant et après une s
 - `git diff -- docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_GLOBALE.md`
 - `git diff -- docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_INDEX.md`
 - `git diff -- docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_CHECKLIST_CODEX.md`
-- `Get-ChildItem -Recurse -File docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2 | Select-Object -ExpandProperty FullName`
+- `Get-ChildItem -Recurse -File docs/1-MASTER/1-MAQUETTE | Select-Object -ExpandProperty FullName`
 - `Get-ChildItem -File docs/1-MASTER/3-FONCTIONNALITES | Select-Object -ExpandProperty Name`
 
 ## 25. Interdictions de modifier hors périmètre

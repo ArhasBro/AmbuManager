@@ -3,7 +3,7 @@
 Version : V2  
 Statut : référence UI/UX codable  
 Objectif : reproduction visuelle 99 %  
-Source visuelle : docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/3-Modèles-Horaire/Modèles-Horaire_V2.png  
+Source visuelle : docs/1-MASTER/1-MAQUETTE/3-Modèles-Horaire/Modèles-Horaire_V2.png  
 Source fonctionnelle : docs/1-MASTER/3-FONCTIONNALITES/3-FONCTIONNALITES_DETAILLEES_MODELES_HORAIRES_V1.1.md  
 
 ## Sommaire
@@ -54,13 +54,13 @@ Il décrit précisément l’interface à reproduire visuellement en cohérence 
 
 ## 2. Sources utilisées
 Source visuelle de référence demandée :  
-- `docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/3-Modèles-Horaire/Modèles-Horaire_V2.png`
+- `docs/1-MASTER/1-MAQUETTE/3-Modèles-Horaire/Modèles-Horaire_V2.png`
 
 Source fonctionnelle de référence :  
 - `docs/1-MASTER/3-FONCTIONNALITES/3-FONCTIONNALITES_DETAILLEES_MODELES_HORAIRES_V1.1.md`
 
 Constat de disponibilité dans le dépôt pour la maquette exploitée :  
-- `docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/3-Modèles-Horaire/Modèles-Horaire_V2.png`
+- `docs/1-MASTER/1-MAQUETTE/3-Modèles-Horaire/Modèles-Horaire_V2.png`
 
 ## 3. Règle d’autorité
 Ordre d’autorité appliqué :

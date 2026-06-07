@@ -3,7 +3,7 @@
 Version : V2  
 Statut : référence UI/UX codable  
 Objectif : reproduction visuelle 99 %  
-Source visuelle : docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/8-Société/Société_V2.png  
+Source visuelle : docs/1-MASTER/1-MAQUETTE/8-Société/Société_V2.png  
 Source fonctionnelle : docs/1-MASTER/3-FONCTIONNALITES/8-FONCTIONNALITES_DETAILLEES_SOCIETE_V1.1.md  
 
 ## Sommaire
@@ -49,7 +49,7 @@ Ce document définit une référence UI/UX codable de la page **Société** à r
 Cette référence décrit l’interface et les comportements visuels attendus, sans valider définitivement les règles fonctionnelles de fond.
 
 ## 2. Sources utilisées
-- Source visuelle principale : `docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/8-Société/Société_V2.png`
+- Source visuelle principale : `docs/1-MASTER/1-MAQUETTE/8-Société/Société_V2.png`
 - Source fonctionnelle de cadrage : `docs/1-MASTER/3-FONCTIONNALITES/8-FONCTIONNALITES_DETAILLEES_SOCIETE_V1.1.md`
 
 ## 3. Règle d’autorité

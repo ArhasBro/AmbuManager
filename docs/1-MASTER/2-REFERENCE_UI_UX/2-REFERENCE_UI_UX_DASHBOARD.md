@@ -3,7 +3,7 @@
 Version : V2  
 Statut : référence UI/UX codable  
 Objectif : reproduction visuelle 99 %  
-Source visuelle : docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/2-Dashboard/Dashboard_V2.png  
+Source visuelle : docs/1-MASTER/1-MAQUETTE/2-Dashboard/Dashboard_V2.png  
 Source fonctionnelle : docs/1-MASTER/3-FONCTIONNALITES/2-FONCTIONNALITES_DETAILLEES_TABLEAU_DE_BORD_V1.1.md  
 
 ## Sommaire
@@ -53,7 +53,7 @@ Ce document définit une référence UI/UX codable pour reproduire visuellement 
 Cette référence UI/UX ne vaut pas validation fonctionnelle définitive. Les règles métier non confirmées restent marquées comme points à confirmer dans les fiches fonctionnelles.
 
 ## 2. Sources utilisées
-- Source visuelle prioritaire : `docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/2-Dashboard/Dashboard_V2.png`.
+- Source visuelle prioritaire : `docs/1-MASTER/1-MAQUETTE/2-Dashboard/Dashboard_V2.png`.
 - Source fonctionnelle secondaire : `docs/1-MASTER/3-FONCTIONNALITES/2-FONCTIONNALITES_DETAILLEES_TABLEAU_DE_BORD_V1.1.md`.
 
 Aucune autre source visuelle n’est utilisée.

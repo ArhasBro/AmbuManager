@@ -3,7 +3,7 @@
 Version : V2  
 Statut : référence UI/UX codable  
 Objectif : reproduction visuelle 99 %  
-Source visuelle : docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/9-Mise en route/Mise-En-Route_V2.png  
+Source visuelle : docs/1-MASTER/1-MAQUETTE/9-Mise en route/Mise-En-Route_V2.png  
 Source fonctionnelle : docs/1-MASTER/3-FONCTIONNALITES/9-FONCTIONNALITES_DETAILLEES_MISE_EN_ROUTE_V1.1.md  
 
 ## Sommaire
@@ -47,7 +47,7 @@ Source fonctionnelle : docs/1-MASTER/3-FONCTIONNALITES/9-FONCTIONNALITES_DETAILL
 Documenter de manière codable la page **Mise en route** pour permettre une reproduction visuelle fidèle à la maquette V2, avec un objectif de ressemblance minimale de 99 %, sans valider définitivement les règles fonctionnelles métier.
 
 ## 2. Sources utilisées
-- Maquette PNG : `docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/9-Mise en route/Mise-En-Route_V2.png`.
+- Maquette PNG : `docs/1-MASTER/1-MAQUETTE/9-Mise en route/Mise-En-Route_V2.png`.
 - Fiche fonctionnalités : `docs/1-MASTER/3-FONCTIONNALITES/9-FONCTIONNALITES_DETAILLEES_MISE_EN_ROUTE_V1.1.md`.
 
 ## 3. Règle d’autorité

@@ -1,255 +1,236 @@
-# Ambulance Manager — README_SESSIONS
+# Ambulance Manager - README_SESSIONS
 
-Version : V2.0  
-Date : 26/05/2026
+Version : V3.0
+Date : 07/06/2026
 
 ## Sommaire
 
-- 1. Rôle du dossier `docs/2-SESSIONS`
-- 2. Principe général des sessions
-- 3. Modèle de session `SESSION-YYYYMMDD-XX`
-- 4. Ouverture d’une session Codex
-- 5. Documents à lire au début d’une session
-- 6. Règles de lecture documentaire limitée
-- 7. Règles de travail pendant une session
-- 8. Règles de patch
-- 9. Contrôles obligatoires
-- 10. Preuves attendues
-- 11. Documentation de fin de session
-- 12. Clôture de session
-- 13. Interdictions strictes
-- 14. Documents concurrents retirés du périmètre actif
-- 15. Conclusion
-- 16. Statut du document
-- 17. Règles officielles Codex / ChatGPT contrôle
+- [1. Role du dossier `docs/2-SESSIONS`](#1-role-du-dossier-docs2-sessions)
+- [2. Principe general des sessions](#2-principe-general-des-sessions)
+- [3. Modele de session `SESSION-YYYYMMDD-XX`](#3-modele-de-session-session-yyyymmdd-xx)
+- [4. Creation de session](#4-creation-de-session)
+- [5. Ouverture d'une session Codex](#5-ouverture-dune-session-codex)
+- [6. Documents a lire au debut d'une session](#6-documents-a-lire-au-debut-dune-session)
+- [7. Regles de lecture documentaire limitee](#7-regles-de-lecture-documentaire-limitee)
+- [8. Regles de travail pendant une session](#8-regles-de-travail-pendant-une-session)
+- [9. Regles de patch](#9-regles-de-patch)
+- [10. Contenu des preuves](#10-contenu-des-preuves)
+- [11. Documentation de fin de session](#11-documentation-de-fin-de-session)
+- [12. Cloture de session](#12-cloture-de-session)
+- [13. Interdictions strictes](#13-interdictions-strictes)
+- [14. References historiques non actives](#14-references-historiques-non-actives)
+- [15. Statut du document](#15-statut-du-document)
 
-## 1. Rôle du dossier docs/2-SESSIONS
+## 1. Role du dossier docs/2-SESSIONS
 
-Le dossier `docs/2-SESSIONS` sert à conserver la gouvernance actuelle des sessions et les modèles utiles aux prochaines sessions.
+Le dossier `docs/2-SESSIONS` conserve la gouvernance des sessions Codex et les traces des sessions executees.
 
-Ce dossier est une base de traçabilité.  
-Il ne remplace pas `docs/1-MASTER`.
+Ce dossier est une base de tracabilite. Il ne remplace pas `docs/1-MASTER` et ne doit pas devenir un plan de developpement parallele.
 
-## 2. Principe général des sessions
+## 2. Principe general des sessions
 
-Document unique actif de gouvernance des sessions :
+Document actif de gouvernance des sessions :
+
 - `docs/2-SESSIONS/README_SESSIONS.md`
 
-Règles de base :
+Regles de base :
+
 - 1 session = 1 objectif unique ;
-- lecture documentaire minimale ;
-- patch minimal et ciblé ;
-- preuves terminales obligatoires ;
-- clôture explicite.
+- perimetre autorise et perimetre interdit explicites ;
+- preuves obligatoires ;
+- cloture explicite ;
+- pas de validation implicite ;
+- pas de modification hors perimetre.
 
-## 3. Modèle de session SESSION-YYYYMMDD-XX
+## 3. Modele de session SESSION-YYYYMMDD-XX
 
-Le dossier `docs/2-SESSIONS/SESSION-YYYYMMDD-XX` est conservé comme modèle opérationnel utilisé par le script de création de session.
+Le dossier `docs/2-SESSIONS/SESSION-YYYYMMDD-XX` est le modele operationnel utilise par le script de creation de session.
 
-Rôle :
-- standardiser la structure de session ;
-- garantir les fichiers de suivi :
-  - `SESSION.md`
-  - `NOTES.md`
-  - `EVIDENCES.md`
-  - `RESULTATS.md`
-  - `FIN_SESSION.md`
+Structure officielle future :
 
-## 4. Ouverture d’une session Codex
+```text
+SESSION-XXXX/
+|-- 1-SESSION.md
+|-- 2-PREUVES.md
+|-- 3-FIN_DE_SESSION.md
+`-- PATCH/
+```
 
-À l’ouverture :
-1. définir le type de session ;
-2. définir l’objectif unique ;
-3. fixer le périmètre exact ;
-4. lister les fichiers autorisés ;
+Role des fichiers :
+
+- `1-SESSION.md` : cadrage de la session avant execution ;
+- `2-PREUVES.md` : preuves de lecture, d'usage, de creation, de modification et de controle ;
+- `3-FIN_DE_SESSION.md` : synthese finale, ecarts, reste a faire et verdict ;
+- `PATCH/` : patch officiel ou justification d'absence de patch selon le type de session.
+
+## 4. Creation de session
+
+Toute session doit etre creee via `create_session.ps1`.
+
+La structure suivante doit etre presente des l'ouverture :
+
+- `1-SESSION.md`
+- `2-PREUVES.md`
+- `3-FIN_DE_SESSION.md`
+- `PATCH/`
+
+Si le script echoue, afficher l'erreur exacte et s'arreter sans creation manuelle alternative.
+
+Le script conserve :
+
+- `NO_PATCH.md` pour les sessions sans patch attendu ;
+- `README_PATCH.md` pour les sessions avec correction ou completion attendue.
+
+## 5. Ouverture d'une session Codex
+
+A l'ouverture :
+
+1. definir le type de session ;
+2. definir l'objectif unique ;
+3. fixer le perimetre exact ;
+4. lister les fichiers autorises ;
 5. lister les fichiers interdits ;
-6. annoncer les contrôles à exécuter ;
-7. exécuter la session sans élargir le périmètre.
+6. annoncer les controles a executer ;
+7. executer la session sans elargir le perimetre.
 
-## 5. Documents à lire au début d’une session
+## 6. Documents a lire au debut d'une session
 
-Documents obligatoires par défaut :
-- `docs/1-MASTER/_INDEX_MASTER.md`
-- `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md`
-- `docs/1-MASTER/DOCUMENT_MAITRE_V2.md`
+Documents MASTER actifs a lire par defaut :
+
+- `docs/1-MASTER/01-APPLICATION_WEB.md`
+- `docs/1-MASTER/02-DOCUMENT_MAITRE_PROJET.md`
+- `docs/1-MASTER/03-METHODE_DE_TRAVAIL.md`
+- `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`
 - `docs/2-SESSIONS/README_SESSIONS.md`
 
-Documents à lire selon le bloc :
-- `docs/1-MASTER/DOCUMENT_CADRAGE_FONCTIONNEL_V2.md`
-- `docs/1-MASTER/REGISTRE_DECISIONS_V2.md`
-- `docs/1-MASTER/AUDIT_CODE_EXISTANT_ALPHA_V2.md` (si audit/écarts code)
-- `docs/1-MASTER/ETAT_GLOBAL_PROJET_V2.md` (si statut global)
-- `docs/1-MASTER/RGPD_BASE_MINIMALE.md` (si impact données/permissions)
-- `docs/1-MASTER/4-BASE44_REFERENCE/SYNTHESE_FINALE_BASE44_AMBULANCE_MANAGER.md` (si comparaison Base44 nécessaire)
+Documents a lire selon le bloc :
 
-Documents à ne pas lire sauf demande explicite :
-- anciennes sessions Alpha supprimées
-- anciens documents concurrents listés en section 14
-- tout dossier non lié à l’objectif de la session
+- uniquement les fichiers explicitement utiles a l'objectif de session ;
+- uniquement les documents valides comme actifs par le MASTER ;
+- tout fichier supplementaire demande explicitement dans `1-SESSION.md`.
 
-## 6. Règles de lecture documentaire limitée
+Documents a ne pas lire sauf demande explicite :
 
-- lire d’abord les documents obligatoires ;
-- ouvrir uniquement les fichiers utiles à l’objectif ;
-- ne pas lire tout le repo par défaut ;
+- anciennes sessions historiques ;
+- references historiques non actives listees en section 14 ;
+- tout dossier non lie a l'objectif de la session.
+
+## 7. Regles de lecture documentaire limitee
+
+- lire d'abord les documents obligatoires ;
+- ouvrir uniquement les fichiers utiles a l'objectif ;
+- ne pas lire tout le repo par defaut ;
 - ne pas utiliser les historiques comme source active sans validation master ;
-- en cas de doute : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- en cas de doute : `INFORMATION NON FOURNIE - A CONFIRMER`.
 
-## 7. Règles de travail pendant une session
+## 8. Regles de travail pendant une session
 
 - garder un objectif unique ;
-- éviter le mélange code + refonte documentaire + tri documentaire ;
-- appliquer un périmètre strict ;
-- modifier seulement les fichiers autorisés ;
-- signaler immédiatement tout blocage.
+- eviter le melange code, refonte documentaire et tri documentaire ;
+- appliquer un perimetre strict ;
+- modifier seulement les fichiers autorises ;
+- signaler immediatement tout blocage.
 
-## 8. Règles de patch
+## 9. Regles de patch
 
-- patch minimal, ciblé, traçable ;
-- aucun patch hors périmètre ;
-- aucun fichier `.diff` créé par défaut ;
-- patch/diff seulement si demandé explicitement dans la session ;
-- ne jamais rejouer un ancien patch historique sans contrôle explicite.
+- patch minimal, cible, tracable ;
+- aucun patch hors perimetre ;
+- aucun fichier `.diff` cree par defaut ;
+- patch ou diff seulement si demande explicitement dans la session ;
+- ne jamais rejouer un ancien patch historique sans controle explicite.
 
-## 9. Contrôles obligatoires
+## 10. Contenu des preuves
 
-Contrôles minimum :
-- `git status --short`
-- contrôles techniques adaptés au périmètre (lint, build, tests) si code modifié
-- vérification des fichiers réellement touchés
-- vérification des fichiers interdits non modifiés
+En fin de session, `2-PREUVES.md` doit prouver :
 
-## 10. Preuves attendues
+- fichiers lus ;
+- fichiers utilises comme reference ;
+- fichiers crees, modifies, supprimes, deplaces ou renommes ;
+- dossiers explicitement non modifies ;
+- commandes executees ;
+- resultats des commandes ;
+- controles Git ;
+- controles techniques ;
+- controles d'encodage ;
+- controles de perimetre ;
+- limites et commandes non executees.
 
-En fin de session, fournir :
-- résumé des actions réalisées ;
-- liste des fichiers lus ;
-- liste des fichiers modifiés ;
-- liste des fichiers créés/supprimés/déplacés ;
-- sortie `git status --short` ;
-- sortie `git diff -- <chemins concernés>` si modification ;
-- points à confirmer restants.
+Regles obligatoires :
+
+- une commande non montree = non prouvee ;
+- un fichier non liste = non prouve ;
+- une information absente = `INFORMATION NON FOURNIE - A CONFIRMER`.
 
 ## 11. Documentation de fin de session
 
-La documentation de session doit être mise à jour dans la structure session concernée :
-- `SESSION.md`
-- `NOTES.md`
-- `EVIDENCES.md`
-- `RESULTATS.md`
-- `FIN_SESSION.md`
+La documentation de session doit etre mise a jour dans la structure session concernee :
 
-Règle :
-- documenter uniquement ce qui a été réellement fait et vérifié.
+- `1-SESSION.md`
+- `2-PREUVES.md`
+- `3-FIN_DE_SESSION.md`
+- `PATCH/`
 
-## 12. Clôture de session
+Regle :
 
-Une session est clôturable si :
-- objectif unique traité ;
-- périmètre respecté ;
-- contrôles exécutés ;
+- documenter uniquement ce qui a ete reellement fait et verifie ;
+- ne pas presenter une action non prouvee comme realisee ;
+- ne pas auto-valider la session.
+
+Verdicts possibles dans `3-FIN_DE_SESSION.md` :
+
+- `VALIDABLE`
+- `VALIDABLE SOUS RESERVE`
+- `NON VALIDABLE`
+- `INFORMATION NON FOURNIE - A CONFIRMER`
+
+## 12. Cloture de session
+
+Une session est cloturable si :
+
+- objectif unique traite ;
+- perimetre respecte ;
+- controles executes ;
 - preuves fournies ;
 - verdict final explicite.
 
-Format de verdict attendu :
-- `<SESSION> — <INTITULÉ> : OUI / NON`
-- `PASSAGE À LA SESSION SUIVANTE RECOMMANDÉ : OUI / NON / À CONFIRMER`
+Format de cloture attendu :
+
+- resume court ;
+- fichiers impactes ;
+- controles executes ;
+- resultats obtenus ;
+- points de vigilance ;
+- verdict final.
 
 ## 13. Interdictions strictes
 
-- ne pas transformer `docs/2-SESSIONS` en plan de développement parallèle ;
-- ne pas relire tout l’historique par défaut ;
-- ne pas mélanger plusieurs objectifs majeurs dans une session ;
+- ne pas transformer `docs/2-SESSIONS` en plan de developpement parallele ;
+- ne pas relire tout l'historique par defaut ;
+- ne pas melanger plusieurs objectifs majeurs dans une session ;
 - ne pas faire de refonte documentaire massive pendant une session de code ;
-- ne pas modifier `docs/1-MASTER` hors besoin validé ;
-- ne pas modifier `docs/3-TEMPLATES` hors besoin validé ;
+- ne pas modifier `docs/1-MASTER` hors besoin valide ;
+- ne pas modifier `docs/3-TEMPLATES` hors besoin valide ;
 - ne pas modifier le code applicatif dans une session documentaire ;
-- ne pas supprimer/déplacer des éléments historiques sans validation explicite.
+- ne pas supprimer ou deplacer des elements historiques sans validation explicite ;
+- ne pas valider implicitement une session.
 
-## 14. Documents concurrents retirés du périmètre actif
+## 14. References historiques non actives
 
-Les documents suivants ne sont plus des documents actifs de gouvernance des sessions :
+Les references suivantes peuvent exister dans l'historique du projet, mais elles ne sont pas des sources actives de gouvernance des sessions :
 
-- `docs/2-SESSIONS/README.md`
-- `docs/2-SESSIONS/GOUVERNANCE_SESSIONS.md`
-- `docs/2-SESSIONS/_INDEX_SESSIONS.md`
-- `docs/2-SESSIONS/CHECKLIST_EXECUTION_LOTS_SESSIONS.md`
-- `docs/2-SESSIONS/DOSSIER_DECISION_LOTS_SESSIONS.md`
-- `docs/2-SESSIONS/FORMULAIRE_VALIDATION_LOTS_SESSIONS.md`
-- `docs/2-SESSIONS/SIMULATION_ARCHIVAGE_SESSIONS.md`
+- anciens README ou documents concurrents de `docs/2-SESSIONS` ;
+- anciens documents MASTER remplaces par les documents actifs numerotes ;
+- anciens fichiers de session du modele a 5 fichiers.
 
-Ils ne doivent pas être restaurés sans décision explicite.
+Ces references ne doivent pas etre restaurees ni presentees comme actives sans decision explicite.
 
-## 15. Conclusion
-
-Ce document définit une gouvernance de session simple, courte et exploitable pour la Phase 6 :
-- un document actif unique ;
-- une lecture documentaire minimale ;
-- une exécution par objectif unique ;
-- des contrôles et preuves obligatoires ;
-- une clôture explicite de chaque session.
-
-## 16. Statut du document
+## 15. Statut du document
 
 Ce document est le document actif de gouvernance des sessions Codex.
 
-Il remplace les anciens documents concurrents listés en section 14.
+Regles :
 
-Règles :
-- ce document doit rester court, clair et opérationnel ;
-- il ne doit pas redevenir un plan de développement parallèle ;
-- il doit être modifié uniquement si le fonctionnement réel des sessions change ;
-- toute modification importante doit être validée humainement.
-
-## 17. Règles officielles Codex / ChatGPT contrôle
-
-### 17.1 ChatGPT contrôle
-
-- ChatGPT contrôle ne doit pas démarrer de contrôle repo/ZIP à l’ouverture.
-- Tant que le retour brut Codex n’est pas fourni, il doit répondre uniquement :
-  - `EN ATTENTE DU RETOUR CODEX — CONTRÔLE NON DÉMARRÉ`
-- ChatGPT contrôle contrôle uniquement le retour brut Codex et les pièces transmises ensuite.
-
-### 17.2 Création de session
-
-- Toute session doit être créée via `create_session.ps1`.
-- La structure doit être présente dès l’ouverture :
-  - `SESSION.md`
-  - `NOTES.md`
-  - `EVIDENCES.md`
-  - `RESULTATS.md`
-  - `FIN_SESSION.md`
-  - `PATCH/`
-- Si le script échoue, afficher l’erreur exacte et s’arrêter sans création manuelle alternative.
-
-### 17.3 Retour Codex
-
-- Ne pas recopier intégralement les `.md`, les `.diff` et les gros contenus.
-- Fournir seulement : résumé court, chemins des fichiers, commandes exécutées, preuves, `git status --short`, justification des commandes non lancées.
-
-### 17.4 Session documentaire
-
-- Pas de `.diff` obligatoire.
-- Pas de `git diff` complet obligatoire dans le retour.
-- `git status --short` et contrôle d’encodage restent obligatoires.
-
-### 17.5 Session code
-
-- Si patch code : `.diff` obligatoire.
-- Le `.diff` doit être dans `PATCH/` et commencer par `diff --git`.
-- Preuve obligatoire : `git apply --check <chemin_du_patch>`.
-
-### 17.6 Validation
-
-- Codex ne s’auto-valide jamais.
-- Formule autorisée : `Travail terminé côté Codex, en attente de contrôle ChatGPT / validation humaine.`
-- La validation appartient à ChatGPT contrôle et à la validation humaine.
-
-### 17.7 Preuves obligatoires des sessions code
-
-- Si code modifié : présence obligatoire d’un patch `.diff` dans `PATCH/`, commençant par `diff --git`.
-- La commande exacte `git apply --check <chemin_du_patch>` doit être exécutée et sa sortie terminale complète copiée dans `EVIDENCES.md`.
-- `git status --short`, `npm run lint`, `npm run build` et `npm run docs:encoding` (si disponible) doivent être exécutés avec sorties complètes copiées.
-- Si une commande échoue ou n’existe pas : copier la sortie complète d’échec.
-- Un simple résumé (`OK`, `succès`, `exit 0`) ne constitue jamais une preuve suffisante.
-- Codex ne s’auto-valide jamais ; le verdict final appartient au contrôle externe.
+- ce document doit rester court, clair et operationnel ;
+- il ne doit pas redevenir un plan de developpement parallele ;
+- il doit etre modifie uniquement si le fonctionnement reel des sessions change ;
+- toute modification importante doit etre validee humainement.

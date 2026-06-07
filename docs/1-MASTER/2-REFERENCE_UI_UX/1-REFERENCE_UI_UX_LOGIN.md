@@ -3,7 +3,7 @@
 Version : V2  
 Statut : référence UI/UX codable  
 Objectif : reproduction visuelle 99 %  
-Source visuelle : docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/1-Login/Login_V2.png  
+Source visuelle : docs/1-MASTER/1-MAQUETTE/1-Login/Login_V2.png  
 Source fonctionnelle : docs/1-MASTER/3-FONCTIONNALITES/1-FONCTIONNALITES_DETAILLEES_LOGIN_V1.1.md
 
 ## Sommaire
@@ -46,7 +46,7 @@ Ce document définit la référence UI/UX codable de la page Login à reproduire
 Il ne valide pas définitivement la fonctionnalité métier. Il sert à cadrer une implémentation fidèle, mesurable et non interprétative.
 
 ## 2. Sources utilisées
-- Source visuelle unique : docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/1-Login/Login_V2.png.
+- Source visuelle unique : docs/1-MASTER/1-MAQUETTE/1-Login/Login_V2.png.
 - Source fonctionnelle unique : docs/1-MASTER/3-FONCTIONNALITES/1-FONCTIONNALITES_DETAILLEES_LOGIN_V1.1.md.
 
 ## 3. Règle d’autorité

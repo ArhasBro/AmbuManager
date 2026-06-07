@@ -3,7 +3,7 @@
 Version : V2  
 Statut : référence UI/UX codable  
 Objectif : reproduction visuelle 99 %  
-Source visuelle : docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/10-Audit/Audit_V2.png  
+Source visuelle : docs/1-MASTER/1-MAQUETTE/10-Audit/Audit_V2.png  
 Source fonctionnelle : docs/1-MASTER/3-FONCTIONNALITES/10-FONCTIONNALITES_DETAILLEES_AUDIT_V1.md  
 
 ## Sommaire
@@ -56,7 +56,7 @@ Ce document définit une référence UI/UX codable de la page `Audit` pour obten
 Il ne constitue pas une validation fonctionnelle définitive du module Audit.
 
 ## 2. Sources utilisées
-- Source visuelle principale : `docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/10-Audit/Audit_V2.png`.
+- Source visuelle principale : `docs/1-MASTER/1-MAQUETTE/10-Audit/Audit_V2.png`.
 - Source fonctionnelle secondaire : `docs/1-MASTER/3-FONCTIONNALITES/10-FONCTIONNALITES_DETAILLEES_AUDIT_V1.md`.
 - Aucune source code applicative utilisée comme référence visuelle.
 

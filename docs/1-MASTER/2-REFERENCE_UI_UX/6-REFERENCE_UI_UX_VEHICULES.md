@@ -3,7 +3,7 @@
 Version : V2  
 Statut : référence UI/UX codable  
 Objectif : reproduction visuelle 99 %  
-Source visuelle : docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/6-Véhicules/Véhicules_V2.png  
+Source visuelle : docs/1-MASTER/1-MAQUETTE/6-Véhicules/Véhicules_V2.png  
 Source fonctionnelle : docs/1-MASTER/3-FONCTIONNALITES/6-FONCTIONNALITES_DETAILLEES_VEHICULES_V1.1.md  
 
 ## Sommaire
@@ -59,7 +59,7 @@ Ce document ne vaut pas validation fonctionnelle définitive : il cadre l’inte
 
 ## 2. Sources utilisées
 Sources strictement utilisées pour cette référence :
-- Maquette : `docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/6-Véhicules/Véhicules_V2.png`.
+- Maquette : `docs/1-MASTER/1-MAQUETTE/6-Véhicules/Véhicules_V2.png`.
 - Fiche fonctionnelle : `docs/1-MASTER/3-FONCTIONNALITES/6-FONCTIONNALITES_DETAILLEES_VEHICULES_V1.1.md`.
 
 Aucune autre source visuelle ou code applicatif n’est utilisée.

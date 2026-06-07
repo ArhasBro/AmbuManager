@@ -3,7 +3,7 @@
 Version : V2  
 Statut : référence UI/UX codable  
 Objectif : reproduction visuelle 99 %  
-Source visuelle : docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/0-Shell-Global/Shell-Global_V2.png  
+Source visuelle : docs/1-MASTER/1-MAQUETTE/0-Shell-Global/Shell-Global_V2.png  
 Source fonctionnelle : docs/1-MASTER/3-FONCTIONNALITES/0-FONCTIONNALITES_DETAILLEES_SHELL_GLOBAL_NAVIGATION_V1.md
 
 ## Sommaire
@@ -43,7 +43,7 @@ Source fonctionnelle : docs/1-MASTER/3-FONCTIONNALITES/0-FONCTIONNALITES_DETAILL
 Définir une référence UI/UX codable du Shell global (navigation + cadre connecté) pour viser une reproduction visuelle minimale de 99 % de la maquette V2, sans présumer une validation fonctionnelle définitive.
 
 ## 2. Sources utilisées
-- Source visuelle unique : `docs/1-MASTER/1-MAQUETTE/MAQUETTE_PNG_V2/0-Shell-Global/Shell-Global_V2.png`.
+- Source visuelle unique : `docs/1-MASTER/1-MAQUETTE/0-Shell-Global/Shell-Global_V2.png`.
 - Source fonctionnelle unique : `docs/1-MASTER/3-FONCTIONNALITES/0-FONCTIONNALITES_DETAILLEES_SHELL_GLOBAL_NAVIGATION_V1.md`.
 - Référence observée : écran desktop 1586 × 992 px (PNG).
 

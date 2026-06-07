@@ -1,4 +1,4 @@
-﻿# ==============================
+# ==============================
 # create_session.ps1
 # ==============================
 
@@ -79,6 +79,17 @@ function New-DirectoryIfMissing {
     if (-not (Test-Path $Path)) {
         New-Item -ItemType Directory -Path $Path -Force | Out-Null
     }
+}
+
+function Set-Utf8NoBomFile {
+    param(
+        [string]$Path,
+        [string]$Value
+    )
+
+    $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+    $resolvedPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($Path)
+    [System.IO.File]::WriteAllText($resolvedPath, $Value, $utf8NoBom)
 }
 
 function Get-SafeString {
@@ -285,7 +296,7 @@ function Set-SessionIdInFile {
 
     $content = Get-Content $FilePath -Raw
     $content = $content -replace "SESSION-YYYYMMDD-XX", $SessionId
-    Set-Content -Path $FilePath -Value $content -Encoding utf8
+    Set-Utf8NoBomFile -Path $FilePath -Value $content
 }
 
 function Initialize-SessionFiles {
@@ -301,69 +312,203 @@ function Initialize-SessionFiles {
         [string]$PatchRelativePath
     )
 
-    $sessionMdPath   = Join-Path $SessionDir "SESSION.md"
-    $notesMdPath     = Join-Path $SessionDir "NOTES.md"
-    $evidencesMdPath = Join-Path $SessionDir "EVIDENCES.md"
-    $resultatsMdPath = Join-Path $SessionDir "RESULTATS.md"
-    $finSessionPath  = Join-Path $SessionDir "FIN_SESSION.md"
+    $sessionMdPath     = Join-Path $SessionDir "1-SESSION.md"
+    $preuvesMdPath     = Join-Path $SessionDir "2-PREUVES.md"
+    $finSessionMdPath  = Join-Path $SessionDir "3-FIN_DE_SESSION.md"
 
-    Set-SessionIdInFile -FilePath $sessionMdPath   -SessionId $SessionId
-    Set-SessionIdInFile -FilePath $notesMdPath     -SessionId $SessionId
-    Set-SessionIdInFile -FilePath $evidencesMdPath -SessionId $SessionId
-    Set-SessionIdInFile -FilePath $resultatsMdPath -SessionId $SessionId
-    Set-SessionIdInFile -FilePath $finSessionPath  -SessionId $SessionId
+    Set-SessionIdInFile -FilePath $sessionMdPath    -SessionId $SessionId
+    Set-SessionIdInFile -FilePath $preuvesMdPath    -SessionId $SessionId
+    Set-SessionIdInFile -FilePath $finSessionMdPath -SessionId $SessionId
 
 $sessionContent = @"
-# SESSION
+# 1 — Session
 
-## ID SESSION
+## 1. Identification
 
-$SessionId
+- Session : $SessionId
+- Date : $DateDisplay
+- Phase : $StageValue
+- Bloc : $BlockValue
+- Type : $TypeValue
+- Intitulé : $TitleValue
 
-## Date
+## 2. Contexte
 
-$DateDisplay
+Projet : Investissement
+Sous-projet : Ambulance Manager
 
-## Contexte
+## 3. Objectif unique
 
-Projet : Investissement  
-Sous-projet : Ambulance Manager  
-Maturite : $StageValue  
-Bloc : $BlockValue  
-Type : $TypeValue  
-Intitule : $TitleValue
+INFORMATION NON FOURNIE — À CONFIRMER
 
-## Objectif de la session
+## 4. Périmètre autorisé
 
-INFORMATION NON FOURNIE - A CONFIRMER
+INFORMATION NON FOURNIE — À CONFIRMER
 
-## Perimetre exact traite
+## 5. Périmètre interdit
 
-INFORMATION NON FOURNIE - A CONFIRMER
+INFORMATION NON FOURNIE — À CONFIRMER
 
-## Resultat synthetique de session
+## 6. Fichiers à lire
 
-INFORMATION NON FOURNIE - A CONFIRMER
+INFORMATION NON FOURNIE — À CONFIRMER
 
-## Dossiers lies
+## 7. Fichiers modifiables
 
-- Session : $SessionRelativePath
-- PATCH   : $PatchRelativePath
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## 8. Fichiers à ne pas modifier
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## 9. Livrable attendu
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## 10. Contrôles attendus
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## 11. Critères de validation
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## 12. Points à confirmer
+
+INFORMATION NON FOURNIE — À CONFIRMER
 "@
-    Set-Content -Path $sessionMdPath -Value $sessionContent -Encoding utf8
+    Set-Utf8NoBomFile -Path $sessionMdPath -Value $sessionContent
 
-    if (-not (Test-Path $notesMdPath)) {
-        Set-Content -Path $notesMdPath -Value "# NOTES`n`nINFORMATION NON FOURNIE - A CONFIRMER" -Encoding utf8
-    }
-    if (-not (Test-Path $evidencesMdPath)) {
-        Set-Content -Path $evidencesMdPath -Value "# EVIDENCES`n`nINFORMATION NON FOURNIE - A CONFIRMER" -Encoding utf8
-    }
-    if (-not (Test-Path $resultatsMdPath)) {
-        Set-Content -Path $resultatsMdPath -Value "# RESULTATS`n`nINFORMATION NON FOURNIE - A CONFIRMER" -Encoding utf8
-    }
-    if (-not (Test-Path $finSessionPath)) {
-        Set-Content -Path $finSessionPath -Value "# FIN_SESSION`n`nINFORMATION NON FOURNIE - A CONFIRMER" -Encoding utf8
-    }
+$preuvesContent = @"
+# 2 — Preuves
+
+## 1. Fichiers lus
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## 2. Fichiers utilisés comme référence
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## 3. Fichiers créés
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## 4. Fichiers modifiés
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## 5. Fichiers supprimés
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## 6. Fichiers déplacés ou renommés
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## 7. Dossiers explicitement non modifiés
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## 8. Commandes exécutées
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## 9. Résultats des commandes
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## 10. Contrôles Git
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## 11. Contrôles techniques
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## 12. Contrôles d’encodage
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## 13. Contrôles de périmètre
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## 14. Limites / commandes non exécutées
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## 15. Informations non fournies
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+Règles obligatoires :
+
+- Une commande non montrée = non prouvée.
+- Un fichier non listé = non prouvé.
+- Une information absente = INFORMATION NON FOURNIE — À CONFIRMER.
+"@
+    Set-Utf8NoBomFile -Path $preuvesMdPath -Value $preuvesContent
+
+$finSessionContent = @"
+# 3 — Fin de session
+
+## 1. Résumé court
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## 2. Objectif traité
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## 3. Livrable produit
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## 4. Méthode utilisée
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## 5. Commandes PowerShell exécutées
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## 6. Résultats obtenus
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## 7. Fichiers réellement impactés
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## 8. Écarts constatés
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## 9. Points de vigilance
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## 10. Reste à faire
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## 11. Recommandation pour la suite
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+## 12. Verdict final
+
+INFORMATION NON FOURNIE — À CONFIRMER
+
+Verdicts possibles :
+
+- VALIDABLE
+- VALIDABLE SOUS RÉSERVE
+- NON VALIDABLE
+- INFORMATION NON FOURNIE — À CONFIRMER
+"@
+    Set-Utf8NoBomFile -Path $finSessionMdPath -Value $finSessionContent
 }
 
 function Initialize-PatchFolder {
@@ -393,7 +538,7 @@ Raison :
 - Aucun patch officiel a produire pour cette session.
 - Le dossier PATCH reste present dans la session pour centraliser la documentation et les patchs.
 "@
-        Set-Content -Path $noPatchPath -Value $noPatchContent -Encoding utf8
+        Set-Utf8NoBomFile -Path $noPatchPath -Value $noPatchContent
         if (Test-Path $readmePatchPath) {
             Remove-Item $readmePatchPath -Force
         }
@@ -425,7 +570,7 @@ git apply         "$PatchRelativePath/$patchFileName"
 - Dossier patch initialise.
 - Patch officiel a produire dans cette session si du code est modifie.
 "@
-        Set-Content -Path $readmePatchPath -Value $readmePatchContent -Encoding utf8
+        Set-Utf8NoBomFile -Path $readmePatchPath -Value $readmePatchContent
         if (Test-Path $noPatchPath) {
             Remove-Item $noPatchPath -Force
         }
@@ -542,11 +687,9 @@ DOSSIERS
 - PATCH   : $patchRelativePath
 
 FICHIERS DE SESSION A UTILISER / METTRE A JOUR
-- $sessionRelativePath/SESSION.md
-- $sessionRelativePath/NOTES.md
-- $sessionRelativePath/EVIDENCES.md
-- $sessionRelativePath/RESULTATS.md
-- $sessionRelativePath/FIN_SESSION.md
+- $sessionRelativePath/1-SESSION.md
+- $sessionRelativePath/2-PREUVES.md
+- $sessionRelativePath/3-FIN_DE_SESSION.md
 
 REGLES
 - 1 session = 1 point clair
@@ -590,7 +733,7 @@ if ($shouldOpen) {
         code $newSessionDir
     }
     else {
-        Start-Process (Join-Path $newSessionDir 'SESSION.md') | Out-Null
-        Write-Host "Note: commande 'code' introuvable. SESSION.md ouvert avec l'application par defaut."
+        Start-Process (Join-Path $newSessionDir '1-SESSION.md') | Out-Null
+        Write-Host "Note: commande 'code' introuvable. 1-SESSION.md ouvert avec l'application par defaut."
     }
 }
