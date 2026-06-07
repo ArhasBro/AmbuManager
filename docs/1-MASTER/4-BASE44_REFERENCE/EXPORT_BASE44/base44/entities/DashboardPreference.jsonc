@@ -1,0 +1,20 @@
+{
+  "name": "DashboardPreference",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "ID de l'utilisateur propri\u00e9taire de la pr\u00e9f\u00e9rence"
+    },
+    "visible_widgets": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Liste des identifiants de widgets visibles, dans l'ordre choisi"
+    }
+  },
+  "required": [
+    "user_id"
+  ]
+}

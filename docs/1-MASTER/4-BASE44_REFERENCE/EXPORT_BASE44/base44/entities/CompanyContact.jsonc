@@ -1,0 +1,41 @@
+{
+  "name": "CompanyContact",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "full_name": {
+      "type": "string"
+    },
+    "contact_type": {
+      "type": "string",
+      "enum": [
+        "Repr\u00e9sentant l\u00e9gal",
+        "Administratif",
+        "Facturation",
+        "Exploitation",
+        "Autre"
+      ],
+      "default": "Autre"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "is_archived": {
+      "type": "boolean",
+      "default": false,
+      "description": "Archivage logique \u2014 jamais de suppression physique"
+    }
+  },
+  "required": [
+    "full_name",
+    "contact_type"
+  ]
+}

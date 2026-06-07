@@ -1,0 +1,126 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "business_role": {
+      "type": "string",
+      "enum": [
+        "ADMIN",
+        "GERANT",
+        "BUREAU",
+        "REGULATEUR",
+        "ADE",
+        "AA",
+        "TAXI"
+      ],
+      "description": "R\u00f4le m\u00e9tier principal (identifiant technique sans accent)"
+    },
+    "secondary_roles": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "ADMIN",
+          "GERANT",
+          "BUREAU",
+          "REGULATEUR",
+          "ADE",
+          "AA",
+          "TAXI"
+        ]
+      },
+      "description": "R\u00f4les m\u00e9tier compl\u00e9mentaires (max 2) \u2014 m\u00eames identifiants techniques"
+    },
+    "permissions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Permissions fines accord\u00e9es"
+    },
+    "first_name": {
+      "type": "string"
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "initials": {
+      "type": "string",
+      "description": "Initiales avatar (saisie manuelle)"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "psc1": {
+      "type": "boolean",
+      "default": false,
+      "description": "Titulaire du PSC1 (qualification secondaire, jamais un r\u00f4le principal)"
+    },
+    "company_id": {
+      "type": "string",
+      "description": "Soci\u00e9t\u00e9 de rattachement"
+    },
+    "depot_id": {
+      "type": "string",
+      "description": "D\u00e9p\u00f4t de rattachement (ID)"
+    },
+    "depot_name": {
+      "type": "string",
+      "description": "D\u00e9p\u00f4t de rattachement (libell\u00e9 d\u00e9normalis\u00e9)"
+    },
+    "team": {
+      "type": "string",
+      "description": "\u00c9quipe / Service"
+    },
+    "daily_start": {
+      "type": "string",
+      "description": "Heure de d\u00e9but habituelle (ex: 07:00)"
+    },
+    "daily_end": {
+      "type": "string",
+      "description": "Heure de fin habituelle (ex: 19:00)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Actif",
+        "Inactif"
+      ],
+      "default": "Actif",
+      "description": "Statut du compte (jamais chang\u00e9 par une absence)"
+    },
+    "operational_status": {
+      "type": "string",
+      "enum": [
+        "Pr\u00e9sent",
+        "Absent",
+        "Indisponible",
+        "Non planifi\u00e9"
+      ],
+      "default": "Non planifi\u00e9",
+      "description": "\u00c9tat op\u00e9rationnel du jour (distinct du statut de compte)"
+    },
+    "has_app_access": {
+      "type": "boolean",
+      "default": false,
+      "description": "Utilisateur a un compte de connexion / acc\u00e8s applicatif actif"
+    },
+    "app_access_email": {
+      "type": "string",
+      "description": "Email utilis\u00e9 pour le compte applicatif"
+    },
+    "app_access_created_at": {
+      "type": "string",
+      "description": "Date/heure de cr\u00e9ation de l'acc\u00e8s applicatif"
+    },
+    "is_archived": {
+      "type": "boolean",
+      "default": false,
+      "description": "Archivage logique \u2014 jamais de suppression physique"
+    },
+    "last_login": {
+      "type": "string",
+      "description": "Derni\u00e8re connexion"
+    }
+  }
+}

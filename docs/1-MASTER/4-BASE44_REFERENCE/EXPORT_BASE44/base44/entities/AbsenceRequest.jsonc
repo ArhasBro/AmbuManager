@@ -1,0 +1,56 @@
+{
+  "name": "AbsenceRequest",
+  "type": "object",
+  "properties": {
+    "employee_id": {
+      "type": "string"
+    },
+    "employee_name": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "Absence",
+        "Indisponibilit\u00e9",
+        "Cong\u00e9",
+        "Maladie",
+        "Autre"
+      ],
+      "default": "Absence"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "En attente",
+        "Valid\u00e9e",
+        "Refus\u00e9e",
+        "Annul\u00e9e"
+      ],
+      "default": "En attente"
+    },
+    "decided_by": {
+      "type": "string",
+      "description": "Qui a valid\u00e9/refus\u00e9"
+    },
+    "company_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "employee_id",
+    "type",
+    "start_date"
+  ]
+}

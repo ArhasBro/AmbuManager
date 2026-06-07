@@ -1,0 +1,93 @@
+{
+  "name": "ShiftTemplate",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nom du mod\u00e8le"
+    },
+    "short_label": {
+      "type": "string",
+      "description": "Libell\u00e9 court affich\u00e9 dans le planning"
+    },
+    "allowed_roles": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "ADMIN",
+          "GERANT",
+          "BUREAU",
+          "REGULATEUR",
+          "ADE",
+          "AA",
+          "TAXI"
+        ]
+      },
+      "description": "R\u00f4les techniques autoris\u00e9s pour ce mod\u00e8le"
+    },
+    "vehicle_type": {
+      "type": "string",
+      "enum": [
+        "AMBULANCE",
+        "VSL",
+        "TAXI",
+        "TPMR",
+        "Aucun"
+      ],
+      "default": "AMBULANCE",
+      "description": "Type de v\u00e9hicule attendu"
+    },
+    "active_days": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "Lundi",
+          "Mardi",
+          "Mercredi",
+          "Jeudi",
+          "Vendredi",
+          "Samedi",
+          "Dimanche"
+        ]
+      },
+      "description": "Jours actifs"
+    },
+    "start_time": {
+      "type": "string",
+      "description": "Ex: 07:00"
+    },
+    "end_time": {
+      "type": "string",
+      "description": "Ex: 19:00"
+    },
+    "crosses_midnight": {
+      "type": "boolean",
+      "default": false
+    },
+    "usage_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Nb utilis\u00e9"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Actif",
+        "Inactif"
+      ],
+      "default": "Actif"
+    },
+    "is_archived": {
+      "type": "boolean",
+      "default": false
+    },
+    "company_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

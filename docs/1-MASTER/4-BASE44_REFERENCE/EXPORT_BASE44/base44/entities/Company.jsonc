@@ -1,0 +1,93 @@
+{
+  "name": "Company",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nom de la soci\u00e9t\u00e9"
+    },
+    "commercial_name": {
+      "type": "string",
+      "description": "Nom commercial"
+    },
+    "siret": {
+      "type": "string",
+      "description": "Num\u00e9ro SIRET"
+    },
+    "phone": {
+      "type": "string",
+      "description": "T\u00e9l\u00e9phone principal"
+    },
+    "email": {
+      "type": "string",
+      "description": "Email de contact"
+    },
+    "website": {
+      "type": "string",
+      "description": "Site web"
+    },
+    "address": {
+      "type": "string",
+      "description": "Adresse"
+    },
+    "address_complement": {
+      "type": "string",
+      "description": "Compl\u00e9ment d'adresse"
+    },
+    "postal_code": {
+      "type": "string",
+      "description": "Code postal"
+    },
+    "city": {
+      "type": "string",
+      "description": "Ville"
+    },
+    "country": {
+      "type": "string",
+      "default": "France"
+    },
+    "ars_number": {
+      "type": "string",
+      "description": "N\u00b0 agr\u00e9ment sanitaire"
+    },
+    "ars_region": {
+      "type": "string",
+      "description": "ARS de rattachement"
+    },
+    "department": {
+      "type": "string",
+      "description": "D\u00e9partement principal d'activit\u00e9"
+    },
+    "activity_zone": {
+      "type": "string",
+      "description": "Zone d'activit\u00e9"
+    },
+    "regulatory_comment": {
+      "type": "string",
+      "description": "Commentaire r\u00e9glementaire interne"
+    },
+    "timezone": {
+      "type": "string",
+      "default": "Europe/Paris"
+    },
+    "date_format": {
+      "type": "string",
+      "default": "JJ/MM/AAAA"
+    },
+    "time_format": {
+      "type": "string",
+      "default": "24h"
+    },
+    "language": {
+      "type": "string",
+      "default": "Fran\u00e7ais"
+    },
+    "logo_url": {
+      "type": "string",
+      "description": "URL du logo"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

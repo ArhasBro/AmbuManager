@@ -1,0 +1,65 @@
+{
+  "name": "AuditLog",
+  "type": "object",
+  "properties": {
+    "actor_initials": {
+      "type": "string"
+    },
+    "actor_name": {
+      "type": "string"
+    },
+    "actor_role": {
+      "type": "string"
+    },
+    "action": {
+      "type": "string",
+      "description": "Ex: Connexion r\u00e9ussie, Modification, Cr\u00e9ation"
+    },
+    "action_type": {
+      "type": "string",
+      "enum": [
+        "create",
+        "update",
+        "login",
+        "logout",
+        "export",
+        "view"
+      ],
+      "default": "view"
+    },
+    "module": {
+      "type": "string",
+      "description": "Ex: Auth, Planning, V\u00e9hicules, Utilisateurs"
+    },
+    "resource": {
+      "type": "string",
+      "description": "Ex: User: nathan.a"
+    },
+    "ip_address": {
+      "type": "string"
+    },
+    "result": {
+      "type": "string",
+      "enum": [
+        "Succ\u00e8s",
+        "\u00c9chec",
+        "Avertissement"
+      ],
+      "default": "Succ\u00e8s"
+    },
+    "details": {
+      "type": "string"
+    },
+    "event_id": {
+      "type": "string"
+    },
+    "company_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "action",
+    "module",
+    "result"
+  ]
+}

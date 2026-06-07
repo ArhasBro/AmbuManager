@@ -1,0 +1,54 @@
+{
+  "name": "Depot",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nom unique du d\u00e9p\u00f4t / base dans la soci\u00e9t\u00e9"
+    },
+    "code": {
+      "type": "string",
+      "description": "Code court (optionnel)"
+    },
+    "address": {
+      "type": "string",
+      "description": "Adresse (recommand\u00e9e mais non obligatoire)"
+    },
+    "postal_code": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "local_manager": {
+      "type": "string",
+      "description": "Responsable local (optionnel)"
+    },
+    "vehicle_count": {
+      "type": "number",
+      "default": 0
+    },
+    "user_count": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Actif",
+        "Inactif"
+      ],
+      "default": "Actif"
+    },
+    "is_archived": {
+      "type": "boolean",
+      "default": false
+    },
+    "company_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

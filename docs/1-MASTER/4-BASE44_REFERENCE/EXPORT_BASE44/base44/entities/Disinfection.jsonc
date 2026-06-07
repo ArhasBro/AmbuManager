@@ -1,0 +1,58 @@
+{
+  "name": "Disinfection",
+  "type": "object",
+  "properties": {
+    "vehicle_id": {
+      "type": "string"
+    },
+    "vehicle_name": {
+      "type": "string"
+    },
+    "vehicle_type": {
+      "type": "string"
+    },
+    "depot_name": {
+      "type": "string"
+    },
+    "disinfection_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "product_type": {
+      "type": "string",
+      "description": "Type de produit utilis\u00e9"
+    },
+    "performed_by": {
+      "type": "string"
+    },
+    "result": {
+      "type": "string",
+      "enum": [
+        "R\u00e9alis\u00e9e",
+        "R\u00e9alis\u00e9e avec r\u00e9serve",
+        "Non r\u00e9alis\u00e9e",
+        "\u00c0 refaire"
+      ],
+      "default": "R\u00e9alis\u00e9e"
+    },
+    "counter_checked": {
+      "type": "boolean",
+      "default": false,
+      "description": "Contre-v\u00e9rifi\u00e9e par un tiers autoris\u00e9"
+    },
+    "counter_checked_by": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "company_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "vehicle_id",
+    "disinfection_date",
+    "result"
+  ]
+}

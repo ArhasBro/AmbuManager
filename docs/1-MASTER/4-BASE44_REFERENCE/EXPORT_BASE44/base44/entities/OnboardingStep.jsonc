@@ -1,0 +1,50 @@
+{
+  "name": "OnboardingStep",
+  "type": "object",
+  "properties": {
+    "step_number": {
+      "type": "number"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Termin\u00e9",
+        "En cours",
+        "\u00c0 faire",
+        "\u00c0 planifier"
+      ],
+      "default": "\u00c0 faire"
+    },
+    "responsible": {
+      "type": "string"
+    },
+    "responsible_initials": {
+      "type": "string"
+    },
+    "objectives": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "resources": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "company_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "step_number",
+    "title"
+  ]
+}

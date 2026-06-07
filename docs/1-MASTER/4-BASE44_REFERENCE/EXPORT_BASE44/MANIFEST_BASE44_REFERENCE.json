@@ -1,0 +1,717 @@
+[
+  {
+    "path": "EXCLUSIONS_BASE44_REFERENCE.md",
+    "size": 339,
+    "sha256_prefix": "1a2ec2d182c1ae2a"
+  },
+  {
+    "path": "README.md",
+    "size": 1059,
+    "sha256_prefix": "3712727e52379d19"
+  },
+  {
+    "path": "README_EXPORT_BASE44.md",
+    "size": 1196,
+    "sha256_prefix": "3d67e6d5a62635e0"
+  },
+  {
+    "path": "base44/config.jsonc",
+    "size": 181,
+    "sha256_prefix": "d375d020b81be405"
+  },
+  {
+    "path": "base44/entities/AbsenceRequest.jsonc",
+    "size": 991,
+    "sha256_prefix": "5c9a4d91c3ec9ef1"
+  },
+  {
+    "path": "base44/entities/AuditLog.jsonc",
+    "size": 1190,
+    "sha256_prefix": "fe2923e10b776acd"
+  },
+  {
+    "path": "base44/entities/Company.jsonc",
+    "size": 2001,
+    "sha256_prefix": "87a9dcd2c1861a30"
+  },
+  {
+    "path": "base44/entities/CompanyContact.jsonc",
+    "size": 750,
+    "sha256_prefix": "8a7edcd2db1fb514"
+  },
+  {
+    "path": "base44/entities/DashboardPreference.jsonc",
+    "size": 441,
+    "sha256_prefix": "d1f7ed35140fc8d0"
+  },
+  {
+    "path": "base44/entities/Depot.jsonc",
+    "size": 1039,
+    "sha256_prefix": "445089ed6d080fcc"
+  },
+  {
+    "path": "base44/entities/Disinfection.jsonc",
+    "size": 1146,
+    "sha256_prefix": "70ba3df545f1f318"
+  },
+  {
+    "path": "base44/entities/Employee.jsonc",
+    "size": 1541,
+    "sha256_prefix": "48108324cac99663"
+  },
+  {
+    "path": "base44/entities/OnboardingStep.jsonc",
+    "size": 830,
+    "sha256_prefix": "01af128e6617de98"
+  },
+  {
+    "path": "base44/entities/PlanningEntry.jsonc",
+    "size": 1840,
+    "sha256_prefix": "771378230d8d2dfc"
+  },
+  {
+    "path": "base44/entities/ShiftTemplate.jsonc",
+    "size": 1830,
+    "sha256_prefix": "430efbc50ab9f340"
+  },
+  {
+    "path": "base44/entities/User.jsonc",
+    "size": 3196,
+    "sha256_prefix": "635082f2e5a5cf4e"
+  },
+  {
+    "path": "base44/entities/Vehicle.jsonc",
+    "size": 1823,
+    "sha256_prefix": "d3160de4efc1998b"
+  },
+  {
+    "path": "base44/entities/VehicleAnomaly.jsonc",
+    "size": 1308,
+    "sha256_prefix": "cb48d0ed20cd4fc1"
+  },
+  {
+    "path": "base44/entities/VehicleCheck.jsonc",
+    "size": 920,
+    "sha256_prefix": "603d29eb885cb644"
+  },
+  {
+    "path": "base44/functions/fixNathanRole/entry.ts",
+    "size": 597,
+    "sha256_prefix": "9f56cf7c67366929"
+  },
+  {
+    "path": "components.json",
+    "size": 444,
+    "sha256_prefix": "73e1334afce0f20f"
+  },
+  {
+    "path": "eslint.config.js",
+    "size": 1578,
+    "sha256_prefix": "b0ac68c36cb81cba"
+  },
+  {
+    "path": "index.html",
+    "size": 430,
+    "sha256_prefix": "93b3b0fc202164d5"
+  },
+  {
+    "path": "jsconfig.json",
+    "size": 583,
+    "sha256_prefix": "e73e9adf0fcd9194"
+  },
+  {
+    "path": "package.json",
+    "size": 3235,
+    "sha256_prefix": "b0de0e5ce7005877"
+  },
+  {
+    "path": "postcss.config.js",
+    "size": 80,
+    "sha256_prefix": "190c877db466995b"
+  },
+  {
+    "path": "src/App.jsx",
+    "size": 2808,
+    "sha256_prefix": "e25517c2d2642c47"
+  },
+  {
+    "path": "src/api/base44Client.js",
+    "size": 337,
+    "sha256_prefix": "35647ef13677f2b2"
+  },
+  {
+    "path": "src/components/AuthLayout.jsx",
+    "size": 1156,
+    "sha256_prefix": "e445a4872a225839"
+  },
+  {
+    "path": "src/components/GoogleIcon.jsx",
+    "size": 854,
+    "sha256_prefix": "0d817400857f53ce"
+  },
+  {
+    "path": "src/components/ProtectedRoute.jsx",
+    "size": 1069,
+    "sha256_prefix": "f1121449bc7f8f31"
+  },
+  {
+    "path": "src/components/ScrollToTop.jsx",
+    "size": 805,
+    "sha256_prefix": "56f6ecc5d3f0bd69"
+  },
+  {
+    "path": "src/components/UserNotRegisteredError.jsx",
+    "size": 1592,
+    "sha256_prefix": "5cecb11fe2fb3a03"
+  },
+  {
+    "path": "src/components/auth/LoginForm.jsx",
+    "size": 5137,
+    "sha256_prefix": "c07d386ad35fa78d"
+  },
+  {
+    "path": "src/components/dashboard/DashboardAlertCard.jsx",
+    "size": 960,
+    "sha256_prefix": "126221b08f53e4f1"
+  },
+  {
+    "path": "src/components/dashboard/DashboardCustomizeDialog.jsx",
+    "size": 2354,
+    "sha256_prefix": "b4b3d39017af1bec"
+  },
+  {
+    "path": "src/components/dashboard/DashboardKpiCard.jsx",
+    "size": 847,
+    "sha256_prefix": "ecd96c74ebfd74a8"
+  },
+  {
+    "path": "src/components/dashboard/DashboardShortcutCard.jsx",
+    "size": 845,
+    "sha256_prefix": "a369a2808c8d4a50"
+  },
+  {
+    "path": "src/components/dashboard/DashboardWidgetCard.jsx",
+    "size": 1032,
+    "sha256_prefix": "bcd475bea3e3bd89"
+  },
+  {
+    "path": "src/components/depots/DepotFormDialog.jsx",
+    "size": 4024,
+    "sha256_prefix": "52171046c9104b14"
+  },
+  {
+    "path": "src/components/modeles/TemplateFormDialog.jsx",
+    "size": 6624,
+    "sha256_prefix": "e53ae8645b22a6b6"
+  },
+  {
+    "path": "src/components/planning/AssignmentFormDialog.jsx",
+    "size": 8684,
+    "sha256_prefix": "f85200cf056bfdef"
+  },
+  {
+    "path": "src/components/planning/PlanningGlobal.jsx",
+    "size": 13146,
+    "sha256_prefix": "1ca2f2536e0a6d8e"
+  },
+  {
+    "path": "src/components/planning/PlanningJour.jsx",
+    "size": 11353,
+    "sha256_prefix": "8dd8f0922993e6cd"
+  },
+  {
+    "path": "src/components/planning/PlanningMois.jsx",
+    "size": 9465,
+    "sha256_prefix": "5ba0ffac94115323"
+  },
+  {
+    "path": "src/components/planning/PlanningPersonnel.jsx",
+    "size": 11673,
+    "sha256_prefix": "489751ad11a30d05"
+  },
+  {
+    "path": "src/components/planning/PlanningSemaine.jsx",
+    "size": 10467,
+    "sha256_prefix": "db718e3f301f5438"
+  },
+  {
+    "path": "src/components/planning/WeekPublishBar.jsx",
+    "size": 1866,
+    "sha256_prefix": "69d0b07735135205"
+  },
+  {
+    "path": "src/components/shell/AccessDeniedState.jsx",
+    "size": 896,
+    "sha256_prefix": "ad823efefaac1723"
+  },
+  {
+    "path": "src/components/shell/AppShell.jsx",
+    "size": 8639,
+    "sha256_prefix": "7ab2a03bb23bcd0c"
+  },
+  {
+    "path": "src/components/societe/CompanyAdminPanel.jsx",
+    "size": 3791,
+    "sha256_prefix": "73c1d5861a3452a4"
+  },
+  {
+    "path": "src/components/societe/CompanyContactsPanel.jsx",
+    "size": 8789,
+    "sha256_prefix": "a8d2e7bb1258847f"
+  },
+  {
+    "path": "src/components/societe/CompanyField.jsx",
+    "size": 459,
+    "sha256_prefix": "5827531903ea1396"
+  },
+  {
+    "path": "src/components/suivi/AnomalyFormDialog.jsx",
+    "size": 4622,
+    "sha256_prefix": "90a63affae63e7e4"
+  },
+  {
+    "path": "src/components/suivi/CheckFormDialog.jsx",
+    "size": 5565,
+    "sha256_prefix": "a78874017a0ad1ab"
+  },
+  {
+    "path": "src/components/suivi/DisinfectionFormDialog.jsx",
+    "size": 6689,
+    "sha256_prefix": "f1c4be02fe761841"
+  },
+  {
+    "path": "src/components/suivi/SuiviAnomalies.jsx",
+    "size": 9056,
+    "sha256_prefix": "c355f7506b8eb86f"
+  },
+  {
+    "path": "src/components/suivi/SuiviDesinfection.jsx",
+    "size": 7588,
+    "sha256_prefix": "608bc7b1153b4f1e"
+  },
+  {
+    "path": "src/components/suivi/SuiviVerifications.jsx",
+    "size": 8431,
+    "sha256_prefix": "b8f04baf36e54e1f"
+  },
+  {
+    "path": "src/components/suivi/SuiviVueEnsemble.jsx",
+    "size": 8402,
+    "sha256_prefix": "268064a2ab41cfef"
+  },
+  {
+    "path": "src/components/ui/KpiCard.jsx",
+    "size": 848,
+    "sha256_prefix": "6512c489962b9d76"
+  },
+  {
+    "path": "src/components/ui/StatusBadge.jsx",
+    "size": 3746,
+    "sha256_prefix": "29775b99749fa196"
+  },
+  {
+    "path": "src/components/ui/accordion.jsx",
+    "size": 1615,
+    "sha256_prefix": "b47533b3783b8149"
+  },
+  {
+    "path": "src/components/ui/alert-dialog.jsx",
+    "size": 3461,
+    "sha256_prefix": "a20098cdc2eb2b59"
+  },
+  {
+    "path": "src/components/ui/alert.jsx",
+    "size": 1335,
+    "sha256_prefix": "c5baf27fb6a4bf13"
+  },
+  {
+    "path": "src/components/ui/aspect-ratio.jsx",
+    "size": 140,
+    "sha256_prefix": "08b0aa0b05efc573"
+  },
+  {
+    "path": "src/components/ui/avatar.jsx",
+    "size": 1043,
+    "sha256_prefix": "703fb6852952bd03"
+  },
+  {
+    "path": "src/components/ui/badge.jsx",
+    "size": 990,
+    "sha256_prefix": "380dcda78ff8fdd8"
+  },
+  {
+    "path": "src/components/ui/breadcrumb.jsx",
+    "size": 2271,
+    "sha256_prefix": "4c0972765dc0212c"
+  },
+  {
+    "path": "src/components/ui/button.jsx",
+    "size": 1679,
+    "sha256_prefix": "6c28699c64ff8c36"
+  },
+  {
+    "path": "src/components/ui/calendar.jsx",
+    "size": 2851,
+    "sha256_prefix": "06e0c81497bda70a"
+  },
+  {
+    "path": "src/components/ui/card.jsx",
+    "size": 1440,
+    "sha256_prefix": "8ab6f42e722e9c51"
+  },
+  {
+    "path": "src/components/ui/carousel.jsx",
+    "size": 4821,
+    "sha256_prefix": "55eb9456609f96f5"
+  },
+  {
+    "path": "src/components/ui/chart.jsx",
+    "size": 8639,
+    "sha256_prefix": "c4684b470cae53b8"
+  },
+  {
+    "path": "src/components/ui/checkbox.jsx",
+    "size": 880,
+    "sha256_prefix": "b0260cb7767493d8"
+  },
+  {
+    "path": "src/components/ui/collapsible.jsx",
+    "size": 329,
+    "sha256_prefix": "f4cdd104de29928b"
+  },
+  {
+    "path": "src/components/ui/command.jsx",
+    "size": 3897,
+    "sha256_prefix": "e7cea37aff49e211"
+  },
+  {
+    "path": "src/components/ui/context-menu.jsx",
+    "size": 5995,
+    "sha256_prefix": "5fe320cad9ee1833"
+  },
+  {
+    "path": "src/components/ui/dialog.jsx",
+    "size": 3228,
+    "sha256_prefix": "50a7cc4ae5ce0f25"
+  },
+  {
+    "path": "src/components/ui/drawer.jsx",
+    "size": 2359,
+    "sha256_prefix": "3d2dce97d3f6bc5d"
+  },
+  {
+    "path": "src/components/ui/dropdown-menu.jsx",
+    "size": 6157,
+    "sha256_prefix": "d36cd67e71781bbb"
+  },
+  {
+    "path": "src/components/ui/form.jsx",
+    "size": 3141,
+    "sha256_prefix": "d899b071230c321a"
+  },
+  {
+    "path": "src/components/ui/hover-card.jsx",
+    "size": 1070,
+    "sha256_prefix": "3b49e533ad609957"
+  },
+  {
+    "path": "src/components/ui/input-otp.jsx",
+    "size": 1811,
+    "sha256_prefix": "78a437a82203c1d9"
+  },
+  {
+    "path": "src/components/ui/input.jsx",
+    "size": 690,
+    "sha256_prefix": "4455aea152904f12"
+  },
+  {
+    "path": "src/components/ui/label.jsx",
+    "size": 525,
+    "sha256_prefix": "37c6425d2a5c798a"
+  },
+  {
+    "path": "src/components/ui/menubar.jsx",
+    "size": 6790,
+    "sha256_prefix": "5411f1b8221d9a34"
+  },
+  {
+    "path": "src/components/ui/navigation-menu.jsx",
+    "size": 4217,
+    "sha256_prefix": "a1f789747cb75032"
+  },
+  {
+    "path": "src/components/ui/pagination.jsx",
+    "size": 2322,
+    "sha256_prefix": "1d519fc3ba1c8c6c"
+  },
+  {
+    "path": "src/components/ui/popover.jsx",
+    "size": 1166,
+    "sha256_prefix": "199cc7b3d8100138"
+  },
+  {
+    "path": "src/components/ui/progress.jsx",
+    "size": 667,
+    "sha256_prefix": "1ad2808d51c365f0"
+  },
+  {
+    "path": "src/components/ui/radio-group.jsx",
+    "size": 1135,
+    "sha256_prefix": "10ced1e6932e4fe5"
+  },
+  {
+    "path": "src/components/ui/resizable.jsx",
+    "size": 1570,
+    "sha256_prefix": "4e74fb31b8321012"
+  },
+  {
+    "path": "src/components/ui/scroll-area.jsx",
+    "size": 1362,
+    "sha256_prefix": "3de4bed34be51a94"
+  },
+  {
+    "path": "src/components/ui/select.jsx",
+    "size": 4677,
+    "sha256_prefix": "15c7a0e4c45b655f"
+  },
+  {
+    "path": "src/components/ui/separator.jsx",
+    "size": 600,
+    "sha256_prefix": "2c82247abd573d0f"
+  },
+  {
+    "path": "src/components/ui/sheet.jsx",
+    "size": 3549,
+    "sha256_prefix": "33f27d1b55925dbc"
+  },
+  {
+    "path": "src/components/ui/sidebar.jsx",
+    "size": 20643,
+    "sha256_prefix": "828bec5ac1ec715f"
+  },
+  {
+    "path": "src/components/ui/skeleton.jsx",
+    "size": 227,
+    "sha256_prefix": "c5f32316d9f8feeb"
+  },
+  {
+    "path": "src/components/ui/slider.jsx",
+    "size": 914,
+    "sha256_prefix": "1761bfaa0a06480b"
+  },
+  {
+    "path": "src/components/ui/sonner.jsx",
+    "size": 799,
+    "sha256_prefix": "f1309f953467d583"
+  },
+  {
+    "path": "src/components/ui/switch.jsx",
+    "size": 1025,
+    "sha256_prefix": "880e95637cc1d90e"
+  },
+  {
+    "path": "src/components/ui/table.jsx",
+    "size": 2231,
+    "sha256_prefix": "301509bb8337184f"
+  },
+  {
+    "path": "src/components/ui/tabs.jsx",
+    "size": 1529,
+    "sha256_prefix": "57591bdfb3fa931b"
+  },
+  {
+    "path": "src/components/ui/textarea.jsx",
+    "size": 587,
+    "sha256_prefix": "b64a8fabf495dd59"
+  },
+  {
+    "path": "src/components/ui/toast.jsx",
+    "size": 3804,
+    "sha256_prefix": "8a98ef70908fd336"
+  },
+  {
+    "path": "src/components/ui/toaster.jsx",
+    "size": 785,
+    "sha256_prefix": "fc1bce32d9a45f5b"
+  },
+  {
+    "path": "src/components/ui/toggle-group.jsx",
+    "size": 1284,
+    "sha256_prefix": "1c7566b9f2aa00f0"
+  },
+  {
+    "path": "src/components/ui/toggle.jsx",
+    "size": 1310,
+    "sha256_prefix": "e8fe6de52ef73d6f"
+  },
+  {
+    "path": "src/components/ui/tooltip.jsx",
+    "size": 1091,
+    "sha256_prefix": "73e47a5dde6c55ac"
+  },
+  {
+    "path": "src/components/ui/use-toast.jsx",
+    "size": 3379,
+    "sha256_prefix": "40f2839736597a3f"
+  },
+  {
+    "path": "src/components/utilisateurs/AbsencePanelDialog.jsx",
+    "size": 7411,
+    "sha256_prefix": "1769ed866a56220b"
+  },
+  {
+    "path": "src/components/utilisateurs/ApplicationAccessDialog.jsx",
+    "size": 2461,
+    "sha256_prefix": "d27f946b90f4d88e"
+  },
+  {
+    "path": "src/components/utilisateurs/PasswordResetDialog.jsx",
+    "size": 2259,
+    "sha256_prefix": "b5f0cf549ca8cab3"
+  },
+  {
+    "path": "src/components/utilisateurs/UserFormDialog.jsx",
+    "size": 12538,
+    "sha256_prefix": "2a0ec52438caf100"
+  },
+  {
+    "path": "src/components/vehicules/VehicleFormDialog.jsx",
+    "size": 7375,
+    "sha256_prefix": "95e6574f048648cf"
+  },
+  {
+    "path": "src/hooks/use-mobile.jsx",
+    "size": 545,
+    "sha256_prefix": "a136217739e79f9d"
+  },
+  {
+    "path": "src/index.css",
+    "size": 2623,
+    "sha256_prefix": "578640a1bb0dd7e6"
+  },
+  {
+    "path": "src/lib/AuthContext.jsx",
+    "size": 4902,
+    "sha256_prefix": "c5b2a5f5db9c78b8"
+  },
+  {
+    "path": "src/lib/PageNotFound.jsx",
+    "size": 3930,
+    "sha256_prefix": "8536e20911882757"
+  },
+  {
+    "path": "src/lib/app-params.js",
+    "size": 1791,
+    "sha256_prefix": "d0c8c149528b7053"
+  },
+  {
+    "path": "src/lib/auditLogger.js",
+    "size": 1757,
+    "sha256_prefix": "8face3de2324a8ee"
+  },
+  {
+    "path": "src/lib/planningEligibility.js",
+    "size": 839,
+    "sha256_prefix": "615d57851fda93ca"
+  },
+  {
+    "path": "src/lib/planningUtils.js",
+    "size": 4839,
+    "sha256_prefix": "faf7021dd2174e19"
+  },
+  {
+    "path": "src/lib/query-client.js",
+    "size": 197,
+    "sha256_prefix": "0a080b6d9a1ed9f5"
+  },
+  {
+    "path": "src/lib/userPermissions.js",
+    "size": 7430,
+    "sha256_prefix": "61fe15090012a447"
+  },
+  {
+    "path": "src/lib/utils.js",
+    "size": 190,
+    "sha256_prefix": "4f592359765d69c3"
+  },
+  {
+    "path": "src/lib/vehicleUtils.js",
+    "size": 523,
+    "sha256_prefix": "c69c108cedd80143"
+  },
+  {
+    "path": "src/main.jsx",
+    "size": 189,
+    "sha256_prefix": "caa3bab80b647fbb"
+  },
+  {
+    "path": "src/pages/Audit.jsx",
+    "size": 9758,
+    "sha256_prefix": "61f7932b1878e6a0"
+  },
+  {
+    "path": "src/pages/Dashboard.jsx",
+    "size": 19484,
+    "sha256_prefix": "3cd891b9e45ab5b9"
+  },
+  {
+    "path": "src/pages/Depots.jsx",
+    "size": 8966,
+    "sha256_prefix": "455c3b32b3798f87"
+  },
+  {
+    "path": "src/pages/Login.jsx",
+    "size": 3507,
+    "sha256_prefix": "2498b8817dc1f318"
+  },
+  {
+    "path": "src/pages/MiseEnRoute.jsx",
+    "size": 7416,
+    "sha256_prefix": "a6b9bdc6d05c6c70"
+  },
+  {
+    "path": "src/pages/ModelesHoraires.jsx",
+    "size": 11882,
+    "sha256_prefix": "6b6d9c96e7be9b59"
+  },
+  {
+    "path": "src/pages/Planning.jsx",
+    "size": 1937,
+    "sha256_prefix": "af31d44440439720"
+  },
+  {
+    "path": "src/pages/Societe.jsx",
+    "size": 8380,
+    "sha256_prefix": "95cd60c49ccb9267"
+  },
+  {
+    "path": "src/pages/SuiviVehicules.jsx",
+    "size": 1827,
+    "sha256_prefix": "a20b413ddc2bd878"
+  },
+  {
+    "path": "src/pages/Utilisateurs.jsx",
+    "size": 16535,
+    "sha256_prefix": "0c731fa0ee24ab3f"
+  },
+  {
+    "path": "src/pages/Vehicules.jsx",
+    "size": 12185,
+    "sha256_prefix": "5307bbfbe230f2fa"
+  },
+  {
+    "path": "src/utils/index.ts",
+    "size": 97,
+    "sha256_prefix": "1bd31d3e8630b19d"
+  },
+  {
+    "path": "tailwind.config.js",
+    "size": 2598,
+    "sha256_prefix": "7b8434c2adeffe61"
+  },
+  {
+    "path": "vite.config.js",
+    "size": 676,
+    "sha256_prefix": "6e60cb5b78a0d5aa"
+  }
+]

@@ -1,0 +1,99 @@
+{
+  "name": "PlanningEntry",
+  "type": "object",
+  "properties": {
+    "employee_id": {
+      "type": "string"
+    },
+    "employee_name": {
+      "type": "string"
+    },
+    "employee_initials": {
+      "type": "string"
+    },
+    "employee_role": {
+      "type": "string"
+    },
+    "vehicle_id": {
+      "type": "string"
+    },
+    "vehicle_name": {
+      "type": "string"
+    },
+    "vehicle_type": {
+      "type": "string"
+    },
+    "depot_id": {
+      "type": "string"
+    },
+    "depot_name": {
+      "type": "string"
+    },
+    "template_id": {
+      "type": "string"
+    },
+    "template_name": {
+      "type": "string"
+    },
+    "shift_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "week_number": {
+      "type": "number"
+    },
+    "year": {
+      "type": "number"
+    },
+    "start_time": {
+      "type": "string"
+    },
+    "end_time": {
+      "type": "string"
+    },
+    "type_badge": {
+      "type": "string",
+      "description": "AMB/VSL/TAXI/REPOS/ABSENT/GARDE/\u00c0 AFFECTER"
+    },
+    "coverage_status": {
+      "type": "string",
+      "enum": [
+        "\u00c0 couvrir",
+        "Couvert",
+        "Incomplet",
+        "Non affect\u00e9",
+        "\u00c0 v\u00e9rifier"
+      ],
+      "default": "\u00c0 v\u00e9rifier"
+    },
+    "publication_status": {
+      "type": "string",
+      "enum": [
+        "Brouillon",
+        "Publi\u00e9",
+        "Modifi\u00e9 apr\u00e8s publication",
+        "Annul\u00e9"
+      ],
+      "default": "Brouillon"
+    },
+    "cancellation_reason": {
+      "type": "string",
+      "description": "Motif d'annulation logique"
+    },
+    "team": {
+      "type": "string"
+    },
+    "binome": {
+      "type": "string"
+    },
+    "annotation": {
+      "type": "string"
+    },
+    "company_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "shift_date"
+  ]
+}

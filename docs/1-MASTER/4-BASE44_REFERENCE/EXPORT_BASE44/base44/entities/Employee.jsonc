@@ -1,0 +1,85 @@
+{
+  "name": "Employee",
+  "type": "object",
+  "properties": {
+    "full_name": {
+      "type": "string"
+    },
+    "first_name": {
+      "type": "string"
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "initials": {
+      "type": "string",
+      "description": "Initiales 2 lettres"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string",
+      "enum": [
+        "ADMIN",
+        "GERANT",
+        "BUREAU",
+        "ADE",
+        "AA",
+        "TAXI",
+        "REGULATEUR"
+      ],
+      "default": "ADE"
+    },
+    "role_label": {
+      "type": "string",
+      "description": "Libell\u00e9 du r\u00f4le affich\u00e9"
+    },
+    "team": {
+      "type": "string",
+      "description": "\u00c9quipe / Service"
+    },
+    "depot_id": {
+      "type": "string"
+    },
+    "depot_name": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Actif",
+        "Inactif",
+        "Absent"
+      ],
+      "default": "Actif"
+    },
+    "is_trainee": {
+      "type": "boolean",
+      "default": false
+    },
+    "last_login": {
+      "type": "string",
+      "description": "Derni\u00e8re connexion"
+    },
+    "daily_start": {
+      "type": "string",
+      "description": "Heure d\u00e9but habituelle"
+    },
+    "daily_end": {
+      "type": "string",
+      "description": "Heure fin habituelle"
+    },
+    "company_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "full_name",
+    "email",
+    "role"
+  ]
+}

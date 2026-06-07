@@ -1,0 +1,69 @@
+{
+  "name": "VehicleAnomaly",
+  "type": "object",
+  "properties": {
+    "anomaly_ref": {
+      "type": "string",
+      "description": "Ex: ANG-001-AB"
+    },
+    "vehicle_id": {
+      "type": "string"
+    },
+    "vehicle_name": {
+      "type": "string"
+    },
+    "vehicle_type": {
+      "type": "string"
+    },
+    "depot_name": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "D\u00e9claration manuelle",
+        "V\u00e9rification",
+        "D\u00e9sinfection",
+        "Autre"
+      ],
+      "default": "D\u00e9claration manuelle"
+    },
+    "declared_at": {
+      "type": "string",
+      "description": "Date/heure constat"
+    },
+    "declared_by": {
+      "type": "string"
+    },
+    "criticality": {
+      "type": "string",
+      "enum": [
+        "Bloquante",
+        "Majeure",
+        "Non bloquante"
+      ],
+      "default": "Non bloquante"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Ouverte",
+        "En cours de traitement",
+        "R\u00e9solue",
+        "Annul\u00e9e/Class\u00e9e sans suite"
+      ],
+      "default": "Ouverte"
+    },
+    "description": {
+      "type": "string"
+    },
+    "company_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "vehicle_id",
+    "source",
+    "criticality"
+  ]
+}
