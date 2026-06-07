@@ -24,8 +24,10 @@ Règle : en cas de contradiction, les documents normatifs actifs priment.
 | actif | `docs/1-MASTER/REGISTRE_DECISIONS_V2.md` | Registre normatif des décisions validées |
 | actif temporaire | `docs/1-MASTER/ETAT_GLOBAL_PROJET_V2.md` | Statut courant du projet pendant la reprise |
 | actif temporaire | `docs/1-MASTER/AUDIT_CODE_EXISTANT_ALPHA_V2.md` | Preuve d’état du code avant Phase 6 ; utile au démarrage |
+| actif temporaire | `docs/1-MASTER/AUDIT_COMPARAISON_BASE44_OFFICIEL_V1.md` | Audit de cadrage Base44 → repo officiel ; obligatoire pour le bloc `DEV-B44-00` |
 | actif (améliorable) | `docs/1-MASTER/RGPD_BASE_MINIMALE.md` | Base RGPD minimale active, non finale, à améliorer plus tard |
 | contextuel / mémoriel | `docs/1-MASTER/RECAP_DISCUSSIONS_V2.md` | Mémoire narrative ; utile pour le contexte, non normative |
+| archive de référence | `docs/4-ARCHIVES/BASE44_REFERENCE/SYNTHESE_FINALE_BASE44_AMBULANCE_MANAGER.md` | Synthèse finale Base44 ; référence prototype, non source technique finale |
 | archive | `docs/4-ARCHIVES/1-MASTER_HISTORIQUE/` | Historique documentaire non actif |
 
 ## Rôle spécifique de `RECAP_DISCUSSIONS_V2.md`
@@ -58,6 +60,7 @@ Règle : en cas de contradiction, les documents normatifs actifs priment.
 - `REGISTRE_DECISIONS_V2.md` : modifier lorsqu’une décision structurante est validée.
 - `ETAT_GLOBAL_PROJET_V2.md` : modifier à chaque fin de phase importante.
 - `AUDIT_CODE_EXISTANT_ALPHA_V2.md` : ne pas modifier sauf correction factuelle validée ; document de preuve temporaire.
+- `AUDIT_COMPARAISON_BASE44_OFFICIEL_V1.md` : ne pas modifier sauf correction factuelle validée ; document de cadrage temporaire pour `DEV-B44-00`.
 - `RGPD_BASE_MINIMALE.md` : modifier lors d’un travail RGPD dédié.
 - `RECAP_DISCUSSIONS_V2.md` : modifier uniquement pour mémoire narrative, sans statut normatif.
 - `README_SESSIONS.md` : modifier si la gouvernance des sessions change.
@@ -65,4 +68,5 @@ Règle : en cas de contradiction, les documents normatifs actifs priment.
 ## Notes de cycle
 
 - `AUDIT_CODE_EXISTANT_ALPHA_V2.md` pourra être archivé plus tard après stabilisation de la Phase 6 ou remplacement par des audits de blocs plus récents.
+- `AUDIT_COMPARAISON_BASE44_OFFICIEL_V1.md` pourra être archivé plus tard après validation et clôture du bloc `DEV-B44-00`.
 - `ETAT_GLOBAL_PROJET_V2.md` reste temporaire tant que le pilotage de la reprise l’exige.

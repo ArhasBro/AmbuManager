@@ -1,7 +1,7 @@
 # Ambulance Manager — ETAT_GLOBAL_PROJET_V2
 
-Version : V2.0.1  
-Date : 22/05/2026
+Version : V2.0.2
+Date : 07/06/2026
 
 ## 1. Rôle du document
 
@@ -12,7 +12,16 @@ Ce document synthétise l'état courant du projet juste avant l'exécution de la
 - documents MASTER V2 : actifs, finalisés pour la reprise après levée des réserves ;
 - versions non V2 : historiques et non prioritaires ;
 - fiches fonctionnalités : actives, référence fonctionnelle cible détaillée ;
+- audit Base44 → repo officiel : terminé, actif comme cadrage temporaire du bloc `DEV-B44-00` ;
+- Base44 : clôturé comme prototype de référence fonctionnelle, visuelle et métier, non source technique finale ;
 - code : non modifié dans cette phase documentaire.
+
+## 2.1 Statut du bloc DEV-B44-00
+
+- `DEV-B44-00-01 — AUDIT` : terminé.
+- `DEV-B44-00-02 — DOCUMENTATION MASTER` : réalisé côté mise en cohérence documentaire.
+- Prochaine étape : `DEV-B44-00-03 — VALIDATION`.
+- Aucune reprise code issue de Base44 ne doit commencer avant `DEV-B44-00-03` puis `CLOTURE_DEV-B44-00`.
 
 ## 3. Statut des pages
 
@@ -22,7 +31,7 @@ Ce document synthétise l'état courant du projet juste avant l'exécution de la
 
 ## 4. Suite immédiate
 
-1. Exécuter la Phase 6 selon `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md`.
-2. Clarifier et confirmer les points de vigilance dans les blocs DEV-V2 concernés.
-3. Finaliser les maquettes selon les besoins des blocs actifs.
-4. Reprendre le codage sur base documentaire MASTER V2 finalisée.
+1. Exécuter `DEV-B44-00-03 — VALIDATION`.
+2. Clôturer `CLOTURE_DEV-B44-00 — VALIDATION` si le cadrage est validé.
+3. Construire les prochaines sessions code uniquement à partir de l'audit Base44 validé et du plan actif.
+4. Exécuter la Phase 6 selon `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md`.

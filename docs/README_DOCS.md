@@ -29,12 +29,15 @@ Ce document définit les règles courtes de gouvernance du dossier `docs/`.
   - Actifs temporaires avant Phase 6 :
     - `docs/1-MASTER/ETAT_GLOBAL_PROJET_V2.md`
     - `docs/1-MASTER/AUDIT_CODE_EXISTANT_ALPHA_V2.md`
+    - `docs/1-MASTER/AUDIT_COMPARAISON_BASE44_OFFICIEL_V1.md`
 - `docs/2-SESSIONS/` : gouvernance et historique des sessions.
   - Document actif unique : `docs/2-SESSIONS/README_SESSIONS.md`
   - Modèle de session : `docs/2-SESSIONS/SESSION-YYYYMMDD-XX`
   - Anciens documents concurrents archivés : `docs/4-ARCHIVES/2-SESSIONS_HISTORIQUE/`
 - `docs/3-TEMPLATES/` : modèles de documents de session (support d'exécution, pas source de vérité produit).
 - `docs/4-ARCHIVES/` : documents historiques retirés du périmètre actif.
+  - Référence Base44 : `docs/4-ARCHIVES/BASE44_REFERENCE/SYNTHESE_FINALE_BASE44_AMBULANCE_MANAGER.md`
+  - Usage : prototype fonctionnel, visuel et métier ; pas source technique finale.
 
 ## Règle de priorité documentaire
 
@@ -45,6 +48,8 @@ En cas de contradiction :
 4. archives.
 
 Les archives ne sont utilisées qu'en cas de besoin historique explicite.
+
+Exception contrôlée : la synthèse finale Base44 archivée peut être lue comme référence prototype si une session du bloc `DEV-B44-00` ou une reprise ultérieure issue de l'audit Base44 l'exige.
 
 ## Rappel opérationnel
 

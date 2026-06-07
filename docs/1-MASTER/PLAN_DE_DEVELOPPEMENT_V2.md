@@ -1,7 +1,7 @@
 # Ambulance Manager — PLAN_DE_DEVELOPPEMENT_V2
 
-Version : V2.0  
-Date : 26/05/2026
+Version : V2.1
+Date : 07/06/2026
 
 ## Sommaire
 
@@ -31,6 +31,8 @@ Il sert de cadre opérationnel pour exécuter la Phase 6 par blocs courts, traç
 ## 2. Références utilisées
 
 - `docs/1-MASTER/AUDIT_CODE_EXISTANT_ALPHA_V2.md`
+- `docs/1-MASTER/AUDIT_COMPARAISON_BASE44_OFFICIEL_V1.md`
+- `docs/4-ARCHIVES/BASE44_REFERENCE/SYNTHESE_FINALE_BASE44_AMBULANCE_MANAGER.md`
 - `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md` — plan actif de pilotage de la reprise Phase 6.
 - `docs/1-MASTER/DOCUMENT_MAITRE_V2.md`
 - `docs/1-MASTER/_INDEX_MASTER.md`
@@ -78,6 +80,7 @@ La Phase 6 doit :
 
 Ordre retenu (dépendances + risque) :
 
+0. cadrage Base44 : intégrer l'audit Base44 → repo officiel dans la gouvernance MASTER avant toute reprise code issue de Base44 ;
 1. socle transverse : shell/navigation/nomenclature/accès refusé ;
 2. permissions front/API transverses ;
 3. modules opérationnels cœur : véhicules puis suivi des véhicules ;
@@ -91,6 +94,42 @@ Ordre retenu (dépendances + risque) :
 Justification : ce séquencement réduit les régressions, car planning/dashboard/login/audit dépendent d’une base permissionnelle, nomenclature et données métier déjà stabilisées.
 
 ## 7. Blocs de développement DEV-V2
+
+### BLOC DEV-B44-00 — Cadrage intégration Base44 → repo officiel
+
+#### Objectif du bloc
+Intégrer le cadrage Base44 dans la documentation MASTER avant toute reprise code inspirée du prototype.
+
+#### Pourquoi ce bloc existe
+L'audit `AUDIT_COMPARAISON_BASE44_OFFICIEL_V1.md` établit que Base44 est utile comme prototype fonctionnel, visuel et métier, mais ne peut pas devenir une source technique finale.
+
+#### Règles structurantes
+- Base44 est un prototype de référence fonctionnelle, visuelle et métier.
+- Le repo officiel reste la source technique finale : Next.js, Prisma, PostgreSQL, RBAC serveur, documentation V2 et contrôles de validation.
+- Aucun code Base44 ne doit être copié directement dans le repo officiel.
+- Aucune reprise code issue de Base44 ne commence avant `DEV-B44-00-03` puis `CLOTURE_DEV-B44-00`.
+- Les prochaines sessions code doivent être construites à partir de l'audit validé et adaptées à l'architecture officielle.
+- Les renommages documentaires restent autorisés uniquement s'ils améliorent clairement la cohérence, avec justification et mise à jour des liens concernés.
+
+#### Sessions prévues
+- DEV-B44-00-01 — AUDIT — Audit comparaison Base44 / officiel.
+- DEV-B44-00-02 — DOCUMENTATION MASTER — Mise en cohérence docs MASTER.
+- DEV-B44-00-03 — VALIDATION — Validation du cadrage avant reprise code.
+- CLOTURE_DEV-B44-00 — VALIDATION — Clôture du bloc de cadrage.
+
+#### Livrables attendus
+Documentation MASTER cohérente avec l'audit Base44 → repo officiel, registre de décision mis à jour, état global aligné et prochaine étape de validation explicite.
+
+#### Contrôles obligatoires
+`git status --short`, diff documentaire ciblé, contrôle des liens et références modifiés, vérification qu'aucun fichier code, Prisma, package/config ou fichier Base44 n'a été modifié.
+
+#### Critère de validation du bloc
+Le bloc est clôturable seulement après validation documentaire `DEV-B44-00-03` et clôture explicite `CLOTURE_DEV-B44-00`.
+
+#### Documentation à mettre à jour si nécessaire
+`PLAN_DE_DEVELOPPEMENT_V2.md`, `DOCUMENT_MAITRE_V2.md`, `_INDEX_MASTER.md`, `README_DOCS.md`, `ETAT_GLOBAL_PROJET_V2.md`, `REGISTRE_DECISIONS_V2.md`.
+
+---
 
 ### BLOC DEV-V2-01 — Shell global / navigation / nomenclature V2 / accès refusé
 

@@ -1,7 +1,7 @@
 # Ambulance Manager — DOCUMENT_MAITRE_V2
 
 Version : V2.0.1  
-Date : 22/05/2026
+Date : 07/06/2026
 
 ## 1. Vision du projet
 
@@ -24,6 +24,7 @@ Documents MASTER V2 actifs pour la reprise Phase 6 :
 - `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md` ;
 - `docs/1-MASTER/ETAT_GLOBAL_PROJET_V2.md` ;
 - `docs/1-MASTER/REGISTRE_DECISIONS_V2.md` ;
+- `docs/1-MASTER/AUDIT_COMPARAISON_BASE44_OFFICIEL_V1.md` ;
 - `docs/1-MASTER/3-FONCTIONNALITES/`.
 
 Document contextuel / mémoriel (non normatif) :
@@ -32,6 +33,12 @@ Document contextuel / mémoriel (non normatif) :
 - non source de vérité principale en cas de contradiction.
 
 Les versions sans suffixe V2 sont historiques, archivées et non prioritaires.
+
+Référence Base44 :
+- `docs/4-ARCHIVES/BASE44_REFERENCE/SYNTHESE_FINALE_BASE44_AMBULANCE_MANAGER.md` ;
+- statut : prototype fonctionnel, visuel et métier clôturable côté Base44 ;
+- usage : référence de comparaison et d'inspiration contrôlée ;
+- limite : non source technique finale et non copiable directement.
 
 ## 4. Rôle des fiches fonctionnalités
 
@@ -56,10 +63,20 @@ Leur présence ne signifie pas que les pages correspondantes sont déjà validé
 
 Ordre méthodologique :
 1. Stabiliser la documentation V2.
-2. Cadrer puis auditer les toutes les pages.
-3. Finaliser les maquettes.
-4. Produire des références UI/UX propres.
-5. Reprendre le codage.
+2. Intégrer le cadrage Base44 dans les documents MASTER via le bloc `DEV-B44-00`.
+3. Valider `DEV-B44-00-03` puis `CLOTURE_DEV-B44-00` avant toute reprise code inspirée de Base44.
+4. Cadrer puis auditer les toutes les pages.
+5. Finaliser les maquettes.
+6. Produire des références UI/UX propres.
+7. Reprendre le codage.
+
+## 7.1 Rôle de Base44 dans la reprise
+
+Base44 sert uniquement de prototype de référence fonctionnelle, visuelle et métier.
+
+Le repo officiel reste la source technique finale : stack Next.js, Prisma, PostgreSQL, RBAC serveur, documentation V2 et validations humaines.
+
+Toute idée issue de Base44 doit être adaptée au modèle officiel, reliée à l'audit validé et traitée dans une session Codex dédiée. Le code Base44 ne doit pas être copié directement.
 
 ## 8. Règles documentaires
 

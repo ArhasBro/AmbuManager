@@ -1,7 +1,7 @@
 # Ambulance Manager — REGISTRE_DECISIONS_V2
 
-Version : V2.0.1  
-Date : 22/05/2026
+Version : V2.0.2
+Date : 07/06/2026
 
 ## 1. Rôle du registre
 
@@ -17,6 +17,16 @@ Les anciennes décisions restent consultables dans les documents historiques et 
 - `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md` est le plan actif de reprise en Phase 6 ;
 - `docs/1-MASTER/RECAP_DISCUSSIONS_V2.md` est contextuel / mémoriel et non normatif ;
 - les fichiers liés à REBASAGE sont supprimés du repo actif.
+
+## 2.1 Décision structurante — Base44 et bloc DEV-B44-00
+
+- Base44 est clôturé comme prototype fonctionnel, visuel et métier.
+- Base44 sert de référence de comparaison et d'inspiration UX/métier, sans devenir source technique finale.
+- Le repo officiel reste la source finale pour l'architecture, le modèle de données, le RBAC serveur, les API, Prisma, Next.js et les validations.
+- Le bloc `DEV-B44-00` est ajouté avant toute reprise code issue de Base44.
+- Aucune reprise code issue de Base44 ne commence avant `DEV-B44-00-03 — VALIDATION` puis `CLOTURE_DEV-B44-00 — VALIDATION`.
+- Toute reprise ultérieure doit partir de `docs/1-MASTER/AUDIT_COMPARAISON_BASE44_OFFICIEL_V1.md`, adapter les idées au repo officiel et refuser toute copie directe du code Base44.
+- Les renommages documentaires sont autorisés uniquement s'ils améliorent clairement la cohérence, avec justification, conservation du contenu utile et mise à jour des liens, index, sommaires et références.
 
 ## 3. Décisions de statut fonctionnel
 
