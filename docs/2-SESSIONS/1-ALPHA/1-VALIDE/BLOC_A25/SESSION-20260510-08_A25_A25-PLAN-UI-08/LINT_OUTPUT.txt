@@ -1,7 +1,0 @@
-COMMAND: npm run lint
-EXIT_CODE: 0
-
-
-> ambulance-manager@0.1.0 lint
-> eslint .
-

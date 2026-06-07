@@ -1,9 +1,0 @@
-diff --git a/docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-05_A26_A26-UI-05/PATCH/PATCH__SESSION-20260513-05_A26_A26-UI-05.diff b/docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-05_A26_A26-UI-05/PATCH/PATCH__SESSION-20260513-05_A26_A26-UI-05.diff
---- a/docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-05_A26_A26-UI-05/PATCH/PATCH__SESSION-20260513-05_A26_A26-UI-05.diff
-+++ b/docs/2-SESSIONS/1-ALPHA/BLOC_A26/SESSION-20260513-05_A26_A26-UI-05/PATCH/PATCH__SESSION-20260513-05_A26_A26-UI-05.diff
-@@
--                     Vue dÃ©pÃ´t
-+                     Vue dépôt
-@@
--+          <summary>Vue legacy (avancÃ©e)</summary>
-++          <summary>Vue legacy (avancée)</summary>

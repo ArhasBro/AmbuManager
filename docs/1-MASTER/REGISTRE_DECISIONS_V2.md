@@ -12,10 +12,11 @@ Les anciennes décisions restent consultables dans les documents historiques et 
 ## 2. Décisions de gouvernance documentaire
 
 - les documents V2 constituent la gouvernance active de référence pour la reprise ;
-- les versions non V2 sont historiques, archivées et non prioritaires ;
+- les versions non V2 et les anciennes sessions Alpha supprimées ne sont plus des sources actives ;
 - les fiches de `docs/1-MASTER/3-FONCTIONNALITES/` restent actives comme référence détaillée de cadrage fonctionnel cible ;
 - `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md` est le plan actif de reprise en Phase 6 ;
-- `docs/1-MASTER/RECAP_DISCUSSIONS_V2.md` est contextuel / mémoriel et non normatif ;
+- `docs/1-MASTER/4-BASE44_REFERENCE/SYNTHESE_FINALE_BASE44_AMBULANCE_MANAGER.md` est la référence prototype Base44 conservée ;
+- aucune archive active n'est conservée dans le repo actif ;
 - les fichiers liés à REBASAGE sont supprimés du repo actif.
 
 ## 2.1 Décision structurante — Base44 et bloc DEV-B44-00

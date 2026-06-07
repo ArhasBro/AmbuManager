@@ -29,7 +29,7 @@ Ce document ne valide ni le code officiel, ni Base44. Présent dans le code ne v
 
 ### Base44
 
-- `docs/4-ARCHIVES/BASE44_REFERENCE/SYNTHESE_FINALE_BASE44_AMBULANCE_MANAGER.md`
+- `docs/1-MASTER/4-BASE44_REFERENCE/SYNTHESE_FINALE_BASE44_AMBULANCE_MANAGER.md`
 - `C:\Users\arche\ambulance-manager-Base44\src\pages\`
 - `C:\Users\arche\ambulance-manager-Base44\src\components\`
 - `C:\Users\arche\ambulance-manager-Base44\base44\entities\`

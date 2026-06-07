@@ -32,7 +32,7 @@ Il sert de cadre opérationnel pour exécuter la Phase 6 par blocs courts, traç
 
 - `docs/1-MASTER/AUDIT_CODE_EXISTANT_ALPHA_V2.md`
 - `docs/1-MASTER/AUDIT_COMPARAISON_BASE44_OFFICIEL_V1.md`
-- `docs/4-ARCHIVES/BASE44_REFERENCE/SYNTHESE_FINALE_BASE44_AMBULANCE_MANAGER.md`
+- `docs/1-MASTER/4-BASE44_REFERENCE/SYNTHESE_FINALE_BASE44_AMBULANCE_MANAGER.md`
 - `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md` — plan actif de pilotage de la reprise Phase 6.
 - `docs/1-MASTER/DOCUMENT_MAITRE_V2.md`
 - `docs/1-MASTER/_INDEX_MASTER.md`

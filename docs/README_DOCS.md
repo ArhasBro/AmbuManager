@@ -1,7 +1,7 @@
 # README_DOCS.md
 
 Projet : Ambulance Manager  
-Statut : gouvernance documentaire racine (active)
+Statut : gouvernance documentaire racine active
 
 ## Objet
 
@@ -15,44 +15,52 @@ Ce document définit les règles courtes de gouvernance du dossier `docs/`.
 - `1-MASTER/`
 - `2-SESSIONS/`
 - `3-TEMPLATES/`
-- `4-ARCHIVES/`
+
+Aucune archive active n'est conservée dans le repo actif.
 
 ## Rôle des sections
 
-- `docs/1-MASTER/` : références actives de gouvernance projet.
+- `docs/1-MASTER/` : documentation active de référence.
   - Index à lire : `docs/1-MASTER/_INDEX_MASTER.md`
   - Actifs principaux :
     - `docs/1-MASTER/DOCUMENT_MAITRE_V2.md`
     - `docs/1-MASTER/DOCUMENT_CADRAGE_FONCTIONNEL_V2.md`
     - `docs/1-MASTER/PLAN_DE_DEVELOPPEMENT_V2.md`
     - `docs/1-MASTER/REGISTRE_DECISIONS_V2.md`
-  - Actifs temporaires avant Phase 6 :
+  - Actifs temporaires ou de contexte contrôlé :
     - `docs/1-MASTER/ETAT_GLOBAL_PROJET_V2.md`
     - `docs/1-MASTER/AUDIT_CODE_EXISTANT_ALPHA_V2.md`
     - `docs/1-MASTER/AUDIT_COMPARAISON_BASE44_OFFICIEL_V1.md`
-- `docs/2-SESSIONS/` : gouvernance et historique des sessions.
-  - Document actif unique : `docs/2-SESSIONS/README_SESSIONS.md`
-  - Modèle de session : `docs/2-SESSIONS/SESSION-YYYYMMDD-XX`
-  - Anciens documents concurrents archivés : `docs/4-ARCHIVES/2-SESSIONS_HISTORIQUE/`
-- `docs/3-TEMPLATES/` : modèles de documents de session (support d'exécution, pas source de vérité produit).
-- `docs/4-ARCHIVES/` : documents historiques retirés du périmètre actif.
-  - Référence Base44 : `docs/4-ARCHIVES/BASE44_REFERENCE/SYNTHESE_FINALE_BASE44_AMBULANCE_MANAGER.md`
+- `docs/1-MASTER/1-MAQUETTE/` : maquettes conservées.
+- `docs/1-MASTER/2-REFERENCE_UI_UX/` : références UI/UX conservées.
+- `docs/1-MASTER/3-FONCTIONNALITES/` : fiches fonctionnalités conservées.
+- `docs/1-MASTER/4-BASE44_REFERENCE/` : référence Base44 conservée.
+  - Synthèse active : `docs/1-MASTER/4-BASE44_REFERENCE/SYNTHESE_FINALE_BASE44_AMBULANCE_MANAGER.md`
   - Usage : prototype fonctionnel, visuel et métier ; pas source technique finale.
+- `docs/2-SESSIONS/` : gouvernance actuelle des sessions si le dossier existe encore.
+  - Document actif : `docs/2-SESSIONS/README_SESSIONS.md`
+  - Modèle de session : `docs/2-SESSIONS/SESSION-YYYYMMDD-XX`
+- `docs/3-TEMPLATES/` : modèles documentaires si le dossier existe encore.
 
 ## Règle de priorité documentaire
 
 En cas de contradiction :
-1. documents normatifs actifs de `docs/1-MASTER` ;
-2. documents temporaires (preuve/contexte) ;
-3. documents mémoriels ;
-4. archives.
+1. code réel du dépôt officiel ;
+2. documents normatifs actifs de `docs/1-MASTER` ;
+3. documents temporaires ou de preuve ;
+4. références complémentaires conservées.
 
-Les archives ne sont utilisées qu'en cas de besoin historique explicite.
+Les anciennes archives et anciennes sessions Alpha supprimées ne sont plus des sources actives.
 
-Exception contrôlée : la synthèse finale Base44 archivée peut être lue comme référence prototype si une session du bloc `DEV-B44-00` ou une reprise ultérieure issue de l'audit Base44 l'exige.
+## Doctrine Base44
+
+Base44 reste une référence prototype conservée dans `docs/1-MASTER/4-BASE44_REFERENCE/`.
+
+Le repo officiel reste la source technique finale. Base44 ne doit jamais être copié directement.
 
 ## Rappel opérationnel
 
 - Ne pas créer de plan concurrent au `PLAN_DE_DEVELOPPEMENT_V2.md`.
 - Ne pas utiliser `CMD.md` comme source de vérité documentaire.
-- En cas d'information manquante, utiliser : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Les prochaines sessions Codex doivent partir des documents MASTER actifs restants.
+- En cas d'information manquante, utiliser : `INFORMATION NON FOURNIE - À CONFIRMER`.

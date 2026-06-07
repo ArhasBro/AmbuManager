@@ -18,18 +18,14 @@ Date : 26/05/2026
 - 11. Documentation de fin de session
 - 12. Clôture de session
 - 13. Interdictions strictes
-- 14. Documents concurrents archivés
+- 14. Documents concurrents retirés du périmètre actif
 - 15. Conclusion
 - 16. Statut du document
 - 17. Règles officielles Codex / ChatGPT contrôle
 
 ## 1. Rôle du dossier docs/2-SESSIONS
 
-Le dossier `docs/2-SESSIONS` sert à conserver :
-- l’historique des sessions ;
-- les preuves d’exécution ;
-- les notes et résultats de session ;
-- les clôtures de session.
+Le dossier `docs/2-SESSIONS` sert à conserver la gouvernance actuelle des sessions et les modèles utiles aux prochaines sessions.
 
 Ce dossier est une base de traçabilité.  
 Il ne remplace pas `docs/1-MASTER`.
@@ -84,10 +80,10 @@ Documents à lire selon le bloc :
 - `docs/1-MASTER/AUDIT_CODE_EXISTANT_ALPHA_V2.md` (si audit/écarts code)
 - `docs/1-MASTER/ETAT_GLOBAL_PROJET_V2.md` (si statut global)
 - `docs/1-MASTER/RGPD_BASE_MINIMALE.md` (si impact données/permissions)
-- dossiers ciblés de `docs/2-SESSIONS/1-ALPHA/` (uniquement si preuve/historique nécessaire)
+- `docs/1-MASTER/4-BASE44_REFERENCE/SYNTHESE_FINALE_BASE44_AMBULANCE_MANAGER.md` (si comparaison Base44 nécessaire)
 
 Documents à ne pas lire sauf demande explicite :
-- lecture exhaustive de `docs/2-SESSIONS/1-ALPHA/1-VALIDE`
+- anciennes sessions Alpha supprimées
 - anciens documents concurrents listés en section 14
 - tout dossier non lié à l’objectif de la session
 
@@ -170,9 +166,9 @@ Format de verdict attendu :
 - ne pas modifier le code applicatif dans une session documentaire ;
 - ne pas supprimer/déplacer des éléments historiques sans validation explicite.
 
-## 14. Documents concurrents archivés
+## 14. Documents concurrents retirés du périmètre actif
 
-Les documents suivants sont des documents concurrents de gouvernance déjà archivés dans `docs/4-ARCHIVES/2-SESSIONS_HISTORIQUE/` :
+Les documents suivants ne sont plus des documents actifs de gouvernance des sessions :
 
 - `docs/2-SESSIONS/README.md`
 - `docs/2-SESSIONS/GOUVERNANCE_SESSIONS.md`
@@ -182,7 +178,7 @@ Les documents suivants sont des documents concurrents de gouvernance déjà arch
 - `docs/2-SESSIONS/FORMULAIRE_VALIDATION_LOTS_SESSIONS.md`
 - `docs/2-SESSIONS/SIMULATION_ARCHIVAGE_SESSIONS.md`
 
-Ces documents archivés ne sont plus des documents actifs de gouvernance des sessions.
+Ils ne doivent pas être restaurés sans décision explicite.
 
 ## 15. Conclusion
 
@@ -197,7 +193,7 @@ Ce document définit une gouvernance de session simple, courte et exploitable po
 
 Ce document est le document actif de gouvernance des sessions Codex.
 
-Il remplace les anciens documents concurrents listés en section 14, qui sont archivés.
+Il remplace les anciens documents concurrents listés en section 14.
 
 Règles :
 - ce document doit rester court, clair et opérationnel ;

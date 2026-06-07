@@ -1,8 +1,0 @@
-COMMAND: git apply --check <PATCH_MAIN> (on clean HEAD worktree)
-EXIT_CODE: 0
-
-
-COMMAND: git apply --check <PATCH_FIX_01> (on HEAD + PATCH_MAIN worktree)
-PREPARE_APPLY_MAIN_EXIT_CODE: 0
-EXIT_CODE: 0
-

@@ -27,15 +27,10 @@ Documents MASTER V2 actifs pour la reprise Phase 6 :
 - `docs/1-MASTER/AUDIT_COMPARAISON_BASE44_OFFICIEL_V1.md` ;
 - `docs/1-MASTER/3-FONCTIONNALITES/`.
 
-Document contextuel / mémoriel (non normatif) :
-- `docs/1-MASTER/RECAP_DISCUSSIONS_V2.md` ;
-- utile pour le contexte ;
-- non source de vérité principale en cas de contradiction.
-
-Les versions sans suffixe V2 sont historiques, archivées et non prioritaires.
+Les versions sans suffixe V2 et les anciennes sessions Alpha supprimées ne sont plus des sources actives.
 
 Référence Base44 :
-- `docs/4-ARCHIVES/BASE44_REFERENCE/SYNTHESE_FINALE_BASE44_AMBULANCE_MANAGER.md` ;
+- `docs/1-MASTER/4-BASE44_REFERENCE/SYNTHESE_FINALE_BASE44_AMBULANCE_MANAGER.md` ;
 - statut : prototype fonctionnel, visuel et métier clôturable côté Base44 ;
 - usage : référence de comparaison et d'inspiration contrôlée ;
 - limite : non source technique finale et non copiable directement.

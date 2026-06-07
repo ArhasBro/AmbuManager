@@ -4,10 +4,15 @@ Le dossier `docs/` contient la documentation projet utilisée pour piloter la re
 
 ## Structure du dossier `docs/`
 
-- `docs/1-MASTER/` : documentation MASTER active (références de pilotage).
-- `docs/2-SESSIONS/` : gouvernance et traçabilité des sessions.
+- `docs/1-MASTER/` : documentation MASTER active de référence.
+- `docs/1-MASTER/1-MAQUETTE/` : maquettes conservées.
+- `docs/1-MASTER/2-REFERENCE_UI_UX/` : références UI/UX conservées.
+- `docs/1-MASTER/3-FONCTIONNALITES/` : fiches fonctionnalités conservées.
+- `docs/1-MASTER/4-BASE44_REFERENCE/` : référence Base44 conservée.
+- `docs/2-SESSIONS/` : gouvernance actuelle des sessions.
 - `docs/3-TEMPLATES/` : modèles documentaires de session.
-- `docs/4-ARCHIVES/` : documents historiques hors périmètre actif.
+
+Aucune archive active n'est conservée dans le repo actif.
 
 ## Points d'entrée recommandés
 
@@ -24,17 +29,21 @@ Le dossier `docs/` contient la documentation projet utilisée pour piloter la re
 Références temporaires utiles avant Phase 6 :
 - `docs/1-MASTER/ETAT_GLOBAL_PROJET_V2.md`
 - `docs/1-MASTER/AUDIT_CODE_EXISTANT_ALPHA_V2.md`
+- `docs/1-MASTER/AUDIT_COMPARAISON_BASE44_OFFICIEL_V1.md`
+
+Référence Base44 conservée :
+- `docs/1-MASTER/4-BASE44_REFERENCE/SYNTHESE_FINALE_BASE44_AMBULANCE_MANAGER.md`
 
 ## Sessions
 
-- Document actif unique : `docs/2-SESSIONS/README_SESSIONS.md`.
+- Document actif : `docs/2-SESSIONS/README_SESSIONS.md`.
 - Modèle de session : `docs/2-SESSIONS/SESSION-YYYYMMDD-XX`.
-- Les anciens documents concurrents sont archivés dans `docs/4-ARCHIVES/2-SESSIONS_HISTORIQUE/`.
+- Les anciennes sessions Alpha supprimées ne sont plus des sources actives.
 
 ## Règle de priorité documentaire
 
 En cas de contradiction :
-- les documents normatifs actifs de `docs/1-MASTER` priment ;
+- le code réel du dépôt officiel prime pour l'état technique ;
+- les documents normatifs actifs de `docs/1-MASTER` priment pour la gouvernance ;
 - les documents temporaires servent de preuve ou de contexte ;
-- les documents mémoriels ne tranchent pas une décision ;
-- les archives ne sont pas des références actives.
+- les références complémentaires ne tranchent pas une décision.
