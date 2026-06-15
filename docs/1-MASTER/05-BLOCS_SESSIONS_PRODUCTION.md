@@ -85,7 +85,7 @@ Maintenir la gouvernance de reprise P1, le plan court et la déclinaison opérat
 
 #### Pourquoi ce bloc existe
 
-P1-02 à P1-06 ont posé la base de reprise. T0 vérifie que ces décisions restent cohérentes avant les sessions opérationnelles.
+P1-02 à P1-07 ont posé la base de reprise. T0 vérifie que ces décisions restent cohérentes avant les sessions opérationnelles.
 
 #### Périmètre
 
