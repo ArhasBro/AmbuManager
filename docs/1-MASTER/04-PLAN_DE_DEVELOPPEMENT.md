@@ -1,297 +1,275 @@
 # Ambulance Manager - Plan de développement
 
-Date de refonte : 07/06/2026
-
-## Sommaire
-
-1. [Rôle du document](#1-rôle-du-document)
-2. [Principe de lecture du plan](#2-principe-de-lecture-du-plan)
-3. [État de départ de la reprise](#3-état-de-départ-de-la-reprise)
-4. [Règles opérationnelles du plan](#4-règles-opérationnelles-du-plan)
-5. [Phases globales du projet](#5-phases-globales-du-projet)
-6. [Phase actuelle](#6-phase-actuelle)
-7. [Blocs de reprise prévus](#7-blocs-de-reprise-prévus)
-   - [BLOC 1 — Socle de reprise et règles transverses](#bloc-1-socle-de-reprise-et-règles-transverses)
-   - [BLOC 2 — Shell global / navigation / nomenclature / accès refusé](#bloc-2-shell-global-navigation-nomenclature-accès-refusé)
-   - [BLOC 3 — RBAC UI/API transverse](#bloc-3-rbac-uiapi-transverse)
-   - [BLOC 4 — Véhicules](#bloc-4-véhicules)
-   - [BLOC 5 — Suivi des véhicules](#bloc-5-suivi-des-véhicules)
-   - [BLOC 6 — Utilisateurs / RH](#bloc-6-utilisateurs-rh)
-   - [BLOC 7 — Dépôts / Bases](#bloc-7-dépôts-bases)
-   - [BLOC 8 — Modèles horaires](#bloc-8-modèles-horaires)
-   - [BLOC 9 — Société](#bloc-9-société)
-   - [BLOC 10 — Planning](#bloc-10-planning)
-   - [BLOC 11 — Tableau de bord](#bloc-11-tableau-de-bord)
-   - [BLOC 12 — Login](#bloc-12-login)
-   - [BLOC 13 — Audit / traçabilité](#bloc-13-audit-traçabilité)
-   - [BLOC 14 — Mise en route](#bloc-14-mise-en-route)
-   - [BLOC 15 — Validation finale Alpha](#bloc-15-validation-finale-alpha)
-8. [Statut des blocs](#8-statut-des-blocs)
-9. [Dépendances importantes](#9-dépendances-importantes)
-10. [Contrôles attendus par type de bloc](#10-contrôles-attendus-par-type-de-bloc)
-11. [Prochaine session à préparer](#11-prochaine-session-à-préparer)
-12. [Prochaines décisions à prendre](#12-prochaines-décisions-à-prendre)
-13. [Règles de mise à jour du plan](#13-règles-de-mise-à-jour-du-plan)
+Date de refonte ciblée : 13/06/2026
 
 ## 1. Rôle du document
 
-Ce document est le plan de route opérationnel du projet Ambulance Manager.
+Ce document est le plan de reprise operationnelle actif d'Ambulance Manager.
 
-Il fixe l'ordre des phases, les blocs de reprise, les dépendances, les contrôles attendus et la prochaine session à préparer.
+Il sert a preparer les prochaines sessions Codex, fixer l'ordre de reprise, distinguer les blocs transversaux des blocs pages/modules, lister les controles attendus et rendre visibles les points restant a confirmer.
 
-## 2. Principe de lecture du plan
+Le detail operationnel des blocs, sessions de production, livrables attendus, types de sessions, controles, preuves et statuts est suivi dans `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md`.
 
-Le plan commence par `PHASE 1 — Structuration du plan de reprise`.
+Il ne remplace pas :
 
-La refonte `docs/1-MASTER` est un préambule hors phase. Elle prépare la reprise, mais ne constitue pas une phase opérationnelle du plan de développement.
+- `01-APPLICATION_WEB.md` pour le perimetre produit ;
+- `02-DOCUMENT_MAITRE_PROJET.md` pour le pilotage global ;
+- `03-METHODE_DE_TRAVAIL.md` pour les regles de session ;
+- les fiches fonctionnelles, audits, maquettes, references UI/UX ou references Base44.
 
-## 3. État de départ de la reprise
+## 2. Références de travail
 
-État consolidé :
+References actives :
 
-- repo officiel exploitable avec corrections majeures ;
-- Base44 exploitable comme prototype, non comme source technique ;
-- documents actifs consolidés ;
-- fiches fonctionnalités, références UI/UX, maquettes, audits et synthèse Base44 conservés comme supports ;
-- aucune page applicative validée automatiquement ;
-- aucune reprise code autorisée sans bloc et session dédiés.
+- `docs/1-MASTER/01-APPLICATION_WEB.md`
+- `docs/1-MASTER/02-DOCUMENT_MAITRE_PROJET.md`
+- `docs/1-MASTER/03-METHODE_DE_TRAVAIL.md`
+- `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`
 
-## 4. Règles opérationnelles du plan
+References de reprise :
 
-- Une session = un objectif.
-- Un bloc doit avoir un objectif, un périmètre, des dépendances et des contrôles.
-- `AUDIT` avant correction si le périmètre exact est incertain.
-- `CORRECTION` avant `COMPLÉTION` si l'existant est erroné.
-- `VALIDATION` avant passage au bloc suivant.
-- `CLÔTURE` pour fermer un bloc.
-- Aucun code Base44 copié directement.
-- Aucun passage implicite en phase suivante.
+- P1-01 : audit initial du repo officiel et de Base44.
+- P1-02 : base officielle de reprise operationnelle.
+- P1-03 : integration des decisions humaines issues de P1-02.
+- P1-04 : preparation de la refonte ciblee du present plan.
+- `docs/1-MASTER/4-BASE44_REFERENCE/` : prototype Base44 comme reference metier, fonctionnelle et visuelle.
 
-## 5. Phases globales du projet
+## 3. Principes non négociables
 
-Préambule hors phase — Refonte `docs/1-MASTER`
+- Le repo officiel reste la reference technique finale.
+- Base44 est une reference prototype, pas une source technique a copier-coller.
+- Aucune reprise code ne commence sans session dediee, perimetre clair et preuves.
+- Une session = un objectif unique, controlable et cloturable.
+- Le nombre de sessions depend de la complexite reelle du bloc.
+- Aucun plafond fixe artificiel n'est impose par bloc.
+- Les routes techniques restent stables en anglais cote code tant qu'un renommage n'est pas confirme.
+- Les libelles UI visibles doivent rester en francais.
+- Les actions sensibles doivent etre tracees.
+- Le multi-tenant par societe reste non negociable.
+- Les incertitudes restent visibles sous la forme `INFORMATION NON FOURNIE - A CONFIRMER`.
 
-`PHASE 1 — Structuration du plan de reprise`
+## 4. Contexte de reprise P1
 
-`PHASE 2 — Audit comparatif Base44 vs repo officiel`
+P1-01 a audite le repo officiel, la reference Base44, les pages, les modules, les entites utiles et les anciennes logiques de plan.
 
-`PHASE 3 — Réalignement des références projet`
+P1-02 devient la base officielle de reprise operationnelle. Elle structure la reprise en blocs transversaux, blocs pages/modules et validations finales.
 
-`PHASE 4 — Reprise code par blocs`
+P1-03 acte les decisions humaines : routes techniques stables, libelles UI francais, `Modèles horaires`, `Mise en route`, statut hybride de `Suivi des véhicules`, Privacy visible en Alpha, RBAC progressif, contacts societe multiples, `Se souvenir de moi` a prevoir, Dashboard a fiabiliser avant preferences.
 
-`PHASE 5 — Stabilisation Alpha`
+P1-04 prepare la refonte ciblee du present document sans modifier le MASTER.
 
-`PHASE 6 — Préparation Beta / évolutions`
+## 5. Statut des anciennes logiques de plan
 
-## 6. Phase actuelle
+Les anciennes logiques ne sont pas supprimees comme historique, mais elles ne pilotent plus l'ordre principal.
 
-Phase actuelle après cette refonte :
+Ne doivent plus servir de plan d'execution principal :
 
-`PHASE 1 — Structuration du plan de reprise`
+- les anciens blocs 1 a 15 du plan precedent ;
+- les anciens codes `DEV-B44-*` ;
+- l'ancien cadrage oriente `Phase 5` ;
+- les blocs Base44 A a L comme blocs officiels de reprise ;
+- une logique de francisation technique automatique des routes ;
+- un Dashboard traite avant stabilisation des donnees sources ;
+- un RBAC monolithique a finaliser d'un coup ;
+- Privacy comme simple page Base44.
 
-Objectif : créer les blocs de développement, confirmer l'ordre, les dépendances, les sessions attendues et les critères de validation.
+Ces elements peuvent rester utiles comme contexte, mais toute session future doit partir du present plan et de P1-02/P1-03.
 
-## 7. Blocs de reprise prévus
+## 6. Doctrine de reprise depuis Base44
 
-### BLOC 1 — Socle de reprise et règles transverses
+Base44 est utilise pour comprendre :
 
-Objectif : confirmer l'ordre des blocs, les contrôles, la matrice de statut et les règles de session.
+- les parcours ;
+- les libelles metier ;
+- les ecrans ;
+- les composants et patterns utiles ;
+- les entites prototype ;
+- les ecarts entre prototype et repo officiel.
 
-Statut : à préparer.
+Base44 ne doit pas etre utilise pour :
 
-### BLOC 2 — Shell global / navigation / nomenclature / accès refusé
+- copier du code ;
+- definir l'architecture finale ;
+- valider la securite backend ;
+- valider Prisma ;
+- valider le RBAC serveur ;
+- valider la conformite RGPD complete.
 
-Objectif : stabiliser la base commune avant les modules métier.
+Toute idee Base44 reprise doit etre adaptee au repo officiel, a Prisma, au RBAC serveur/API, au multi-tenant et aux regles de preuve du projet.
 
-Dépendance : Bloc 1.
+## 7. Règles de decoupage des blocs
 
-### BLOC 3 — RBAC UI/API transverse
+Un bloc regroupe un probleme coherent.
 
-Objectif : établir et contrôler la cohérence permissions front/API.
+Deux familles de blocs sont utilisees :
 
-Dépendance : Bloc 2.
+- blocs transversaux, quand plusieurs pages partagent la meme logique ;
+- blocs pages/modules, quand une page ou un module metier doit etre repris dans son contexte.
+
+Un bloc peut contenir plusieurs sessions si le risque, les dependances ou la complexite l'exigent.
+
+Un bloc ne doit pas devenir une session unique trop lourde.
+
+## 8. Règles de decoupage des sessions
+
+Chaque session doit avoir :
+
+- un objectif unique ;
+- un perimetre autorise ;
+- un hors perimetre ;
+- des fichiers a lire ;
+- des fichiers modifiables ;
+- des controles attendus ;
+- des preuves terminales ;
+- un verdict explicite.
+
+Pour les sessions code, les controles attendus incluent au minimum les controles adaptes au changement : lint, build, tests cibles, controle API/RBAC, controle visuel si UI modifiee, et controle multi-tenant si donnees societe impliquees.
+
+Pour les sessions documentaires, les controles attendus incluent Git, perimetre, encodage UTF-8 sans BOM, absence de mojibake et absence de modification code si le code est hors perimetre.
+
+## 9. Ordre global de reprise operationnelle
+
+Ordre principal valide par P1-02 et ajuste par P1-03/P1-04 :
+
+1. T0 - Gouvernance P1 et remplacement du plan.
+2. T2 - Nomenclature, routes et renommages futurs.
+3. T1 - Shell global, navigation et contexte connecte.
+4. T3 - Design system officiel et composants communs.
+5. T4 - RBAC UI/API et matrice permissions, en mode progressif.
+6. T5 - Donnees, multi-tenant et mapping Base44 vers officiel.
+7. T6 - Audit et tracabilite transverse.
+8. T7 - Qualite, tests et controles de reprise.
+9. P-LOGIN - Connexion, incluant `Se souvenir de moi`.
+10. P-COMPANY - Societe, incluant contacts societe multiples.
+11. P-DEPOTS - Depots / Bases.
+12. P-USERS-RH - Utilisateurs / RH.
+13. P-VEHICLES - Vehicules.
+14. P-VEHICLE-FOLLOWUP - Suivi des véhicules en statut hybride.
+15. P-TEMPLATES - Modèles horaires.
+16. P-PLANNING - Planning.
+17. P-AUDIT - Audit / Tracabilite.
+18. P-DASHBOARD - Tableau de bord comme portail fiable.
+19. P-ONBOARDING - Mise en route.
+20. RGPD-PRIVACY - Privacy visible en Alpha et rattachee au bloc RGPD.
+21. F1 - Validation fonctionnelle croisee.
+22. F2 - Validation qualite technique.
+23. F3 - Validation UX visuelle.
+24. F4 - Cloture documentaire Alpha ou cloture de phase.
+
+## 10. Blocs transversaux
+
+| Bloc | Objectif | Points de vigilance |
+|---|---|---|
+| T0 - Gouvernance P1 | Formaliser la gouvernance de reprise et maintenir le plan. | Ne pas creer de plan parallele. |
+| T2 - Nomenclature | Cadrer routes, libelles et renommages futurs. | Routes code stables en anglais ; libelles UI en francais. |
+| T1 - Shell / navigation | Stabiliser sidebar, topbar, societe courante, utilisateur, acces refuse. | Precede les pages metier. |
+| T3 - Design system | Stabiliser composants communs et etats UI. | Ne pas copier les composants Base44. |
+| T4 - RBAC progressif | Poser une matrice minimale puis renforcer par module. | Controle serveur/API obligatoire pour actions sensibles. |
+| T5 - Donnees / multi-tenant | Comparer entites Base44 et modele officiel. | Aucune modification Prisma sans session dediee. |
+| T6 - Audit transverse | Definir les actions sensibles a tracer. | Acteur, societe, cible, action et resultat doivent etre identifiables. |
+| T7 - Qualite / controles | Definir les DoD par type de session. | Les exceptions doivent etre documentees. |
 
-### BLOC 4 — Véhicules
+## 11. Blocs pages / modules
 
-Objectif : corriger le référentiel véhicules, les statuts, la disponibilité, l'archive/restauration et les droits.
+| Bloc | Route technique actuelle | Libelle produit | Reference Base44 | Notes |
+|---|---|---|---|---|
+| P-LOGIN | `/login` | Connexion | `/login` | Inclure `Se souvenir de moi`; pas d'inscription libre Alpha. |
+| P-COMPANY | `/company` | Société | `/societe` | Contacts societe multiples valides ; multi-tenant strict. |
+| P-DEPOTS | `/depots` | Dépôts / Bases | `/depots` | Referentiel source pour RH, vehicules et planning. |
+| P-USERS-RH | `/users` | Utilisateurs / RH | `/utilisateurs` | Separation fiche RH / acces applicatif a reprendre proprement. |
+| P-VEHICLES | `/vehicles` | Véhicules | `/vehicules` | Precede suivi vehicules et planning. |
+| P-VEHICLE-FOLLOWUP | A confirmer | Suivi des véhicules | `/suivi-vehicules` | Statut hybride valide : rattache flotte avec cadrage propre. |
+| P-TEMPLATES | `/templates` | Modèles horaires | `/modeles-horaires` | Renommage technique futur a confirmer plus tard. |
+| P-PLANNING | `/planning` | Planning | `/planning` | A reprendre apres referentiels et donnees sources. |
+| P-AUDIT | `/audit` | Audit / Tracabilite | `/audit` | Doit verifier les traces serveur officielles. |
+| P-DASHBOARD | `/dashboard` | Tableau de bord | `/` | Portail fiable d'abord ; preferences plus tard. |
+| P-ONBOARDING | `/onboarding` | Mise en route | `/mise-en-route` | Renommage technique futur a confirmer plus tard. |
 
-Dépendance : Bloc 3.
+## 12. Bloc RGPD / Privacy
 
-### BLOC 5 — Suivi des véhicules
+Privacy doit etre visible en Alpha.
 
-Objectif : cadrer puis matérialiser le module officiel : vue d'ensemble, vérifications, désinfections, anomalies.
+La page ou section Privacy est rattachee au bloc RGPD, pas a un bloc page Base44 classique.
 
-Dépendances : Blocs 3 et 4.
+Le bloc RGPD / Privacy doit couvrir au minimum :
 
-### BLOC 6 — Utilisateurs / RH
+- presence et accessibilite de Privacy ;
+- coherence avec le login et les informations utilisateur ;
+- limites de la conformite Alpha ;
+- points RGPD restant a confirmer : conservation, purge, droits d'acces, rectification, suppression, contact privacy, base legale et DPO.
 
-Objectif : réaligner utilisateurs, statuts, rôles, permissions, absences et accès applicatif.
+La conformite RGPD complete reste `INFORMATION NON FOURNIE - A CONFIRMER`.
 
-Dépendance : Bloc 3.
+## 13. Bloc validations finales / gel Alpha
 
-### BLOC 7 — Dépôts / Bases
+Les validations finales doivent intervenir avant tout passage a du code applicatif lourd ou a une cloture Alpha.
 
-Objectif : stabiliser les lieux de référence, rattachements, archive/restauration et compteurs calculés.
+Elles couvrent :
 
-Dépendances : Blocs 3 et 6 si rattachements RH impactés.
+- F1 - parcours fonctionnels croises ;
+- F2 - qualite technique : lint, build, tests cibles, API/RBAC, multi-tenant ;
+- F3 - UX visuelle : shell, pages critiques, responsive, etats vides/erreur/loading ;
+- F4 - cloture documentaire : preuves, decisions, reports acceptes, prochaine phase.
 
-### BLOC 8 — Modèles horaires
+Aucun bloc ne se cloture par simple presence de fichiers.
 
-Objectif : aligner terminologie, cycle de vie et dépendances planning.
+## 14. Règles de preuve et controle
 
-Dépendances : Blocs 3 et 7.
+Chaque session doit fournir les preuves adaptees :
 
-### BLOC 9 — Société
+- commandes executees ;
+- fichiers lus ;
+- fichiers crees, modifies, supprimes ou renommes ;
+- `git status --short` initial et final ;
+- diff des fichiers modifies ;
+- preuve d'absence de modification hors perimetre ;
+- controles d'encodage pour les Markdown ;
+- controles de mojibake ;
+- tests ou controles techniques quand du code est modifie.
 
-Objectif : stabiliser profil société, règles, contacts éventuels et multi-tenant.
+Pour toute reprise inspiree de Base44, la session doit prouver :
 
-Dépendance : Bloc 3.
+- ce qui est repris comme idee ;
+- ce qui est refuse ;
+- ce qui est adapte au repo officiel ;
+- l'absence de copie directe de code Base44.
 
-### BLOC 10 — Planning
+## 15. Règles de maintenance du plan
 
-Objectif : reprendre le planning après stabilisation des données critiques.
+Le present plan est mis a jour uniquement quand :
 
-Dépendances : Blocs 3, 4, 6, 7 et 8.
+- un ordre de reprise change ;
+- un bloc est ajoute, retire, fusionne ou cloture ;
+- une decision humaine modifie le perimetre ;
+- une dependance change ;
+- une incertitude est tranchee ;
+- la phase actuelle change.
 
-### BLOC 11 — Tableau de bord
+Le plan doit rester court, exploitable et oriente sessions.
 
-Objectif : réaligner widgets, raccourcis, KPI et données après stabilisation des modules.
+Il ne doit pas devenir un journal de session, un audit detaille, une fiche fonctionnalite ou une copie de P1-02.
 
-Dépendance : Bloc 10 ou état suffisant des modules sources.
+## 16. Points restant a confirmer
 
-### BLOC 12 — Login
+- Statut technique futur de `Suivi des véhicules` : route autonome, sous-module de `Véhicules`, ou integration hybride precise.
+- Renommage technique futur `templates` vers `modeles-horaires`.
+- Renommage technique futur `onboarding` vers `mise-en-route`.
+- Niveau de granularite initial du RBAC progressif.
+- Politique RGPD complete.
+- Moment exact de reprise des preferences Dashboard apres stabilisation du portail et des donnees sources.
+- Sessions Prisma futures si le mapping donnees revele des ecarts.
 
-Objectif : finaliser session, `Se souvenir de moi`, redirections et messages d'accès.
+## 17. Prochaine session recommandee
 
-Dépendances : Blocs 2 et 3.
+Prochaine session recommandee :
 
-### BLOC 13 — Audit / traçabilité
-
-Objectif : normaliser la traçabilité serveur des actions sensibles.
-
-Dépendance : cartographie des actions sensibles des blocs métier.
-
-### BLOC 14 — Mise en route
-
-Objectif : reprendre l'assistant de configuration initiale après stabilisation des référentiels.
-
-Dépendances : Blocs 6, 7, 8, 9 et 10.
-
-### BLOC 15 — Validation finale Alpha
-
-Objectif : vérifier cohérence système, non-régression, droits, audit, documentation et restes à traiter.
-
-Dépendance : blocs précédents validés ou restes explicitement acceptés.
-
-## 8. Statut des blocs
-
-| Bloc | Statut | Priorité | Commentaire |
-|---|---|---|---|
-| Préambule hors phase | réalisé par refonte documentaire | haute | ne compte pas comme phase opérationnelle |
-| Bloc 1 | à préparer | très haute | première session opérationnelle |
-| Bloc 2 | prévu | très haute | socle commun |
-| Bloc 3 | prévu | très haute | sécurité et droits |
-| Bloc 4 | prévu | très haute | dépendance suivi/planning |
-| Bloc 5 | prévu | très haute | module critique à cadrer |
-| Bloc 6 | prévu | très haute | RH et permissions |
-| Bloc 7 | prévu | haute | dépendances planning |
-| Bloc 8 | prévu | haute | dépendance planning |
-| Bloc 9 | prévu | haute | multi-tenant et règles |
-| Bloc 10 | prévu | très haute | module complexe |
-| Bloc 11 | prévu | moyenne | après données stabilisées |
-| Bloc 12 | prévu | haute | auth/session |
-| Bloc 13 | prévu | haute | confiance et traçabilité |
-| Bloc 14 | prévu | moyenne | synthèse initialisation |
-| Bloc 15 | prévu | très haute | clôture Alpha |
-
-## 9. Dépendances importantes
-
-- Shell et accès refusé avant modules métier.
-- RBAC UI/API avant actions sensibles.
-- Véhicules avant suivi véhicules et planning.
-- Utilisateurs/RH, dépôts/bases et modèles horaires avant planning.
-- Audit final après cartographie des actions sensibles.
-- Mise en route après stabilisation des référentiels qu'elle résume.
-- Dashboard après données source stabilisées.
-
-## 10. Contrôles attendus par type de bloc
-
-### Documentation
-
-- cohérence Markdown ;
-- liens internes ;
-- UTF-8 sans BOM ;
-- absence de mojibake ;
-- absence de modification code.
-
-### Code UI
-
-- `npm run lint` ;
-- `npm run build` ;
-- contrôle visuel si UI modifiée ;
-- contrôle responsive si concerné ;
-- contrôle permissions si actions conditionnelles.
-
-### API / RBAC
-
-- `npm run lint` ;
-- `npm run build` ;
-- contrôle API ;
-- contrôle non-contournement ;
-- vérification multi-tenant `companyId`.
-
-### Prisma
-
-- `npx prisma validate` ;
-- `npx prisma generate` ;
-- impact migration documenté ;
-- contrôles lint/build.
-
-### Audit / traçabilité
-
-- action sensible tracée ;
-- acteur identifiable ;
-- société identifiable ;
-- contexte suffisant ;
-- absence de donnée sensible inutile.
-
-## 11. Prochaine session à préparer
-
-Prochaine session recommandée :
-
-`PHASE 1 — SESSION 1 — Structuration des blocs de reprise`
+`T0-03 - CLOTURE DOCUMENTAIRE - Cloture du cadrage P1 et preparation de la reprise operationnelle`
 
 Objectif :
 
-- transformer les blocs ci-dessus en sessions opérationnelles ;
-- confirmer l'ordre ;
-- identifier les fichiers sources à lire par bloc ;
-- définir les critères de validation ;
-- confirmer les décisions à obtenir avant code.
-
-Type : DOCUMENTATION / CADRAGE.
+- verifier que P1-01 a P1-05 sont coherentes ;
+- confirmer que le present plan remplace l'ancien ordre principal ;
+- preparer les premieres sessions operationnelles T2/T1 sans coder ;
+- lister les decisions humaines encore necessaires avant reprise code.
 
 Patch code : interdit.
-
-## 12. Prochaines décisions à prendre
-
-- Matrice RBAC officielle minimale.
-- Périmètre officiel de `Suivi des véhicules`.
-- Politique archive/restauration par module.
-- Comportement exact de `Se souvenir de moi`.
-- Besoin Alpha de `CompanyContact`.
-- Besoin Alpha de `DashboardPreference`.
-- Granularité audit et support.
-- Périmètre RGPD détaillé et responsable conformité.
-
-## 13. Règles de mise à jour du plan
-
-Le plan est mis à jour quand :
-
-- un bloc change d'ordre ;
-- une dépendance change ;
-- une session est ajoutée, retirée ou validée ;
-- une décision structurante modifie le périmètre ;
-- la phase actuelle change.
-
-Le plan ne doit pas devenir un audit détaillé, un journal de session ou une fiche fonctionnelle.

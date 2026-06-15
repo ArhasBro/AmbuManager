@@ -1,0 +1,1173 @@
+# Ambulance Manager — Blocs et sessions de production
+
+## 1. Rôle du document
+
+Ce fichier décline opérationnellement le plan court `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md` en fiches de blocs lisibles.
+
+`04-PLAN_DE_DEVELOPPEMENT.md` reste le plan maître court. Le présent fichier sert à piloter les sessions Codex bloc par bloc, sans devenir un second plan concurrent, un audit détaillé ou une fiche fonctionnelle complète.
+
+## 2. Règles de lecture
+
+* `04-PLAN_DE_DEVELOPPEMENT.md` reste la référence de l'ordre global et du cadrage court.
+* `05-BLOCS_SESSIONS_PRODUCTION.md` est une déclinaison opérationnelle lisible du plan `04`.
+* Chaque bloc doit commencer par une session obligatoire d'audit ciblé.
+* L'audit ciblé compare le repo officiel, Base44 et la documentation de référence.
+* Les sessions détaillées sont confirmées après audit ciblé.
+* Ne pas inventer de production non prouvée par l'existant réel du repo.
+* Base44 est une référence prototype métier, visuelle et fonctionnelle, pas une source technique finale.
+* Les incertitudes restent visibles avec la mention INFORMATION NON FOURNIE — À CONFIRMER.
+
+### Questions pendant les audits ciblés
+
+Lorsqu'une session d'audit ciblé révèle des zones floues, des décisions non tranchées ou des incohérences entre le repo officiel, Base44 et la documentation, Codex ne doit pas arbitrer seul.
+
+Il doit produire une liste de questions à poser à l'utilisateur avant de figer les sessions de production du bloc.
+
+Règles :
+
+* maximum 10 questions prioritaires par audit ciblé ;
+* plus de 10 questions uniquement si le sujet est réellement trop flou, avec justification ;
+* questions numérotées, courtes, claires et actionnables ;
+* chaque question doit indiquer ce qu'elle bloque ou ce qu'elle permet de décider ;
+* les réponses utilisateur servent ensuite à mettre à jour le bloc concerné dans le présent fichier.
+
+## 3. Modèle de fiche de bloc
+
+### BLOC [ID] — [Nom]
+
+#### Objectif du bloc
+
+...
+
+#### Pourquoi ce bloc existe
+
+...
+
+#### Périmètre
+
+...
+
+#### Exclusions
+
+...
+
+#### Sessions prévues
+
+...
+
+#### Livrables attendus
+
+...
+
+#### Contrôles obligatoires
+
+...
+
+#### Critère de validation du bloc
+
+...
+
+#### Documentation à mettre à jour si nécessaire
+
+...
+
+#### Statut
+
+...
+
+## 4. Blocs transversaux
+
+### BLOC T0 — Gouvernance P1
+
+#### Objectif du bloc
+
+Maintenir la gouvernance de reprise P1, le plan court et la déclinaison opérationnelle sans créer de plan parallèle.
+
+#### Pourquoi ce bloc existe
+
+P1-02 à P1-06 ont posé la base de reprise. T0 vérifie que ces décisions restent cohérentes avant les sessions opérationnelles.
+
+#### Périmètre
+
+Cohérence documentaire P1, règles de session, preuves, statuts, ordre de reprise et maintenance des fichiers `04` et `05`.
+
+#### Exclusions
+
+Code applicatif, Base44 modifié, renommages, migrations, reprise fonctionnelle page par page.
+
+#### Sessions prévues
+
+* T0-01 — AUDIT ciblé — Comparer le repo officiel, Base44 et la documentation de référence afin de confirmer l'existant, les écarts et les sessions de production nécessaires.
+* T0-02 — CADRAGE — Valider le découpage réel du bloc après audit ciblé.
+* Sessions de production suivantes : INFORMATION NON FOURNIE — À CONFIRMER après audit ciblé.
+* CLOTURE_T0 — VALIDATION — Clôture finale du bloc après réalisation et contrôle des sessions confirmées.
+
+#### Livrables attendus
+
+Synthèse de cohérence P1, écarts éventuels, décisions restantes et statuts des documents de pilotage.
+
+#### Contrôles obligatoires
+
+Git status initial/final, diff documentaire ciblé si modification, absence de modification code/Base44, UTF-8 sans BOM, absence de mojibake.
+
+#### Critère de validation du bloc
+
+La gouvernance P1 est cohérente, lisible et exploitable pour lancer les blocs suivants.
+
+#### Documentation à mettre à jour si nécessaire
+
+`04-PLAN_DE_DEVELOPPEMENT.md`, `05-BLOCS_SESSIONS_PRODUCTION.md`, sessions P1 concernées.
+
+#### Statut
+
+À faire
+### BLOC T2 — Nomenclature, routes et renommages futurs
+
+#### Objectif du bloc
+
+Cadrer les routes techniques, les libellés UI et les renommages futurs sans les exécuter par défaut.
+
+#### Pourquoi ce bloc existe
+
+P1-03 valide les routes techniques anglaises et les libellés UI français, tout en reportant certains renommages techniques.
+
+#### Périmètre
+
+Routes, libellés, conventions de nommage, impacts futurs de `templates` vers `modeles-horaires` et `onboarding` vers `mise-en-route`.
+
+#### Exclusions
+
+Renommage effectif, modification de code, migration de routes ou refonte navigation.
+
+#### Sessions prévues
+
+* T2-01 — AUDIT ciblé — Comparer le repo officiel, Base44 et la documentation de référence afin de confirmer l'existant, les écarts et les sessions de production nécessaires.
+* T2-02 — CADRAGE — Valider le découpage réel du bloc après audit ciblé.
+* Sessions de production suivantes : INFORMATION NON FOURNIE — À CONFIRMER après audit ciblé.
+* CLOTURE_T2 — VALIDATION — Clôture finale du bloc après réalisation et contrôle des sessions confirmées.
+
+#### Livrables attendus
+
+Matrice routes/libellés, liste des renommages possibles, impacts et arbitrages à confirmer.
+
+#### Contrôles obligatoires
+
+Recherche routes repo, comparaison Base44 lecture seule, absence de renommage, absence modification code si session documentaire.
+
+#### Critère de validation du bloc
+
+Chaque route ou libellé litigieux a un statut clair : conservé, à renommer plus tard ou à confirmer.
+
+#### Documentation à mettre à jour si nécessaire
+
+`04`, `05`, documentation de conventions, fiches de session du bloc.
+
+#### Statut
+
+À faire
+### BLOC T1 — Shell global, navigation et contexte connecté
+
+#### Objectif du bloc
+
+Stabiliser la structure connectée commune : sidebar, topbar, société courante, utilisateur courant, droits visibles et accès refusé.
+
+#### Pourquoi ce bloc existe
+
+Le shell conditionne l'accès aux modules métier et doit être fiable avant les reprises page par page.
+
+#### Périmètre
+
+Navigation connectée, contexte société/utilisateur, filtrage visible par droits, états communs d'accès refusé.
+
+#### Exclusions
+
+Correction profonde des pages métier, RBAC complet, design system complet.
+
+#### Sessions prévues
+
+* T1-01 — AUDIT ciblé — Comparer le repo officiel, Base44 et la documentation de référence afin de confirmer l'existant, les écarts et les sessions de production nécessaires.
+* T1-02 — CADRAGE — Valider le découpage réel du bloc après audit ciblé.
+* Sessions de production suivantes : INFORMATION NON FOURNIE — À CONFIRMER après audit ciblé.
+* CLOTURE_T1 — VALIDATION — Clôture finale du bloc après réalisation et contrôle des sessions confirmées.
+
+#### Livrables attendus
+
+Cartographie shell/navigation, écarts priorisés, sessions de correction confirmées après audit.
+
+#### Contrôles obligatoires
+
+Contrôle navigateur si UI modifiée, lint/build si code modifié, vérification liens, droits visibles et responsive.
+
+#### Critère de validation du bloc
+
+Le shell permet d'accéder aux modules autorisés sans incohérence critique connue.
+
+#### Documentation à mettre à jour si nécessaire
+
+`05`, documentation UI/UX, preuves de session.
+
+#### Statut
+
+À faire
+### BLOC T3 — Design system officiel et composants communs
+
+#### Objectif du bloc
+
+Stabiliser les composants communs du repo officiel utiles aux pages Alpha.
+
+#### Pourquoi ce bloc existe
+
+Les pages doivent partager des composants et états cohérents sans copier les composants Base44.
+
+#### Périmètre
+
+Boutons, cartes, badges, tableaux, filtres, formulaires, états vide/chargement/erreur, composants communs officiels.
+
+#### Exclusions
+
+Copie de code Base44, refonte visuelle globale, reprise fonctionnelle d'une page entière.
+
+#### Sessions prévues
+
+* T3-01 — AUDIT ciblé — Comparer le repo officiel, Base44 et la documentation de référence afin de confirmer l'existant, les écarts et les sessions de production nécessaires.
+* T3-02 — CADRAGE — Valider le découpage réel du bloc après audit ciblé.
+* Sessions de production suivantes : INFORMATION NON FOURNIE — À CONFIRMER après audit ciblé.
+* CLOTURE_T3 — VALIDATION — Clôture finale du bloc après réalisation et contrôle des sessions confirmées.
+
+#### Livrables attendus
+
+Inventaire composants/états, manques confirmés, sessions de complétion ou correction ciblées.
+
+#### Contrôles obligatoires
+
+Lint/build si code modifié, contrôle visuel navigateur, contrôle responsive si composant UI touché.
+
+#### Critère de validation du bloc
+
+Les composants nécessaires aux premières reprises sont identifiés, fiables ou reportés explicitement.
+
+#### Documentation à mettre à jour si nécessaire
+
+Référence UI/UX, `05`, sessions du bloc.
+
+#### Statut
+
+À faire
+### BLOC T4 — RBAC UI/API et matrice permissions, en mode progressif
+
+#### Objectif du bloc
+
+Poser une matrice RBAC progressive et vérifier les contrôles UI/API des actions sensibles.
+
+#### Pourquoi ce bloc existe
+
+Le RBAC ne doit pas être traité comme un bloc monolithique finalisé d'un coup, mais aucun module sensible ne doit rester sans contrôle serveur/API.
+
+#### Périmètre
+
+Permissions minimales, filtrage UI, accès pages, endpoints, actions sensibles, tests de non-contournement.
+
+#### Exclusions
+
+Matrice V1 complète non arbitrée, permissions fines non décidées, refonte globale auth.
+
+#### Sessions prévues
+
+* T4-01 — AUDIT ciblé — Comparer le repo officiel, Base44 et la documentation de référence afin de confirmer l'existant, les écarts et les sessions de production nécessaires.
+* T4-02 — CADRAGE — Valider le découpage réel du bloc après audit ciblé.
+* Sessions de production suivantes : INFORMATION NON FOURNIE — À CONFIRMER après audit ciblé.
+* CLOTURE_T4 — VALIDATION — Clôture finale du bloc après réalisation et contrôle des sessions confirmées.
+
+#### Livrables attendus
+
+Matrice RBAC initiale, écarts UI/API, sessions ciblées par module ou action.
+
+#### Contrôles obligatoires
+
+Tests rôles/endpoints si code modifié, lint/build, preuve de contrôle serveur/API, preuve multi-tenant si données société impliquées.
+
+#### Critère de validation du bloc
+
+Le RBAC Alpha minimal est cadré et les écarts prioritaires sont traités ou reportés.
+
+#### Documentation à mettre à jour si nécessaire
+
+Matrice permissions, `05`, fiches de sessions concernées.
+
+#### Statut
+
+À faire
+### BLOC T5 — Données, multi-tenant et mapping Base44 vers officiel
+
+#### Objectif du bloc
+
+Comparer les entités Base44 utiles avec le modèle officiel et cadrer le multi-tenant avant toute modification de données.
+
+#### Pourquoi ce bloc existe
+
+Le repo officiel reste la source technique finale. Les idées Base44 doivent être acceptées, adaptées ou refusées explicitement.
+
+#### Périmètre
+
+Entités, champs, companyId, cloisonnement société, écarts Prisma éventuels, besoins de sessions données futures.
+
+#### Exclusions
+
+Migration, génération Prisma, modification schema sans session dédiée, copie de modèle Base44.
+
+#### Sessions prévues
+
+* T5-01 — AUDIT ciblé — Comparer le repo officiel, Base44 et la documentation de référence afin de confirmer l'existant, les écarts et les sessions de production nécessaires.
+* T5-02 — CADRAGE — Valider le découpage réel du bloc après audit ciblé.
+* Sessions de production suivantes : INFORMATION NON FOURNIE — À CONFIRMER après audit ciblé.
+* CLOTURE_T5 — VALIDATION — Clôture finale du bloc après réalisation et contrôle des sessions confirmées.
+
+#### Livrables attendus
+
+Matrice entités/champs, décisions accepté/refusé/à confirmer, besoin éventuel de sessions Prisma.
+
+#### Contrôles obligatoires
+
+Lecture Prisma si autorisée par session, Base44 lecture seule, absence migration, absence prisma generate, preuve multi-tenant.
+
+#### Critère de validation du bloc
+
+Les données utiles au périmètre Alpha sont cadrées sans modification Prisma non autorisée.
+
+#### Documentation à mettre à jour si nécessaire
+
+`05`, documentation données, sessions futures Prisma si validées.
+
+#### Statut
+
+À faire
+### BLOC T6 — Audit et traçabilité transverse
+
+#### Objectif du bloc
+
+Définir les actions sensibles à tracer et le contrat minimal de traçabilité.
+
+#### Pourquoi ce bloc existe
+
+Les actions sensibles doivent être traçables de manière cohérente sur les modules métier.
+
+#### Périmètre
+
+Acteur, société, cible, action, résultat, actions sensibles transverses, lien avec RBAC et modules métier.
+
+#### Exclusions
+
+Conformité RGPD complète, SIEM, politique de rétention finale non confirmée.
+
+#### Sessions prévues
+
+* T6-01 — AUDIT ciblé — Comparer le repo officiel, Base44 et la documentation de référence afin de confirmer l'existant, les écarts et les sessions de production nécessaires.
+* T6-02 — CADRAGE — Valider le découpage réel du bloc après audit ciblé.
+* Sessions de production suivantes : INFORMATION NON FOURNIE — À CONFIRMER après audit ciblé.
+* CLOTURE_T6 — VALIDATION — Clôture finale du bloc après réalisation et contrôle des sessions confirmées.
+
+#### Livrables attendus
+
+Cartographie actions/traces, contrat audit minimal, sessions de correction confirmées si nécessaire.
+
+#### Contrôles obligatoires
+
+Tests ciblés si trace modifiée, preuve audit produite, lint/build si code modifié, cohérence RBAC.
+
+#### Critère de validation du bloc
+
+Les actions sensibles prioritaires ont un contrat de trace ou un report explicite.
+
+#### Documentation à mettre à jour si nécessaire
+
+Documentation audit, `05`, fiches fonctionnelles concernées si nécessaire.
+
+#### Statut
+
+À faire
+### BLOC T7 — Qualité, tests et contrôles de reprise
+
+#### Objectif du bloc
+
+Définir les contrôles récurrents par type de session et les preuves minimales attendues.
+
+#### Pourquoi ce bloc existe
+
+Les sessions futures doivent être contrôlables, comparables et clôturables sans validation implicite.
+
+#### Périmètre
+
+DoD par type de session, lint/build/tests, contrôle navigateur, encodage, périmètre Git, preuves.
+
+#### Exclusions
+
+Exécution de tous les tests hors contexte, refonte de la méthode globale sans décision.
+
+#### Sessions prévues
+
+* T7-01 — AUDIT ciblé — Comparer le repo officiel, Base44 et la documentation de référence afin de confirmer l'existant, les écarts et les sessions de production nécessaires.
+* T7-02 — CADRAGE — Valider le découpage réel du bloc après audit ciblé.
+* Sessions de production suivantes : INFORMATION NON FOURNIE — À CONFIRMER après audit ciblé.
+* CLOTURE_T7 — VALIDATION — Clôture finale du bloc après réalisation et contrôle des sessions confirmées.
+
+#### Livrables attendus
+
+Grille de contrôles par type de session, exceptions documentées, modèle de preuve réutilisable.
+
+#### Contrôles obligatoires
+
+Git status, diff, encodage, absence mojibake, lint/build/tests selon type de modification.
+
+#### Critère de validation du bloc
+
+Les futures sessions disposent d'un cadre de contrôle clair et applicable.
+
+#### Documentation à mettre à jour si nécessaire
+
+`03-METHODE_DE_TRAVAIL.md`, `05`, README sessions si changement validé.
+
+#### Statut
+
+À faire
+
+## 5. Blocs pages / modules
+
+### BLOC P-LOGIN — Connexion, incluant “Se souvenir de moi”
+
+#### Objectif du bloc
+
+Stabiliser le parcours de connexion officiel, avec Se souvenir de moi à cadrer et prévoir.
+
+#### Pourquoi ce bloc existe
+
+P1-03 valide Se souvenir de moi comme fonctionnalité à prévoir, tandis que Base44 indique que le login prototype n'est pas la référence finale.
+
+#### Périmètre
+
+Connexion, erreurs, redirections, session, lien Privacy, comportement Se souvenir de moi après cadrage.
+
+#### Exclusions
+
+Inscription libre Alpha, MFA, SSO, mot de passe oublié si non validé.
+
+#### Sessions prévues
+
+* P-LOGIN-01 — AUDIT ciblé — Comparer le repo officiel, Base44 et la documentation de référence afin de confirmer l'existant, les écarts et les sessions de production nécessaires.
+* P-LOGIN-02 — CADRAGE — Valider le découpage réel du bloc après audit ciblé, dont le comportement Se souvenir de moi.
+* Sessions de production suivantes : INFORMATION NON FOURNIE — À CONFIRMER après audit ciblé.
+* CLOTURE_P-LOGIN — VALIDATION — Clôture finale du bloc après réalisation et contrôle des sessions confirmées.
+
+#### Livrables attendus
+
+Écarts login, décision Se souvenir de moi, sessions de correction confirmées.
+
+#### Contrôles obligatoires
+
+Tests auth/redirections si code modifié, contrôle navigateur, absence inscription libre, cohérence RGPD/Privacy.
+
+#### Critère de validation du bloc
+
+Le login est utilisable, contrôlé et ses limites Alpha sont explicites.
+
+#### Documentation à mettre à jour si nécessaire
+
+Fiche Login, `05`, documentation RGPD/Privacy si impact.
+
+#### Statut
+
+À faire
+### BLOC P-COMPANY — Société, incluant contacts société multiples
+
+#### Objectif du bloc
+
+Stabiliser la société courante, son profil et les contacts société multiples.
+
+#### Pourquoi ce bloc existe
+
+P1-03 valide les contacts société multiples et rappelle le multi-tenant strict par société.
+
+#### Périmètre
+
+Profil société, contacts, règles métier, companyId, droits, audit des actions sensibles.
+
+#### Exclusions
+
+Facturation, abonnement, multi-société non cadré, conformité juridique complète.
+
+#### Sessions prévues
+
+* P-COMPANY-01 — AUDIT ciblé — Comparer le repo officiel, Base44 et la documentation de référence afin de confirmer l'existant, les écarts et les sessions de production nécessaires.
+* P-COMPANY-02 — CADRAGE — Valider le découpage réel du bloc après audit ciblé, dont les contacts société multiples.
+* Sessions de production suivantes : INFORMATION NON FOURNIE — À CONFIRMER après audit ciblé.
+* CLOTURE_P-COMPANY — VALIDATION — Clôture finale du bloc après réalisation et contrôle des sessions confirmées.
+
+#### Livrables attendus
+
+Écarts société/contacts, règles multi-tenant, sessions de correction ou complétion confirmées.
+
+#### Contrôles obligatoires
+
+Preuve companyId, tests droits/API si code modifié, audit des actions sensibles, absence fuite inter-sociétés.
+
+#### Critère de validation du bloc
+
+La société et ses contacts sont cohérents, cloisonnés et contrôlés.
+
+#### Documentation à mettre à jour si nécessaire
+
+Fiche Société, documentation données, `05`.
+
+#### Statut
+
+À faire
+### BLOC P-DEPOTS — Dépôts / Bases
+
+#### Objectif du bloc
+
+Stabiliser le référentiel des dépôts/bases utilisé par RH, véhicules et planning.
+
+#### Pourquoi ce bloc existe
+
+Les dépôts sont une donnée source pour plusieurs modules métier et doivent être fiables avant planning.
+
+#### Périmètre
+
+Création, modification, statut, archivage/restauration, rattachements, compteurs utiles, droits.
+
+#### Exclusions
+
+Géolocalisation avancée, contraintes planning non cadrées, automatisations futures.
+
+#### Sessions prévues
+
+* P-DEPOTS-01 — AUDIT ciblé — Comparer le repo officiel, Base44 et la documentation de référence afin de confirmer l'existant, les écarts et les sessions de production nécessaires.
+* P-DEPOTS-02 — CADRAGE — Valider le découpage réel du bloc après audit ciblé.
+* Sessions de production suivantes : INFORMATION NON FOURNIE — À CONFIRMER après audit ciblé.
+* CLOTURE_P-DEPOTS — VALIDATION — Clôture finale du bloc après réalisation et contrôle des sessions confirmées.
+
+#### Livrables attendus
+
+Écarts dépôt/base, dépendances confirmées, sessions de correction ciblées si nécessaire.
+
+#### Contrôles obligatoires
+
+Tests droits et multi-tenant si code modifié, contrôle audit pour archivage/restauration, lint/build.
+
+#### Critère de validation du bloc
+
+Les dépôts/bases sont fiables comme référentiel pour les modules dépendants.
+
+#### Documentation à mettre à jour si nécessaire
+
+Fiche Dépôts, `05`, documentation données si impact.
+
+#### Statut
+
+À faire
+### BLOC P-USERS-RH — Utilisateurs / RH
+
+#### Objectif du bloc
+
+Stabiliser les utilisateurs, fiches RH, rôles, accès applicatif et rattachements.
+
+#### Pourquoi ce bloc existe
+
+Base44 a clarifié la séparation fiche RH / accès applicatif, mais le repo officiel doit rester la source finale.
+
+#### Périmètre
+
+Fiches RH, comptes applicatifs, rôles, permissions, dépôts, absences/indisponibilités, archivage et audit.
+
+#### Exclusions
+
+Paie, contrats, SIRH avancé, permissions fines non décidées.
+
+#### Sessions prévues
+
+* P-USERS-RH-01 — AUDIT ciblé — Comparer le repo officiel, Base44 et la documentation de référence afin de confirmer l'existant, les écarts et les sessions de production nécessaires.
+* P-USERS-RH-02 — CADRAGE — Valider le découpage réel du bloc après audit ciblé.
+* Sessions de production suivantes : INFORMATION NON FOURNIE — À CONFIRMER après audit ciblé.
+* CLOTURE_P-USERS-RH — VALIDATION — Clôture finale du bloc après réalisation et contrôle des sessions confirmées.
+
+#### Livrables attendus
+
+Cartographie RH/accès, écarts RBAC, sessions de correction ou complétion confirmées.
+
+#### Contrôles obligatoires
+
+Tests RBAC, audit actions sensibles, multi-tenant, lint/build si code modifié.
+
+#### Critère de validation du bloc
+
+Les utilisateurs/RH sont exploitables sans confusion entre personne, rôle et accès applicatif.
+
+#### Documentation à mettre à jour si nécessaire
+
+Fiche Utilisateurs/RH, matrice RBAC, `05`.
+
+#### Statut
+
+À faire
+### BLOC P-VEHICLES — Véhicules
+
+#### Objectif du bloc
+
+Stabiliser le référentiel administratif de flotte avant suivi véhicules et planning.
+
+#### Pourquoi ce bloc existe
+
+Les véhicules sont une donnée source majeure et conditionnent disponibilité, suivi et planning.
+
+#### Périmètre
+
+Type, immatriculation, statut, disponibilité, dépôt principal, archivage/restauration, audit.
+
+#### Exclusions
+
+Vérifications, désinfections et anomalies si traitées dans le bloc suivi véhicules.
+
+#### Sessions prévues
+
+* P-VEHICLES-01 — AUDIT ciblé — Comparer le repo officiel, Base44 et la documentation de référence afin de confirmer l'existant, les écarts et les sessions de production nécessaires.
+* P-VEHICLES-02 — CADRAGE — Valider le découpage réel du bloc après audit ciblé.
+* Sessions de production suivantes : INFORMATION NON FOURNIE — À CONFIRMER après audit ciblé.
+* CLOTURE_P-VEHICLES — VALIDATION — Clôture finale du bloc après réalisation et contrôle des sessions confirmées.
+
+#### Livrables attendus
+
+Écarts flotte/disponibilité, règles d'archivage, sessions de correction confirmées.
+
+#### Contrôles obligatoires
+
+Tests API/RBAC, audit disponibilité/archivage, multi-tenant, lint/build si code modifié.
+
+#### Critère de validation du bloc
+
+La flotte administrative est fiable pour les modules dépendants.
+
+#### Documentation à mettre à jour si nécessaire
+
+Fiche Véhicules, `05`, documentation audit si impact.
+
+#### Statut
+
+À faire
+### BLOC P-VEHICLE-FOLLOWUP — Suivi des véhicules en statut hybride
+
+#### Objectif du bloc
+
+Cadrer puis reprendre le suivi opérationnel des véhicules comme module hybride rattaché à la flotte.
+
+#### Pourquoi ce bloc existe
+
+P1-03 valide le statut hybride. Base44 montre des sous-flux connus, mais le statut technique officiel reste à confirmer.
+
+#### Périmètre
+
+Vue d'ensemble, vérifications, désinfections, anomalies, navigation, données, droits, audit minimal des actions sensibles.
+
+#### Exclusions
+
+Signature électronique, preuve mobile, maintenance prédictive, règles ARS complètes non confirmées.
+
+#### Sessions prévues
+
+Sessions prévisionnelles à confirmer après audit ciblé.
+
+* P-VEHICLE-FOLLOWUP-01 — AUDIT ciblé — Confirmer périmètre exact cible et existant réutilisable.
+* P-VEHICLE-FOLLOWUP-02 — CADRAGE — Confirmer le statut hybride : route autonome, sous-module Véhicules ou intégration mixte.
+* P-VEHICLE-FOLLOWUP-03 — COMPLÉTION prévisionnelle — Structurer la vue d'ensemble côté UI/navigation.
+* P-VEHICLE-FOLLOWUP-04 — COMPLÉTION prévisionnelle — Structurer la vue d'ensemble côté données/API minimal validé.
+* P-VEHICLE-FOLLOWUP-05 — COMPLÉTION prévisionnelle — Structurer le sous-flux Vérifications côté UI/états.
+* P-VEHICLE-FOLLOWUP-06 — COMPLÉTION prévisionnelle — Structurer le sous-flux Vérifications côté API/permissions.
+* P-VEHICLE-FOLLOWUP-07 — COMPLÉTION prévisionnelle — Structurer le sous-flux Désinfections côté UI/états.
+* P-VEHICLE-FOLLOWUP-08 — COMPLÉTION prévisionnelle — Structurer le sous-flux Désinfections côté API/permissions.
+* P-VEHICLE-FOLLOWUP-09 — COMPLÉTION prévisionnelle — Structurer le sous-flux Anomalies avec traçabilité minimale si action sensible.
+* P-VEHICLE-FOLLOWUP-10 — VALIDATION — Vérifier cohérence permissions, données et navigation.
+* CLOTURE_P-VEHICLE-FOLLOWUP — VALIDATION — Clôture finale du bloc.
+
+#### Livrables attendus
+
+Décision de statut hybride, découpage confirmé, sessions de production ajustées après audit, validations UI/API/RBAC.
+
+#### Contrôles obligatoires
+
+Tests UI/API selon tranche, contrôle RBAC, audit actions sensibles, multi-tenant, navigateur, lint/build si code modifié.
+
+#### Critère de validation du bloc
+
+Le suivi véhicules est situé clairement et fonctionne sans confusion avec le référentiel flotte.
+
+#### Documentation à mettre à jour si nécessaire
+
+Fiche Suivi véhicules, `05`, matrice RBAC, documentation audit.
+
+#### Statut
+
+À confirmer
+### BLOC P-TEMPLATES — Modèles horaires
+
+#### Objectif du bloc
+
+Aligner le référentiel des modèles horaires avec la terminologie produit officielle.
+
+#### Pourquoi ce bloc existe
+
+P1-03 valide `Modèles horaires` comme nom produit, mais le renommage technique `templates` reste à confirmer.
+
+#### Périmètre
+
+Modèles horaires, horaires optionnels, statuts, archivage, dépendance planning, libellés français.
+
+#### Exclusions
+
+Renommage technique sans décision, reprise complète planning.
+
+#### Sessions prévues
+
+* P-TEMPLATES-01 — AUDIT ciblé — Comparer le repo officiel, Base44 et la documentation de référence afin de confirmer l'existant, les écarts et les sessions de production nécessaires.
+* P-TEMPLATES-02 — CADRAGE — Valider le découpage réel du bloc après audit ciblé, dont le renommage technique futur.
+* Sessions de production suivantes : INFORMATION NON FOURNIE — À CONFIRMER après audit ciblé.
+* CLOTURE_P-TEMPLATES — VALIDATION — Clôture finale du bloc après réalisation et contrôle des sessions confirmées.
+
+#### Livrables attendus
+
+Écarts modèles horaires, décision renommage/report, sessions de correction confirmées.
+
+#### Contrôles obligatoires
+
+Tests API/RBAC si code modifié, compatibilité planning, absence renommage non validé.
+
+#### Critère de validation du bloc
+
+Les modèles horaires sont exploitables et nommés correctement côté produit.
+
+#### Documentation à mettre à jour si nécessaire
+
+Fiche Modèles horaires, `05`, conventions routes/libellés.
+
+#### Statut
+
+À faire
+### BLOC P-PLANNING — Planning
+
+#### Objectif du bloc
+
+Reprendre le planning après stabilisation des référentiels et données sources.
+
+#### Pourquoi ce bloc existe
+
+Le planning dépend de société, dépôts, utilisateurs/RH, véhicules, modèles horaires et éventuellement suivi véhicules.
+
+#### Périmètre
+
+Vues planning, affectations, publication, annulation logique, exports éventuels, droits, audit, données sources.
+
+#### Exclusions
+
+Planification automatique avancée, reporting analytique, agenda heure par heure si non validé.
+
+#### Sessions prévues
+
+* P-PLANNING-01 — AUDIT ciblé — Comparer le repo officiel, Base44 et la documentation de référence afin de confirmer l'existant, les écarts et les sessions de production nécessaires.
+* P-PLANNING-02 — CADRAGE — Valider le découpage réel du bloc après audit ciblé.
+* Sessions de production suivantes : INFORMATION NON FOURNIE — À CONFIRMER après audit ciblé.
+* CLOTURE_P-PLANNING — VALIDATION — Clôture finale du bloc après réalisation et contrôle des sessions confirmées.
+
+#### Livrables attendus
+
+Cartographie écarts planning, dépendances confirmées, sessions de production ajustées.
+
+#### Contrôles obligatoires
+
+Tests fonctionnels ciblés, RBAC, audit, multi-tenant, navigateur, lint/build si code modifié.
+
+#### Critère de validation du bloc
+
+Le planning manuel métier est fiable sur les parcours Alpha retenus.
+
+#### Documentation à mettre à jour si nécessaire
+
+Fiche Planning, `05`, matrice RBAC, documentation audit.
+
+#### Statut
+
+À faire
+### BLOC P-AUDIT — Audit / Traçabilité
+
+#### Objectif du bloc
+
+Garantir la consultation des traces officielles autorisées.
+
+#### Pourquoi ce bloc existe
+
+La page Audit doit refléter les traces serveur officielles et rester cohérente avec le bloc transverse T6.
+
+#### Périmètre
+
+Lecture audit, filtres, droits, traces produites par les modules, lecture seule.
+
+#### Exclusions
+
+SIEM, purge/rétention complète, conformité RGPD finale.
+
+#### Sessions prévues
+
+* P-AUDIT-01 — AUDIT ciblé — Comparer le repo officiel, Base44 et la documentation de référence afin de confirmer l'existant, les écarts et les sessions de production nécessaires.
+* P-AUDIT-02 — CADRAGE — Valider le découpage réel du bloc après audit ciblé.
+* Sessions de production suivantes : INFORMATION NON FOURNIE — À CONFIRMER après audit ciblé.
+* CLOTURE_P-AUDIT — VALIDATION — Clôture finale du bloc après réalisation et contrôle des sessions confirmées.
+
+#### Livrables attendus
+
+Écarts page Audit/traces, sessions de correction confirmées si nécessaire.
+
+#### Contrôles obligatoires
+
+Tests droits lecture seule, API/RBAC, cohérence avec T6, absence modification non prévue.
+
+#### Critère de validation du bloc
+
+Les traces officielles autorisées sont consultables sans action de modification non voulue.
+
+#### Documentation à mettre à jour si nécessaire
+
+Documentation audit, `05`, matrice RBAC.
+
+#### Statut
+
+À faire
+### BLOC P-DASHBOARD — Tableau de bord comme portail fiable
+
+#### Objectif du bloc
+
+Fiabiliser le tableau de bord comme portail utile après stabilisation des données sources.
+
+#### Pourquoi ce bloc existe
+
+P1-03 reporte les préférences Dashboard après fiabilisation du portail et des données sources.
+
+#### Périmètre
+
+KPI réels, widgets, raccourcis autorisés, informations utiles selon profil, préférences seulement après cadrage.
+
+#### Exclusions
+
+Reporting avancé, préférences complexes non confirmées, données fictives.
+
+#### Sessions prévues
+
+* P-DASHBOARD-01 — AUDIT ciblé — Comparer le repo officiel, Base44 et la documentation de référence afin de confirmer l'existant, les écarts et les sessions de production nécessaires.
+* P-DASHBOARD-02 — CADRAGE — Valider le découpage réel du bloc après audit ciblé, dont le moment des préférences.
+* Sessions de production suivantes : INFORMATION NON FOURNIE — À CONFIRMER après audit ciblé.
+* CLOTURE_P-DASHBOARD — VALIDATION — Clôture finale du bloc après réalisation et contrôle des sessions confirmées.
+
+#### Livrables attendus
+
+Écarts KPI/widgets/raccourcis, décisions sur préférences, sessions de correction confirmées.
+
+#### Contrôles obligatoires
+
+Contrôle données réelles, RBAC raccourcis, navigateur, responsive, lint/build si code modifié.
+
+#### Critère de validation du bloc
+
+Le dashboard affiche des données fiables et des accès autorisés.
+
+#### Documentation à mettre à jour si nécessaire
+
+Fiche Dashboard, `05`, documentation données si impact.
+
+#### Statut
+
+À faire
+### BLOC P-ONBOARDING — Mise en route
+
+#### Objectif du bloc
+
+Stabiliser l'assistant de configuration initiale après les référentiels métier.
+
+#### Pourquoi ce bloc existe
+
+P1-03 valide Mise en route comme nom produit, avec renommage technique futur à confirmer.
+
+#### Périmètre
+
+Checklist société, dépôts, utilisateurs, véhicules, modèles horaires, planning, liens vers modules.
+
+#### Exclusions
+
+Onboarding marketing, tutoriels avancés, renommage technique sans décision.
+
+#### Sessions prévues
+
+* P-ONBOARDING-01 — AUDIT ciblé — Comparer le repo officiel, Base44 et la documentation de référence afin de confirmer l'existant, les écarts et les sessions de production nécessaires.
+* P-ONBOARDING-02 — CADRAGE — Valider le découpage réel du bloc après audit ciblé, dont le renommage technique futur.
+* Sessions de production suivantes : INFORMATION NON FOURNIE — À CONFIRMER après audit ciblé.
+* CLOTURE_P-ONBOARDING — VALIDATION — Clôture finale du bloc après réalisation et contrôle des sessions confirmées.
+
+#### Livrables attendus
+
+Écarts Mise en route, dépendances référentiels, sessions de correction confirmées.
+
+#### Contrôles obligatoires
+
+Tests liens, données sources, RBAC visible, navigateur, lint/build si code modifié.
+
+#### Critère de validation du bloc
+
+La mise en route guide correctement la configuration Alpha avec les vrais modules sources.
+
+#### Documentation à mettre à jour si nécessaire
+
+Fiche Mise en route, `05`, conventions routes/libellés.
+
+#### Statut
+
+À faire
+
+## 6. Bloc RGPD / Privacy
+
+### BLOC RGPD-PRIVACY — Privacy visible en Alpha et rattachée au bloc RGPD
+
+#### Objectif du bloc
+
+Garantir une Privacy visible en Alpha et documenter les limites RGPD sans déclarer une conformité complète non prouvée.
+
+#### Pourquoi ce bloc existe
+
+P1-03 rattache Privacy au bloc RGPD et non à un simple bloc page Base44.
+
+#### Périmètre
+
+Présence Privacy, accessibilité, lien avec Login, mentions minimales Alpha, limites de conformité, points RGPD à confirmer.
+
+#### Exclusions
+
+Conformité RGPD complète, politique légale exhaustive, DPO/base légale/rétention/purge non confirmés.
+
+#### Sessions prévues
+
+* RGPD-PRIVACY-01 — AUDIT ciblé — Comparer le repo officiel, Base44 et la documentation de référence afin de confirmer l'existant, les écarts et les sessions de production nécessaires.
+* RGPD-PRIVACY-02 — CADRAGE — Valider le découpage réel du bloc après audit ciblé.
+* Sessions de production suivantes : INFORMATION NON FOURNIE — À CONFIRMER après audit ciblé.
+* CLOTURE_RGPD-PRIVACY — VALIDATION — Clôture finale du bloc après réalisation et contrôle des sessions confirmées.
+
+#### Livrables attendus
+
+Écarts Privacy, limites RGPD Alpha, décisions restantes, sessions de correction confirmées.
+
+#### Contrôles obligatoires
+
+Contrôle navigateur, lien login/privacy, absence déclaration de conformité complète, encodage si documentation modifiée.
+
+#### Critère de validation du bloc
+
+Privacy est visible et cohérente avec les limites Alpha.
+
+#### Documentation à mettre à jour si nécessaire
+
+RGPD_BASE_MINIMALE.md si repris dans une session dédiée, `05`, Login, documentation Privacy.
+
+#### Statut
+
+À faire
+
+## 7. Validations finales / gel Alpha
+
+### BLOC F1 — Validation fonctionnelle croisée
+
+#### Objectif du bloc
+
+Vérifier les parcours fonctionnels transverses après les blocs métier.
+
+#### Pourquoi ce bloc existe
+
+Une page isolée ne valide pas l'application ; les parcours doivent être contrôlés entre modules.
+
+#### Périmètre
+
+Parcours admin/gérant, bureau/régulateur, terrain, navigation, droits, données et liens entre modules.
+
+#### Exclusions
+
+Correction code pendant validation sauf session séparée, nouvelles fonctionnalités.
+
+#### Sessions prévues
+
+* F1-01 — AUDIT ciblé — Comparer le repo officiel, Base44 et la documentation de référence afin de confirmer l'existant, les écarts et les sessions de production nécessaires.
+* F1-02 — CADRAGE — Valider le découpage réel du bloc après audit ciblé.
+* Sessions de production suivantes : INFORMATION NON FOURNIE — À CONFIRMER après audit ciblé.
+* CLOTURE_F1 — VALIDATION — Clôture finale du bloc après réalisation et contrôle des sessions confirmées.
+
+#### Livrables attendus
+
+Rapports de parcours, écarts bloquants, reports explicites.
+
+#### Contrôles obligatoires
+
+Navigateur, RBAC, données de test, captures si UI, preuve des rôles utilisés.
+
+#### Critère de validation du bloc
+
+Les parcours principaux sont validés ou les écarts bloquants sont listés et reportés.
+
+#### Documentation à mettre à jour si nécessaire
+
+Rapports de validation, `05`, fin de phase.
+
+#### Statut
+
+À faire
+### BLOC F2 — Validation qualité technique
+
+#### Objectif du bloc
+
+Vérifier la qualité technique globale après reprise.
+
+#### Pourquoi ce bloc existe
+
+La reprise Alpha doit être contrôlée techniquement avant gel ou passage de phase.
+
+#### Périmètre
+
+Lint, build, tests disponibles, API/RBAC, multi-tenant, non-régression ciblée.
+
+#### Exclusions
+
+Correction dans la même session de validation, migration non prévue, couverture exhaustive non confirmée.
+
+#### Sessions prévues
+
+* F2-01 — AUDIT ciblé — Comparer le repo officiel, Base44 et la documentation de référence afin de confirmer l'existant, les écarts et les sessions de production nécessaires.
+* F2-02 — CADRAGE — Valider le découpage réel du bloc après audit ciblé.
+* Sessions de production suivantes : INFORMATION NON FOURNIE — À CONFIRMER après audit ciblé.
+* CLOTURE_F2 — VALIDATION — Clôture finale du bloc après réalisation et contrôle des sessions confirmées.
+
+#### Livrables attendus
+
+Rapport technique, sorties de commandes, écarts et exceptions documentées.
+
+#### Contrôles obligatoires
+
+Lint, build, tests ciblés disponibles, contrôles API/RBAC, multi-tenant, Git status.
+
+#### Critère de validation du bloc
+
+Les contrôles techniques Alpha sont exécutés et leurs résultats sont exploitables.
+
+#### Documentation à mettre à jour si nécessaire
+
+Rapports qualité, `05`, documentation de contrôle.
+
+#### Statut
+
+À faire
+### BLOC F3 — Validation UX visuelle
+
+#### Objectif du bloc
+
+Vérifier la cohérence visuelle, responsive et ergonomique des parcours critiques.
+
+#### Pourquoi ce bloc existe
+
+Les reprises UI doivent être validées en rendu réel, pas seulement par présence de fichiers.
+
+#### Périmètre
+
+Shell, navigation, pages référentiels, login, dashboard, planning, états vide/erreur/chargement, desktop/mobile.
+
+#### Exclusions
+
+Refonte UI globale pendant validation, nouvelle maquette non validée.
+
+#### Sessions prévues
+
+* F3-01 — AUDIT ciblé — Comparer le repo officiel, Base44 et la documentation de référence afin de confirmer l'existant, les écarts et les sessions de production nécessaires.
+* F3-02 — CADRAGE — Valider le découpage réel du bloc après audit ciblé.
+* Sessions de production suivantes : INFORMATION NON FOURNIE — À CONFIRMER après audit ciblé.
+* CLOTURE_F3 — VALIDATION — Clôture finale du bloc après réalisation et contrôle des sessions confirmées.
+
+#### Livrables attendus
+
+Rapport visuel, captures, écarts UX bloquants ou reports.
+
+#### Contrôles obligatoires
+
+Contrôle navigateur, responsive, états UI, absence chevauchements visibles, captures utiles.
+
+#### Critère de validation du bloc
+
+Les écrans critiques ne présentent pas d'écart visuel bloquant connu.
+
+#### Documentation à mettre à jour si nécessaire
+
+Références UI/UX si décision validée, rapports F3, `05`.
+
+#### Statut
+
+À faire
+### BLOC F4 — Clôture documentaire Alpha ou clôture de phase
+
+#### Objectif du bloc
+
+Clôturer la phase Alpha ou acter explicitement les reports et la non-clôture.
+
+#### Pourquoi ce bloc existe
+
+La fin de phase doit reposer sur des preuves, pas sur l'existence de fichiers ou de sessions.
+
+#### Périmètre
+
+Synthèse F1/F2/F3, reports, décisions humaines, documents MASTER, preuves finales, prochaine phase.
+
+#### Exclusions
+
+Nouvelle fonctionnalité, correction code non séparée, validation implicite.
+
+#### Sessions prévues
+
+* F4-01 — AUDIT ciblé — Comparer le repo officiel, Base44 et la documentation de référence afin de confirmer l'existant, les écarts et les sessions de production nécessaires.
+* F4-02 — CADRAGE — Valider le découpage réel du bloc après audit ciblé.
+* Sessions de production suivantes : INFORMATION NON FOURNIE — À CONFIRMER après audit ciblé.
+* CLOTURE_F4 — VALIDATION — Clôture finale du bloc après réalisation et contrôle des sessions confirmées.
+
+#### Livrables attendus
+
+Note de clôture ou non-clôture, reports acceptés, décision humaine, prochaine phase.
+
+#### Contrôles obligatoires
+
+Vérification preuves F1/F2/F3, Git status, cohérence MASTER, absence validation implicite.
+
+#### Critère de validation du bloc
+
+La phase est clôturée ou non clôturée explicitement, avec preuves et décisions visibles.
+
+#### Documentation à mettre à jour si nécessaire
+
+`04`, `05`, fin de session, synthèse de phase.
+
+#### Statut
+
+À faire
+
+## 8. Règles de maintenance
+
+Mettre à jour ce fichier uniquement dans les cas suivants :
+
+* après audit ciblé d'un bloc ;
+* après décision humaine ;
+* après changement d'ordre ;
+* après ajout, retrait ou fusion de session ;
+* après clôture d'un bloc.
+
+Règles à conserver :
+
+* ne pas transformer `05` en copie de `04` ;
+* ne pas transformer `05` en copie de P1-02 ;
+* ne pas créer de gros tableaux administratifs par bloc ;
+* ne pas inventer de sessions de production non prouvées ;
+* garder les incertitudes visibles ;
+* conserver un audit ciblé obligatoire au début de chaque bloc ;
+* mettre à jour les fiches après preuve, pas avant.
