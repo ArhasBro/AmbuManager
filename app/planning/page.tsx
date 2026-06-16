@@ -48,7 +48,7 @@ export default async function PlanningPage() {
   if (!canViewSelf && !canViewGlobal) {
     return (
       <main className="page-wrap">
-        <AccessDeniedState message="Vous etes authentifie, mais vous n'avez pas les autorisations necessaires pour consulter le planning." />
+        <AccessDeniedState message="Vous êtes authentifié, mais vous n'avez pas les autorisations nécessaires pour consulter le planning." />
       </main>
     );
   }

@@ -1,0 +1,37 @@
+diff --git a/app/planning/page.tsx b/app/planning/page.tsx
+index b93b4e23..82300ccc 100644
+--- a/app/planning/page.tsx
++++ b/app/planning/page.tsx
+@@ -48,7 +48,7 @@ export default async function PlanningPage() {
+   if (!canViewSelf && !canViewGlobal) {
+     return (
+       <main className="page-wrap">
+-        <AccessDeniedState message="Vous etes authentifie, mais vous n'avez pas les autorisations necessaires pour consulter le planning." />
++        <AccessDeniedState message="Vous êtes authentifié, mais vous n'avez pas les autorisations nécessaires pour consulter le planning." />
+       </main>
+     );
+   }
+diff --git a/app/ui/access-denied-state.tsx b/app/ui/access-denied-state.tsx
+index 00b87367..d08df405 100644
+--- a/app/ui/access-denied-state.tsx
++++ b/app/ui/access-denied-state.tsx
+@@ -1,4 +1,5 @@
+ import Link from "next/link";
++import { ShieldAlert } from "lucide-react";
+ 
+ import ErrorMessage from "./error-message";
+ 
+@@ -11,10 +12,12 @@ const DEFAULT_MESSAGE = "Vous êtes connecté, mais vous ne disposez pas des per
+ export default function AccessDeniedState({ message = DEFAULT_MESSAGE }: AccessDeniedStateProps) {
+   return (
+     <ErrorMessage
++      className="ui-error-message--access-denied"
++      icon={<ShieldAlert size={18} strokeWidth={2.2} />}
+       title="Accès refusé"
+       message={message}
+       details={(
+-        <Link href="/dashboard">
++        <Link href="/dashboard" className="ui-error-message__link">
+           Retour au tableau de bord
+         </Link>
+       )}
