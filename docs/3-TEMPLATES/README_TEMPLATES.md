@@ -41,10 +41,17 @@ Les anciens fichiers suivants sont retirés du modèle actif :
 - Preuves obligatoires.
 - Verdict explicite.
 - Aucune validation implicite.
+- Lecture obligatoire de `04` et `05`.
+- Respect du type `DX` / `CX`.
+- Respect de la règle `1 session = 1 dossier unique`.
+- Interdiction des sessions `FIX` séparées.
+- Règles de patch selon `DX` / `CX`.
 - Fichiers du prompt courant prioritaires.
 - Sortie structurée obligatoire.
 
 ## 6. Références liées
 
 - `docs/1-MASTER/03-METHODE_DE_TRAVAIL.md`
+- `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`
+- `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md`
 - `docs/2-SESSIONS/README_SESSIONS.md`

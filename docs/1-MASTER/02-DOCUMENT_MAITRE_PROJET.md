@@ -37,12 +37,13 @@ Il consolide l'état courant, les décisions structurantes, les points validés,
 
 ## 3. Références actives du projet
 
-Les quatre documents actifs de `docs/1-MASTER` sont :
+Les cinq documents MASTER actifs de `docs/1-MASTER` sont :
 
-- `docs/1-MASTER/01-APPLICATION_WEB.md`
-- `docs/1-MASTER/02-DOCUMENT_MAITRE_PROJET.md`
-- `docs/1-MASTER/03-METHODE_DE_TRAVAIL.md`
-- `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`
+- `docs/1-MASTER/01-APPLICATION_WEB.md` : décrit l'application web, son périmètre produit et ses modules.
+- `docs/1-MASTER/02-DOCUMENT_MAITRE_PROJET.md` : pilote l'état du projet, l'historique utile et les décisions structurantes.
+- `docs/1-MASTER/03-METHODE_DE_TRAVAIL.md` : définit la méthode de travail, les preuves, les contrôles et les règles de session.
+- `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md` : définit le plan maître court, l'ordre de reprise, les blocs, les principes et les dépendances.
+- `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md` : définit le détail opérationnel officiel des blocs et sessions de production.
 
 Références supports conservées :
 
@@ -61,7 +62,7 @@ Le projet ne repart pas de zéro techniquement. Il repart sur une gouvernance do
 - le repo officiel est exploitable avec corrections majeures ;
 - aucune page n'est validée automatiquement ;
 - le prototype Base44 est clôturable comme prototype fonctionnel sous réserves, mais il n'est pas une source technique finale ;
-- le dossier `docs/1-MASTER` est refondu autour de quatre documents actifs ;
+- le dossier `docs/1-MASTER` est refondu autour de cinq documents MASTER actifs ;
 - les dossiers supports restent conservés ;
 - la prochaine reprise opérationnelle doit commencer par la structuration du plan de reprise, pas par du code.
 
@@ -73,7 +74,7 @@ Historique retenu :
 - un audit du code officiel a conclu que la base est réutilisable mais nécessite des corrections majeures ;
 - un prototype Base44 a permis de clarifier des parcours, des libellés et des réserves métier ;
 - un audit comparatif Base44 / repo officiel a posé la règle : adapter les idées Base44, ne jamais copier le code Base44 ;
-- la présente refonte remplace les suffixes documentaires actifs par quatre noms simples.
+- la présente refonte remplace les suffixes documentaires actifs par cinq noms simples.
 
 ## 6. Décisions structurantes validées
 
@@ -95,7 +96,7 @@ Historique retenu :
 - Fiches fonctionnalités disponibles dans `docs/1-MASTER/3-FONCTIONNALITES/`.
 - Références UI/UX disponibles dans `docs/1-MASTER/2-REFERENCE_UI_UX/`.
 - Maquettes disponibles dans `docs/1-MASTER/1-MAQUETTE/`.
-- Documents maîtres racine consolidés en quatre fichiers actifs.
+- Documents MASTER racine consolidés en cinq fichiers actifs.
 
 ## 8. Ce qui manque
 
@@ -114,7 +115,7 @@ Validé à ce stade :
 
 - la refonte documentaire doit être limitée à `docs/1-MASTER` ;
 - les dossiers `docs/2-SESSIONS/` et `docs/3-TEMPLATES/` ne sont pas modifiés dans cette intervention ;
-- les quatre documents actifs sont la nouvelle référence racine ;
+- les cinq documents MASTER actifs sont la nouvelle référence racine ;
 - Base44 est utilisable comme prototype, pas comme code à copier ;
 - les libellés `Modèles horaires` et `Mise en route` sont actifs ;
 - le plan de développement doit repartir par une Phase 1 de structuration du plan de reprise.
@@ -178,11 +179,9 @@ Base44 est considéré comme prototype fonctionnel, visuel et métier exploitabl
 
 ## 15. Prochaine grande étape
 
-La prochaine grande étape est :
+La prochaine grande étape est la reprise opérationnelle par blocs, à partir du plan court `04` et du détail opérationnel `05`.
 
-`PHASE 1 — Structuration du plan de reprise`
-
-Objectif : définir les blocs de développement, leur ordre, leurs dépendances, les sessions à préparer et les contrôles attendus avant tout patch de code.
+Objectif : exécuter des sessions courtes, fermées, contrôlables et validables, sans copie technique directe de Base44 et sans patch applicatif hors session CX.
 
 ## 16. Règles de mise à jour du document
 

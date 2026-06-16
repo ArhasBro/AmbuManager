@@ -27,6 +27,8 @@ $BetaBlockMin  = 1
 $BetaBlockMax  = 99
 
 $AllowedTypeTokens = @(
+    'DX',
+    'CX',
     'AUDIT',
     'CORRECTION',
     'CORRECTION_DOCUMENTAIRE',
@@ -42,6 +44,32 @@ $AllowedTypeTokens = @(
     'CLOTURE_DOCUMENTAIRE',
     'PREPARATION_INTEGRATION_CODE'
 )
+
+$KnownAlphaBlockFolderNames = @{
+    'T1' = 'BLOC_T1_SHELL_NAVIGATION'
+    'T2' = 'BLOC_T2_NOMENCLATURE_ROUTES'
+    'T3' = 'BLOC_T3_DESIGN_SYSTEM'
+    'T4' = 'BLOC_T4_RBAC_PERMISSIONS'
+    'T5' = 'BLOC_T5_DONNEES_MULTI_TENANT'
+    'T6' = 'BLOC_T6_AUDIT_TRACABILITE'
+    'T7' = 'BLOC_T7_QUALITE_CONTROLES'
+    'P-LOGIN' = 'BLOC_P_LOGIN'
+    'P-DASHBOARD' = 'BLOC_P_DASHBOARD'
+    'P-MODELES-HORAIRES' = 'BLOC_P_MODELES_HORAIRES'
+    'P-PLANNING' = 'BLOC_P_PLANNING'
+    'P-UTILISATEURS-RH' = 'BLOC_P_UTILISATEURS_RH'
+    'P-VEHICULES' = 'BLOC_P_VEHICULES'
+    'P-SUIVI-VEHICULES' = 'BLOC_P_SUIVI_VEHICULES'
+    'P-DEPOTS-BASES' = 'BLOC_P_DEPOTS_BASES'
+    'P-SOCIETE' = 'BLOC_P_SOCIETE'
+    'P-MISE-EN-ROUTE' = 'BLOC_P_MISE_EN_ROUTE'
+    'P-AUDIT' = 'BLOC_P_AUDIT'
+    'RGPD-PRIVACY' = 'BLOC_RGPD_PRIVACY'
+    'F1' = 'BLOC_F1_VALIDATION_FONCTIONNELLE'
+    'F2' = 'BLOC_F2_VALIDATION_QUALITE'
+    'F3' = 'BLOC_F3_VALIDATION_UX'
+    'F4' = 'BLOC_F4_CLOTURE_ALPHA'
+}
 
 function Get-BlockRangeLabel {
     param(
@@ -148,8 +176,8 @@ function Test-BlockAllowedForStage {
     switch ($StageValue) {
         "1-ALPHA" {
             $pattern = Get-BlockRegexPattern -Prefix "A" -Min $AlphaBlockMin -Max $AlphaBlockMax
-            if ($BlockValue -notmatch $pattern) {
-                throw "Bloc invalide pour 1-ALPHA. Valeurs autorisees : $(Get-BlockRangeLabel -Prefix 'A' -Min $AlphaBlockMin -Max $AlphaBlockMax)."
+            if (($BlockValue -notmatch $pattern) -and (-not $KnownAlphaBlockFolderNames.ContainsKey($BlockValue))) {
+                throw "Bloc invalide pour 1-ALPHA. Valeurs autorisees : $(Get-BlockRangeLabel -Prefix 'A' -Min $AlphaBlockMin -Max $AlphaBlockMax), T1..T7, P-LOGIN, P-DASHBOARD, P-MODELES-HORAIRES, P-PLANNING, P-UTILISATEURS-RH, P-VEHICULES, P-SUIVI-VEHICULES, P-DEPOTS-BASES, P-SOCIETE, P-MISE-EN-ROUTE, P-AUDIT, RGPD-PRIVACY, F1..F4."
             }
         }
         "2-BETA" {
@@ -175,7 +203,7 @@ function Get-CanonicalBlock {
     $clean = (Get-SafeString -Value $Value).ToUpperInvariant()
 
     if ([string]::IsNullOrWhiteSpace($clean)) {
-        throw "Bloc invalide. Valeurs autorisees : $(Get-BlockRangeLabel -Prefix 'A' -Min $AlphaBlockMin -Max $AlphaBlockMax), $(Get-BlockRangeLabel -Prefix 'B' -Min $BetaBlockMin -Max $BetaBlockMax) (ou BLOC_A1 a BLOC_A21, BLOC_B1 a BLOC_B4)."
+        throw "Bloc invalide. Valeurs autorisees : A1..A99, B1..B99, T1..T7, P-LOGIN, P-DASHBOARD, P-MODELES-HORAIRES, P-PLANNING, P-UTILISATEURS-RH, P-VEHICULES, P-SUIVI-VEHICULES, P-DEPOTS-BASES, P-SOCIETE, P-MISE-EN-ROUTE, P-AUDIT, RGPD-PRIVACY, F1..F4."
     }
 
     if ($clean -match '^BLOC_(.+)$') {
@@ -189,11 +217,15 @@ function Get-CanonicalBlock {
         return $clean
     }
 
+    if ($KnownAlphaBlockFolderNames.ContainsKey($clean)) {
+        return $clean
+    }
+
     if ($clean -match '^DEV-V2-\d{2}$') {
         return $clean
     }
 
-    throw "Bloc invalide. Valeurs autorisees : $(Get-BlockRangeLabel -Prefix 'A' -Min $AlphaBlockMin -Max $AlphaBlockMax), $(Get-BlockRangeLabel -Prefix 'B' -Min $BetaBlockMin -Max $BetaBlockMax) (ou BLOC_A1 a BLOC_A21, BLOC_B1 a BLOC_B4)."
+    throw "Bloc invalide. Valeurs autorisees : A1..A99, B1..B99, T1..T7, P-LOGIN, P-DASHBOARD, P-MODELES-HORAIRES, P-PLANNING, P-UTILISATEURS-RH, P-VEHICULES, P-SUIVI-VEHICULES, P-DEPOTS-BASES, P-SOCIETE, P-MISE-EN-ROUTE, P-AUDIT, RGPD-PRIVACY, F1..F4."
 }
 
 function Get-CanonicalType {
@@ -203,8 +235,10 @@ function Get-CanonicalType {
     $allowedTypesLabel = ($AllowedTypeTokens -join ', ')
 
     switch ($normalized) {
+        "DOCUMENTAIRE"           { return "DX" }
+        "CODE"                   { return "CX" }
+        "TECHNIQUE"              { return "CX" }
         "CORRECTIONDOCUMENTAIRE" { return "CORRECTION_DOCUMENTAIRE" }
-        "DOCUMENTAIRE"           { return "DOCUMENTATION" }
     }
 
     if ([string]::IsNullOrWhiteSpace($normalized)) {
@@ -245,7 +279,44 @@ function Test-TypeRequiresPatch {
         Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
     )
 
-    return (($tokens | Where-Object { $_ -in @('CORRECTION', 'COMPLETION') }).Count -gt 0)
+    return (($tokens | Where-Object { $_ -in @('CX', 'CORRECTION', 'COMPLETION', 'DESIGN_SYSTEM', 'PREPARATION_INTEGRATION_CODE') }).Count -gt 0)
+}
+
+function Get-SessionKind {
+    param([string]$TypeValue)
+
+    $tokens = @(
+        $TypeValue -split '\+' |
+        Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+    )
+
+    if ('DX' -in $tokens -and 'CX' -in $tokens) {
+        throw "Type invalide : une session ne peut pas etre a la fois DX et CX."
+    }
+
+    if ('DX' -in $tokens) {
+        return 'DX'
+    }
+
+    if ('CX' -in $tokens) {
+        return 'CX'
+    }
+
+    if ((($tokens | Where-Object { $_ -in @('CORRECTION', 'COMPLETION', 'DESIGN_SYSTEM', 'PREPARATION_INTEGRATION_CODE') }).Count) -gt 0) {
+        return 'CX'
+    }
+
+    return 'DX'
+}
+
+function Get-BlockDirectoryName {
+    param([string]$BlockValue)
+
+    if ($KnownAlphaBlockFolderNames.ContainsKey($BlockValue)) {
+        return $KnownAlphaBlockFolderNames[$BlockValue]
+    }
+
+    return "BLOC_{0}" -f ($BlockValue -replace '[^A-Z0-9_-]', '_' -replace '-', '_')
 }
 
 function Read-ValueIfMissing {
@@ -534,9 +605,9 @@ Session : $SessionId
 Type : $TypeValue
 
 Raison :
-- Session documentaire de type $TypeValue.
-- Aucun patch officiel a produire pour cette session.
-- Le dossier PATCH reste present dans la session pour centraliser la documentation et les patchs.
+- Session DX ou session sans modification applicative attendue.
+- Aucun patch applicatif .diff a produire pour cette session.
+- Le dossier PATCH reste present dans la session pour centraliser la justification d'absence de patch.
 "@
         Set-Utf8NoBomFile -Path $noPatchPath -Value $noPatchContent
         if (Test-Path $readmePatchPath) {
@@ -568,7 +639,7 @@ git apply         "$PatchRelativePath/$patchFileName"
 
 ## Statut
 - Dossier patch initialise.
-- Patch officiel a produire dans cette session si du code est modifie.
+- Session CX ou technique : patch .diff a produire dans ce dossier si du code, un script, Prisma, Tailwind, API, UI, composants ou fichiers applicatifs sont modifies.
 "@
         Set-Utf8NoBomFile -Path $readmePatchPath -Value $readmePatchContent
         if (Test-Path $noPatchPath) {
@@ -579,9 +650,9 @@ git apply         "$PatchRelativePath/$patchFileName"
 
 # --- Interactive fallback ---
 $Stage = Read-ValueIfMissing -CurrentValue $Stage -PromptText "Stage (1-ALPHA / 2-BETA)"
-$Block = Read-ValueIfMissing -CurrentValue $Block -PromptText "Bloc (A1 a A21 / B1 a B4)"
-$SessionCode = Read-ValueIfMissing -CurrentValue $SessionCode -PromptText "Code session (ex: AUTH-01)"
-$Type = Read-ValueIfMissing -CurrentValue $Type -PromptText "Type (AUDIT / CORRECTION / COMPLETION / VALIDATION / CADRAGE / DESIGN_SYSTEM / etc. / combinaisons avec +)"
+$Block = Read-ValueIfMissing -CurrentValue $Block -PromptText "Bloc (ex: T1, P-LOGIN, RGPD-PRIVACY, F1, A1, B1)"
+$SessionCode = Read-ValueIfMissing -CurrentValue $SessionCode -PromptText "Objet session (ex: AUDIT_CADRAGE_LOGIN)"
+$Type = Read-ValueIfMissing -CurrentValue $Type -PromptText "Type (DX / CX / AUDIT / CORRECTION / COMPLETION / VALIDATION / CADRAGE / combinaisons avec +)"
 $Title = Read-ValueIfMissing -CurrentValue $Title -PromptText "Intitule de la session"
 
 $Stage = Get-CanonicalStage -Value $Stage
@@ -589,7 +660,22 @@ $Block = Get-CanonicalBlock -Value $Block
 Test-BlockAllowedForStage -StageValue $Stage -BlockValue $Block
 $SessionCode = (Get-SafeString -Value $SessionCode).ToUpperInvariant()
 $Type = Get-CanonicalType -Value $Type
+$SessionKind = Get-SessionKind -TypeValue $Type
 $Title = Get-SafeString -Value $Title
+
+if ($SessionKind -eq 'DX') {
+    $dxTokens = @(
+        $Type -split '\+' |
+        Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+    )
+    $invalidDxTokens = @(
+        $dxTokens |
+        Where-Object { $_ -notin @('DX', 'AUDIT', 'CADRAGE', 'VALIDATION', 'DOCUMENTATION', 'CORRECTION_DOCUMENTAIRE', 'CLOTURE_DOCUMENTAIRE') }
+    )
+    if ($invalidDxTokens.Count -gt 0) {
+        throw "Type DX invalide. Les sessions DX autorisees sont limitees a audit + cadrage sous validation, ou cloture."
+    }
+}
 
 if ([string]::IsNullOrWhiteSpace($SessionCode)) {
     throw "Le code session est obligatoire (ex: AUTH-01)."
@@ -600,12 +686,15 @@ if ([string]::IsNullOrWhiteSpace($Title)) {
 if ($SessionCode -notmatch '^[A-Z0-9_-]+$') {
     throw "Le code session ne doit contenir que des lettres majuscules, chiffres, tirets et underscores."
 }
+if (($SessionCode -match '(^|[-_])FIX($|[-_0-9])') -or ($Title -match '(?i)(^|[-_ ])FIX($|[-_ 0-9])')) {
+    throw "Session FIX refusee : un fix ne cree jamais une nouvelle session. Integre le correctif, le patch eventuel et les preuves dans le dossier de session original."
+}
 
 # --- Checks ---
 Test-PathOrThrow $DocsSessionsRoot
 Test-PathOrThrow $SessionTemplateDir
 
-$blockDirName = "BLOC_{0}" -f $Block
+$blockDirName = Get-BlockDirectoryName -BlockValue $Block
 if ($Stage -eq "DEV-V2") {
     $stageSessionsRoot = $DocsSessionsRoot
     $blockSessionsRoot = Join-Path $DocsSessionsRoot $blockDirName
@@ -628,7 +717,7 @@ if ($Stage -eq "DEV-V2") {
 }
 else {
     $nextOrdinal = Get-NextSessionOrdinal -StageSessionsRoot $stageSessionsRoot -DateToken $dateToken
-    $sessionId   = "SESSION-{0}-{1:D2}_{2}_{3}" -f $dateToken, $nextOrdinal, $Block, $SessionCode
+    $sessionId   = "SESSION-{0}-{1:D2}_{2}_{3}_{4}" -f $dateToken, $nextOrdinal, $SessionKind, $Block, $SessionCode
 }
 
 $newSessionDir = Join-Path $blockSessionsRoot $sessionId
@@ -680,6 +769,7 @@ SESSION
 - Bloc : $Block
 - Code session : $SessionCode
 - Type : $Type
+- Famille : $SessionKind
 - Intitule : $Title
 
 DOSSIERS
@@ -692,13 +782,12 @@ FICHIERS DE SESSION A UTILISER / METTRE A JOUR
 - $sessionRelativePath/3-FIN_DE_SESSION.md
 
 REGLES
-- 1 session = 1 point clair
-- 1 session = 1 fonctionnalite
-- 1 session = 1 DoD
-- 1 session = 1 validation
-- 1 session = 1 patch officiel maximum
-- Si session AUDIT ou VALIDATION : NO_PATCH.md
-- Si session avec CORRECTION et/ou COMPLETION : README_PATCH.md puis patch officiel unique si code modifie
+- 1 session = 1 dossier unique
+- 1 session = 1 objectif clair
+- Un fix ne cree jamais une nouvelle session
+- Les correctifs restent dans le dossier de session original
+- DX : aucun patch applicatif .diff attendu
+- CX : tout patch applicatif ou technique doit etre produit dans PATCH/
 "@
 
 $clipboardMsg = "Non disponible"

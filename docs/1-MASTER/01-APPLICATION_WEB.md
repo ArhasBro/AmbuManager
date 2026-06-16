@@ -233,9 +233,11 @@ Exclusions immédiates :
 
 Documents actifs :
 
+- `docs/1-MASTER/01-APPLICATION_WEB.md`
 - `docs/1-MASTER/02-DOCUMENT_MAITRE_PROJET.md`
 - `docs/1-MASTER/03-METHODE_DE_TRAVAIL.md`
 - `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`
+- `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md`
 
 Références supports :
 

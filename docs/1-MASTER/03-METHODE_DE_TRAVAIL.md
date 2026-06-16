@@ -11,12 +11,6 @@ Date de refonte : 07/06/2026
 5. [Rôle de l'utilisateur](#5-rôle-de-lutilisateur)
 6. [Règle centrale : une session = un objectif](#6-règle-centrale-une-session-un-objectif)
 7. [Types de sessions](#7-types-de-sessions)
-   - [AUDIT](#audit)
-   - [CORRECTION](#correction)
-   - [COMPLÉTION](#complétion)
-   - [VALIDATION](#validation)
-   - [DOCUMENTATION](#documentation)
-   - [CLÔTURE](#clôture)
 8. [Structure attendue d'une session](#8-structure-attendue-dune-session)
 9. [Règles de périmètre](#9-règles-de-périmètre)
 10. [Règles anti-refonte](#10-règles-anti-refonte)
@@ -39,7 +33,7 @@ Date de refonte : 07/06/2026
 
 Ce document définit la méthode de travail sur Ambulance Manager : utilisation de Codex, contrôle ChatGPT, sessions, preuves, validation, Git, encodage et règles anti-refonte.
 
-Il consolide les règles générales indispensables. Les dossiers `docs/2-SESSIONS/` et `docs/3-TEMPLATES/` restent conservés et seront revus dans une phase dédiée ultérieure.
+Il consolide les règles générales indispensables. Les dossiers `docs/2-SESSIONS/` et `docs/3-TEMPLATES/` portent les sessions et templates actifs quand une session validée les utilise.
 
 ## 2. Principes généraux de travail
 
@@ -76,29 +70,18 @@ Une session ne doit pas devenir un fourre-tout.
 
 ## 7. Types de sessions
 
-### AUDIT
+Deux familles officielles sont utilisées dans les noms de dossiers :
 
-Lire, comparer, cartographier, produire des constats. Aucun patch code sauf demande explicite.
+- `DX` : session documentaire utile au code. Les seules sessions DX autorisées sont audit + cadrage sous validation, ou clôture.
+- `CX` : session code, applicative ou technique.
 
-### CORRECTION
+`DX` ou `CX` doit être visible dans le nom du dossier de session.
 
-Corriger un écart identifié et limité.
+Les sessions documentaires abstraites, inutiles ou sans lien direct avec le code sont interdites.
 
-### COMPLÉTION
+Une session DX ne produit pas de patch applicatif `.diff`.
 
-Ajouter un comportement manquant validé dans le périmètre.
-
-### VALIDATION
-
-Contrôler un livrable, vérifier les preuves, produire un verdict.
-
-### DOCUMENTATION
-
-Mettre à jour les documents nécessaires, sans refonte non demandée.
-
-### CLÔTURE
-
-Clôturer un bloc ou une phase après preuves et décisions explicites.
+Une session CX qui modifie du code, des scripts, la structure technique, Prisma, Tailwind, API, UI, composants ou fichiers applicatifs doit produire un patch `.diff` dans le dossier `PATCH/` de la session.
 
 ## 8. Structure attendue d'une session
 
@@ -175,6 +158,13 @@ Le contrôle doit vérifier :
 - Ne pas mélanger code et documentation sans nécessité.
 - Un commit doit être cohérent, traçable et explicitement demandé ou validé.
 - Pas de patch généré inutilement.
+- 1 session = 1 dossier unique.
+- Un fix ne crée jamais une nouvelle session.
+- Un correctif lié à une session existante doit être intégré au dossier de session original.
+- Les patchs correctifs éventuels doivent aller dans `PATCH/` du dossier original.
+- Les preuves corrigées doivent rester dans les fichiers de preuve du dossier original.
+- Il est interdit de créer un dossier de session séparé de type `FIX-01`.
+- L'ancienne session `docs/2-SESSIONS/1-ALPHA/BLOC_A1/SESSION-20260615-02_A1_P1-07-FIX-01` est une exception historique conservée, à ne pas utiliser comme modèle.
 
 ## 16. Règles d'encodage et qualité fichiers
 
@@ -262,7 +252,9 @@ Documents actifs :
 
 - `docs/1-MASTER/01-APPLICATION_WEB.md`
 - `docs/1-MASTER/02-DOCUMENT_MAITRE_PROJET.md`
+- `docs/1-MASTER/03-METHODE_DE_TRAVAIL.md`
 - `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`
+- `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md`
 
 Supports conservés :
 

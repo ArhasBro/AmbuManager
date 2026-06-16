@@ -9,6 +9,7 @@ Corriger uniquement les points bloquants du retour précédent.
 PARAMÈTRES À REMPLACER
 - Session : <SESSION_ID>
 - Bloc : <BLOC_ID>
+- Type : <DX_OU_CX>
 - Objectif initial : <OBJECTIF>
 - Périmètre autorisé : <PÉRIMÈTRE_AUTORISÉ>
 - Périmètre interdit : <PÉRIMÈTRE_INTERDIT>
@@ -32,6 +33,10 @@ RÈGLES DE RELANCE
 - Ne pas refaire toute la session.
 - Produire un correctif minimal.
 - Ne pas régénérer un patch complet déjà appliqué.
+- Ne pas créer une nouvelle session pour un fix.
+- Intégrer le correctif au dossier de session original.
+- Une session DX ne produit pas de patch applicatif `.diff`.
+- Une session CX qui modifie du code, des scripts, la structure technique, Prisma, Tailwind, API, UI, composants ou fichiers applicatifs doit produire un patch `.diff` dans `PATCH/`.
 - Répondre uniquement aux points bloquants.
 - Fournir les preuves manquantes.
 - Ne modifier que les fichiers autorisés.

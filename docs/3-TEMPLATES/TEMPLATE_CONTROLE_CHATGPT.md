@@ -10,6 +10,7 @@ EN ATTENTE DU RETOUR CODEX — CONTRÔLE NON DÉMARRÉ
 PARAMÈTRES À REMPLACER
 - Session contrôlée : <SESSION_ID>
 - Bloc : <BLOC_ID>
+- Type attendu : <DX_OU_CX>
 - Objectif attendu : <OBJECTIF>
 - Périmètre autorisé : <PÉRIMÈTRE_AUTORISÉ>
 - Périmètre interdit : <PÉRIMÈTRE_INTERDIT>
@@ -37,6 +38,10 @@ RÈGLES DE CONTRÔLE
 - Toute commande non montrée = non prouvée.
 - Tout fichier non listé = non prouvé.
 - Toute information absente = INFORMATION NON FOURNIE — À CONFIRMER.
+- Aucune validation implicite.
+- Un fix ne doit jamais créer une nouvelle session.
+- Une session DX ne doit pas produire de patch applicatif `.diff`.
+- Une session CX qui modifie du code, scripts, Prisma, Tailwind, API, UI, composants ou fichiers applicatifs doit produire un patch `.diff` dans `PATCH/`.
 
 POINTS À VÉRIFIER
 1. Objectif unique respecté.
@@ -49,6 +54,9 @@ POINTS À VÉRIFIER
 8. Contrôles attendus exécutés ou impossibilité documentée.
 9. Encodage contrôlé si demandé.
 10. Structure session cohérente si concernée : `1-SESSION.md`, `2-PREUVES.md`, `3-FIN_DE_SESSION.md`, `PATCH/`.
+11. Règle `1 session = 1 dossier unique` respectée.
+12. Absence de session `FIX` séparée.
+13. Règles de patch DX/CX respectées.
 
 RÉPONSE ATTENDUE
 1. Points validés avec preuves

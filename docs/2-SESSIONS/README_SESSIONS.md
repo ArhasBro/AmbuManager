@@ -7,7 +7,7 @@ Date : 07/06/2026
 
 - [1. Role du dossier `docs/2-SESSIONS`](#1-role-du-dossier-docs2-sessions)
 - [2. Principe general des sessions](#2-principe-general-des-sessions)
-- [3. Modele de session `SESSION-YYYYMMDD-XX`](#3-modele-de-session-session-yyyymmdd-xx)
+- [3. Modele de session](#3-modele-de-session)
 - [4. Creation de session](#4-creation-de-session)
 - [5. Ouverture d'une session Codex](#5-ouverture-dune-session-codex)
 - [6. Documents a lire au debut d'une session](#6-documents-a-lire-au-debut-dune-session)
@@ -36,15 +36,26 @@ Document actif de gouvernance des sessions :
 Regles de base :
 
 - 1 session = 1 objectif unique ;
+- 1 session = 1 dossier unique ;
+- un fix ne cree jamais une nouvelle session ;
 - perimetre autorise et perimetre interdit explicites ;
 - preuves obligatoires ;
 - cloture explicite ;
 - pas de validation implicite ;
 - pas de modification hors perimetre.
 
-## 3. Modele de session SESSION-YYYYMMDD-XX
+## 3. Modele de session
 
-Le dossier `docs/2-SESSIONS/SESSION-YYYYMMDD-XX` est le modele operationnel utilise par le script de creation de session.
+Convention cible :
+
+- `SESSION-YYYYMMDD-NN_DX_<BLOC>_<OBJET>`
+- `SESSION-YYYYMMDD-NN_CX_<BLOC>_<OBJET>`
+
+`DX` = session documentaire utile au code.
+
+`CX` = session code, applicative ou technique.
+
+`DX` ou `CX` doit etre visible dans le nom du dossier de session.
 
 Structure officielle future :
 
@@ -61,7 +72,7 @@ Role des fichiers :
 - `1-SESSION.md` : cadrage de la session avant execution ;
 - `2-PREUVES.md` : preuves de lecture, d'usage, de creation, de modification et de controle ;
 - `3-FIN_DE_SESSION.md` : synthese finale, ecarts, reste a faire et verdict ;
-- `PATCH/` : patch officiel ou justification d'absence de patch selon le type de session.
+- `PATCH/` : patch officiel ou justification d'absence de patch selon le type DX/CX.
 
 ## 4. Creation de session
 
@@ -79,7 +90,7 @@ Si le script echoue, afficher l'erreur exacte et s'arreter sans creation manuell
 Le script conserve :
 
 - `NO_PATCH.md` pour les sessions sans patch attendu ;
-- `README_PATCH.md` pour les sessions avec correction ou completion attendue.
+- `README_PATCH.md` pour les sessions CX avec patch applicatif ou technique attendu.
 
 ## 5. Ouverture d'une session Codex
 
@@ -101,6 +112,7 @@ Documents MASTER actifs a lire par defaut :
 - `docs/1-MASTER/02-DOCUMENT_MAITRE_PROJET.md`
 - `docs/1-MASTER/03-METHODE_DE_TRAVAIL.md`
 - `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`
+- `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md`
 - `docs/2-SESSIONS/README_SESSIONS.md`
 
 Documents a lire selon le bloc :
@@ -121,7 +133,7 @@ Documents a ne pas lire sauf demande explicite :
 - ouvrir uniquement les fichiers utiles a l'objectif ;
 - ne pas lire tout le repo par defaut ;
 - ne pas utiliser les historiques comme source active sans validation master ;
-- en cas de doute : `INFORMATION NON FOURNIE - A CONFIRMER`.
+- en cas de doute : `INFORMATION NON FOURNIE — À CONFIRMER`.
 
 ## 8. Regles de travail pendant une session
 
@@ -135,9 +147,19 @@ Documents a ne pas lire sauf demande explicite :
 
 - patch minimal, cible, tracable ;
 - aucun patch hors perimetre ;
-- aucun fichier `.diff` cree par defaut ;
-- patch ou diff seulement si demande explicitement dans la session ;
+- une session DX ne produit pas de patch applicatif `.diff` ;
+- une session CX qui modifie du code, des scripts, la structure technique, Prisma, Tailwind, API, UI, composants ou fichiers applicatifs doit produire un patch `.diff` dans `PATCH/` ;
 - ne jamais rejouer un ancien patch historique sans controle explicite.
+
+Regles de fix :
+
+- 1 session = 1 dossier unique ;
+- un fix ne cree jamais une nouvelle session ;
+- un correctif lie a une session existante doit etre integre au dossier de session original ;
+- les patchs correctifs eventuels doivent aller dans `PATCH/` du dossier original ;
+- les preuves corrigees doivent rester dans les fichiers de preuve du dossier original ;
+- interdiction future de creer un dossier de session separe de type `FIX-01` ;
+- l'ancienne session `docs/2-SESSIONS/1-ALPHA/BLOC_A1/SESSION-20260615-02_A1_P1-07-FIX-01` est une exception historique conservee, a ne pas utiliser comme modele.
 
 ## 10. Contenu des preuves
 
@@ -159,7 +181,7 @@ Regles obligatoires :
 
 - une commande non montree = non prouvee ;
 - un fichier non liste = non prouve ;
-- une information absente = `INFORMATION NON FOURNIE - A CONFIRMER`.
+- une information absente = `INFORMATION NON FOURNIE — À CONFIRMER`.
 
 ## 11. Documentation de fin de session
 
@@ -181,7 +203,7 @@ Verdicts possibles dans `3-FIN_DE_SESSION.md` :
 - `VALIDABLE`
 - `VALIDABLE SOUS RESERVE`
 - `NON VALIDABLE`
-- `INFORMATION NON FOURNIE - A CONFIRMER`
+- `INFORMATION NON FOURNIE — À CONFIRMER`
 
 ## 12. Cloture de session
 

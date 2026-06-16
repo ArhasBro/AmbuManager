@@ -21,6 +21,7 @@ DOCUMENTS À LIRE
 - `docs/1-MASTER/02-DOCUMENT_MAITRE_PROJET.md`
 - `docs/1-MASTER/03-METHODE_DE_TRAVAIL.md`
 - `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`
+- `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md`
 - `docs/2-SESSIONS/README_SESSIONS.md`
 
 CONTRAINTES
@@ -31,6 +32,10 @@ CONTRAINTES
 - Ne pas inventer de preuves.
 - Ne pas valider une session à l'avance.
 - Garder 1 session = 1 objectif.
+- Garder 1 session = 1 dossier unique.
+- Respecter les types DX / CX.
+- Ne jamais créer de session FIX séparée.
+- Appliquer les règles de patch selon DX / CX.
 
 SESSIONS À PRODUIRE
 <LISTE_DES_SESSIONS_ATTENDUES>
@@ -42,6 +47,7 @@ FORMAT ATTENDU POUR CHAQUE SESSION
 ```text
 Session : <SESSION_ID>
 Bloc : <BLOC_ID>
+Type : <DX_OU_CX>
 Objectif unique : <OBJECTIF>
 Périmètre autorisé : <PÉRIMÈTRE_AUTORISÉ>
 Périmètre interdit : <PÉRIMÈTRE_INTERDIT>
@@ -58,6 +64,7 @@ Objectif attendu : <OBJECTIF>
 Contrôler uniquement le retour brut fourni et les fichiers joints au prompt courant.
 Toute commande non montrée = non prouvée.
 Toute information absente = INFORMATION NON FOURNIE — À CONFIRMER.
+Un fix ne crée jamais une nouvelle session.
 Verdict attendu : VALIDABLE / VALIDABLE SOUS RÉSERVE / NON VALIDABLE.
 ```
 
@@ -77,4 +84,5 @@ INTERDICTIONS
 - Ne pas modifier `docs/3-TEMPLATES/**`.
 - Ne pas modifier le code applicatif.
 - Ne pas produire de verdict de validation finale.
+- Ne pas produire de session séparée `FIX-01`.
 ~~~
