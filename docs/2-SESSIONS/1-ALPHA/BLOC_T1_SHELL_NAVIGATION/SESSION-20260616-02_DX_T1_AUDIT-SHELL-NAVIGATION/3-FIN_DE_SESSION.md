@@ -78,7 +78,6 @@ Aucune modification volontaire dans :
 - fichiers Base44
 - PNG / maquettes
 - `04-PLAN_DE_DEVELOPPEMENT.md`
-- `05-BLOCS_SESSIONS_PRODUCTION.md`
 - templates
 - `create_session.ps1`
 

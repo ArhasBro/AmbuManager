@@ -11,8 +11,7 @@
 
 ## 2. Contexte
 
-Projet : Investissement
-Sous-projet : Ambulance Manager
+Projet : Ambulance Manager
 
 Cette session DX audite le shell global, la navigation connectee, le contexte utilisateur/societe, les acces visibles selon droits, les libelles, les routes et l'etat Acces refuse. Elle prepare le decoupage fin des futures sessions CX du bloc T1 sans modifier le code applicatif.
 
