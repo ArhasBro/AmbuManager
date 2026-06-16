@@ -70,12 +70,14 @@ Une session ne doit pas devenir un fourre-tout.
 
 ## 7. Types de sessions
 
-Deux familles officielles sont utilisées dans les noms de dossiers :
+Deux natures réelles de sessions sont utilisées dans les noms de dossiers :
 
-- `DX` : session documentaire utile au code. Les seules sessions DX autorisées sont audit + cadrage sous validation, ou clôture.
+- `DX` : session documentaire utile au code.
 - `CX` : session code, applicative ou technique.
 
 `DX` ou `CX` doit être visible dans le nom du dossier de session.
+
+Il ne doit pas exister de session réelle `QA` ou `DOC`.
 
 `DX_DOCUMENTATION` et `DX_CORRECTION_DOCUMENTAIRE` sont refusées comme sessions documentaires normales.
 
@@ -84,6 +86,76 @@ Les sessions documentaires abstraites, inutiles ou sans lien direct avec le code
 Une session DX ne produit pas de patch applicatif `.diff`.
 
 Une session CX qui modifie du code, des scripts, la structure technique, Prisma, Tailwind, API, UI, composants ou fichiers applicatifs doit produire un patch `.diff` dans le dossier `PATCH/` de la session.
+
+### 7.1 Types métier officiels
+
+Les types métier officiels sont :
+
+- `AUDIT+CADRAGE`
+- `AUDIT`
+- `CADRAGE`
+- `CRÉATION`
+- `CORRECTION`
+- `COMPLÉTION`
+- `VALIDATION+CLOTURE`
+
+Par défaut, un bloc actif commence par une session `DX` de type métier `AUDIT+CADRAGE`.
+
+Pour les blocs/pages complexes, ou quand une décision séparée est nécessaire, `AUDIT` et `CADRAGE` peuvent être séparés en deux sessions `DX`.
+
+### 7.2 Types métier DX
+
+`AUDIT+CADRAGE` :
+
+- nature : `DX` ;
+- sert à lire les sources, cartographier l'existant, identifier les écarts, poser les décisions à confirmer et cadrer les sessions suivantes ;
+- ne modifie pas le code applicatif ;
+- ne produit pas de patch applicatif.
+
+`AUDIT` :
+
+- nature : `DX` ;
+- utilisé uniquement pour un bloc complexe nécessitant une cartographie séparée avant décision ;
+- ne tranche pas seul les décisions métier non fournies ;
+- ne corrige pas le code.
+
+`CADRAGE` :
+
+- nature : `DX` ;
+- utilisé uniquement après un audit séparé, ou quand une décision humaine, produit, RBAC, data, route ou Prisma doit être isolée ;
+- prépare les options, impacts, risques et questions ;
+- ne modifie pas le code.
+
+`VALIDATION+CLOTURE` :
+
+- nature : `DX` ;
+- contrôle le bloc, vérifie les preuves, valide les parcours attendus et acte la clôture du bloc si tout est conforme ;
+- peut aussi conclure que le bloc n'est pas clôturable en l'état ;
+- ne corrige pas le code directement ;
+- si un écart bloquant est détecté, la session doit documenter précisément l'écart et demander une session `CX` ciblée de `CORRECTION`, `CRÉATION` ou `COMPLÉTION`.
+
+### 7.3 Types métier CX
+
+`CRÉATION` :
+
+- nature : `CX` ;
+- crée un élément applicatif ou technique validé : route, module, modèle, API, composant, service ou test ;
+- doit rester ciblé et prouvé ;
+- ne doit pas créer de modèle Prisma, route ou module sans cadrage préalable si la décision est non fournie.
+
+`CORRECTION` :
+
+- nature : `CX` ;
+- corrige un écart prouvé sur de l'existant ;
+- doit rester limitée à la cause identifiée ;
+- ne doit pas ajouter une fonctionnalité nouvelle non cadrée.
+
+`COMPLÉTION` :
+
+- nature : `CX` ;
+- complète un existant incomplet selon un périmètre déjà cadré ;
+- ne doit pas devenir une refonte globale ;
+- doit préserver les décisions à confirmer quand elles ne sont pas arbitrées.
 
 ## 8. Structure attendue d'une session
 
@@ -185,7 +257,7 @@ Si elles échouent exclusivement à cause de fichiers situés dans `docs/1-MASTE
 - Tous les fichiers Markdown doivent être lus et écrits en UTF-8 sans BOM.
 - Ne jamais utiliser d'encodage implicite.
 - Ne pas réencoder les fichiers hors périmètre.
-- Contrôler les séquences suspectes : `Ã`, `Â`, `â€`, `�`.
+- Contrôler les séquences suspectes d'encodage définies dans les consignes de session.
 - Lister fichier et ligne exacte si une séquence suspecte reste.
 - Préserver les accents français.
 

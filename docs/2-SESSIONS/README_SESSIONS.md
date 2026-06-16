@@ -57,9 +57,26 @@ Convention cible :
 
 `DX` ou `CX` doit etre visible dans le nom du dossier de session.
 
-Les seules sessions DX autorisees sont audit + cadrage sous validation, ou cloture.
+Les seules natures réelles de sessions sont `DX` et `CX`.
 
-`DX_DOCUMENTATION` et `DX_CORRECTION_DOCUMENTAIRE` sont refusees comme sessions documentaires normales.
+Il ne doit pas exister de sessions réelles `QA` ou `DOC`.
+
+`DX` porte les sessions documentaires utiles au code :
+
+- `AUDIT+CADRAGE` par défaut au début d'un bloc actif ;
+- `AUDIT` uniquement si le bloc est complexe ;
+- `CADRAGE` uniquement si une décision séparée est nécessaire ;
+- `VALIDATION+CLOTURE` pour contrôler, vérifier les preuves, valider les parcours et clôturer ou déclarer le bloc non clôturable.
+
+`CX` porte les sessions applicatives ou techniques :
+
+- `CRÉATION` ;
+- `CORRECTION` ;
+- `COMPLÉTION`.
+
+Une session `VALIDATION+CLOTURE` ne corrige pas le code. Si elle détecte un écart bloquant, elle conclut à une non-clôture du bloc et demande une session `CX` ciblée.
+
+Les anciennes familles de validation ou de documentation autonomes sont refusées comme natures ou familles de sessions réelles.
 
 Les sessions documentaires abstraites, inutiles ou sans lien direct avec le code sont interdites.
 
