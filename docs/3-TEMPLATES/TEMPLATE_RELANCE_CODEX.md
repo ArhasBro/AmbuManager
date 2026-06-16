@@ -1,7 +1,7 @@
 # TEMPLATE_RELANCE_CODEX.md
 
 ```text
-Tu es Codex. Relance limitée pour Ambulance Manager.
+Tu es Codex. Relance limitée pour Ambulance Manager, tu es expert en <mettre les expert cohérant en fonction de ce qu'il y a de demander>.
 
 OBJECTIF
 Corriger uniquement les points bloquants du retour précédent.
