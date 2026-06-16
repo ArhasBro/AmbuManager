@@ -35,6 +35,8 @@ RÈGLES DE RELANCE
 - Ne pas régénérer un patch complet déjà appliqué.
 - Ne pas créer une nouvelle session pour un fix.
 - Intégrer le correctif au dossier de session original.
+- Respecter la doctrine DX stricte : audit + cadrage sous validation, ou clôture uniquement.
+- Refuser DX_DOCUMENTATION et DX_CORRECTION_DOCUMENTAIRE.
 - Une session DX ne produit pas de patch applicatif `.diff`.
 - Une session CX qui modifie du code, des scripts, la structure technique, Prisma, Tailwind, API, UI, composants ou fichiers applicatifs doit produire un patch `.diff` dans `PATCH/`.
 - Répondre uniquement aux points bloquants.

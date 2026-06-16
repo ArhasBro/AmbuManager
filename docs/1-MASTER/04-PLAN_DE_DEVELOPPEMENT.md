@@ -2,6 +2,20 @@
 
 Date de refonte ciblée : 16/06/2026
 
+## Sommaire
+
+1. [Rôle du document](#1-rôle-du-document)
+2. [Documents MASTER actifs](#2-documents-master-actifs)
+3. [Principes non négociables](#3-principes-non-négociables)
+4. [Statut de T0 et de BLOC_A1](#4-statut-de-t0-et-de-bloc_a1)
+5. [Doctrine de reprise depuis Base44](#5-doctrine-de-reprise-depuis-base44)
+6. [Règles de découpage des blocs](#6-règles-de-découpage-des-blocs)
+7. [Règles de découpage des sessions](#7-règles-de-découpage-des-sessions)
+8. [Ordre global de reprise opérationnelle](#8-ordre-global-de-reprise-opérationnelle)
+9. [Dépendances majeures](#9-dépendances-majeures)
+10. [Maintenance du plan](#10-maintenance-du-plan)
+11. [Points restant à confirmer](#11-points-restant-à-confirmer)
+
 ## 1. Rôle du document
 
 Ce document est le plan maître court de reprise opérationnelle d'Ambulance Manager.
@@ -113,8 +127,8 @@ T0 est historique et n'est plus listé comme bloc actif futur.
 
 Ordre principal :
 
-1. T2 - Nomenclature, routes et renommages futurs.
-2. T1 - Shell global, navigation et contexte connecté.
+1. T1 - Shell global, navigation et contexte connecté.
+2. T2 - Nomenclature, routes et renommages futurs.
 3. T3 - Design system officiel et composants communs.
 4. T4 - RBAC UI/API et matrice permissions, en mode progressif.
 5. T5 - Données, multi-tenant et mapping Base44 vers officiel.

@@ -43,6 +43,8 @@ Les anciens fichiers suivants sont retirés du modèle actif :
 - Aucune validation implicite.
 - Lecture obligatoire de `04` et `05`.
 - Respect du type `DX` / `CX`.
+- `DX` limité à audit + cadrage sous validation, ou clôture.
+- `DX_DOCUMENTATION` et `DX_CORRECTION_DOCUMENTAIRE` refusées.
 - Respect de la règle `1 session = 1 dossier unique`.
 - Interdiction des sessions `FIX` séparées.
 - Règles de patch selon `DX` / `CX`.

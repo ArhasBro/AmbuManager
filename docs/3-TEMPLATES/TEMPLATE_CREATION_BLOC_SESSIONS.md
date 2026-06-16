@@ -34,6 +34,8 @@ CONTRAINTES
 - Garder 1 session = 1 objectif.
 - Garder 1 session = 1 dossier unique.
 - Respecter les types DX / CX.
+- Limiter DX à audit + cadrage sous validation, ou clôture.
+- Refuser DX_DOCUMENTATION et DX_CORRECTION_DOCUMENTAIRE.
 - Ne jamais créer de session FIX séparée.
 - Appliquer les règles de patch selon DX / CX.
 
@@ -65,6 +67,7 @@ Contrôler uniquement le retour brut fourni et les fichiers joints au prompt cou
 Toute commande non montrée = non prouvée.
 Toute information absente = INFORMATION NON FOURNIE — À CONFIRMER.
 Un fix ne crée jamais une nouvelle session.
+DX_DOCUMENTATION et DX_CORRECTION_DOCUMENTAIRE sont refusées.
 Verdict attendu : VALIDABLE / VALIDABLE SOUS RÉSERVE / NON VALIDABLE.
 ```
 

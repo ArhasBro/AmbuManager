@@ -57,6 +57,12 @@ Convention cible :
 
 `DX` ou `CX` doit etre visible dans le nom du dossier de session.
 
+Les seules sessions DX autorisees sont audit + cadrage sous validation, ou cloture.
+
+`DX_DOCUMENTATION` et `DX_CORRECTION_DOCUMENTAIRE` sont refusees comme sessions documentaires normales.
+
+Les sessions documentaires abstraites, inutiles ou sans lien direct avec le code sont interdites.
+
 Structure officielle future :
 
 ```text

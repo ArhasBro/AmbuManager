@@ -29,6 +29,8 @@ CONTEXTE
 - 1 session = 1 dossier unique.
 - DX = session documentaire utile au code.
 - CX = session code / applicative / technique.
+- DX autorisé uniquement pour audit + cadrage sous validation, ou clôture.
+- DX_DOCUMENTATION et DX_CORRECTION_DOCUMENTAIRE sont refusées.
 
 PÉRIMÈTRE AUTORISÉ
 <PÉRIMÈTRE_AUTORISÉ>
@@ -56,6 +58,7 @@ RÈGLES DE TRAVAIL
 - Aucun fichier non autorisé.
 - Aucune validation implicite.
 - Respecter le type DX/CX annoncé.
+- Refuser toute session documentaire abstraite, inutile ou sans lien direct avec le code.
 - Une session DX ne produit pas de patch applicatif `.diff`.
 - Une session CX qui modifie du code, des scripts, la structure technique, Prisma, Tailwind, API, UI, composants ou fichiers applicatifs doit produire un patch `.diff` dans `PATCH/`.
 - Un fix ne crée jamais une nouvelle session.

@@ -40,6 +40,9 @@ RÈGLES DE CONTRÔLE
 - Toute information absente = INFORMATION NON FOURNIE — À CONFIRMER.
 - Aucune validation implicite.
 - Un fix ne doit jamais créer une nouvelle session.
+- Une session DX doit être limitée à audit + cadrage sous validation, ou clôture.
+- `DX_DOCUMENTATION` et `DX_CORRECTION_DOCUMENTAIRE` doivent être refusées.
+- Les sessions documentaires abstraites, inutiles ou sans lien direct avec le code sont interdites.
 - Une session DX ne doit pas produire de patch applicatif `.diff`.
 - Une session CX qui modifie du code, scripts, Prisma, Tailwind, API, UI, composants ou fichiers applicatifs doit produire un patch `.diff` dans `PATCH/`.
 
@@ -57,6 +60,7 @@ POINTS À VÉRIFIER
 11. Règle `1 session = 1 dossier unique` respectée.
 12. Absence de session `FIX` séparée.
 13. Règles de patch DX/CX respectées.
+14. Doctrine DX stricte respectée : audit/cadrage sous validation ou clôture uniquement.
 
 RÉPONSE ATTENDUE
 1. Points validés avec preuves

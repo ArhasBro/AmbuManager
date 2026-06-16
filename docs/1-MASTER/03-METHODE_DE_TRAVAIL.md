@@ -9,7 +9,7 @@ Date de refonte : 07/06/2026
 3. [Rôle de ChatGPT](#3-rôle-de-chatgpt)
 4. [Rôle de Codex](#4-rôle-de-codex)
 5. [Rôle de l'utilisateur](#5-rôle-de-lutilisateur)
-6. [Règle centrale : une session = un objectif](#6-règle-centrale-une-session-un-objectif)
+6. [Règle centrale une session un objectif](#6-règle-centrale-une-session-un-objectif)
 7. [Types de sessions](#7-types-de-sessions)
 8. [Structure attendue d'une session](#8-structure-attendue-dune-session)
 9. [Règles de périmètre](#9-règles-de-périmètre)
@@ -62,7 +62,7 @@ L'utilisateur valide les arbitrages métier, les décisions structurantes, les c
 
 Aucune validation humaine n'est remplacée par la présence d'un fichier, d'un patch ou d'un résultat technique.
 
-## 6. Règle centrale : une session = un objectif
+## 6. Règle centrale une session un objectif
 
 Une session opérationnelle future doit avoir un objectif unique, contrôlable et clôturable.
 
@@ -76,6 +76,8 @@ Deux familles officielles sont utilisées dans les noms de dossiers :
 - `CX` : session code, applicative ou technique.
 
 `DX` ou `CX` doit être visible dans le nom du dossier de session.
+
+`DX_DOCUMENTATION` et `DX_CORRECTION_DOCUMENTAIRE` sont refusées comme sessions documentaires normales.
 
 Les sessions documentaires abstraites, inutiles ou sans lien direct avec le code sont interdites.
 

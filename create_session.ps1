@@ -36,6 +36,7 @@ $AllowedTypeTokens = @(
     'COMPLETION',
     'VALIDATION',
     'CADRAGE',
+    'CLOTURE',
     'DESIGN_SYSTEM',
     'MAQUETTES_FONDATRICES',
     'MAQUETTES_COMPLEMENTAIRES',
@@ -245,7 +246,7 @@ function Get-CanonicalType {
         throw "Type invalide. Tokens autorises : $allowedTypesLabel. Combinaisons acceptees avec '+', par exemple AUDIT+VALIDATION ou AUDIT+CORRECTION+COMPLETION+VALIDATION."
     }
 
-    $normalized = $normalized -replace '[-/,;|]', '+'
+    $normalized = $normalized -replace '[-_/,;|]', '+'
 
     $rawTokens = @(
         $normalized -split '\+' |
@@ -259,6 +260,12 @@ function Get-CanonicalType {
     $canonicalTokens = New-Object System.Collections.Generic.List[string]
 
     foreach ($token in $rawTokens) {
+        switch ($token) {
+            "CORRECTIONDOCUMENTAIRE" { $token = "CORRECTION_DOCUMENTAIRE" }
+            "CLOTUREDOCUMENTAIRE"    { $token = "CLOTURE_DOCUMENTAIRE" }
+            "DOCUMENTAIRE"           { $token = "DX" }
+        }
+
         if ($token -notin $AllowedTypeTokens) {
             throw "Type invalide. Tokens autorises : $allowedTypesLabel. Combinaisons acceptees avec '+', par exemple AUDIT+VALIDATION ou AUDIT+CORRECTION+COMPLETION+VALIDATION."
         }
@@ -307,6 +314,41 @@ function Get-SessionKind {
     }
 
     return 'DX'
+}
+
+function Assert-DxTypeAllowed {
+    param(
+        [string]$TypeValue,
+        [string]$SessionCodeValue
+    )
+
+    $tokens = @(
+        $TypeValue -split '\+' |
+        Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+    )
+    $objectTokens = @(
+        ((Convert-ToPlainLabel -Value $SessionCodeValue) -replace '[-_/,;|]', '+') -split '\+' |
+        Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+    )
+    $allTokens = @($tokens + $objectTokens)
+
+    if (($allTokens | Where-Object { $_ -in @('DOCUMENTATION', 'CORRECTION_DOCUMENTAIRE', 'CORRECTIONDOCUMENTAIRE') }).Count -gt 0) {
+        throw "Session DX refusee : DX_DOCUMENTATION et DX_CORRECTION_DOCUMENTAIRE ne sont pas des sessions documentaires autorisees. DX est limite a AUDIT-CADRAGE sous validation, AUDIT, CADRAGE avec VALIDATION, ou CLOTURE."
+    }
+
+    if ('CLOTURE' -in $allTokens -or 'CLOTURE_DOCUMENTAIRE' -in $allTokens -or 'CLOTUREDOCUMENTAIRE' -in $allTokens) {
+        return
+    }
+
+    if ('AUDIT' -in $allTokens) {
+        return
+    }
+
+    if ('CADRAGE' -in $allTokens -and 'VALIDATION' -in $allTokens) {
+        return
+    }
+
+    throw "Session DX refusee : les sessions DX autorisees sont AUDIT-CADRAGE sous validation, AUDIT, CADRAGE avec VALIDATION, ou CLOTURE."
 }
 
 function Get-BlockDirectoryName {
@@ -664,17 +706,7 @@ $SessionKind = Get-SessionKind -TypeValue $Type
 $Title = Get-SafeString -Value $Title
 
 if ($SessionKind -eq 'DX') {
-    $dxTokens = @(
-        $Type -split '\+' |
-        Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
-    )
-    $invalidDxTokens = @(
-        $dxTokens |
-        Where-Object { $_ -notin @('DX', 'AUDIT', 'CADRAGE', 'VALIDATION', 'DOCUMENTATION', 'CORRECTION_DOCUMENTAIRE', 'CLOTURE_DOCUMENTAIRE') }
-    )
-    if ($invalidDxTokens.Count -gt 0) {
-        throw "Type DX invalide. Les sessions DX autorisees sont limitees a audit + cadrage sous validation, ou cloture."
-    }
+    Assert-DxTypeAllowed -TypeValue $Type -SessionCodeValue $SessionCode
 }
 
 if ([string]::IsNullOrWhiteSpace($SessionCode)) {
