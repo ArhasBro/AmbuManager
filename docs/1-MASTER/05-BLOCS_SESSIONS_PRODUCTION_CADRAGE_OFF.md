@@ -1,1924 +1,2606 @@
-# Ambulance Manager - Blocs et sessions de production
+# Ambulance Manager - Cadrage OFF des blocs et sessions de production
 
 Date de refonte ciblée : 16/06/2026
 
-## Sommaire
-
-1. [Rôle du document](#1-rôle-du-document)
-2. [Règles générales de sessions](#2-règles-générales-de-sessions)
-3. [Conventions de nommage](#3-conventions-de-nommage)
-4. [Doctrine de découpage après audit](#4-doctrine-de-découpage-après-audit)
-5. [Modèle de fiche de bloc](#5-modèle-de-fiche-de-bloc)
-6. [Historique T0 et BLOC_A1](#6-historique-t0-et-bloc_a1)
-7. [Blocs transversaux](#7-blocs-transversaux)
-8. [Blocs pages et modules](#8-blocs-pages-et-modules)
-9. [Bloc RGPD et Privacy](#9-bloc-rgpd-et-privacy)
-10. [Validations finales et gel Alpha](#10-validations-finales-et-gel-alpha)
-11. [Maintenance](#11-maintenance)
-
 ## 1. Rôle du document
 
-Ce fichier est le document opérationnel officiel des blocs et sessions de production.
+Ce fichier est une copie de cadrage OFF destinée à préparer un vrai plan de sessions de production pour les blocs restants.
 
-`docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md` reste le plan maître court : ordre global, principes et dépendances.
+Il ne remplace pas `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md`.
 
-Le présent fichier prépare les blocs et le futur découpage des sessions. À ce stade, il ne doit pas figer artificiellement toutes les sessions de code avant audit global ou audit bloc par bloc.
+Règles appliquées :
 
-## 2. Règles générales de sessions
+- le repo officiel reste la source technique de vérité ;
+- Base44 reste une référence fonctionnelle, visuelle et métier, jamais une source technique à copier ;
+- les sessions listées ci-dessous sont des lots réels, ordonnés, courts et contrôlables ;
+- aucune validation humaine n'est déclarée dans ce document ;
+- toute information non prouvée reste marquée `INFORMATION NON FOURNIE — À CONFIRMER`.
 
-- `DX` = session documentaire utile au code.
-- `CX` = session code, applicative ou technique.
-- `DX` ou `CX` doit être visible dans le nom du dossier de session.
-- Les sessions DX autorisées sont uniquement audit + cadrage sous validation, ou clôture.
-- `DX_DOCUMENTATION` et `DX_CORRECTION_DOCUMENTAIRE` sont refusées comme sessions documentaires normales.
-- Les sessions documentaires abstraites, inutiles ou sans lien direct avec le code sont interdites.
-- Une session DX ne produit pas de patch applicatif `.diff`.
-- Une session CX qui modifie du code, des scripts, la structure technique, Prisma, Tailwind, API, UI, composants ou fichiers applicatifs doit produire un patch `.diff` dans `PATCH/`.
-- 1 session = 1 dossier unique.
-- Un fix ne crée jamais une nouvelle session.
-- Un correctif lié à une session existante doit être intégré au dossier de session original.
-- Les patchs correctifs éventuels doivent aller dans `PATCH/` du dossier original.
-- Les preuves corrigées doivent rester dans les fichiers de preuve du dossier original.
-- Il est interdit de créer un dossier de session séparé de type `FIX-01`.
-- L'ancienne session `docs/2-SESSIONS/1-ALPHA/BLOC_A1/SESSION-20260615-02_A1_P1-07-FIX-01` est une anomalie historique conservée, à ne pas utiliser comme modèle.
-- Toute information non prouvée doit être notée `INFORMATION NON FOURNIE — À CONFIRMER`.
+## 2. Convention de lecture
 
-## 3. Conventions de nommage
+Les natures utilisées dans ce plan sont :
 
-Convention cible :
+- `DX` : audit, cadrage ou clôture documentaire utile au code ;
+- `CX` : création, correction ou complétion applicative/technique ;
+- Les validations sont portées par des sessions `DX` de type métier `VALIDATION+CLOTURE` ; elles contrôlent, vérifient les preuves et concluent le bloc sans corriger directement.
 
-- `SESSION-YYYYMMDD-NN_DX_<BLOC>_<OBJET>`
-- `SESSION-YYYYMMDD-NN_CX_<BLOC>_<OBJET>`
+Point de méthode validé : les validations et clôtures sont portées par des sessions `DX` de type métier `VALIDATION+CLOTURE`. Aucune session réelle de validation séparée n'est à créer dans `docs/2-SESSIONS`. La documentation de clôture reste portée par `DX` et conditionnée à validation humaine explicite quand elle modifie des documents officiels.
 
-`NN` est le numéro d'ordre journalier.
+## 3. Ordre global recommandé des blocs restants
 
-Exemples de dossiers de blocs :
+Ordre recommandé :
 
-- `BLOC_T1_SHELL_NAVIGATION`
-- `BLOC_P_LOGIN`
-- `BLOC_RGPD_PRIVACY`
-- `BLOC_F1_VALIDATION_FONCTIONNELLE`
+1. T1 - Shell global, navigation et contexte connecté : bloc historiquement traité, à garder visible sans nouvelle correction inventée.
+2. T2 - Nomenclature, routes et renommages futurs.
+3. T3 - Design system officiel et composants communs.
+4. T4 - RBAC UI/API et matrice permissions progressive.
+5. T5 - Données, multi-tenant et mapping Base44 vers officiel.
+6. T6 - Audit et traçabilité transverse.
+7. T7 - Qualité, tests et contrôles de reprise.
+8. P-LOGIN - Connexion.
+9. P-SOCIETE - Société.
+10. P-DEPOTS-BASES - Dépôts / Bases.
+11. P-UTILISATEURS-RH - Utilisateurs / RH.
+12. P-VEHICULES - Véhicules.
+13. P-SUIVI-VEHICULES - Suivi des véhicules.
+14. P-MODELES-HORAIRES - Modèles horaires.
+15. P-PLANNING - Planning.
+16. P-AUDIT - Audit / Traçabilité.
+17. P-DASHBOARD - Tableau de bord.
+18. P-MISE-EN-ROUTE - Mise en route.
+19. RGPD-PRIVACY - Privacy visible en Alpha.
+20. F1 - Validation fonctionnelle croisée.
+21. F2 - Validation qualité technique.
+22. F3 - Validation UX visuelle.
+23. F4 - Clôture documentaire Alpha ou clôture de phase.
 
-## 4. Doctrine de découpage après audit
+Justification synthétique :
 
-Chaque bloc commence par une session DX d'audit + cadrage.
+- T2 précède les renommages/routes afin d'éviter des changements techniques non arbitrés sur `/templates` et `/onboarding`.
+- T3 précède l'harmonisation UI large afin de stabiliser les primitives `app/ui`, les états communs et les patterns de tableaux/actions.
+- T4 précède les actions sensibles car les écarts front/API sont un risque majeur confirmé par les audits.
+- T5 précède les créations de modèles/data, notamment `CompanyContact`, `DashboardPreference`, `VehicleCheck`, `Disinfection`, `VehicleAnomaly` et tout mapping Base44.
+- T6 précède les modules devant produire ou exposer des traces.
+- Les référentiels Société, Dépôts, Utilisateurs/RH, Véhicules et Modèles horaires précèdent le Planning.
+- Le Planning précède le Dashboard final, car les KPI et widgets ne doivent pas présenter de données fictives.
+- F1, F2 et F3 précèdent F4 afin d'éviter une clôture documentaire sans preuve.
 
-Le détail fin des sessions CX de production sera confirmé après audit global ou audit bloc par bloc. Un audit peut proposer d'améliorer, diviser, fusionner ou réorganiser les sessions prévues avant lancement du code.
-
-Les sessions CX listées dans ce document sont donc des axes prévisionnels, pas des lots de code figés. Elles doivent être découpées en sessions courtes, fermées, contrôlables et validables après audit ciblé.
-
-Quand le détail exact dépend réellement de l'audit, utiliser :
-
-`INFORMATION NON FOURNIE — À CONFIRMER APRÈS AUDIT CIBLÉ`
-
-Il est interdit de lancer une grosse session CX de type "tout corriger", "tout compléter" ou "produire le bloc complet" sans découpage validé.
-
-## 5. Modèle de fiche de bloc
-
-Chaque bloc utilise la structure suivante :
-
-- Identifiant
-- Nom
-- Type de bloc
-- Dossier cible
-- Objectif
-- Dépendances
-- Hors périmètre
-- Sessions prévues
-- Contrôles obligatoires
-- Critère de sortie
-- Documentation à mettre à jour
-- Statut
-
-## 6. Historique T0 et BLOC_A1
-
-T0 / Gouvernance P1 est historique de cadrage. Il ne doit plus être prolongé comme futur bloc actif de production.
-
-Le dossier `docs/2-SESSIONS/1-ALPHA/BLOC_A1` est conservé tel quel comme historique.
-
-Les dossiers historiques `SESSION-20260615-03_A1_T0-01` et `SESSION-20260615-04_A1_T0-02` existaient déjà avant cette correction et ne sont pas une anomalie de la présente intervention.
-
-## 7. Blocs transversaux
+## 4. Blocs transversaux
 
 ### BLOC T1 - Shell global, navigation et contexte connecté
 
-#### **Identifiant**
+#### Objectif du bloc
 
-T1
+Conserver le statut historique du bloc T1 sans rouvrir de corrections non demandées.
 
-#### **Type de bloc**
+#### Rôle dans l'application
 
-Transverse
+Le shell porte la navigation connectée, le contexte utilisateur/société, la visibilité des modules et le pattern `Accès refusé`.
 
-#### **Dossier cible**
+#### Dépendances amont
 
-`docs/2-SESSIONS/1-ALPHA/BLOC_T1_SHELL_NAVIGATION`
+- Sessions historiques T1 déjà réalisées.
+- T4 pour toute évolution future des permissions fines.
 
-#### **Objectif**
+#### Dépendances aval
 
-Stabiliser sidebar, topbar, société courante, utilisateur courant, filtrage visible par droits et accès refusé.
+- Tous les blocs page/module.
+- F1 et F3.
 
-#### **Dépendances**
+#### Décisions connues
 
-- T2 si une convention de nommage bloque.
-- T4 pour les permissions fines.
+- T1 est marqué `Validé` dans le plan actuel.
+- Les libellés visibles attendus sont `Modèles horaires`, `Mise en route`, `Dépôts / Bases`, `Utilisateurs / RH`.
+- `Privacy` ne doit pas être une entrée métier principale.
 
-#### **Hors périmètre**
+#### Décisions à confirmer
 
-- Reprise profonde des pages métier.
-- RBAC complet.
-- Design system complet.
+- Validation humaine finale du statut T1 dans la phase Alpha : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Règles exactes de fallback si un droit est retiré pendant une session active : `INFORMATION NON FOURNIE — À CONFIRMER`.
 
-#### **Sessions prévues**
+#### Risques principaux
 
-- DX audit + cadrage : cartographier shell/navigation, écarts, risques et questions bloquantes.
-- `CX_T1_RENOMMAGE-LIBELLES-NAVIGATION`
-  - Nature : CX.
-  - Type métier : RENOMMAGE.
-  - Objectif : corriger uniquement les libellés visibles de navigation.
-  - Périmètre : libellés UI français visibles dans la navigation/shell.
-  - Hors périmètre : renommage technique de routes, RBAC, Accès refusé, Suivi des véhicules, refonte shell.
-- `CX_T1_CORRECTION-SHELL-ACTIONS-CONTEXTE`
+- Réouvrir T1 sans preuve et inventer une nouvelle correction.
+- Confondre validation historique et validation finale Alpha.
+- Laisser T4 modifier indirectement la navigation sans contrôle T1.
+
+#### Sessions de production prévues
+
+- `DX_T1_VALIDATION-CLOTURE-HISTORIQUE-SHELL`
+  - Nature : DX.
+  - Type métier : VALIDATION+CLOTURE.
+  - Objectif : vérifier que le statut historique T1 est cohérent avec les preuves disponibles et qu'aucune nouvelle correction T1 n'est nécessaire avant les blocs restants.
+  - Périmètre inclus : lecture du dossier historique T1, `app/app-shell.tsx`, `app/ui/access-denied-state.tsx`, références Shell et navigation.
+  - Hors périmètre : correction code, renommage de routes, modification RBAC.
+  - Règle de non-correction : Si un écart bloquant est détecté, la session doit conclure à une non-clôture du bloc et demander une session CX ciblée.
+  - Zones à lire : `docs/2-SESSIONS/1-ALPHA/BLOC_T1_SHELL_NAVIGATION` si présent, `app/app-shell.tsx`, `app/ui/access-denied-state.tsx`, `docs/1-MASTER/2-REFERENCE_UI_UX/0-REFERENCE_UI_UX_SHELL_GLOBAL.md`.
+  - Zones modifiables plus tard : aucune dans cette session de validation.
+  - Critères de validation : statut T1 qualifié comme déjà traité, écarts restants listés sans patch.
+  - Preuves attendues : `git status --short`, extraits de fichiers, captures éventuelles si serveur disponible.
+  - Dépendances : T4 si une permission modifie la navigation.
+
+- `DX_T1_CLOTURE-HISTORIQUE-SI-REQUIS`
+  - Nature : DX.
+  - Type métier : CLÔTURE.
+  - Objectif : produire une note de clôture historique T1 uniquement si la méthode de phase l'exige.
+  - Périmètre inclus : synthèse documentaire du statut T1 et des réserves.
+  - Hors périmètre : correction, nouvelle session de reprise T1, validation humaine implicite.
+  - Zones à lire : preuves T1, `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`, présent fichier.
+  - Zones modifiables plus tard : documentation de session T1 ou synthèse de phase si explicitement ouverte.
+  - Critères de validation : aucune nouvelle correction T1 inventée.
+  - Preuves attendues : liste des preuves lues, `git status --short`.
+  - Dépendances : DX_T1_VALIDATION-CLOTURE-HISTORIQUE-SHELL.
+
+#### Critère de clôture du bloc
+
+T1 reste visible comme bloc historiquement traité ; aucune correction T1 nouvelle n'est planifiée sans écart prouvé.
+
+#### Points de contrôle ChatGPT
+
+- Vérifier que T1 n'est pas implicitement revalidé pour toute l'Alpha.
+- Vérifier qu'aucune session de correction T1 n'a été inventée.
+
+### BLOC T2 - Nomenclature, routes et renommages futurs
+
+#### Objectif du bloc
+
+Classer les libellés produit, routes techniques et renommages futurs avant toute intervention sur les routes ou liens.
+
+#### Rôle dans l'application
+
+T2 évite les divergences entre route technique officielle et libellé métier visible, notamment `templates`/`Modèles horaires` et `onboarding`/`Mise en route`.
+
+#### Dépendances amont
+
+- T1 historique.
+- Documents `01`, `03`, `04`.
+- Références UI/UX globales et Shell.
+
+#### Dépendances aval
+
+- T3.
+- P-MODELES-HORAIRES.
+- P-MISE-EN-ROUTE.
+- P-LOGIN, P-DASHBOARD et F3 pour cohérence des liens.
+
+#### Décisions connues
+
+- Les routes techniques restent stables en anglais tant qu'un renommage n'est pas confirmé.
+- Les libellés UI visibles doivent être en français.
+- `Privacy` n'est pas une entrée métier principale.
+
+#### Décisions à confirmer
+
+- Renommage technique éventuel `/templates` vers une route française : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Renommage technique éventuel `/onboarding` vers une route française : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Statut exact de la route future `Suivi des véhicules` : `INFORMATION NON FOURNIE — À CONFIRMER`.
+
+#### Risques principaux
+
+- Casser les liens internes ou redirections.
+- Renommer du code avant arbitrage.
+- Présenter les routes anglaises comme un problème si seuls les libellés visibles sont en cause.
+
+#### Sessions de production prévues
+
+- `DX_T2_AUDIT-ROUTES-LIBELLES`
+  - Nature : DX.
+  - Type métier : AUDIT.
+  - Objectif : cartographier routes officielles, libellés visibles et écarts de nomenclature.
+  - Périmètre inclus : routes `app/`, navigation, liens login/privacy, dashboard, Base44 en lecture.
+  - Hors périmètre : correction de libellés, renommage technique, redirections.
+  - Zones à lire : `app/`, `app/app-shell.tsx`, `app/login/page.tsx`, `app/templates/page.tsx`, `app/onboarding/page.tsx`, références UI/UX et fiches fonctionnelles.
+  - Zones modifiables plus tard : `app/app-shell.tsx`, pages portant des libellés, éventuelles routes si décision validée.
+  - Critères de validation : matrice route technique -> libellé visible -> décision classée.
+  - Preuves attendues : liste des routes, extraits de libellés, `git status --short`.
+  - Dépendances : T1.
+
+- `DX_T2_CADRAGE-RENOMMAGES`
+  - Nature : DX.
+  - Type métier : CADRAGE.
+  - Objectif : décider quoi conserver, quoi corriger en UI, quoi reporter comme renommage technique.
+  - Périmètre inclus : options de maintien routes anglaises, aliases, redirections, impacts SEO non prioritaires Alpha.
+  - Hors périmètre : migration de route.
+  - Zones à lire : résultat audit T2, `next.config.ts`, `app/`.
+  - Zones modifiables plus tard : documentation conventions, routes si validées.
+  - Critères de validation : chaque renommage classé `conserver`, `corriger libellé`, `renommer plus tard`, ou `INFORMATION NON FOURNIE — À CONFIRMER`.
+  - Preuves attendues : tableau de décisions, risques, impacts.
+  - Dépendances : DX_T2_AUDIT-ROUTES-LIBELLES.
+
+- `CX_T2_CORRECTION-LIBELLES-RESIDUELS`
   - Nature : CX.
   - Type métier : CORRECTION.
-  - Objectif : corriger ou stabiliser les actions visibles du shell/topbar et l'affichage du contexte utilisateur/société.
-  - Périmètre : shell connecté, topbar, utilisateur courant, société courante, actions visibles.
-  - Hors périmètre : RBAC fin, refonte globale, modules métier.
-- `CX_T1_CREATION-ACCES-REFUSE`
+  - Objectif : corriger uniquement les libellés visibles résiduels sans changer les routes techniques.
+  - Périmètre inclus : textes UI encore en `Templates`, `Onboarding` ou équivalents legacy.
+  - Hors périmètre : déplacement de fichiers, renommage d'URL, refonte navigation.
+  - Zones à lire : audit T2, `app/`, `app/ui/`.
+  - Zones modifiables plus tard : fichiers UI concernés uniquement.
+  - Critères de validation : libellés visibles français, routes inchangées, tests/lint selon patch.
+  - Preuves attendues : diff ciblé, `npm run lint`, captures ou extraits.
+  - Dépendances : DX_T2_CADRAGE-RENOMMAGES.
+
+- `DX_T2_VALIDATION-CLOTURE-LIENS-ROUTES`
+  - Nature : DX.
+  - Type métier : VALIDATION+CLOTURE.
+  - Objectif : contrôler que les liens et routes existants fonctionnent après corrections de libellés.
+  - Périmètre inclus : navigation, accès direct `/templates`, `/onboarding`, `/privacy`, modules principaux.
+  - Hors périmètre : correction.
+  - Règle de non-correction : Si un écart bloquant est détecté, la session doit conclure à une non-clôture du bloc et demander une session CX ciblée.
+  - Zones à lire : app rendue, `app/`.
+  - Zones modifiables plus tard : aucune dans cette session DX VALIDATION+CLOTURE.
+  - Critères de validation : aucun lien critique cassé, libellés visibles conformes ou écarts listés.
+  - Preuves attendues : commandes, captures navigateur, `git status --short`.
+  - Dépendances : CX T2 éventuelle.
+
+#### Critère de clôture du bloc
+
+Les routes et libellés sont classés, les corrections de libellés simples sont faites ou reportées, et aucun renommage technique n'est engagé sans décision humaine.
+
+#### Points de contrôle ChatGPT
+
+- Vérifier que T2 ne modifie pas Prisma ni modèle de données.
+- Vérifier que les routes anglaises conservées ne contredisent pas les libellés UI français.
+
+### BLOC T3 - Design system officiel et composants communs
+
+#### Objectif du bloc
+
+Stabiliser les composants communs nécessaires aux pages Alpha sans copier les composants Base44.
+
+#### Rôle dans l'application
+
+T3 sert à limiter les divergences UI sur tableaux, badges, filtres, états vides, erreurs, accès refusé, boutons et headers.
+
+#### Dépendances amont
+
+- T1 historique.
+- T2 pour libellés et routes.
+- Références UI/UX globales.
+
+#### Dépendances aval
+
+- Tous les blocs page.
+- F3 validation UX.
+
+#### Décisions connues
+
+- Les composants officiels actuels sont principalement dans `app/ui/`.
+- Base44 peut inspirer des patterns mais pas être copié.
+- Les états communs `loading`, `empty`, `error`, `disabled`, `Accès refusé` doivent être cohérents.
+
+#### Décisions à confirmer
+
+- Création d'un dossier `components/` futur : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Palette, typographie et espacements chiffrés exacts : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Niveau de fidélité visuelle Alpha par rapport aux maquettes V2 : `INFORMATION NON FOURNIE — À CONFIRMER`.
+
+#### Risques principaux
+
+- Refonte UI globale trop large.
+- Copier des composants shadcn/Base44 au lieu d'adapter les primitives officielles.
+- Mélanger composant commun et logique métier de page.
+
+#### Sessions de production prévues
+
+- `DX_T3_AUDIT-COMPOSANTS-ETATS`
+  - Nature : DX.
+  - Type métier : AUDIT.
+  - Objectif : inventorier les composants communs existants et les états UI manquants.
+  - Périmètre inclus : `app/ui`, CSS globaux, composants clients récurrents, références UI/UX.
+  - Hors périmètre : patch UI, création de design system complet.
+  - Zones à lire : `app/ui/`, `app/globals.css`, CSS page, Base44 composants uniquement en lecture.
+  - Zones modifiables plus tard : `app/ui/`, CSS ciblés.
+  - Critères de validation : liste des composants fiables, à corriger, à créer ou à ne pas toucher.
+  - Preuves attendues : inventaire, extraits, `git status --short`.
+  - Dépendances : T2.
+
+- `CX_T3_CORRECTION-ETATS-COMMUNS`
   - Nature : CX.
-  - Type métier : CRÉATION.
-  - Objectif : créer ou stabiliser le traitement visible `Accès refusé` selon la décision retenue après audit.
-  - Périmètre : page/composant/route dédiée si nécessaire, comportement utilisateur authentifié non autorisé.
-  - Hors périmètre : matrice RBAC complète T4, refonte des protections métier.
-- `CX_T1_COMPLETION-NAVIGATION-DROITS`
+  - Type métier : CORRECTION.
+  - Objectif : corriger les états communs insuffisants sans modifier les règles métier.
+  - Périmètre inclus : `empty-state`, `error-message`, `access-denied-state`, states loading/disabled communs.
+  - Hors périmètre : refonte d'une page métier complète.
+  - Zones à lire : audit T3, `app/ui/*`.
+  - Zones modifiables plus tard : composants UI communs uniquement.
+  - Critères de validation : états communs réutilisables et non spécifiques à un module.
+  - Preuves attendues : diff, lint/build si nécessaire, captures ciblées.
+  - Dépendances : DX_T3_AUDIT-COMPOSANTS-ETATS.
+
+- `CX_T3_COMPLETION-TABLEAUX-FILTRES-BADGES`
   - Nature : CX.
   - Type métier : COMPLÉTION.
-  - Objectif : compléter la navigation visible selon les droits, en cohérence avec les décisions RBAC disponibles.
-  - Périmètre : visibilité des entrées de navigation, droits visibles, cohérence shell/sidebar.
-  - Dépendance : T4/RBAC si matrice module-permission non encore stabilisée.
-  - Hors périmètre : correction métier profonde des pages.
-- `CX_T1_VALIDATION-SHELL-NAVIGATION`
-  - Nature : CX.
-  - Type métier : VALIDATION.
-  - Objectif : valider shell, navigation, routes visibles, libellés, contexte connecté, accès direct non autorisé et Accès refusé.
-  - Périmètre : contrôles techniques et fonctionnels ciblés T1.
-  - Hors périmètre : nouvelles corrections lourdes non cadrées.
-
-#### **Contrôles obligatoires**
-
-Git, preuves de lecture, absence de patch applicatif en DX, contrôle navigateur/lint/build uniquement pour une CX qui modifie le code.
-
-#### **Critère de sortie**
-
-Le shell permet d'accéder aux modules autorisés et de refuser proprement les accès interdits, ou les écarts restants sont reportés explicitement.
-
-#### **Documentation à mettre à jour**
-
-`05`, références UI/UX, matrice RBAC si impact.
-
-#### **Statut**
-
-Validé
-
-### BLOC T2 - Nomenclature, routes et renommages futurs
-
-#### **Identifiant**
-
-T2
-
-#### **Type de bloc**
-
-Transverse
-
-#### **Dossier cible**
-
-`docs/2-SESSIONS/1-ALPHA/BLOC_T2_NOMENCLATURE_ROUTES`
-
-#### **Objectif**
-
-Cadrer routes techniques, libellés UI et renommages futurs sans les exécuter par défaut.
-
-#### **Dépendances**
-
-`04`, `03`, références UI/UX, repo officiel en lecture seule.
-
-#### **Hors périmètre**
-
-Renommage effectif, migration de routes, refonte navigation, code applicatif en DX.
-
-#### **Sessions prévues**
-
-- DX audit + cadrage : matrice routes/libellés et décisions à confirmer.
-- CX prévisionnelles : uniquement si l'audit valide un renommage ou une correction technique ciblée.
-- Clôture : DX sauf modification technique réelle.
-
-#### **Contrôles obligatoires**
-
-Git, preuves, absence de modification code en DX, contrôle des liens/routes si une CX est validée.
-
-#### **Critère de sortie**
-
-Chaque élément litigieux est classé : conservé, à renommer plus tard, ou à confirmer.
-
-#### **Documentation à mettre à jour**
-
-`04`, `05`, conventions éventuelles.
-
-#### **Statut**
-
-À faire.
-
-### BLOC T3 - Design system officiel et composants communs
-
-#### **Identifiant**
-
-T3
-
-#### **Type de bloc**
-
-Transverse
-
-#### **Dossier cible**
-
-`docs/2-SESSIONS/1-ALPHA/BLOC_T3_DESIGN_SYSTEM`
-
-#### **Objectif**
-
-Identifier et stabiliser les composants et états UI communs nécessaires aux pages Alpha.
-
-#### **Dépendances**
-
-T1, T2.
-
-#### **Hors périmètre**
-
-Copie de composants Base44, refonte visuelle globale, reprise complète d'une page.
-
-#### **Sessions prévues**
-
-- DX audit + cadrage : inventaire composants, états, écarts, priorités.
-- CX prévisionnelles : à découper par composant ou famille d'états après audit ciblé.
-- Clôture : DX sauf modification technique réelle.
-
-#### **Contrôles obligatoires**
-
-Git, preuves, Base44 en lecture seule, lint/build et contrôle visuel pour toute CX UI.
-
-#### **Critère de sortie**
-
-Les composants nécessaires sont fiables ou reportés explicitement.
-
-#### **Documentation à mettre à jour**
-
-Références UI/UX, `05`.
-
-#### **Statut**
-
-À faire.
-
-### BLOC T4 - RBAC UI/API et matrice permissions
-
-#### **Identifiant**
-
-T4
-
-#### **Type de bloc**
-
-Transverse
-
-#### **Dossier cible**
-
-`docs/2-SESSIONS/1-ALPHA/BLOC_T4_RBAC_PERMISSIONS`
-
-#### **Objectif**
-
-Poser une matrice RBAC progressive et vérifier les contrôles UI/API des actions sensibles.
-
-#### **Dépendances**
-
-T1, T5 si données société impliquées.
-
-#### **Hors périmètre**
-
-Matrice V1 complète non arbitrée, refonte globale auth.
-
-#### **Sessions prévues**
-
-- DX audit + cadrage : rôles, permissions, endpoints, écarts et questions.
-- CX prévisionnelles : à découper par permission, endpoint, écran ou action sensible après audit ciblé.
-- Clôture : DX sauf modification technique réelle.
-
-#### **Contrôles obligatoires**
-
-Preuves, tests rôles/endpoints pour toute CX, lint/build, preuve serveur/API.
-
-#### **Critère de sortie**
-
-Le RBAC Alpha minimal est cadré et les écarts prioritaires sont traités ou reportés.
-
-#### **Documentation à mettre à jour**
-
-Matrice permissions, `05`.
-
-#### **Statut**
-
-À faire.
-
-### BLOC T5 - Données, multi-tenant et mapping Base44 vers officiel
-
-#### **Identifiant**
-
-T5
-
-#### **Type de bloc**
-
-Transverse
-
-#### **Dossier cible**
-
-`docs/2-SESSIONS/1-ALPHA/BLOC_T5_DONNEES_MULTI_TENANT`
-
-#### **Objectif**
-
-Comparer les entités Base44 utiles au modèle officiel et cadrer le multi-tenant avant toute modification de données.
-
-#### **Dépendances**
-
-`01`, audits existants, T4 si droits impliqués.
-
-#### **Hors périmètre**
-
-Migration, modification Prisma, `prisma generate`, copie de modèle Base44.
-
-#### **Sessions prévues**
-
-- DX audit + cadrage : matrice entités/champs, écarts, accepté/refusé/à confirmer.
-- CX prévisionnelles : à découper par modèle, relation ou contrôle multi-tenant après audit ciblé.
-- Clôture : DX sauf modification technique réelle.
-
-#### **Contrôles obligatoires**
-
-Prisma en lecture si autorisé, Base44 lecture seule, preuve multi-tenant pour toute CX.
-
-#### **Critère de sortie**
-
-Les données utiles Alpha sont cadrées sans modification Prisma non autorisée.
-
-#### **Documentation à mettre à jour**
-
-Documentation données, `05`.
-
-#### **Statut**
-
-À faire.
-
-### BLOC T6 - Audit et traçabilité transverse
-
-#### **Identifiant**
-
-T6
-
-#### **Type de bloc**
-
-Transverse
-
-#### **Dossier cible**
-
-`docs/2-SESSIONS/1-ALPHA/BLOC_T6_AUDIT_TRACABILITE`
-
-#### **Objectif**
-
-Définir les actions sensibles à tracer et le contrat minimal de traçabilité.
-
-#### **Dépendances**
-
-T4, T5.
-
-#### **Hors périmètre**
-
-Conformité RGPD complète, SIEM, politique de rétention finale.
-
-#### **Sessions prévues**
-
-- DX audit + cadrage : actions sensibles, traces existantes, contrat minimal.
-- CX prévisionnelles : à découper par action sensible ou module après audit ciblé.
-- Clôture : DX sauf modification technique réelle.
-
-#### **Contrôles obligatoires**
-
-Preuves, cohérence RBAC, test de trace produite pour toute CX.
-
-#### **Critère de sortie**
-
-Les actions sensibles prioritaires ont un contrat de trace ou un report explicite.
-
-#### **Documentation à mettre à jour**
-
-Documentation audit, `05`.
-
-#### **Statut**
-
-À faire.
-
-### BLOC T7 - Qualité, tests et contrôles de reprise
-
-#### **Identifiant**
-
-T7
-
-#### **Type de bloc**
-
-Transverse
-
-#### **Dossier cible**
-
-`docs/2-SESSIONS/1-ALPHA/BLOC_T7_QUALITE_CONTROLES`
-
-#### **Objectif**
-
-Définir les contrôles récurrents par type de session et les preuves minimales attendues.
-
-#### **Dépendances**
-
-`03`, README sessions, templates.
-
-#### **Hors périmètre**
-
-Exécution exhaustive de tous les tests hors contexte.
-
-#### **Sessions prévues**
-
-- DX audit + cadrage : DoD par type de session.
-- CX prévisionnelles : uniquement pour outillage technique validé après audit ciblé.
-- Clôture : DX sauf modification technique réelle.
-
-#### **Contrôles obligatoires**
-
-Git, diff, encodage, absence de modification hors périmètre, test non destructif pour tout script modifié.
-
-#### **Critère de sortie**
-
-Les futures sessions disposent d'un cadre de contrôle clair.
-
-#### **Documentation à mettre à jour**
-
-`03`, README sessions, templates, `05`.
-
-#### **Statut**
-
-À faire.
-
-## 8. Blocs pages et modules
-
-Les blocs pages/modules suivent la même logique : audit DX, découpage fin des CX après audit, clôture DX ou CX selon le périmètre réel.
-
-### BLOC P-LOGIN - Connexion
-
-#### **Identifiant**
-
-P-LOGIN
-
-#### **Type de bloc**
-
-Page / module fonctionnel
-
-#### **Dossier cible**
-
-`docs/2-SESSIONS/1-ALPHA/BLOC_P_LOGIN`
-
-#### **Objectif**
-
-Stabiliser le parcours de connexion officiel, dont `Se souvenir de moi` si confirmé.
-
-#### **Dépendances**
-
-T1, T4, RGPD-PRIVACY.
-
-#### **Hors périmètre**
-
-Inscription libre Alpha, MFA, SSO, mot de passe oublié si non validé.
-
-#### **Sessions prévues**
-
-- DX audit + cadrage : login, erreurs, redirections, session, Privacy.
-- CX prévisionnelles : à découper après audit ciblé.
-- Clôture : DX ou CX selon contrôles réellement nécessaires.
-
-#### **Contrôles obligatoires**
-
-Auth/redirections/navigateur/lint/build uniquement pour CX ; preuves et absence de patch applicatif pour DX.
-
-#### **Critère de sortie**
-
-Login utilisable, contrôlé et limites Alpha explicites.
-
-#### **Documentation à mettre à jour**
-
-Fiche Login, `05`, Privacy si impact.
-
-#### **Statut**
-
-À faire.
-
-### BLOC P-SOCIETE - Société
-
-#### **Identifiant**
-
-P-SOCIETE
-
-#### **Type de bloc**
-
-Page / module fonctionnel
-
-#### **Dossier cible**
-
-`docs/2-SESSIONS/1-ALPHA/BLOC_P_SOCIETE`
-
-#### **Objectif**
-
-Stabiliser société courante, profil et contacts société multiples.
-
-#### **Dépendances**
-
-T4, T5, T6.
-
-#### **Hors périmètre**
-
-Facturation, abonnement, conformité juridique complète.
-
-#### **Sessions prévues**
-
-- DX audit + cadrage : profil, contacts, companyId, droits, audit.
-- CX prévisionnelles : à découper après audit ciblé par écran, API ou contrôle.
-- Clôture : DX ou CX selon périmètre réel.
-
-#### **Contrôles obligatoires**
-
-CompanyId, API/RBAC, audit et multi-tenant pour toute CX.
-
-#### **Critère de sortie**
-
-Société et contacts cohérents, cloisonnés et contrôlés.
-
-#### **Documentation à mettre à jour**
-
-Fiche Société, documentation données, `05`.
-
-#### **Statut**
-
-À faire.
-
-### BLOC P-DEPOTS-BASES - Dépôts / Bases
-
-#### **Identifiant**
-
-P-DEPOTS-BASES
-
-#### **Type de bloc**
-
-Page / module fonctionnel
-
-#### **Dossier cible**
-
-`docs/2-SESSIONS/1-ALPHA/BLOC_P_DEPOTS_BASES`
-
-#### **Objectif**
-
-Stabiliser le référentiel des dépôts/bases.
-
-#### **Dépendances**
-
-T4, T5, T6.
-
-#### **Hors périmètre**
-
-Géolocalisation avancée, automatisations planning futures.
-
-#### **Sessions prévues**
-
-- DX audit + cadrage : référentiel, rattachements, dépendances.
-- CX prévisionnelles : à découper après audit ciblé.
-- Clôture : DX ou CX selon périmètre réel.
-
-#### **Contrôles obligatoires**
-
-API/RBAC, multi-tenant, audit et lint/build pour toute CX.
-
-#### **Critère de sortie**
-
-Dépôts fiables pour RH, véhicules et planning.
-
-#### **Documentation à mettre à jour**
-
-Fiche Dépôts/Bases, `05`.
-
-#### **Statut**
-
-À faire.
-
-### BLOC P-UTILISATEURS-RH - Utilisateurs / RH
-
-#### **Identifiant**
-
-P-UTILISATEURS-RH
-
-#### **Type de bloc**
-
-Page / module fonctionnel
-
-#### **Dossier cible**
-
-`docs/2-SESSIONS/1-ALPHA/BLOC_P_UTILISATEURS_RH`
-
-#### **Objectif**
-
-Stabiliser utilisateurs, rôles, accès applicatif, données RH minimales et indisponibilités.
-
-#### **Dépendances**
-
-T4, T5, T6, P-DEPOTS-BASES.
-
-#### **Hors périmètre**
-
-Paie, RH avancée, permissions fines non validées.
-
-#### **Sessions prévues**
-
-- DX audit + cadrage : modèles, UI/API, rôles, accès et écarts.
-- CX prévisionnelles : à découper après audit ciblé par écran, action, endpoint ou permission.
-- Clôture : DX ou CX selon périmètre réel.
-
-#### **Contrôles obligatoires**
-
-API/RBAC, multi-tenant, audit, lint/build pour toute CX.
-
-#### **Critère de sortie**
-
-Utilisateurs/RH exploitables sans incohérence critique connue.
-
-#### **Documentation à mettre à jour**
-
-Fiche Utilisateurs/RH, matrice RBAC, `05`.
-
-#### **Statut**
-
-À faire.
-
-### BLOC P-VEHICULES - Véhicules
-
-#### **Identifiant**
-
-P-VEHICULES
-
-#### **Type de bloc**
-
-Page / module fonctionnel
-
-#### **Dossier cible**
-
-`docs/2-SESSIONS/1-ALPHA/BLOC_P_VEHICULES`
-
-#### **Objectif**
-
-Stabiliser la flotte administrative.
-
-#### **Dépendances**
-
-T4, T5, T6, P-DEPOTS-BASES.
-
-#### **Hors périmètre**
-
-Suivi opérationnel détaillé, maintenance prédictive.
-
-#### **Sessions prévues**
-
-- DX audit + cadrage : flotte, statuts, archivage, disponibilité.
-- CX prévisionnelles : à découper après audit ciblé.
-- Clôture : DX ou CX selon périmètre réel.
-
-#### **Contrôles obligatoires**
-
-API/RBAC, multi-tenant, audit, lint/build pour toute CX.
-
-#### **Critère de sortie**
-
-Flotte administrative fiable pour modules dépendants.
-
-#### **Documentation à mettre à jour**
-
-Fiche Véhicules, `05`.
-
-#### **Statut**
-
-À faire.
-
-### BLOC P-SUIVI-VEHICULES - Suivi des véhicules
-
-#### **Identifiant**
-
-P-SUIVI-VEHICULES
-
-#### **Type de bloc**
-
-Page / module fonctionnel
-
-#### **Dossier cible**
-
-`docs/2-SESSIONS/1-ALPHA/BLOC_P_SUIVI_VEHICULES`
-
-#### **Objectif**
-
-Cadrer puis reprendre le suivi opérationnel des véhicules en statut hybride.
-
-#### **Dépendances**
-
-P-VEHICULES, T4, T5, T6.
-
-#### **Hors périmètre**
-
-Signature électronique, preuve mobile, maintenance prédictive, règles ARS complètes non confirmées.
-
-#### **Sessions prévues**
-
-- DX audit + cadrage : statut technique, vue d'ensemble, vérifications, désinfections, anomalies.
-- CX prévisionnelles : à découper après audit ciblé par sous-flux confirmé.
-- Clôture : DX ou CX selon périmètre réel.
-
-#### **Contrôles obligatoires**
-
-Navigateur, API/RBAC, multi-tenant, audit et lint/build pour toute CX.
-
-#### **Critère de sortie**
-
-Suivi véhicules situé clairement et fonctionnel sur le périmètre Alpha retenu.
-
-#### **Documentation à mettre à jour**
-
-Fiche Suivi véhicules, matrice RBAC, documentation audit, `05`.
-
-#### **Statut**
-
-À confirmer après audit ciblé.
-
-### BLOC P-MODELES-HORAIRES - Modèles horaires
-
-#### **Identifiant**
-
-P-MODELES-HORAIRES
-
-#### **Type de bloc**
-
-Page / module fonctionnel
-
-#### **Dossier cible**
-
-`docs/2-SESSIONS/1-ALPHA/BLOC_P_MODELES_HORAIRES`
-
-#### **Objectif**
-
-Aligner le référentiel des modèles horaires avec la terminologie produit officielle.
-
-#### **Dépendances**
-
-T2, T4, T5.
-
-#### **Hors périmètre**
-
-Renommage technique sans décision, reprise complète planning.
-
-#### **Sessions prévues**
-
-- DX audit + cadrage : modèles horaires, route actuelle, dépendance planning.
-- CX prévisionnelles : à découper après audit ciblé.
-- Clôture : DX ou CX selon périmètre réel.
-
-#### **Contrôles obligatoires**
-
-API/RBAC, compatibilité planning, lint/build pour toute CX.
-
-#### **Critère de sortie**
-
-Modèles horaires exploitables et nommés correctement côté produit.
-
-#### **Documentation à mettre à jour**
-
-Fiche Modèles horaires, `05`, conventions.
-
-#### **Statut**
-
-À faire.
-
-### BLOC P-PLANNING - Planning
-
-#### **Identifiant**
-
-P-PLANNING
-
-#### **Type de bloc**
-
-Page / module fonctionnel
-
-#### **Dossier cible**
-
-`docs/2-SESSIONS/1-ALPHA/BLOC_P_PLANNING`
-
-#### **Objectif**
-
-Reprendre le planning après stabilisation des référentiels et données sources.
-
-#### **Dépendances**
-
-P-SOCIETE, P-DEPOTS-BASES, P-UTILISATEURS-RH, P-VEHICULES, P-MODELES-HORAIRES, T4, T5, T6.
-
-#### **Hors périmètre**
-
-Planification automatique avancée, reporting analytique, agenda heure par heure si non validé.
-
-#### **Sessions prévues**
-
-- DX audit + cadrage : dépendances, vues, affectations, publication, annulation logique.
-- CX prévisionnelles : à découper après audit ciblé par vue, action, contrôle ou endpoint.
-- Clôture : DX ou CX selon périmètre réel.
-
-#### **Contrôles obligatoires**
-
-Fonctionnel ciblé, API/RBAC, audit, multi-tenant, navigateur, lint/build pour toute CX.
-
-#### **Critère de sortie**
-
-Planning manuel métier fiable sur les parcours Alpha retenus.
-
-#### **Documentation à mettre à jour**
-
-Fiche Planning, matrice RBAC, `05`.
-
-#### **Statut**
-
-À faire.
-
-### BLOC P-AUDIT - Audit / Traçabilité
-
-#### **Identifiant**
-
-P-AUDIT
-
-#### **Type de bloc**
-
-Page / module fonctionnel
-
-#### **Dossier cible**
-
-`docs/2-SESSIONS/1-ALPHA/BLOC_P_AUDIT`
-
-#### **Objectif**
-
-Garantir la consultation des traces officielles autorisées.
-
-#### **Dépendances**
-
-T6, T4.
-
-#### **Hors périmètre**
-
-SIEM, purge/rétention complète, conformité RGPD finale.
-
-#### **Sessions prévues**
-
-- DX audit + cadrage : page, filtres, droits, traces disponibles.
-- CX prévisionnelles : à découper après audit ciblé.
-- Clôture : DX ou CX selon périmètre réel.
-
-#### **Contrôles obligatoires**
-
-Lecture seule, API/RBAC, lint/build pour toute CX.
-
-#### **Critère de sortie**
-
-Traces officielles autorisées consultables sans modification non voulue.
-
-#### **Documentation à mettre à jour**
-
-Documentation audit, matrice RBAC, `05`.
-
-#### **Statut**
-
-À faire.
-
-### BLOC P-DASHBOARD - Tableau de bord
-
-#### **Identifiant**
-
-P-DASHBOARD
-
-#### **Type de bloc**
-
-Page / module fonctionnel
-
-#### **Dossier cible**
-
-`docs/2-SESSIONS/1-ALPHA/BLOC_P_DASHBOARD`
-
-#### **Objectif**
-
-Fiabiliser le dashboard après stabilisation des données sources.
-
-#### **Dépendances**
-
-T1, T4, T5, référentiels utiles.
-
-#### **Hors périmètre**
-
-Reporting avancé, préférences complexes non confirmées, données fictives.
-
-#### **Sessions prévues**
-
-- DX audit + cadrage : KPI, widgets, raccourcis, données et droits.
-- CX prévisionnelles : à découper après audit ciblé.
-- Clôture : DX ou CX selon périmètre réel.
-
-#### **Contrôles obligatoires**
-
-Données réelles, RBAC, navigateur, lint/build pour toute CX.
-
-#### **Critère de sortie**
-
-Dashboard fiable, sans données fictives présentées comme réelles.
-
-#### **Documentation à mettre à jour**
-
-Fiche Dashboard, documentation données, `05`.
-
-#### **Statut**
-
-À faire.
-
-### BLOC P-MISE-EN-ROUTE - Mise en route
-
-#### **Identifiant**
-
-P-MISE-EN-ROUTE
-
-#### **Type de bloc**
-
-Page / module fonctionnel
-
-#### **Dossier cible**
-
-`docs/2-SESSIONS/1-ALPHA/BLOC_P_MISE_EN_ROUTE`
-
-#### **Objectif**
-
-Stabiliser l'assistant de configuration initiale après les référentiels métier.
-
-#### **Dépendances**
-
-P-SOCIETE, P-DEPOTS-BASES, P-UTILISATEURS-RH, P-VEHICULES, P-MODELES-HORAIRES.
-
-#### **Hors périmètre**
-
-Onboarding marketing, tutoriels avancés, renommage technique sans décision.
-
-#### **Sessions prévues**
-
-- DX audit + cadrage : checklist, liens, données sources et libellés.
-- CX prévisionnelles : à découper après audit ciblé.
-- Clôture : DX ou CX selon périmètre réel.
-
-#### **Contrôles obligatoires**
-
-Liens, données sources, RBAC visible, navigateur, lint/build pour toute CX.
-
-#### **Critère de sortie**
-
-Mise en route cohérente avec les vrais modules sources.
-
-#### **Documentation à mettre à jour**
-
-Fiche Mise en route, conventions, `05`.
-
-#### **Statut**
-
-À faire.
-
-## 9. Bloc RGPD et Privacy
-
-### BLOC RGPD-PRIVACY - Privacy visible en Alpha
-
-#### **Identifiant**
-
-RGPD-PRIVACY
-
-#### **Type de bloc**
-
-RGPD / conformité
-
-#### **Dossier cible**
-
-`docs/2-SESSIONS/1-ALPHA/BLOC_RGPD_PRIVACY`
-
-#### **Objectif**
-
-Garantir une Privacy visible en Alpha et documenter les limites RGPD sans déclarer une conformité complète non prouvée.
-
-#### **Dépendances**
-
-P-LOGIN, `01`, règles RGPD minimales connues.
-
-#### **Hors périmètre**
-
-Conformité RGPD complète, politique légale exhaustive, DPO/base légale/rétention/purge non confirmés.
-
-#### **Sessions prévues**
-
-- DX audit + cadrage : présence, accessibilité, lien login et limites Alpha.
-- CX prévisionnelles : uniquement si l'audit confirme une correction applicative ciblée.
-- Clôture : DX ou CX selon périmètre réel.
-
-#### **Contrôles obligatoires**
-
-Navigateur, lien login/privacy, absence de déclaration de conformité complète, lint/build pour toute CX.
-
-#### **Critère de sortie**
-
-Privacy visible et cohérente avec les limites Alpha.
-
-#### **Documentation à mettre à jour**
-
-Documentation RGPD, Login, `05`.
-
-#### **Statut**
-
-À faire.
-
-## 10. Validations finales et gel Alpha
-
-### BLOC F1 - Validation fonctionnelle croisée
-
-#### **Identifiant**
-
-F1
-
-#### **Type de bloc**
-
-Finalisation
-
-#### **Dossier cible**
-
-`docs/2-SESSIONS/1-ALPHA/BLOC_F1_VALIDATION_FONCTIONNELLE`
-
-#### **Objectif**
-
-Vérifier les parcours fonctionnels transverses après blocs métier.
-
-#### **Dépendances**
-
-Blocs métier nécessaires terminés ou reports acceptés.
-
-#### **Hors périmètre**
-
-Correction code pendant validation, nouvelles fonctionnalités.
-
-#### **Sessions prévues**
-
-- DX audit + cadrage : parcours à valider, données et rôles.
-- CX prévisionnelles : uniquement si scripts/tests applicatifs sont modifiés.
-- Clôture : DX.
-
-#### **Contrôles obligatoires**
-
-Navigateur, RBAC, données de test, captures si UI.
-
-#### **Critère de sortie**
-
-Parcours principaux validés ou écarts bloquants listés et reportés.
-
-#### **Documentation à mettre à jour**
-
-Rapports de validation, `05`.
-
-#### **Statut**
-
-À faire.
-
-### BLOC F2 - Validation qualité technique
-
-#### **Identifiant**
-
-F2
-
-#### **Type de bloc**
-
-Finalisation
-
-#### **Dossier cible**
-
-`docs/2-SESSIONS/1-ALPHA/BLOC_F2_VALIDATION_QUALITE`
-
-#### **Objectif**
-
-Vérifier lint, build, tests disponibles, API/RBAC et multi-tenant après reprise.
-
-#### **Dépendances**
-
-Blocs code nécessaires terminés.
-
-#### **Hors périmètre**
-
-Correction dans la même session de validation, migration non prévue.
-
-#### **Sessions prévues**
-
-- DX audit + cadrage : commandes et périmètre de validation.
-- CX prévisionnelles : uniquement si scripts/tests techniques sont modifiés.
-- Clôture : DX.
-
-#### **Contrôles obligatoires**
-
-Lint, build, tests disponibles, contrôles API/RBAC, multi-tenant.
-
-#### **Critère de sortie**
-
-Contrôles techniques Alpha exécutés et résultats exploitables.
-
-#### **Documentation à mettre à jour**
-
-Rapports qualité, `05`.
-
-#### **Statut**
-
-À faire.
-
-### BLOC F3 - Validation UX visuelle
-
-#### **Identifiant**
-
-F3
-
-#### **Type de bloc**
-
-Finalisation
-
-#### **Dossier cible**
-
-`docs/2-SESSIONS/1-ALPHA/BLOC_F3_VALIDATION_UX`
-
-#### **Objectif**
-
-Vérifier cohérence visuelle, responsive et ergonomique des parcours critiques.
-
-#### **Dépendances**
-
-T1, T3, blocs pages nécessaires.
-
-#### **Hors périmètre**
-
-Refonte UI globale pendant validation, nouvelle maquette non validée.
-
-#### **Sessions prévues**
-
-- DX audit + cadrage : écrans et critères visuels.
-- CX prévisionnelles : uniquement si outil ou code de test visuel est modifié.
-- Clôture : DX.
-
-#### **Contrôles obligatoires**
-
-Navigateur, responsive, états UI, captures utiles.
-
-#### **Critère de sortie**
-
-Écrans critiques sans écart visuel bloquant connu ou écarts listés.
-
-#### **Documentation à mettre à jour**
-
-Références UI/UX si décision validée, rapports F3, `05`.
-
-#### **Statut**
-
-À faire.
-
-### BLOC F4 - Clôture documentaire Alpha ou clôture de phase
-
-#### **Identifiant**
-
-F4
-
-#### **Type de bloc**
-
-Finalisation
-
-#### **Dossier cible**
-
-`docs/2-SESSIONS/1-ALPHA/BLOC_F4_CLOTURE_ALPHA`
-
-#### **Objectif**
-
-Clôturer la phase ou acter explicitement la non-clôture et les reports.
-
-#### **Dépendances**
-
-F1, F2, F3 terminés ou reportés explicitement.
-
-#### **Hors périmètre**
-
-Nouvelle fonctionnalité, correction code non séparée, validation implicite.
-
-#### **Sessions prévues**
-
-- DX audit + cadrage : preuves, décisions, reports.
-- DX clôture : note de clôture ou non-clôture.
-
-#### **Contrôles obligatoires**
-
-Preuves F1/F2/F3, Git status, cohérence MASTER, absence validation implicite.
-
-#### **Critère de sortie**
-
-Phase clôturée ou non clôturée explicitement, avec preuves et décisions visibles.
-
-#### **Documentation à mettre à jour**
-
-`02`, `04`, `05`, synthèse de phase.
-
-#### **Statut**
-
-À faire.
-
-## 11. Maintenance
-
-Mettre à jour ce fichier uniquement dans les cas suivants :
-
-- après audit ciblé d'un bloc ;
-- après décision humaine ;
-- après changement d'ordre ;
-- après ajout, retrait ou fusion de session ;
-- après clôture d'un bloc.
-
-Règles à conserver :
-
-- ne pas transformer `05` en copie de `04` ;
-- ne pas inventer de production non validée ;
-- garder les incertitudes visibles ;
-- mettre à jour les fiches après preuve, pas avant ;
-- ne pas créer de session FIX séparée.
-
----
-
-## 12. Cadrage off documentaire - préparation des blocs restants
-
-Date de cadrage off : 16/06/2026
-
-### 12.1 Rôle de cette copie
-
-Cette section est une copie de travail documentaire. Elle ne vaut pas modification du plan officiel et ne valide aucun bloc.
-
-Fichier source non modifié : `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md`.
-
-Fichier de travail modifié : `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION_CADRAGE_OFF.md`.
-
-Hypothèse non bloquante : les blocs déjà présents dans le fichier officiel restent la trame de production, mais les sessions ci-dessous sont des propositions à valider humainement avant création dans `docs/2-SESSIONS`.
-
-Règles conservées :
-
-- aucune session n'est créée par ce cadrage ;
-- aucune session proposée n'est implicitement validée ;
-- aucune reprise code n'est autorisée par cette seule copie ;
-- Base44 reste une référence métier, visuelle et fonctionnelle, jamais une source technique à copier ;
-- les décisions non prouvées restent à confirmer.
-
-### 12.2 Sources consultées pour ce cadrage
-
-Sources maîtres :
-
-- `docs/1-MASTER/01-APPLICATION_WEB.md`
-- `docs/1-MASTER/02-DOCUMENT_MAITRE_PROJET.md`
-- `docs/1-MASTER/03-METHODE_DE_TRAVAIL.md`
-- `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`
-- `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md`
-- `docs/1-MASTER/RGPD_BASE_MINIMALE.md`
-
-Références Base44 :
-
-- `docs/1-MASTER/4-BASE44_REFERENCE/README_BASE44_REFERENCE.md`
-- `docs/1-MASTER/4-BASE44_REFERENCE/SYNTHESE_FINALE_BASE44_AMBULANCE_MANAGER.md`
-- `docs/1-MASTER/4-BASE44_REFERENCE/EXPORT_BASE44/MANIFEST_BASE44_REFERENCE.json`
-- `docs/1-MASTER/4-BASE44_REFERENCE/EXPORT_BASE44/EXCLUSIONS_BASE44_REFERENCE.md`
-- `docs/1-MASTER/4-BASE44_REFERENCE/EXPORT_BASE44/base44/entities/*`
-- `docs/1-MASTER/4-BASE44_REFERENCE/EXPORT_BASE44/src/pages/*`
-- `docs/1-MASTER/4-BASE44_REFERENCE/EXPORT_BASE44/src/components/*`
-- `docs/1-MASTER/4-BASE44_REFERENCE/EXPORT_BASE44/src/lib/*`
-
-Références UI/UX et fonctionnelles :
-
-- `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_INDEX.md`
-- `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_GLOBALE.md`
-- `docs/1-MASTER/2-REFERENCE_UI_UX/REFERENCE_UI_UX_CHECKLIST_CODEX.md`
-- `docs/1-MASTER/2-REFERENCE_UI_UX/0-REFERENCE_UI_UX_SHELL_GLOBAL.md`
-- `docs/1-MASTER/2-REFERENCE_UI_UX/1-REFERENCE_UI_UX_LOGIN.md`
-- `docs/1-MASTER/2-REFERENCE_UI_UX/2-REFERENCE_UI_UX_DASHBOARD.md`
-- `docs/1-MASTER/2-REFERENCE_UI_UX/3-REFERENCE_UI_UX_MODELES_HORAIRES.md`
-- `docs/1-MASTER/2-REFERENCE_UI_UX/4-REFERENCE_UI_UX_PLANNING.md`
-- `docs/1-MASTER/2-REFERENCE_UI_UX/5-REFERENCE_UI_UX_UTILISATEURS_RH.md`
-- `docs/1-MASTER/2-REFERENCE_UI_UX/6-REFERENCE_UI_UX_VEHICULES.md`
-- `docs/1-MASTER/2-REFERENCE_UI_UX/6.1-REFERENCE_UI_UX_SUIVI_DES_VEHICULES.md`
-- `docs/1-MASTER/2-REFERENCE_UI_UX/7-REFERENCE_UI_UX_DEPOTS_BASES.md`
-- `docs/1-MASTER/2-REFERENCE_UI_UX/8-REFERENCE_UI_UX_SOCIETE.md`
-- `docs/1-MASTER/2-REFERENCE_UI_UX/9-REFERENCE_UI_UX_MISE_EN_ROUTE.md`
-- `docs/1-MASTER/2-REFERENCE_UI_UX/10-REFERENCE_UI_UX_AUDIT.md`
-- `docs/1-MASTER/3-FONCTIONNALITES/LISTE_FONCTIONNALITES_V1.1.md`
-- `docs/1-MASTER/3-FONCTIONNALITES/0-FONCTIONNALITES_DETAILLEES_SHELL_GLOBAL_NAVIGATION_V1.md`
-- `docs/1-MASTER/3-FONCTIONNALITES/1-FONCTIONNALITES_DETAILLEES_LOGIN_V1.1.md`
-- `docs/1-MASTER/3-FONCTIONNALITES/2-FONCTIONNALITES_DETAILLEES_TABLEAU_DE_BORD_V1.1.md`
-- `docs/1-MASTER/3-FONCTIONNALITES/3-FONCTIONNALITES_DETAILLEES_MODELES_HORAIRES_V1.1.md`
-- `docs/1-MASTER/3-FONCTIONNALITES/4-FONCTIONNALITES_DETAILLEES_PLANNING_V1.1.md`
-- `docs/1-MASTER/3-FONCTIONNALITES/5-FONCTIONNALITES_DETAILLEES_UTILISATEURS_V1.1.md`
-- `docs/1-MASTER/3-FONCTIONNALITES/6-FONCTIONNALITES_DETAILLEES_VEHICULES_V1.1.md`
-- `docs/1-MASTER/3-FONCTIONNALITES/6.1-FONCTIONNALITES_DETAILLEES_SUIVI_DES_VEHICULES_V1.md`
-- `docs/1-MASTER/3-FONCTIONNALITES/7-FONCTIONNALITES_DETAILLEES_DEPOTS_BASES_V1.md`
-- `docs/1-MASTER/3-FONCTIONNALITES/8-FONCTIONNALITES_DETAILLEES_SOCIETE_V1.1.md`
-- `docs/1-MASTER/3-FONCTIONNALITES/9-FONCTIONNALITES_DETAILLEES_MISE_EN_ROUTE_V1.1.md`
-- `docs/1-MASTER/3-FONCTIONNALITES/10-FONCTIONNALITES_DETAILLEES_AUDIT_V1.md`
-
-Audits et code officiel utiles :
-
-- `docs/1-MASTER/5-AUDIT/AUDIT_CODE_EXISTANT_ALPHA_V2.md`
-- `docs/1-MASTER/5-AUDIT/AUDIT_COMPARAISON_BASE44_OFFICIEL_V1.md`
-- `package.json`
-- `prisma/schema.prisma`
-- `lib/auth.ts`
-- `lib/permission-catalog.ts`
-- `lib/permissions.ts`
-- `lib/rbac.ts`
-- `app/layout.tsx`
-- `app/app-shell.tsx`
-- `app/ui/*`
-- `app/login/page.tsx`
-- `app/dashboard/page.tsx`
-- `app/company/*`
-- `app/depots/*`
-- `app/users/*`
-- `app/vehicles/*`
-- `app/templates/*`
-- `app/planning/*`
-- `app/audit/*`
-- `app/onboarding/*`
-- `app/privacy/page.tsx`
-- `app/api/*`
-- `lib/services/*`
-- `scripts/quality/*`
-
-### 12.3 Constats transverses issus du cadrage
-
-Décisions déjà connues :
-
-- Le repo officiel reste la source technique finale.
-- Base44 est une référence prototype, pas une source de code.
-- Les libellés actifs sont `Modèles horaires`, `Mise en route`, `Dépôts / Bases`, `Utilisateurs / RH`.
-- Les routes techniques anglaises peuvent rester stables tant qu'un renommage n'est pas confirmé.
-- Le multi-tenant par `companyId` est non négociable.
-- Les actions sensibles doivent être tracées.
-- Les sessions futures doivent rester courtes, ciblées et contrôlables.
-- Les sessions DX ne produisent pas de patch applicatif.
-
-Écarts structurants observés :
-
-- Le code officiel couvre déjà de nombreux modules, mais aucune page n'est validée individuellement.
-- Prisma ne contient pas encore `CompanyContact`, `DashboardPreference`, `VehicleCheck`, `Disinfection`, `VehicleAnomaly` ni `OnboardingStep`.
-- Le catalogue RBAC officiel est réel mais incomplet pour dépôts, contacts société, suivi véhicules, disponibilité véhicule, reset password et certaines actions de restauration.
-- Les audits signalent encore des écarts UI/API, des flux legacy planning, des cycles archive/restauration incomplets et des états visuels hétérogènes.
-- `Se souvenir de moi` existe visuellement côté login, mais le comportement session officiel reste à confirmer.
-- `Privacy` existe et est liée au login selon les tests qualité, mais ne doit pas déclarer une conformité complète.
-
-### 12.4 Format compact des sessions proposées
-
-Chaque session ci-dessous indique :
-
-- code session proposé ;
-- nature : DX, CX, QA ou DOC ;
-- type métier : AUDIT, CADRAGE, CRÉATION, CORRECTION, COMPLÉTION, VALIDATION, DOCUMENTATION ou CLÔTURE ;
-- objectif précis ;
-- périmètre inclus ;
-- hors périmètre explicite ;
-- fichiers ou zones probables à auditer/modifier plus tard ;
-- critères de validation ;
-- preuves attendues ;
-- dépendances éventuelles.
-
-Les codes ne contiennent pas de date volontairement. La date et le numéro journalier devront être ajoutés uniquement lors de la création réelle d'une session.
-
----
-
-### BLOC T2 - Nomenclature, routes et renommages futurs
-
-- Objectif du bloc : cadrer les libellés produit, routes techniques et renommages éventuels sans lancer de migration de routes par défaut.
-- Rôle dans l'application : éviter la confusion entre noms métier français et routes historiques anglaises.
-- Références Base44 à regarder : `src/App.jsx`, `src/components/shell/AppShell.jsx`, pages `ModelesHoraires.jsx`, `MiseEnRoute.jsx`, `SuiviVehicules.jsx`.
-- Références repo officiel à regarder : `app/layout.tsx`, `app/app-shell.tsx`, routes `app/templates`, `app/onboarding`, `app/vehicles`, `proxy.ts`, tests `scripts/quality/targeted-sensitive-blocks.test.mjs`.
-- Dépendances amont : T1, `04`, doctrine de routes techniques stables.
-- Dépendances aval : T3, T4, P-MODELES-HORAIRES, P-MISE-EN-ROUTE, P-SUIVI-VEHICULES.
-- Risques identifiés : casser des liens, tests, bookmarks ou redirections ; confondre correction de libellé avec migration route ; introduire des alias non maintenus.
-- Décisions déjà connues : libellés UI français actifs ; routes anglaises conservables tant qu'un renommage n'est pas validé.
-- Décisions restant à confirmer : renommage technique `/templates`, `/onboarding`, emplacement technique de `Suivi des véhicules`, politique d'alias/redirection.
-- Découpage proposé en sessions courtes : audit routes/libellés, décision conventions, corrections libellés restantes, validation navigation.
-- Critères de clôture du bloc : chaque route/libellé est classé en `conservé`, `renommage futur`, `alias à prévoir` ou `à confirmer`.
-- Points de contrôle ChatGPT recommandés : vérifier qu'aucun renommage technique n'est lancé sans décision humaine et que les libellés visibles restent français.
-
-| Code session proposé | Nature | Type métier | Objectif précis | Périmètre inclus | Hors périmètre explicite | Zones probables futures | Critères de validation | Preuves attendues | Dépendances |
-|---|---|---|---|---|---|---|---|---|---|
-| DX_T2_AUDIT-NOMENCLATURE-ROUTES | DX | AUDIT | Cartographier routes, libellés, liens et écarts Base44/officiel. | Lecture docs, shell, routes pages, dashboard links, tests qualité. | Renommage code, migration de routes. | `app/layout.tsx`, `app/app-shell.tsx`, `app/dashboard/page.tsx`, `app/*/page.tsx`. | Matrice route actuelle/libellé cible/risque. | `git status --short`, extraits routes/liens. | T1. |
-| DX_T2_CADRAGE-CONVENTIONS-ROUTES | DX | CADRAGE | Proposer une convention route stable vs libellé métier. | Décisions à confirmer, stratégie alias future. | Modification de `04` ou `05` officiel. | Docs MASTER après validation. | Liste d'arbitrages prête pour validation humaine. | Tableau décisions/hypothèses. | DX_T2_AUDIT. |
-| CX_T2_CORRECTION-LIBELLES-RESIDUELS | CX | CORRECTION | Corriger uniquement les libellés visibles résiduels validés. | UI visible, textes, titres, breadcrumbs. | Changement de chemin technique. | Shell, pages, dashboard. | Aucun libellé interdit restant sur surface validée. | Diff, captures, lint/build. | Décision humaine T2. |
-| QA_T2_VALIDATION-ROUTES-LIENS | QA | VALIDATION | Vérifier navigation, accès direct, liens internes et absence de régression. | Parcours navigateur, liens dashboard/mise en route. | Corrections lourdes. | Browser, tests qualité. | Routes critiques atteignables ou refusées proprement. | Captures/commandes, `git status --short`. | Sessions CX T2 éventuelles. |
-
-### BLOC T3 - Design system officiel et composants communs
-
-- Objectif du bloc : stabiliser les primitives UI officielles et les états communs nécessaires aux pages Alpha.
-- Rôle dans l'application : réduire les divergences de cards, badges, tableaux, filtres, boutons, panneaux, états empty/loading/error/disabled.
-- Références Base44 à regarder : `src/components/ui/*`, `src/components/dashboard/*`, `src/components/shell/*`, `src/index.css`, `tailwind.config.js`.
-- Références repo officiel à regarder : `app/ui/*`, `app/globals.css`, `app/a24-*.css`, pages métier existantes.
-- Dépendances amont : T1, T2, références UI/UX globales.
-- Dépendances aval : toutes les pages modules, F3.
-- Risques identifiés : copier shadcn/Base44, refonte globale CSS, régression visuelle, tokens inventés non documentés.
-- Décisions déjà connues : SaaS métier clair, dense, professionnel ; composants à garder sobres et réutilisables.
-- Décisions restant à confirmer : palette exacte, échelle typographique, tokens Tailwind finaux, architecture éventuelle `components/`.
-- Découpage proposé en sessions courtes : inventaire, états communs, tableaux/filtres, badges/actions, validation visuelle.
-- Critères de clôture du bloc : composants prioritaires utilisables ou reports documentés ; aucune refonte globale cachée.
-- Points de contrôle ChatGPT recommandés : vérifier que Base44 sert seulement d'inspiration et que les styles restent compatibles avec le repo.
-
-| Code session proposé | Nature | Type métier | Objectif précis | Périmètre inclus | Hors périmètre explicite | Zones probables futures | Critères de validation | Preuves attendues | Dépendances |
-|---|---|---|---|---|---|---|---|---|---|
-| DX_T3_AUDIT-COMPOSANTS-ETATS | DX | AUDIT | Inventorier composants officiels, usages et écarts UI/UX. | `app/ui`, CSS, pages, références UI/UX. | Création/modification composants. | `app/ui/*`, `app/globals.css`. | Liste priorisée des composants à stabiliser. | Extraits, captures si utiles, status Git. | T2. |
-| CX_T3_COMPLETION-ETATS-COMMUNS | CX | COMPLÉTION | Harmoniser états empty/loading/error/disabled/focus sur primitives ciblées. | Une famille d'états par session si nécessaire. | Reprise page métier complète. | `app/ui/empty-state.tsx`, `error-message.tsx`, `status-badge.tsx`, CSS. | États rendus sans rupture sur pages ciblées. | Diff, lint/build, contrôle navigateur. | DX_T3_AUDIT. |
-| CX_T3_CORRECTION-TABLEAUX-FILTRES | CX | CORRECTION | Stabiliser tableau, filtres et actions compactes partagés. | Primitives UI seulement. | Changement métier des colonnes. | `app/ui/data-table.tsx`, `filter-bar.tsx`, pages consommatrices. | Comportement UI homogène sur modules tests. | Diff, captures desktop. | DX_T3_AUDIT. |
-| CX_T3_COMPLETION-BADGES-ACTIONS | CX | COMPLÉTION | Harmoniser statuts/badges/boutons sensibles. | Badges texte+couleur, boutons primaires/secondaires/danger. | Nouvelle matrice métier. | `app/ui/status-badge.tsx`, `action-button.tsx`. | Statuts lisibles hors couleur seule. | Diff, captures, lint/build. | T4 pour droits visibles si impact. |
-| QA_T3_VALIDATION-DESIGN-SYSTEM | QA | VALIDATION | Valider les primitives sur surfaces représentatives. | Login exclu si design spécifique ; pages dashboard/liste/formulaire. | Corrections lourdes. | Browser, captures. | Pas d'écart visuel bloquant connu ou écarts listés. | Captures, status Git. | CX T3. |
+  - Objectif : compléter les primitives de table, filtres, statuts et actions récurrentes.
+  - Périmètre inclus : `data-table`, `filter-bar`, `status-badge`, `action-button`, `page-header`, `stat-card`.
+  - Hors périmètre : logique API ou filtres métier propres à un module.
+  - Zones à lire : `app/ui/`, pages utilisant ces composants.
+  - Zones modifiables plus tard : `app/ui/` et imports limités si nécessaire.
+  - Critères de validation : composants utilisables par blocs page sans régression visible.
+  - Preuves attendues : diff, lint, captures d'au moins deux pages consommatrices si modifiées.
+  - Dépendances : CX_T3_CORRECTION-ETATS-COMMUNS.
+
+- `DX_T3_VALIDATION-CLOTURE-VISUELLE-COMPOSANTS`
+  - Nature : DX.
+  - Type métier : VALIDATION+CLOTURE.
+  - Objectif : contrôler la cohérence visuelle des composants communs dans les pages existantes.
+  - Périmètre inclus : rendu navigateur desktop et responsive minimum des composants modifiés.
+  - Hors périmètre : correction.
+  - Règle de non-correction : Si un écart bloquant est détecté, la session doit conclure à une non-clôture du bloc et demander une session CX ciblée.
+  - Zones à lire : app rendue, références UI/UX.
+  - Zones modifiables plus tard : aucune dans cette session DX VALIDATION+CLOTURE.
+  - Critères de validation : absence de casse visuelle évidente, états communs visibles et cohérents.
+  - Preuves attendues : captures, commandes, `git status --short`.
+  - Dépendances : CX T3.
+
+- `DX_T3_CLOTURE-DESIGN-SYSTEM`
+  - Nature : DX.
+  - Type métier : CLÔTURE.
+  - Objectif : synthétiser composants prêts, limites et reports.
+  - Périmètre inclus : rapport de clôture du bloc.
+  - Hors périmètre : validation humaine implicite, correction.
+  - Zones à lire : preuves T3.
+  - Zones modifiables plus tard : documentation de session uniquement.
+  - Critères de validation : périmètre T3 clair pour les blocs page.
+  - Preuves attendues : synthèse, `git status --short`.
+  - Dépendances : DX_T3_VALIDATION-CLOTURE-VISUELLE-COMPOSANTS.
+
+#### Critère de clôture du bloc
+
+Les composants communs nécessaires aux blocs page sont identifiés, corrigés ou reportés explicitement, sans copie technique Base44.
+
+#### Points de contrôle ChatGPT
+
+- Vérifier que les composants restent génériques.
+- Vérifier qu'aucune page métier n'est refondue dans T3.
 
 ### BLOC T4 - RBAC UI/API et matrice permissions progressive
 
-- Objectif du bloc : établir une matrice RBAC Alpha progressive reliant rôle, permission, action UI, route API et audit.
-- Rôle dans l'application : empêcher les écarts front/API et préparer les modules sensibles.
-- Références Base44 à regarder : `src/lib/userPermissions.js`, appels `can(...)`, modules utilisateurs, véhicules, suivi, audit.
-- Références repo officiel à regarder : `lib/permission-catalog.ts`, `lib/permissions.ts`, `lib/rbac.ts`, `app/layout.tsx`, `app/api/*`, `scripts/quality/*`.
-- Dépendances amont : T1, T2, T5 pour données société.
-- Dépendances aval : tous les modules métier, T6, F1/F2.
-- Risques identifiés : front-only, permissions trop larges, support global mal cadré, endpoints non protégés ou UI plus permissive que l'API.
-- Décisions déjà connues : Admin/Gérant ont accès natif large ; autres rôles passent par permissions ; support global à cadrer strictement.
-- Décisions restant à confirmer : `DEPOTS_MANAGE`, `COMPANY_MANAGE`, `COMPANY_CONTACTS_MANAGE`, `VEHICLES_AVAILABILITY`, suivi véhicules, reset password, restauration par module.
-- Découpage proposé en sessions courtes : matrice, endpoints critiques, UI actions, support, tests.
-- Critères de clôture du bloc : matrice minimale validable, écarts prioritaires traités ou reportés.
-- Points de contrôle ChatGPT recommandés : comparer UI/API pour chaque action sensible et refuser toute garantie seulement front.
+#### Objectif du bloc
 
-| Code session proposé | Nature | Type métier | Objectif précis | Périmètre inclus | Hors périmètre explicite | Zones probables futures | Critères de validation | Preuves attendues | Dépendances |
-|---|---|---|---|---|---|---|---|---|---|
-| DX_T4_AUDIT-MATRICE-RBAC | DX | AUDIT | Construire rôle/permission/action/route/audit. | Catalogue officiel, Base44, API, pages. | Ajout de permissions. | `lib/permission-catalog.ts`, `app/api/*`. | Matrice avec manques et risques. | Tableau, extraits, status Git. | T5 lecture données. |
-| CX_T4_COMPLETION-CATALOGUE-PERMISSIONS | CX | COMPLÉTION | Ajouter uniquement les permissions validées et helpers associés. | Catalogue, seed si nécessaire, helpers serveur. | Refonte auth, MFA. | `lib/permission-catalog.ts`, `lib/permissions.ts`, `prisma/seed.ts`. | Permissions typées, utilisées sans briser existant. | Diff, lint/build, tests qualité. | Décision humaine T4. |
-| CX_T4_CORRECTION-ENDPOINTS-CRITIQUES | CX | CORRECTION | Aligner les endpoints sensibles sur la matrice. | Une famille endpoint par session. | UI complète. | `app/api/users`, `vehicles`, `templates`, `depots`, `company`, `planning`. | API refuse sans session/droit et filtre `companyId`. | Tests ciblés, extraits route. | Matrice validée. |
-| CX_T4_CORRECTION-ACTIONS-UI-DROITS | CX | CORRECTION | Aligner visibilité/désactivation des actions UI sur RBAC serveur. | Une page ou famille d'actions. | Modification API hors écart constaté. | Pages clients. | UI ne propose pas d'action impossible ou non tracée. | Captures, diff, lint/build. | CX endpoints. |
-| QA_T4_VALIDATION-RBAC-PROGRESSIF | QA | VALIDATION | Exécuter contrôles multi-rôles/API disponibles. | Tests smoke/targeted et parcours manuels. | Création de nouvelle matrice. | `scripts/quality/*`. | Écarts restants listés par gravité. | Commandes, logs synthèse, status Git. | T4 CX. |
+Cadrer puis corriger progressivement les contrôles RBAC UI/API sur les actions sensibles Alpha.
+
+#### Rôle dans l'application
+
+T4 garantit que les actions visibles ne contredisent pas les contrôles serveur et que les API ne font pas confiance au client.
+
+#### Dépendances amont
+
+- T1.
+- T2 pour routes/libellés.
+- T5 si des droits dépendent d'entités ou relations non créées.
+
+#### Dépendances aval
+
+- Toutes les sessions CX avec actions sensibles.
+- T6, P-AUDIT, F2.
+
+#### Décisions connues
+
+- Le catalogue officiel actuel est `ALPHA_PERMISSION_CATALOG`.
+- Les rôles `ADMIN` et `GERANT` ont un accès natif large.
+- `PlatformRole.SUPPORT` existe pour le support global sous conditions.
+- Base44 `can()` est front-only et ne vaut pas garantie serveur.
+
+#### Décisions à confirmer
+
+- Permission `DEPOTS_MANAGE` : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Permissions suivi véhicules : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Permissions disponibilité véhicule, reset password, contacts société, dashboard preferences : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Granularité archive/restauration par module : `INFORMATION NON FOURNIE — À CONFIRMER`.
+
+#### Risques principaux
+
+- Front autorise une action refusée par API ou inversement.
+- Trop de permissions créées sans arbitrage métier.
+- Support global accède à des données tenant sans trace ou raison.
+
+#### Sessions de production prévues
+
+- `DX_T4_AUDIT-MATRICE-RBAC`
+  - Nature : DX.
+  - Type métier : AUDIT.
+  - Objectif : cartographier rôles, permissions, helpers et endpoints sensibles.
+  - Périmètre inclus : `lib/permissions.ts`, `lib/permission-catalog.ts`, `lib/rbac.ts`, `app/api`, pages avec actions.
+  - Hors périmètre : ajout de permission, correction code.
+  - Zones à lire : RBAC officiel, fiches fonctionnelles, audit Base44, scripts qualité.
+  - Zones modifiables plus tard : catalogue permission, helpers, guards API/UI si validés.
+  - Critères de validation : matrice rôle/permission/action/API avec écarts classés.
+  - Preuves attendues : tableau, extraits endpoint/UI, `git status --short`.
+  - Dépendances : T2.
+
+- `DX_T4_CADRAGE-PERMISSIONS-MANQUANTES`
+  - Nature : DX.
+  - Type métier : CADRAGE.
+  - Objectif : préparer les décisions sur permissions manquantes ou trop larges.
+  - Périmètre inclus : options pour dépôts, suivi véhicules, disponibilité, contacts, reset password, dashboard.
+  - Hors périmètre : modification catalogue.
+  - Zones à lire : audit T4, `docs/1-MASTER/3-FONCTIONNALITES/`, Base44 `userPermissions.js`.
+  - Zones modifiables plus tard : `lib/permission-catalog.ts`, migrations si permissions persistées.
+  - Critères de validation : décisions prêtes à validation humaine avec impacts.
+  - Preuves attendues : options, risques, dépendances T5/T6.
+  - Dépendances : DX_T4_AUDIT-MATRICE-RBAC.
+
+- `CX_T4_CORRECTION-ENDPOINTS-CRITIQUES`
+  - Nature : CX.
+  - Type métier : CORRECTION.
+  - Objectif : corriger les endpoints sensibles dont le contrôle serveur est incohérent avec la matrice validée.
+  - Périmètre inclus : endpoints users, vehicles, templates, depots, company, planning selon priorisation.
+  - Hors périmètre : création massive de permissions, UI large.
+  - Zones à lire : audit T4, routes API ciblées, services.
+  - Zones modifiables plus tard : routes API ciblées, helpers permissions.
+  - Critères de validation : API refuse sans session/companyId, ne lit pas `companyId` client, permission alignée.
+  - Preuves attendues : diff, tests qualité, logs de commandes.
+  - Dépendances : validation cadrage T4, T5 si modèle impliqué.
+
+- `CX_T4_CORRECTION-ACTIONS-UI`
+  - Nature : CX.
+  - Type métier : CORRECTION.
+  - Objectif : aligner visibilité/disabled des actions UI sur la matrice validée.
+  - Périmètre inclus : boutons et menus d'actions sensibles déjà existants.
+  - Hors périmètre : redesign UI complet, endpoints non corrigés.
+  - Zones à lire : pages modules, `app/ui/action-button.tsx`, helpers permissions.
+  - Zones modifiables plus tard : composants clients ciblés.
+  - Critères de validation : action visible seulement si autorisée et refus serveur cohérent en accès direct.
+  - Preuves attendues : diff, captures par rôle si possible, lint.
+  - Dépendances : CX_T4_CORRECTION-ENDPOINTS-CRITIQUES.
+
+- `DX_T4_VALIDATION-CLOTURE-RBAC-SENSIBLE`
+  - Nature : DX.
+  - Type métier : VALIDATION+CLOTURE.
+  - Objectif : contrôler les contrats RBAC critiques sans correction.
+  - Périmètre inclus : scripts qualité existants, tests API ciblés, vérification support.
+  - Hors périmètre : patch.
+  - Règle de non-correction : Si un écart bloquant est détecté, la session doit conclure à une non-clôture du bloc et demander une session CX ciblée.
+  - Zones à lire : `scripts/quality/`, API modifiées, pages critiques.
+  - Zones modifiables plus tard : aucune dans cette session DX VALIDATION+CLOTURE.
+  - Critères de validation : écarts classés bloquants/non bloquants, preuves serveur.
+  - Preuves attendues : `npm run test:quality`, extraits, `git status --short`.
+  - Dépendances : CX T4.
+
+#### Critère de clôture du bloc
+
+Une matrice RBAC Alpha minimale existe, les écarts critiques front/API sont traités ou reportés explicitement, et les permissions non arbitrées restent marquées à confirmer.
+
+#### Points de contrôle ChatGPT
+
+- Vérifier que les API restent la barrière réelle.
+- Vérifier que le support global est limité et tracé.
 
 ### BLOC T5 - Données, multi-tenant et mapping Base44 vers officiel
 
-- Objectif du bloc : cadrer les entités/champs Base44 utiles et les comparer au modèle Prisma officiel sans migration implicite.
-- Rôle dans l'application : sécuriser les futurs choix data et le cloisonnement `companyId`.
-- Références Base44 à regarder : `base44/entities/*.jsonc`, pages avec accès données, `AuthContext.jsx`.
-- Références repo officiel à regarder : `prisma/schema.prisma`, services `lib/services/*`, routes API, import engine.
-- Dépendances amont : audits existants, `01`, T4.
-- Dépendances aval : P-SOCIETE, P-DEPOTS-BASES, P-UTILISATEURS-RH, P-VEHICULES, P-SUIVI-VEHICULES, P-DASHBOARD, P-MISE-EN-ROUTE.
-- Risques identifiés : copier des entités denormalisées, accepter des statuts libres, ajouter des champs sans usage, casser le multi-tenant.
-- Décisions déjà connues : `PlanningEntry` Base44 est refusé comme remplacement ; audit client Base44 refusé ; `Employee` séparé refusé sans arbitrage.
-- Décisions restant à confirmer : `CompanyContact`, `DashboardPreference`, suivi véhicules, disponibilité véhicule, TPMR, contacts et préférences.
-- Découpage proposé en sessions courtes : mapping entités, multi-tenant API, migrations candidates, imports.
-- Critères de clôture du bloc : chaque écart data est classé accepté/adapté/refusé/reporté.
-- Points de contrôle ChatGPT recommandés : vérifier que chaque ajout Prisma futur possède un besoin Alpha et des contrôles RBAC/audit.
+#### Objectif du bloc
 
-| Code session proposé | Nature | Type métier | Objectif précis | Périmètre inclus | Hors périmètre explicite | Zones probables futures | Critères de validation | Preuves attendues | Dépendances |
-|---|---|---|---|---|---|---|---|---|---|
-| DX_T5_AUDIT-MAPPING-DONNEES | DX | AUDIT | Produire la matrice Base44 entité/champ vers Prisma officiel. | Entités Base44, schema Prisma, fiches. | Migration Prisma. | `prisma/schema.prisma`, `base44/entities`. | Écarts classés. | Tableau, status Git. | T4. |
-| DX_T5_CADRAGE-MULTI-TENANT | DX | CADRAGE | Cartographier les contrôles `companyId` pages/API/services. | API et services critiques. | Correction code. | `app/api/*`, `lib/services/*`. | Risques multi-tenant priorisés. | Extraits de filtres, status Git. | DX_T5_AUDIT. |
-| CX_T5_CORRECTION-SCOPING-CRITIQUE | CX | CORRECTION | Corriger un écart multi-tenant validé. | Un endpoint/service ciblé. | Ajout de modèle. | Endpoint concerné. | Aucun `companyId` client non fiable accepté. | Diff, test ciblé, lint/build. | Décision humaine. |
-| DX_T5_CADRAGE-MIGRATIONS-CANDIDATES | DX | CADRAGE | Préparer les migrations candidates sans les créer. | Besoins `CompanyContact`, suivi, préférences. | `prisma migrate`, `prisma generate`. | Dossier Prisma futur. | Liste migrations candidates avec justification. | Tableau, risques. | DX_T5_AUDIT. |
-| QA_T5_VALIDATION-DONNEES-TENANT | QA | VALIDATION | Vérifier les contrôles qualité multi-tenant existants. | Tests qualité, lecture API. | Correction. | `scripts/quality/*`. | Écarts restants documentés. | Commandes, status Git. | Sessions T5 éventuelles. |
+Comparer les entités Base44 utiles au modèle officiel et cadrer les créations ou reports de données sans modifier Prisma par défaut.
+
+#### Rôle dans l'application
+
+T5 protège le multi-tenant et évite les migrations opportunistes inspirées de Base44 sans décision.
+
+#### Dépendances amont
+
+- `01`, audits, schéma Prisma officiel.
+- T4 pour permissions liées aux données.
+
+#### Dépendances aval
+
+- P-SOCIETE, P-SUIVI-VEHICULES, P-DASHBOARD, P-MISE-EN-ROUTE.
+- P-PLANNING pour référentiels.
+
+#### Décisions connues
+
+- Le schéma officiel contient `Company`, `Depot`, `User`, `UserAbsence`, `Vehicle`, `ShiftTemplate`, `DraftShift`, `Shift`, `PlanningAuditLog`, `LoginAuditLog`.
+- `CompanyContact`, `DashboardPreference`, `VehicleCheck`, `Disinfection`, `VehicleAnomaly`, `OnboardingStep` sont absents du schéma officiel lu.
+- `PlanningEntry` Base44 ne doit pas remplacer `Shift`/`DraftShift`/`AutoScheduleRun`.
+
+#### Décisions à confirmer
+
+- Création ou report de `CompanyContact` : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Création ou report de `DashboardPreference` : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Création ou report de `VehicleCheck`, `Disinfection`, `VehicleAnomaly` : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Création ou refus de `OnboardingStep` : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Gestion TPMR / TPMR VSL / TPMR TAXI : `INFORMATION NON FOURNIE — À CONFIRMER`.
+
+#### Risques principaux
+
+- Copier des entités Base44 dénormalisées.
+- Ajouter Prisma avant d'avoir contrôlé les relations `companyId`.
+- Stocker des compteurs ou statuts libres au lieu de requêtes/enums officiels.
+
+#### Sessions de production prévues
+
+- `DX_T5_AUDIT-MAPPING-ENTITES`
+  - Nature : DX.
+  - Type métier : AUDIT.
+  - Objectif : produire une matrice Base44 -> Prisma officiel pour toutes les entités utiles.
+  - Périmètre inclus : entités Base44, `prisma/schema.prisma`, services officiels, validators.
+  - Hors périmètre : migration, `prisma generate`, modification Prisma.
+  - Zones à lire : `prisma/schema.prisma`, `docs/1-MASTER/4-BASE44_REFERENCE/EXPORT_BASE44/base44/entities/`, `lib/validators/`.
+  - Zones modifiables plus tard : Prisma uniquement dans sessions CX validées.
+  - Critères de validation : chaque entité classée garder/adaptater/refuser/à confirmer.
+  - Preuves attendues : tableau, extraits schéma, `git status --short`.
+  - Dépendances : T4 audit si permissions liées.
+
+- `DX_T5_CADRAGE-MODELES-CANDIDATS`
+  - Nature : DX.
+  - Type métier : CADRAGE.
+  - Objectif : cadrer les modèles candidats et leurs impacts avant toute migration.
+  - Périmètre inclus : `CompanyContact`, `DashboardPreference`, suivi véhicules, `OnboardingStep`.
+  - Hors périmètre : création Prisma.
+  - Zones à lire : audit T5, fiches Société, Dashboard, Suivi véhicules, Mise en route.
+  - Zones modifiables plus tard : migrations Prisma, validators, services, API selon décisions.
+  - Critères de validation : chaque modèle a option créer/report/refuser avec impact sessions.
+  - Preuves attendues : options, risques multi-tenant, dépendances RBAC/audit.
+  - Dépendances : DX_T5_AUDIT-MAPPING-ENTITES.
+
+- `CX_T5_CORRECTION-MULTITENANT-CRITIQUE`
+  - Nature : CX.
+  - Type métier : CORRECTION.
+  - Objectif : corriger les accès tenant critiques déjà prouvés comme incohérents.
+  - Périmètre inclus : requêtes qui ne bornent pas correctement par `companyId`.
+  - Hors périmètre : création de nouveaux modèles.
+  - Zones à lire : audit T5, routes/services concernés.
+  - Zones modifiables plus tard : routes API et services ciblés uniquement.
+  - Critères de validation : `companyId` issu serveur, dépendances résolues dans le tenant.
+  - Preuves attendues : diff, tests qualité, extraits.
+  - Dépendances : audit T5, T4 si permission modifiée.
+
+- `CX_T5_CREATION-MODELE-CANDIDAT`
+  - Nature : CX.
+  - Type métier : CRÉATION.
+  - Objectif : créer un modèle Prisma uniquement après décision humaine explicite sur un modèle candidat.
+  - Périmètre inclus : un seul modèle ou groupe cohérent validé par session.
+  - Hors périmètre : création simultanée de tous les modèles Base44, UI métier.
+  - Zones à lire : cadrage modèle, `prisma/schema.prisma`, validators/services ciblés.
+  - Zones modifiables plus tard : Prisma, migration, validators/API minimaux du modèle retenu.
+  - Critères de validation : migration cohérente, `companyId` obligatoire si tenant, relations/indexes validés.
+  - Preuves attendues : migration, `npx prisma validate`, tests ciblés.
+  - Dépendances : validation humaine du modèle concerné.
+
+- `DX_T5_VALIDATION-CLOTURE-DONNEES-TENANT`
+  - Nature : DX.
+  - Type métier : VALIDATION+CLOTURE.
+  - Objectif : valider le cloisonnement des données après corrections ou créations.
+  - Périmètre inclus : API touchées, scripts qualité, Prisma validate si migration.
+  - Hors périmètre : correction.
+  - Règle de non-correction : Si un écart bloquant est détecté, la session doit conclure à une non-clôture du bloc et demander une session CX ciblée.
+  - Zones à lire : routes/services/migrations modifiés.
+  - Zones modifiables plus tard : aucune dans cette session DX VALIDATION+CLOTURE.
+  - Critères de validation : pas de confiance dans `companyId` client, relations tenant contrôlées.
+  - Preuves attendues : commandes, extraits, `git status --short`.
+  - Dépendances : CX T5.
+
+#### Critère de clôture du bloc
+
+Les données Alpha utiles sont mappées, les modèles candidats sont classés, et aucune modification Prisma n'est engagée sans décision explicite.
+
+#### Points de contrôle ChatGPT
+
+- Vérifier que Base44 n'est jamais repris comme modèle technique.
+- Vérifier les champs `companyId`, indexes et relations avant tout feu vert Prisma.
 
 ### BLOC T6 - Audit et traçabilité transverse
 
-- Objectif du bloc : définir le contrat de trace serveur pour les actions sensibles Alpha.
-- Rôle dans l'application : rendre les modifications sensibles contrôlables et consultables.
-- Références Base44 à regarder : `src/lib/auditLogger.js`, `base44/entities/AuditLog.jsonc`, pages auditées.
-- Références repo officiel à regarder : `LoginAuditLog`, `PlanningAuditLog`, `lib/services/audit/*`, `app/api/audit/route.ts`.
-- Dépendances amont : T4, T5.
-- Dépendances aval : P-AUDIT et tous les modules avec actions sensibles.
-- Risques identifiés : audit non transactionnel, trous d'événements, payload trop sensible, absence de rétention, support mal justifié.
-- Décisions déjà connues : audit client Base44 refusé ; traces login/planning déjà présentes ; actions sensibles doivent être tracées.
-- Décisions restant à confirmer : audit générique unifié, rétention, export audit, niveau de détail payload, supportReason.
-- Découpage proposé en sessions courtes : inventaire, contrat, corrections par module, validation consultation.
-- Critères de clôture du bloc : contrat minimal par action sensible et reports explicites.
-- Points de contrôle ChatGPT recommandés : vérifier serveur/API, pas seulement UI, et distinguer audit métier de conformité RGPD complète.
+#### Objectif du bloc
 
-| Code session proposé | Nature | Type métier | Objectif précis | Périmètre inclus | Hors périmètre explicite | Zones probables futures | Critères de validation | Preuves attendues | Dépendances |
-|---|---|---|---|---|---|---|---|---|---|
-| DX_T6_AUDIT-ACTIONS-SENSIBLES | DX | AUDIT | Lister actions sensibles et traces existantes/manquantes. | Modules, services audit, fiches. | Ajout de logs. | `lib/services/audit/*`, `app/api/*`. | Table action/source/trace/manque. | Extraits, status Git. | T4, T5. |
-| DX_T6_CADRAGE-CONTRAT-AUDIT | DX | CADRAGE | Définir champs minimaux, payload, support, masquage. | Contrat documentaire. | RGPD complet, SIEM. | Docs futures, services. | Contrat prêt validation humaine. | Matrice champs/risques. | DX_T6_AUDIT. |
-| CX_T6_COMPLETION-TRACE-MODULE | CX | COMPLÉTION | Ajouter une trace serveur validée sur un module/action ciblé. | Une action sensible par session si nécessaire. | Refonte audit globale. | Services module, audit service. | Trace créée et consultable. | Test/API, diff, lint/build. | Contrat validé. |
-| CX_T6_CORRECTION-PAYLOAD-SENSIBLE | CX | CORRECTION | Réduire ou normaliser un payload audit risqué validé. | Payload d'une famille de logs. | Politique rétention. | Audit services. | Pas de donnée excessive non justifiée. | Diff, test ciblé. | DX_T6_CADRAGE. |
-| QA_T6_VALIDATION-TRACABILITE | QA | VALIDATION | Vérifier la production et consultation de traces prioritaires. | Parcours test, API audit. | Correction lourde. | `app/audit`, `app/api/audit`. | Traces prouvées ou écarts listés. | Commandes/captures. | CX T6 et P-AUDIT. |
+Définir puis fiabiliser le contrat minimal de traçabilité serveur des actions sensibles.
+
+#### Rôle dans l'application
+
+T6 établit quelles actions doivent produire une trace officielle exploitable par P-AUDIT.
+
+#### Dépendances amont
+
+- T4 RBAC.
+- T5 données/multi-tenant.
+
+#### Dépendances aval
+
+- P-AUDIT.
+- Tous modules avec actions sensibles.
+- RGPD-PRIVACY et F2.
+
+#### Décisions connues
+
+- Le repo contient `PlanningAuditLog` et `LoginAuditLog`.
+- Des services d'audit existent pour login, planning, données personnelles et support.
+- Base44 audit client-side est à refuser comme preuve.
+
+#### Décisions à confirmer
+
+- Niveau de détail et de rétention audit : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Export audit : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Audit générique unifié ou maintien de journaux spécifiques : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Actions support obligatoires et motif support : `INFORMATION NON FOURNIE — À CONFIRMER`.
+
+#### Risques principaux
+
+- Trace écrite côté client ou hors transaction présentée comme probante.
+- Payload contenant des données personnelles excessives.
+- Page audit affichant des fallback `INFORMATION NON FOURNIE` au lieu de données qualifiées.
+
+#### Sessions de production prévues
+
+- `DX_T6_AUDIT-TRACES-EXISTANTES`
+  - Nature : DX.
+  - Type métier : AUDIT.
+  - Objectif : inventorier logs, services et actions sensibles déjà tracées.
+  - Périmètre inclus : auth, users, vehicles, depots, templates, company, planning, audit page/API.
+  - Hors périmètre : ajout de trace.
+  - Zones à lire : `lib/services/audit/`, `lib/services/planning/planning-audit.ts`, API routes sensibles, Prisma audit models.
+  - Zones modifiables plus tard : services audit et routes ciblées.
+  - Critères de validation : matrice action -> trace existante -> manque.
+  - Preuves attendues : extraits, tableau, `git status --short`.
+  - Dépendances : T4/T5.
+
+- `DX_T6_CADRAGE-CONTRAT-AUDIT`
+  - Nature : DX.
+  - Type métier : CADRAGE.
+  - Objectif : définir le contrat minimal de trace par type d'action.
+  - Périmètre inclus : module, action, acteur, tenant, cible, résultat, payload minimal.
+  - Hors périmètre : conformité RGPD complète, SIEM.
+  - Zones à lire : audit T6, RGPD base minimale, fiches fonctionnelles.
+  - Zones modifiables plus tard : services audit, validators.
+  - Critères de validation : contrat validable sans sur-collecte.
+  - Preuves attendues : contrat proposé, risques RGPD, dépendances.
+  - Dépendances : DX_T6_AUDIT-TRACES-EXISTANTES.
+
+- `CX_T6_CORRECTION-TRACES-PRIORITAIRES`
+  - Nature : CX.
+  - Type métier : CORRECTION.
+  - Objectif : corriger les traces manquantes ou incohérentes sur actions déjà existantes.
+  - Périmètre inclus : une famille d'actions par session si volume élevé.
+  - Hors périmètre : création de module audit complet, export audit.
+  - Zones à lire : cadrage T6, routes/services ciblés.
+  - Zones modifiables plus tard : services/routes ciblés.
+  - Critères de validation : trace serveur produite avec tenant et acteur.
+  - Preuves attendues : diff, tests, extraits logs ou mocks.
+  - Dépendances : T4/T5 et cadrage T6.
+
+- `CX_T6_COMPLETION-SUPPORT-AUDIT`
+  - Nature : CX.
+  - Type métier : COMPLÉTION.
+  - Objectif : compléter la traçabilité support si le périmètre support est confirmé.
+  - Périmètre inclus : actions support déjà présentes dans services.
+  - Hors périmètre : portail support complet.
+  - Zones à lire : `lib/services/audit/support-action-trace.ts`, services depots/users/vehicles.
+  - Zones modifiables plus tard : services support-action ciblés.
+  - Critères de validation : support tracé, raison/contextes présents ou explicitement non fournis.
+  - Preuves attendues : tests ciblés, diff.
+  - Dépendances : décision support : `INFORMATION NON FOURNIE — À CONFIRMER`.
+
+- `DX_T6_VALIDATION-CLOTURE-TRACABILITE`
+  - Nature : DX.
+  - Type métier : VALIDATION+CLOTURE.
+  - Objectif : contrôler sans correction que les actions sensibles retenues produisent ou exposent des traces.
+  - Périmètre inclus : actions modifiées, audit API/page, tests qualité.
+  - Hors périmètre : correction.
+  - Règle de non-correction : Si un écart bloquant est détecté, la session doit conclure à une non-clôture du bloc et demander une session CX ciblée.
+  - Zones à lire : services/routes modifiés, `app/api/audit/route.ts`.
+  - Zones modifiables plus tard : aucune dans cette session DX VALIDATION+CLOTURE.
+  - Critères de validation : traces consultables par acteur autorisé et interdites sinon.
+  - Preuves attendues : commandes, extraits, captures audit.
+  - Dépendances : CX T6 et P-AUDIT.
+
+#### Critère de clôture du bloc
+
+Le contrat audit Alpha est défini, les traces prioritaires sont traitées ou reportées, et les limites de rétention/conformité restent visibles.
+
+#### Points de contrôle ChatGPT
+
+- Vérifier que l'audit Base44 client-side n'est pas utilisé comme preuve.
+- Vérifier la minimisation des payloads.
 
 ### BLOC T7 - Qualité, tests et contrôles de reprise
 
-- Objectif du bloc : formaliser les contrôles minimaux par type de session et renforcer les tests ciblés utiles.
-- Rôle dans l'application : rendre chaque retour Codex contrôlable sans régression silencieuse.
-- Références Base44 à regarder : seulement pour l'exception documentaire Base44 build/lint déjà décidée.
-- Références repo officiel à regarder : `package.json`, `scripts/quality/*`, `scripts/check-doc-encoding.mjs`, `03-METHODE_DE_TRAVAIL.md`.
-- Dépendances amont : `03`, sessions T1 déjà historiques.
-- Dépendances aval : toutes les sessions CX/DX et F2.
-- Risques identifiés : tests trop larges inutilisables, exception Base44 mal appliquée, oubli encodage, validation implicite.
-- Décisions déjà connues : `npm run lint`, `npm run build`, tests qualité selon contexte ; exception Base44 documentaire si échec isolé.
-- Décisions restant à confirmer : minimum exact par bloc, besoin Playwright/browser systématique ou ciblé, couverture tests RBAC par rôle.
-- Découpage proposé en sessions courtes : DoD par session, tests sensibles, encodage, validation finale.
-- Critères de clôture du bloc : checklists de contrôle prêtes et tests utiles maintenus.
-- Points de contrôle ChatGPT recommandés : vérifier commandes exécutées, écarts préexistants et absence de modification hors périmètre.
+#### Objectif du bloc
 
-| Code session proposé | Nature | Type métier | Objectif précis | Périmètre inclus | Hors périmètre explicite | Zones probables futures | Critères de validation | Preuves attendues | Dépendances |
-|---|---|---|---|---|---|---|---|---|---|
-| DX_T7_AUDIT-CONTROLES-EXISTANTS | DX | AUDIT | Inventorier scripts, tests et contrôles docs. | `package.json`, scripts, docs méthode. | Création test. | `scripts/quality`, `scripts/check-doc-encoding.mjs`. | Carte contrôle par type session. | Commandes lecture, status Git. | Aucune. |
-| DX_T7_CADRAGE-DOD-PAR-BLOC | DX | CADRAGE | Définir DoD minimal par bloc/session. | Tableau contrôles obligatoires/recommandés. | Modification templates sans validation. | `03`, `05`, templates futurs. | DoD prêt validation. | Tableau. | DX_T7_AUDIT. |
-| CX_T7_COMPLETION-TEST-SENSIBLE | CX | COMPLÉTION | Ajouter un test qualité ciblé validé. | Un contrat sensible par session. | E2E complet. | `scripts/quality/*.test.mjs`. | Test non fragile et documenté. | Diff, `npm run test:quality`. | Décision humaine. |
-| QA_T7_VALIDATION-ENCODAGE-DOCS | QA | VALIDATION | Vérifier encodage et séquences suspectes sur docs modifiés. | Markdown concernés par session. | Réencodage global. | `scripts/check-doc-encoding.mjs`, PowerShell bytes. | UTF-8 sans BOM, pas de mojibake. | Commandes, status Git. | Chaque session documentaire. |
-| DX_T7_CLOTURE-CADRE-QUALITE | DX | CLÔTURE | Acter ou non le cadre de contrôle Alpha. | Synthèse risques et reports. | Validation produit. | Docs maîtres après validation. | Clôture explicite ou non-clôture. | Preuves T7. | Sessions T7. |
+Formaliser et compléter les contrôles récurrents nécessaires aux futures sessions.
 
-### BLOC P-LOGIN - Connexion incluant Se souvenir de moi
+#### Rôle dans l'application
 
-- Objectif du bloc : stabiliser le login officiel, ses erreurs, ses redirections, son lien Privacy et le comportement `Se souvenir de moi`.
-- Rôle dans l'application : point d'entrée sécurisé et compréhensible pour tous les utilisateurs.
-- Références Base44 à regarder : `src/pages/Login.jsx`, `src/components/auth/LoginForm.jsx`, `src/components/AuthLayout.jsx` uniquement comme référence visuelle.
-- Références repo officiel à regarder : `app/login/page.tsx`, `lib/auth.ts`, `app/api/auth/[...nextauth]/route.ts`, `types/next-auth.d.ts`, `app/privacy/page.tsx`.
-- Dépendances amont : T1, T4, RGPD-PRIVACY.
-- Dépendances aval : tous les modules connectés, F1.
-- Risques identifiés : fausse persistance session, cookie non sécurisé, erreurs trop précises, redirection non autorisée mal traitée.
-- Décisions déjà connues : pas d'inscription libre, pas MFA/SSO en Alpha, Privacy visible, audit login présent.
-- Décisions restant à confirmer : durée session standard/remember, renouvellement, option UI si non supportée, mot de passe oublié exclu ou report confirmé.
-- Découpage proposé en sessions courtes : audit auth, cadrage remember, correction UI/comportement, validation sécurité.
-- Critères de clôture du bloc : login utilisable, limites Alpha visibles, `Se souvenir de moi` décidé et prouvé ou retiré/neutralisé explicitement.
-- Points de contrôle ChatGPT recommandés : vérifier que l'option visible correspond au comportement réel et que le lien Privacy reste accessible.
+T7 permet d'ouvrir des sessions Codex avec DoD, commandes et preuves adaptées au type de changement.
 
-| Code session proposé | Nature | Type métier | Objectif précis | Périmètre inclus | Hors périmètre explicite | Zones probables futures | Critères de validation | Preuves attendues | Dépendances |
-|---|---|---|---|---|---|---|---|---|---|
-| DX_PLOGIN_AUDIT-AUTH-REMEMBER | DX | AUDIT | Auditer login, cookies, session, redirections, Privacy. | `lib/auth.ts`, login, NextAuth. | Modification auth. | `app/login/page.tsx`, `lib/auth.ts`. | Écart remember clairement établi. | Extraits, status Git. | T4. |
-| DX_PLOGIN_CADRAGE-SE-SOUVENIR | DX | CADRAGE | Proposer comportement session standard vs longue durée. | Sécurité, UX, RGPD minimal. | Codage. | Auth future. | Choix prêt validation humaine. | Options/risques. | DX audit. |
-| CX_PLOGIN_COMPLETION-REMEMBER-ME | CX | COMPLÉTION | Brancher ou corriger `Se souvenir de moi` selon décision. | UI + auth uniquement. | MFA, mot de passe oublié. | `app/login/page.tsx`, `lib/auth.ts`. | Durées session prouvées. | Diff, tests auth, lint/build. | Décision humaine. |
-| CX_PLOGIN_CORRECTION-ETATS-ERREURS | CX | CORRECTION | Harmoniser erreurs, loading, disabled et lien Privacy. | Formulaire et messages. | Refonte visuelle globale. | `app/login/page.tsx`, CSS login. | États conformes UI/UX. | Captures, lint/build. | T3. |
-| QA_PLOGIN_VALIDATION-PARCOURS | QA | VALIDATION | Vérifier login succès/échec/session expirée/privacy. | Parcours navigateur et audit login. | Correction. | Browser, audit logs. | Parcours validés ou écarts listés. | Captures/commandes. | CX P-LOGIN. |
+#### Dépendances amont
 
-### BLOC P-SOCIETE - Société incluant contacts société multiples
+- `03`.
+- Scripts qualité existants.
+- T4/T5/T6 pour les contrôles RBAC, tenant et audit.
 
-- Objectif du bloc : stabiliser profil société, règles, responsables et contacts société multiples.
-- Rôle dans l'application : référentiel tenant permanent, distinct de Mise en route.
-- Références Base44 à regarder : `src/pages/Societe.jsx`, `src/components/societe/*`, entités `Company`, `CompanyContact`.
-- Références repo officiel à regarder : `app/company/*`, `app/api/company/*`, `lib/services/company/*`, `lib/company-rules/*`, `prisma/schema.prisma`.
-- Dépendances amont : T4, T5, T6.
-- Dépendances aval : P-MISE-EN-ROUTE, P-PLANNING, P-DASHBOARD, RGPD-PRIVACY.
-- Risques identifiés : `CompanyContact` absent Prisma, confusion contact/utilisateur, règles société non raccordées, multi-tenant fragile.
-- Décisions déjà connues : Société ne gère pas suspension/suppression société en Alpha ; contacts multiples attendus fonctionnellement.
-- Décisions restant à confirmer : modèle `CompanyContact`, champs ARS, contact privacy, permission contacts, audit contacts.
-- Découpage proposé en sessions courtes : audit profil/règles, cadrage contacts, migration/API contacts, UI contacts, validation.
-- Critères de clôture du bloc : profil et contacts cohérents, cloisonnés, tracés ou report contacts explicite.
-- Points de contrôle ChatGPT recommandés : vérifier qu'un contact société n'est pas transformé en utilisateur applicatif par erreur.
+#### Dépendances aval
 
-| Code session proposé | Nature | Type métier | Objectif précis | Périmètre inclus | Hors périmètre explicite | Zones probables futures | Critères de validation | Preuves attendues | Dépendances |
-|---|---|---|---|---|---|---|---|---|---|
-| DX_PSOCIETE_AUDIT-PROFIL-REGLES-CONTACTS | DX | AUDIT | Cartographier profil, règles et absence/présence contacts. | Code officiel, Base44, schema. | Migration. | `app/company`, `app/api/company`, Prisma. | Écarts profil/contacts/règles listés. | Extraits, status Git. | T5, T6. |
-| DX_PSOCIETE_CADRAGE-CONTACTS-SOCIETE | DX | CADRAGE | Définir modèle, permissions et audit contacts. | Types contacts, champs, cycle archive. | Codage. | Prisma/API futurs. | Décision prête validation. | Options et risques. | Audit. |
-| CX_PSOCIETE_CREATION-CONTACTS-DATA-API | CX | CRÉATION | Créer modèle/API contacts si validé. | Prisma migration, API contacts, validators. | UI complète. | `prisma/schema.prisma`, `app/api/company/contacts`. | CRUD tenant-scopé et audité. | Migration, tests, lint/build. | T4/T5/T6 validés. |
-| CX_PSOCIETE_COMPLETION-CONTACTS-UI | CX | COMPLÉTION | Ajouter gestion UI des contacts multiples. | Page société, états UI, droits. | Changement règles société. | `app/company/*`. | Contacts visibles/modifiables selon droits. | Captures, diff. | API contacts. |
-| QA_PSOCIETE_VALIDATION-TENANT-AUDIT | QA | VALIDATION | Vérifier profil, contacts, règles, audit et droits. | Parcours navigateur + API. | Corrections lourdes. | Browser, API audit. | Pas d'écart bloquant connu. | Captures/commandes. | CX. |
+- Toutes les sessions CX et DX VALIDATION+CLOTURE.
+- F2.
+
+#### Décisions connues
+
+- Scripts disponibles : `npm run lint`, `npm run build`, `npm run test:smoke`, `npm run test:targeted`, `npm run test:quality`, `npm run docs:encoding`.
+- Exception Base44 documentaire possible pour build/lint si conditions strictes.
+
+#### Décisions à confirmer
+
+- Nommage réel des sessions DX VALIDATION+CLOTURE : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Niveau minimal E2E navigateur Alpha : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Tolérance warnings lint/build : `INFORMATION NON FOURNIE — À CONFIRMER`.
+
+#### Risques principaux
+
+- Valider avec des tests non représentatifs.
+- Masquer une régression derrière l'exception Base44.
+- Mélanger correction et validation.
+
+#### Sessions de production prévues
+
+- `DX_T7_AUDIT-SCRIPTS-CONTROLES`
+  - Nature : DX.
+  - Type métier : AUDIT.
+  - Objectif : inventorier scripts, commandes et lacunes de contrôle.
+  - Périmètre inclus : `package.json`, `scripts/quality/`, `scripts/check-doc-encoding.mjs` si présent.
+  - Hors périmètre : modification de scripts.
+  - Zones à lire : scripts qualité, docs méthode.
+  - Zones modifiables plus tard : scripts qualité ciblés.
+  - Critères de validation : matrice type de session -> commandes.
+  - Preuves attendues : extraits, liste scripts, `git status --short`.
+  - Dépendances : T4/T5/T6.
+
+- `DX_T7_CADRAGE-DOD-SESSIONS`
+  - Nature : DX.
+  - Type métier : CADRAGE.
+  - Objectif : définir les critères de sortie par session DX/CX.
+  - Périmètre inclus : preuves, git, encodage, tests, navigateur, Prisma.
+  - Hors périmètre : création de session dans `docs/2-SESSIONS`.
+  - Zones à lire : `03`, audit T7.
+  - Zones modifiables plus tard : templates ou docs si validation humaine.
+  - Critères de validation : DoD exploitable pour prompts Codex.
+  - Preuves attendues : tableau DoD, points à confirmer.
+  - Dépendances : DX_T7_AUDIT-SCRIPTS-CONTROLES.
+
+- `CX_T7_COMPLETION-SCRIPTS-QUALITE`
+  - Nature : CX.
+  - Type métier : COMPLÉTION.
+  - Objectif : compléter un script qualité uniquement si une lacune bloquante est confirmée.
+  - Périmètre inclus : un script ou test ciblé par session.
+  - Hors périmètre : refonte complète outillage, tests E2E lourds.
+  - Zones à lire : scripts qualité, routes concernées.
+  - Zones modifiables plus tard : `scripts/quality/`.
+  - Critères de validation : script non destructif, déterministe, documenté par preuves.
+  - Preuves attendues : diff, exécution du script, `npm run test:quality` si applicable.
+  - Dépendances : cadrage T7 et validation de la lacune.
+
+- `DX_T7_VALIDATION-CLOTURE-CADRE-REPRISE`
+  - Nature : DX.
+  - Type métier : VALIDATION+CLOTURE.
+  - Objectif : vérifier que le cadre qualité couvre les futures sessions.
+  - Périmètre inclus : commandes, encodage, git status, exception Base44.
+  - Hors périmètre : correction.
+  - Règle de non-correction : Si un écart bloquant est détecté, la session doit conclure à une non-clôture du bloc et demander une session CX ciblée.
+  - Zones à lire : `package.json`, scripts, `03`.
+  - Zones modifiables plus tard : aucune dans cette session DX VALIDATION+CLOTURE.
+  - Critères de validation : aucun type de session restant sans contrôle minimal.
+  - Preuves attendues : commandes non destructives, synthèse.
+  - Dépendances : DX/CX T7.
+
+#### Critère de clôture du bloc
+
+Les futures sessions disposent d'un cadre de contrôle clair, les manques de scripts sont traités ou reportés, et F2 peut s'appuyer sur des commandes connues.
+
+#### Points de contrôle ChatGPT
+
+- Vérifier que les sessions DX VALIDATION+CLOTURE ne corrigent pas.
+- Vérifier que l'exception Base44 n'est pas abusée.
+
+## 5. Blocs pages et modules
+
+### BLOC P-LOGIN - Connexion
+
+#### Objectif du bloc
+
+Stabiliser le parcours officiel de connexion, les erreurs, les redirections et le comportement `Se souvenir de moi` si confirmé.
+
+#### Rôle dans l'application
+
+Le login est l'entrée publique de l'application et charge l'identité, le tenant, les rôles et permissions.
+
+#### Dépendances amont
+
+- T1, T2, T4.
+- RGPD-PRIVACY pour lien et mentions.
+
+#### Dépendances aval
+
+- Tous les modules connectés.
+- F1, F2, RGPD-PRIVACY.
+
+#### Décisions connues
+
+- Auth officielle via NextAuth Credentials.
+- Session JWT max age actuellement fixe à 8 heures.
+- Lien `/privacy` attendu depuis login.
+- Pas d'inscription libre Alpha.
+
+#### Décisions à confirmer
+
+- Comportement exact de `Se souvenir de moi` : durée, cookie, renouvellement ou retrait : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Mot de passe oublié Alpha : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Politique de session prolongée : `INFORMATION NON FOURNIE — À CONFIRMER`.
+
+#### Risques principaux
+
+- Option `Se souvenir de moi` visible sans effet réel.
+- Redirection login utilisée pour utilisateur connecté mais non autorisé.
+- Sur-promesse sécurité/RGPD.
+
+#### Sessions de production prévues
+
+- `DX_PLOGIN_AUDIT-AUTH-UX`
+  - Nature : DX.
+  - Type métier : AUDIT.
+  - Objectif : auditer page login, auth NextAuth, lien privacy et états d'erreur.
+  - Périmètre inclus : UI login, `lib/auth.ts`, route auth, RGPD minimal.
+  - Hors périmètre : modification auth.
+  - Zones à lire : `app/login/page.tsx`, `app/api/auth/[...nextauth]/route.ts`, `lib/auth.ts`, `app/privacy/page.tsx`.
+  - Zones modifiables plus tard : login/auth seulement après cadrage.
+  - Critères de validation : écarts login classés UI, auth, privacy, remember.
+  - Preuves attendues : extraits, `git status --short`, éventuelles captures.
+  - Dépendances : T2/T4.
+
+- `DX_PLOGIN_CADRAGE-REMEMBER-ME`
+  - Nature : DX.
+  - Type métier : CADRAGE.
+  - Objectif : cadrer le comportement `Se souvenir de moi` ou son retrait.
+  - Périmètre inclus : options session courte/longue, sécurité, UX, impact NextAuth.
+  - Hors périmètre : patch.
+  - Zones à lire : audit login, `lib/auth.ts`, fiche Login.
+  - Zones modifiables plus tard : `lib/auth.ts`, `app/login/page.tsx`.
+  - Critères de validation : option retenue ou décision à confirmer explicitement.
+  - Preuves attendues : options, risques, impact tests.
+  - Dépendances : DX_PLOGIN_AUDIT-AUTH-UX.
+
+- `CX_PLOGIN_CORRECTION-UI-ERREURS-PRIVACY`
+  - Nature : CX.
+  - Type métier : CORRECTION.
+  - Objectif : corriger les états login et le lien privacy sans toucher à la durée session si non arbitrée.
+  - Périmètre inclus : messages, disabled/loading, lien privacy, libellés.
+  - Hors périmètre : MFA, SSO, mot de passe oublié, remember non arbitré.
+  - Zones à lire : audit login, `app/login/page.tsx`.
+  - Zones modifiables plus tard : `app/login/page.tsx`, styles associés.
+  - Critères de validation : login clair, privacy accessible, erreurs non ambiguës.
+  - Preuves attendues : diff, lint/build, capture login.
+  - Dépendances : T3/RGPD.
+
+- `CX_PLOGIN_COMPLETION-REMEMBER-ME`
+  - Nature : CX.
+  - Type métier : COMPLÉTION.
+  - Objectif : implémenter ou neutraliser `Se souvenir de moi` selon décision humaine.
+  - Périmètre inclus : formulaire login, configuration session si validée.
+  - Hors périmètre : refonte auth globale, MFA.
+  - Zones à lire : cadrage remember, `lib/auth.ts`, NextAuth route.
+  - Zones modifiables plus tard : `app/login/page.tsx`, `lib/auth.ts`.
+  - Critères de validation : comportement prouvé ou option retirée explicitement.
+  - Preuves attendues : diff, tests auth manuels, lint/build.
+  - Dépendances : décision humaine remember.
+
+- `DX_PLOGIN_VALIDATION-CLOTURE-CONNEXION`
+  - Nature : DX.
+  - Type métier : VALIDATION+CLOTURE.
+  - Objectif : valider connexion, erreurs, session, redirection et privacy sans correction.
+  - Périmètre inclus : scénarios succès/échec, utilisateur inactif si testable, lien privacy.
+  - Hors périmètre : correction.
+  - Règle de non-correction : Si un écart bloquant est détecté, la session doit conclure à une non-clôture du bloc et demander une session CX ciblée.
+  - Zones à lire : app rendue, logs auth si disponibles.
+  - Zones modifiables plus tard : aucune dans cette session DX VALIDATION+CLOTURE.
+  - Critères de validation : parcours login exploitable et limites restantes listées.
+  - Preuves attendues : captures, commandes, `git status --short`.
+  - Dépendances : CX PLOGIN.
+
+#### Critère de clôture du bloc
+
+Le login est utilisable, les limites Alpha sont explicites, et `Se souvenir de moi` est implémenté, neutralisé ou reporté avec décision visible.
+
+#### Points de contrôle ChatGPT
+
+- Vérifier que l'auth Base44 n'est pas reprise.
+- Vérifier que le lien privacy reste discret et accessible.
+
+### BLOC P-SOCIETE - Société
+
+#### Objectif du bloc
+
+Stabiliser le profil société, les règles métier et le cadrage des contacts société multiples.
+
+#### Rôle dans l'application
+
+Société porte le contexte permanent du tenant, les informations de profil, les règles métier et les contacts éventuels.
+
+#### Dépendances amont
+
+- T4, T5, T6.
+
+#### Dépendances aval
+
+- P-DEPOTS-BASES, P-PLANNING, P-DASHBOARD, P-MISE-EN-ROUTE, RGPD-PRIVACY.
+
+#### Décisions connues
+
+- `Company` et `CompanyRule` existent officiellement.
+- `CompanyContact` existe dans Base44 mais pas dans Prisma officiel lu.
+- Société ne doit pas être fusionnée avec Mise en route.
+
+#### Décisions à confirmer
+
+- Création de `CompanyContact` en Alpha : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Champs ARS/réglementaires exacts : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Permission profil société vs règles société vs contacts : `INFORMATION NON FOURNIE — À CONFIRMER`.
+
+#### Risques principaux
+
+- Multi-tenant fragile si société non issue de session serveur.
+- Contacts société confondus avec utilisateurs applicatifs.
+- Déclaration réglementaire excessive.
+
+#### Sessions de production prévues
+
+- `DX_PSOCIETE_AUDIT-PROFIL-REGLES-CONTACTS`
+  - Nature : DX.
+  - Type métier : AUDIT.
+  - Objectif : auditer profil, règles, contacts attendus et écarts Base44/officiel.
+  - Périmètre inclus : page société, API company, Prisma Company/CompanyRule, fiche Société.
+  - Hors périmètre : migration contacts.
+  - Zones à lire : `app/company/*`, `app/api/company/*`, `lib/services/company/`, `lib/company-rules/`, `prisma/schema.prisma`.
+  - Zones modifiables plus tard : company UI/API/services, Prisma si modèle validé.
+  - Critères de validation : écarts profil/règles/contacts classés.
+  - Preuves attendues : extraits, matrice, `git status --short`.
+  - Dépendances : T5.
+
+- `DX_PSOCIETE_CADRAGE-COMPANYCONTACT`
+  - Nature : DX.
+  - Type métier : CADRAGE.
+  - Objectif : décider créer, reporter ou refuser `CompanyContact`.
+  - Périmètre inclus : données, RBAC, audit, UI, migration.
+  - Hors périmètre : création modèle.
+  - Zones à lire : audit P-SOCIETE, entité Base44 `CompanyContact`, fiche Société.
+  - Zones modifiables plus tard : Prisma/API/UI contacts.
+  - Critères de validation : décision prête avec impacts.
+  - Preuves attendues : options, risques RGPD/multi-tenant.
+  - Dépendances : T5/T4/T6.
+
+- `CX_PSOCIETE_CORRECTION-PROFIL-REGLES`
+  - Nature : CX.
+  - Type métier : CORRECTION.
+  - Objectif : corriger les incohérences prouvées du profil société et des règles existantes.
+  - Périmètre inclus : champs existants, validations, droits, audit existant.
+  - Hors périmètre : contacts si modèle non validé, facturation.
+  - Zones à lire : audit P-SOCIETE, `app/company/*`, `app/api/company/*`.
+  - Zones modifiables plus tard : page/API/services company.
+  - Critères de validation : profil borné au tenant, droits cohérents, audit si action sensible.
+  - Preuves attendues : diff, tests API, lint/build.
+  - Dépendances : T4/T5/T6.
+
+- `CX_PSOCIETE_CREATION-CONTACTS`
+  - Nature : CX.
+  - Type métier : CRÉATION.
+  - Objectif : créer les contacts société uniquement si `CompanyContact` est validé.
+  - Périmètre inclus : migration Prisma, API contacts, UI minimale, audit.
+  - Hors périmètre : annuaire complet, utilisateurs applicatifs, conformité juridique complète.
+  - Zones à lire : cadrage CompanyContact, Prisma, validators.
+  - Zones modifiables plus tard : Prisma, API company contacts, UI société.
+  - Critères de validation : contacts tenant-scopés, archivage logique si retenu, audit.
+  - Preuves attendues : migration, `npx prisma validate`, tests, captures.
+  - Dépendances : validation humaine CompanyContact.
+
+- `DX_PSOCIETE_VALIDATION-CLOTURE-SOCIETE`
+  - Nature : DX.
+  - Type métier : VALIDATION+CLOTURE.
+  - Objectif : valider profil/règles/contacts retenus par rôle et tenant.
+  - Périmètre inclus : API, UI, audit, multi-tenant.
+  - Hors périmètre : correction.
+  - Règle de non-correction : Si un écart bloquant est détecté, la session doit conclure à une non-clôture du bloc et demander une session CX ciblée.
+  - Zones à lire : app rendue, API modifiées, audit.
+  - Zones modifiables plus tard : aucune dans cette session DX VALIDATION+CLOTURE.
+  - Critères de validation : société cohérente et non confondue avec Mise en route.
+  - Preuves attendues : captures, commandes, `git status --short`.
+  - Dépendances : CX P-SOCIETE.
+
+#### Critère de clôture du bloc
+
+Le profil société et les règles existantes sont fiables ; les contacts sont créés seulement si validés ou clairement reportés.
+
+#### Points de contrôle ChatGPT
+
+- Vérifier `companyId` serveur.
+- Vérifier qu'aucun champ réglementaire non confirmé n'est présenté comme conformité.
 
 ### BLOC P-DEPOTS-BASES - Dépôts / Bases
 
-- Objectif du bloc : stabiliser le référentiel dépôts/bases, son cycle actif/archivé et ses rattachements.
-- Rôle dans l'application : référence pour utilisateurs, véhicules, planning et mise en route.
-- Références Base44 à regarder : `src/pages/Depots.jsx`, `src/components/depots/DepotFormDialog.jsx`, entité `Depot`.
-- Références repo officiel à regarder : `app/depots/*`, `app/api/depots/*`, `lib/services/depots/*`, `prisma/schema.prisma`.
-- Dépendances amont : T4, T5, T6.
-- Dépendances aval : P-UTILISATEURS-RH, P-VEHICULES, P-PLANNING, P-MISE-EN-ROUTE.
-- Risques identifiés : permission dédiée absente du catalogue, restauration à confirmer, responsable local absent/à modéliser, compteurs denormalisés à refuser.
-- Décisions déjà connues : nom unique par société, pas suppression physique, rattachements gérés depuis users/vehicles.
-- Décisions restant à confirmer : `DEPOTS_MANAGE`, restauration/désarchivage, responsable local utilisateur, archivage avec rattachements.
-- Découpage proposé en sessions courtes : audit, permission/RBAC, cycle archive, UI champs, validation.
-- Critères de clôture du bloc : dépôts fiables pour modules dépendants, écarts de restauration/responsable explicités.
-- Points de contrôle ChatGPT recommandés : vérifier pas de compteur stocké inutile et pas d'archive bloquante sans décision.
+#### Objectif du bloc
 
-| Code session proposé | Nature | Type métier | Objectif précis | Périmètre inclus | Hors périmètre explicite | Zones probables futures | Critères de validation | Preuves attendues | Dépendances |
-|---|---|---|---|---|---|---|---|---|---|
-| DX_PDEPOTS_AUDIT-REFERENTIEL | DX | AUDIT | Auditer champs, API, UI, rattachements, archive. | Dépôts officiel/Base44. | Correction. | `app/depots`, `app/api/depots`, services. | Écarts classés. | Extraits, status Git. | T5. |
-| CX_PDEPOTS_COMPLETION-RBAC-API | CX | COMPLÉTION | Ajouter/aligner permission dépôts si validée. | Catalogue/helper/API. | UI refonte. | `lib/permissions.ts`, `app/api/depots`. | API protégée par permission validée. | Tests, diff. | T4. |
-| CX_PDEPOTS_CORRECTION-CYCLE-ARCHIVE | CX | CORRECTION | Stabiliser archivage/restauration selon décision. | API/service/UI ciblés. | Suppression physique. | `lib/services/depots`, `app/depots`. | Cycle prouvé, audit produit. | Test/capture. | T6. |
-| CX_PDEPOTS_COMPLETION-CHAMPS-UI | CX | COMPLÉTION | Compléter champs validés et avertissements rattachement. | Formulaire/table seulement. | Compteurs stockés. | `app/depots/depots-client.tsx`. | UX conforme fiches. | Captures, lint/build. | Audit. |
-| QA_PDEPOTS_VALIDATION-REFERENTIEL | QA | VALIDATION | Vérifier création, édition, archive, droits, tenant. | Parcours API/UI. | Correction. | Browser/API. | Référentiel exploitable. | Commandes/captures. | CX. |
+Stabiliser le référentiel des dépôts/bases avant les rattachements RH, véhicules et planning.
+
+#### Rôle dans l'application
+
+Les dépôts structurent les lieux de rattachement, les véhicules, les utilisateurs et les affectations planning.
+
+#### Dépendances amont
+
+- T4, T5, T6.
+- P-SOCIETE pour tenant/règles éventuelles.
+
+#### Dépendances aval
+
+- P-UTILISATEURS-RH, P-VEHICULES, P-PLANNING, P-MISE-EN-ROUTE.
+
+#### Décisions connues
+
+- Modèle `Depot` officiel présent.
+- API CRUD et archivage existent.
+- Base44 ajoute code, ville, responsable local et compteurs dynamiques comme inspirations.
+
+#### Décisions à confirmer
+
+- Permission dédiée `DEPOTS_MANAGE` : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Restauration/désarchivage officiel : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Responsable local comme utilisateur lié ou texte : `INFORMATION NON FOURNIE — À CONFIRMER`.
+
+#### Risques principaux
+
+- Archiver un dépôt encore rattaché sans règle claire.
+- Compteurs dénormalisés repris de Base44.
+- Gestion des dépôts sans permission dédiée.
+
+#### Sessions de production prévues
+
+- `DX_PDEPOTS_AUDIT-REFERENTIEL-API-UI`
+  - Nature : DX.
+  - Type métier : AUDIT.
+  - Objectif : auditer modèle, API, UI, archivage et rattachements.
+  - Périmètre inclus : depots page/API/services, Prisma, fiches.
+  - Hors périmètre : correction.
+  - Zones à lire : `app/depots/*`, `app/api/depots/*`, `lib/services/depots/*`, `prisma/schema.prisma`.
+  - Zones modifiables plus tard : page/API/services depots.
+  - Critères de validation : cycle vie et dépendances cartographiés.
+  - Preuves attendues : extraits, tableau écarts, `git status --short`.
+  - Dépendances : T5.
+
+- `DX_PDEPOTS_CADRAGE-CYCLE-VIE`
+  - Nature : DX.
+  - Type métier : CADRAGE.
+  - Objectif : cadrer archive/restauration et blocage si rattachements actifs.
+  - Périmètre inclus : règles utilisateur/véhicule/planning dépendantes.
+  - Hors périmètre : patch.
+  - Zones à lire : audit depots, services users/vehicles/planning.
+  - Zones modifiables plus tard : services archive/depot, UI filtres.
+  - Critères de validation : règles prêtes à validation humaine ou marquées à confirmer.
+  - Preuves attendues : options, impacts.
+  - Dépendances : DX_PDEPOTS_AUDIT-REFERENTIEL-API-UI.
+
+- `CX_PDEPOTS_CORRECTION-RBAC-TENANT-AUDIT`
+  - Nature : CX.
+  - Type métier : CORRECTION.
+  - Objectif : corriger droits, tenant et audit sur actions dépôt existantes.
+  - Périmètre inclus : create/update/archive/depot assignment si dépôt impliqué.
+  - Hors périmètre : nouveaux champs non validés.
+  - Zones à lire : audit/cadrage depots, T4/T6.
+  - Zones modifiables plus tard : API/services depots.
+  - Critères de validation : actions dépôt bornées au tenant et tracées.
+  - Preuves attendues : diff, tests qualité, lint/build.
+  - Dépendances : T4/T6.
+
+- `CX_PDEPOTS_COMPLETION-UI-CHAMPS-FILTRES`
+  - Nature : CX.
+  - Type métier : COMPLÉTION.
+  - Objectif : compléter UI dépôts sur champs/filtres/états validés.
+  - Périmètre inclus : colonnes, recherche, active/archivé si supporté.
+  - Hors périmètre : géolocalisation, compteurs stockés.
+  - Zones à lire : référence UI/UX dépôts, page officielle.
+  - Zones modifiables plus tard : `app/depots/*`, CSS ciblé.
+  - Critères de validation : liste exploitable par RH/véhicules/planning.
+  - Preuves attendues : diff, captures, lint/build.
+  - Dépendances : T3, cadrage cycle vie.
+
+- `DX_PDEPOTS_VALIDATION-CLOTURE-REFERENTIEL`
+  - Nature : DX.
+  - Type métier : VALIDATION+CLOTURE.
+  - Objectif : valider création/modification/archive/lecture dépôts selon droits.
+  - Périmètre inclus : UI/API, tenant, audit.
+  - Hors périmètre : correction.
+  - Règle de non-correction : Si un écart bloquant est détecté, la session doit conclure à une non-clôture du bloc et demander une session CX ciblée.
+  - Zones à lire : app/API rendues.
+  - Zones modifiables plus tard : aucune dans cette session DX VALIDATION+CLOTURE.
+  - Critères de validation : dépôts fiables pour modules dépendants.
+  - Preuves attendues : captures, commandes, `git status --short`.
+  - Dépendances : CX P-DEPOTS.
+
+#### Critère de clôture du bloc
+
+Le référentiel dépôts/bases est fiable, tenant-scopé et exploitable par RH, véhicules et planning ; les règles de restauration non validées restent visibles.
+
+#### Points de contrôle ChatGPT
+
+- Vérifier que les compteurs sont calculés ou justifiés.
+- Vérifier que les rattachements actifs sont pris en compte avant archivage si règle retenue.
 
 ### BLOC P-UTILISATEURS-RH - Utilisateurs / RH
 
-- Objectif du bloc : stabiliser utilisateurs, rôles, permissions, accès applicatif, absences et rattachement dépôt.
-- Rôle dans l'application : référentiel RH et source planning.
-- Références Base44 à regarder : `src/pages/Utilisateurs.jsx`, `src/components/utilisateurs/*`, entités `User`, `AbsenceRequest`, `Employee` à refuser comme entité séparée.
-- Références repo officiel à regarder : `app/users/*`, `app/api/users/*`, `lib/services/users/*`, validators user/absence.
-- Dépendances amont : T4, T5, T6, P-DEPOTS-BASES.
-- Dépendances aval : P-PLANNING, P-DASHBOARD, P-MISE-EN-ROUTE.
-- Risques identifiés : actions RH sensibles trop larges, reset password sans permission dédiée, filtres actifs/inactifs incohérents, données personnelles.
-- Décisions déjà connues : pas de suppression physique par défaut, `User` officiel porte identité/RH minimale, absences simples existantes.
-- Décisions restant à confirmer : accès applicatif séparé, workflow demandes d'absence, `USERS_PASSWORD_RESET`, multi-rôle maximum 3, statuts opérationnels.
-- Découpage proposé en sessions courtes : audit, filtres/statuts, accès applicatif/reset, absences, RBAC/audit, validation.
-- Critères de clôture du bloc : users/RH exploitables sans incohérence critique connue.
-- Points de contrôle ChatGPT recommandés : vérifier cohérence UI/API et données personnelles audit/RGPD.
+#### Objectif du bloc
 
-| Code session proposé | Nature | Type métier | Objectif précis | Périmètre inclus | Hors périmètre explicite | Zones probables futures | Critères de validation | Preuves attendues | Dépendances |
-|---|---|---|---|---|---|---|---|---|---|
-| DX_PUSERS_AUDIT-RH-RBAC-DATA | DX | AUDIT | Auditer modèle, UI/API, droits, absences, Base44. | Code users, schema, fiches. | Correction. | `app/users`, `app/api/users`, services. | Matrice écarts RH. | Extraits, status Git. | T4/T5. |
-| CX_PUSERS_CORRECTION-FILTRES-STATUTS | CX | CORRECTION | Corriger mismatch filtres actifs/inactifs et états. | Liste users/API si validé. | Workflow absence. | `app/users/*`, `app/api/users/route.ts`. | UI/API cohérents. | Tests/captures. | Audit. |
-| CX_PUSERS_COMPLETION-ACCES-RESET | CX | COMPLÉTION | Stabiliser accès applicatif et reset password. | Actions ciblées, RBAC, audit. | Première connexion complète. | Dialogs users, reset route. | Action visible/protégée/tracée. | Diff, test API. | T4/T6. |
-| CX_PUSERS_COMPLETION-ABSENCES | CX | COMPLÉTION | Stabiliser absences/indisponibilités Alpha. | CRUD absence, validations, audit. | Workflow validation avancé si non décidé. | `lib/services/users/user-absence.ts`, API absences. | Absence tenant-scopée et tracée. | Tests/captures. | T5/T6. |
-| QA_PUSERS_VALIDATION-RH | QA | VALIDATION | Valider création/édition/archive/rattachement/absence/droits. | Parcours et tests qualité. | Correction. | Browser/API. | Écarts restants priorisés. | Commandes/captures. | CX. |
+Stabiliser utilisateurs, rôles, accès applicatif, données RH minimales, rattachement dépôt et absences.
+
+#### Rôle dans l'application
+
+Le module porte les personnes, droits, statuts, accès et indisponibilités nécessaires au planning et aux actions sensibles.
+
+#### Dépendances amont
+
+- T4, T5, T6.
+- P-DEPOTS-BASES.
+
+#### Dépendances aval
+
+- P-PLANNING, P-DASHBOARD, P-MISE-EN-ROUTE, F1.
+
+#### Décisions connues
+
+- Modèle officiel `User`, `Permission`, `UserPermission`, `UserAbsence`.
+- Base44 `Employee` est refusé comme entité séparée sans arbitrage.
+- API users et absences existent.
+
+#### Décisions à confirmer
+
+- Séparation compte applicatif / fiche RH en officiel : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Permission dédiée reset password : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Statuts RH opérationnels au-delà de `isActive`/absences : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Workflow demandes d'absence vs indisponibilités simples : `INFORMATION NON FOURNIE — À CONFIRMER`.
+
+#### Risques principaux
+
+- Incohérence filtre actifs/inactifs UI/API.
+- Reset password ou rôles sans permission fine.
+- Données personnelles modifiées sans audit.
+- Support global inclus dans listes tenant.
+
+#### Sessions de production prévues
+
+- `DX_PUSERS_AUDIT-RH-API-RBAC`
+  - Nature : DX.
+  - Type métier : AUDIT.
+  - Objectif : auditer users/RH, API, permissions, absences et écarts Base44.
+  - Périmètre inclus : page users, API, services, validators, Prisma User/UserAbsence.
+  - Hors périmètre : correction.
+  - Zones à lire : `app/users/*`, `app/api/users/*`, `lib/services/users/*`, `lib/validators/user*.ts`, `prisma/schema.prisma`.
+  - Zones modifiables plus tard : users UI/API/services/validators.
+  - Critères de validation : écarts action par action classés.
+  - Preuves attendues : extraits, matrice, `git status --short`.
+  - Dépendances : T4/T5.
+
+- `DX_PUSERS_CADRAGE-ACCES-APPLICATIF-RH`
+  - Nature : DX.
+  - Type métier : CADRAGE.
+  - Objectif : cadrer séparation fiche RH, compte applicatif, reset password et permissions.
+  - Périmètre inclus : options sans nouveau modèle vs champs existants vs report.
+  - Hors périmètre : patch.
+  - Zones à lire : audit users, Base44 Utilisateurs, fiche RH.
+  - Zones modifiables plus tard : user schema/API/UI si validé.
+  - Critères de validation : décisions prêtes ou à confirmer.
+  - Preuves attendues : options, risques RGPD/RBAC.
+  - Dépendances : DX_PUSERS_AUDIT-RH-API-RBAC.
+
+- `CX_PUSERS_CORRECTION-FILTRES-STATUTS`
+  - Nature : CX.
+  - Type métier : CORRECTION.
+  - Objectif : corriger mismatch filtres/statuts actifs/inactifs et actions visibles.
+  - Périmètre inclus : liste users, filtres, API list, statut actif.
+  - Hors périmètre : nouveau workflow RH.
+  - Zones à lire : audit users, `app/users/*`, `app/api/users/route.ts`.
+  - Zones modifiables plus tard : UI liste/API users.
+  - Critères de validation : UI et API racontent la même vérité.
+  - Preuves attendues : diff, tests qualité, captures.
+  - Dépendances : P-DEPOTS si rattachement affiché.
+
+- `CX_PUSERS_COMPLETION-ABSENCES-DEPOTS`
+  - Nature : CX.
+  - Type métier : COMPLÉTION.
+  - Objectif : compléter absences/indisponibilités et rattachement dépôt selon cadrage.
+  - Périmètre inclus : `UserAbsence`, assignation dépôt, validations, audit.
+  - Hors périmètre : workflow validation/refus d'absence si non validé.
+  - Zones à lire : services absences, API depot assignment, validators.
+  - Zones modifiables plus tard : services/API/UI absences et depot.
+  - Critères de validation : absence bornée tenant, impact planning documenté.
+  - Preuves attendues : diff, tests, lint/build.
+  - Dépendances : P-DEPOTS, T6.
+
+- `CX_PUSERS_CORRECTION-RBAC-AUDIT`
+  - Nature : CX.
+  - Type métier : CORRECTION.
+  - Objectif : corriger RBAC/audit sur création, édition, archive, reset et permissions.
+  - Périmètre inclus : actions sensibles users existantes.
+  - Hors périmètre : module complet de gestion des rôles si non validé.
+  - Zones à lire : T4/T6, users API/services.
+  - Zones modifiables plus tard : API/services users, permission helpers.
+  - Critères de validation : action sensible contrôlée et tracée.
+  - Preuves attendues : diff, `npm run test:quality`, extraits audit.
+  - Dépendances : T4/T6.
+
+- `DX_PUSERS_VALIDATION-CLOTURE-RH`
+  - Nature : DX.
+  - Type métier : VALIDATION+CLOTURE.
+  - Objectif : valider parcours users/RH sans correction.
+  - Périmètre inclus : liste, création, édition, archive, absences, droits.
+  - Hors périmètre : correction.
+  - Règle de non-correction : Si un écart bloquant est détecté, la session doit conclure à une non-clôture du bloc et demander une session CX ciblée.
+  - Zones à lire : app/API rendues.
+  - Zones modifiables plus tard : aucune dans cette session DX VALIDATION+CLOTURE.
+  - Critères de validation : module exploitable sans incohérence critique connue.
+  - Preuves attendues : captures, commandes, `git status --short`.
+  - Dépendances : CX P-USERS.
+
+#### Critère de clôture du bloc
+
+Utilisateurs/RH est exploitable, les données personnelles sont tracées, et les règles non arbitrées restent explicitement à confirmer.
+
+#### Points de contrôle ChatGPT
+
+- Vérifier que `Employee` Base44 n'est pas recréé sans arbitrage.
+- Vérifier que les utilisateurs support ne polluent pas les listes tenant.
 
 ### BLOC P-VEHICULES - Véhicules
 
-- Objectif du bloc : stabiliser la flotte administrative, ses statuts, rattachements et archivage.
-- Rôle dans l'application : référentiel véhicules pour suivi, planning et dashboard.
-- Références Base44 à regarder : `src/pages/Vehicules.jsx`, `src/components/vehicules/VehicleFormDialog.jsx`, `vehicleUtils.js`, entité `Vehicle`.
-- Références repo officiel à regarder : `app/vehicles/*`, `app/api/vehicles/*`, `lib/services/vehicles/*`, `lib/validators/vehicle.ts`, schema `Vehicle`.
-- Dépendances amont : T4, T5, T6, P-DEPOTS-BASES.
-- Dépendances aval : P-SUIVI-VEHICULES, P-PLANNING, P-DASHBOARD.
-- Risques identifiés : disponibilité opérationnelle mal modélisée, TPMR absent de l'enum, permission UI/API à vérifier, restauration à cadrer.
-- Décisions déjà connues : véhicules administratifs distincts du suivi opérationnel ; pas suppression physique ; types officiels actuels `AMBULANCE`, `VSL`, `TAXI`.
-- Décisions restant à confirmer : TPMR, disponibilité avec motif, restauration, `VEHICLES_AVAILABILITY`, champs documentaires complémentaires.
-- Découpage proposé en sessions courtes : audit, statuts/disponibilité, API/RBAC, archive/restauration, validation.
-- Critères de clôture du bloc : flotte fiable pour modules dépendants.
-- Points de contrôle ChatGPT recommandés : vérifier que Suivi des véhicules n'est pas dilué dans le référentiel administratif.
+#### Objectif du bloc
 
-| Code session proposé | Nature | Type métier | Objectif précis | Périmètre inclus | Hors périmètre explicite | Zones probables futures | Critères de validation | Preuves attendues | Dépendances |
-|---|---|---|---|---|---|---|---|---|---|
-| DX_PVEHICULES_AUDIT-FLOTTE | DX | AUDIT | Auditer flotte, champs, statuts, permissions, Base44. | UI/API/services/schema. | Correction. | `app/vehicles`, `app/api/vehicles`, Prisma. | Écarts classés. | Extraits, status Git. | P-DEPOTS. |
-| DX_PVEHICULES_CADRAGE-DISPONIBILITE-TPMR | DX | CADRAGE | Proposer traitement disponibilité/motif/TPMR. | Options data/RBAC/planning. | Migration. | Prisma futur, validators. | Arbitrage prêt validation. | Matrice options. | T5/T4. |
-| CX_PVEHICULES_CORRECTION-RBAC-API | CX | CORRECTION | Aligner API/UI véhicules sur permissions validées. | Routes véhicules, actions UI. | Suivi véhicules. | `app/api/vehicles`, `vehicles-client`. | Front/API cohérents. | Tests/captures. | T4. |
-| CX_PVEHICULES_COMPLETION-ARCHIVE-RESTAURE | CX | COMPLÉTION | Compléter cycle archive/restauration si validé. | Service/API/UI ciblés. | Suppression physique. | `lib/services/vehicles`, API archive. | Cycle prouvé et audité. | Diff, test. | T6. |
-| QA_PVEHICULES_VALIDATION-FLOTTE | QA | VALIDATION | Vérifier CRUD, archive, tenant, droits, audit. | Parcours API/UI. | Correction. | Browser/API. | Flotte exploitable. | Commandes/captures. | CX. |
+Stabiliser le référentiel administratif de flotte avant le suivi opérationnel et le planning.
+
+#### Rôle dans l'application
+
+Véhicules porte la flotte administrative, les statuts, les documents, les rattachements dépôt et la disponibilité de base.
+
+#### Dépendances amont
+
+- T4, T5, T6.
+- P-DEPOTS-BASES.
+
+#### Dépendances aval
+
+- P-SUIVI-VEHICULES, P-PLANNING, P-DASHBOARD.
+
+#### Décisions connues
+
+- Modèle `Vehicle` officiel présent.
+- API vehicles et archive existent.
+- Audit identifie une incohérence permission front/API sur création.
+- Le suivi opérationnel détaillé relève de P-SUIVI-VEHICULES.
+
+#### Décisions à confirmer
+
+- Permission disponibilité véhicule : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Mapping `VehicleStatus`, `isActive`, disponibilité opérationnelle et indisponibilité planning : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- TPMR / TPMR VSL / TPMR TAXI : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Restauration véhicule : `INFORMATION NON FOURNIE — À CONFIRMER`.
+
+#### Risques principaux
+
+- Confusion entre référentiel administratif et suivi opérationnel.
+- Disponibilité non cohérente avec planning.
+- Détails véhicule affichant des données synthétiques ou placeholders.
+
+#### Sessions de production prévues
+
+- `DX_PVEH_AUDIT-FLOTTE-API-UI`
+  - Nature : DX.
+  - Type métier : AUDIT.
+  - Objectif : auditer modèle, API, UI, statuts, documents et écarts Base44.
+  - Périmètre inclus : page véhicules, API, services, validators, Prisma Vehicle.
+  - Hors périmètre : suivi opérationnel 6.1.
+  - Zones à lire : `app/vehicles/*`, `app/api/vehicles/*`, `lib/services/vehicles/*`, `lib/validators/vehicle.ts`, `prisma/schema.prisma`.
+  - Zones modifiables plus tard : véhicules UI/API/services.
+  - Critères de validation : écarts flotte classés par priorité.
+  - Preuves attendues : extraits, matrice, `git status --short`.
+  - Dépendances : P-DEPOTS/T4/T5.
+
+- `DX_PVEH_CADRAGE-STATUTS-DISPONIBILITE`
+  - Nature : DX.
+  - Type métier : CADRAGE.
+  - Objectif : cadrer statuts, disponibilité, motifs et impact planning.
+  - Périmètre inclus : enums officiels, idées Base44, droits, audit.
+  - Hors périmètre : migration ou UI.
+  - Zones à lire : audit véhicules, fiche véhicules, Base44 Vehicle.
+  - Zones modifiables plus tard : schema/API/UI si validé.
+  - Critères de validation : mapping statut/disponibilité prêt ou à confirmer.
+  - Preuves attendues : options, risques planning.
+  - Dépendances : T5/P-PLANNING futur.
+
+- `CX_PVEH_CORRECTION-RBAC-CREATION`
+  - Nature : CX.
+  - Type métier : CORRECTION.
+  - Objectif : corriger incohérence front/API sur création et gestion véhicule.
+  - Périmètre inclus : permissions page/API create/update/archive.
+  - Hors périmètre : disponibilité avancée, suivi véhicules.
+  - Zones à lire : T4, `app/vehicles/*`, `app/api/vehicles/*`.
+  - Zones modifiables plus tard : véhicules UI/API.
+  - Critères de validation : même permission front/API et refus serveur prouvé.
+  - Preuves attendues : diff, tests qualité, captures.
+  - Dépendances : T4.
+
+- `CX_PVEH_COMPLETION-ARCHIVE-DEPOT-DOCUMENTS`
+  - Nature : CX.
+  - Type métier : COMPLÉTION.
+  - Objectif : compléter cycle administratif validé : archive, dépôt, champs documentaires.
+  - Périmètre inclus : rattachement dépôt, documents, état actif, restauration si validée.
+  - Hors périmètre : vérifications/désinfections/anomalies.
+  - Zones à lire : services vehicles, validators, page.
+  - Zones modifiables plus tard : API/services/UI vehicles.
+  - Critères de validation : flotte fiable pour planning et suivi.
+  - Preuves attendues : diff, lint/build, tests ciblés.
+  - Dépendances : P-DEPOTS/T6.
+
+- `CX_PVEH_CORRECTION-DONNEES-DETAIL`
+  - Nature : CX.
+  - Type métier : CORRECTION.
+  - Objectif : supprimer ou remplacer les données de détail non sourcées par des états honnêtes.
+  - Périmètre inclus : panneaux de détail, placeholders, informations liées au suivi futur.
+  - Hors périmètre : création du module suivi véhicules.
+  - Zones à lire : audit véhicules, `app/vehicles/vehicles-client.tsx`.
+  - Zones modifiables plus tard : UI véhicule.
+  - Critères de validation : aucune donnée fictive présentée comme réelle.
+  - Preuves attendues : diff, captures.
+  - Dépendances : T3/P-SUIVI futur.
+
+- `DX_PVEH_VALIDATION-CLOTURE-FLOTTE`
+  - Nature : DX.
+  - Type métier : VALIDATION+CLOTURE.
+  - Objectif : valider parcours flotte administrative sans correction.
+  - Périmètre inclus : create/update/archive/depot/documents/RBAC.
+  - Hors périmètre : suivi opérationnel.
+  - Règle de non-correction : Si un écart bloquant est détecté, la session doit conclure à une non-clôture du bloc et demander une session CX ciblée.
+  - Zones à lire : app/API rendues.
+  - Zones modifiables plus tard : aucune dans cette session DX VALIDATION+CLOTURE.
+  - Critères de validation : véhicules fiables pour modules dépendants.
+  - Preuves attendues : captures, commandes, `git status --short`.
+  - Dépendances : CX P-VEH.
+
+#### Critère de clôture du bloc
+
+La flotte administrative est fiable, tenant-scopée, contrôlée et prête pour suivi véhicules et planning.
+
+#### Points de contrôle ChatGPT
+
+- Vérifier séparation Véhicules vs Suivi des véhicules.
+- Vérifier absence de faux détails opérationnels.
 
 ### BLOC P-SUIVI-VEHICULES - Suivi des véhicules
 
-- Objectif du bloc : cadrer puis créer/stabiliser le suivi opérationnel véhicules Alpha.
-- Rôle dans l'application : suivre vérifications, désinfections, anomalies et criticités opérationnelles.
-- Références Base44 à regarder : `src/pages/SuiviVehicules.jsx`, `src/components/suivi/*`, entités `VehicleCheck`, `Disinfection`, `VehicleAnomaly`.
-- Références repo officiel à regarder : `app/vehicles/*` pour fragments existants, schema Prisma, routes API véhicules, références 6.1.
-- Dépendances amont : P-VEHICULES, T4, T5, T6.
-- Dépendances aval : P-PLANNING, P-AUDIT, P-DASHBOARD, F1/F3.
-- Risques identifiés : entités absentes Prisma, règles ARS non confirmées, permissions larges Base44 à refuser, risque de module trop gros.
-- Décisions déjà connues : onglets Alpha attendus vue ensemble/vérifications/désinfections/anomalies ; pas d'indisponibilité automatique ; anomalie depuis vérification/désinfection possible.
-- Décisions restant à confirmer : route autonome vs sous-module, modèles Prisma, permissions dédiées, règles ARS, contre-vérification habilitée ou simple différence de personne.
-- Découpage proposé en sessions courtes : cadrage technique, modèles/API, UI par onglet, audit/RBAC, validation.
-- Critères de clôture du bloc : périmètre Alpha situé clairement et fonctionnel ou report explicite.
-- Points de contrôle ChatGPT recommandés : refuser toute absence volontaire de contrôle RBAC et tout automatisme d'indisponibilité non validé.
+#### Objectif du bloc
 
-| Code session proposé | Nature | Type métier | Objectif précis | Périmètre inclus | Hors périmètre explicite | Zones probables futures | Critères de validation | Preuves attendues | Dépendances |
-|---|---|---|---|---|---|---|---|---|---|
-| DX_PSUIVI_AUDIT-STATUT-TECHNIQUE | DX | AUDIT | Déterminer module autonome/sous-module et gaps officiels. | Code officiel, Base44, fiches 6.1. | Création code. | Routes véhicules, schema, docs 6.1. | Décision à confirmer documentée. | Matrice options. | P-VEHICULES. |
-| DX_PSUIVI_CADRAGE-MODELES-API-RBAC | DX | CADRAGE | Définir modèles, endpoints, permissions, audit. | VehicleCheck/Disinfection/Anomaly candidats. | Migration. | Prisma/API futurs. | Plan technique prêt validation. | Diagramme/tableau. | T4/T5/T6. |
-| CX_PSUIVI_CREATION-DATA-API | CX | CRÉATION | Créer modèles/API de suivi validés. | Prisma, validators, routes API. | UI complète. | `prisma/schema.prisma`, `app/api/vehicle-tracking` ou équivalent. | API tenant-scopée, RBAC, audit. | Migration, tests, lint/build. | Décision humaine. |
-| CX_PSUIVI_CREATION-UI-ONGLETS | CX | CRÉATION | Créer UI de suivi par onglets en sessions séparables. | Vue ensemble puis onglet ciblé. | Tous onglets en une fois si trop large. | Page/composants suivi. | Onglet fonctionnel et contrôlable. | Captures, diff. | API suivi. |
-| CX_PSUIVI_COMPLETION-ANOMALIES-LIAISONS | CX | COMPLÉTION | Relier anomalies depuis vérification/désinfection. | Flux ciblé, audit, RBAC. | Automatisme indisponibilité. | Services suivi. | Anomalie créée/tracée depuis source. | Test/capture. | UI/API suivi. |
-| QA_PSUIVI_VALIDATION-OPERATIONNELLE | QA | VALIDATION | Valider onglets, droits, tenant, audit, états. | Parcours complet Alpha. | Correction lourde. | Browser/API. | Suivi véhicules exploitable ou écarts bloquants listés. | Captures/commandes. | CX. |
+Cadrer puis créer ou compléter le module de suivi opérationnel véhicules selon le périmètre Alpha validé.
+
+#### Rôle dans l'application
+
+Le module porte vue d'ensemble, vérifications, désinfections et anomalies, distincts de la flotte administrative.
+
+#### Dépendances amont
+
+- P-VEHICULES.
+- T4, T5, T6.
+- P-DEPOTS-BASES.
+
+#### Dépendances aval
+
+- P-DASHBOARD, P-PLANNING si disponibilité impactée, F1, F3.
+
+#### Décisions connues
+
+- Base44 matérialise un module dédié avec quatre onglets.
+- Le repo officiel ne prouve pas de route autonome dédiée.
+- Les modèles `VehicleCheck`, `Disinfection`, `VehicleAnomaly` sont absents du Prisma officiel lu.
+
+#### Décisions à confirmer
+
+- Route autonome, sous-module Véhicules ou hybride : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Création des modèles Prisma suivi véhicules : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Règles ARS exactes vérifications/désinfections : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Permissions création/modification/lecture suivi : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Effet d'une anomalie critique sur disponibilité véhicule : `INFORMATION NON FOURNIE — À CONFIRMER`.
+
+#### Risques principaux
+
+- Bloc trop large si Prisma/API/UI sont mélangés.
+- Reprendre les entités Base44 sans normalisation officielle.
+- Absence de RBAC fin sur écritures opérationnelles.
+- Présenter des règles ARS non confirmées.
+
+#### Sessions de production prévues
+
+- `DX_PSUIVI_AUDIT-PERIMETRE-EXISTANT`
+  - Nature : DX.
+  - Type métier : AUDIT.
+  - Objectif : vérifier ce qui existe réellement côté officiel et comparer à Base44 6.1.
+  - Périmètre inclus : route/page officielle éventuelle, véhicules détail, Prisma, Base44 suivi.
+  - Hors périmètre : création module.
+  - Zones à lire : `app/vehicles/*`, `app/api/vehicles/*`, `prisma/schema.prisma`, références/fiches suivi, Base44 suivi.
+  - Zones modifiables plus tard : route suivi, Prisma, API, UI si validés.
+  - Critères de validation : statut technique du module qualifié.
+  - Preuves attendues : extraits, matrice manques, `git status --short`.
+  - Dépendances : P-VEH.
+
+- `DX_PSUIVI_CADRAGE-ARCHITECTURE-MODULE`
+  - Nature : DX.
+  - Type métier : CADRAGE.
+  - Objectif : décider route autonome/sous-module/hybride et découpage data/API/UI.
+  - Périmètre inclus : architecture officielle, dépendances véhicules/dépôts/audit/RBAC.
+  - Hors périmètre : migration.
+  - Zones à lire : audit suivi, T5/T4/T6.
+  - Zones modifiables plus tard : `app/suivi-vehicules` ou autre route validée, API, Prisma.
+  - Critères de validation : architecture et ordre des CX prêts, ou questions humaines listées.
+  - Preuves attendues : options, impacts, décisions à confirmer.
+  - Dépendances : DX_PSUIVI_AUDIT-PERIMETRE-EXISTANT.
+
+- `CX_PSUIVI_CREATION-PRISMA-API`
+  - Nature : CX.
+  - Type métier : CRÉATION.
+  - Objectif : créer les modèles/API suivi uniquement après validation du cadrage.
+  - Périmètre inclus : un lot data/API cohérent : check, désinfection, anomalie ou socle commun.
+  - Hors périmètre : UI complète quatre onglets, règles ARS non confirmées.
+  - Zones à lire : cadrage suivi, Prisma, validators, services audit.
+  - Zones modifiables plus tard : Prisma, migrations, API, validators/services.
+  - Critères de validation : modèles tenant-scopés, API RBAC, audit serveur.
+  - Preuves attendues : migration, prisma validate, tests API.
+  - Dépendances : validation humaine modèles suivi.
+
+- `CX_PSUIVI_CREATION-UI-VUE-ENSEMBLE`
+  - Nature : CX.
+  - Type métier : CRÉATION.
+  - Objectif : créer la vue d'ensemble suivi sur données officielles.
+  - Périmètre inclus : route/page, KPI réels ou états vides, liens véhicules.
+  - Hors périmètre : formulaires check/désinfection/anomalie si API non prête.
+  - Zones à lire : API suivi, références UI/UX 6.1, Base44 en lecture.
+  - Zones modifiables plus tard : page suivi, composants UI ciblés.
+  - Critères de validation : vue sans faux KPI, accès selon droits.
+  - Preuves attendues : diff, captures, lint/build.
+  - Dépendances : CX Prisma/API ou décision de lecture sans nouveaux modèles.
+
+- `CX_PSUIVI_CREATION-ONGLETS-OPERATIONS`
+  - Nature : CX.
+  - Type métier : CRÉATION.
+  - Objectif : créer les onglets vérifications, désinfections et anomalies par petits lots.
+  - Périmètre inclus : un onglet ou formulaire par session si volume élevé.
+  - Hors périmètre : indisponibilité automatique, signature, preuve mobile.
+  - Zones à lire : UI vue ensemble, API suivi, références 6.1.
+  - Zones modifiables plus tard : composants suivi ciblés.
+  - Critères de validation : actions contrôlées, traçables, données réelles.
+  - Preuves attendues : diff, captures, tests.
+  - Dépendances : CX_PSUIVI_CREATION-PRISMA-API.
+
+- `CX_PSUIVI_COMPLETION-RBAC-AUDIT`
+  - Nature : CX.
+  - Type métier : COMPLÉTION.
+  - Objectif : compléter permissions et traces suivi véhicules.
+  - Périmètre inclus : accès lecture/écriture, actions sensibles, payload audit.
+  - Hors périmètre : conformité réglementaire complète.
+  - Zones à lire : T4/T6, API suivi.
+  - Zones modifiables plus tard : permissions/helpers/API/services.
+  - Critères de validation : pas d'écriture non autorisée, traces produites.
+  - Preuves attendues : tests RBAC, extraits audit, diff.
+  - Dépendances : décisions permissions suivi.
+
+- `DX_PSUIVI_VALIDATION-CLOTURE-MODULE`
+  - Nature : DX.
+  - Type métier : VALIDATION+CLOTURE.
+  - Objectif : valider le périmètre suivi retenu sans correction.
+  - Périmètre inclus : route, onglets, API, audit, RBAC, états vides.
+  - Hors périmètre : correction.
+  - Règle de non-correction : Si un écart bloquant est détecté, la session doit conclure à une non-clôture du bloc et demander une session CX ciblée.
+  - Zones à lire : app rendue/API.
+  - Zones modifiables plus tard : aucune dans cette session DX VALIDATION+CLOTURE.
+  - Critères de validation : suivi véhicules situé clairement et fonctionnel sur Alpha retenu.
+  - Preuves attendues : captures, commandes, `git status --short`.
+  - Dépendances : CX PSUIVI.
+
+#### Critère de clôture du bloc
+
+Le statut du module est tranché, le périmètre Alpha retenu fonctionne ou est reporté explicitement, et aucune règle ARS non confirmée n'est présentée comme validée.
+
+#### Points de contrôle ChatGPT
+
+- Vérifier que le bloc est divisé data/API/UI.
+- Vérifier que Base44 est utilisé comme référence, pas comme source technique.
 
 ### BLOC P-MODELES-HORAIRES - Modèles horaires
 
-- Objectif du bloc : aligner l'ancien module templates sur le référentiel `Modèles horaires`.
-- Rôle dans l'application : source des affectations et repères planning.
-- Références Base44 à regarder : `src/pages/ModelesHoraires.jsx`, `src/components/modeles/TemplateFormDialog.jsx`, entité `ShiftTemplate`.
-- Références repo officiel à regarder : `app/templates/*`, `app/api/templates/*`, `lib/templates/*`, schema `ShiftTemplate`.
-- Dépendances amont : T2, T4, T5, T6.
-- Dépendances aval : P-PLANNING, P-MISE-EN-ROUTE, P-DASHBOARD.
-- Risques identifiés : route `/templates` confuse, champs Base44 non alignés, duplication/restauration à confirmer, modèles sans horaires déjà à préserver.
-- Décisions déjà connues : libellé produit `Modèles horaires`, route technique peut rester `/templates` tant que T2 non tranché.
-- Décisions restant à confirmer : renommage route, duplication, jours actifs, compteur usage, restauration, granularité RBAC.
-- Découpage proposé en sessions courtes : audit, nomenclature UI, archive/restore, champs horaires/jours actifs, validation planning.
-- Critères de clôture du bloc : modèles exploitables et nommés correctement côté produit.
-- Points de contrôle ChatGPT recommandés : vérifier qu'une modification de modèle ne modifie pas rétroactivement les shifts déjà créés.
+#### Objectif du bloc
 
-| Code session proposé | Nature | Type métier | Objectif précis | Périmètre inclus | Hors périmètre explicite | Zones probables futures | Critères de validation | Preuves attendues | Dépendances |
-|---|---|---|---|---|---|---|---|---|---|
-| DX_PMODELES_AUDIT-TEMPLATES-OFFICIEL | DX | AUDIT | Auditer route, champs, API, planning, Base44. | `templates`, schema, fiches. | Correction. | `app/templates`, `lib/templates`. | Écarts classés. | Extraits, status Git. | T2/T5. |
-| CX_PMODELES_CORRECTION-LIBELLES-UI | CX | CORRECTION | Corriger libellés visibles résiduels. | Textes UI uniquement. | Renommage route. | `app/templates/*`, dashboard/shell si besoin. | Plus de libellé legacy visible ciblé. | Captures, diff. | T2. |
-| CX_PMODELES_COMPLETION-ARCHIVE-RESTAURE | CX | COMPLÉTION | Stabiliser archivage/restauration/duplication si validés. | Actions ciblées. | Jours actifs si non décidé. | API/templates, services. | Cycle prouvé et audité. | Tests/captures. | T4/T6. |
-| DX_PMODELES_CADRAGE-JOURS-ACTIFS | DX | CADRAGE | Cadrer jours actifs, horaires par jour, compteur usage. | Options data/planning. | Migration. | Prisma futur. | Décision prête validation. | Tableau risques. | P-PLANNING dépendance. |
-| QA_PMODELES_VALIDATION-REFERENTIEL | QA | VALIDATION | Vérifier CRUD, états, droits, compatibilité planning. | Parcours UI/API. | Correction. | Browser/API. | Référentiel fiable. | Commandes/captures. | CX. |
+Aligner le module officiel `ShiftTemplate` avec la terminologie `Modèles horaires` et les besoins planning.
+
+#### Rôle dans l'application
+
+Les modèles horaires sont un référentiel utilisé par le planning pour créer ou affecter des créneaux.
+
+#### Dépendances amont
+
+- T2, T3, T4, T5.
+
+#### Dépendances aval
+
+- P-PLANNING, P-DASHBOARD, P-MISE-EN-ROUTE.
+
+#### Décisions connues
+
+- Route officielle actuelle `/templates`.
+- Modèle Prisma `ShiftTemplate` existant.
+- Permission officielle `TEMPLATES_MANAGE` existante.
+- Libellé visible attendu : `Modèles horaires`.
+
+#### Décisions à confirmer
+
+- Renommage technique route `/templates` : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Duplication et restauration modèles : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Champs Base44 `allowed_roles`, `active_days`, `usage_count`, `short_label` : `INFORMATION NON FOURNIE — À CONFIRMER`.
+
+#### Risques principaux
+
+- Terminologie legacy visible.
+- Casser le planning en modifiant les modèles.
+- Reprendre des compteurs stockés Base44.
+
+#### Sessions de production prévues
+
+- `DX_PMODELES_AUDIT-TEMPLATES-OFFICIEL`
+  - Nature : DX.
+  - Type métier : AUDIT.
+  - Objectif : auditer ShiftTemplate, API templates, UI et dépendances planning.
+  - Périmètre inclus : `/templates`, services/lib templates, Prisma.
+  - Hors périmètre : renommage technique.
+  - Zones à lire : `app/templates/*`, `app/api/templates/*`, `lib/templates/*`, `lib/services/templates/*`, `prisma/schema.prisma`.
+  - Zones modifiables plus tard : templates UI/API/services.
+  - Critères de validation : écarts terminologie/champs/cycle vie classés.
+  - Preuves attendues : extraits, matrice, `git status --short`.
+  - Dépendances : T2/T5.
+
+- `DX_PMODELES_CADRAGE-CHAMPS-CYCLE-VIE`
+  - Nature : DX.
+  - Type métier : CADRAGE.
+  - Objectif : cadrer duplication, archive/restauration, jours actifs et rôles autorisés.
+  - Périmètre inclus : décisions champs et impact planning.
+  - Hors périmètre : migration.
+  - Zones à lire : audit modèles, Base44 ShiftTemplate, fiche planning.
+  - Zones modifiables plus tard : Prisma/API/UI si validé.
+  - Critères de validation : chaque enrichissement classé créer/report/refuser.
+  - Preuves attendues : options, risques planning.
+  - Dépendances : DX_PMODELES_AUDIT-TEMPLATES-OFFICIEL.
+
+- `CX_PMODELES_CORRECTION-NOMENCLATURE-UI`
+  - Nature : CX.
+  - Type métier : CORRECTION.
+  - Objectif : corriger les libellés visibles vers `Modèles horaires`.
+  - Périmètre inclus : titres, boutons, messages, navigation locale.
+  - Hors périmètre : route technique, schema, planning.
+  - Zones à lire : audit modèles, T2.
+  - Zones modifiables plus tard : `app/templates/*`.
+  - Critères de validation : aucun libellé visible legacy non justifié.
+  - Preuves attendues : diff, captures, lint.
+  - Dépendances : T2.
+
+- `CX_PMODELES_COMPLETION-ARCHIVE-VALIDATIONS`
+  - Nature : CX.
+  - Type métier : COMPLÉTION.
+  - Objectif : compléter validations et cycle vie modèle selon cadrage.
+  - Périmètre inclus : validation horaires, archive/restauration si confirmée, compatibilité planning.
+  - Hors périmètre : refonte planning.
+  - Zones à lire : validators/templates, API, planning dependencies.
+  - Zones modifiables plus tard : validators/API/services/UI templates.
+  - Critères de validation : modèles exploitables et non cassants pour planning.
+  - Preuves attendues : diff, tests API, lint/build.
+  - Dépendances : cadrage champs/cycle vie.
+
+- `DX_PMODELES_VALIDATION-CLOTURE-PLANNING-COMPAT`
+  - Nature : DX.
+  - Type métier : VALIDATION+CLOTURE.
+  - Objectif : valider modèles horaires et compatibilité planning sans correction.
+  - Périmètre inclus : CRUD, archive si retenue, utilisation planning.
+  - Hors périmètre : correction.
+  - Règle de non-correction : Si un écart bloquant est détecté, la session doit conclure à une non-clôture du bloc et demander une session CX ciblée.
+  - Zones à lire : app rendue, API.
+  - Zones modifiables plus tard : aucune dans cette session DX VALIDATION+CLOTURE.
+  - Critères de validation : modèles horaires prêts pour P-PLANNING.
+  - Preuves attendues : captures, commandes, `git status --short`.
+  - Dépendances : CX P-MODELES.
+
+#### Critère de clôture du bloc
+
+Le module est nommé correctement côté produit, fonctionne avec `ShiftTemplate` officiel et ne bloque pas la reprise du planning.
+
+#### Points de contrôle ChatGPT
+
+- Vérifier qu'aucun renommage technique n'est fait sans T2.
+- Vérifier la compatibilité planning avant clôture.
 
 ### BLOC P-PLANNING - Planning
 
-- Objectif du bloc : fiabiliser le planning manuel métier après stabilisation des référentiels.
-- Rôle dans l'application : synthèse opérationnelle des utilisateurs, véhicules, dépôts et modèles.
-- Références Base44 à regarder : `src/pages/Planning.jsx`, `src/components/planning/*`, `planningUtils.js`, `planningEligibility.js`, entité `PlanningEntry` à refuser comme remplacement.
-- Références repo officiel à regarder : `app/planning/*`, `app/api/planning/*`, `lib/services/planning/*`, `lib/planning/export.ts`, schema `Shift`, `DraftShift`, `AutoScheduleRun`.
-- Dépendances amont : P-SOCIETE, P-DEPOTS-BASES, P-UTILISATEURS-RH, P-VEHICULES, P-MODELES-HORAIRES, T4, T5, T6.
-- Dépendances aval : P-DASHBOARD, P-AUDIT, F1/F2/F3.
-- Risques identifiés : module très large, flux legacy, régression moteur d'affectation, règles métier non confirmées, planning automatique hors coeur Alpha.
-- Décisions déjà connues : Alpha centré planning manuel métier synthétique ; `PlanningEntry` Base44 refusé ; actions publication/annulation doivent être tracées.
-- Décisions restant à confirmer : semaine 53, publication avec besoins non couverts, compatibilité rôles/véhicules, jours fériés/week-ends, informations sensibles visibles par rôle.
-- Découpage proposé en sessions courtes : audit flux, vues, actions manuelles, publication/annulation, exports, legacy, validation.
-- Critères de clôture du bloc : parcours Alpha retenus fiables, écarts bloquants listés.
-- Points de contrôle ChatGPT recommandés : empêcher une session "tout planning" et exiger preuves par flux.
+#### Objectif du bloc
 
-| Code session proposé | Nature | Type métier | Objectif précis | Périmètre inclus | Hors périmètre explicite | Zones probables futures | Critères de validation | Preuves attendues | Dépendances |
-|---|---|---|---|---|---|---|---|---|---|
-| DX_PPLANNING_AUDIT-FLUX-ACTIFS-LEGACY | DX | AUDIT | Cartographier flux actifs, legacy, vues, APIs. | Planning officiel/Base44. | Correction. | `app/planning`, `app/api/planning`, services. | Flux à garder/corriger/reportés. | Matrice, status Git. | Référentiels. |
-| DX_PPLANNING_CADRAGE-PARCOURS-ALPHA | DX | CADRAGE | Définir parcours Alpha prioritaires et règles à confirmer. | Vues, actions, rôles, dépendances. | Codage. | Docs futures. | Périmètre réduit validable. | Tableau priorités. | Audit. |
-| CX_PPLANNING_CORRECTION-ACTIONS-MANUELLES | CX | CORRECTION | Stabiliser création/édition affectation manuelle ciblée. | Un flux action. | Autoschedule avancé. | `planning-client`, API shifts. | Action tenant-scopée, RBAC, audit. | Test/capture. | T4/T6. |
-| CX_PPLANNING_COMPLETION-PUBLICATION-ANNULATION | CX | COMPLÉTION | Stabiliser publication/annulation logique avec motif. | Flux ciblé. | Reporting. | API shifts/runs, audit. | Trace produite et état cohérent. | Tests/captures. | T6. |
-| CX_PPLANNING_CORRECTION-VUES-UI | CX | CORRECTION | Corriger une vue Planning ciblée. | Une vue par session si nécessaire. | Changer moteur data. | `planning-client.tsx`, CSS. | Vue lisible et fidèle aux docs. | Captures desktop. | T3. |
-| QA_PPLANNING_VALIDATION-PARCOURS | QA | VALIDATION | Vérifier parcours planning Alpha retenus. | Parcours navigateur/API/tests. | Correction. | Browser, tests. | Écarts listés par gravité. | Commandes/captures. | CX. |
+Reprendre le planning manuel métier après stabilisation des référentiels et contrôles transverses.
+
+#### Rôle dans l'application
+
+Le planning synthétise utilisateurs, véhicules, dépôts, modèles horaires, absences, publications, annulations et exports.
+
+#### Dépendances amont
+
+- P-SOCIETE, P-DEPOTS-BASES, P-UTILISATEURS-RH, P-VEHICULES, P-MODELES-HORAIRES.
+- T4, T5, T6, T7.
+
+#### Dépendances aval
+
+- P-DASHBOARD, P-AUDIT, F1, F2, F3.
+
+#### Décisions connues
+
+- Modèle officiel structuré autour de `DraftShift`, `Shift`, `AutoScheduleRun`, audit planning.
+- Base44 `PlanningEntry` monolithique est refusé comme remplacement.
+- Module officiel déjà riche mais complexe et incomplet.
+
+#### Décisions à confirmer
+
+- Règles semaine 53 : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Publication avec besoins obligatoires non couverts : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Week-ends/jours fériés/équilibrage : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Informations sensibles visibles par rôle : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Restauration planning/shift annulé : `INFORMATION NON FOURNIE — À CONFIRMER`.
+
+#### Risques principaux
+
+- Session trop large.
+- Régression moteur autoschedule/matching.
+- Mélange planning manuel, autoschedule, export, audit et vues en un seul patch.
+- Données personnelles visibles à tort.
+
+#### Sessions de production prévues
+
+- `DX_PPLANNING_AUDIT-FLUX-MOTEUR`
+  - Nature : DX.
+  - Type métier : AUDIT.
+  - Objectif : cartographier vues, flux actifs, legacy, endpoints, services et audit.
+  - Périmètre inclus : planning page, APIs shifts/autoschedule/exports, services.
+  - Hors périmètre : correction.
+  - Zones à lire : `app/planning/*`, `app/api/planning/*`, `lib/services/planning/*`, `lib/types/planning.ts`, `prisma/schema.prisma`.
+  - Zones modifiables plus tard : planning UI/API/services.
+  - Critères de validation : flux classés actif/legacy/report.
+  - Preuves attendues : matrice flux, extraits, `git status --short`.
+  - Dépendances : référentiels.
+
+- `DX_PPLANNING_CADRAGE-VUES-ALPHA`
+  - Nature : DX.
+  - Type métier : CADRAGE.
+  - Objectif : définir les vues Alpha à traiter : global, personnel, semaine, jour, mois.
+  - Périmètre inclus : priorités, données nécessaires, droits visibles.
+  - Hors périmètre : patch.
+  - Zones à lire : audit planning, références UI/UX planning, Base44 planning.
+  - Zones modifiables plus tard : composants planning.
+  - Critères de validation : vues prioritaires et reports explicités.
+  - Preuves attendues : ordre de traitement, risques.
+  - Dépendances : DX_PPLANNING_AUDIT-FLUX-MOTEUR.
+
+- `CX_PPLANNING_CORRECTION-LEGACY-CONTRATS`
+  - Nature : CX.
+  - Type métier : CORRECTION.
+  - Objectif : corriger ou isoler les flux legacy prouvés comme risqués.
+  - Périmètre inclus : endpoints dépréciés, composants inutilisés, contrats API fragiles.
+  - Hors périmètre : refonte planning.
+  - Zones à lire : audit planning.
+  - Zones modifiables plus tard : endpoints/services ciblés.
+  - Critères de validation : flux legacy qualifié, non destructif.
+  - Preuves attendues : diff, tests qualité, lint/build.
+  - Dépendances : cadrage planning.
+
+- `CX_PPLANNING_COMPLETION-ACTIONS-MANUELLES`
+  - Nature : CX.
+  - Type métier : COMPLÉTION.
+  - Objectif : compléter création/édition/assignation/cancel manuel selon périmètre Alpha.
+  - Périmètre inclus : shifts manuels, validation tenant, absences, véhicules, modèles.
+  - Hors périmètre : autoschedule avancé, vues multiples non liées.
+  - Zones à lire : API shifts, assign services, validators.
+  - Zones modifiables plus tard : API shifts, planning client.
+  - Critères de validation : action manuelle contrôlée, auditée, cohérente avec référentiels.
+  - Preuves attendues : diff, tests, captures.
+  - Dépendances : P-USERS/P-VEH/P-MODELES/T6.
+
+- `CX_PPLANNING_COMPLETION-VUES`
+  - Nature : CX.
+  - Type métier : COMPLÉTION.
+  - Objectif : compléter une vue planning prioritaire par session.
+  - Périmètre inclus : rendu, filtres, états, droits, données réelles.
+  - Hors périmètre : modification moteur.
+  - Zones à lire : cadrage vues, composants planning.
+  - Zones modifiables plus tard : `app/planning/*`.
+  - Critères de validation : vue exploitable sans données fictives.
+  - Preuves attendues : captures, lint/build.
+  - Dépendances : CX actions manuelles si nécessaire.
+
+- `CX_PPLANNING_COMPLETION-PUBLICATION-EXPORT`
+  - Nature : CX.
+  - Type métier : COMPLÉTION.
+  - Objectif : fiabiliser publication, annulation et export dans le périmètre retenu.
+  - Périmètre inclus : publish/cancel/export, RBAC, audit.
+  - Hors périmètre : règles non arbitrées semaine 53/jours fériés.
+  - Zones à lire : autoschedule publish/cancel, exports route, audit planning.
+  - Zones modifiables plus tard : API/services planning.
+  - Critères de validation : actions sensibles tracées et droits prouvés.
+  - Preuves attendues : tests, diff, extraits audit.
+  - Dépendances : T4/T6.
+
+- `DX_PPLANNING_VALIDATION-CLOTURE-PARCOURS-CRITIQUES`
+  - Nature : DX.
+  - Type métier : VALIDATION+CLOTURE.
+  - Objectif : valider les parcours planning retenus sans correction.
+  - Périmètre inclus : vues, actions manuelles, publication/annulation/export, RBAC.
+  - Hors périmètre : correction.
+  - Règle de non-correction : Si un écart bloquant est détecté, la session doit conclure à une non-clôture du bloc et demander une session CX ciblée.
+  - Zones à lire : app/API rendues.
+  - Zones modifiables plus tard : aucune dans cette session DX VALIDATION+CLOTURE.
+  - Critères de validation : planning manuel métier fiable ou écarts listés.
+  - Preuves attendues : captures, commandes, `git status --short`.
+  - Dépendances : CX P-PLANNING.
+
+#### Critère de clôture du bloc
+
+Les parcours planning Alpha retenus sont fiables, contrôlés, auditables, et les règles non arbitrées sont explicitement reportées.
+
+#### Points de contrôle ChatGPT
+
+- Vérifier que `PlanningEntry` Base44 n'est jamais utilisé comme modèle.
+- Vérifier que chaque session planning garde un seul objectif.
 
 ### BLOC P-AUDIT - Audit / Traçabilité
 
-- Objectif du bloc : garantir la consultation des traces officielles autorisées.
-- Rôle dans l'application : interface de contrôle des actions sensibles.
-- Références Base44 à regarder : `src/pages/Audit.jsx`, entité `AuditLog`, `auditLogger.js` à refuser comme preuve serveur.
-- Références repo officiel à regarder : `app/audit/*`, `app/api/audit/route.ts`, `lib/services/audit/*`, schema logs.
-- Dépendances amont : T6, T4, T5.
-- Dépendances aval : F1, F2, F4.
-- Risques identifiés : support global et `companyId` param, payload sensible, filtres incomplets, export audit non confirmé.
-- Décisions déjà connues : page lecture seule ; accès `AUDIT_VIEW`/Admin/Gérant/support contrôlé.
-- Décisions restant à confirmer : export audit, rétention, champs de contexte obligatoires, visibilité inter-tenant support.
-- Découpage proposé en sessions courtes : audit page/API, filtres, détails payload, support, validation.
-- Critères de clôture du bloc : traces autorisées consultables sans modification métier et sans fuite tenant.
-- Points de contrôle ChatGPT recommandés : vérifier lecture seule, droits et payloads masqués si nécessaire.
+#### Objectif du bloc
 
-| Code session proposé | Nature | Type métier | Objectif précis | Périmètre inclus | Hors périmètre explicite | Zones probables futures | Critères de validation | Preuves attendues | Dépendances |
-|---|---|---|---|---|---|---|---|---|---|
-| DX_PAUDIT_AUDIT-PAGE-API-FILTRES | DX | AUDIT | Auditer consultation, filtres, support, payload. | Page/API/services. | Correction. | `app/audit`, `app/api/audit`. | Écarts classés. | Extraits, status Git. | T6. |
-| CX_PAUDIT_CORRECTION-SCOPING-SUPPORT | CX | CORRECTION | Corriger scoping tenant/support si écart validé. | API audit et UI filtre société. | Audit write. | `app/api/audit/route.ts`, audit client. | Pas de fuite tenant. | Tests/captures. | T4/T5. |
-| CX_PAUDIT_COMPLETION-FILTRES-DETAILS | CX | COMPLÉTION | Stabiliser filtres et panneau détail autorisé. | UI lecture seule. | Export audit. | `app/audit/audit-client.tsx`. | Filtres fonctionnels, détail lisible. | Captures. | T3/T6. |
-| QA_PAUDIT_VALIDATION-LECTURE-SEULE | QA | VALIDATION | Vérifier lecture seule, droits, filtres, traces. | Parcours API/UI. | Correction. | Browser/API. | Page contrôlable. | Commandes/captures. | CX. |
+Garantir la consultation autorisée des traces officielles.
 
-### BLOC P-DASHBOARD - Tableau de bord comme portail fiable
+#### Rôle dans l'application
 
-- Objectif du bloc : fiabiliser le dashboard avec KPI, raccourcis et widgets basés sur des données réelles.
-- Rôle dans l'application : portail d'entrée après connexion.
-- Références Base44 à regarder : `src/pages/Dashboard.jsx`, `src/components/dashboard/*`, entité `DashboardPreference`.
-- Références repo officiel à regarder : `app/dashboard/page.tsx`, `app/ui/stat-card.tsx`, données Prisma utilisées.
-- Dépendances amont : T1, T3, T4, T5, référentiels métier.
-- Dépendances aval : F1, F3, P-MISE-EN-ROUTE.
-- Risques identifiés : données fictives, préférences absentes Prisma, raccourcis non autorisés, KPI coûteux ou incohérents.
-- Décisions déjà connues : dashboard après connexion, données réelles, raccourcis selon droits.
-- Décisions restant à confirmer : persistance `DashboardPreference`, personnalisation Alpha, widgets obligatoires, raccourci suivi véhicules.
-- Découpage proposé en sessions courtes : audit, cadrage widgets, correction KPI/raccourcis, préférences si validées, validation.
-- Critères de clôture du bloc : dashboard fiable, sans faux KPI, adapté aux permissions.
-- Points de contrôle ChatGPT recommandés : vérifier que l'absence de donnée est affichée comme telle, jamais masquée par du statique.
+P-AUDIT expose les événements audit pertinents sans permettre de modification involontaire.
 
-| Code session proposé | Nature | Type métier | Objectif précis | Périmètre inclus | Hors périmètre explicite | Zones probables futures | Critères de validation | Preuves attendues | Dépendances |
-|---|---|---|---|---|---|---|---|---|---|
-| DX_PDASHBOARD_AUDIT-KPI-WIDGETS-DROITS | DX | AUDIT | Auditer KPI, widgets, raccourcis, données. | Dashboard officiel/Base44. | Correction. | `app/dashboard/page.tsx`. | Faux/fragiles KPI identifiés. | Extraits, status Git. | Référentiels. |
-| DX_PDASHBOARD_CADRAGE-PREFERENCES | DX | CADRAGE | Décider personnalisation/préférences Alpha. | Options sans/avec persistance. | Migration. | Prisma futur. | Choix prêt validation. | Options risques. | T5. |
-| CX_PDASHBOARD_CORRECTION-KPI-REALES | CX | CORRECTION | Corriger KPI/raccourcis non fiables validés. | Page dashboard. | Préférences complexes. | `app/dashboard/page.tsx`. | Données réelles ou état vide. | Captures, tests. | T4/T5. |
-| CX_PDASHBOARD_CREATION-PREFERENCES | CX | CRÉATION | Ajouter préférences si validées. | Modèle/API/UI préférences. | Reporting avancé. | Prisma, dashboard API/page. | Préférences tenant/user-scopées. | Migration, tests, captures. | Décision humaine. |
-| QA_PDASHBOARD_VALIDATION-PORTAIL | QA | VALIDATION | Vérifier portail par rôles et données. | Parcours navigateur. | Correction. | Browser. | Raccourcis autorisés et KPI fiables. | Captures/commandes. | CX. |
+#### Dépendances amont
+
+- T6.
+- T4.
+
+#### Dépendances aval
+
+- F1, F2, RGPD-PRIVACY.
+
+#### Décisions connues
+
+- Route `/audit` et API audit existent.
+- Lecture réservée via `canViewAudit`.
+- Base44 Audit UI est inspiration, audit client est refusé.
+
+#### Décisions à confirmer
+
+- Export audit : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Filtre criticité : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Masquage des champs sensibles par permission : `INFORMATION NON FOURNIE — À CONFIRMER`.
+
+#### Risques principaux
+
+- Affichage de payloads sensibles.
+- Page audit utilisée comme preuve d'actions non tracées.
+- Export non autorisé.
+
+#### Sessions de production prévues
+
+- `DX_PAUDIT_AUDIT-PAGE-API-FILTRES`
+  - Nature : DX.
+  - Type métier : AUDIT.
+  - Objectif : auditer page audit, API, filtres, droits et données exposées.
+  - Périmètre inclus : `app/audit`, `app/api/audit`, logs Prisma.
+  - Hors périmètre : correction.
+  - Zones à lire : `app/audit/*`, `app/api/audit/route.ts`, `lib/services/audit/*`, Prisma audit logs.
+  - Zones modifiables plus tard : audit page/API.
+  - Critères de validation : écarts consultation/filtre/sensibilité classés.
+  - Preuves attendues : extraits, matrice, `git status --short`.
+  - Dépendances : T6.
+
+- `CX_PAUDIT_CORRECTION-RBAC-LECTURE`
+  - Nature : CX.
+  - Type métier : CORRECTION.
+  - Objectif : corriger accès, lecture seule et restrictions de données.
+  - Périmètre inclus : guard page/API, détails sensibles, états accès refusé.
+  - Hors périmètre : export audit non validé.
+  - Zones à lire : audit P-AUDIT, T4.
+  - Zones modifiables plus tard : `app/audit/*`, `app/api/audit/route.ts`.
+  - Critères de validation : accès audit réservé et accès direct refusé.
+  - Preuves attendues : diff, tests, captures.
+  - Dépendances : T4.
+
+- `CX_PAUDIT_COMPLETION-FILTRES-DETAILS`
+  - Nature : CX.
+  - Type métier : COMPLÉTION.
+  - Objectif : compléter filtres et panneau détail sur les traces officielles existantes.
+  - Périmètre inclus : période, module, action, utilisateur, résultat selon données présentes.
+  - Hors périmètre : création d'événements manquants, export.
+  - Zones à lire : API audit, UI audit, références UI/UX.
+  - Zones modifiables plus tard : page/API audit.
+  - Critères de validation : filtres fonctionnels et détails utiles sans sur-exposition.
+  - Preuves attendues : diff, captures, tests.
+  - Dépendances : T6.
+
+- `DX_PAUDIT_VALIDATION-CLOTURE-CONSULTATION`
+  - Nature : DX.
+  - Type métier : VALIDATION+CLOTURE.
+  - Objectif : valider consultation audit autorisée sans correction.
+  - Périmètre inclus : filtres, droits, détails, lecture seule.
+  - Hors périmètre : correction.
+  - Règle de non-correction : Si un écart bloquant est détecté, la session doit conclure à une non-clôture du bloc et demander une session CX ciblée.
+  - Zones à lire : app/API rendues.
+  - Zones modifiables plus tard : aucune dans cette session DX VALIDATION+CLOTURE.
+  - Critères de validation : traces officielles consultables sans modification.
+  - Preuves attendues : captures, commandes, `git status --short`.
+  - Dépendances : CX P-AUDIT.
+
+#### Critère de clôture du bloc
+
+L'audit officiel est consultable par les profils autorisés, avec limites et champs sensibles contrôlés.
+
+#### Points de contrôle ChatGPT
+
+- Vérifier que P-AUDIT ne promet pas une traçabilité complète si T6 a des reports.
+- Vérifier que la page reste lecture seule.
+
+### BLOC P-DASHBOARD - Tableau de bord
+
+#### Objectif du bloc
+
+Fiabiliser le tableau de bord comme portail d'entrée sur données réelles et permissions.
+
+#### Rôle dans l'application
+
+Le dashboard synthétise KPI, raccourcis, alertes et widgets après stabilisation des modules sources.
+
+#### Dépendances amont
+
+- T1, T3, T4, T5.
+- Référentiels métiers et P-PLANNING pour widgets planning fiables.
+
+#### Dépendances aval
+
+- F1, F3, P-MISE-EN-ROUTE.
+
+#### Décisions connues
+
+- Dashboard officiel existe.
+- Base44 apporte widgets, raccourcis, préférences et suppression des faux KPI.
+- `DashboardPreference` absent du Prisma officiel lu.
+
+#### Décisions à confirmer
+
+- Persistance `DashboardPreference` : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Widgets obligatoires Alpha : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Personnalisation Alpha : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Raccourci suivi véhicules si module créé : `INFORMATION NON FOURNIE — À CONFIRMER`.
+
+#### Risques principaux
+
+- KPI fictifs ou coûteux.
+- Préférences qui contournent les permissions.
+- Dashboard repris avant les données sources.
+
+#### Sessions de production prévues
+
+- `DX_PDASHBOARD_AUDIT-KPI-WIDGETS`
+  - Nature : DX.
+  - Type métier : AUDIT.
+  - Objectif : auditer KPI, widgets, raccourcis, données et droits.
+  - Périmètre inclus : dashboard officiel, Base44 dashboard, sources Prisma.
+  - Hors périmètre : correction.
+  - Zones à lire : `app/dashboard/page.tsx`, `app/ui/stat-card.tsx`, fiches dashboard, Base44 dashboard.
+  - Zones modifiables plus tard : dashboard page, API éventuelle, Prisma si préférence validée.
+  - Critères de validation : faux KPI et dépendances listés.
+  - Preuves attendues : extraits, matrice, `git status --short`.
+  - Dépendances : référentiels.
+
+- `DX_PDASHBOARD_CADRAGE-PREFERENCES-WIDGETS`
+  - Nature : DX.
+  - Type métier : CADRAGE.
+  - Objectif : décider widgets Alpha et persistance préférences.
+  - Périmètre inclus : option sans persistance, local UI, Prisma `DashboardPreference`.
+  - Hors périmètre : migration.
+  - Zones à lire : audit dashboard, T5, fiche dashboard.
+  - Zones modifiables plus tard : Prisma/API/UI dashboard si validé.
+  - Critères de validation : widgets/raccourcis classés et préférences décidées ou reportées.
+  - Preuves attendues : options, risques permissions.
+  - Dépendances : T5/T4.
+
+- `CX_PDASHBOARD_CORRECTION-KPI-RACCOURCIS`
+  - Nature : CX.
+  - Type métier : CORRECTION.
+  - Objectif : corriger KPI/raccourcis non fiables sur données existantes.
+  - Périmètre inclus : données réelles ou états indisponibles, permissions.
+  - Hors périmètre : préférences persistées, reporting avancé.
+  - Zones à lire : audit/cadrage dashboard.
+  - Zones modifiables plus tard : `app/dashboard/page.tsx`.
+  - Critères de validation : aucun faux KPI présenté comme réel.
+  - Preuves attendues : diff, captures, tests/lint.
+  - Dépendances : référentiels et P-PLANNING pour widgets planning.
+
+- `CX_PDASHBOARD_CREATION-PREFERENCES`
+  - Nature : CX.
+  - Type métier : CRÉATION.
+  - Objectif : créer préférences dashboard uniquement si validées.
+  - Périmètre inclus : modèle/API/UI préférences tenant/user-scopées.
+  - Hors périmètre : marketplace widgets, reporting avancé.
+  - Zones à lire : cadrage préférences, Prisma, T4/T5.
+  - Zones modifiables plus tard : Prisma, API dashboard, page dashboard.
+  - Critères de validation : préférences n'affichent jamais un widget non autorisé.
+  - Preuves attendues : migration, tests, captures.
+  - Dépendances : validation humaine DashboardPreference.
+
+- `DX_PDASHBOARD_VALIDATION-CLOTURE-PORTAIL`
+  - Nature : DX.
+  - Type métier : VALIDATION+CLOTURE.
+  - Objectif : valider portail par rôles et données sans correction.
+  - Périmètre inclus : KPI, raccourcis, widgets, états vides.
+  - Hors périmètre : correction.
+  - Règle de non-correction : Si un écart bloquant est détecté, la session doit conclure à une non-clôture du bloc et demander une session CX ciblée.
+  - Zones à lire : app rendue.
+  - Zones modifiables plus tard : aucune dans cette session DX VALIDATION+CLOTURE.
+  - Critères de validation : dashboard fiable et permissions respectées.
+  - Preuves attendues : captures, commandes, `git status --short`.
+  - Dépendances : CX P-DASHBOARD.
+
+#### Critère de clôture du bloc
+
+Le dashboard n'affiche que des données fiables ou des états explicites, et les préférences sont créées seulement si validées.
+
+#### Points de contrôle ChatGPT
+
+- Vérifier absence de données fictives.
+- Vérifier que les raccourcis suivent les droits.
 
 ### BLOC P-MISE-EN-ROUTE - Mise en route
 
-- Objectif du bloc : stabiliser la checklist initiale après les référentiels.
-- Rôle dans l'application : guide d'installation initiale sans remplacer les pages métier.
-- Références Base44 à regarder : `src/pages/MiseEnRoute.jsx`, entité `OnboardingStep` à ne pas reprendre sans décision.
-- Références repo officiel à regarder : `app/onboarding/*`, dashboard links, référentiels sources.
-- Dépendances amont : P-SOCIETE, P-DEPOTS-BASES, P-UTILISATEURS-RH, P-VEHICULES, P-MODELES-HORAIRES, T2, T4.
-- Dépendances aval : F1/F3, P-DASHBOARD.
-- Risques identifiés : doublon avec Société, route `/onboarding`, calcul de complétion flou, imports non cadrés.
-- Décisions déjà connues : libellé `Mise en route`; page séparée de Société ; progression basée sur modules sources.
-- Décisions restant à confirmer : conditions de complétion, permission dédiée, import Alpha, table `OnboardingStep` ou calcul dynamique.
-- Découpage proposé en sessions courtes : audit, cadrage étapes, correction liens/libellés, calculs, validation.
-- Critères de clôture du bloc : checklist cohérente avec vrais modules, sans formulaire doublon.
-- Points de contrôle ChatGPT recommandés : vérifier que Mise en route ne remplace pas les modules métier.
+#### Objectif du bloc
 
-| Code session proposé | Nature | Type métier | Objectif précis | Périmètre inclus | Hors périmètre explicite | Zones probables futures | Critères de validation | Preuves attendues | Dépendances |
-|---|---|---|---|---|---|---|---|---|---|
-| DX_PMER_AUDIT-CHECKLIST-SOURCES | DX | AUDIT | Auditer étapes, liens, calculs, droits. | `app/onboarding`, fiches, Base44. | Correction. | `app/onboarding/*`. | Écarts étapes/sources. | Extraits, status Git. | Référentiels. |
-| DX_PMER_CADRAGE-CONDITIONS-COMPLETION | DX | CADRAGE | Définir conditions minimales par étape. | Table étapes/sources/droits. | Codage. | Docs futures. | Conditions validables. | Tableau. | Audit. |
-| CX_PMER_CORRECTION-LIBELLES-LIENS | CX | CORRECTION | Corriger libellés, liens et redirects. | UI et liens. | Renommage route. | `app/onboarding/page.tsx`, client. | Liens vers modules vrais et autorisés. | Captures. | T2/T4. |
-| CX_PMER_COMPLETION-CALCULS-PROGRESSION | CX | COMPLÉTION | Stabiliser calcul progression dynamique. | Requêtes sources, états. | Table OnboardingStep sans décision. | `app/onboarding/page.tsx`. | Progression cohérente avec données réelles. | Tests/captures. | T5. |
-| QA_PMER_VALIDATION-MISE-EN-ROUTE | QA | VALIDATION | Vérifier parcours Admin/Gérant et droits. | Browser. | Correction. | Browser. | Checklist fiable. | Captures/commandes. | CX. |
+Stabiliser l'assistant de configuration initiale après les référentiels métier.
+
+#### Rôle dans l'application
+
+Mise en route guide l'installation initiale sans remplacer Société ni les pages métier.
+
+#### Dépendances amont
+
+- P-SOCIETE, P-DEPOTS-BASES, P-UTILISATEURS-RH, P-VEHICULES, P-MODELES-HORAIRES.
+- T2, T4, T5.
+
+#### Dépendances aval
+
+- F1, F3, P-DASHBOARD.
+
+#### Décisions connues
+
+- Route officielle actuelle `/onboarding`.
+- Libellé visible attendu `Mise en route`.
+- Base44 calcule la progression depuis les entités métier et ne prouve pas l'usage d'`OnboardingStep`.
+
+#### Décisions à confirmer
+
+- Conditions minimales de complétion par étape : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Permission dédiée Mise en route : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Création ou refus `OnboardingStep` : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Périmètre imports Alpha : `INFORMATION NON FOURNIE — À CONFIRMER`.
+
+#### Risques principaux
+
+- Dupliquer les modules métier.
+- Confondre route `onboarding` et libellé utilisateur.
+- Afficher une progression arbitraire.
+
+#### Sessions de production prévues
+
+- `DX_PMER_AUDIT-CHECKLIST-SOURCES`
+  - Nature : DX.
+  - Type métier : AUDIT.
+  - Objectif : auditer checklist, liens, calculs, sources et droits.
+  - Périmètre inclus : `app/onboarding`, fiches, Base44 Mise en route.
+  - Hors périmètre : correction.
+  - Zones à lire : `app/onboarding/*`, fiches Mise en route/Société, Base44 MiseEnRoute.
+  - Zones modifiables plus tard : onboarding page/client, route si validée.
+  - Critères de validation : étapes et sources classées.
+  - Preuves attendues : extraits, matrice, `git status --short`.
+  - Dépendances : référentiels.
+
+- `DX_PMER_CADRAGE-CONDITIONS-COMPLETION`
+  - Nature : DX.
+  - Type métier : CADRAGE.
+  - Objectif : définir les conditions de complétion et le besoin éventuel d'`OnboardingStep`.
+  - Périmètre inclus : sources dynamiques, options de persistance, droits.
+  - Hors périmètre : migration.
+  - Zones à lire : audit PMER, T5, Base44 OnboardingStep.
+  - Zones modifiables plus tard : Prisma/API/UI si validé.
+  - Critères de validation : conditions validables ou à confirmer.
+  - Preuves attendues : tableau étapes/sources/risques.
+  - Dépendances : DX_PMER_AUDIT-CHECKLIST-SOURCES.
+
+- `CX_PMER_CORRECTION-LIBELLES-LIENS`
+  - Nature : CX.
+  - Type métier : CORRECTION.
+  - Objectif : corriger libellés, liens et redirections sans renommage technique non validé.
+  - Périmètre inclus : UI `Mise en route`, liens vers vrais modules.
+  - Hors périmètre : route rename, calcul progression.
+  - Zones à lire : T2, audit PMER.
+  - Zones modifiables plus tard : `app/onboarding/*`.
+  - Critères de validation : libellé utilisateur conforme et liens autorisés.
+  - Preuves attendues : diff, captures, lint.
+  - Dépendances : T2/T4.
+
+- `CX_PMER_COMPLETION-PROGRESSION`
+  - Nature : CX.
+  - Type métier : COMPLÉTION.
+  - Objectif : stabiliser calcul progression sur données réelles.
+  - Périmètre inclus : requêtes sources validées, états incomplétude, permissions.
+  - Hors périmètre : table `OnboardingStep` si non validée.
+  - Zones à lire : cadrage complétion, référentiels.
+  - Zones modifiables plus tard : `app/onboarding/*`, API éventuelle.
+  - Critères de validation : progression cohérente avec vrais modules.
+  - Preuves attendues : diff, captures, tests.
+  - Dépendances : référentiels stabilisés.
+
+- `DX_PMER_VALIDATION-CLOTURE-MISE-EN-ROUTE`
+  - Nature : DX.
+  - Type métier : VALIDATION+CLOTURE.
+  - Objectif : valider parcours Mise en route sans correction.
+  - Périmètre inclus : étapes, liens, droits, états.
+  - Hors périmètre : correction.
+  - Règle de non-correction : Si un écart bloquant est détecté, la session doit conclure à une non-clôture du bloc et demander une session CX ciblée.
+  - Zones à lire : app rendue.
+  - Zones modifiables plus tard : aucune dans cette session DX VALIDATION+CLOTURE.
+  - Critères de validation : checklist fiable et non dupliquante.
+  - Preuves attendues : captures, commandes, `git status --short`.
+  - Dépendances : CX PMER.
+
+#### Critère de clôture du bloc
+
+Mise en route reflète les vrais modules sources, sans fusion avec Société et sans persistance non validée.
+
+#### Points de contrôle ChatGPT
+
+- Vérifier que la page ne remplace pas les modules métier.
+- Vérifier que `OnboardingStep` n'est pas créé sans décision.
+
+## 6. Bloc RGPD et Privacy
 
 ### BLOC RGPD-PRIVACY - Privacy visible en Alpha
 
-- Objectif du bloc : rendre les mentions Privacy visibles et cohérentes sans déclarer une conformité complète.
-- Rôle dans l'application : information minimale données personnelles en Alpha.
-- Références Base44 à regarder : aucune source technique à reprendre ; vérifier seulement que Base44 ne sert pas de preuve RGPD.
-- Références repo officiel à regarder : `app/privacy/page.tsx`, `app/login/page.tsx`, `RGPD_BASE_MINIMALE.md`, tests qualité.
-- Dépendances amont : P-LOGIN, T6, T7.
-- Dépendances aval : F1/F4.
-- Risques identifiés : promesse conformité excessive, contact privacy/DPO absent, conservation non définie, lien inaccessible.
-- Décisions déjà connues : Privacy existe ; lien login attendu ; conformité complète non prouvée.
-- Décisions restant à confirmer : responsable traitement, contact DPO/privacy, bases légales, rétention, export RGPD dédié.
-- Découpage proposé en sessions courtes : audit mentions, correction contenu/lien, validation.
-- Critères de clôture du bloc : Privacy visible, honnête sur les limites Alpha et sans sur-promesse.
-- Points de contrôle ChatGPT recommandés : vérifier toutes les formulations juridiques non prouvées.
+#### Objectif du bloc
 
-| Code session proposé | Nature | Type métier | Objectif précis | Périmètre inclus | Hors périmètre explicite | Zones probables futures | Critères de validation | Preuves attendues | Dépendances |
-|---|---|---|---|---|---|---|---|---|---|
-| DX_RGPD_AUDIT-PRIVACY-ALPHA | DX | AUDIT | Auditer page Privacy, lien login, contenu RGPD minimal. | Docs RGPD, page, tests. | Correction. | `app/privacy/page.tsx`, `app/login/page.tsx`. | Écarts et sur-promesses listés. | Extraits, status Git. | P-LOGIN. |
-| CX_RGPD_CORRECTION-MENTIONS-LIEN | CX | CORRECTION | Corriger lien ou contenu minimal validé. | Privacy/login seulement. | Politique complète. | `app/privacy/page.tsx`, `app/login/page.tsx`. | Page visible et prudente. | Captures, test quality. | Décision humaine. |
-| QA_RGPD_VALIDATION-VISIBILITE | QA | VALIDATION | Vérifier accès public, lien login, absence promesse complète. | Navigateur + test smoke. | Correction. | Browser, tests. | Privacy accessible. | Commandes/captures. | CX éventuelle. |
+Garantir une page Privacy visible et prudente sans déclarer une conformité RGPD complète.
+
+#### Rôle dans l'application
+
+Privacy informe minimalement sur les données personnelles manipulées en Alpha.
+
+#### Dépendances amont
+
+- P-LOGIN.
+- T6.
+- `RGPD_BASE_MINIMALE.md`.
+
+#### Dépendances aval
+
+- F1 et F4.
+
+#### Décisions connues
+
+- `/privacy` existe.
+- Le login doit pointer vers `/privacy`.
+- La conformité complète n'est pas prouvée.
+
+#### Décisions à confirmer
+
+- Responsable de traitement : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Contact DPO/privacy : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Bases légales et durées de conservation : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Export RGPD dédié : `INFORMATION NON FOURNIE — À CONFIRMER`.
+
+#### Risques principaux
+
+- Sur-promesse juridique.
+- Page inaccessible depuis login.
+- Mentions déconnectées du code réel.
+
+#### Sessions de production prévues
+
+- `DX_RGPD_AUDIT-PRIVACY-ALPHA`
+  - Nature : DX.
+  - Type métier : AUDIT.
+  - Objectif : auditer page Privacy, lien login et cohérence avec RGPD minimal.
+  - Périmètre inclus : `/privacy`, `/login`, documentation RGPD.
+  - Hors périmètre : rédaction juridique complète.
+  - Zones à lire : `app/privacy/page.tsx`, `app/login/page.tsx`, `docs/1-MASTER/RGPD_BASE_MINIMALE.md`.
+  - Zones modifiables plus tard : privacy/login seulement.
+  - Critères de validation : sur-promesses et manques listés.
+  - Preuves attendues : extraits, `git status --short`.
+  - Dépendances : P-LOGIN.
+
+- `CX_RGPD_CORRECTION-MENTIONS-LIEN`
+  - Nature : CX.
+  - Type métier : CORRECTION.
+  - Objectif : corriger lien ou contenu minimal validé sans inventer d'informations.
+  - Périmètre inclus : page Privacy et lien Login.
+  - Hors périmètre : politique légale exhaustive, DPO inventé.
+  - Zones à lire : audit RGPD.
+  - Zones modifiables plus tard : `app/privacy/page.tsx`, `app/login/page.tsx`.
+  - Critères de validation : page accessible et prudente.
+  - Preuves attendues : diff, capture, test qualité privacy.
+  - Dépendances : audit RGPD et décisions de contenu.
+
+- `DX_RGPD_VALIDATION-CLOTURE-VISIBILITE`
+  - Nature : DX.
+  - Type métier : VALIDATION+CLOTURE.
+  - Objectif : vérifier accessibilité et absence de promesse complète.
+  - Périmètre inclus : login -> privacy, contenu visible, encodage.
+  - Hors périmètre : correction.
+  - Règle de non-correction : Si un écart bloquant est détecté, la session doit conclure à une non-clôture du bloc et demander une session CX ciblée.
+  - Zones à lire : app rendue.
+  - Zones modifiables plus tard : aucune dans cette session DX VALIDATION+CLOTURE.
+  - Critères de validation : Privacy visible et limites Alpha explicites.
+  - Preuves attendues : captures, commandes, `git status --short`.
+  - Dépendances : CX RGPD éventuelle.
+
+#### Critère de clôture du bloc
+
+Privacy est visible et cohérente avec les limites Alpha ; la conformité complète reste non déclarée.
+
+#### Points de contrôle ChatGPT
+
+- Vérifier chaque formulation juridique non prouvée.
+- Vérifier que les informations non fournies restent marquées.
+
+## 7. Validations finales et gel Alpha
 
 ### BLOC F1 - Validation fonctionnelle croisée
 
-- Objectif du bloc : valider les parcours principaux après reprise ou reports acceptés.
-- Rôle dans l'application : contrôle final des flux métier transverses.
-- Références Base44 à regarder : pages Base44 comme parcours de comparaison, sans copier.
-- Références repo officiel à regarder : pages/app APIs stabilisées, sessions clôturées, docs fonctions.
-- Dépendances amont : blocs métier terminés ou reports acceptés.
-- Dépendances aval : F4.
-- Risques identifiés : valider implicitement une page incomplète, confondre report et réussite, corriger pendant validation.
-- Décisions déjà connues : F1 ne corrige pas le code dans la même session.
-- Décisions restant à confirmer : parcours exacts Alpha, rôles de test, données de test.
-- Découpage proposé en sessions courtes : cadrage parcours, validation par domaine, synthèse.
-- Critères de clôture du bloc : parcours validés ou écarts bloquants listés avec décision report/correction.
-- Points de contrôle ChatGPT recommandés : vérifier que chaque validation a une preuve et un verdict.
+#### Objectif du bloc
 
-| Code session proposé | Nature | Type métier | Objectif précis | Périmètre inclus | Hors périmètre explicite | Zones probables futures | Critères de validation | Preuves attendues | Dépendances |
-|---|---|---|---|---|---|---|---|---|---|
-| DX_F1_CADRAGE-PARCOURS-ALPHA | DX | CADRAGE | Définir les parcours fonctionnels à tester. | Rôles, données, modules. | Tests code. | Docs validation futures. | Checklist validable. | Tableau parcours. | Blocs métier. |
-| QA_F1_VALIDATION-REFERENTIELS | QA | VALIDATION | Valider société, dépôts, users, véhicules, modèles. | Parcours navigateur/API. | Correction. | Browser/API. | Écarts par module. | Captures/commandes. | Référentiels stabilisés. |
-| QA_F1_VALIDATION-PLANNING-SUIVI | QA | VALIDATION | Valider planning et suivi véhicules retenus. | Parcours critiques. | Correction. | Browser/API. | Parcours ok ou bloquants listés. | Captures/commandes. | P-PLANNING/P-SUIVI. |
-| QA_F1_VALIDATION-LOGIN-DASHBOARD-AUDIT | QA | VALIDATION | Valider entrée, portail, audit, privacy. | Parcours transverses. | Correction. | Browser/API. | Flux cohérents. | Captures/commandes. | P-LOGIN/P-DASH/P-AUDIT/RGPD. |
-| DX_F1_CLOTURE-FONCTIONNELLE | DX | CLÔTURE | Synthétiser validations et écarts. | Rapport documentaire. | Validation humaine automatique. | Docs de phase. | Verdict explicite. | Preuves F1. | QA F1. |
+Valider les parcours fonctionnels principaux après reprise ou reports acceptés.
+
+#### Rôle dans l'application
+
+F1 vérifie les flux métier transverses sans corriger dans la session de validation.
+
+#### Dépendances amont
+
+- Blocs métiers terminés ou reports explicitement acceptés.
+- T4/T5/T6/T7.
+
+#### Dépendances aval
+
+- F4.
+
+#### Décisions connues
+
+- F1 ne corrige pas le code.
+- Chaque validation doit avoir une preuve.
+
+#### Décisions à confirmer
+
+- Parcours exacts Alpha : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Rôles et jeux de données de test : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Seuil d'acceptation des reports : `INFORMATION NON FOURNIE — À CONFIRMER`.
+
+#### Risques principaux
+
+- Valider implicitement une page incomplète.
+- Confondre report et réussite.
+- Corriger pendant validation.
+
+#### Sessions de production prévues
+
+- `DX_F1_CADRAGE-PARCOURS-ALPHA`
+  - Nature : DX.
+  - Type métier : CADRAGE.
+  - Objectif : définir parcours, rôles, données et modules à valider.
+  - Périmètre inclus : login, référentiels, planning, suivi, dashboard, audit, privacy.
+  - Hors périmètre : test correctif.
+  - Zones à lire : sessions clôturées, docs fonctionnalités, T7.
+  - Zones modifiables plus tard : plan de validation seulement.
+  - Critères de validation : checklist de parcours prête.
+  - Preuves attendues : tableau parcours/rôles/données.
+  - Dépendances : blocs métier.
+
+- `DX_F1_VALIDATION-CLOTURE-REFERENTIELS`
+  - Nature : DX.
+  - Type métier : VALIDATION+CLOTURE.
+  - Objectif : valider Société, Dépôts, Users/RH, Véhicules, Modèles horaires.
+  - Périmètre inclus : parcours UI/API des référentiels.
+  - Hors périmètre : correction.
+  - Règle de non-correction : Si un écart bloquant est détecté, la session doit conclure à une non-clôture du bloc et demander une session CX ciblée.
+  - Zones à lire : app/API rendues.
+  - Zones modifiables plus tard : aucune dans cette session DX VALIDATION+CLOTURE.
+  - Critères de validation : référentiels exploitables ou écarts listés.
+  - Preuves attendues : captures, commandes.
+  - Dépendances : blocs référentiels.
+
+- `DX_F1_VALIDATION-CLOTURE-PLANNING-SUIVI`
+  - Nature : DX.
+  - Type métier : VALIDATION+CLOTURE.
+  - Objectif : valider planning et suivi véhicules retenus.
+  - Périmètre inclus : parcours critiques, RBAC, audit.
+  - Hors périmètre : correction.
+  - Règle de non-correction : Si un écart bloquant est détecté, la session doit conclure à une non-clôture du bloc et demander une session CX ciblée.
+  - Zones à lire : app/API rendues.
+  - Zones modifiables plus tard : aucune dans cette session DX VALIDATION+CLOTURE.
+  - Critères de validation : parcours OK ou bloquants listés.
+  - Preuves attendues : captures, commandes.
+  - Dépendances : P-PLANNING/P-SUIVI.
+
+- `DX_F1_VALIDATION-CLOTURE-LOGIN-DASHBOARD-AUDIT-RGPD`
+  - Nature : DX.
+  - Type métier : VALIDATION+CLOTURE.
+  - Objectif : valider entrée, portail, audit et privacy.
+  - Périmètre inclus : login, dashboard, audit, privacy.
+  - Hors périmètre : correction.
+  - Règle de non-correction : Si un écart bloquant est détecté, la session doit conclure à une non-clôture du bloc et demander une session CX ciblée.
+  - Zones à lire : app rendue.
+  - Zones modifiables plus tard : aucune dans cette session DX VALIDATION+CLOTURE.
+  - Critères de validation : flux transverses cohérents.
+  - Preuves attendues : captures, commandes.
+  - Dépendances : P-LOGIN/P-DASHBOARD/P-AUDIT/RGPD.
+
+- `DX_F1_CLOTURE-FONCTIONNELLE`
+  - Nature : DX.
+  - Type métier : CLÔTURE.
+  - Objectif : synthétiser validations et écarts F1.
+  - Périmètre inclus : rapport F1.
+  - Hors périmètre : validation humaine automatique.
+  - Zones à lire : preuves de validation/clôture F1.
+  - Zones modifiables plus tard : documentation de phase si validée.
+  - Critères de validation : verdict explicite et écarts classés.
+  - Preuves attendues : synthèse, `git status --short`.
+  - Dépendances : validations/clôtures F1.
+
+#### Critère de clôture du bloc
+
+Les parcours principaux sont validés ou les écarts bloquants sont listés avec décision de correction/report.
+
+#### Points de contrôle ChatGPT
+
+- Vérifier preuves par parcours.
+- Vérifier qu'aucune correction n'est mélangée à F1.
 
 ### BLOC F2 - Validation qualité technique
 
-- Objectif du bloc : vérifier qualité technique Alpha après reprises.
-- Rôle dans l'application : sécuriser build, lint, tests, API/RBAC/multi-tenant.
-- Références Base44 à regarder : uniquement pour appliquer l'exception documentaire si build/lint cite `EXPORT_BASE44`.
-- Références repo officiel à regarder : `package.json`, scripts qualité, Prisma, API routes, docs session.
-- Dépendances amont : blocs code terminés.
-- Dépendances aval : F4.
-- Risques identifiés : build/lint masqués par exception abusive, tests non représentatifs, dette Prisma non validée.
-- Décisions déjà connues : exception Base44 documentaire possible sous conditions strictes.
-- Décisions restant à confirmer : niveau minimal E2E, validation Prisma si migrations ajoutées, tolérance warnings.
-- Découpage proposé en sessions courtes : cadrage commandes, exécution qualité, validation API/RBAC, synthèse.
-- Critères de clôture du bloc : résultats exploitables et écarts bloquants séparés des reports.
-- Points de contrôle ChatGPT recommandés : vérifier que tout échec est qualifié précisément.
+#### Objectif du bloc
 
-| Code session proposé | Nature | Type métier | Objectif précis | Périmètre inclus | Hors périmètre explicite | Zones probables futures | Critères de validation | Preuves attendues | Dépendances |
-|---|---|---|---|---|---|---|---|---|---|
-| DX_F2_CADRAGE-PLAN-QUALITE | DX | CADRAGE | Définir commandes et périmètre qualité. | Lint/build/tests/docs encoding. | Correction. | `package.json`, scripts. | Plan validable. | Liste commandes. | T7. |
-| QA_F2_VALIDATION-LINT-BUILD | QA | VALIDATION | Exécuter lint/build et qualifier résultats. | Commandes projet. | Correction. | NPM. | Succès ou échecs qualifiés. | Logs synthèse. | Blocs code. |
-| QA_F2_VALIDATION-TESTS-QUALITE | QA | VALIDATION | Exécuter tests smoke/targeted/quality. | Scripts qualité. | Ajout test. | `scripts/quality`. | Résultats exploitables. | Logs synthèse. | T7. |
-| QA_F2_VALIDATION-API-RBAC-TENANT | QA | VALIDATION | Recontrôler contrats API/RBAC/multi-tenant critiques. | Routes sensibles. | Correction. | API/routes/tests. | Écarts classés. | Commandes/extraits. | T4/T5. |
-| DX_F2_CLOTURE-QUALITE | DX | CLÔTURE | Documenter verdict qualité technique. | Synthèse. | Validation produit. | Docs phase. | Verdict explicite. | Preuves F2. | QA F2. |
+Valider lint, build, tests, API/RBAC, multi-tenant et Prisma après reprise.
+
+#### Rôle dans l'application
+
+F2 contrôle la qualité technique finale Alpha sans corriger dans la même session.
+
+#### Dépendances amont
+
+- Blocs code terminés.
+- T7.
+
+#### Dépendances aval
+
+- F4.
+
+#### Décisions connues
+
+- Scripts qualité existent.
+- Exception Base44 documentaire possible si conditions strictes.
+
+#### Décisions à confirmer
+
+- Niveau minimal E2E : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Validation Prisma si aucune migration nouvelle : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Tolérance warnings : `INFORMATION NON FOURNIE — À CONFIRMER`.
+
+#### Risques principaux
+
+- Build/lint masqués par exception abusive.
+- Tests qualité statiques insuffisants.
+- Échec Prisma ignoré après migration.
+
+#### Sessions de production prévues
+
+- `DX_F2_CADRAGE-PLAN-QUALITE`
+  - Nature : DX.
+  - Type métier : CADRAGE.
+  - Objectif : définir commandes et périmètre qualité.
+  - Périmètre inclus : lint, build, tests qualité, Prisma, encodage.
+  - Hors périmètre : correction.
+  - Zones à lire : `package.json`, `scripts/quality/`, T7.
+  - Zones modifiables plus tard : aucune sauf plan de validation.
+  - Critères de validation : plan de commandes prêt.
+  - Preuves attendues : liste commandes, critères échec/succès.
+  - Dépendances : T7.
+
+- `DX_F2_VALIDATION-CLOTURE-LINT-BUILD`
+  - Nature : DX.
+  - Type métier : VALIDATION+CLOTURE.
+  - Objectif : exécuter lint/build et qualifier les résultats.
+  - Périmètre inclus : `npm run lint`, `npm run build`.
+  - Hors périmètre : correction.
+  - Règle de non-correction : Si un écart bloquant est détecté, la session doit conclure à une non-clôture du bloc et demander une session CX ciblée.
+  - Zones à lire : logs commandes.
+  - Zones modifiables plus tard : aucune dans cette session DX VALIDATION+CLOTURE.
+  - Critères de validation : succès ou échecs précisément qualifiés.
+  - Preuves attendues : logs synthèse, exception Base44 si applicable.
+  - Dépendances : DX_F2_CADRAGE-PLAN-QUALITE.
+
+- `DX_F2_VALIDATION-CLOTURE-TESTS-QUALITE`
+  - Nature : DX.
+  - Type métier : VALIDATION+CLOTURE.
+  - Objectif : exécuter tests smoke/targeted/quality.
+  - Périmètre inclus : `npm run test:quality` et scripts nécessaires.
+  - Hors périmètre : ajout test.
+  - Règle de non-correction : Si un écart bloquant est détecté, la session doit conclure à une non-clôture du bloc et demander une session CX ciblée.
+  - Zones à lire : logs tests.
+  - Zones modifiables plus tard : aucune dans cette session DX VALIDATION+CLOTURE.
+  - Critères de validation : résultats exploitables.
+  - Preuves attendues : logs synthèse.
+  - Dépendances : T7.
+
+- `DX_F2_VALIDATION-CLOTURE-API-RBAC-TENANT`
+  - Nature : DX.
+  - Type métier : VALIDATION+CLOTURE.
+  - Objectif : recontrôler contrats API/RBAC/multi-tenant critiques.
+  - Périmètre inclus : routes sensibles, tests ciblés, extraits.
+  - Hors périmètre : correction.
+  - Règle de non-correction : Si un écart bloquant est détecté, la session doit conclure à une non-clôture du bloc et demander une session CX ciblée.
+  - Zones à lire : API routes/services et scripts.
+  - Zones modifiables plus tard : aucune dans cette session DX VALIDATION+CLOTURE.
+  - Critères de validation : écarts classés bloquant/non bloquant.
+  - Preuves attendues : commandes, extraits.
+  - Dépendances : T4/T5.
+
+- `DX_F2_VALIDATION-CLOTURE-PRISMA-ENCODAGE`
+  - Nature : DX.
+  - Type métier : VALIDATION+CLOTURE.
+  - Objectif : valider Prisma et encodage documentaire.
+  - Périmètre inclus : `npx prisma validate` si Prisma touché, `npm run docs:encoding`, contrôle séquences suspectes.
+  - Hors périmètre : correction.
+  - Règle de non-correction : Si un écart bloquant est détecté, la session doit conclure à une non-clôture du bloc et demander une session CX ciblée.
+  - Zones à lire : logs commandes.
+  - Zones modifiables plus tard : aucune dans cette session DX VALIDATION+CLOTURE.
+  - Critères de validation : Prisma valide si concerné, encodage OK ou anomalies listées.
+  - Preuves attendues : logs, liste anomalies.
+  - Dépendances : T5/T7.
+
+- `DX_F2_CLOTURE-QUALITE`
+  - Nature : DX.
+  - Type métier : CLÔTURE.
+  - Objectif : documenter verdict qualité technique.
+  - Périmètre inclus : synthèse F2.
+  - Hors périmètre : validation produit.
+  - Zones à lire : preuves de validation/clôture F2.
+  - Zones modifiables plus tard : docs phase si validées.
+  - Critères de validation : verdict explicite.
+  - Preuves attendues : `git status --short`, synthèse.
+  - Dépendances : validations/clôtures F2.
+
+#### Critère de clôture du bloc
+
+Les contrôles techniques Alpha sont exécutés, les échecs éventuels qualifiés, et aucune correction n'est faite dans F2.
+
+#### Points de contrôle ChatGPT
+
+- Vérifier l'usage strict de l'exception Base44.
+- Vérifier que chaque échec est attribué à un fichier/périmètre.
 
 ### BLOC F3 - Validation UX visuelle
 
-- Objectif du bloc : vérifier cohérence visuelle, responsive minimum et ergonomie des écrans critiques.
-- Rôle dans l'application : contrôle final de l'alignement UI/UX avec maquettes/références.
-- Références Base44 à regarder : prototype comme comparaison ergonomique uniquement.
-- Références repo officiel à regarder : maquettes PNG, références UI/UX, pages rendues.
-- Dépendances amont : T3, pages nécessaires terminées ou reportées.
-- Dépendances aval : F4.
-- Risques identifiés : vouloir refaire l'UI pendant validation, confondre capture Base44 avec référence officielle, oublier états.
-- Décisions déjà connues : priorité desktop, UI SaaS métier claire, maquettes V2 prioritaires.
-- Décisions restant à confirmer : seuil exact de conformité visuelle, viewports à tester, écarts acceptables Alpha.
-- Découpage proposé en sessions courtes : cadrage écrans, validation desktop, validation responsive ciblée, synthèse.
-- Critères de clôture du bloc : écrans critiques sans écart bloquant connu ou écarts listés.
-- Points de contrôle ChatGPT recommandés : vérifier qu'aucune nouvelle fonctionnalité n'est demandée dans F3.
+#### Objectif du bloc
 
-| Code session proposé | Nature | Type métier | Objectif précis | Périmètre inclus | Hors périmètre explicite | Zones probables futures | Critères de validation | Preuves attendues | Dépendances |
-|---|---|---|---|---|---|---|---|---|---|
-| DX_F3_CADRAGE-ECRANS-CRITIQUES | DX | CADRAGE | Définir écrans, maquettes, viewports, états. | Références UI/UX, maquettes. | Correction. | Docs validation. | Checklist visuelle. | Tableau écrans. | T3. |
-| QA_F3_VALIDATION-DESKTOP-PAGES | QA | VALIDATION | Capturer et comparer pages desktop critiques. | Browser/captures. | Correction. | Local app. | Écarts listés. | Captures. | Pages terminées. |
-| QA_F3_VALIDATION-ETATS-UI | QA | VALIDATION | Vérifier empty/loading/error/disabled/focus sur surfaces critiques. | États UI. | Correction. | Browser. | États couverts ou écarts listés. | Captures. | T3. |
-| QA_F3_VALIDATION-RESPONSIVE-MINIMUM | QA | VALIDATION | Vérifier absence de cassure mobile/tablette minimale. | Viewports ciblés. | Refonte responsive complète. | Browser. | Pas de chevauchement bloquant. | Captures. | Pages terminées. |
-| DX_F3_CLOTURE-UX | DX | CLÔTURE | Synthétiser validation visuelle et reports. | Rapport F3. | Validation implicite. | Docs phase. | Verdict explicite. | Preuves F3. | QA F3. |
+Valider la cohérence visuelle et responsive minimale des écrans critiques.
+
+#### Rôle dans l'application
+
+F3 contrôle l'alignement avec les références UI/UX et maquettes sans refonte pendant validation.
+
+#### Dépendances amont
+
+- T3.
+- Blocs pages terminés ou reportés.
+
+#### Dépendances aval
+
+- F4.
+
+#### Décisions connues
+
+- Références UI/UX et maquettes V2 existent.
+- Base44 peut servir de comparaison ergonomique uniquement.
+
+#### Décisions à confirmer
+
+- Viewports exacts à tester : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Seuil d'écart visuel acceptable Alpha : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Pages critiques exactes : `INFORMATION NON FOURNIE — À CONFIRMER`.
+
+#### Risques principaux
+
+- Transformer une validation UX en refonte.
+- Prendre Base44 pour référence visuelle officielle finale.
+- Oublier états UI et responsive.
+
+#### Sessions de production prévues
+
+- `DX_F3_CADRAGE-ECRANS-CRITIQUES`
+  - Nature : DX.
+  - Type métier : CADRAGE.
+  - Objectif : définir écrans, maquettes, états et viewports à valider.
+  - Périmètre inclus : références UI/UX, maquettes PNG, pages critiques.
+  - Hors périmètre : capture/correction.
+  - Zones à lire : `docs/1-MASTER/2-REFERENCE_UI_UX/`, `docs/1-MASTER/1-MAQUETTE/`.
+  - Zones modifiables plus tard : plan de validation UX.
+  - Critères de validation : checklist visuelle prête.
+  - Preuves attendues : tableau écrans/viewports/états.
+  - Dépendances : T3.
+
+- `DX_F3_VALIDATION-CLOTURE-DESKTOP-PAGES`
+  - Nature : DX.
+  - Type métier : VALIDATION+CLOTURE.
+  - Objectif : capturer et comparer pages desktop critiques.
+  - Périmètre inclus : shell, login, dashboard, référentiels, planning.
+  - Hors périmètre : correction.
+  - Règle de non-correction : Si un écart bloquant est détecté, la session doit conclure à une non-clôture du bloc et demander une session CX ciblée.
+  - Zones à lire : app rendue, maquettes.
+  - Zones modifiables plus tard : aucune dans cette session DX VALIDATION+CLOTURE.
+  - Critères de validation : écarts visuels listés.
+  - Preuves attendues : captures, notes d'écart.
+  - Dépendances : cadrage F3.
+
+- `DX_F3_VALIDATION-CLOTURE-ETATS-UI`
+  - Nature : DX.
+  - Type métier : VALIDATION+CLOTURE.
+  - Objectif : vérifier empty/loading/error/disabled/access denied.
+  - Périmètre inclus : états critiques.
+  - Hors périmètre : correction.
+  - Règle de non-correction : Si un écart bloquant est détecté, la session doit conclure à une non-clôture du bloc et demander une session CX ciblée.
+  - Zones à lire : app rendue.
+  - Zones modifiables plus tard : aucune dans cette session DX VALIDATION+CLOTURE.
+  - Critères de validation : états couverts ou écarts listés.
+  - Preuves attendues : captures.
+  - Dépendances : T3/pages.
+
+- `DX_F3_VALIDATION-CLOTURE-RESPONSIVE-MINIMUM`
+  - Nature : DX.
+  - Type métier : VALIDATION+CLOTURE.
+  - Objectif : vérifier absence de chevauchements bloquants sur viewports ciblés.
+  - Périmètre inclus : mobile/tablette minimum selon cadrage.
+  - Hors périmètre : refonte responsive complète.
+  - Règle de non-correction : Si un écart bloquant est détecté, la session doit conclure à une non-clôture du bloc et demander une session CX ciblée.
+  - Zones à lire : app rendue.
+  - Zones modifiables plus tard : aucune dans cette session DX VALIDATION+CLOTURE.
+  - Critères de validation : pas de casse bloquante connue ou écarts listés.
+  - Preuves attendues : captures.
+  - Dépendances : cadrage F3.
+
+- `DX_F3_CLOTURE-UX`
+  - Nature : DX.
+  - Type métier : CLÔTURE.
+  - Objectif : synthétiser validation visuelle et reports.
+  - Périmètre inclus : rapport F3.
+  - Hors périmètre : validation implicite.
+  - Zones à lire : preuves de validation/clôture F3.
+  - Zones modifiables plus tard : docs phase si validées.
+  - Critères de validation : verdict UX explicite.
+  - Preuves attendues : synthèse, `git status --short`.
+  - Dépendances : validations/clôtures F3.
+
+#### Critère de clôture du bloc
+
+Les écrans critiques sont contrôlés visuellement, les écarts sont qualifiés, et aucune correction n'est mélangée à F3.
+
+#### Points de contrôle ChatGPT
+
+- Vérifier que Base44 n'est pas source visuelle finale.
+- Vérifier preuves par écran/viewport.
 
 ### BLOC F4 - Clôture documentaire Alpha ou clôture de phase
 
-- Objectif du bloc : clôturer explicitement la phase ou acter la non-clôture et les reports.
-- Rôle dans l'application : gouvernance de fin de phase avant suite Beta/V1.
-- Références Base44 à regarder : synthèse Base44 seulement comme rappel des réserves prototype.
-- Références repo officiel à regarder : `02`, `04`, `05`, rapports F1/F2/F3, sessions réellement créées.
-- Dépendances amont : F1, F2, F3 terminés ou reportés explicitement.
-- Dépendances aval : phase suivante.
-- Risques identifiés : validation implicite, oublier reports, modifier MASTER sans validation, confondre Alpha clôturée et conformité complète.
-- Décisions déjà connues : validation humaine obligatoire, preuves requises, reports explicitement acceptés.
-- Décisions restant à confirmer : périmètre final Alpha, reports acceptés, prochaines priorités Beta/V1.
-- Découpage proposé en sessions courtes : audit preuves, synthèse, mise à jour docs après validation.
-- Critères de clôture du bloc : verdict clair `clôturée` ou `non clôturée`, preuves et reports visibles.
-- Points de contrôle ChatGPT recommandés : vérifier que chaque bloc clôturé a preuve ou report accepté.
+#### Objectif du bloc
 
-| Code session proposé | Nature | Type métier | Objectif précis | Périmètre inclus | Hors périmètre explicite | Zones probables futures | Critères de validation | Preuves attendues | Dépendances |
-|---|---|---|---|---|---|---|---|---|---|
-| DX_F4_AUDIT-PREUVES-PHASE | DX | AUDIT | Rassembler preuves F1/F2/F3 et décisions. | Rapports, sessions, Git. | Modification MASTER. | Docs phase. | Manques listés. | Tableau preuves. | F1/F2/F3. |
-| DX_F4_CADRAGE-REPORTS-DECISIONS | DX | CADRAGE | Lister reports, risques et décisions humaines nécessaires. | Synthèse. | Clôture automatique. | Docs futures. | Liste de validation humaine. | Questions/risques. | Audit preuves. |
-| DOC_F4_DOCUMENTATION-CLOTURE | DOC | DOCUMENTATION | Mettre à jour documents de clôture après validation. | `02`, `04`, `05` selon décision. | Code, nouvelles fonctionnalités. | MASTER officiels. | Docs cohérents et non contradictoires. | Diff docs, encodage. | Validation humaine explicite. |
-| DX_F4_CLOTURE-OU-NON-CLOTURE | DX | CLÔTURE | Émettre verdict final de phase. | Synthèse clôture. | Correction. | Note de clôture. | Verdict explicite. | Git status, preuves. | DOC F4 si nécessaire. |
+Clôturer explicitement la phase ou acter sa non-clôture avec reports et preuves.
 
-### 12.5 Décisions à confirmer avant production
+#### Rôle dans l'application
 
-- Comportement exact de `Se souvenir de moi` : durée, cookie, renouvellement, ou retrait/neutralisation de l'option.
-- Renommage technique éventuel de `/templates` vers une route française ou maintien route anglaise avec libellé français.
-- Renommage technique éventuel de `/onboarding` vers une route française ou maintien route anglaise avec libellé français.
-- Statut technique du module `Suivi des véhicules` : route autonome, sous-module de `Véhicules`, ou hybride.
-- Création ou report des modèles Prisma `VehicleCheck`, `Disinfection`, `VehicleAnomaly`.
+F4 est la gouvernance de fin de phase avant suite Beta/V1.
+
+#### Dépendances amont
+
+- F1, F2, F3 terminés ou reportés explicitement.
+
+#### Dépendances aval
+
+- Phase suivante.
+
+#### Décisions connues
+
+- Validation humaine obligatoire.
+- Aucune conformité RGPD complète ne doit être promise.
+- Une clôture ne corrige pas.
+
+#### Décisions à confirmer
+
+- Périmètre final Alpha : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Reports acceptés : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Prochaines priorités Beta/V1 : `INFORMATION NON FOURNIE — À CONFIRMER`.
+
+#### Risques principaux
+
+- Clôture implicite sans preuves.
+- Oublier les reports.
+- Modifier les MASTER sans validation humaine.
+
+#### Sessions de production prévues
+
+- `DX_F4_AUDIT-PREUVES-PHASE`
+  - Nature : DX.
+  - Type métier : AUDIT.
+  - Objectif : rassembler preuves F1/F2/F3, statuts blocs et décisions.
+  - Périmètre inclus : rapports de validation, sessions créées, git status.
+  - Hors périmètre : modification MASTER.
+  - Zones à lire : preuves F1/F2/F3, `docs/1-MASTER/02*`, `04*`, `05*`.
+  - Zones modifiables plus tard : synthèse de phase si validée.
+  - Critères de validation : manques et contradictions listés.
+  - Preuves attendues : tableau preuves, `git status --short`.
+  - Dépendances : F1/F2/F3.
+
+- `DX_F4_CADRAGE-REPORTS-DECISIONS`
+  - Nature : DX.
+  - Type métier : CADRAGE.
+  - Objectif : lister reports, risques et décisions humaines nécessaires.
+  - Périmètre inclus : blocs non clôturés, réserves RGPD/RBAC/data/UX.
+  - Hors périmètre : clôture automatique.
+  - Zones à lire : audit preuves F4.
+  - Zones modifiables plus tard : docs de phase après validation.
+  - Critères de validation : liste de décisions humaines claire.
+  - Preuves attendues : questions, risques, options.
+  - Dépendances : DX_F4_AUDIT-PREUVES-PHASE.
+
+- `DX_F4_DOCUMENTATION-CLOTURE`
+  - Nature : DX.
+  - Type métier : DOCUMENTATION+CLOTURE.
+  - Objectif : mettre à jour les documents officiels de clôture uniquement après validation humaine explicite.
+  - Périmètre inclus : `02`, `04`, `05` ou synthèse de phase selon décision.
+  - Hors périmètre : code, nouvelles fonctionnalités, validation implicite.
+  - Zones à lire : décisions humaines F4.
+  - Zones modifiables plus tard : documents MASTER explicitement autorisés.
+  - Critères de validation : docs cohérents et non contradictoires.
+  - Preuves attendues : diff docs, encodage, `git status --short`.
+  - Dépendances : validation humaine explicite.
+
+- `DX_F4_CLOTURE-OU-NON-CLOTURE`
+  - Nature : DX.
+  - Type métier : CLÔTURE.
+  - Objectif : émettre le verdict final de phase.
+  - Périmètre inclus : verdict clôturée/non clôturée, preuves, reports.
+  - Hors périmètre : correction ou validation produit inventée.
+  - Zones à lire : preuves F4 et documents mis à jour si documentation de clôture exécutée.
+  - Zones modifiables plus tard : aucune sauf synthèse de session.
+  - Critères de validation : verdict explicite, reports visibles.
+  - Preuves attendues : `git status --short`, liste décisions, synthèse finale.
+  - Dépendances : DX_F4_DOCUMENTATION-CLOTURE si documentation officielle validée.
+
+#### Critère de clôture du bloc
+
+La phase est clôturée ou non clôturée explicitement, avec preuves, reports et validation humaine documentée.
+
+#### Points de contrôle ChatGPT
+
+- Vérifier qu'aucune validation humaine n'est inventée.
+- Vérifier que F4 ne corrige pas.
+
+## 8. Décisions à confirmer avant production
+
+- Comportement exact de `Se souvenir de moi`.
+- Renommage technique éventuel de `/templates`.
+- Renommage technique éventuel de `/onboarding`.
+- Statut technique de `Suivi des véhicules`.
+- Création ou report de `VehicleCheck`, `Disinfection`, `VehicleAnomaly`.
 - Création ou report de `CompanyContact`.
 - Création ou report de `DashboardPreference`.
+- Création ou refus de `OnboardingStep`.
 - Granularité RBAC : dépôts, contacts société, disponibilité véhicule, suivi véhicules, reset password, archive/restauration.
 - Politique archive/restauration par module.
 - Gestion officielle de TPMR, TPMR VSL, TPMR TAXI.
@@ -1927,15 +2609,16 @@ Les codes ne contiennent pas de date volontairement. La date et le numéro journ
 - Règles de publication planning avec besoins non couverts, semaine 53, jours fériés/week-ends et informations sensibles par rôle.
 - Politique RGPD complète : responsable de traitement, contact privacy/DPO, bases légales, conservation, export RGPD dédié.
 - Niveau de détail et de rétention audit, export audit et accès support.
+- Nommage réel des sessions DX VALIDATION+CLOTURE dans `docs/2-SESSIONS`.
 
-### 12.6 Risques principaux à surveiller
+## 9. Risques principaux à surveiller
 
 - RBAC front/API incohérent sur actions sensibles.
 - Multi-tenant incomplet ou dépendant d'un `companyId` client.
 - Reprise directe de concepts Base44 incompatibles avec Prisma officiel.
 - Gros blocs CX trop larges, notamment Planning et Suivi des véhicules.
 - Audit client ou non transactionnel présenté comme preuve.
-- Données fictives ou compteurs denormalisés présentés comme vérité.
+- Données fictives ou compteurs dénormalisés présentés comme vérité.
 - Confusion entre référentiel administratif Véhicules et suivi opérationnel.
 - Privacy/RGPD sur-promis sans informations légales confirmées.
 - Validation finale implicite de pages seulement parce que le code existe.
