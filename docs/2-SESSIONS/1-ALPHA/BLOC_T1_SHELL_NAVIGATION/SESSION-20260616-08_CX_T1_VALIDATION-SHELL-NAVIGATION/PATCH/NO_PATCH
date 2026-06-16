@@ -1,0 +1,10 @@
+# NO_PATCH
+
+Session : SESSION-20260616-08_CX_T1_VALIDATION-SHELL-NAVIGATION
+
+Raison :
+
+- Session CX de validation.
+- Aucun code applicatif modifié.
+- Aucun fichier RBAC, Prisma, Base44, template, maquette, PNG ou MASTER 04/05 modifié.
+- Aucun patch `.diff` nécessaire.

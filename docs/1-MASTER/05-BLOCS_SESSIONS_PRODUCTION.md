@@ -163,12 +163,6 @@ Stabiliser sidebar, topbar, société courante, utilisateur courant, filtrage vi
   - Objectif : valider shell, navigation, routes visibles, libellés, contexte connecté, accès direct non autorisé et Accès refusé.
   - Périmètre : contrôles techniques et fonctionnels ciblés T1.
   - Hors périmètre : nouvelles corrections lourdes non cadrées.
-- `DX_T1_CLOTURE`
-  - Nature : DX.
-  - Type métier : CLÔTURE.
-  - Objectif : clôturer le bloc T1, synthétiser ce qui est fait, ce qui reste dépendant de T2/T4/T5, et vérifier la cohérence documentaire.
-  - Périmètre : documentation de clôture et preuves finales.
-  - Hors périmètre : code applicatif sauf si une session CX précédente a explicitement prévu un contrôle technique.
 
 #### **Contrôles obligatoires**
 
@@ -184,7 +178,7 @@ Le shell permet d'accéder aux modules autorisés et de refuser proprement les a
 
 #### **Statut**
 
-À faire.
+Validé
 
 ### BLOC T2 - Nomenclature, routes et renommages futurs
 
