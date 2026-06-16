@@ -87,6 +87,7 @@ Historique retenu :
 - Les actions sensibles doivent être tracées.
 - Le multi-tenant par société est non négociable.
 - Aucune reprise code inspirée de Base44 ne doit commencer sans validation documentaire préalable.
+- 2026-06-16 — Décision qualité : le référentiel `docs/1-MASTER/4-BASE44_REFERENCE/EXPORT_BASE44` est une source documentaire Base44 intouchable. Les échecs build/lint exclusivement liés à ce dossier ne bloquent pas une session applicative, si le patch ne le modifie pas, si les erreurs ne concernent pas les fichiers modifiés et si l'exception est documentée.
 
 ## 7. Ce qui est fait
 

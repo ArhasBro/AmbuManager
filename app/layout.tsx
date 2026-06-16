@@ -58,7 +58,7 @@ async function getAppShellData(): Promise<{ navLinks: AppShellNavLink[]; context
     return { navLinks: [], context: fallbackContext };
   }
 
-  const navLinks: AppShellNavLink[] = [{ href: "/dashboard", label: "Dashboard" }];
+  const navLinks: AppShellNavLink[] = [{ href: "/dashboard", label: "Tableau de bord" }];
   const companyScopedSession = Boolean(user.companyId);
   const supportActor = user.platformRole === "SUPPORT";
 
@@ -94,7 +94,7 @@ async function getAppShellData(): Promise<{ navLinks: AppShellNavLink[]; context
   if (companyScopedSession && vehiclesAllowed) navLinks.push({ href: "/vehicles", label: "Véhicules" });
   if (companyScopedSession && templatesAllowed) navLinks.push({ href: "/templates", label: "Modèles horaires" });
   if (companyScopedSession && (companyProfileAllowed || companyRulesAllowed)) navLinks.push({ href: "/company", label: "Société" });
-  if (companyScopedSession && companyProfileAllowed) navLinks.push({ href: "/depots", label: "Dépôts / bases" });
+  if (companyScopedSession && companyProfileAllowed) navLinks.push({ href: "/depots", label: "Dépôts / Bases" });
   if (companyScopedSession && companyProfileAllowed) navLinks.push({ href: "/onboarding", label: "Mise en route" });
   if ((companyScopedSession || supportActor) && auditAllowed) navLinks.push({ href: "/audit", label: "Audit" });
 

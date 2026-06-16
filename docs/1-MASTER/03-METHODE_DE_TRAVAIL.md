@@ -144,6 +144,18 @@ Le contrôle doit vérifier :
 - Toute action sensible doit être auditée si le périmètre le demande.
 - `npm run lint` et `npm run build` sont attendus pour les changements code, sauf impossibilité documentée.
 
+### 13.1 Exception documentaire Base44 pour build/lint
+
+Les commandes `npm run build` et `npm run lint` restent obligatoires après toute modification de code.
+
+Si elles échouent exclusivement à cause de fichiers situés dans `docs/1-MASTER/4-BASE44_REFERENCE/EXPORT_BASE44`, alors l'échec ne bloque pas la validation de la session applicative, à condition que :
+
+- le patch de session ne modifie aucun fichier Base44 ;
+- les erreurs ne citent pas les fichiers modifiés par la session ;
+- les erreurs soient documentées comme préexistantes ou hors périmètre ;
+- le verdict mentionne explicitement l'exception Base44 ;
+- aucune correction ne soit faite dans le dossier Base44 documentaire.
+
 ## 14. Règles de modification documentaire
 
 - Ne modifier que les documents concernés.
