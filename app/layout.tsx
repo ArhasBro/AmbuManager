@@ -12,6 +12,8 @@ import {
   canManageTemplates,
   canManageUsers,
   canManageVehicles,
+  canAccessAdminDashboard,
+  canAccessTerrainDashboard,
   canViewAudit,
   canViewGlobalPlanning,
   canViewSelfPlanning,
@@ -58,13 +60,15 @@ async function getAppShellData(): Promise<{ navLinks: AppShellNavLink[]; context
     return { navLinks: [], context: fallbackContext };
   }
 
-  const navLinks: AppShellNavLink[] = [{ href: "/dashboard", label: "Tableau de bord" }];
+  const navLinks: AppShellNavLink[] = [];
   const companyScopedSession = Boolean(user.companyId);
   const supportActor = user.platformRole === "SUPPORT";
 
   const companyProfileAllowed = canManageCompanyProfile(user.role);
 
   const [
+    adminDashboardAllowed,
+    terrainDashboardAllowed,
     planningSelfAllowed,
     planningGlobalAllowed,
     usersAllowed,
@@ -74,6 +78,8 @@ async function getAppShellData(): Promise<{ navLinks: AppShellNavLink[]; context
     auditAllowed,
     company,
   ] = await Promise.all([
+    canAccessAdminDashboard(user.id, user.role, user.platformRole),
+    canAccessTerrainDashboard(user.id, user.role, user.platformRole),
     canViewSelfPlanning(user.id, user.role, user.platformRole),
     canViewGlobalPlanning(user.id, user.role, user.platformRole),
     canManageUsers(user.id, user.role, user.platformRole),
@@ -89,14 +95,35 @@ async function getAppShellData(): Promise<{ navLinks: AppShellNavLink[]; context
       : Promise.resolve(null),
   ]);
 
-  if (companyScopedSession && (planningSelfAllowed || planningGlobalAllowed)) navLinks.push({ href: "/planning", label: "Planning" });
-  if (companyScopedSession && usersAllowed) navLinks.push({ href: "/users", label: "Utilisateurs / RH" });
-  if (companyScopedSession && vehiclesAllowed) navLinks.push({ href: "/vehicles", label: "Véhicules" });
-  if (companyScopedSession && templatesAllowed) navLinks.push({ href: "/templates", label: "Modèles horaires" });
-  if (companyScopedSession && (companyProfileAllowed || companyRulesAllowed)) navLinks.push({ href: "/company", label: "Société" });
-  if (companyScopedSession && companyProfileAllowed) navLinks.push({ href: "/depots", label: "Dépôts / Bases" });
-  if (companyScopedSession && companyProfileAllowed) navLinks.push({ href: "/onboarding", label: "Mise en route" });
-  if ((companyScopedSession || supportActor) && auditAllowed) navLinks.push({ href: "/audit", label: "Audit" });
+  const planningAllowed = companyScopedSession && (planningSelfAllowed || planningGlobalAllowed);
+  const usersNavAllowed = companyScopedSession && usersAllowed;
+  const vehiclesNavAllowed = companyScopedSession && vehiclesAllowed;
+  const templatesNavAllowed = companyScopedSession && templatesAllowed;
+  const companyNavAllowed = companyScopedSession && (companyProfileAllowed || companyRulesAllowed);
+  const depotsNavAllowed = companyScopedSession && companyProfileAllowed;
+  const onboardingNavAllowed = companyScopedSession && companyProfileAllowed;
+  const auditNavAllowed = (companyScopedSession || supportActor) && auditAllowed;
+  const dashboardNavAllowed =
+    adminDashboardAllowed ||
+    terrainDashboardAllowed ||
+    planningAllowed ||
+    usersNavAllowed ||
+    vehiclesNavAllowed ||
+    templatesNavAllowed ||
+    companyNavAllowed ||
+    depotsNavAllowed ||
+    onboardingNavAllowed ||
+    auditNavAllowed;
+
+  if (dashboardNavAllowed) navLinks.push({ href: "/dashboard", label: "Tableau de bord" });
+  if (planningAllowed) navLinks.push({ href: "/planning", label: "Planning" });
+  if (usersNavAllowed) navLinks.push({ href: "/users", label: "Utilisateurs / RH" });
+  if (vehiclesNavAllowed) navLinks.push({ href: "/vehicles", label: "Véhicules" });
+  if (templatesNavAllowed) navLinks.push({ href: "/templates", label: "Modèles horaires" });
+  if (companyNavAllowed) navLinks.push({ href: "/company", label: "Société" });
+  if (depotsNavAllowed) navLinks.push({ href: "/depots", label: "Dépôts / Bases" });
+  if (onboardingNavAllowed) navLinks.push({ href: "/onboarding", label: "Mise en route" });
+  if (auditNavAllowed) navLinks.push({ href: "/audit", label: "Audit" });
 
   const context: AppShellContext = {
     companyLabel: company?.name ?? (companyScopedSession ? "Société courante" : "Société non rattachée"),
