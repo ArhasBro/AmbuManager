@@ -134,7 +134,7 @@ export default function PrivacyPage() {
             Accueil
           </Link>
           <span>/</span>
-          <span>Mention d&apos;information</span>
+          <span>Mentions d&apos;information</span>
         </nav>
 
         <div className="privacy-page__header-row">

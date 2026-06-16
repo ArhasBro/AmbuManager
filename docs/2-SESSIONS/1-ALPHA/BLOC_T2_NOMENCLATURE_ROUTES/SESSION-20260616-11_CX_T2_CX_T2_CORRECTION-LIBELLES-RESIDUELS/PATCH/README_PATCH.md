@@ -1,0 +1,29 @@
+# README_PATCH
+
+## Session liée
+
+`SESSION-20260616-11_CX_T2_CX_T2_CORRECTION-LIBELLES-RESIDUELS`
+
+## Type
+
+`CORRECTION`
+
+## Dossier `PATCH`
+
+`docs/2-SESSIONS/1-ALPHA/BLOC_T2_NOMENCLATURE_ROUTES/SESSION-20260616-11_CX_T2_CX_T2_CORRECTION-LIBELLES-RESIDUELS/PATCH`
+
+## Patch officiel attendu
+
+`PATCH__SESSION-20260616-11_CX_T2_CX_T2_CORRECTION-LIBELLES-RESIDUELS.diff`
+
+## Commandes d'application
+
+```bash
+git apply --check "PATCH__SESSION-20260616-11_CX_T2_CX_T2_CORRECTION-LIBELLES-RESIDUELS.diff"
+git apply "PATCH__SESSION-20260616-11_CX_T2_CX_T2_CORRECTION-LIBELLES-RESIDUELS.diff"
+```
+
+## Statut
+
+- Dossier patch initialisé.
+- Le patch applicatif `.diff` existant est conservé en l'état.

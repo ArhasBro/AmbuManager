@@ -407,7 +407,7 @@ function TemplateFormFields({
             disabled={disabled}
             onChange={(event) => onChange((prev) => ({ ...prev, isTimeDefined: event.target.checked, crossesMidnight: event.target.checked ? prev.crossesMidnight : false }))}
           />
-          <span>Template horodate</span>
+          <span>Horaires définis</span>
         </label>
 
         {form.isTimeDefined ? (
@@ -444,7 +444,7 @@ function TemplateFormFields({
           </div>
         ) : (
           <p className="templates-help-text">
-            Le template est conserve sans horaire. Il n&apos;est pas utilisable par l&apos;autoschedule dans l&apos;etat actuel du lot.
+            Le modèle horaire est conservé sans horaire. Il n&apos;est pas utilisable par l&apos;autoschedule dans l&apos;état actuel du lot.
           </p>
         )}
       </div>
@@ -585,7 +585,7 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
 
   async function handleCreate() {
     if (createForm.name.trim().length === 0) {
-      setError("Le nom du template est obligatoire.");
+      setError("Le nom du modèle horaire est obligatoire.");
       return;
     }
 
@@ -602,7 +602,7 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
       const payload = (await response.json().catch(() => null)) as ApiResponse<Template> | null;
 
       if (!response.ok || !payload?.ok) {
-        setError(getApiError(payload, "Impossible de creer le template."));
+        setError(getApiError(payload, "Impossible de créer le modèle horaire."));
         return;
       }
 
@@ -612,7 +612,7 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
       setCheckedTemplateIds([payload.data.id]);
       setShowCreateForm(false);
       setShowFormWorkspace(false);
-      setSuccessMessage("Template cree.");
+      setSuccessMessage("Modèle horaire créé.");
     } finally {
       setIsCreating(false);
     }
@@ -642,13 +642,13 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
     setEditForm(null);
     setShowCreateForm(true);
     setShowFormWorkspace(true);
-    setSuccessMessage("Template pre-rempli pour duplication.");
+    setSuccessMessage("Formulaire prérempli pour la duplication du modèle horaire.");
   }
 
   async function handleSave(templateId: string) {
     if (!editForm) return;
     if (editForm.name.trim().length === 0) {
-      setError("Le nom du template est obligatoire.");
+      setError("Le nom du modèle horaire est obligatoire.");
       return;
     }
 
@@ -665,12 +665,12 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
       const payload = (await response.json().catch(() => null)) as ApiResponse<Template> | null;
 
       if (!response.ok || !payload?.ok) {
-        setError(getApiError(payload, "Impossible d'enregistrer le template."));
+        setError(getApiError(payload, "Impossible d'enregistrer le modèle horaire."));
         return;
       }
 
       setTemplates((prev) => prev.map((template) => (template.id === templateId ? payload.data : template)));
-      setSuccessMessage("Template mis a jour.");
+      setSuccessMessage("Modèle horaire mis à jour.");
       closeEdit();
     } finally {
       setSavingTemplateId(null);
@@ -678,7 +678,7 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
   }
 
   async function handleArchive(templateId: string) {
-    const confirmed = window.confirm("Archiver ce template ? Il restera visible dans l'historique mais ne sera plus actif.");
+    const confirmed = window.confirm("Archiver ce modèle horaire ? Il restera visible dans l'historique mais ne sera plus actif.");
     if (!confirmed) return;
 
     setArchivingTemplateId(templateId);
@@ -689,12 +689,12 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
       const payload = (await response.json().catch(() => null)) as ApiResponse<Template> | null;
 
       if (!response.ok || !payload?.ok) {
-        setError(getApiError(payload, "Impossible d'archiver le template."));
+        setError(getApiError(payload, "Impossible d'archiver le modèle horaire."));
         return;
       }
 
       setTemplates((prev) => prev.map((template) => (template.id === templateId ? payload.data : template)));
-      setSuccessMessage("Template archive.");
+      setSuccessMessage("Modèle horaire archivé.");
       if (editingTemplateId === templateId) closeEdit();
     } finally {
       setArchivingTemplateId(null);
@@ -724,7 +724,7 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
     },
     {
       key: "name",
-      header: "Nom du template",
+      header: "Nom du modèle horaire",
       width: "188px",
       render: (template) => {
         const rowIndex = filteredTemplates.findIndex((current) => current.id === template.id);
@@ -829,20 +829,20 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
         </div>
         <div className="templates-page-top__actions">
           <ActionButton variant="primary" leadingIcon={<Plus size={16} />} onClick={openCreateWorkspace}>
-            Nouveau template
+            Nouveau modèle horaire
           </ActionButton>
         </div>
       </div>
 
       <div className="templates-grid-stats">
-        <StatCard title="Total templates" value={templateStats.total} hint="Total templates" tone="info" icon={<ClipboardList size={18} />} />
+        <StatCard title="Total modèles horaires" value={templateStats.total} hint="Total modèles horaires" tone="info" icon={<ClipboardList size={18} />} />
         <StatCard title="Actifs" value={templateStats.active} hint="Actifs" tone="success" icon={<CalendarClock size={18} />} />
         <StatCard title="Désactivés" value={templateStats.inactive} hint="Désactivés" tone="warning" icon={<PauseCircle size={18} />} />
         <StatCard title="Archivés" value={templateStats.archived} hint="Archivés" tone="neutral" icon={<Archive size={18} />} />
         <StatCard title="Types de garde" value={templateStats.categoryCount} hint="Types de garde" tone="info" icon={<UsersRound size={18} />} />
       </div>
 
-      {error ? <ErrorMessage title="Erreur module templates" message={error} /> : null}
+      {error ? <ErrorMessage title="Erreur module modèles horaires" message={error} /> : null}
       {successMessage ? <div className="templates-alert templates-alert--success">{successMessage}</div> : null}
 
       <div className="templates-layout">
@@ -862,7 +862,7 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
                   type="text"
                   value={searchInput}
                   onChange={(event) => setSearchInput(event.target.value)}
-                  placeholder="Rechercher un template..."
+                  placeholder="Rechercher un modèle horaire..."
                 />
               </div>
 
@@ -941,19 +941,19 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
               loading={false}
               error={null}
               emptyTitle="Aucun élément à afficher"
-              emptyMessage="Aucun template ne correspond aux critères sélectionnés."
+              emptyMessage="Aucun modèle horaire ne correspond aux critères sélectionnés."
               selectedRowKey={selectedTemplateId}
               onRowClick={(template) => {
                 setSelectedTemplateId(template.id);
                 setCheckedTemplateIds([template.id]);
               }}
               minWidth={1120}
-              caption="Templates de garde"
+              caption="Modèles horaires de garde"
               className="templates-table"
             />
 
             <div className="templates-table-footer">
-              <span>{filteredTemplates.length} template(s) affiché(s)</span>
+              <span>{filteredTemplates.length} modèle(s) horaire(s) affiché(s)</span>
               <span>Vue liste + détail priorisée</span>
             </div>
           </section>
@@ -982,7 +982,7 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
                 </div>
               </div>
 
-              <nav className="templates-detail-tabs" aria-label="Détails template">
+              <nav className="templates-detail-tabs" aria-label="Détails du modèle horaire">
                 {TEMPLATE_DETAIL_TABS.map((tab) => (
                   <button
                     key={tab.id}
@@ -1071,13 +1071,13 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
                   </ActionButton>
                 ) : (
                   <ActionButton variant="secondary" leadingIcon={<Ban size={14} />} disabled>
-                    Template archivé
+                    Modèle horaire archivé
                   </ActionButton>
                 )}
               </div>
             </>
           ) : (
-            <p className="templates-table-cell-subtle">Sélectionnez un template dans le tableau pour afficher le détail.</p>
+            <p className="templates-table-cell-subtle">Sélectionnez un modèle horaire dans le tableau pour afficher le détail.</p>
           )}
         </aside>
       </div>
@@ -1105,7 +1105,7 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
                 setEditForm(null);
               }}
             >
-              Nouveau template
+              Nouveau modèle horaire
             </ActionButton>
             <ActionButton
               variant={!showCreateForm ? "primary" : "secondary"}
@@ -1131,7 +1131,7 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
               />
               <div className="templates-actions templates-actions--end">
                 <ActionButton variant="primary" onClick={handleCreate} disabled={isCreating}>
-                  {isCreating ? "Création..." : "Créer le template"}
+                  {isCreating ? "Création..." : "Créer le modèle horaire"}
                 </ActionButton>
               </div>
             </>

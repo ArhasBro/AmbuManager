@@ -71,20 +71,20 @@ const DOMAIN_OPTIONS: Array<{ value: ImportDomain; label: string; help: string; 
   },
   {
     value: "vehicles",
-    label: "Vehicules",
-    help: "Ajout simple de vehicules. Colonnes minimales : immatriculation, type. Colonnes optionnelles : statut, depot, dates.",
+    label: "Véhicules",
+    help: "Ajout simple de véhicules. Colonnes minimales : immatriculation, type. Colonnes optionnelles : statut, depot, dates.",
     columns: ["immatriculation", "type", "statut", "depot", "insuranceExpiresAt", "technicalInspectionExpiresAt", "registrationDocumentPresent", "sanitaryApprovalExpiresAt"],
   },
   {
     value: "templates",
     label: "Modèles horaires",
-    help: "Ajout simple de templates. Colonnes minimales : nom, categorie. Horaires et contraintes optionnels.",
+    help: "Ajout simple de modèles horaires. Colonnes minimales : nom, categorie. Horaires et contraintes optionnels.",
     columns: ["nom", "categorie", "requiredRole", "secondaryAllowedRoles", "minStaffCount", "requiredVehicleType", "isActive", "isTimeDefined", "startTime", "endTime", "crossesMidnight", "color"],
   },
   {
     value: "depots",
-    label: "Depots",
-    help: "Ajout simple de depots. Colonnes minimales : nom, adresse.",
+    label: "Dépôts / Bases",
+    help: "Ajout simple de dépôts / bases. Colonnes minimales : nom, adresse.",
     columns: ["nom", "adresse"],
   },
   {
@@ -98,13 +98,13 @@ const DOMAIN_OPTIONS: Array<{ value: ImportDomain; label: string; help: string; 
 function getStepStatus(done: boolean, count?: number): StepStatus {
   if (typeof count === "number") {
     return {
-      label: done ? `OK (${count})` : `A completer (${count})`,
+      label: done ? `OK (${count})` : `À compléter (${count})`,
       variant: done ? "success" : "warning",
     };
   }
 
   return {
-    label: done ? "OK" : "A completer",
+    label: done ? "OK" : "À compléter",
     variant: done ? "success" : "warning",
   };
 }
@@ -131,16 +131,16 @@ export default function OnboardingClient({ checklist, links }: { checklist: Chec
     () => [
       {
         href: links.company,
-        title: "Profil societe",
-        description: "Renseigner l'identite complete de la societe.",
+        title: "Profil société",
+        description: "Renseigner l'identité complète de la société.",
         status: getStepStatus(checklist.profileComplete),
         done: checklist.profileComplete,
         countLabel: "1 / 1",
       },
       {
         href: links.depots,
-        title: "Bases / depots",
-        description: "Creer les depots utilises au demarrage.",
+        title: "Dépôts / Bases",
+        description: "Créer les dépôts / bases utilisés au démarrage.",
         status: getStepStatus(checklist.depotsCount > 0, checklist.depotsCount),
         done: checklist.depotsCount > 0,
         countLabel: `${checklist.depotsCount}`,
@@ -155,7 +155,7 @@ export default function OnboardingClient({ checklist, links }: { checklist: Chec
       },
       {
         href: links.vehicles,
-        title: "Vehicules",
+        title: "Véhicules",
         description: "Renseigner la flotte active et son statut.",
         status: getStepStatus(checklist.vehiclesCount > 0, checklist.vehiclesCount),
         done: checklist.vehiclesCount > 0,
@@ -234,7 +234,7 @@ export default function OnboardingClient({ checklist, links }: { checklist: Chec
       <section className="panel onboarding-card onboarding-card--timeline">
         <div className="onboarding-card__head">
           <h2 className="onboarding-card__title">Progression de la mise en route</h2>
-          <p className="onboarding-card__description">Preparer les donnees de demarrage avant la premiere exploitation reelle.</p>
+          <p className="onboarding-card__description">Préparer les données de démarrage avant la première exploitation réelle.</p>
         </div>
 
         <div className="onboarding-progress">
@@ -244,7 +244,7 @@ export default function OnboardingClient({ checklist, links }: { checklist: Chec
           <strong>{completionPct}%</strong>
         </div>
 
-        <p className="onboarding-card__description">{completedImportSteps} etapes sur {onboardingSteps.length} completees</p>
+        <p className="onboarding-card__description">{completedImportSteps} étapes sur {onboardingSteps.length} complétées</p>
 
         <div className="onboarding-steps">
           {onboardingSteps.map((step, index) => (
@@ -266,18 +266,18 @@ export default function OnboardingClient({ checklist, links }: { checklist: Chec
       <section className="panel onboarding-card onboarding-card--import">
         <div className="onboarding-card__head">
           <h2 className="onboarding-card__title">Import initial</h2>
-          <p className="onboarding-card__description">Apercu obligatoire avant validation. Aucun import destructeur.</p>
+          <p className="onboarding-card__description">Aperçu obligatoire avant validation. Aucun import destructeur.</p>
         </div>
 
-        <ol className="onboarding-import-steps" aria-label="Etapes import">
+        <ol className="onboarding-import-steps" aria-label="Étapes d'import">
           <li className="is-active"><span>1</span><small>Type d&apos;import</small></li>
           <li className={file ? "is-active" : ""}><span>2</span><small>Fichier</small></li>
-          <li className={preview ? "is-active" : ""}><span>3</span><small>Apercu</small></li>
+          <li className={preview ? "is-active" : ""}><span>3</span><small>Aperçu</small></li>
           <li className={preview?.invalidRows ? "is-warning" : preview ? "is-active" : ""}><span>4</span><small>Erreurs</small></li>
           <li className={commitResult ? "is-active" : ""}><span>5</span><small>Validation</small></li>
         </ol>
 
-        <div className="onboarding-domain-tabs" role="tablist" aria-label="Type import">
+        <div className="onboarding-domain-tabs" role="tablist" aria-label="Type d'import">
           {DOMAIN_OPTIONS.map((option) => (
             <button
               key={option.value}
@@ -296,8 +296,8 @@ export default function OnboardingClient({ checklist, links }: { checklist: Chec
         </div>
 
         <div className="onboarding-upload-zone">
-          <p className="onboarding-upload-zone__title">Glissez-deposez votre fichier ici</p>
-          <p className="onboarding-upload-zone__text">Formats acceptes : CSV, XLSX (max. 10 Mo)</p>
+          <p className="onboarding-upload-zone__title">Glissez-déposez votre fichier ici</p>
+          <p className="onboarding-upload-zone__text">Formats acceptés : CSV, XLSX (max. 10 Mo)</p>
           <label className="onboarding-upload-zone__picker">
             <span>Cliquez pour parcourir</span>
             <input
@@ -323,7 +323,7 @@ export default function OnboardingClient({ checklist, links }: { checklist: Chec
         <section className="panel-soft onboarding-hint">
           <strong>{selectedDomain.label}</strong>
           <p>{selectedDomain.help}</p>
-          <p className="onboarding-hint__columns">Colonnes conseillees : {selectedDomain.columns.join(", ")}</p>
+          <p className="onboarding-hint__columns">Colonnes conseillées : {selectedDomain.columns.join(", ")}</p>
         </section>
 
         <div className="onboarding-actions">
@@ -331,7 +331,7 @@ export default function OnboardingClient({ checklist, links }: { checklist: Chec
             {loading ? "Analyse en cours..." : "Analyser le fichier"}
           </ActionButton>
           <ActionButton type="button" variant="ghost" disabled={loading}>
-            Telecharger un modele
+            Télécharger un modèle
           </ActionButton>
           <ActionButton type="button" variant="primary" disabled={!preview || preview.rows.length === 0 || committing} onClick={() => void commitImport()}>
             {committing ? "Validation..." : "Valider l'import"}
@@ -345,7 +345,7 @@ export default function OnboardingClient({ checklist, links }: { checklist: Chec
             <div className="onboarding-preview__badges">
               <StatusBadge variant="neutral">{preview.fileName}</StatusBadge>
               <StatusBadge variant="info">{preview.format.toUpperCase()}</StatusBadge>
-              <StatusBadge variant="success">{preview.validRows} ligne(s) prete(s)</StatusBadge>
+              <StatusBadge variant="success">{preview.validRows} ligne(s) prête(s)</StatusBadge>
               <StatusBadge variant={preview.invalidRows > 0 ? "warning" : "neutral"}>{preview.invalidRows} ligne(s) en erreur</StatusBadge>
             </div>
 
@@ -356,9 +356,9 @@ export default function OnboardingClient({ checklist, links }: { checklist: Chec
             ) : null}
 
             <section className="onboarding-block">
-              <h3 className="onboarding-block__title">Apercu import ({preview.previewRows.length} lignes)</h3>
+              <h3 className="onboarding-block__title">Aperçu d&apos;import ({preview.previewRows.length} lignes)</h3>
               {preview.previewRows.length === 0 ? (
-                <div className="panel-soft onboarding-empty">Aucune ligne prete a importer.</div>
+                <div className="panel-soft onboarding-empty">Aucune ligne prête à importer.</div>
               ) : (
                 <div className="onboarding-row-list">
                   {preview.previewRows.map((row) => (
@@ -380,9 +380,9 @@ export default function OnboardingClient({ checklist, links }: { checklist: Chec
 
             <section className="onboarding-grid-feedback">
               <section className="onboarding-block onboarding-block--danger">
-                <h3 className="onboarding-block__title">Erreurs detectees ({preview.errors.length})</h3>
+                <h3 className="onboarding-block__title">Erreurs détectées ({preview.errors.length})</h3>
                 {preview.errors.length === 0 ? (
-                  <div className="status-success onboarding-feedback">Aucune erreur bloquante detectee dans l&apos;apercu.</div>
+                  <div className="status-success onboarding-feedback">Aucune erreur bloquante détectée dans l&apos;aperçu.</div>
                 ) : (
                   <div className="onboarding-errors">
                     {preview.errors.map((item, index) => (
@@ -395,9 +395,9 @@ export default function OnboardingClient({ checklist, links }: { checklist: Chec
               </section>
 
               <section className="onboarding-block onboarding-block--success">
-                <h3 className="onboarding-block__title">Pret a importer</h3>
+                <h3 className="onboarding-block__title">Prêt à importer</h3>
                 <p>{preview.validRows} lignes valides sur {preview.totalRows}</p>
-                <p>{preview.invalidRows} erreurs a corriger</p>
+                <p>{preview.invalidRows} erreurs à corriger</p>
               </section>
             </section>
           </section>
@@ -405,16 +405,16 @@ export default function OnboardingClient({ checklist, links }: { checklist: Chec
 
         {commitResult ? (
           <section className="onboarding-preview">
-            <h3 className="onboarding-block__title">Resultat d&apos;import</h3>
+            <h3 className="onboarding-block__title">Résultat d&apos;import</h3>
             <div className="onboarding-preview__badges">
               <StatusBadge variant="success">{commitResult.insertedCount} insertion(s)</StatusBadge>
-              <StatusBadge variant={commitResult.errorCount > 0 ? "warning" : "neutral"}>{commitResult.errorCount} ligne(s) rejetee(s)</StatusBadge>
+              <StatusBadge variant={commitResult.errorCount > 0 ? "warning" : "neutral"}>{commitResult.errorCount} ligne(s) rejetée(s)</StatusBadge>
             </div>
 
             {commitResult.insertedPreview.length > 0 ? (
               <div className="onboarding-notes">
                 {commitResult.insertedPreview.map((row) => (
-                  <div key={row.rowNumber}>Ligne {row.rowNumber} importee.</div>
+                  <div key={row.rowNumber}>Ligne {row.rowNumber} importée.</div>
                 ))}
               </div>
             ) : null}
@@ -428,7 +428,7 @@ export default function OnboardingClient({ checklist, links }: { checklist: Chec
                 ))}
               </div>
             ) : (
-              <div className="status-success onboarding-feedback">Import valide sans erreur residuelle.</div>
+              <div className="status-success onboarding-feedback">Import validé sans erreur résiduelle.</div>
             )}
           </section>
         ) : null}
@@ -437,7 +437,7 @@ export default function OnboardingClient({ checklist, links }: { checklist: Chec
       <aside className="panel onboarding-card onboarding-card--assist">
         <div className="onboarding-card__head">
           <h2 className="onboarding-card__title">Aide import</h2>
-          <p className="onboarding-card__description">Conseils de preparation avant validation finale.</p>
+          <p className="onboarding-card__description">Conseils de préparation avant validation finale.</p>
         </div>
 
         <section className="onboarding-assist-progress">
@@ -445,33 +445,33 @@ export default function OnboardingClient({ checklist, links }: { checklist: Chec
             <span>{completionPct}%</span>
           </div>
           <div>
-            <strong>{completedImportSteps} etapes terminees sur {onboardingSteps.length}</strong>
-            <p>Continuez pour finaliser la preparation de votre societe.</p>
+            <strong>{completedImportSteps} étapes terminées sur {onboardingSteps.length}</strong>
+            <p>Continuez pour finaliser la préparation de votre société.</p>
           </div>
         </section>
 
         <section className="onboarding-assist-block">
-          <h3>Etape selectionnee</h3>
+          <h3>Étape sélectionnée</h3>
           <StatusBadge variant="info">{selectedDomain.label}</StatusBadge>
         </section>
 
         <section className="onboarding-assist-block">
-          <h3>Conseils de preparation</h3>
+          <h3>Conseils de préparation</h3>
           <ul>
-            <li>Verifier que les bases/depots sont crees et actifs.</li>
+            <li>Vérifier que les dépôts / bases sont créés et actifs.</li>
             <li>Chaque utilisateur doit avoir un email unique.</li>
-            <li>Les roles doivent correspondre au referentiel.</li>
-            <li>Les depots doivent exister et etre actifs.</li>
+            <li>Les rôles doivent correspondre au référentiel.</li>
+            <li>Les dépôts / bases doivent exister et être actifs.</li>
           </ul>
         </section>
 
         <section className="onboarding-assist-block">
-          <h3>Ordre recommande</h3>
+          <h3>Ordre recommandé</h3>
           <ol>
-            <li>Societe</li>
-            <li>Depots</li>
+            <li>Société</li>
+            <li>Dépôts / Bases</li>
             <li>Utilisateurs</li>
-            <li>Vehicules</li>
+            <li>Véhicules</li>
             <li>Modèles horaires</li>
           </ol>
         </section>

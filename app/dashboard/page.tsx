@@ -282,8 +282,8 @@ export default async function DashboardPage() {
   if (companyScopedSession && depotsAllowed) {
     adminLinks.push({
       href: "/depots",
-      title: "Dépôts",
-      description: "Gérez les dépôts et leurs informations opérationnelles.",
+      title: "Dépôts / Bases",
+      description: "Gérez les dépôts / bases et leurs informations opérationnelles.",
       Icon: Landmark,
       tone: "violet",
       statusLabel: "Disponible",

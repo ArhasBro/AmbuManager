@@ -90,7 +90,7 @@ export default async function DepotsPage() {
   return (
     <section className="depots-section">
       <PageHeader
-        title="Dépôts / bases"
+        title="Dépôts / Bases"
         description="Gérez les bases de rattachement de vos équipes et véhicules."
         actions={
           <a href="#depots-create-form" className="ui-action-button ui-action-button--primary ui-action-button--md">
