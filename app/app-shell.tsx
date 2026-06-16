@@ -7,7 +7,6 @@ import {
   Ambulance,
   Building2,
   CalendarDays,
-  ChevronDown,
   FileText,
   GraduationCap,
   Landmark,
@@ -149,7 +148,6 @@ export default function AppShell({
             </span>
             <strong className="app-shell__user-name">{context.userLabel}</strong>
             <span className="app-shell__user-role">{context.roleLabel}</span>
-            <ChevronDown size={14} className="app-shell__user-chevron" aria-hidden="true" />
           </div>
         </div>
       </aside>
@@ -157,13 +155,12 @@ export default function AppShell({
       <section className="app-shell__content">
         <header className="app-shell__topbar">
           <div className="app-shell__topbar-meta">
-            <button type="button" className="app-shell__company-selector" aria-label="Société courante">
+            <div className="app-shell__company-selector" aria-label="Société courante">
               <span className="app-shell__company-icon" aria-hidden="true">
                 <Building2 size={15} />
               </span>
               <span className="app-shell__company-text">{context.companyLabel}</span>
-              <ChevronDown size={14} aria-hidden="true" />
-            </button>
+            </div>
 
             <button
               type="button"
@@ -182,7 +179,6 @@ export default function AppShell({
                 <span>{context.userLabel}</span>
                 <small>{context.roleLabel}</small>
               </span>
-              <ChevronDown size={14} aria-hidden="true" />
             </div>
 
             {context.canLogout ? (

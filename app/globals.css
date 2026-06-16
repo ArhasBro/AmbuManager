@@ -336,10 +336,10 @@ pre {
   background: var(--ui-surface);
   padding: 10px 12px;
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr);
   grid-template-areas:
-    "avatar name chevron"
-    "avatar role chevron";
+    "avatar name"
+    "avatar role";
   align-items: center;
   column-gap: 10px;
   gap: 2px;
@@ -375,11 +375,6 @@ pre {
   grid-area: role;
   color: var(--ui-text-muted);
   font-size: 12px;
-}
-
-.app-shell__user-chevron {
-  grid-area: chevron;
-  color: var(--ui-text-muted);
 }
 
 .app-shell__content {
