@@ -102,340 +102,340 @@ Les dossiers historiques `SESSION-20260615-03_A1_T0-01` et `SESSION-20260615-04_
 
 ### BLOC T1 - Shell global, navigation et contexte connecté
 
-**Identifiant**
+#### **Identifiant**
 
 T1
 
-**Type de bloc**
+#### **Type de bloc**
 
 Transverse
 
-**Dossier cible**
+#### **Dossier cible**
 
 `docs/2-SESSIONS/1-ALPHA/BLOC_T1_SHELL_NAVIGATION`
 
-**Objectif**
+#### **Objectif**
 
 Stabiliser sidebar, topbar, société courante, utilisateur courant, filtrage visible par droits et accès refusé.
 
-**Dépendances**
+#### **Dépendances**
 
 - T2 si une convention de nommage bloque.
 - T4 pour les permissions fines.
 
-**Hors périmètre**
+#### **Hors périmètre**
 
 - Reprise profonde des pages métier.
 - RBAC complet.
 - Design system complet.
 
-**Sessions prévues**
+#### **Sessions prévues**
 
 - DX audit + cadrage : cartographier shell/navigation, écarts, risques et questions bloquantes.
 - CX prévisionnelles : `INFORMATION NON FOURNIE — À CONFIRMER APRÈS AUDIT CIBLÉ`.
 - Clôture : DX si synthèse documentaire seule ; CX uniquement si un contrôle technique ou script est réellement modifié.
 
-**Contrôles obligatoires**
+#### **Contrôles obligatoires**
 
 Git, preuves de lecture, absence de patch applicatif en DX, contrôle navigateur/lint/build uniquement pour une CX qui modifie le code.
 
-**Critère de sortie**
+#### **Critère de sortie**
 
 Le shell permet d'accéder aux modules autorisés et de refuser proprement les accès interdits, ou les écarts restants sont reportés explicitement.
 
-**Documentation à mettre à jour**
+#### **Documentation à mettre à jour**
 
 `05`, références UI/UX, matrice RBAC si impact.
 
-**Statut**
+#### **Statut**
 
 À faire.
 
 ### BLOC T2 - Nomenclature, routes et renommages futurs
 
-**Identifiant**
+#### **Identifiant**
 
 T2
 
-**Type de bloc**
+#### **Type de bloc**
 
 Transverse
 
-**Dossier cible**
+#### **Dossier cible**
 
 `docs/2-SESSIONS/1-ALPHA/BLOC_T2_NOMENCLATURE_ROUTES`
 
-**Objectif**
+#### **Objectif**
 
 Cadrer routes techniques, libellés UI et renommages futurs sans les exécuter par défaut.
 
-**Dépendances**
+#### **Dépendances**
 
 `04`, `03`, références UI/UX, repo officiel en lecture seule.
 
-**Hors périmètre**
+#### **Hors périmètre**
 
 Renommage effectif, migration de routes, refonte navigation, code applicatif en DX.
 
-**Sessions prévues**
+#### **Sessions prévues**
 
 - DX audit + cadrage : matrice routes/libellés et décisions à confirmer.
 - CX prévisionnelles : uniquement si l'audit valide un renommage ou une correction technique ciblée.
 - Clôture : DX sauf modification technique réelle.
 
-**Contrôles obligatoires**
+#### **Contrôles obligatoires**
 
 Git, preuves, absence de modification code en DX, contrôle des liens/routes si une CX est validée.
 
-**Critère de sortie**
+#### **Critère de sortie**
 
 Chaque élément litigieux est classé : conservé, à renommer plus tard, ou à confirmer.
 
-**Documentation à mettre à jour**
+#### **Documentation à mettre à jour**
 
 `04`, `05`, conventions éventuelles.
 
-**Statut**
+#### **Statut**
 
 À faire.
 
 ### BLOC T3 - Design system officiel et composants communs
 
-**Identifiant**
+#### **Identifiant**
 
 T3
 
-**Type de bloc**
+#### **Type de bloc**
 
 Transverse
 
-**Dossier cible**
+#### **Dossier cible**
 
 `docs/2-SESSIONS/1-ALPHA/BLOC_T3_DESIGN_SYSTEM`
 
-**Objectif**
+#### **Objectif**
 
 Identifier et stabiliser les composants et états UI communs nécessaires aux pages Alpha.
 
-**Dépendances**
+#### **Dépendances**
 
 T1, T2.
 
-**Hors périmètre**
+#### **Hors périmètre**
 
 Copie de composants Base44, refonte visuelle globale, reprise complète d'une page.
 
-**Sessions prévues**
+#### **Sessions prévues**
 
 - DX audit + cadrage : inventaire composants, états, écarts, priorités.
 - CX prévisionnelles : à découper par composant ou famille d'états après audit ciblé.
 - Clôture : DX sauf modification technique réelle.
 
-**Contrôles obligatoires**
+#### **Contrôles obligatoires**
 
 Git, preuves, Base44 en lecture seule, lint/build et contrôle visuel pour toute CX UI.
 
-**Critère de sortie**
+#### **Critère de sortie**
 
 Les composants nécessaires sont fiables ou reportés explicitement.
 
-**Documentation à mettre à jour**
+#### **Documentation à mettre à jour**
 
 Références UI/UX, `05`.
 
-**Statut**
+#### **Statut**
 
 À faire.
 
 ### BLOC T4 - RBAC UI/API et matrice permissions
 
-**Identifiant**
+#### **Identifiant**
 
 T4
 
-**Type de bloc**
+#### **Type de bloc**
 
 Transverse
 
-**Dossier cible**
+#### **Dossier cible**
 
 `docs/2-SESSIONS/1-ALPHA/BLOC_T4_RBAC_PERMISSIONS`
 
-**Objectif**
+#### **Objectif**
 
 Poser une matrice RBAC progressive et vérifier les contrôles UI/API des actions sensibles.
 
-**Dépendances**
+#### **Dépendances**
 
 T1, T5 si données société impliquées.
 
-**Hors périmètre**
+#### **Hors périmètre**
 
 Matrice V1 complète non arbitrée, refonte globale auth.
 
-**Sessions prévues**
+#### **Sessions prévues**
 
 - DX audit + cadrage : rôles, permissions, endpoints, écarts et questions.
 - CX prévisionnelles : à découper par permission, endpoint, écran ou action sensible après audit ciblé.
 - Clôture : DX sauf modification technique réelle.
 
-**Contrôles obligatoires**
+#### **Contrôles obligatoires**
 
 Preuves, tests rôles/endpoints pour toute CX, lint/build, preuve serveur/API.
 
-**Critère de sortie**
+#### **Critère de sortie**
 
 Le RBAC Alpha minimal est cadré et les écarts prioritaires sont traités ou reportés.
 
-**Documentation à mettre à jour**
+#### **Documentation à mettre à jour**
 
 Matrice permissions, `05`.
 
-**Statut**
+#### **Statut**
 
 À faire.
 
 ### BLOC T5 - Données, multi-tenant et mapping Base44 vers officiel
 
-**Identifiant**
+#### **Identifiant**
 
 T5
 
-**Type de bloc**
+#### **Type de bloc**
 
 Transverse
 
-**Dossier cible**
+#### **Dossier cible**
 
 `docs/2-SESSIONS/1-ALPHA/BLOC_T5_DONNEES_MULTI_TENANT`
 
-**Objectif**
+#### **Objectif**
 
 Comparer les entités Base44 utiles au modèle officiel et cadrer le multi-tenant avant toute modification de données.
 
-**Dépendances**
+#### **Dépendances**
 
 `01`, audits existants, T4 si droits impliqués.
 
-**Hors périmètre**
+#### **Hors périmètre**
 
 Migration, modification Prisma, `prisma generate`, copie de modèle Base44.
 
-**Sessions prévues**
+#### **Sessions prévues**
 
 - DX audit + cadrage : matrice entités/champs, écarts, accepté/refusé/à confirmer.
 - CX prévisionnelles : à découper par modèle, relation ou contrôle multi-tenant après audit ciblé.
 - Clôture : DX sauf modification technique réelle.
 
-**Contrôles obligatoires**
+#### **Contrôles obligatoires**
 
 Prisma en lecture si autorisé, Base44 lecture seule, preuve multi-tenant pour toute CX.
 
-**Critère de sortie**
+#### **Critère de sortie**
 
 Les données utiles Alpha sont cadrées sans modification Prisma non autorisée.
 
-**Documentation à mettre à jour**
+#### **Documentation à mettre à jour**
 
 Documentation données, `05`.
 
-**Statut**
+#### **Statut**
 
 À faire.
 
 ### BLOC T6 - Audit et traçabilité transverse
 
-**Identifiant**
+#### **Identifiant**
 
 T6
 
-**Type de bloc**
+#### **Type de bloc**
 
 Transverse
 
-**Dossier cible**
+#### **Dossier cible**
 
 `docs/2-SESSIONS/1-ALPHA/BLOC_T6_AUDIT_TRACABILITE`
 
-**Objectif**
+#### **Objectif**
 
 Définir les actions sensibles à tracer et le contrat minimal de traçabilité.
 
-**Dépendances**
+#### **Dépendances**
 
 T4, T5.
 
-**Hors périmètre**
+#### **Hors périmètre**
 
 Conformité RGPD complète, SIEM, politique de rétention finale.
 
-**Sessions prévues**
+#### **Sessions prévues**
 
 - DX audit + cadrage : actions sensibles, traces existantes, contrat minimal.
 - CX prévisionnelles : à découper par action sensible ou module après audit ciblé.
 - Clôture : DX sauf modification technique réelle.
 
-**Contrôles obligatoires**
+#### **Contrôles obligatoires**
 
 Preuves, cohérence RBAC, test de trace produite pour toute CX.
 
-**Critère de sortie**
+#### **Critère de sortie**
 
 Les actions sensibles prioritaires ont un contrat de trace ou un report explicite.
 
-**Documentation à mettre à jour**
+#### **Documentation à mettre à jour**
 
 Documentation audit, `05`.
 
-**Statut**
+#### **Statut**
 
 À faire.
 
 ### BLOC T7 - Qualité, tests et contrôles de reprise
 
-**Identifiant**
+#### **Identifiant**
 
 T7
 
-**Type de bloc**
+#### **Type de bloc**
 
 Transverse
 
-**Dossier cible**
+#### **Dossier cible**
 
 `docs/2-SESSIONS/1-ALPHA/BLOC_T7_QUALITE_CONTROLES`
 
-**Objectif**
+#### **Objectif**
 
 Définir les contrôles récurrents par type de session et les preuves minimales attendues.
 
-**Dépendances**
+#### **Dépendances**
 
 `03`, README sessions, templates.
 
-**Hors périmètre**
+#### **Hors périmètre**
 
 Exécution exhaustive de tous les tests hors contexte.
 
-**Sessions prévues**
+#### **Sessions prévues**
 
 - DX audit + cadrage : DoD par type de session.
 - CX prévisionnelles : uniquement pour outillage technique validé après audit ciblé.
 - Clôture : DX sauf modification technique réelle.
 
-**Contrôles obligatoires**
+#### **Contrôles obligatoires**
 
 Git, diff, encodage, absence de modification hors périmètre, test non destructif pour tout script modifié.
 
-**Critère de sortie**
+#### **Critère de sortie**
 
 Les futures sessions disposent d'un cadre de contrôle clair.
 
-**Documentation à mettre à jour**
+#### **Documentation à mettre à jour**
 
 `03`, README sessions, templates, `05`.
 
-**Statut**
+#### **Statut**
 
 À faire.
 
@@ -445,441 +445,529 @@ Les blocs pages/modules suivent la même logique : audit DX, découpage fin des 
 
 ### BLOC P-LOGIN - Connexion
 
-**Dossier cible**
+#### **Identifiant**
+
+P-LOGIN
+
+#### **Type de bloc**
+
+Page / module fonctionnel
+
+#### **Dossier cible**
 
 `docs/2-SESSIONS/1-ALPHA/BLOC_P_LOGIN`
 
-**Objectif**
+#### **Objectif**
 
 Stabiliser le parcours de connexion officiel, dont `Se souvenir de moi` si confirmé.
 
-**Dépendances**
+#### **Dépendances**
 
 T1, T4, RGPD-PRIVACY.
 
-**Hors périmètre**
+#### **Hors périmètre**
 
 Inscription libre Alpha, MFA, SSO, mot de passe oublié si non validé.
 
-**Sessions prévues**
+#### **Sessions prévues**
 
 - DX audit + cadrage : login, erreurs, redirections, session, Privacy.
 - CX prévisionnelles : à découper après audit ciblé.
 - Clôture : DX ou CX selon contrôles réellement nécessaires.
 
-**Contrôles obligatoires**
+#### **Contrôles obligatoires**
 
 Auth/redirections/navigateur/lint/build uniquement pour CX ; preuves et absence de patch applicatif pour DX.
 
-**Critère de sortie**
+#### **Critère de sortie**
 
 Login utilisable, contrôlé et limites Alpha explicites.
 
-**Documentation à mettre à jour**
+#### **Documentation à mettre à jour**
 
 Fiche Login, `05`, Privacy si impact.
 
-**Statut**
+#### **Statut**
 
 À faire.
 
 ### BLOC P-SOCIETE - Société
 
-**Dossier cible**
+#### **Identifiant**
+
+P-SOCIETE
+
+#### **Type de bloc**
+
+Page / module fonctionnel
+
+#### **Dossier cible**
 
 `docs/2-SESSIONS/1-ALPHA/BLOC_P_SOCIETE`
 
-**Objectif**
+#### **Objectif**
 
 Stabiliser société courante, profil et contacts société multiples.
 
-**Dépendances**
+#### **Dépendances**
 
 T4, T5, T6.
 
-**Hors périmètre**
+#### **Hors périmètre**
 
 Facturation, abonnement, conformité juridique complète.
 
-**Sessions prévues**
+#### **Sessions prévues**
 
 - DX audit + cadrage : profil, contacts, companyId, droits, audit.
 - CX prévisionnelles : à découper après audit ciblé par écran, API ou contrôle.
 - Clôture : DX ou CX selon périmètre réel.
 
-**Contrôles obligatoires**
+#### **Contrôles obligatoires**
 
 CompanyId, API/RBAC, audit et multi-tenant pour toute CX.
 
-**Critère de sortie**
+#### **Critère de sortie**
 
 Société et contacts cohérents, cloisonnés et contrôlés.
 
-**Documentation à mettre à jour**
+#### **Documentation à mettre à jour**
 
 Fiche Société, documentation données, `05`.
 
-**Statut**
+#### **Statut**
 
 À faire.
 
 ### BLOC P-DEPOTS-BASES - Dépôts / Bases
 
-**Dossier cible**
+#### **Identifiant**
+
+P-DEPOTS-BASES
+
+#### **Type de bloc**
+
+Page / module fonctionnel
+
+#### **Dossier cible**
 
 `docs/2-SESSIONS/1-ALPHA/BLOC_P_DEPOTS_BASES`
 
-**Objectif**
+#### **Objectif**
 
 Stabiliser le référentiel des dépôts/bases.
 
-**Dépendances**
+#### **Dépendances**
 
 T4, T5, T6.
 
-**Hors périmètre**
+#### **Hors périmètre**
 
 Géolocalisation avancée, automatisations planning futures.
 
-**Sessions prévues**
+#### **Sessions prévues**
 
 - DX audit + cadrage : référentiel, rattachements, dépendances.
 - CX prévisionnelles : à découper après audit ciblé.
 - Clôture : DX ou CX selon périmètre réel.
 
-**Contrôles obligatoires**
+#### **Contrôles obligatoires**
 
 API/RBAC, multi-tenant, audit et lint/build pour toute CX.
 
-**Critère de sortie**
+#### **Critère de sortie**
 
 Dépôts fiables pour RH, véhicules et planning.
 
-**Documentation à mettre à jour**
+#### **Documentation à mettre à jour**
 
 Fiche Dépôts/Bases, `05`.
 
-**Statut**
+#### **Statut**
 
 À faire.
 
 ### BLOC P-UTILISATEURS-RH - Utilisateurs / RH
 
-**Dossier cible**
+#### **Identifiant**
+
+P-UTILISATEURS-RH
+
+#### **Type de bloc**
+
+Page / module fonctionnel
+
+#### **Dossier cible**
 
 `docs/2-SESSIONS/1-ALPHA/BLOC_P_UTILISATEURS_RH`
 
-**Objectif**
+#### **Objectif**
 
 Stabiliser utilisateurs, rôles, accès applicatif, données RH minimales et indisponibilités.
 
-**Dépendances**
+#### **Dépendances**
 
 T4, T5, T6, P-DEPOTS-BASES.
 
-**Hors périmètre**
+#### **Hors périmètre**
 
 Paie, RH avancée, permissions fines non validées.
 
-**Sessions prévues**
+#### **Sessions prévues**
 
 - DX audit + cadrage : modèles, UI/API, rôles, accès et écarts.
 - CX prévisionnelles : à découper après audit ciblé par écran, action, endpoint ou permission.
 - Clôture : DX ou CX selon périmètre réel.
 
-**Contrôles obligatoires**
+#### **Contrôles obligatoires**
 
 API/RBAC, multi-tenant, audit, lint/build pour toute CX.
 
-**Critère de sortie**
+#### **Critère de sortie**
 
 Utilisateurs/RH exploitables sans incohérence critique connue.
 
-**Documentation à mettre à jour**
+#### **Documentation à mettre à jour**
 
 Fiche Utilisateurs/RH, matrice RBAC, `05`.
 
-**Statut**
+#### **Statut**
 
 À faire.
 
 ### BLOC P-VEHICULES - Véhicules
 
-**Dossier cible**
+#### **Identifiant**
+
+P-VEHICULES
+
+#### **Type de bloc**
+
+Page / module fonctionnel
+
+#### **Dossier cible**
 
 `docs/2-SESSIONS/1-ALPHA/BLOC_P_VEHICULES`
 
-**Objectif**
+#### **Objectif**
 
 Stabiliser la flotte administrative.
 
-**Dépendances**
+#### **Dépendances**
 
 T4, T5, T6, P-DEPOTS-BASES.
 
-**Hors périmètre**
+#### **Hors périmètre**
 
 Suivi opérationnel détaillé, maintenance prédictive.
 
-**Sessions prévues**
+#### **Sessions prévues**
 
 - DX audit + cadrage : flotte, statuts, archivage, disponibilité.
 - CX prévisionnelles : à découper après audit ciblé.
 - Clôture : DX ou CX selon périmètre réel.
 
-**Contrôles obligatoires**
+#### **Contrôles obligatoires**
 
 API/RBAC, multi-tenant, audit, lint/build pour toute CX.
 
-**Critère de sortie**
+#### **Critère de sortie**
 
 Flotte administrative fiable pour modules dépendants.
 
-**Documentation à mettre à jour**
+#### **Documentation à mettre à jour**
 
 Fiche Véhicules, `05`.
 
-**Statut**
+#### **Statut**
 
 À faire.
 
 ### BLOC P-SUIVI-VEHICULES - Suivi des véhicules
 
-**Dossier cible**
+#### **Identifiant**
+
+P-SUIVI-VEHICULES
+
+#### **Type de bloc**
+
+Page / module fonctionnel
+
+#### **Dossier cible**
 
 `docs/2-SESSIONS/1-ALPHA/BLOC_P_SUIVI_VEHICULES`
 
-**Objectif**
+#### **Objectif**
 
 Cadrer puis reprendre le suivi opérationnel des véhicules en statut hybride.
 
-**Dépendances**
+#### **Dépendances**
 
 P-VEHICULES, T4, T5, T6.
 
-**Hors périmètre**
+#### **Hors périmètre**
 
 Signature électronique, preuve mobile, maintenance prédictive, règles ARS complètes non confirmées.
 
-**Sessions prévues**
+#### **Sessions prévues**
 
 - DX audit + cadrage : statut technique, vue d'ensemble, vérifications, désinfections, anomalies.
 - CX prévisionnelles : à découper après audit ciblé par sous-flux confirmé.
 - Clôture : DX ou CX selon périmètre réel.
 
-**Contrôles obligatoires**
+#### **Contrôles obligatoires**
 
 Navigateur, API/RBAC, multi-tenant, audit et lint/build pour toute CX.
 
-**Critère de sortie**
+#### **Critère de sortie**
 
 Suivi véhicules situé clairement et fonctionnel sur le périmètre Alpha retenu.
 
-**Documentation à mettre à jour**
+#### **Documentation à mettre à jour**
 
 Fiche Suivi véhicules, matrice RBAC, documentation audit, `05`.
 
-**Statut**
+#### **Statut**
 
 À confirmer après audit ciblé.
 
 ### BLOC P-MODELES-HORAIRES - Modèles horaires
 
-**Dossier cible**
+#### **Identifiant**
+
+P-MODELES-HORAIRES
+
+#### **Type de bloc**
+
+Page / module fonctionnel
+
+#### **Dossier cible**
 
 `docs/2-SESSIONS/1-ALPHA/BLOC_P_MODELES_HORAIRES`
 
-**Objectif**
+#### **Objectif**
 
 Aligner le référentiel des modèles horaires avec la terminologie produit officielle.
 
-**Dépendances**
+#### **Dépendances**
 
 T2, T4, T5.
 
-**Hors périmètre**
+#### **Hors périmètre**
 
 Renommage technique sans décision, reprise complète planning.
 
-**Sessions prévues**
+#### **Sessions prévues**
 
 - DX audit + cadrage : modèles horaires, route actuelle, dépendance planning.
 - CX prévisionnelles : à découper après audit ciblé.
 - Clôture : DX ou CX selon périmètre réel.
 
-**Contrôles obligatoires**
+#### **Contrôles obligatoires**
 
 API/RBAC, compatibilité planning, lint/build pour toute CX.
 
-**Critère de sortie**
+#### **Critère de sortie**
 
 Modèles horaires exploitables et nommés correctement côté produit.
 
-**Documentation à mettre à jour**
+#### **Documentation à mettre à jour**
 
 Fiche Modèles horaires, `05`, conventions.
 
-**Statut**
+#### **Statut**
 
 À faire.
 
 ### BLOC P-PLANNING - Planning
 
-**Dossier cible**
+#### **Identifiant**
+
+P-PLANNING
+
+#### **Type de bloc**
+
+Page / module fonctionnel
+
+#### **Dossier cible**
 
 `docs/2-SESSIONS/1-ALPHA/BLOC_P_PLANNING`
 
-**Objectif**
+#### **Objectif**
 
 Reprendre le planning après stabilisation des référentiels et données sources.
 
-**Dépendances**
+#### **Dépendances**
 
 P-SOCIETE, P-DEPOTS-BASES, P-UTILISATEURS-RH, P-VEHICULES, P-MODELES-HORAIRES, T4, T5, T6.
 
-**Hors périmètre**
+#### **Hors périmètre**
 
 Planification automatique avancée, reporting analytique, agenda heure par heure si non validé.
 
-**Sessions prévues**
+#### **Sessions prévues**
 
 - DX audit + cadrage : dépendances, vues, affectations, publication, annulation logique.
 - CX prévisionnelles : à découper après audit ciblé par vue, action, contrôle ou endpoint.
 - Clôture : DX ou CX selon périmètre réel.
 
-**Contrôles obligatoires**
+#### **Contrôles obligatoires**
 
 Fonctionnel ciblé, API/RBAC, audit, multi-tenant, navigateur, lint/build pour toute CX.
 
-**Critère de sortie**
+#### **Critère de sortie**
 
 Planning manuel métier fiable sur les parcours Alpha retenus.
 
-**Documentation à mettre à jour**
+#### **Documentation à mettre à jour**
 
 Fiche Planning, matrice RBAC, `05`.
 
-**Statut**
+#### **Statut**
 
 À faire.
 
 ### BLOC P-AUDIT - Audit / Traçabilité
 
-**Dossier cible**
+#### **Identifiant**
+
+P-AUDIT
+
+#### **Type de bloc**
+
+Page / module fonctionnel
+
+#### **Dossier cible**
 
 `docs/2-SESSIONS/1-ALPHA/BLOC_P_AUDIT`
 
-**Objectif**
+#### **Objectif**
 
 Garantir la consultation des traces officielles autorisées.
 
-**Dépendances**
+#### **Dépendances**
 
 T6, T4.
 
-**Hors périmètre**
+#### **Hors périmètre**
 
 SIEM, purge/rétention complète, conformité RGPD finale.
 
-**Sessions prévues**
+#### **Sessions prévues**
 
 - DX audit + cadrage : page, filtres, droits, traces disponibles.
 - CX prévisionnelles : à découper après audit ciblé.
 - Clôture : DX ou CX selon périmètre réel.
 
-**Contrôles obligatoires**
+#### **Contrôles obligatoires**
 
 Lecture seule, API/RBAC, lint/build pour toute CX.
 
-**Critère de sortie**
+#### **Critère de sortie**
 
 Traces officielles autorisées consultables sans modification non voulue.
 
-**Documentation à mettre à jour**
+#### **Documentation à mettre à jour**
 
 Documentation audit, matrice RBAC, `05`.
 
-**Statut**
+#### **Statut**
 
 À faire.
 
 ### BLOC P-DASHBOARD - Tableau de bord
 
-**Dossier cible**
+#### **Identifiant**
+
+P-DASHBOARD
+
+#### **Type de bloc**
+
+Page / module fonctionnel
+
+#### **Dossier cible**
 
 `docs/2-SESSIONS/1-ALPHA/BLOC_P_DASHBOARD`
 
-**Objectif**
+#### **Objectif**
 
 Fiabiliser le dashboard après stabilisation des données sources.
 
-**Dépendances**
+#### **Dépendances**
 
 T1, T4, T5, référentiels utiles.
 
-**Hors périmètre**
+#### **Hors périmètre**
 
 Reporting avancé, préférences complexes non confirmées, données fictives.
 
-**Sessions prévues**
+#### **Sessions prévues**
 
 - DX audit + cadrage : KPI, widgets, raccourcis, données et droits.
 - CX prévisionnelles : à découper après audit ciblé.
 - Clôture : DX ou CX selon périmètre réel.
 
-**Contrôles obligatoires**
+#### **Contrôles obligatoires**
 
 Données réelles, RBAC, navigateur, lint/build pour toute CX.
 
-**Critère de sortie**
+#### **Critère de sortie**
 
 Dashboard fiable, sans données fictives présentées comme réelles.
 
-**Documentation à mettre à jour**
+#### **Documentation à mettre à jour**
 
 Fiche Dashboard, documentation données, `05`.
 
-**Statut**
+#### **Statut**
 
 À faire.
 
 ### BLOC P-MISE-EN-ROUTE - Mise en route
 
-**Dossier cible**
+#### **Identifiant**
+
+P-MISE-EN-ROUTE
+
+#### **Type de bloc**
+
+Page / module fonctionnel
+
+#### **Dossier cible**
 
 `docs/2-SESSIONS/1-ALPHA/BLOC_P_MISE_EN_ROUTE`
 
-**Objectif**
+#### **Objectif**
 
 Stabiliser l'assistant de configuration initiale après les référentiels métier.
 
-**Dépendances**
+#### **Dépendances**
 
 P-SOCIETE, P-DEPOTS-BASES, P-UTILISATEURS-RH, P-VEHICULES, P-MODELES-HORAIRES.
 
-**Hors périmètre**
+#### **Hors périmètre**
 
 Onboarding marketing, tutoriels avancés, renommage technique sans décision.
 
-**Sessions prévues**
+#### **Sessions prévues**
 
 - DX audit + cadrage : checklist, liens, données sources et libellés.
 - CX prévisionnelles : à découper après audit ciblé.
 - Clôture : DX ou CX selon périmètre réel.
 
-**Contrôles obligatoires**
+#### **Contrôles obligatoires**
 
 Liens, données sources, RBAC visible, navigateur, lint/build pour toute CX.
 
-**Critère de sortie**
+#### **Critère de sortie**
 
 Mise en route cohérente avec les vrais modules sources.
 
-**Documentation à mettre à jour**
+#### **Documentation à mettre à jour**
 
 Fiche Mise en route, conventions, `05`.
 
-**Statut**
+#### **Statut**
 
 À faire.
 
@@ -887,41 +975,49 @@ Fiche Mise en route, conventions, `05`.
 
 ### BLOC RGPD-PRIVACY - Privacy visible en Alpha
 
-**Dossier cible**
+#### **Identifiant**
+
+RGPD-PRIVACY
+
+#### **Type de bloc**
+
+RGPD / conformité
+
+#### **Dossier cible**
 
 `docs/2-SESSIONS/1-ALPHA/BLOC_RGPD_PRIVACY`
 
-**Objectif**
+#### **Objectif**
 
 Garantir une Privacy visible en Alpha et documenter les limites RGPD sans déclarer une conformité complète non prouvée.
 
-**Dépendances**
+#### **Dépendances**
 
 P-LOGIN, `01`, règles RGPD minimales connues.
 
-**Hors périmètre**
+#### **Hors périmètre**
 
 Conformité RGPD complète, politique légale exhaustive, DPO/base légale/rétention/purge non confirmés.
 
-**Sessions prévues**
+#### **Sessions prévues**
 
 - DX audit + cadrage : présence, accessibilité, lien login et limites Alpha.
 - CX prévisionnelles : uniquement si l'audit confirme une correction applicative ciblée.
 - Clôture : DX ou CX selon périmètre réel.
 
-**Contrôles obligatoires**
+#### **Contrôles obligatoires**
 
 Navigateur, lien login/privacy, absence de déclaration de conformité complète, lint/build pour toute CX.
 
-**Critère de sortie**
+#### **Critère de sortie**
 
 Privacy visible et cohérente avec les limites Alpha.
 
-**Documentation à mettre à jour**
+#### **Documentation à mettre à jour**
 
 Documentation RGPD, Login, `05`.
 
-**Statut**
+#### **Statut**
 
 À faire.
 
@@ -929,160 +1025,192 @@ Documentation RGPD, Login, `05`.
 
 ### BLOC F1 - Validation fonctionnelle croisée
 
-**Dossier cible**
+#### **Identifiant**
+
+F1
+
+#### **Type de bloc**
+
+Finalisation
+
+#### **Dossier cible**
 
 `docs/2-SESSIONS/1-ALPHA/BLOC_F1_VALIDATION_FONCTIONNELLE`
 
-**Objectif**
+#### **Objectif**
 
 Vérifier les parcours fonctionnels transverses après blocs métier.
 
-**Dépendances**
+#### **Dépendances**
 
 Blocs métier nécessaires terminés ou reports acceptés.
 
-**Hors périmètre**
+#### **Hors périmètre**
 
 Correction code pendant validation, nouvelles fonctionnalités.
 
-**Sessions prévues**
+#### **Sessions prévues**
 
 - DX audit + cadrage : parcours à valider, données et rôles.
 - CX prévisionnelles : uniquement si scripts/tests applicatifs sont modifiés.
 - Clôture : DX.
 
-**Contrôles obligatoires**
+#### **Contrôles obligatoires**
 
 Navigateur, RBAC, données de test, captures si UI.
 
-**Critère de sortie**
+#### **Critère de sortie**
 
 Parcours principaux validés ou écarts bloquants listés et reportés.
 
-**Documentation à mettre à jour**
+#### **Documentation à mettre à jour**
 
 Rapports de validation, `05`.
 
-**Statut**
+#### **Statut**
 
 À faire.
 
 ### BLOC F2 - Validation qualité technique
 
-**Dossier cible**
+#### **Identifiant**
+
+F2
+
+#### **Type de bloc**
+
+Finalisation
+
+#### **Dossier cible**
 
 `docs/2-SESSIONS/1-ALPHA/BLOC_F2_VALIDATION_QUALITE`
 
-**Objectif**
+#### **Objectif**
 
 Vérifier lint, build, tests disponibles, API/RBAC et multi-tenant après reprise.
 
-**Dépendances**
+#### **Dépendances**
 
 Blocs code nécessaires terminés.
 
-**Hors périmètre**
+#### **Hors périmètre**
 
 Correction dans la même session de validation, migration non prévue.
 
-**Sessions prévues**
+#### **Sessions prévues**
 
 - DX audit + cadrage : commandes et périmètre de validation.
 - CX prévisionnelles : uniquement si scripts/tests techniques sont modifiés.
 - Clôture : DX.
 
-**Contrôles obligatoires**
+#### **Contrôles obligatoires**
 
 Lint, build, tests disponibles, contrôles API/RBAC, multi-tenant.
 
-**Critère de sortie**
+#### **Critère de sortie**
 
 Contrôles techniques Alpha exécutés et résultats exploitables.
 
-**Documentation à mettre à jour**
+#### **Documentation à mettre à jour**
 
 Rapports qualité, `05`.
 
-**Statut**
+#### **Statut**
 
 À faire.
 
 ### BLOC F3 - Validation UX visuelle
 
-**Dossier cible**
+#### **Identifiant**
+
+F3
+
+#### **Type de bloc**
+
+Finalisation
+
+#### **Dossier cible**
 
 `docs/2-SESSIONS/1-ALPHA/BLOC_F3_VALIDATION_UX`
 
-**Objectif**
+#### **Objectif**
 
 Vérifier cohérence visuelle, responsive et ergonomique des parcours critiques.
 
-**Dépendances**
+#### **Dépendances**
 
 T1, T3, blocs pages nécessaires.
 
-**Hors périmètre**
+#### **Hors périmètre**
 
 Refonte UI globale pendant validation, nouvelle maquette non validée.
 
-**Sessions prévues**
+#### **Sessions prévues**
 
 - DX audit + cadrage : écrans et critères visuels.
 - CX prévisionnelles : uniquement si outil ou code de test visuel est modifié.
 - Clôture : DX.
 
-**Contrôles obligatoires**
+#### **Contrôles obligatoires**
 
 Navigateur, responsive, états UI, captures utiles.
 
-**Critère de sortie**
+#### **Critère de sortie**
 
 Écrans critiques sans écart visuel bloquant connu ou écarts listés.
 
-**Documentation à mettre à jour**
+#### **Documentation à mettre à jour**
 
 Références UI/UX si décision validée, rapports F3, `05`.
 
-**Statut**
+#### **Statut**
 
 À faire.
 
 ### BLOC F4 - Clôture documentaire Alpha ou clôture de phase
 
-**Dossier cible**
+#### **Identifiant**
+
+F4
+
+#### **Type de bloc**
+
+Finalisation
+
+#### **Dossier cible**
 
 `docs/2-SESSIONS/1-ALPHA/BLOC_F4_CLOTURE_ALPHA`
 
-**Objectif**
+#### **Objectif**
 
 Clôturer la phase ou acter explicitement la non-clôture et les reports.
 
-**Dépendances**
+#### **Dépendances**
 
 F1, F2, F3 terminés ou reportés explicitement.
 
-**Hors périmètre**
+#### **Hors périmètre**
 
 Nouvelle fonctionnalité, correction code non séparée, validation implicite.
 
-**Sessions prévues**
+#### **Sessions prévues**
 
 - DX audit + cadrage : preuves, décisions, reports.
 - DX clôture : note de clôture ou non-clôture.
 
-**Contrôles obligatoires**
+#### **Contrôles obligatoires**
 
 Preuves F1/F2/F3, Git status, cohérence MASTER, absence validation implicite.
 
-**Critère de sortie**
+#### **Critère de sortie**
 
 Phase clôturée ou non clôturée explicitement, avec preuves et décisions visibles.
 
-**Documentation à mettre à jour**
+#### **Documentation à mettre à jour**
 
 `02`, `04`, `05`, synthèse de phase.
 
-**Statut**
+#### **Statut**
 
 À faire.
 
