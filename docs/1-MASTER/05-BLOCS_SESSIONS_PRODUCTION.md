@@ -2,6 +2,41 @@
 
 Date de refonte ciblée : 16/06/2026
 
+## Sommaire
+
+- [1. Rôle du document](#1-rôle-du-document)
+- [2. Convention de lecture](#2-convention-de-lecture)
+- [3. Ordre global recommandé des blocs restants](#3-ordre-global-recommandé-des-blocs-restants)
+- [4. Blocs transversaux](#4-blocs-transversaux)
+  - [BLOC T1 - Shell global, navigation et contexte connecté](#bloc-t1---shell-global-navigation-et-contexte-connecté)
+  - [BLOC T2 - Nomenclature, routes et renommages futurs](#bloc-t2---nomenclature-routes-et-renommages-futurs)
+  - [BLOC T3 - Design system officiel et composants communs](#bloc-t3---design-system-officiel-et-composants-communs)
+  - [BLOC T4 - RBAC UI/API et matrice permissions progressive](#bloc-t4---rbac-uiapi-et-matrice-permissions-progressive)
+  - [BLOC T5 - Données, multi-tenant et mapping Base44 vers officiel](#bloc-t5---données-multi-tenant-et-mapping-base44-vers-officiel)
+  - [BLOC T6 - Audit et traçabilité transverse](#bloc-t6---audit-et-traçabilité-transverse)
+  - [BLOC T7 - Qualité, tests et contrôles de reprise](#bloc-t7---qualité-tests-et-contrôles-de-reprise)
+- [5. Blocs pages et modules](#5-blocs-pages-et-modules)
+  - [BLOC P-LOGIN - Connexion](#bloc-p-login---connexion)
+  - [BLOC P-SOCIETE - Société](#bloc-p-societe---société)
+  - [BLOC P-DEPOTS-BASES - Dépôts / Bases](#bloc-p-depots-bases---dépôts--bases)
+  - [BLOC P-UTILISATEURS-RH - Utilisateurs / RH](#bloc-p-utilisateurs-rh---utilisateurs--rh)
+  - [BLOC P-VEHICULES - Véhicules](#bloc-p-vehicules---véhicules)
+  - [BLOC P-SUIVI-VEHICULES - Suivi des véhicules](#bloc-p-suivi-vehicules---suivi-des-véhicules)
+  - [BLOC P-MODELES-HORAIRES - Modèles horaires](#bloc-p-modeles-horaires---modèles-horaires)
+  - [BLOC P-PLANNING - Planning](#bloc-p-planning---planning)
+  - [BLOC P-AUDIT - Audit / Traçabilité](#bloc-p-audit---audit--traçabilité)
+  - [BLOC P-DASHBOARD - Tableau de bord](#bloc-p-dashboard---tableau-de-bord)
+  - [BLOC P-MISE-EN-ROUTE - Mise en route](#bloc-p-mise-en-route---mise-en-route)
+- [6. Bloc RGPD et Privacy](#6-bloc-rgpd-et-privacy)
+  - [BLOC RGPD-PRIVACY - Privacy visible en Alpha](#bloc-rgpd-privacy---privacy-visible-en-alpha)
+- [7. Validations finales et gel Alpha](#7-validations-finales-et-gel-alpha)
+  - [BLOC F1 - Validation fonctionnelle croisée](#bloc-f1---validation-fonctionnelle-croisée)
+  - [BLOC F2 - Validation qualité technique](#bloc-f2---validation-qualité-technique)
+  - [BLOC F3 - Validation UX visuelle](#bloc-f3---validation-ux-visuelle)
+  - [BLOC F4 - Clôture documentaire Alpha ou clôture de phase](#bloc-f4---clôture-documentaire-alpha-ou-clôture-de-phase)
+- [8. Décisions à confirmer avant production](#8-décisions-à-confirmer-avant-production)
+- [9. Risques principaux à surveiller](#9-risques-principaux-à-surveiller)
+
 ## 1. Rôle du document
 
 Ce fichier est le plan officiel unique des blocs et sessions de production d'Ambulance Manager.
