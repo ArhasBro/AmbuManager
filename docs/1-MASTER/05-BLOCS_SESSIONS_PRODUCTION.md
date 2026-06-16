@@ -132,8 +132,43 @@ Stabiliser sidebar, topbar, société courante, utilisateur courant, filtrage vi
 #### **Sessions prévues**
 
 - DX audit + cadrage : cartographier shell/navigation, écarts, risques et questions bloquantes.
-- CX prévisionnelles : `INFORMATION NON FOURNIE — À CONFIRMER APRÈS AUDIT CIBLÉ`.
-- Clôture : DX si synthèse documentaire seule ; CX uniquement si un contrôle technique ou script est réellement modifié.
+- `CX_T1_RENOMMAGE-LIBELLES-NAVIGATION`
+  - Nature : CX.
+  - Type métier : RENOMMAGE.
+  - Objectif : corriger uniquement les libellés visibles de navigation.
+  - Périmètre : libellés UI français visibles dans la navigation/shell.
+  - Hors périmètre : renommage technique de routes, RBAC, Accès refusé, Suivi des véhicules, refonte shell.
+- `CX_T1_CORRECTION-SHELL-ACTIONS-CONTEXTE`
+  - Nature : CX.
+  - Type métier : CORRECTION.
+  - Objectif : corriger ou stabiliser les actions visibles du shell/topbar et l'affichage du contexte utilisateur/société.
+  - Périmètre : shell connecté, topbar, utilisateur courant, société courante, actions visibles.
+  - Hors périmètre : RBAC fin, refonte globale, modules métier.
+- `CX_T1_CREATION-ACCES-REFUSE`
+  - Nature : CX.
+  - Type métier : CRÉATION.
+  - Objectif : créer ou stabiliser le traitement visible `Accès refusé` selon la décision retenue après audit.
+  - Périmètre : page/composant/route dédiée si nécessaire, comportement utilisateur authentifié non autorisé.
+  - Hors périmètre : matrice RBAC complète T4, refonte des protections métier.
+- `CX_T1_COMPLETION-NAVIGATION-DROITS`
+  - Nature : CX.
+  - Type métier : COMPLÉTION.
+  - Objectif : compléter la navigation visible selon les droits, en cohérence avec les décisions RBAC disponibles.
+  - Périmètre : visibilité des entrées de navigation, droits visibles, cohérence shell/sidebar.
+  - Dépendance : T4/RBAC si matrice module-permission non encore stabilisée.
+  - Hors périmètre : correction métier profonde des pages.
+- `CX_T1_VALIDATION-SHELL-NAVIGATION`
+  - Nature : CX.
+  - Type métier : VALIDATION.
+  - Objectif : valider shell, navigation, routes visibles, libellés, contexte connecté, accès direct non autorisé et Accès refusé.
+  - Périmètre : contrôles techniques et fonctionnels ciblés T1.
+  - Hors périmètre : nouvelles corrections lourdes non cadrées.
+- `DX_T1_CLOTURE`
+  - Nature : DX.
+  - Type métier : CLÔTURE.
+  - Objectif : clôturer le bloc T1, synthétiser ce qui est fait, ce qui reste dépendant de T2/T4/T5, et vérifier la cohérence documentaire.
+  - Périmètre : documentation de clôture et preuves finales.
+  - Hors périmètre : code applicatif sauf si une session CX précédente a explicitement prévu un contrôle technique.
 
 #### **Contrôles obligatoires**
 
