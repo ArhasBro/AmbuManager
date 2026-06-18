@@ -441,6 +441,19 @@ T4 garantit que les actions visibles ne contredisent pas les contrôles serveur 
 
 #### Sessions de production prévues
 
+- `DX_T4_CADRAGE-BLOC-SESSIONS`
+  - Nature : DX.
+  - Type métier : AUDIT+CADRAGE.
+  - Objectif : analyser la cohérence du bloc T4 et de ses sessions avant démarrage, vérifier si le découpage est suffisant, identifier les sessions manquantes, trop larges, redondantes ou à reporter, puis produire les questions d’arbitrage nécessaires.
+  - Périmètre inclus : analyse du périmètre fonctionnel du bloc, cohérence des dépendances amont/aval, revue des sessions prévues, proposition d’ordre d’exécution, identification des risques de périmètre, identification des risques de surconsommation de crédits, questions à arbitrer avant développement.
+  - Hors périmètre : correction de code, création de code, modification applicative, modification Prisma, modification API, modification RBAC effective, modification de routes, modification de packages, validation navigateur, captures, exécution de build, mise à jour automatique du plan MASTER sans validation humaine.
+  - Zones à lire : `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`, `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md`, sessions déjà clôturées des blocs amont si nécessaires, références Base44 uniquement comme référence fonctionnelle/métier/visuelle, fichiers applicatifs liés au périmètre T4 en lecture seule.
+  - Zones modifiables plus tard : `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md` uniquement après validation humaine, fichiers du bloc T4 uniquement dans les futures sessions CX/DX ciblées.
+  - Critères de validation : périmètre T4 clairement compris, sessions prévues classées `CONSERVER`, `COMPLÉTER`, `DÉCOUPER`, `FUSIONNER`, `REPORTER`, `SUPPRIMER` ou `À CONFIRMER`, risques identifiés, questions d’arbitrage listées et priorisées, ordre d’exécution recommandé, absence de modification applicative.
+  - Preuves attendues : synthèse du bloc, tableau d’analyse des sessions, liste des sessions manquantes ou à ajuster, questions à arbitrer classées par priorité, recommandations d’ordre d’exécution, commandes sobres si utilisées, `git status --short`, `PATCH/NO_PATCH.md`.
+  - Dépendances : clôture des blocs T1, T2 et T3 ; décisions existantes sur navigation, nomenclature, routes, libellés UI et composants communs.
+  - Sortie principale : plan de sessions recommandé + questions à arbitrer.
+
 - `DX_T4_AUDIT-MATRICE-RBAC`
   - Nature : DX.
   - Type métier : AUDIT.
