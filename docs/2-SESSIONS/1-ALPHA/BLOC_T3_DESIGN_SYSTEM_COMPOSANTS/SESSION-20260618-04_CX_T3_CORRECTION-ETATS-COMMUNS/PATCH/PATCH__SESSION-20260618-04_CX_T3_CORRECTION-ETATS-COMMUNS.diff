@@ -1,0 +1,460 @@
+﻿diff --git a/app/planning/manual-planning-panel.tsx b/app/planning/manual-planning-panel.tsx
+index 5fc45cf3..e19991f0 100644
+--- a/app/planning/manual-planning-panel.tsx
++++ b/app/planning/manual-planning-panel.tsx
+@@ -1,7 +1,7 @@
+ "use client";
+ 
+ import { useCallback, useEffect, useMemo, useState, type Dispatch, type SetStateAction } from "react";
+-import { ActionButton, EmptyState, ErrorMessage, StatusBadge } from "@/app/ui";
++import { ActionButton, EmptyState, ErrorMessage, LoadingState, StatusBadge } from "@/app/ui";
+ import { resolveTemplateMinStaffCount } from "@/lib/templates/template-rules";
+ 
+ type UserLite = { id: string; name: string; email?: string };
+@@ -503,8 +503,24 @@ export default function ManualPlanningPanel({
+       )}
+ 
+       {message && <div className="planning-manual__feedback planning-manual__feedback--success">{message}</div>}
+-      {error && <ErrorMessage title="Erreur planning manuel" message={error} />}
+-      {loading && <div className="planning-manual__loading">Chargement du planning manuel...</div>}
++      {error && (
++        <ErrorMessage
++          title="Erreur planning manuel"
++          message={error}
++          details={(
++            <ActionButton type="button" variant="secondary" size="sm" onClick={() => void loadPlanning()}>
++              Réessayer
++            </ActionButton>
++          )}
++        />
++      )}
++      {loading ? (
++        <LoadingState
++          title="Chargement du planning manuel"
++          message="Récupération des shifts de la période courante."
++          className="planning-manual__loading"
++        />
++      ) : null}
+ 
+       {!loading && viewMode !== "month" && (
+         <div className="planning-manual__list">
+diff --git a/app/ui/access-denied-state.tsx b/app/ui/access-denied-state.tsx
+index d08df405..84517795 100644
+--- a/app/ui/access-denied-state.tsx
++++ b/app/ui/access-denied-state.tsx
+@@ -5,20 +5,26 @@ import ErrorMessage from "./error-message";
+ 
+ type AccessDeniedStateProps = {
+   message?: string;
++  returnHref?: string;
++  returnLabel?: string;
+ };
+ 
+-const DEFAULT_MESSAGE = "Vous êtes connecté, mais vous ne disposez pas des permissions nécessaires pour accéder à cette page.";
++const DEFAULT_MESSAGE = "Vous Ãªtes connectÃ©, mais vous ne disposez pas des permissions nÃ©cessaires pour accÃ©der Ã  cette page.";
+ 
+-export default function AccessDeniedState({ message = DEFAULT_MESSAGE }: AccessDeniedStateProps) {
++export default function AccessDeniedState({
++  message = DEFAULT_MESSAGE,
++  returnHref = "/dashboard",
++  returnLabel = "Retour au tableau de bord",
++}: AccessDeniedStateProps) {
+   return (
+     <ErrorMessage
+       className="ui-error-message--access-denied"
+       icon={<ShieldAlert size={18} strokeWidth={2.2} />}
+-      title="Accès refusé"
++      title="AccÃ¨s refusÃ©"
+       message={message}
+       details={(
+-        <Link href="/dashboard" className="ui-error-message__link">
+-          Retour au tableau de bord
++        <Link href={returnHref} className="ui-error-message__link">
++          {returnLabel}
+         </Link>
+       )}
+     />
+diff --git a/app/ui/data-table.tsx b/app/ui/data-table.tsx
+index 0550d2dc..bc7f7cfd 100644
+--- a/app/ui/data-table.tsx
++++ b/app/ui/data-table.tsx
+@@ -2,6 +2,7 @@ import { type ReactNode } from "react";
+ 
+ import EmptyState from "./empty-state";
+ import ErrorMessage from "./error-message";
++import LoadingState from "./loading-state";
+ 
+ type Align = "left" | "center" | "right";
+ 
+@@ -56,9 +57,11 @@ export default function DataTable<T>({
+   if (loading) {
+     return (
+       <section className={classes}>
+-        <div className="ui-data-table__state ui-data-table__state--loading" role="status" aria-live="polite">
+-          {loadingLabel}
+-        </div>
++        <LoadingState
++          className="ui-data-table__state ui-data-table__state--loading"
++          title="Chargement de la table"
++          message={loadingLabel}
++        />
+       </section>
+     );
+   }
+diff --git a/app/ui/index.ts b/app/ui/index.ts
+index 6c2b0b6b..7956cf63 100644
+--- a/app/ui/index.ts
++++ b/app/ui/index.ts
+@@ -1,9 +1,11 @@
+ export { default as ActionButton } from "./action-button";
+ export { default as AccessDeniedState } from "./access-denied-state";
+ export { default as DataTable } from "./data-table";
++export { default as DisabledState } from "./disabled-state";
+ export { default as EmptyState } from "./empty-state";
+ export { default as ErrorMessage } from "./error-message";
+ export { default as FilterBar } from "./filter-bar";
++export { default as LoadingState } from "./loading-state";
+ export { default as PageHeader } from "./page-header";
+ export { default as StatCard } from "./stat-card";
+ export { default as StatusBadge } from "./status-badge";
+diff --git a/app/users/reset-password-client.tsx b/app/users/reset-password-client.tsx
+index 5a512b1b..78232c9f 100644
+--- a/app/users/reset-password-client.tsx
++++ b/app/users/reset-password-client.tsx
+@@ -2,7 +2,7 @@
+ 
+ import { useEffect, useMemo, useState, type FormEvent } from "react";
+ 
+-import { ActionButton, EmptyState, ErrorMessage, StatusBadge } from "@/app/ui";
++import { ActionButton, EmptyState, ErrorMessage, LoadingState, StatusBadge } from "@/app/ui";
+ 
+ import { USERS_REFRESH_EVENT } from "./users-refresh";
+ 
+@@ -178,7 +178,13 @@ export default function ResetPasswordClient({ actorUserId }: Props) {
+           </p>
+         </div>
+ 
+-        {loading ? <div className="users-selection-card">Chargement des utilisateurs...</div> : null}
++        {loading ? (
++          <LoadingState
++            title="Chargement des utilisateurs"
++            message="Récupération des comptes administrables pour le reset."
++            className="users-selection-card"
++          />
++        ) : null}
+ 
+         {!loading && users.length === 0 ? (
+           <EmptyState
+@@ -240,7 +246,17 @@ export default function ResetPasswordClient({ actorUserId }: Props) {
+             </label>
+           </div>
+ 
+-          {error ? <ErrorMessage title="Echec de reinitialisation" message={error} /> : null}
++          {error ? (
++            <ErrorMessage
++              title="Echec de reinitialisation"
++              message={error}
++              details={(
++                <ActionButton type="button" variant="secondary" size="sm" onClick={() => setReloadKey((current) => current + 1)}>
++                  Réessayer
++                </ActionButton>
++              )}
++            />
++          ) : null}
+           {success ? <div className="users-alert users-alert--success">{success}</div> : null}
+ 
+           <div className="users-actions">
+diff --git a/app/users/user-absence-client.tsx b/app/users/user-absence-client.tsx
+index a58b8553..4586959f 100644
+--- a/app/users/user-absence-client.tsx
++++ b/app/users/user-absence-client.tsx
+@@ -2,7 +2,7 @@
+ 
+ import { useEffect, useMemo, useState, type FormEvent } from "react";
+ 
+-import { ActionButton, EmptyState, ErrorMessage, StatusBadge } from "@/app/ui";
++import { ActionButton, EmptyState, ErrorMessage, LoadingState, StatusBadge } from "@/app/ui";
+ 
+ import { type UserListRow } from "./users-client-shared";
+ import { USERS_SELECTION_EVENT, type UsersSelectionEventDetail } from "./users-refresh";
+@@ -429,7 +429,17 @@ export default function UserAbsenceClient() {
+               </div>
+             </form>
+ 
+-            {error ? <ErrorMessage title="Echec de gestion des absences" message={error} /> : null}
++              {error ? (
++                <ErrorMessage
++                  title="Echec de gestion des absences"
++                  message={error}
++                  details={(
++                    <ActionButton type="button" variant="secondary" size="sm" onClick={() => setReloadKey((current) => current + 1)}>
++                      Réessayer
++                    </ActionButton>
++                  )}
++                />
++              ) : null}
+             {success ? <div className="users-alert users-alert--success">{success}</div> : null}
+ 
+             <div className="users-card users-card--soft">
+@@ -438,7 +448,13 @@ export default function UserAbsenceClient() {
+                 <StatusBadge variant="neutral">{items.length} element{items.length > 1 ? "s" : ""}</StatusBadge>
+               </div>
+ 
+-              {loading ? <div className="users-selection-card">Chargement des absences...</div> : null}
++              {loading ? (
++                <LoadingState
++                  title="Chargement des absences"
++                  message="Récupération des absences de l'utilisateur sélectionné."
++                  className="users-selection-card"
++                />
++              ) : null}
+ 
+               {!loading && items.length === 0 ? (
+                 <EmptyState
+diff --git a/app/users/user-depot-assignment-client.tsx b/app/users/user-depot-assignment-client.tsx
+index 34df3e76..5c3be1fa 100644
+--- a/app/users/user-depot-assignment-client.tsx
++++ b/app/users/user-depot-assignment-client.tsx
+@@ -2,7 +2,7 @@
+ 
+ import { useEffect, useMemo, useState } from "react";
+ 
+-import { ActionButton, EmptyState, ErrorMessage, StatusBadge } from "@/app/ui";
++import { ActionButton, EmptyState, ErrorMessage, LoadingState, StatusBadge } from "@/app/ui";
+ 
+ import { USERS_REFRESH_EVENT, dispatchUsersRefresh, dispatchUsersSelection } from "./users-refresh";
+ 
+@@ -257,7 +257,13 @@ export default function UserDepotAssignmentClient({ availableDepots }: { availab
+           </select>
+         </label>
+ 
+-        {loading ? <div className="users-selection-card">Chargement des utilisateurs...</div> : null}
++        {loading ? (
++          <LoadingState
++            title="Chargement des utilisateurs"
++            message="Récupération des comptes administrables de la société courante."
++            className="users-selection-card"
++          />
++        ) : null}
+ 
+         {!loading && users.length === 0 ? (
+           <EmptyState
+@@ -314,7 +320,17 @@ export default function UserDepotAssignmentClient({ availableDepots }: { availab
+           </>
+         ) : null}
+ 
+-        {error ? <ErrorMessage title="Echec de l'affectation depot" message={error} /> : null}
++        {error ? (
++          <ErrorMessage
++            title="Echec de l'affectation depot"
++            message={error}
++            details={(
++              <ActionButton type="button" variant="secondary" size="sm" onClick={() => setReloadKey((value) => value + 1)}>
++                Réessayer
++              </ActionButton>
++            )}
++          />
++        ) : null}
+         {success ? <div className="users-alert users-alert--success">{success}</div> : null}
+ 
+         <div className="users-actions">
+diff --git a/app/users/user-edit-client.tsx b/app/users/user-edit-client.tsx
+index ed08958b..d35ba349 100644
+--- a/app/users/user-edit-client.tsx
++++ b/app/users/user-edit-client.tsx
+@@ -2,7 +2,7 @@
+ 
+ import { useEffect, useMemo, useState, type FormEvent } from "react";
+ 
+-import { ActionButton, ErrorMessage, StatusBadge } from "@/app/ui";
++import { ActionButton, DisabledState, ErrorMessage, LoadingState, StatusBadge } from "@/app/ui";
+ import {
+   COMPANY_RULES_MANAGE_PERMISSION,
+   isCompanyRulesGovernorRole,
+@@ -184,6 +184,7 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
+   const [permissionCodes, setPermissionCodes] = useState<AlphaPermissionCode[]>([]);
+   const [submitting, setSubmitting] = useState(false);
+   const [loadingDetails, setLoadingDetails] = useState(false);
++  const [detailsReloadKey, setDetailsReloadKey] = useState(0);
+   const [error, setError] = useState<string | null>(null);
+   const [detailsError, setDetailsError] = useState<string | null>(null);
+   const [success, setSuccess] = useState<string | null>(null);
+@@ -273,7 +274,7 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
+     return () => {
+       cancelled = true;
+     };
+-  }, [selectedUser?.id]);
++  }, [selectedUser?.id, detailsReloadKey]);
+ 
+   const assignableRoleOptions = useMemo(
+     () => getAssignableRoleOptions(canGovernCompanyRules, role || loadedUser?.role || selectedUser?.role || undefined),
+@@ -453,11 +454,36 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
+           </div>
+ 
+           {loadingDetails ? (
+-            <div className="users-selection-card">Chargement des permissions et du detail d&apos;edition...</div>
++            <LoadingState
++              title="Chargement du formulaire"
++              message="Permissions et détail d'édition en cours de chargement."
++              className="users-selection-card"
++            />
++          ) : null}
++
++          {roleFieldLocked ? (
++            <DisabledState
++              title="Rôle verrouillé"
++              message="Le rôle principal de ce compte est verrouillé pour préserver la gouvernance des règles métier."
++              className="users-selection-card"
++            />
+           ) : null}
+ 
+           {detailsError ? (
+-            <ErrorMessage title="Erreur de chargement utilisateur" message={detailsError} />
++            <ErrorMessage
++              title="Erreur de chargement utilisateur"
++              message={detailsError}
++              details={(
++                <ActionButton
++                  type="button"
++                  variant="secondary"
++                  size="sm"
++                  onClick={() => setDetailsReloadKey((value) => value + 1)}
++                >
++                  Réessayer
++                </ActionButton>
++              )}
++            />
+           ) : null}
+ 
+           <label className="users-field">
+diff --git a/app/users/users-side-panel-client.tsx b/app/users/users-side-panel-client.tsx
+index a676ff6d..81626754 100644
+--- a/app/users/users-side-panel-client.tsx
++++ b/app/users/users-side-panel-client.tsx
+@@ -3,7 +3,7 @@
+ import { useEffect, useMemo, useState } from "react";
+ import { CalendarX, KeyRound, Plus, Save, Trash2, X } from "lucide-react";
+ 
+-import { ActionButton, ErrorMessage, StatusBadge } from "@/app/ui";
++import { ActionButton, ErrorMessage, LoadingState, StatusBadge } from "@/app/ui";
+ 
+ import { dailyScheduleLabel, depotLabel, type UserListRow } from "./users-client-shared";
+ import { USERS_SELECTION_EVENT, type UsersSelectionEventDetail } from "./users-refresh";
+@@ -69,6 +69,7 @@ export default function UsersSidePanelClient() {
+   const [absences, setAbsences] = useState<AbsenceItem[]>([]);
+   const [loadingAbsences, setLoadingAbsences] = useState(false);
+   const [absenceError, setAbsenceError] = useState<string | null>(null);
++  const [absencesReloadKey, setAbsencesReloadKey] = useState(0);
+ 
+   useEffect(() => {
+     function handleSelection(event: Event) {
+@@ -120,7 +121,7 @@ export default function UsersSidePanelClient() {
+     return () => {
+       cancelled = true;
+     };
+-  }, [selectedUser?.id]);
++  }, [selectedUser?.id, absencesReloadKey]);
+ 
+   const absenceSummary = useMemo(() => {
+     if (absences.length === 0) return "Aucune absence";
+@@ -222,8 +223,24 @@ export default function UsersSidePanelClient() {
+             </div>
+             <p className="users-table-cell-subtle">{absenceSummary}</p>
+ 
+-            {loadingAbsences ? <p className="users-table-cell-subtle">Chargement des absences...</p> : null}
+-            {absenceError ? <ErrorMessage title="Erreur absences" message={absenceError} /> : null}
++            {loadingAbsences ? (
++              <LoadingState
++                title="Chargement des absences"
++                message="Récupération des absences de l'utilisateur sélectionné."
++                className="users-selection-card"
++              />
++            ) : null}
++            {absenceError ? (
++              <ErrorMessage
++                title="Erreur absences"
++                message={absenceError}
++                details={(
++                  <ActionButton type="button" variant="secondary" size="sm" onClick={() => setAbsencesReloadKey((value) => value + 1)}>
++                    Réessayer
++                  </ActionButton>
++                )}
++              />
++            ) : null}
+ 
+             {!loadingAbsences && !absenceError ? (
+               <div className="users-absences-table-wrap">
+
+diff --git a/app/ui/loading-state.tsx b/app/ui/loading-state.tsx
+new file mode 100644
+index 00000000..42a558fe
+--- /dev/null
++++ b/app/ui/loading-state.tsx
+@@ -0,0 +1,30 @@
++import { LoaderCircle } from "lucide-react";
++import { type ReactNode } from "react";
++
++import EmptyState from "./empty-state";
++
++type LoadingStateProps = {
++  title?: string;
++  message?: string;
++  action?: ReactNode;
++  className?: string;
++};
++
++export default function LoadingState({
++  title = "Chargement en cours",
++  message = "Veuillez patienter pendant le chargement.",
++  action,
++  className,
++}: LoadingStateProps) {
++  return (
++    <div className={["ui-loading-state", className].filter(Boolean).join(" ")} role="status" aria-live="polite">
++      <EmptyState
++        className="ui-loading-state__content"
++        icon={<LoaderCircle size={18} strokeWidth={2.2} aria-hidden="true" />}
++        title={title}
++        message={message}
++        action={action}
++      />
++    </div>
++  );
++}
+
+diff --git a/app/ui/disabled-state.tsx b/app/ui/disabled-state.tsx
+new file mode 100644
+index 00000000..ef6d28c1
+--- /dev/null
++++ b/app/ui/disabled-state.tsx
+@@ -0,0 +1,30 @@
++import { Ban } from "lucide-react";
++import { type ReactNode } from "react";
++
++import EmptyState from "./empty-state";
++
++type DisabledStateProps = {
++  title?: string;
++  message?: string;
++  action?: ReactNode;
++  className?: string;
++};
++
++export default function DisabledState({
++  title = "Elément désactivé",
++  message = "Cette zone n'est pas disponible dans l'état actuel.",
++  action,
++  className,
++}: DisabledStateProps) {
++  return (
++    <div className={["ui-disabled-state", className].filter(Boolean).join(" ")}>
++      <EmptyState
++        className="ui-disabled-state__content"
++        icon={<Ban size={18} strokeWidth={2.2} aria-hidden="true" />}
++        title={title}
++        message={message}
++        action={action}
++      />
++    </div>
++  );
++}

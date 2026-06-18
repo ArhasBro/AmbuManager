@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { CalendarX, KeyRound, Plus, Save, Trash2, X } from "lucide-react";
 
-import { ActionButton, ErrorMessage, StatusBadge } from "@/app/ui";
+import { ActionButton, ErrorMessage, LoadingState, StatusBadge } from "@/app/ui";
 
 import { dailyScheduleLabel, depotLabel, type UserListRow } from "./users-client-shared";
 import { USERS_SELECTION_EVENT, type UsersSelectionEventDetail } from "./users-refresh";
@@ -69,6 +69,7 @@ export default function UsersSidePanelClient() {
   const [absences, setAbsences] = useState<AbsenceItem[]>([]);
   const [loadingAbsences, setLoadingAbsences] = useState(false);
   const [absenceError, setAbsenceError] = useState<string | null>(null);
+  const [absencesReloadKey, setAbsencesReloadKey] = useState(0);
 
   useEffect(() => {
     function handleSelection(event: Event) {
@@ -120,7 +121,7 @@ export default function UsersSidePanelClient() {
     return () => {
       cancelled = true;
     };
-  }, [selectedUser?.id]);
+  }, [selectedUser?.id, absencesReloadKey]);
 
   const absenceSummary = useMemo(() => {
     if (absences.length === 0) return "Aucune absence";
@@ -222,8 +223,24 @@ export default function UsersSidePanelClient() {
             </div>
             <p className="users-table-cell-subtle">{absenceSummary}</p>
 
-            {loadingAbsences ? <p className="users-table-cell-subtle">Chargement des absences...</p> : null}
-            {absenceError ? <ErrorMessage title="Erreur absences" message={absenceError} /> : null}
+            {loadingAbsences ? (
+              <LoadingState
+                title="Chargement des absences"
+                message="Récupération des absences de l'utilisateur sélectionné."
+                className="users-selection-card"
+              />
+            ) : null}
+            {absenceError ? (
+              <ErrorMessage
+                title="Erreur absences"
+                message={absenceError}
+                details={(
+                  <ActionButton type="button" variant="secondary" size="sm" onClick={() => setAbsencesReloadKey((value) => value + 1)}>
+                    Réessayer
+                  </ActionButton>
+                )}
+              />
+            ) : null}
 
             {!loadingAbsences && !absenceError ? (
               <div className="users-absences-table-wrap">

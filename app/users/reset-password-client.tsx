@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 
-import { ActionButton, EmptyState, ErrorMessage, StatusBadge } from "@/app/ui";
+import { ActionButton, EmptyState, ErrorMessage, LoadingState, StatusBadge } from "@/app/ui";
 
 import { USERS_REFRESH_EVENT } from "./users-refresh";
 
@@ -178,7 +178,13 @@ export default function ResetPasswordClient({ actorUserId }: Props) {
           </p>
         </div>
 
-        {loading ? <div className="users-selection-card">Chargement des utilisateurs...</div> : null}
+        {loading ? (
+          <LoadingState
+            title="Chargement des utilisateurs"
+            message="Récupération des comptes administrables pour le reset."
+            className="users-selection-card"
+          />
+        ) : null}
 
         {!loading && users.length === 0 ? (
           <EmptyState
@@ -240,7 +246,17 @@ export default function ResetPasswordClient({ actorUserId }: Props) {
             </label>
           </div>
 
-          {error ? <ErrorMessage title="Echec de reinitialisation" message={error} /> : null}
+          {error ? (
+            <ErrorMessage
+              title="Echec de reinitialisation"
+              message={error}
+              details={(
+                <ActionButton type="button" variant="secondary" size="sm" onClick={() => setReloadKey((current) => current + 1)}>
+                  Réessayer
+                </ActionButton>
+              )}
+            />
+          ) : null}
           {success ? <div className="users-alert users-alert--success">{success}</div> : null}
 
           <div className="users-actions">

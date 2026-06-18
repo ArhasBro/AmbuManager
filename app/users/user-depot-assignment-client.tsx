@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-import { ActionButton, EmptyState, ErrorMessage, StatusBadge } from "@/app/ui";
+import { ActionButton, EmptyState, ErrorMessage, LoadingState, StatusBadge } from "@/app/ui";
 
 import { USERS_REFRESH_EVENT, dispatchUsersRefresh, dispatchUsersSelection } from "./users-refresh";
 
@@ -257,7 +257,13 @@ export default function UserDepotAssignmentClient({ availableDepots }: { availab
           </select>
         </label>
 
-        {loading ? <div className="users-selection-card">Chargement des utilisateurs...</div> : null}
+        {loading ? (
+          <LoadingState
+            title="Chargement des utilisateurs"
+            message="Récupération des comptes administrables de la société courante."
+            className="users-selection-card"
+          />
+        ) : null}
 
         {!loading && users.length === 0 ? (
           <EmptyState
@@ -314,7 +320,17 @@ export default function UserDepotAssignmentClient({ availableDepots }: { availab
           </>
         ) : null}
 
-        {error ? <ErrorMessage title="Echec de l'affectation depot" message={error} /> : null}
+        {error ? (
+          <ErrorMessage
+            title="Echec de l'affectation depot"
+            message={error}
+            details={(
+              <ActionButton type="button" variant="secondary" size="sm" onClick={() => setReloadKey((value) => value + 1)}>
+                Réessayer
+              </ActionButton>
+            )}
+          />
+        ) : null}
         {success ? <div className="users-alert users-alert--success">{success}</div> : null}
 
         <div className="users-actions">

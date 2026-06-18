@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 
-import { ActionButton, ErrorMessage, StatusBadge } from "@/app/ui";
+import { ActionButton, DisabledState, ErrorMessage, LoadingState, StatusBadge } from "@/app/ui";
 import {
   COMPANY_RULES_MANAGE_PERMISSION,
   isCompanyRulesGovernorRole,
@@ -184,6 +184,7 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
   const [permissionCodes, setPermissionCodes] = useState<AlphaPermissionCode[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [loadingDetails, setLoadingDetails] = useState(false);
+  const [detailsReloadKey, setDetailsReloadKey] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [detailsError, setDetailsError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -273,7 +274,7 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
     return () => {
       cancelled = true;
     };
-  }, [selectedUser?.id]);
+  }, [selectedUser?.id, detailsReloadKey]);
 
   const assignableRoleOptions = useMemo(
     () => getAssignableRoleOptions(canGovernCompanyRules, role || loadedUser?.role || selectedUser?.role || undefined),
@@ -453,11 +454,36 @@ export default function UserEditClient({ canGovernCompanyRules }: UserEditClient
           </div>
 
           {loadingDetails ? (
-            <div className="users-selection-card">Chargement des permissions et du detail d&apos;edition...</div>
+            <LoadingState
+              title="Chargement du formulaire"
+              message="Permissions et détail d'édition en cours de chargement."
+              className="users-selection-card"
+            />
+          ) : null}
+
+          {roleFieldLocked ? (
+            <DisabledState
+              title="Rôle verrouillé"
+              message="Le rôle principal de ce compte est verrouillé pour préserver la gouvernance des règles métier."
+              className="users-selection-card"
+            />
           ) : null}
 
           {detailsError ? (
-            <ErrorMessage title="Erreur de chargement utilisateur" message={detailsError} />
+            <ErrorMessage
+              title="Erreur de chargement utilisateur"
+              message={detailsError}
+              details={(
+                <ActionButton
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => setDetailsReloadKey((value) => value + 1)}
+                >
+                  Réessayer
+                </ActionButton>
+              )}
+            />
           ) : null}
 
           <label className="users-field">

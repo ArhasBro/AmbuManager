@@ -2,6 +2,7 @@ import { type ReactNode } from "react";
 
 import EmptyState from "./empty-state";
 import ErrorMessage from "./error-message";
+import LoadingState from "./loading-state";
 
 type Align = "left" | "center" | "right";
 
@@ -56,9 +57,11 @@ export default function DataTable<T>({
   if (loading) {
     return (
       <section className={classes}>
-        <div className="ui-data-table__state ui-data-table__state--loading" role="status" aria-live="polite">
-          {loadingLabel}
-        </div>
+        <LoadingState
+          className="ui-data-table__state ui-data-table__state--loading"
+          title="Chargement de la table"
+          message={loadingLabel}
+        />
       </section>
     );
   }

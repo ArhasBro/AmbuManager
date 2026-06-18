@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 
-import { ActionButton, EmptyState, ErrorMessage, StatusBadge } from "@/app/ui";
+import { ActionButton, EmptyState, ErrorMessage, LoadingState, StatusBadge } from "@/app/ui";
 
 import { type UserListRow } from "./users-client-shared";
 import { USERS_SELECTION_EVENT, type UsersSelectionEventDetail } from "./users-refresh";
@@ -429,7 +429,17 @@ export default function UserAbsenceClient() {
               </div>
             </form>
 
-            {error ? <ErrorMessage title="Echec de gestion des absences" message={error} /> : null}
+              {error ? (
+                <ErrorMessage
+                  title="Echec de gestion des absences"
+                  message={error}
+                  details={(
+                    <ActionButton type="button" variant="secondary" size="sm" onClick={() => setReloadKey((current) => current + 1)}>
+                      Réessayer
+                    </ActionButton>
+                  )}
+                />
+              ) : null}
             {success ? <div className="users-alert users-alert--success">{success}</div> : null}
 
             <div className="users-card users-card--soft">
@@ -438,7 +448,13 @@ export default function UserAbsenceClient() {
                 <StatusBadge variant="neutral">{items.length} element{items.length > 1 ? "s" : ""}</StatusBadge>
               </div>
 
-              {loading ? <div className="users-selection-card">Chargement des absences...</div> : null}
+              {loading ? (
+                <LoadingState
+                  title="Chargement des absences"
+                  message="Récupération des absences de l'utilisateur sélectionné."
+                  className="users-selection-card"
+                />
+              ) : null}
 
               {!loading && items.length === 0 ? (
                 <EmptyState

@@ -5,11 +5,17 @@ import ErrorMessage from "./error-message";
 
 type AccessDeniedStateProps = {
   message?: string;
+  returnHref?: string;
+  returnLabel?: string;
 };
 
 const DEFAULT_MESSAGE = "Vous êtes connecté, mais vous ne disposez pas des permissions nécessaires pour accéder à cette page.";
 
-export default function AccessDeniedState({ message = DEFAULT_MESSAGE }: AccessDeniedStateProps) {
+export default function AccessDeniedState({
+  message = DEFAULT_MESSAGE,
+  returnHref = "/dashboard",
+  returnLabel = "Retour au tableau de bord",
+}: AccessDeniedStateProps) {
   return (
     <ErrorMessage
       className="ui-error-message--access-denied"
@@ -17,10 +23,11 @@ export default function AccessDeniedState({ message = DEFAULT_MESSAGE }: AccessD
       title="Accès refusé"
       message={message}
       details={(
-        <Link href="/dashboard" className="ui-error-message__link">
-          Retour au tableau de bord
+        <Link href={returnHref} className="ui-error-message__link">
+          {returnLabel}
         </Link>
       )}
     />
   );
 }
+

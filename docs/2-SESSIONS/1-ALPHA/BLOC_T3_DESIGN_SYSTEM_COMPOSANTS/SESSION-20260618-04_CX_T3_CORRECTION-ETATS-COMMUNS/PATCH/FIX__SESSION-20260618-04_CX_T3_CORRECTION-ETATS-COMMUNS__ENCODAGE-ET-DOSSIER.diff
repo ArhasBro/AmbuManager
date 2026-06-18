@@ -1,0 +1,61 @@
+diff --git a/app/ui/access-denied-state.tsx b/app/ui/access-denied-state.tsx
+--- a/app/ui/access-denied-state.tsx
++++ b/app/ui/access-denied-state.tsx
+@@ -9,15 +9,15 @@
+ type AccessDeniedStateProps = {
+   message?: string;
+   returnHref?: string;
+   returnLabel?: string;
+ };
+ 
+-const DEFAULT_MESSAGE = "Vous Ãªtes connectÃ©, mais vous ne disposez pas des permissions nÃ©cessaires pour accÃ©der Ã  cette page.";
++const DEFAULT_MESSAGE = "Vous êtes connecté, mais vous ne disposez pas des permissions nécessaires pour accéder à cette page.";
+ 
+ export default function AccessDeniedState({
+   message = DEFAULT_MESSAGE,
+   returnHref = "/dashboard",
+   returnLabel = "Retour au tableau de bord",
+ }: AccessDeniedStateProps) {
+   return (
+     <ErrorMessage
+       className="ui-error-message--access-denied"
+       icon={<ShieldAlert size={18} strokeWidth={2.2} />}
+-      title="AccÃ¨s refusÃ©"
++      title="Accès refusé"
+       message={message}
+       details={(
+         <Link href={returnHref} className="ui-error-message__link">
+           {returnLabel}
+         </Link>
+       )}
+     />
+   );
+ }
+
+diff --git a/docs/2-SESSIONS/1-ALPHA/BLOC_T3_DESIGN_SYSTEM_COMPOSANTS/SESSION-20260618-04_CX_T3_CORRECTION-ETATS-COMMUNS/PATCH/README_PATCH.md b/docs/2-SESSIONS/1-ALPHA/BLOC_T3_DESIGN_SYSTEM_COMPOSANTS/SESSION-20260618-04_CX_T3_CORRECTION-ETATS-COMMUNS/PATCH/README_PATCH.md
+--- a/docs/2-SESSIONS/1-ALPHA/BLOC_T3_DESIGN_SYSTEM_COMPOSANTS/SESSION-20260618-04_CX_T3_CORRECTION-ETATS-COMMUNS/PATCH/README_PATCH.md
++++ b/docs/2-SESSIONS/1-ALPHA/BLOC_T3_DESIGN_SYSTEM_COMPOSANTS/SESSION-20260618-04_CX_T3_CORRECTION-ETATS-COMMUNS/PATCH/README_PATCH.md
+@@ -8,10 +8,14 @@
+ ## Patch officiel attendu
+ PATCH__SESSION-20260618-04_CX_T3_CORRECTION-ETATS-COMMUNS.diff
+ 
+-## Patch FIX de traÃ§abilitÃ©
++## Patch FIX de traçabilité
+ FIX__SESSION-20260618-04_CX_T3_CORRECTION-ETATS-COMMUNS__ENCODAGE-ET-DOSSIER.diff
+ 
+ ## Commandes d'application
+ 
+ ```bash
+ git apply --check "docs/2-SESSIONS/1-ALPHA/BLOC_T3_DESIGN_SYSTEM_COMPOSANTS/SESSION-20260618-04_CX_T3_CORRECTION-ETATS-COMMUNS/PATCH/PATCH__SESSION-20260618-04_CX_T3_CORRECTION-ETATS-COMMUNS.diff"
+ git apply         "docs/2-SESSIONS/1-ALPHA/BLOC_T3_DESIGN_SYSTEM_COMPOSANTS/SESSION-20260618-04_CX_T3_CORRECTION-ETATS-COMMUNS/PATCH/PATCH__SESSION-20260618-04_CX_T3_CORRECTION-ETATS-COMMUNS.diff"
++git apply --check "docs/2-SESSIONS/1-ALPHA/BLOC_T3_DESIGN_SYSTEM_COMPOSANTS/SESSION-20260618-04_CX_T3_CORRECTION-ETATS-COMMUNS/PATCH/FIX__SESSION-20260618-04_CX_T3_CORRECTION-ETATS-COMMUNS__ENCODAGE-ET-DOSSIER.diff"
++git apply         "docs/2-SESSIONS/1-ALPHA/BLOC_T3_DESIGN_SYSTEM_COMPOSANTS/SESSION-20260618-04_CX_T3_CORRECTION-ETATS-COMMUNS/PATCH/FIX__SESSION-20260618-04_CX_T3_CORRECTION-ETATS-COMMUNS__ENCODAGE-ET-DOSSIER.diff"
+ ```
+ 
+ ## Statut
+- Dossier patch initialise.
+- Patch initial conserve comme premiere passe.
+- Patch FIX ajoute pour la correction d'encodage visible et la tracabilite du deplacement documentaire.
++ Dossier patch initialise.
++ Patch initial conserve comme premiere passe.
++ Patch FIX ajoute pour la correction d'encodage visible et la traçabilité du déplacement documentaire.

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState, type Dispatch, type SetStateAction } from "react";
-import { ActionButton, EmptyState, ErrorMessage, StatusBadge } from "@/app/ui";
+import { ActionButton, EmptyState, ErrorMessage, LoadingState, StatusBadge } from "@/app/ui";
 import { resolveTemplateMinStaffCount } from "@/lib/templates/template-rules";
 
 type UserLite = { id: string; name: string; email?: string };
@@ -503,8 +503,24 @@ export default function ManualPlanningPanel({
       )}
 
       {message && <div className="planning-manual__feedback planning-manual__feedback--success">{message}</div>}
-      {error && <ErrorMessage title="Erreur planning manuel" message={error} />}
-      {loading && <div className="planning-manual__loading">Chargement du planning manuel...</div>}
+      {error && (
+        <ErrorMessage
+          title="Erreur planning manuel"
+          message={error}
+          details={(
+            <ActionButton type="button" variant="secondary" size="sm" onClick={() => void loadPlanning()}>
+              Réessayer
+            </ActionButton>
+          )}
+        />
+      )}
+      {loading ? (
+        <LoadingState
+          title="Chargement du planning manuel"
+          message="Récupération des shifts de la période courante."
+          className="planning-manual__loading"
+        />
+      ) : null}
 
       {!loading && viewMode !== "month" && (
         <div className="planning-manual__list">
