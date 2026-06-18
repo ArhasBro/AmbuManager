@@ -50,7 +50,7 @@ $KnownAlphaBlockFolderNames = @{
     'T1' = 'BLOC_T1_SHELL_NAVIGATION'
     'T2' = 'BLOC_T2_NOMENCLATURE_ROUTES'
     'T3' = 'BLOC_T3_DESIGN_SYSTEM'
-    'T4' = 'BLOC_T4_RBAC_PERMISSIONS'
+    'T4' = 'BLOC_T4_RBAC_UI_API'
     'T5' = 'BLOC_T5_DONNEES_MULTI_TENANT'
     'T6' = 'BLOC_T6_AUDIT_TRACABILITE'
     'T7' = 'BLOC_T7_QUALITE_CONTROLES'
@@ -70,6 +70,11 @@ $KnownAlphaBlockFolderNames = @{
     'F2' = 'BLOC_F2_VALIDATION_QUALITE'
     'F3' = 'BLOC_F3_VALIDATION_UX'
     'F4' = 'BLOC_F4_CLOTURE_ALPHA'
+}
+
+$KnownAlphaBlockAliases = @{
+    'BLOC_T4_RBAC_PERMISSIONS' = 'T4'
+    'BLOC_T4_RBAC_UI_API'      = 'T4'
 }
 
 function Get-BlockRangeLabel {
@@ -207,8 +212,16 @@ function Get-CanonicalBlock {
         throw "Bloc invalide. Valeurs autorisees : A1..A99, B1..B99, T1..T7, P-LOGIN, P-DASHBOARD, P-MODELES-HORAIRES, P-PLANNING, P-UTILISATEURS-RH, P-VEHICULES, P-SUIVI-VEHICULES, P-DEPOTS-BASES, P-SOCIETE, P-MISE-EN-ROUTE, P-AUDIT, RGPD-PRIVACY, F1..F4."
     }
 
+    if ($KnownAlphaBlockAliases.ContainsKey($clean)) {
+        $clean = $KnownAlphaBlockAliases[$clean]
+    }
+
     if ($clean -match '^BLOC_(.+)$') {
         $clean = $Matches[1]
+    }
+
+    if ($KnownAlphaBlockAliases.ContainsKey($clean)) {
+        $clean = $KnownAlphaBlockAliases[$clean]
     }
 
     $alphaPattern = Get-BlockRegexPattern -Prefix "A" -Min $AlphaBlockMin -Max $AlphaBlockMax
@@ -344,11 +357,11 @@ function Assert-DxTypeAllowed {
         return
     }
 
-    if ('CADRAGE' -in $allTokens -and 'VALIDATION' -in $allTokens) {
+    if ('CADRAGE' -in $allTokens) {
         return
     }
 
-    throw "Session DX refusee : les sessions DX autorisees sont AUDIT-CADRAGE sous validation, AUDIT, CADRAGE avec VALIDATION, ou CLOTURE."
+    throw "Session DX refusee : les sessions DX autorisees sont AUDIT-CADRAGE sous validation, AUDIT, CADRAGE, ou CLOTURE."
 }
 
 function Get-BlockDirectoryName {
