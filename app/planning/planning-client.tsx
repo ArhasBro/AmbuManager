@@ -1853,7 +1853,7 @@ export default function PlanningClient({
                 <span className="planning-filter-card__value">{title}</span>
               </div>
               <div className="planning-filter-card">
-                <span className="planning-filter-card__label">Depot</span>
+                <span className="planning-filter-card__label">Dépôt</span>
                 <span className="planning-filter-card__value">Tous</span>
               </div>
               <div className="planning-filter-card">

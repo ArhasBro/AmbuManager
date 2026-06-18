@@ -269,6 +269,14 @@ T2 évite les divergences entre route technique officielle et libellé métier v
   - Preuves attendues : commandes, captures navigateur, `git status --short`.
   - Dépendances : CX T2 éventuelle.
 
+- `CX_T2_CORRECTION-LIBELLE-PLANNING-DEPOT`
+  - Nature : CX.
+  - Type métier : CORRECTION.
+  - Objectif : corriger le reliquat visible `Depot` dans `Planning`.
+  - Dépendances : `DX_T2_VALIDATION-CLOTURE-LIENS-ROUTES`.
+  - Hors périmètre : routes, `href`, URLs, renommage technique, refonte Planning.
+  - Suite attendue : DX courte de revalidation/clôture T2.
+
 #### Critère de clôture du bloc
 
 Les routes et libellés sont classés, les corrections de libellés simples sont faites ou reportées, et aucun renommage technique n'est engagé sans décision humaine.
