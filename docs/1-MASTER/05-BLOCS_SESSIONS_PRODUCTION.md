@@ -425,13 +425,19 @@ T4 garantit que les actions visibles ne contredisent pas les contrôles serveur 
 - Les rôles `ADMIN` et `GERANT` ont un accès natif large.
 - `PlatformRole.SUPPORT` existe pour le support global sous conditions.
 - Base44 `can()` est front-only et ne vaut pas garantie serveur.
+- `DEPOTS_MANAGE` est valide comme permission dédiée pour les actions sensibles sur dépôts / bases.
+- Les dépôts restent des bases opérationnelles rattachées à la société, sans être une société séparée.
+- `COMPANY_MANAGE` reste un droit large pour le noyau société.
+- Le reset password reste l’action administrative actuelle, sans nouvelle permission T4.
+- T4 reste archive-only.
+- La disponibilité véhicule avancée est reportée vers P-VEHICULES / P-SUIVI-VEHICULES.
+- `ROLES_PERMISSIONS_MANAGE` reste dormant / reporté en Alpha.
+- Les contacts société, le suivi véhicules et les dashboard preferences sont hors T4.
 
 #### Décisions à confirmer
 
-- Permission `DEPOTS_MANAGE` : `INFORMATION NON FOURNIE — À CONFIRMER`.
-- Permissions suivi véhicules : `INFORMATION NON FOURNIE — À CONFIRMER`.
-- Permissions disponibilité véhicule, reset password, contacts société, dashboard preferences : `INFORMATION NON FOURNIE — À CONFIRMER`.
-- Granularité archive/restauration par module : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- Aucune décision T4 bloquante restante.
+- Les sujets sortis de T4 sont reportés vers leurs blocs P concernés.
 
 #### Risques principaux
 
@@ -469,38 +475,38 @@ T4 garantit que les actions visibles ne contredisent pas les contrôles serveur 
 - `DX_T4_CADRAGE-PERMISSIONS-MANQUANTES`
   - Nature : DX.
   - Type métier : CADRAGE.
-  - Objectif : préparer les décisions sur permissions manquantes ou trop larges.
-  - Périmètre inclus : options pour dépôts, suivi véhicules, disponibilité, contacts, reset password, dashboard.
+  - Objectif : documenter les décisions T4 restantes et les reports hors périmètre.
+  - Périmètre inclus : DEPOTS_MANAGE, COMPANY_MANAGE, reset password administratif, archive-only, disponibilité véhicule reportée, ROLES_PERMISSIONS_MANAGE dormant.
   - Hors périmètre : modification catalogue.
-  - Zones à lire : audit T4, `docs/1-MASTER/3-FONCTIONNALITES/`, Base44 `userPermissions.js`.
+  - Zones à lire : audit T4, `docs/1-MASTER/3-FONCTIONNALITES/`, Base44 `userPermissions.js`, blocs P concernés pour les reports.
   - Zones modifiables plus tard : `lib/permission-catalog.ts`, migrations si permissions persistées.
-  - Critères de validation : décisions prêtes à validation humaine avec impacts.
-  - Preuves attendues : options, risques, dépendances T5/T6.
+  - Critères de validation : décisions T4 figées et reports correctement rattachés.
+  - Preuves attendues : synthèse des arbitrages, impacts, reports.
   - Dépendances : DX_T4_AUDIT-MATRICE-RBAC.
 
-- `CX_T4_CORRECTION-ENDPOINTS-CRITIQUES`
+- `CX_T4_CORRECTION-RBAC-REFERENTIELS`
   - Nature : CX.
   - Type métier : CORRECTION.
-  - Objectif : corriger les endpoints sensibles dont le contrôle serveur est incohérent avec la matrice validée.
-  - Périmètre inclus : endpoints users, vehicles, templates, depots, company, planning selon priorisation.
-  - Hors périmètre : création massive de permissions, UI large.
-  - Zones à lire : audit T4, routes API ciblées, services.
-  - Zones modifiables plus tard : routes API ciblées, helpers permissions.
-  - Critères de validation : API refuse sans session/companyId, ne lit pas `companyId` client, permission alignée.
+  - Objectif : corriger les surfaces RBAC référentiels sans lot transversal.
+  - Périmètre inclus : users, société et dépôts sur les actions sensibles déjà existantes.
+  - Hors périmètre : disponibilité avancée véhicule, suivi véhicule, UI transversale.
+  - Zones à lire : audit T4, routes API ciblées, pages référentiels.
+  - Zones modifiables plus tard : routes API ciblées, helpers permissions, UI ciblées.
+  - Critères de validation : contrôle serveur cohérent avec la matrice validée et actions visibles alignées.
   - Preuves attendues : diff, tests qualité, logs de commandes.
-  - Dépendances : validation cadrage T4, T5 si modèle impliqué.
+  - Dépendances : validation cadrage T4.
 
-- `CX_T4_CORRECTION-ACTIONS-UI`
+- `CX_T4_CORRECTION-RBAC-VEHICULES`
   - Nature : CX.
   - Type métier : CORRECTION.
-  - Objectif : aligner visibilité/disabled des actions UI sur la matrice validée.
-  - Périmètre inclus : boutons et menus d'actions sensibles déjà existants.
-  - Hors périmètre : redesign UI complet, endpoints non corrigés.
-  - Zones à lire : pages modules, `app/ui/action-button.tsx`, helpers permissions.
-  - Zones modifiables plus tard : composants clients ciblés.
-  - Critères de validation : action visible seulement si autorisée et refus serveur cohérent en accès direct.
-  - Preuves attendues : diff, captures par rôle si possible, lint.
-  - Dépendances : CX_T4_CORRECTION-ENDPOINTS-CRITIQUES.
+  - Objectif : corriger les actions RBAC véhicules déjà existantes sans ouvrir la disponibilité avancée.
+  - Périmètre inclus : création, modification, archivage et affectation dépôt si présentes.
+  - Hors périmètre : disponibilité avancée, suivi véhicule, UI transversale.
+  - Zones à lire : audit T4, routes API véhicules, pages véhicules.
+  - Zones modifiables plus tard : routes API véhicules, helpers permissions, UI ciblées.
+  - Critères de validation : contrôle serveur cohérent avec la matrice validée et absence d’autorisation implicite.
+  - Preuves attendues : diff, tests qualité, logs de commandes.
+  - Dépendances : validation cadrage T4.
 
 - `DX_T4_VALIDATION-CLOTURE-RBAC-SENSIBLE`
   - Nature : DX.
@@ -989,6 +995,13 @@ Société porte le contexte permanent du tenant, les informations de profil, les
 - Champs ARS/réglementaires exacts : `INFORMATION NON FOURNIE — À CONFIRMER`.
 - Permission profil société vs règles société vs contacts : `INFORMATION NON FOURNIE — À CONFIRMER`.
 
+#### Point à ne pas oublier pendant la session AUDIT+CADRAGE
+
+- Les contacts société ont été explicitement sortis du périmètre T4.
+- Ils doivent être repris pendant le cadrage P-SOCIETE.
+- Il faudra décider s’ils relèvent de `COMPANY_MANAGE` ou d’une permission dédiée future.
+- Il faudra vérifier les impacts UI/API, audit et traçabilité.
+
 #### Risques principaux
 
 - Multi-tenant fragile si société non issue de session serveur.
@@ -1097,6 +1110,15 @@ Les dépôts structurent les lieux de rattachement, les véhicules, les utilisat
 - Permission dédiée `DEPOTS_MANAGE` : `INFORMATION NON FOURNIE — À CONFIRMER`.
 - Restauration/désarchivage officiel : `INFORMATION NON FOURNIE — À CONFIRMER`.
 - Responsable local comme utilisateur lié ou texte : `INFORMATION NON FOURNIE — À CONFIRMER`.
+
+#### Point à ne pas oublier pendant la session AUDIT+CADRAGE
+
+- Les dépôts / bases sont rattachés à une société.
+- Une société peut avoir plusieurs dépôts ou bases opérationnelles.
+- Un dépôt peut correspondre à un site avec véhicules, régulation, gérance ou seulement véhicules.
+- Les utilisateurs peuvent potentiellement commencer leur journée depuis plusieurs dépôts.
+- T4 ne traite que le RBAC existant via `DEPOTS_MANAGE`.
+- Le bloc P-DEPOTS-BASES devra cadrer le modèle métier complet : rattachement société, véhicules, utilisateurs, lieux de départ, affectations et règles d’exploitation.
 
 #### Risques principaux
 
@@ -1332,6 +1354,13 @@ Véhicules porte la flotte administrative, les statuts, les documents, les ratta
 - TPMR / TPMR VSL / TPMR TAXI : `INFORMATION NON FOURNIE — À CONFIRMER`.
 - Restauration véhicule : `INFORMATION NON FOURNIE — À CONFIRMER`.
 
+#### Point à ne pas oublier pendant la session AUDIT+CADRAGE
+
+- La disponibilité véhicule avancée a été sortie de T4.
+- T4 ne traite que le RBAC des actions véhicules déjà existantes.
+- Le bloc P-VEHICULES devra cadrer les statuts, disponibilités, indisponibilités, affectations dépôt et impacts planning.
+- Il faudra décider si des permissions comme `VEHICLES_AVAILABILITY` doivent être créées.
+
 #### Risques principaux
 
 - Confusion entre référentiel administratif et suivi opérationnel.
@@ -1455,6 +1484,12 @@ Le module porte vue d'ensemble, vérifications, désinfections et anomalies, dis
 - Règles ARS exactes vérifications/désinfections : `INFORMATION NON FOURNIE — À CONFIRMER`.
 - Permissions création/modification/lecture suivi : `INFORMATION NON FOURNIE — À CONFIRMER`.
 - Effet d'une anomalie critique sur disponibilité véhicule : `INFORMATION NON FOURNIE — À CONFIRMER`.
+
+#### Point à ne pas oublier pendant la session AUDIT+CADRAGE
+
+- Le suivi véhicules a été explicitement sorti de T4.
+- Les permissions `VEHICLES_CHECK` ou équivalentes ne doivent pas être créées dans T4 sans surface métier stable.
+- Le bloc P-SUIVI-VEHICULES devra cadrer les contrôles, vérifications, historiques, responsabilités et permissions associées.
 
 #### Risques principaux
 
@@ -1932,6 +1967,12 @@ Le dashboard synthétise KPI, raccourcis, alertes et widgets après stabilisatio
 - Widgets obligatoires Alpha : `INFORMATION NON FOURNIE — À CONFIRMER`.
 - Personnalisation Alpha : `INFORMATION NON FOURNIE — À CONFIRMER`.
 - Raccourci suivi véhicules si module créé : `INFORMATION NON FOURNIE — À CONFIRMER`.
+
+#### Point à ne pas oublier pendant la session AUDIT+CADRAGE
+
+- Les préférences Dashboard ont été sorties de T4.
+- Elles doivent être reprises après stabilisation du portail / tableau de bord.
+- Il faudra décider si elles relèvent d’un simple réglage utilisateur ou d’une permission d’administration.
 
 #### Risques principaux
 
