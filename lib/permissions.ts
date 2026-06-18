@@ -54,6 +54,9 @@ export async function canCancelAutoSchedule(userId: string, role?: string | null
 export async function canManageUsers(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
   return hasPermissionAccess({ userId, role, platformRole, codes: ["USERS_MANAGE"] });
 }
+export async function canManageDepots(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
+  return hasPermissionAccess({ userId, role, platformRole, codes: ["DEPOTS_MANAGE"] });
+}
 export async function canManageVehicles(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
   return hasPermissionAccess({ userId, role, platformRole, codes: ["VEHICLES_MANAGE"] });
 }

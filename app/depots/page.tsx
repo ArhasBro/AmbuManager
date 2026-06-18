@@ -4,13 +4,10 @@ import { Ambulance, FileArchive, Landmark, Plus, UsersRound, type LucideIcon } f
 
 import { AccessDeniedState, ActionButton, PageHeader, StatusBadge } from "@/app/ui";
 import { authOptions } from "@/lib/auth";
+import { canManageDepots } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 
 import DepotsClient from "./depots-client";
-
-function canManageDepots(role?: string) {
-  return role === "ADMIN" || role === "GERANT";
-}
 
 type DepotKpi = {
   label: string;
@@ -25,7 +22,7 @@ export default async function DepotsPage() {
   const user = session?.user;
 
   if (!user?.id || !user.companyId) redirect("/login");
-  if (!canManageDepots(user.role)) {
+  if (!(await canManageDepots(user.id, user.role, user.platformRole))) {
     return (
       <main className="page-wrap">
         <AccessDeniedState />

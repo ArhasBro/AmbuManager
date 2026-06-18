@@ -1,0 +1,142 @@
+﻿diff --git a/app/api/depots/[id]/archive/route.ts b/app/api/depots/[id]/archive/route.ts
+index ff31b88d..ac7ceb72 100644
+--- a/app/api/depots/[id]/archive/route.ts
++++ b/app/api/depots/[id]/archive/route.ts
+@@ -4,12 +4,10 @@ import { z } from "zod";
+ import { authOptions } from "@/lib/auth";
+ import { badRequest, forbidden, notFound, ok, serverError, unauthorized } from "@/lib/api/response";
+ import { prismaToHttp } from "@/lib/api/prisma-error";
+-import { requireRole } from "@/lib/rbac";
++import { canManageDepots } from "@/lib/permissions";
+ import { serializeDates } from "@/lib/serializers";
+ import { archiveDepot } from "@/lib/services/depots/archive-depot";
+ 
+-const ALLOWED_ROLES = ["ADMIN", "GERANT"];
+-
+ const paramsSchema = z
+   .object({
+     id: z.string().uuid(),
+@@ -34,7 +32,7 @@ export async function POST(_req: Request, ctx: { params: Promise<{ id: string }>
+   const platformRole = session?.user?.platformRole;
+ 
+   if (!actorUserId || !companyId) return unauthorized();
+-  if (!requireRole(role, ALLOWED_ROLES)) return forbidden();
++  if (!(await canManageDepots(actorUserId, role, platformRole))) return forbidden();
+ 
+   const rawParams = await ctx.params.catch(() => null);
+   const parsedParams = paramsSchema.safeParse(rawParams);
+diff --git a/app/api/depots/[id]/route.ts b/app/api/depots/[id]/route.ts
+index 485a6edf..8c09e780 100644
+--- a/app/api/depots/[id]/route.ts
++++ b/app/api/depots/[id]/route.ts
+@@ -4,13 +4,11 @@ import { z } from "zod";
+ import { authOptions } from "@/lib/auth";
+ import { badRequest, conflict, forbidden, notFound, ok, serverError, unauthorized } from "@/lib/api/response";
+ import { prismaToHttp } from "@/lib/api/prisma-error";
+-import { requireRole } from "@/lib/rbac";
++import { canManageDepots } from "@/lib/permissions";
+ import { serializeDates } from "@/lib/serializers";
+ import { updateDepot } from "@/lib/services/depots/update-depot";
+ import { updateDepotBodySchema } from "@/lib/validators/depot";
+ 
+-const ALLOWED_ROLES = ["ADMIN", "GERANT"];
+-
+ const paramsSchema = z.object({
+   id: z.string().uuid(),
+ });
+@@ -33,7 +31,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
+   const platformRole = session?.user?.platformRole;
+ 
+   if (!actorUserId || !companyId) return unauthorized();
+-  if (!requireRole(role, ALLOWED_ROLES)) return forbidden();
++  if (!(await canManageDepots(actorUserId, role, platformRole))) return forbidden();
+ 
+   const rawParams = await ctx.params.catch(() => null);
+   const parsedParams = paramsSchema.safeParse(rawParams);
+diff --git a/app/api/depots/route.ts b/app/api/depots/route.ts
+index c6cf2084..4b7faf51 100644
+--- a/app/api/depots/route.ts
++++ b/app/api/depots/route.ts
+@@ -3,13 +3,11 @@ import { getServerSession } from "next-auth/next";
+ import { authOptions } from "@/lib/auth";
+ import { badRequest, conflict, forbidden, ok, serverError, unauthorized } from "@/lib/api/response";
+ import { prismaToHttp } from "@/lib/api/prisma-error";
+-import { requireRole } from "@/lib/rbac";
++import { canManageDepots } from "@/lib/permissions";
+ import { serializeDates } from "@/lib/serializers";
+ import { createDepot } from "@/lib/services/depots/create-depot";
+ import { createDepotBodySchema } from "@/lib/validators/depot";
+ 
+-const ALLOWED_ROLES = ["ADMIN", "GERANT"];
+-
+ function getErrorMessage(e: unknown): string {
+   if (e instanceof Error) return e.message;
+   if (typeof e === "string") return e;
+@@ -28,7 +26,7 @@ export async function POST(req: Request) {
+   const platformRole = session?.user?.platformRole;
+ 
+   if (!actorUserId || !companyId) return unauthorized();
+-  if (!requireRole(role, ALLOWED_ROLES)) return forbidden();
++  if (!(await canManageDepots(actorUserId, role, platformRole))) return forbidden();
+ 
+   const jsonBody: unknown = await req.json().catch(() => null);
+   const parsed = createDepotBodySchema.safeParse(jsonBody);
+diff --git a/app/depots/page.tsx b/app/depots/page.tsx
+index d0330536..55ff07d8 100644
+--- a/app/depots/page.tsx
++++ b/app/depots/page.tsx
+@@ -4,14 +4,11 @@ import { Ambulance, FileArchive, Landmark, Plus, UsersRound, type LucideIcon } f
+ 
+ import { AccessDeniedState, ActionButton, PageHeader, StatusBadge } from "@/app/ui";
+ import { authOptions } from "@/lib/auth";
++import { canManageDepots } from "@/lib/permissions";
+ import { prisma } from "@/lib/prisma";
+ 
+ import DepotsClient from "./depots-client";
+ 
+-function canManageDepots(role?: string) {
+-  return role === "ADMIN" || role === "GERANT";
+-}
+-
+ type DepotKpi = {
+   label: string;
+   value: number;
+@@ -25,7 +22,7 @@ export default async function DepotsPage() {
+   const user = session?.user;
+ 
+   if (!user?.id || !user.companyId) redirect("/login");
+-  if (!canManageDepots(user.role)) {
++  if (!(await canManageDepots(user.id, user.role, user.platformRole))) {
+     return (
+       <main className="page-wrap">
+         <AccessDeniedState />
+diff --git a/lib/permission-catalog.ts b/lib/permission-catalog.ts
+index 425d3b60..af8583b5 100644
+--- a/lib/permission-catalog.ts
++++ b/lib/permission-catalog.ts
+@@ -49,6 +49,11 @@ export const ALPHA_PERMISSION_CATALOG = [
+     label: "Gérer utilisateurs",
+     description: "Permet d'accéder aux fonctions de gestion utilisateurs déjà présentes.",
+   },
++  {
++    code: "DEPOTS_MANAGE",
++    label: "Gérer dépôts",
++    description: "Permet de gérer les dépôts / bases lorsqu'un module dédié existe.",
++  },
+   {
+     code: "ROLES_PERMISSIONS_MANAGE",
+     label: "Gérer rôles / permissions",
+diff --git a/lib/permissions.ts b/lib/permissions.ts
+index 691c4b16..945d8603 100644
+--- a/lib/permissions.ts
++++ b/lib/permissions.ts
+@@ -54,6 +54,9 @@ export async function canCancelAutoSchedule(userId: string, role?: string | null
+ export async function canManageUsers(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
+   return hasPermissionAccess({ userId, role, platformRole, codes: ["USERS_MANAGE"] });
+ }
++export async function canManageDepots(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
++  return hasPermissionAccess({ userId, role, platformRole, codes: ["DEPOTS_MANAGE"] });
++}
+ export async function canManageVehicles(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
+   return hasPermissionAccess({ userId, role, platformRole, codes: ["VEHICLES_MANAGE"] });
+ }

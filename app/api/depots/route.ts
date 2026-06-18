@@ -3,12 +3,10 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { badRequest, conflict, forbidden, ok, serverError, unauthorized } from "@/lib/api/response";
 import { prismaToHttp } from "@/lib/api/prisma-error";
-import { requireRole } from "@/lib/rbac";
+import { canManageDepots } from "@/lib/permissions";
 import { serializeDates } from "@/lib/serializers";
 import { createDepot } from "@/lib/services/depots/create-depot";
 import { createDepotBodySchema } from "@/lib/validators/depot";
-
-const ALLOWED_ROLES = ["ADMIN", "GERANT"];
 
 function getErrorMessage(e: unknown): string {
   if (e instanceof Error) return e.message;
@@ -28,7 +26,7 @@ export async function POST(req: Request) {
   const platformRole = session?.user?.platformRole;
 
   if (!actorUserId || !companyId) return unauthorized();
-  if (!requireRole(role, ALLOWED_ROLES)) return forbidden();
+  if (!(await canManageDepots(actorUserId, role, platformRole))) return forbidden();
 
   const jsonBody: unknown = await req.json().catch(() => null);
   const parsed = createDepotBodySchema.safeParse(jsonBody);

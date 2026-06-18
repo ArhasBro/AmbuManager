@@ -4,12 +4,10 @@ import { z } from "zod";
 import { authOptions } from "@/lib/auth";
 import { badRequest, conflict, forbidden, notFound, ok, serverError, unauthorized } from "@/lib/api/response";
 import { prismaToHttp } from "@/lib/api/prisma-error";
-import { requireRole } from "@/lib/rbac";
+import { canManageDepots } from "@/lib/permissions";
 import { serializeDates } from "@/lib/serializers";
 import { updateDepot } from "@/lib/services/depots/update-depot";
 import { updateDepotBodySchema } from "@/lib/validators/depot";
-
-const ALLOWED_ROLES = ["ADMIN", "GERANT"];
 
 const paramsSchema = z.object({
   id: z.string().uuid(),
@@ -33,7 +31,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
   const platformRole = session?.user?.platformRole;
 
   if (!actorUserId || !companyId) return unauthorized();
-  if (!requireRole(role, ALLOWED_ROLES)) return forbidden();
+  if (!(await canManageDepots(actorUserId, role, platformRole))) return forbidden();
 
   const rawParams = await ctx.params.catch(() => null);
   const parsedParams = paramsSchema.safeParse(rawParams);

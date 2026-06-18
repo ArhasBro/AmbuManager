@@ -50,6 +50,11 @@ export const ALPHA_PERMISSION_CATALOG = [
     description: "Permet d'accéder aux fonctions de gestion utilisateurs déjà présentes.",
   },
   {
+    code: "DEPOTS_MANAGE",
+    label: "Gérer dépôts",
+    description: "Permet de gérer les dépôts / bases lorsqu'un module dédié existe.",
+  },
+  {
     code: "ROLES_PERMISSIONS_MANAGE",
     label: "Gérer rôles / permissions",
     description: "Permet de gérer rôles et permissions lorsqu'un module dédié existe.",
