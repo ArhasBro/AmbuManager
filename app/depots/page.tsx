@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 import { Ambulance, FileArchive, Landmark, Plus, UsersRound, type LucideIcon } from "lucide-react";
 
-import { AccessDeniedState, PageHeader } from "@/app/ui";
+import { AccessDeniedState, ActionButton, PageHeader, StatusBadge } from "@/app/ui";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
@@ -90,15 +90,18 @@ export default async function DepotsPage() {
   return (
     <section className="depots-section">
       <PageHeader
+        eyebrow="Référentiel société"
         title="Dépôts / Bases"
         description="Gérez les bases de rattachement de vos équipes et véhicules."
+        meta={
+          <StatusBadge variant="info" icon={<Landmark size={12} strokeWidth={2.1} />}>
+            {depots.length} dépôt{depots.length > 1 ? "s" : ""}
+          </StatusBadge>
+        }
         actions={
-          <a href="#depots-create-form" className="ui-action-button ui-action-button--primary ui-action-button--md">
-            <span className="ui-action-button__icon" aria-hidden="true">
-              <Plus size={16} />
-            </span>
-            <span className="ui-action-button__label">Créer un dépôt</span>
-          </a>
+          <ActionButton href="#depots-create-form" variant="primary" leadingIcon={<Plus size={16} />}>
+            Créer un dépôt
+          </ActionButton>
         }
       />
 

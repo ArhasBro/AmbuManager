@@ -456,7 +456,7 @@ export default function UsersListClient() {
           <h2 className="users-card__title">Utilisateurs</h2>
         </div>
 
-        <FilterBar summary={null}>
+        <FilterBar summary={null} busy={loading}>
           <label className="users-field users-field--search">
             <span className="users-field__label users-field__label--icon"><Search size={14} /> Recherche</span>
             <input
@@ -524,6 +524,11 @@ export default function UsersListClient() {
           loadingLabel="Chargement de la liste utilisateurs..."
           emptyTitle="Aucun utilisateur trouvé"
           emptyMessage="Aucun utilisateur ne correspond aux filtres actifs."
+          emptyAction={hasFilter ? (
+            <ActionButton size="sm" leadingIcon={<RotateCcw size={14} />} onClick={resetFilters}>
+              Réinitialiser
+            </ActionButton>
+          ) : undefined}
           selectedRowKey={selectedUserId || null}
           onRowClick={(user) => setSelectedUserId(user.id)}
           minWidth={1080}

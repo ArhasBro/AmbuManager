@@ -5,6 +5,7 @@ export type StatusBadgeVariant = "neutral" | "info" | "success" | "warning" | "d
 type StatusBadgeProps = {
   children: ReactNode;
   variant?: StatusBadgeVariant;
+  icon?: ReactNode;
   className?: string;
 };
 
@@ -16,8 +17,17 @@ const VARIANT_CLASS: Record<StatusBadgeVariant, string> = {
   danger: "ui-status-badge--danger",
 };
 
-export default function StatusBadge({ children, variant = "neutral", className }: StatusBadgeProps) {
+export default function StatusBadge({ children, variant = "neutral", icon, className }: StatusBadgeProps) {
   const classes = ["ui-status-badge", VARIANT_CLASS[variant], className].filter(Boolean).join(" ");
 
-  return <span className={classes}>{children}</span>;
+  return (
+    <span className={classes}>
+      {icon ? (
+        <span className="ui-status-badge__icon" aria-hidden="true">
+          {icon}
+        </span>
+      ) : null}
+      <span className="ui-status-badge__label">{children}</span>
+    </span>
+  );
 }

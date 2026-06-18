@@ -107,8 +107,8 @@ export function AddVehicleForm({
       </label>
 
       <div className="vehicles-actions vehicles-actions--end">
-        <ActionButton type="submit" variant="primary" disabled={disabled}>
-          {disabled ? "Ajout..." : "Ajouter le vehicule"}
+        <ActionButton type="submit" variant="primary" busy={disabled} busyLabel="Ajout...">
+          Ajouter le vehicule
         </ActionButton>
       </div>
     </form>

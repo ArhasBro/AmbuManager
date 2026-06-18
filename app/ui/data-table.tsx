@@ -22,13 +22,17 @@ type DataTableProps<T> = {
   loading?: boolean;
   error?: string | null;
   loadingLabel?: string;
+  loadingAction?: ReactNode;
   emptyTitle?: string;
   emptyMessage?: string;
+  emptyIcon?: ReactNode;
+  emptyAction?: ReactNode;
   selectedRowKey?: string | null;
   onRowClick?: (row: T) => void;
   minWidth?: number;
   caption?: string;
   className?: string;
+  errorDetails?: ReactNode;
 };
 
 const ALIGN_CLASS: Record<Align, string> = {
@@ -44,13 +48,17 @@ export default function DataTable<T>({
   loading = false,
   error = null,
   loadingLabel = "Chargement des donnees...",
+  loadingAction,
   emptyTitle = "Aucune donnee",
   emptyMessage = "Aucun element n'est disponible pour cette vue.",
+  emptyIcon,
+  emptyAction,
   selectedRowKey = null,
   onRowClick,
   minWidth = 720,
   caption,
   className,
+  errorDetails,
 }: DataTableProps<T>) {
   const classes = ["ui-data-table", className].filter(Boolean).join(" ");
 
@@ -61,6 +69,7 @@ export default function DataTable<T>({
           className="ui-data-table__state ui-data-table__state--loading"
           title="Chargement de la table"
           message={loadingLabel}
+          action={loadingAction}
         />
       </section>
     );
@@ -73,6 +82,7 @@ export default function DataTable<T>({
           className="ui-data-table__error"
           title="Impossible de charger la table"
           message={error}
+          details={errorDetails}
         />
       </section>
     );
@@ -81,7 +91,7 @@ export default function DataTable<T>({
   if (rows.length === 0) {
     return (
       <section className={classes}>
-        <EmptyState title={emptyTitle} message={emptyMessage} />
+        <EmptyState title={emptyTitle} message={emptyMessage} icon={emptyIcon} action={emptyAction} />
       </section>
     );
   }

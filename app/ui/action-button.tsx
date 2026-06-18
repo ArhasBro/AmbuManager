@@ -1,14 +1,33 @@
-import { type ButtonHTMLAttributes, type ReactNode } from "react";
+"use client";
+
+import { LoaderCircle } from "lucide-react";
+import { type AnchorHTMLAttributes, type ButtonHTMLAttributes, type MouseEvent, type ReactNode } from "react";
 
 export type ActionButtonVariant = "primary" | "secondary" | "ghost" | "danger";
 export type ActionButtonSize = "sm" | "md";
 
-type ActionButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+type ActionButtonBaseProps = {
+  children?: ReactNode;
   variant?: ActionButtonVariant;
   size?: ActionButtonSize;
   leadingIcon?: ReactNode;
   trailingIcon?: ReactNode;
+  busy?: boolean;
+  busyLabel?: string;
 };
+
+type ActionButtonButtonProps = ActionButtonBaseProps &
+  Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children"> & {
+    href?: undefined;
+  };
+
+type ActionButtonLinkProps = ActionButtonBaseProps &
+  Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "children"> & {
+    href: string;
+    disabled?: boolean;
+  };
+
+type ActionButtonProps = ActionButtonButtonProps | ActionButtonLinkProps;
 
 const VARIANT_CLASS: Record<ActionButtonVariant, string> = {
   primary: "ui-action-button--primary",
@@ -22,33 +41,87 @@ const SIZE_CLASS: Record<ActionButtonSize, string> = {
   md: "ui-action-button--md",
 };
 
-export default function ActionButton({
-  variant = "secondary",
-  size = "md",
-  type,
-  className,
-  leadingIcon,
-  trailingIcon,
-  children,
-  ...props
-}: ActionButtonProps) {
-  const classes = ["ui-action-button", VARIANT_CLASS[variant], SIZE_CLASS[size], className]
+export default function ActionButton(props: ActionButtonProps) {
+  const {
+    variant = "secondary",
+    size = "md",
+    leadingIcon,
+    trailingIcon,
+    busy = false,
+    busyLabel,
+    className,
+    children,
+    ...restProps
+  } = props;
+  const classes = ["ui-action-button", VARIANT_CLASS[variant], SIZE_CLASS[size], busy ? "ui-action-button--busy" : "", className]
     .filter(Boolean)
     .join(" ");
-
-  return (
-    <button type={type ?? "button"} className={classes} {...props}>
-      {leadingIcon ? (
+  const contentLabel = busy && busyLabel ? busyLabel : children;
+  const leadingContent = busy ? <LoaderCircle size={14} strokeWidth={2.2} /> : leadingIcon;
+  const content = (
+    <>
+      {leadingContent ? (
         <span className="ui-action-button__icon" aria-hidden="true">
-          {leadingIcon}
+          {leadingContent}
         </span>
       ) : null}
-      <span className="ui-action-button__label">{children}</span>
-      {trailingIcon ? (
+      <span className="ui-action-button__label">{contentLabel}</span>
+      {busy ? null : trailingIcon ? (
         <span className="ui-action-button__icon" aria-hidden="true">
           {trailingIcon}
         </span>
       ) : null}
+    </>
+  );
+
+  if ("href" in props) {
+    const { href, disabled, onClick, tabIndex, rel, target, ...anchorProps } = restProps as Omit<
+      ActionButtonLinkProps,
+      keyof ActionButtonBaseProps
+    >;
+    const isDisabled = Boolean(disabled || busy);
+
+    function handleClick(event: MouseEvent<HTMLAnchorElement>) {
+      if (isDisabled) {
+        event.preventDefault();
+        event.stopPropagation();
+        return;
+      }
+
+      onClick?.(event);
+    }
+
+    return (
+      <a
+        href={href}
+        {...anchorProps}
+        className={classes}
+        aria-busy={busy || undefined}
+        aria-disabled={isDisabled || undefined}
+        data-busy={busy || undefined}
+        rel={rel}
+        target={target}
+        tabIndex={isDisabled ? -1 : tabIndex}
+        onClick={handleClick}
+      >
+        {content}
+      </a>
+    );
+  }
+
+  const { type, disabled, onClick, ...buttonProps } = restProps as Omit<ActionButtonButtonProps, keyof ActionButtonBaseProps>;
+
+  return (
+    <button
+      {...buttonProps}
+      type={type ?? "button"}
+      className={classes}
+      aria-busy={busy || undefined}
+      data-busy={busy || undefined}
+      disabled={disabled || busy}
+      onClick={onClick}
+    >
+      {content}
     </button>
   );
 }

@@ -6,6 +6,7 @@ type StatCardProps = {
   title: string;
   value: ReactNode;
   hint?: ReactNode;
+  footer?: ReactNode;
   tone?: StatCardTone;
   icon?: ReactNode;
   className?: string;
@@ -23,6 +24,7 @@ export default function StatCard({
   title,
   value,
   hint,
+  footer,
   tone = "neutral",
   icon,
   className,
@@ -41,6 +43,7 @@ export default function StatCard({
       </div>
       <strong className="ui-stat-card__value">{value}</strong>
       {hint ? <p className="ui-stat-card__hint">{hint}</p> : null}
+      {footer ? <div className="ui-stat-card__footer">{footer}</div> : null}
     </article>
   );
 }
