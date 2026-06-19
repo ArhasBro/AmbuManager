@@ -6,7 +6,7 @@ import { ok, badRequest, unauthorized, forbidden, conflict, serverError } from "
 import { prismaToHttp } from "@/lib/api/prisma-error";
 import { createVehicleBodySchema } from "@/lib/validators/vehicle";
 import { serializeDates } from "@/lib/serializers";
-import { canEditPlanning, canManageVehicles } from "@/lib/permissions";
+import { canCreateVehicle, canEditPlanning, canManageVehicles } from "@/lib/permissions";
 import { traceSupportAction } from "@/lib/services/audit/support-action-trace";
 import { z } from "zod";
 
@@ -81,10 +81,11 @@ export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
   const actorUserId = session?.user?.id;
   const companyId = session?.user?.companyId;
+  const role = session?.user?.role;
   const platformRole = session?.user?.platformRole;
 
   if (!actorUserId || !companyId) return unauthorized();
-  if (session.user.role !== "ADMIN") return forbidden();
+  if (!(await canCreateVehicle(role, platformRole))) return forbidden();
 
   const jsonBody: unknown = await req.json().catch(() => null);
   const parsed = createVehicleBodySchema.safeParse(jsonBody);

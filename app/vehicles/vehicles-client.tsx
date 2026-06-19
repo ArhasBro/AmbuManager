@@ -833,7 +833,7 @@ export default function VehiclesClient({
           <p className="vehicles-page-top__subtitle">Gérez votre flotte de véhicules et leurs équipements</p>
         </div>
         <div className="vehicles-page-top__actions">
-          {!canCreateVehicle ? <StatusBadge variant="warning">Création réservée au profil ADMIN</StatusBadge> : null}
+          {!canCreateVehicle ? <StatusBadge variant="warning">Création réservée aux profils ADMIN et GERANT</StatusBadge> : null}
           <ActionButton
             variant={showCreateVehicleForm ? "secondary" : "primary"}
             size="md"

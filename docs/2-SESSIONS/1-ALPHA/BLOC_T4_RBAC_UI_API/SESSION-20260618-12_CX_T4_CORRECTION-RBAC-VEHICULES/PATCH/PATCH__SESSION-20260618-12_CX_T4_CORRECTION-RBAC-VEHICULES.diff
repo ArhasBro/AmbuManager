@@ -1,0 +1,94 @@
+diff --git a/app/api/vehicles/route.ts b/app/api/vehicles/route.ts
+index 57a461d6..48d673a0 100644
+--- a/app/api/vehicles/route.ts
++++ b/app/api/vehicles/route.ts
+@@ -6,7 +6,7 @@ import { ok, badRequest, unauthorized, forbidden, conflict, serverError } from "
+ import { prismaToHttp } from "@/lib/api/prisma-error";
+ import { createVehicleBodySchema } from "@/lib/validators/vehicle";
+ import { serializeDates } from "@/lib/serializers";
+-import { canEditPlanning, canManageVehicles } from "@/lib/permissions";
++import { canCreateVehicle, canEditPlanning, canManageVehicles } from "@/lib/permissions";
+ import { traceSupportAction } from "@/lib/services/audit/support-action-trace";
+ import { z } from "zod";
+ 
+@@ -81,10 +81,11 @@ export async function POST(req: Request) {
+   const session = await getServerSession(authOptions);
+   const actorUserId = session?.user?.id;
+   const companyId = session?.user?.companyId;
++  const role = session?.user?.role;
+   const platformRole = session?.user?.platformRole;
+ 
+   if (!actorUserId || !companyId) return unauthorized();
+-  if (session.user.role !== "ADMIN") return forbidden();
++  if (!(await canCreateVehicle(role, platformRole))) return forbidden();
+ 
+   const jsonBody: unknown = await req.json().catch(() => null);
+   const parsed = createVehicleBodySchema.safeParse(jsonBody);
+diff --git a/app/vehicles/page.tsx b/app/vehicles/page.tsx
+index f9a73bf6..2643d664 100644
+--- a/app/vehicles/page.tsx
++++ b/app/vehicles/page.tsx
+@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
+ 
+ import { AccessDeniedState } from "@/app/ui";
+ import { authOptions } from "@/lib/auth";
+-import { canManageVehicles } from "@/lib/permissions";
++import { canCreateVehicle, canManageVehicles } from "@/lib/permissions";
+ import { prisma } from "@/lib/prisma";
+ import { serializeDates } from "@/lib/serializers";
+ 
+@@ -17,7 +17,8 @@ export default async function VehiclesPage() {
+   const user = session.user;
+ 
+   if (!user.id || !user.companyId) redirect("/login");
+-  if (!(await canManageVehicles(user.id, user.role, user.platformRole))) {
++  const canManageVehiclesAllowed = await canManageVehicles(user.id, user.role, user.platformRole);
++  if (!canManageVehiclesAllowed) {
+     return (
+       <main className="page-wrap">
+         <AccessDeniedState />
+@@ -26,6 +27,7 @@ export default async function VehiclesPage() {
+   }
+ 
+   const companyId = user.companyId;
++  const canCreateVehicleAllowed = await canCreateVehicle(user.role, user.platformRole);
+ 
+   const [vehicles, depots] = await Promise.all([
+     prisma.vehicle.findMany({
+@@ -68,7 +70,7 @@ export default async function VehiclesPage() {
+       <VehiclesClient
+         initialVehicles={serializeDates(vehicles)}
+         availableDepots={depots}
+-        canCreateVehicle={user.role === "ADMIN"}
++        canCreateVehicle={canCreateVehicleAllowed}
+       />
+     </div>
+   );
+diff --git a/app/vehicles/vehicles-client.tsx b/app/vehicles/vehicles-client.tsx
+index a7c05474..32a2fd65 100644
+--- a/app/vehicles/vehicles-client.tsx
++++ b/app/vehicles/vehicles-client.tsx
+@@ -833,7 +833,7 @@ export default function VehiclesClient({
+           <p className="vehicles-page-top__subtitle">Gérez votre flotte de véhicules et leurs équipements</p>
+         </div>
+         <div className="vehicles-page-top__actions">
+-          {!canCreateVehicle ? <StatusBadge variant="warning">Création réservée au profil ADMIN</StatusBadge> : null}
++          {!canCreateVehicle ? <StatusBadge variant="warning">Création réservée aux profils ADMIN et GERANT</StatusBadge> : null}
+           <ActionButton
+             variant={showCreateVehicleForm ? "secondary" : "primary"}
+             size="md"
+diff --git a/lib/permissions.ts b/lib/permissions.ts
+index 945d8603..435d875f 100644
+--- a/lib/permissions.ts
++++ b/lib/permissions.ts
+@@ -60,6 +60,10 @@ export async function canManageDepots(userId: string, role?: string | null, plat
+ export async function canManageVehicles(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
+   return hasPermissionAccess({ userId, role, platformRole, codes: ["VEHICLES_MANAGE"] });
+ }
++export async function canCreateVehicle(role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
++  if (isGlobalSupport(platformRole)) return false;
++  return hasNativeAccess(role);
++}
+ export async function canManageTemplates(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
+   return hasPermissionAccess({ userId, role, platformRole, codes: ["TEMPLATES_MANAGE"] });
+ }

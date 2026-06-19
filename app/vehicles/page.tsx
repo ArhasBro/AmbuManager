@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 
 import { AccessDeniedState } from "@/app/ui";
 import { authOptions } from "@/lib/auth";
-import { canManageVehicles } from "@/lib/permissions";
+import { canCreateVehicle, canManageVehicles } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 import { serializeDates } from "@/lib/serializers";
 
@@ -17,7 +17,8 @@ export default async function VehiclesPage() {
   const user = session.user;
 
   if (!user.id || !user.companyId) redirect("/login");
-  if (!(await canManageVehicles(user.id, user.role, user.platformRole))) {
+  const canManageVehiclesAllowed = await canManageVehicles(user.id, user.role, user.platformRole);
+  if (!canManageVehiclesAllowed) {
     return (
       <main className="page-wrap">
         <AccessDeniedState />
@@ -26,6 +27,7 @@ export default async function VehiclesPage() {
   }
 
   const companyId = user.companyId;
+  const canCreateVehicleAllowed = await canCreateVehicle(user.role, user.platformRole);
 
   const [vehicles, depots] = await Promise.all([
     prisma.vehicle.findMany({
@@ -68,7 +70,7 @@ export default async function VehiclesPage() {
       <VehiclesClient
         initialVehicles={serializeDates(vehicles)}
         availableDepots={depots}
-        canCreateVehicle={user.role === "ADMIN"}
+        canCreateVehicle={canCreateVehicleAllowed}
       />
     </div>
   );

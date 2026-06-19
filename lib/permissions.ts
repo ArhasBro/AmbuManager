@@ -60,6 +60,10 @@ export async function canManageDepots(userId: string, role?: string | null, plat
 export async function canManageVehicles(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
   return hasPermissionAccess({ userId, role, platformRole, codes: ["VEHICLES_MANAGE"] });
 }
+export async function canCreateVehicle(role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
+  if (isGlobalSupport(platformRole)) return false;
+  return hasNativeAccess(role);
+}
 export async function canManageTemplates(userId: string, role?: string | null, platformRole?: PlatformRole | string | null): Promise<boolean> {
   return hasPermissionAccess({ userId, role, platformRole, codes: ["TEMPLATES_MANAGE"] });
 }
