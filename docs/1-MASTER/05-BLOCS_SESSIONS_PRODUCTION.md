@@ -220,6 +220,19 @@ T2 évite les divergences entre route technique officielle et libellé métier v
 
 #### Sessions de production prévues
 
+- `DX_T2_CADRAGE-BLOC-SESSIONS`
+  - Nature : DX.
+  - Type métier : AUDIT+CADRAGE.
+  - Objectif : analyser la cohérence du bloc T2 et de ses sessions avant démarrage, vérifier si le découpage est suffisant, identifier les sessions manquantes, trop larges, redondantes ou à reporter, puis produire les questions d'arbitrage nécessaires.
+  - Périmètre inclus : relecture du plan de développement, relecture du plan des blocs/sessions, relecture de la référence Base44 comme référence fonctionnelle/métier/visuelle, analyse du périmètre fonctionnel du bloc T2, analyse de la cohérence des dépendances amont/aval, revue des sessions prévues, vérification des sessions trop larges ou trop longues, identification des répétitions avec d'autres sessions du même bloc ou d'un autre bloc, proposition d'ordre d'exécution, identification des risques de périmètre, identification des risques de surconsommation de crédits, production des questions d'arbitrage si nécessaire.
+  - Hors périmètre : correction de code, création de code, modification applicative, modification Prisma, modification API, modification RBAC effective, modification de routes, modification de packages, modification automatique de documents de fond sans validation humaine, validation navigateur, captures, exécution de build, application automatique des recommandations dans le MASTER.
+  - Zones à lire : `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`, `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md`, `docs/1-MASTER/4-BASE44_REFERENCE/`, `app/`, `app/app-shell.tsx`, `app/login/page.tsx`, `app/templates/page.tsx`, `app/onboarding/page.tsx`, fichiers nécessaires au bon déroulement de la session en lecture seule.
+  - Zones modifiables plus tard : aucune sans validation humaine explicite ; recommandations de modification du MASTER à formuler uniquement sous forme de propositions.
+  - Critères de validation : périmètre du bloc compris, sessions prévues analysées, sessions trop larges ou trop longues identifiées, répétitions intra-bloc ou inter-blocs identifiées, sessions manquantes proposées si nécessaire, sessions à conserver / compléter / découper / fusionner / reporter / supprimer / confirmer classées, risques identifiés, questions d'arbitrage produites si nécessaire, ordre d'exécution recommandé, absence de modification applicative.
+  - Preuves attendues : synthèse du bloc, tableau d'analyse des sessions prévues, liste des sessions manquantes ou à ajuster, questions à arbitrer classées par priorité si nécessaire, recommandations d'ordre d'exécution, fichiers lus, commandes sobres si utilisées, `git status --short`, confirmation d'absence de modification applicative, confirmation d'absence de modification documentaire hors dossier de session.
+  - Dépendances : T1 historique, documents 01/03/04, références UI/UX globales.
+  - Sortie principale : plan de sessions recommandé + questions à arbitrer.
+
 - `DX_T2_AUDIT-ROUTES-LIBELLES`
   - Nature : DX.
   - Type métier : AUDIT.
@@ -326,6 +339,19 @@ T3 sert à limiter les divergences UI sur tableaux, badges, filtres, états vide
 - Mélanger composant commun et logique métier de page.
 
 #### Sessions de production prévues
+
+- `DX_T3_CADRAGE-BLOC-SESSIONS`
+  - Nature : DX.
+  - Type métier : AUDIT+CADRAGE.
+  - Objectif : analyser la cohérence du bloc T3 et de ses sessions avant démarrage, vérifier si le découpage est suffisant, identifier les sessions manquantes, trop larges, redondantes ou à reporter, puis produire les questions d'arbitrage nécessaires.
+  - Périmètre inclus : relecture du plan de développement, relecture du plan des blocs/sessions, relecture de la référence Base44 comme référence fonctionnelle/métier/visuelle, analyse du périmètre fonctionnel du bloc T3, analyse de la cohérence des dépendances amont/aval, revue des sessions prévues, vérification des sessions trop larges ou trop longues, identification des répétitions avec d'autres sessions du même bloc ou d'un autre bloc, proposition d'ordre d'exécution, identification des risques de périmètre, identification des risques de surconsommation de crédits, production des questions d'arbitrage si nécessaire.
+  - Hors périmètre : correction de code, création de code, modification applicative, modification Prisma, modification API, modification RBAC effective, modification de routes, modification de packages, modification automatique de documents de fond sans validation humaine, validation navigateur, captures, exécution de build, application automatique des recommandations dans le MASTER.
+  - Zones à lire : `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`, `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md`, `docs/1-MASTER/4-BASE44_REFERENCE/`, `docs/1-MASTER/2-REFERENCE_UI_UX/`, `app/ui/`, `app/globals.css`, fichiers nécessaires au bon déroulement de la session en lecture seule.
+  - Zones modifiables plus tard : aucune sans validation humaine explicite ; recommandations de modification du MASTER à formuler uniquement sous forme de propositions.
+  - Critères de validation : périmètre du bloc compris, sessions prévues analysées, sessions trop larges ou trop longues identifiées, répétitions intra-bloc ou inter-blocs identifiées, sessions manquantes proposées si nécessaire, sessions à conserver / compléter / découper / fusionner / reporter / supprimer / confirmer classées, risques identifiés, questions d'arbitrage produites si nécessaire, ordre d'exécution recommandé, absence de modification applicative.
+  - Preuves attendues : synthèse du bloc, tableau d'analyse des sessions prévues, liste des sessions manquantes ou à ajuster, questions à arbitrer classées par priorité si nécessaire, recommandations d'ordre d'exécution, fichiers lus, commandes sobres si utilisées, `git status --short`, confirmation d'absence de modification applicative, confirmation d'absence de modification documentaire hors dossier de session.
+  - Dépendances : T1 historique, T2, références UI/UX globales.
+  - Sortie principale : plan de sessions recommandé + questions à arbitrer.
 
 - `DX_T3_AUDIT-COMPOSANTS-ETATS`
   - Nature : DX.
@@ -572,6 +598,19 @@ T5 protège le multi-tenant et évite les migrations opportunistes inspirées de
 
 #### Sessions de production prévues
 
+- `DX_T5_CADRAGE-BLOC-SESSIONS`
+  - Nature : DX.
+  - Type métier : AUDIT+CADRAGE.
+  - Objectif : analyser la cohérence du bloc T5 et de ses sessions avant démarrage, vérifier si le découpage est suffisant, identifier les sessions manquantes, trop larges, redondantes ou à reporter, puis produire les questions d'arbitrage nécessaires.
+  - Périmètre inclus : relecture du plan de développement, relecture du plan des blocs/sessions, relecture de la référence Base44 comme référence fonctionnelle/métier/visuelle, analyse du périmètre fonctionnel du bloc T5, analyse de la cohérence des dépendances amont/aval, revue des sessions prévues, vérification des sessions trop larges ou trop longues, identification des répétitions avec d'autres sessions du même bloc ou d'un autre bloc, proposition d'ordre d'exécution, identification des risques de périmètre, identification des risques de surconsommation de crédits, production des questions d'arbitrage si nécessaire.
+  - Hors périmètre : correction de code, création de code, modification applicative, modification Prisma, modification API, modification RBAC effective, modification de routes, modification de packages, modification automatique de documents de fond sans validation humaine, validation navigateur, captures, exécution de build, application automatique des recommandations dans le MASTER.
+  - Zones à lire : `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`, `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md`, `docs/1-MASTER/4-BASE44_REFERENCE/`, `prisma/schema.prisma`, `docs/1-MASTER/3-FONCTIONNALITES/`, fichiers nécessaires au bon déroulement de la session en lecture seule.
+  - Zones modifiables plus tard : aucune sans validation humaine explicite ; recommandations de modification du MASTER à formuler uniquement sous forme de propositions.
+  - Critères de validation : périmètre du bloc compris, sessions prévues analysées, sessions trop larges ou trop longues identifiées, répétitions intra-bloc ou inter-blocs identifiées, sessions manquantes proposées si nécessaire, sessions à conserver / compléter / découper / fusionner / reporter / supprimer / confirmer classées, risques identifiés, questions d'arbitrage produites si nécessaire, ordre d'exécution recommandé, absence de modification applicative.
+  - Preuves attendues : synthèse du bloc, tableau d'analyse des sessions prévues, liste des sessions manquantes ou à ajuster, questions à arbitrer classées par priorité si nécessaire, recommandations d'ordre d'exécution, fichiers lus, commandes sobres si utilisées, `git status --short`, confirmation d'absence de modification applicative, confirmation d'absence de modification documentaire hors dossier de session.
+  - Dépendances : T4, schéma Prisma officiel, audits et fiches fonctionnelles.
+  - Sortie principale : plan de sessions recommandé + questions à arbitrer.
+
 - `DX_T5_AUDIT-MAPPING-ENTITES`
   - Nature : DX.
   - Type métier : AUDIT.
@@ -684,6 +723,19 @@ T6 établit quelles actions doivent produire une trace officielle exploitable pa
 
 #### Sessions de production prévues
 
+- `DX_T6_CADRAGE-BLOC-SESSIONS`
+  - Nature : DX.
+  - Type métier : AUDIT+CADRAGE.
+  - Objectif : analyser la cohérence du bloc T6 et de ses sessions avant démarrage, vérifier si le découpage est suffisant, identifier les sessions manquantes, trop larges, redondantes ou à reporter, puis produire les questions d'arbitrage nécessaires.
+  - Périmètre inclus : relecture du plan de développement, relecture du plan des blocs/sessions, relecture de la référence Base44 comme référence fonctionnelle/métier/visuelle, analyse du périmètre fonctionnel du bloc T6, analyse de la cohérence des dépendances amont/aval, revue des sessions prévues, vérification des sessions trop larges ou trop longues, identification des répétitions avec d'autres sessions du même bloc ou d'un autre bloc, proposition d'ordre d'exécution, identification des risques de périmètre, identification des risques de surconsommation de crédits, production des questions d'arbitrage si nécessaire.
+  - Hors périmètre : correction de code, création de code, modification applicative, modification Prisma, modification API, modification RBAC effective, modification de routes, modification de packages, modification automatique de documents de fond sans validation humaine, validation navigateur, captures, exécution de build, application automatique des recommandations dans le MASTER.
+  - Zones à lire : `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`, `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md`, `docs/1-MASTER/4-BASE44_REFERENCE/`, `lib/services/audit/`, `lib/services/planning/planning-audit.ts`, API routes sensibles, `prisma/schema.prisma`, fichiers nécessaires au bon déroulement de la session en lecture seule.
+  - Zones modifiables plus tard : aucune sans validation humaine explicite ; recommandations de modification du MASTER à formuler uniquement sous forme de propositions.
+  - Critères de validation : périmètre du bloc compris, sessions prévues analysées, sessions trop larges ou trop longues identifiées, répétitions intra-bloc ou inter-blocs identifiées, sessions manquantes proposées si nécessaire, sessions à conserver / compléter / découper / fusionner / reporter / supprimer / confirmer classées, risques identifiés, questions d'arbitrage produites si nécessaire, ordre d'exécution recommandé, absence de modification applicative.
+  - Preuves attendues : synthèse du bloc, tableau d'analyse des sessions prévues, liste des sessions manquantes ou à ajuster, questions à arbitrer classées par priorité si nécessaire, recommandations d'ordre d'exécution, fichiers lus, commandes sobres si utilisées, `git status --short`, confirmation d'absence de modification applicative, confirmation d'absence de modification documentaire hors dossier de session.
+  - Dépendances : T4, T5.
+  - Sortie principale : plan de sessions recommandé + questions à arbitrer.
+
 - `DX_T6_AUDIT-TRACES-EXISTANTES`
   - Nature : DX.
   - Type métier : AUDIT.
@@ -794,6 +846,19 @@ T7 permet d'ouvrir des sessions Codex avec DoD, commandes et preuves adaptées a
 
 #### Sessions de production prévues
 
+- `DX_T7_CADRAGE-BLOC-SESSIONS`
+  - Nature : DX.
+  - Type métier : AUDIT+CADRAGE.
+  - Objectif : analyser la cohérence du bloc T7 et de ses sessions avant démarrage, vérifier si le découpage est suffisant, identifier les sessions manquantes, trop larges, redondantes ou à reporter, puis produire les questions d'arbitrage nécessaires.
+  - Périmètre inclus : relecture du plan de développement, relecture du plan des blocs/sessions, relecture de la référence Base44 comme référence fonctionnelle/métier/visuelle, analyse du périmètre fonctionnel du bloc T7, analyse de la cohérence des dépendances amont/aval, revue des sessions prévues, vérification des sessions trop larges ou trop longues, identification des répétitions avec d'autres sessions du même bloc ou d'un autre bloc, proposition d'ordre d'exécution, identification des risques de périmètre, identification des risques de surconsommation de crédits, production des questions d'arbitrage si nécessaire.
+  - Hors périmètre : correction de code, création de code, modification applicative, modification Prisma, modification API, modification RBAC effective, modification de routes, modification de packages, modification automatique de documents de fond sans validation humaine, validation navigateur, captures, exécution de build, application automatique des recommandations dans le MASTER.
+  - Zones à lire : `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`, `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md`, `docs/1-MASTER/4-BASE44_REFERENCE/`, `package.json`, `scripts/quality/`, `scripts/check-doc-encoding.mjs` si présent, fichiers nécessaires au bon déroulement de la session en lecture seule.
+  - Zones modifiables plus tard : aucune sans validation humaine explicite ; recommandations de modification du MASTER à formuler uniquement sous forme de propositions.
+  - Critères de validation : périmètre du bloc compris, sessions prévues analysées, sessions trop larges ou trop longues identifiées, répétitions intra-bloc ou inter-blocs identifiées, sessions manquantes proposées si nécessaire, sessions à conserver / compléter / découper / fusionner / reporter / supprimer / confirmer classées, risques identifiés, questions d'arbitrage produites si nécessaire, ordre d'exécution recommandé, absence de modification applicative.
+  - Preuves attendues : synthèse du bloc, tableau d'analyse des sessions prévues, liste des sessions manquantes ou à ajuster, questions à arbitrer classées par priorité si nécessaire, recommandations d'ordre d'exécution, fichiers lus, commandes sobres si utilisées, `git status --short`, confirmation d'absence de modification applicative, confirmation d'absence de modification documentaire hors dossier de session.
+  - Dépendances : T4, T5, T6, scripts qualité existants.
+  - Sortie principale : plan de sessions recommandé + questions à arbitrer.
+
 - `DX_T7_AUDIT-SCRIPTS-CONTROLES`
   - Nature : DX.
   - Type métier : AUDIT.
@@ -894,6 +959,19 @@ Le login est l'entrée publique de l'application et charge l'identité, le tenan
 - Sur-promesse sécurité/RGPD.
 
 #### Sessions de production prévues
+
+- `DX_PLOGIN_CADRAGE-BLOC-SESSIONS`
+  - Nature : DX.
+  - Type métier : AUDIT+CADRAGE.
+  - Objectif : analyser la cohérence du bloc P-LOGIN et de ses sessions avant démarrage, vérifier si le découpage est suffisant, identifier les sessions manquantes, trop larges, redondantes ou à reporter, puis produire les questions d'arbitrage nécessaires.
+  - Périmètre inclus : relecture du plan de développement, relecture du plan des blocs/sessions, relecture de la référence Base44 comme référence fonctionnelle/métier/visuelle, analyse du périmètre fonctionnel du bloc P-LOGIN, analyse de la cohérence des dépendances amont/aval, revue des sessions prévues, vérification des sessions trop larges ou trop longues, identification des répétitions avec d'autres sessions du même bloc ou d'un autre bloc, proposition d'ordre d'exécution, identification des risques de périmètre, identification des risques de surconsommation de crédits, production des questions d'arbitrage si nécessaire.
+  - Hors périmètre : correction de code, création de code, modification applicative, modification Prisma, modification API, modification RBAC effective, modification de routes, modification de packages, modification automatique de documents de fond sans validation humaine, validation navigateur, captures, exécution de build, application automatique des recommandations dans le MASTER.
+  - Zones à lire : `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`, `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md`, `docs/1-MASTER/4-BASE44_REFERENCE/`, `app/login/page.tsx`, `app/api/auth/[...nextauth]/route.ts`, `lib/auth.ts`, `app/privacy/page.tsx`, fichiers nécessaires au bon déroulement de la session en lecture seule.
+  - Zones modifiables plus tard : aucune sans validation humaine explicite ; recommandations de modification du MASTER à formuler uniquement sous forme de propositions.
+  - Critères de validation : périmètre du bloc compris, sessions prévues analysées, sessions trop larges ou trop longues identifiées, répétitions intra-bloc ou inter-blocs identifiées, sessions manquantes proposées si nécessaire, sessions à conserver / compléter / découper / fusionner / reporter / supprimer / confirmer classées, risques identifiés, questions d'arbitrage produites si nécessaire, ordre d'exécution recommandé, absence de modification applicative.
+  - Preuves attendues : synthèse du bloc, tableau d'analyse des sessions prévues, liste des sessions manquantes ou à ajuster, questions à arbitrer classées par priorité si nécessaire, recommandations d'ordre d'exécution, fichiers lus, commandes sobres si utilisées, `git status --short`, confirmation d'absence de modification applicative, confirmation d'absence de modification documentaire hors dossier de session.
+  - Dépendances : T1 historique, T2, T4, RGPD-PRIVACY.
+  - Sortie principale : plan de sessions recommandé + questions à arbitrer.
 
 - `DX_PLOGIN_AUDIT-AUTH-UX`
   - Nature : DX.
@@ -1009,6 +1087,19 @@ Société porte le contexte permanent du tenant, les informations de profil, les
 - Déclaration réglementaire excessive.
 
 #### Sessions de production prévues
+
+- `DX_PSOCIETE_CADRAGE-BLOC-SESSIONS`
+  - Nature : DX.
+  - Type métier : AUDIT+CADRAGE.
+  - Objectif : analyser la cohérence du bloc P-SOCIETE et de ses sessions avant démarrage, vérifier si le découpage est suffisant, identifier les sessions manquantes, trop larges, redondantes ou à reporter, puis produire les questions d'arbitrage nécessaires.
+  - Périmètre inclus : relecture du plan de développement, relecture du plan des blocs/sessions, relecture de la référence Base44 comme référence fonctionnelle/métier/visuelle, analyse du périmètre fonctionnel du bloc P-SOCIETE, analyse de la cohérence des dépendances amont/aval, revue des sessions prévues, vérification des sessions trop larges ou trop longues, identification des répétitions avec d'autres sessions du même bloc ou d'un autre bloc, proposition d'ordre d'exécution, identification des risques de périmètre, identification des risques de surconsommation de crédits, production des questions d'arbitrage si nécessaire.
+  - Hors périmètre : correction de code, création de code, modification applicative, modification Prisma, modification API, modification RBAC effective, modification de routes, modification de packages, modification automatique de documents de fond sans validation humaine, validation navigateur, captures, exécution de build, application automatique des recommandations dans le MASTER.
+  - Zones à lire : `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`, `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md`, `docs/1-MASTER/4-BASE44_REFERENCE/`, `app/company/*`, `app/api/company/*`, `lib/services/company/`, `lib/company-rules/`, `prisma/schema.prisma`, fichiers nécessaires au bon déroulement de la session en lecture seule.
+  - Zones modifiables plus tard : aucune sans validation humaine explicite ; recommandations de modification du MASTER à formuler uniquement sous forme de propositions.
+  - Critères de validation : périmètre du bloc compris, sessions prévues analysées, sessions trop larges ou trop longues identifiées, répétitions intra-bloc ou inter-blocs identifiées, sessions manquantes proposées si nécessaire, sessions à conserver / compléter / découper / fusionner / reporter / supprimer / confirmer classées, risques identifiés, questions d'arbitrage produites si nécessaire, ordre d'exécution recommandé, absence de modification applicative.
+  - Preuves attendues : synthèse du bloc, tableau d'analyse des sessions prévues, liste des sessions manquantes ou à ajuster, questions à arbitrer classées par priorité si nécessaire, recommandations d'ordre d'exécution, fichiers lus, commandes sobres si utilisées, `git status --short`, confirmation d'absence de modification applicative, confirmation d'absence de modification documentaire hors dossier de session.
+  - Dépendances : T4, T5, T6.
+  - Sortie principale : plan de sessions recommandé + questions à arbitrer.
 
 - `DX_PSOCIETE_AUDIT-PROFIL-REGLES-CONTACTS`
   - Nature : DX.
@@ -1128,6 +1219,19 @@ Les dépôts structurent les lieux de rattachement, les véhicules, les utilisat
 
 #### Sessions de production prévues
 
+- `DX_PDEPOTS_CADRAGE-BLOC-SESSIONS`
+  - Nature : DX.
+  - Type métier : AUDIT+CADRAGE.
+  - Objectif : analyser la cohérence du bloc P-DEPOTS-BASES et de ses sessions avant démarrage, vérifier si le découpage est suffisant, identifier les sessions manquantes, trop larges, redondantes ou à reporter, puis produire les questions d'arbitrage nécessaires.
+  - Périmètre inclus : relecture du plan de développement, relecture du plan des blocs/sessions, relecture de la référence Base44 comme référence fonctionnelle/métier/visuelle, analyse du périmètre fonctionnel du bloc P-DEPOTS-BASES, analyse de la cohérence des dépendances amont/aval, revue des sessions prévues, vérification des sessions trop larges ou trop longues, identification des répétitions avec d'autres sessions du même bloc ou d'un autre bloc, proposition d'ordre d'exécution, identification des risques de périmètre, identification des risques de surconsommation de crédits, production des questions d'arbitrage si nécessaire.
+  - Hors périmètre : correction de code, création de code, modification applicative, modification Prisma, modification API, modification RBAC effective, modification de routes, modification de packages, modification automatique de documents de fond sans validation humaine, validation navigateur, captures, exécution de build, application automatique des recommandations dans le MASTER.
+  - Zones à lire : `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`, `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md`, `docs/1-MASTER/4-BASE44_REFERENCE/`, `app/depots/*`, `app/api/depots/*`, `lib/services/depots/*`, `prisma/schema.prisma`, fichiers nécessaires au bon déroulement de la session en lecture seule.
+  - Zones modifiables plus tard : aucune sans validation humaine explicite ; recommandations de modification du MASTER à formuler uniquement sous forme de propositions.
+  - Critères de validation : périmètre du bloc compris, sessions prévues analysées, sessions trop larges ou trop longues identifiées, répétitions intra-bloc ou inter-blocs identifiées, sessions manquantes proposées si nécessaire, sessions à conserver / compléter / découper / fusionner / reporter / supprimer / confirmer classées, risques identifiés, questions d'arbitrage produites si nécessaire, ordre d'exécution recommandé, absence de modification applicative.
+  - Preuves attendues : synthèse du bloc, tableau d'analyse des sessions prévues, liste des sessions manquantes ou à ajuster, questions à arbitrer classées par priorité si nécessaire, recommandations d'ordre d'exécution, fichiers lus, commandes sobres si utilisées, `git status --short`, confirmation d'absence de modification applicative, confirmation d'absence de modification documentaire hors dossier de session.
+  - Dépendances : T4, T5, T6, P-SOCIETE.
+  - Sortie principale : plan de sessions recommandé + questions à arbitrer.
+
 - `DX_PDEPOTS_AUDIT-REFERENTIEL-API-UI`
   - Nature : DX.
   - Type métier : AUDIT.
@@ -1238,6 +1342,19 @@ Le module porte les personnes, droits, statuts, accès et indisponibilités néc
 - Support global inclus dans listes tenant.
 
 #### Sessions de production prévues
+
+- `DX_PUSERS_CADRAGE-BLOC-SESSIONS`
+  - Nature : DX.
+  - Type métier : AUDIT+CADRAGE.
+  - Objectif : analyser la cohérence du bloc P-UTILISATEURS-RH et de ses sessions avant démarrage, vérifier si le découpage est suffisant, identifier les sessions manquantes, trop larges, redondantes ou à reporter, puis produire les questions d'arbitrage nécessaires.
+  - Périmètre inclus : relecture du plan de développement, relecture du plan des blocs/sessions, relecture de la référence Base44 comme référence fonctionnelle/métier/visuelle, analyse du périmètre fonctionnel du bloc P-UTILISATEURS-RH, analyse de la cohérence des dépendances amont/aval, revue des sessions prévues, vérification des sessions trop larges ou trop longues, identification des répétitions avec d'autres sessions du même bloc ou d'un autre bloc, proposition d'ordre d'exécution, identification des risques de périmètre, identification des risques de surconsommation de crédits, production des questions d'arbitrage si nécessaire.
+  - Hors périmètre : correction de code, création de code, modification applicative, modification Prisma, modification API, modification RBAC effective, modification de routes, modification de packages, modification automatique de documents de fond sans validation humaine, validation navigateur, captures, exécution de build, application automatique des recommandations dans le MASTER.
+  - Zones à lire : `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`, `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md`, `docs/1-MASTER/4-BASE44_REFERENCE/`, `app/users/*`, `app/api/users/*`, `lib/services/users/*`, `lib/validators/user*.ts`, `prisma/schema.prisma`, fichiers nécessaires au bon déroulement de la session en lecture seule.
+  - Zones modifiables plus tard : aucune sans validation humaine explicite ; recommandations de modification du MASTER à formuler uniquement sous forme de propositions.
+  - Critères de validation : périmètre du bloc compris, sessions prévues analysées, sessions trop larges ou trop longues identifiées, répétitions intra-bloc ou inter-blocs identifiées, sessions manquantes proposées si nécessaire, sessions à conserver / compléter / découper / fusionner / reporter / supprimer / confirmer classées, risques identifiés, questions d'arbitrage produites si nécessaire, ordre d'exécution recommandé, absence de modification applicative.
+  - Preuves attendues : synthèse du bloc, tableau d'analyse des sessions prévues, liste des sessions manquantes ou à ajuster, questions à arbitrer classées par priorité si nécessaire, recommandations d'ordre d'exécution, fichiers lus, commandes sobres si utilisées, `git status --short`, confirmation d'absence de modification applicative, confirmation d'absence de modification documentaire hors dossier de session.
+  - Dépendances : T4, T5, T6, P-DEPOTS-BASES.
+  - Sortie principale : plan de sessions recommandé + questions à arbitrer.
 
 - `DX_PUSERS_AUDIT-RH-API-RBAC`
   - Nature : DX.
@@ -1369,6 +1486,19 @@ Véhicules porte la flotte administrative, les statuts, les documents, les ratta
 
 #### Sessions de production prévues
 
+- `DX_PVEH_CADRAGE-BLOC-SESSIONS`
+  - Nature : DX.
+  - Type métier : AUDIT+CADRAGE.
+  - Objectif : analyser la cohérence du bloc P-VEHICULES et de ses sessions avant démarrage, vérifier si le découpage est suffisant, identifier les sessions manquantes, trop larges, redondantes ou à reporter, puis produire les questions d'arbitrage nécessaires.
+  - Périmètre inclus : relecture du plan de développement, relecture du plan des blocs/sessions, relecture de la référence Base44 comme référence fonctionnelle/métier/visuelle, analyse du périmètre fonctionnel du bloc P-VEHICULES, analyse de la cohérence des dépendances amont/aval, revue des sessions prévues, vérification des sessions trop larges ou trop longues, identification des répétitions avec d'autres sessions du même bloc ou d'un autre bloc, proposition d'ordre d'exécution, identification des risques de périmètre, identification des risques de surconsommation de crédits, production des questions d'arbitrage si nécessaire.
+  - Hors périmètre : correction de code, création de code, modification applicative, modification Prisma, modification API, modification RBAC effective, modification de routes, modification de packages, modification automatique de documents de fond sans validation humaine, validation navigateur, captures, exécution de build, application automatique des recommandations dans le MASTER.
+  - Zones à lire : `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`, `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md`, `docs/1-MASTER/4-BASE44_REFERENCE/`, `app/vehicles/*`, `app/api/vehicles/*`, `lib/services/vehicles/*`, `lib/validators/vehicle.ts`, `prisma/schema.prisma`, fichiers nécessaires au bon déroulement de la session en lecture seule.
+  - Zones modifiables plus tard : aucune sans validation humaine explicite ; recommandations de modification du MASTER à formuler uniquement sous forme de propositions.
+  - Critères de validation : périmètre du bloc compris, sessions prévues analysées, sessions trop larges ou trop longues identifiées, répétitions intra-bloc ou inter-blocs identifiées, sessions manquantes proposées si nécessaire, sessions à conserver / compléter / découper / fusionner / reporter / supprimer / confirmer classées, risques identifiés, questions d'arbitrage produites si nécessaire, ordre d'exécution recommandé, absence de modification applicative.
+  - Preuves attendues : synthèse du bloc, tableau d'analyse des sessions prévues, liste des sessions manquantes ou à ajuster, questions à arbitrer classées par priorité si nécessaire, recommandations d'ordre d'exécution, fichiers lus, commandes sobres si utilisées, `git status --short`, confirmation d'absence de modification applicative, confirmation d'absence de modification documentaire hors dossier de session.
+  - Dépendances : T4, T5, T6, P-DEPOTS-BASES.
+  - Sortie principale : plan de sessions recommandé + questions à arbitrer.
+
 - `DX_PVEH_AUDIT-FLOTTE-API-UI`
   - Nature : DX.
   - Type métier : AUDIT.
@@ -1499,6 +1629,19 @@ Le module porte vue d'ensemble, vérifications, désinfections et anomalies, dis
 - Présenter des règles ARS non confirmées.
 
 #### Sessions de production prévues
+
+- `DX_PSUIVI_CADRAGE-BLOC-SESSIONS`
+  - Nature : DX.
+  - Type métier : AUDIT+CADRAGE.
+  - Objectif : analyser la cohérence du bloc P-SUIVI-VEHICULES et de ses sessions avant démarrage, vérifier si le découpage est suffisant, identifier les sessions manquantes, trop larges, redondantes ou à reporter, puis produire les questions d'arbitrage nécessaires.
+  - Périmètre inclus : relecture du plan de développement, relecture du plan des blocs/sessions, relecture de la référence Base44 comme référence fonctionnelle/métier/visuelle, analyse du périmètre fonctionnel du bloc P-SUIVI-VEHICULES, analyse de la cohérence des dépendances amont/aval, revue des sessions prévues, vérification des sessions trop larges ou trop longues, identification des répétitions avec d'autres sessions du même bloc ou d'un autre bloc, proposition d'ordre d'exécution, identification des risques de périmètre, identification des risques de surconsommation de crédits, production des questions d'arbitrage si nécessaire.
+  - Hors périmètre : correction de code, création de code, modification applicative, modification Prisma, modification API, modification RBAC effective, modification de routes, modification de packages, modification automatique de documents de fond sans validation humaine, validation navigateur, captures, exécution de build, application automatique des recommandations dans le MASTER.
+  - Zones à lire : `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`, `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md`, `docs/1-MASTER/4-BASE44_REFERENCE/`, `app/vehicles/*`, `app/api/vehicles/*`, `prisma/schema.prisma`, références/fiches suivi, Base44 suivi, fichiers nécessaires au bon déroulement de la session en lecture seule.
+  - Zones modifiables plus tard : aucune sans validation humaine explicite ; recommandations de modification du MASTER à formuler uniquement sous forme de propositions.
+  - Critères de validation : périmètre du bloc compris, sessions prévues analysées, sessions trop larges ou trop longues identifiées, répétitions intra-bloc ou inter-blocs identifiées, sessions manquantes proposées si nécessaire, sessions à conserver / compléter / découper / fusionner / reporter / supprimer / confirmer classées, risques identifiés, questions d'arbitrage produites si nécessaire, ordre d'exécution recommandé, absence de modification applicative.
+  - Preuves attendues : synthèse du bloc, tableau d'analyse des sessions prévues, liste des sessions manquantes ou à ajuster, questions à arbitrer classées par priorité si nécessaire, recommandations d'ordre d'exécution, fichiers lus, commandes sobres si utilisées, `git status --short`, confirmation d'absence de modification applicative, confirmation d'absence de modification documentaire hors dossier de session.
+  - Dépendances : P-VEHICULES, T4, T5, T6, P-DEPOTS-BASES.
+  - Sortie principale : plan de sessions recommandé + questions à arbitrer.
 
 - `DX_PSUIVI_AUDIT-PERIMETRE-EXISTANT`
   - Nature : DX.
@@ -1633,6 +1776,19 @@ Les modèles horaires sont un référentiel utilisé par le planning pour créer
 
 #### Sessions de production prévues
 
+- `DX_PMODELES_CADRAGE-BLOC-SESSIONS`
+  - Nature : DX.
+  - Type métier : AUDIT+CADRAGE.
+  - Objectif : analyser la cohérence du bloc P-MODELES-HORAIRES et de ses sessions avant démarrage, vérifier si le découpage est suffisant, identifier les sessions manquantes, trop larges, redondantes ou à reporter, puis produire les questions d'arbitrage nécessaires.
+  - Périmètre inclus : relecture du plan de développement, relecture du plan des blocs/sessions, relecture de la référence Base44 comme référence fonctionnelle/métier/visuelle, analyse du périmètre fonctionnel du bloc P-MODELES-HORAIRES, analyse de la cohérence des dépendances amont/aval, revue des sessions prévues, vérification des sessions trop larges ou trop longues, identification des répétitions avec d'autres sessions du même bloc ou d'un autre bloc, proposition d'ordre d'exécution, identification des risques de périmètre, identification des risques de surconsommation de crédits, production des questions d'arbitrage si nécessaire.
+  - Hors périmètre : correction de code, création de code, modification applicative, modification Prisma, modification API, modification RBAC effective, modification de routes, modification de packages, modification automatique de documents de fond sans validation humaine, validation navigateur, captures, exécution de build, application automatique des recommandations dans le MASTER.
+  - Zones à lire : `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`, `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md`, `docs/1-MASTER/4-BASE44_REFERENCE/`, `app/templates/*`, `app/api/templates/*`, `lib/templates/*`, `lib/services/templates/*`, `prisma/schema.prisma`, fichiers nécessaires au bon déroulement de la session en lecture seule.
+  - Zones modifiables plus tard : aucune sans validation humaine explicite ; recommandations de modification du MASTER à formuler uniquement sous forme de propositions.
+  - Critères de validation : périmètre du bloc compris, sessions prévues analysées, sessions trop larges ou trop longues identifiées, répétitions intra-bloc ou inter-blocs identifiées, sessions manquantes proposées si nécessaire, sessions à conserver / compléter / découper / fusionner / reporter / supprimer / confirmer classées, risques identifiés, questions d'arbitrage produites si nécessaire, ordre d'exécution recommandé, absence de modification applicative.
+  - Preuves attendues : synthèse du bloc, tableau d'analyse des sessions prévues, liste des sessions manquantes ou à ajuster, questions à arbitrer classées par priorité si nécessaire, recommandations d'ordre d'exécution, fichiers lus, commandes sobres si utilisées, `git status --short`, confirmation d'absence de modification applicative, confirmation d'absence de modification documentaire hors dossier de session.
+  - Dépendances : T2, T3, T4, T5.
+  - Sortie principale : plan de sessions recommandé + questions à arbitrer.
+
 - `DX_PMODELES_AUDIT-TEMPLATES-OFFICIEL`
   - Nature : DX.
   - Type métier : AUDIT.
@@ -1744,6 +1900,19 @@ Le planning synthétise utilisateurs, véhicules, dépôts, modèles horaires, a
 - Données personnelles visibles à tort.
 
 #### Sessions de production prévues
+
+- `DX_PPLANNING_CADRAGE-BLOC-SESSIONS`
+  - Nature : DX.
+  - Type métier : AUDIT+CADRAGE.
+  - Objectif : analyser la cohérence du bloc P-PLANNING et de ses sessions avant démarrage, vérifier si le découpage est suffisant, identifier les sessions manquantes, trop larges, redondantes ou à reporter, puis produire les questions d'arbitrage nécessaires.
+  - Périmètre inclus : relecture du plan de développement, relecture du plan des blocs/sessions, relecture de la référence Base44 comme référence fonctionnelle/métier/visuelle, analyse du périmètre fonctionnel du bloc P-PLANNING, analyse de la cohérence des dépendances amont/aval, revue des sessions prévues, vérification des sessions trop larges ou trop longues, identification des répétitions avec d'autres sessions du même bloc ou d'un autre bloc, proposition d'ordre d'exécution, identification des risques de périmètre, identification des risques de surconsommation de crédits, production des questions d'arbitrage si nécessaire.
+  - Hors périmètre : correction de code, création de code, modification applicative, modification Prisma, modification API, modification RBAC effective, modification de routes, modification de packages, modification automatique de documents de fond sans validation humaine, validation navigateur, captures, exécution de build, application automatique des recommandations dans le MASTER.
+  - Zones à lire : `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`, `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md`, `docs/1-MASTER/4-BASE44_REFERENCE/`, `app/planning/*`, `app/api/planning/*`, `lib/services/planning/*`, `lib/types/planning.ts`, `prisma/schema.prisma`, fichiers nécessaires au bon déroulement de la session en lecture seule.
+  - Zones modifiables plus tard : aucune sans validation humaine explicite ; recommandations de modification du MASTER à formuler uniquement sous forme de propositions.
+  - Critères de validation : périmètre du bloc compris, sessions prévues analysées, sessions trop larges ou trop longues identifiées, répétitions intra-bloc ou inter-blocs identifiées, sessions manquantes proposées si nécessaire, sessions à conserver / compléter / découper / fusionner / reporter / supprimer / confirmer classées, risques identifiés, questions d'arbitrage produites si nécessaire, ordre d'exécution recommandé, absence de modification applicative.
+  - Preuves attendues : synthèse du bloc, tableau d'analyse des sessions prévues, liste des sessions manquantes ou à ajuster, questions à arbitrer classées par priorité si nécessaire, recommandations d'ordre d'exécution, fichiers lus, commandes sobres si utilisées, `git status --short`, confirmation d'absence de modification applicative, confirmation d'absence de modification documentaire hors dossier de session.
+  - Dépendances : P-SOCIETE, P-DEPOTS-BASES, P-UTILISATEURS-RH, P-VEHICULES, P-MODELES-HORAIRES, T4, T5, T6, T7.
+  - Sortie principale : plan de sessions recommandé + questions à arbitrer.
 
 - `DX_PPLANNING_AUDIT-FLUX-MOTEUR`
   - Nature : DX.
@@ -1878,6 +2047,19 @@ P-AUDIT expose les événements audit pertinents sans permettre de modification 
 
 #### Sessions de production prévues
 
+- `DX_PAUDIT_CADRAGE-BLOC-SESSIONS`
+  - Nature : DX.
+  - Type métier : AUDIT+CADRAGE.
+  - Objectif : analyser la cohérence du bloc P-AUDIT et de ses sessions avant démarrage, vérifier si le découpage est suffisant, identifier les sessions manquantes, trop larges, redondantes ou à reporter, puis produire les questions d'arbitrage nécessaires.
+  - Périmètre inclus : relecture du plan de développement, relecture du plan des blocs/sessions, relecture de la référence Base44 comme référence fonctionnelle/métier/visuelle, analyse du périmètre fonctionnel du bloc P-AUDIT, analyse de la cohérence des dépendances amont/aval, revue des sessions prévues, vérification des sessions trop larges ou trop longues, identification des répétitions avec d'autres sessions du même bloc ou d'un autre bloc, proposition d'ordre d'exécution, identification des risques de périmètre, identification des risques de surconsommation de crédits, production des questions d'arbitrage si nécessaire.
+  - Hors périmètre : correction de code, création de code, modification applicative, modification Prisma, modification API, modification RBAC effective, modification de routes, modification de packages, modification automatique de documents de fond sans validation humaine, validation navigateur, captures, exécution de build, application automatique des recommandations dans le MASTER.
+  - Zones à lire : `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`, `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md`, `docs/1-MASTER/4-BASE44_REFERENCE/`, `docs/1-MASTER/2-REFERENCE_UI_UX/`, `app/audit/*`, `app/api/audit/route.ts`, `lib/services/audit/*`, `prisma/schema.prisma`, fichiers nécessaires au bon déroulement de la session en lecture seule.
+  - Zones modifiables plus tard : aucune sans validation humaine explicite ; recommandations de modification du MASTER à formuler uniquement sous forme de propositions.
+  - Critères de validation : périmètre du bloc compris, sessions prévues analysées, sessions trop larges ou trop longues identifiées, répétitions intra-bloc ou inter-blocs identifiées, sessions manquantes proposées si nécessaire, sessions à conserver / compléter / découper / fusionner / reporter / supprimer / confirmer classées, risques identifiés, questions d'arbitrage produites si nécessaire, ordre d'exécution recommandé, absence de modification applicative.
+  - Preuves attendues : synthèse du bloc, tableau d'analyse des sessions prévues, liste des sessions manquantes ou à ajuster, questions à arbitrer classées par priorité si nécessaire, recommandations d'ordre d'exécution, fichiers lus, commandes sobres si utilisées, `git status --short`, confirmation d'absence de modification applicative, confirmation d'absence de modification documentaire hors dossier de session.
+  - Dépendances : T6, T4.
+  - Sortie principale : plan de sessions recommandé + questions à arbitrer.
+
 - `DX_PAUDIT_AUDIT-PAGE-API-FILTRES`
   - Nature : DX.
   - Type métier : AUDIT.
@@ -1981,6 +2163,19 @@ Le dashboard synthétise KPI, raccourcis, alertes et widgets après stabilisatio
 - Dashboard repris avant les données sources.
 
 #### Sessions de production prévues
+
+- `DX_PDASHBOARD_CADRAGE-BLOC-SESSIONS`
+  - Nature : DX.
+  - Type métier : AUDIT+CADRAGE.
+  - Objectif : analyser la cohérence du bloc P-DASHBOARD et de ses sessions avant démarrage, vérifier si le découpage est suffisant, identifier les sessions manquantes, trop larges, redondantes ou à reporter, puis produire les questions d'arbitrage nécessaires.
+  - Périmètre inclus : relecture du plan de développement, relecture du plan des blocs/sessions, relecture de la référence Base44 comme référence fonctionnelle/métier/visuelle, analyse du périmètre fonctionnel du bloc P-DASHBOARD, analyse de la cohérence des dépendances amont/aval, revue des sessions prévues, vérification des sessions trop larges ou trop longues, identification des répétitions avec d'autres sessions du même bloc ou d'un autre bloc, proposition d'ordre d'exécution, identification des risques de périmètre, identification des risques de surconsommation de crédits, production des questions d'arbitrage si nécessaire.
+  - Hors périmètre : correction de code, création de code, modification applicative, modification Prisma, modification API, modification RBAC effective, modification de routes, modification de packages, modification automatique de documents de fond sans validation humaine, validation navigateur, captures, exécution de build, application automatique des recommandations dans le MASTER.
+  - Zones à lire : `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`, `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md`, `docs/1-MASTER/4-BASE44_REFERENCE/`, `app/dashboard/page.tsx`, `app/ui/stat-card.tsx`, fiches dashboard, Base44 dashboard, fichiers nécessaires au bon déroulement de la session en lecture seule.
+  - Zones modifiables plus tard : aucune sans validation humaine explicite ; recommandations de modification du MASTER à formuler uniquement sous forme de propositions.
+  - Critères de validation : périmètre du bloc compris, sessions prévues analysées, sessions trop larges ou trop longues identifiées, répétitions intra-bloc ou inter-blocs identifiées, sessions manquantes proposées si nécessaire, sessions à conserver / compléter / découper / fusionner / reporter / supprimer / confirmer classées, risques identifiés, questions d'arbitrage produites si nécessaire, ordre d'exécution recommandé, absence de modification applicative.
+  - Preuves attendues : synthèse du bloc, tableau d'analyse des sessions prévues, liste des sessions manquantes ou à ajuster, questions à arbitrer classées par priorité si nécessaire, recommandations d'ordre d'exécution, fichiers lus, commandes sobres si utilisées, `git status --short`, confirmation d'absence de modification applicative, confirmation d'absence de modification documentaire hors dossier de session.
+  - Dépendances : T1, T3, T4, T5, P-PLANNING.
+  - Sortie principale : plan de sessions recommandé + questions à arbitrer.
 
 - `DX_PDASHBOARD_AUDIT-KPI-WIDGETS`
   - Nature : DX.
@@ -2091,6 +2286,19 @@ Mise en route guide l'installation initiale sans remplacer Société ni les page
 - Afficher une progression arbitraire.
 
 #### Sessions de production prévues
+
+- `DX_PMER_CADRAGE-BLOC-SESSIONS`
+  - Nature : DX.
+  - Type métier : AUDIT+CADRAGE.
+  - Objectif : analyser la cohérence du bloc P-MISE-EN-ROUTE et de ses sessions avant démarrage, vérifier si le découpage est suffisant, identifier les sessions manquantes, trop larges, redondantes ou à reporter, puis produire les questions d'arbitrage nécessaires.
+  - Périmètre inclus : relecture du plan de développement, relecture du plan des blocs/sessions, relecture de la référence Base44 comme référence fonctionnelle/métier/visuelle, analyse du périmètre fonctionnel du bloc P-MISE-EN-ROUTE, analyse de la cohérence des dépendances amont/aval, revue des sessions prévues, vérification des sessions trop larges ou trop longues, identification des répétitions avec d'autres sessions du même bloc ou d'un autre bloc, proposition d'ordre d'exécution, identification des risques de périmètre, identification des risques de surconsommation de crédits, production des questions d'arbitrage si nécessaire.
+  - Hors périmètre : correction de code, création de code, modification applicative, modification Prisma, modification API, modification RBAC effective, modification de routes, modification de packages, modification automatique de documents de fond sans validation humaine, validation navigateur, captures, exécution de build, application automatique des recommandations dans le MASTER.
+  - Zones à lire : `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`, `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md`, `docs/1-MASTER/4-BASE44_REFERENCE/`, `app/onboarding/*`, fiches Mise en route/Société, Base44 MiseEnRoute, fichiers nécessaires au bon déroulement de la session en lecture seule.
+  - Zones modifiables plus tard : aucune sans validation humaine explicite ; recommandations de modification du MASTER à formuler uniquement sous forme de propositions.
+  - Critères de validation : périmètre du bloc compris, sessions prévues analysées, sessions trop larges ou trop longues identifiées, répétitions intra-bloc ou inter-blocs identifiées, sessions manquantes proposées si nécessaire, sessions à conserver / compléter / découper / fusionner / reporter / supprimer / confirmer classées, risques identifiés, questions d'arbitrage produites si nécessaire, ordre d'exécution recommandé, absence de modification applicative.
+  - Preuves attendues : synthèse du bloc, tableau d'analyse des sessions prévues, liste des sessions manquantes ou à ajuster, questions à arbitrer classées par priorité si nécessaire, recommandations d'ordre d'exécution, fichiers lus, commandes sobres si utilisées, `git status --short`, confirmation d'absence de modification applicative, confirmation d'absence de modification documentaire hors dossier de session.
+  - Dépendances : P-SOCIETE, P-DEPOTS-BASES, P-UTILISATEURS-RH, P-VEHICULES, P-MODELES-HORAIRES, T2, T4, T5.
+  - Sortie principale : plan de sessions recommandé + questions à arbitrer.
 
 - `DX_PMER_AUDIT-CHECKLIST-SOURCES`
   - Nature : DX.
@@ -2205,6 +2413,19 @@ Privacy informe minimalement sur les données personnelles manipulées en Alpha.
 
 #### Sessions de production prévues
 
+- `DX_RGPD_CADRAGE-BLOC-SESSIONS`
+  - Nature : DX.
+  - Type métier : AUDIT+CADRAGE.
+  - Objectif : analyser la cohérence du bloc RGPD-PRIVACY et de ses sessions avant démarrage, vérifier si le découpage est suffisant, identifier les sessions manquantes, trop larges, redondantes ou à reporter, puis produire les questions d'arbitrage nécessaires.
+  - Périmètre inclus : relecture du plan de développement, relecture du plan des blocs/sessions, relecture de la référence Base44 comme référence fonctionnelle/métier/visuelle, analyse du périmètre fonctionnel du bloc RGPD-PRIVACY, analyse de la cohérence des dépendances amont/aval, revue des sessions prévues, vérification des sessions trop larges ou trop longues, identification des répétitions avec d'autres sessions du même bloc ou d'un autre bloc, proposition d'ordre d'exécution, identification des risques de périmètre, identification des risques de surconsommation de crédits, production des questions d'arbitrage si nécessaire.
+  - Hors périmètre : correction de code, création de code, modification applicative, modification Prisma, modification API, modification RBAC effective, modification de routes, modification de packages, modification automatique de documents de fond sans validation humaine, validation navigateur, captures, exécution de build, application automatique des recommandations dans le MASTER.
+  - Zones à lire : `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`, `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md`, `docs/1-MASTER/4-BASE44_REFERENCE/`, `docs/1-MASTER/RGPD_BASE_MINIMALE.md`, `docs/1-MASTER/2-REFERENCE_UI_UX/`, `app/privacy/page.tsx`, `app/login/page.tsx`, fichiers nécessaires au bon déroulement de la session en lecture seule.
+  - Zones modifiables plus tard : aucune sans validation humaine explicite ; recommandations de modification du MASTER à formuler uniquement sous forme de propositions.
+  - Critères de validation : périmètre du bloc compris, sessions prévues analysées, sessions trop larges ou trop longues identifiées, répétitions intra-bloc ou inter-blocs identifiées, sessions manquantes proposées si nécessaire, sessions à conserver / compléter / découper / fusionner / reporter / supprimer / confirmer classées, risques identifiés, questions d'arbitrage produites si nécessaire, ordre d'exécution recommandé, absence de modification applicative.
+  - Preuves attendues : synthèse du bloc, tableau d'analyse des sessions prévues, liste des sessions manquantes ou à ajuster, questions à arbitrer classées par priorité si nécessaire, recommandations d'ordre d'exécution, fichiers lus, commandes sobres si utilisées, `git status --short`, confirmation d'absence de modification applicative, confirmation d'absence de modification documentaire hors dossier de session.
+  - Dépendances : P-LOGIN, T6, `RGPD_BASE_MINIMALE.md`.
+  - Sortie principale : plan de sessions recommandé + questions à arbitrer.
+
 - `DX_RGPD_AUDIT-PRIVACY-ALPHA`
   - Nature : DX.
   - Type métier : AUDIT.
@@ -2290,6 +2511,19 @@ F1 vérifie les flux métier transverses sans corriger dans la session de valida
 - Corriger pendant validation.
 
 #### Sessions de production prévues
+
+- `DX_F1_CADRAGE-BLOC-SESSIONS`
+  - Nature : DX.
+  - Type métier : AUDIT+CADRAGE.
+  - Objectif : analyser la cohérence du bloc F1 et de ses sessions avant démarrage, vérifier si le découpage est suffisant, identifier les sessions manquantes, trop larges, redondantes ou à reporter, puis produire les questions d'arbitrage nécessaires.
+  - Périmètre inclus : relecture du plan de développement, relecture du plan des blocs/sessions, relecture de la référence Base44 comme référence fonctionnelle/métier/visuelle, analyse du périmètre fonctionnel du bloc F1, analyse de la cohérence des dépendances amont/aval, revue des sessions prévues, vérification des sessions trop larges ou trop longues, identification des répétitions avec d'autres sessions du même bloc ou d'un autre bloc, proposition d'ordre d'exécution, identification des risques de périmètre, identification des risques de surconsommation de crédits, production des questions d'arbitrage si nécessaire.
+  - Hors périmètre : correction de code, création de code, modification applicative, modification Prisma, modification API, modification RBAC effective, modification de routes, modification de packages, modification automatique de documents de fond sans validation humaine, validation navigateur, captures, exécution de build, application automatique des recommandations dans le MASTER.
+  - Zones à lire : `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`, `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md`, `docs/1-MASTER/4-BASE44_REFERENCE/`, sessions clôturées, docs fonctionnalités, `T7`, fichiers nécessaires au bon déroulement de la session en lecture seule.
+  - Zones modifiables plus tard : aucune sans validation humaine explicite ; recommandations de modification du MASTER à formuler uniquement sous forme de propositions.
+  - Critères de validation : périmètre du bloc compris, sessions prévues analysées, sessions trop larges ou trop longues identifiées, répétitions intra-bloc ou inter-blocs identifiées, sessions manquantes proposées si nécessaire, sessions à conserver / compléter / découper / fusionner / reporter / supprimer / confirmer classées, risques identifiés, questions d'arbitrage produites si nécessaire, ordre d'exécution recommandé, absence de modification applicative.
+  - Preuves attendues : synthèse du bloc, tableau d'analyse des sessions prévues, liste des sessions manquantes ou à ajuster, questions à arbitrer classées par priorité si nécessaire, recommandations d'ordre d'exécution, fichiers lus, commandes sobres si utilisées, `git status --short`, confirmation d'absence de modification applicative, confirmation d'absence de modification documentaire hors dossier de session.
+  - Dépendances : blocs métier terminés ou reports explicitement acceptés, T4/T5/T6/T7.
+  - Sortie principale : plan de sessions recommandé + questions à arbitrer.
 
 - `DX_F1_CADRAGE-PARCOURS-ALPHA`
   - Nature : DX.
@@ -2401,6 +2635,19 @@ F2 contrôle la qualité technique finale Alpha sans corriger dans la même sess
 - Échec Prisma ignoré après migration.
 
 #### Sessions de production prévues
+
+- `DX_F2_CADRAGE-BLOC-SESSIONS`
+  - Nature : DX.
+  - Type métier : AUDIT+CADRAGE.
+  - Objectif : analyser la cohérence du bloc F2 et de ses sessions avant démarrage, vérifier si le découpage est suffisant, identifier les sessions manquantes, trop larges, redondantes ou à reporter, puis produire les questions d'arbitrage nécessaires.
+  - Périmètre inclus : relecture du plan de développement, relecture du plan des blocs/sessions, relecture de la référence Base44 comme référence fonctionnelle/métier/visuelle, analyse du périmètre fonctionnel du bloc F2, analyse de la cohérence des dépendances amont/aval, revue des sessions prévues, vérification des sessions trop larges ou trop longues, identification des répétitions avec d'autres sessions du même bloc ou d'un autre bloc, proposition d'ordre d'exécution, identification des risques de périmètre, identification des risques de surconsommation de crédits, production des questions d'arbitrage si nécessaire.
+  - Hors périmètre : correction de code, création de code, modification applicative, modification Prisma, modification API, modification RBAC effective, modification de routes, modification de packages, modification automatique de documents de fond sans validation humaine, validation navigateur, captures, exécution de build, application automatique des recommandations dans le MASTER.
+  - Zones à lire : `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`, `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md`, `docs/1-MASTER/4-BASE44_REFERENCE/`, `package.json`, `scripts/quality/`, `T7`, fichiers nécessaires au bon déroulement de la session en lecture seule.
+  - Zones modifiables plus tard : aucune sans validation humaine explicite ; recommandations de modification du MASTER à formuler uniquement sous forme de propositions.
+  - Critères de validation : périmètre du bloc compris, sessions prévues analysées, sessions trop larges ou trop longues identifiées, répétitions intra-bloc ou inter-blocs identifiées, sessions manquantes proposées si nécessaire, sessions à conserver / compléter / découper / fusionner / reporter / supprimer / confirmer classées, risques identifiés, questions d'arbitrage produites si nécessaire, ordre d'exécution recommandé, absence de modification applicative.
+  - Preuves attendues : synthèse du bloc, tableau d'analyse des sessions prévues, liste des sessions manquantes ou à ajuster, questions à arbitrer classées par priorité si nécessaire, recommandations d'ordre d'exécution, fichiers lus, commandes sobres si utilisées, `git status --short`, confirmation d'absence de modification applicative, confirmation d'absence de modification documentaire hors dossier de session.
+  - Dépendances : blocs code terminés, T7.
+  - Sortie principale : plan de sessions recommandé + questions à arbitrer.
 
 - `DX_F2_CADRAGE-PLAN-QUALITE`
   - Nature : DX.
@@ -2526,6 +2773,19 @@ F3 contrôle l'alignement avec les références UI/UX et maquettes sans refonte 
 
 #### Sessions de production prévues
 
+- `DX_F3_CADRAGE-BLOC-SESSIONS`
+  - Nature : DX.
+  - Type métier : AUDIT+CADRAGE.
+  - Objectif : analyser la cohérence du bloc F3 et de ses sessions avant démarrage, vérifier si le découpage est suffisant, identifier les sessions manquantes, trop larges, redondantes ou à reporter, puis produire les questions d'arbitrage nécessaires.
+  - Périmètre inclus : relecture du plan de développement, relecture du plan des blocs/sessions, relecture de la référence Base44 comme référence fonctionnelle/métier/visuelle, analyse du périmètre fonctionnel du bloc F3, analyse de la cohérence des dépendances amont/aval, revue des sessions prévues, vérification des sessions trop larges ou trop longues, identification des répétitions avec d'autres sessions du même bloc ou d'un autre bloc, proposition d'ordre d'exécution, identification des risques de périmètre, identification des risques de surconsommation de crédits, production des questions d'arbitrage si nécessaire.
+  - Hors périmètre : correction de code, création de code, modification applicative, modification Prisma, modification API, modification RBAC effective, modification de routes, modification de packages, modification automatique de documents de fond sans validation humaine, validation navigateur, captures, exécution de build, application automatique des recommandations dans le MASTER.
+  - Zones à lire : `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`, `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md`, `docs/1-MASTER/4-BASE44_REFERENCE/`, `docs/1-MASTER/2-REFERENCE_UI_UX/`, `docs/1-MASTER/1-MAQUETTE/`, fichiers nécessaires au bon déroulement de la session en lecture seule.
+  - Zones modifiables plus tard : aucune sans validation humaine explicite ; recommandations de modification du MASTER à formuler uniquement sous forme de propositions.
+  - Critères de validation : périmètre du bloc compris, sessions prévues analysées, sessions trop larges ou trop longues identifiées, répétitions intra-bloc ou inter-blocs identifiées, sessions manquantes proposées si nécessaire, sessions à conserver / compléter / découper / fusionner / reporter / supprimer / confirmer classées, risques identifiés, questions d'arbitrage produites si nécessaire, ordre d'exécution recommandé, absence de modification applicative.
+  - Preuves attendues : synthèse du bloc, tableau d'analyse des sessions prévues, liste des sessions manquantes ou à ajuster, questions à arbitrer classées par priorité si nécessaire, recommandations d'ordre d'exécution, fichiers lus, commandes sobres si utilisées, `git status --short`, confirmation d'absence de modification applicative, confirmation d'absence de modification documentaire hors dossier de session.
+  - Dépendances : T3, blocs pages terminés ou reportés.
+  - Sortie principale : plan de sessions recommandé + questions à arbitrer.
+
 - `DX_F3_CADRAGE-ECRANS-CRITIQUES`
   - Nature : DX.
   - Type métier : CADRAGE.
@@ -2636,6 +2896,19 @@ F4 est la gouvernance de fin de phase avant suite Beta/V1.
 - Modifier les MASTER sans validation humaine.
 
 #### Sessions de production prévues
+
+- `DX_F4_CADRAGE-BLOC-SESSIONS`
+  - Nature : DX.
+  - Type métier : AUDIT+CADRAGE.
+  - Objectif : analyser la cohérence du bloc F4 et de ses sessions avant démarrage, vérifier si le découpage est suffisant, identifier les sessions manquantes, trop larges, redondantes ou à reporter, puis produire les questions d'arbitrage nécessaires.
+  - Périmètre inclus : relecture du plan de développement, relecture du plan des blocs/sessions, relecture de la référence Base44 comme référence fonctionnelle/métier/visuelle, analyse du périmètre fonctionnel du bloc F4, analyse de la cohérence des dépendances amont/aval, revue des sessions prévues, vérification des sessions trop larges ou trop longues, identification des répétitions avec d'autres sessions du même bloc ou d'un autre bloc, proposition d'ordre d'exécution, identification des risques de périmètre, identification des risques de surconsommation de crédits, production des questions d'arbitrage si nécessaire.
+  - Hors périmètre : correction de code, création de code, modification applicative, modification Prisma, modification API, modification RBAC effective, modification de routes, modification de packages, modification automatique de documents de fond sans validation humaine, validation navigateur, captures, exécution de build, application automatique des recommandations dans le MASTER.
+  - Zones à lire : `docs/1-MASTER/04-PLAN_DE_DEVELOPPEMENT.md`, `docs/1-MASTER/05-BLOCS_SESSIONS_PRODUCTION.md`, `docs/1-MASTER/4-BASE44_REFERENCE/`, preuves F1/F2/F3, `docs/1-MASTER/02*`, `docs/1-MASTER/04*`, `docs/1-MASTER/05*`, fichiers nécessaires au bon déroulement de la session en lecture seule.
+  - Zones modifiables plus tard : aucune sans validation humaine explicite ; recommandations de modification du MASTER à formuler uniquement sous forme de propositions.
+  - Critères de validation : périmètre du bloc compris, sessions prévues analysées, sessions trop larges ou trop longues identifiées, répétitions intra-bloc ou inter-blocs identifiées, sessions manquantes proposées si nécessaire, sessions à conserver / compléter / découper / fusionner / reporter / supprimer / confirmer classées, risques identifiés, questions d'arbitrage produites si nécessaire, ordre d'exécution recommandé, absence de modification applicative.
+  - Preuves attendues : synthèse du bloc, tableau d'analyse des sessions prévues, liste des sessions manquantes ou à ajuster, questions à arbitrer classées par priorité si nécessaire, recommandations d'ordre d'exécution, fichiers lus, commandes sobres si utilisées, `git status --short`, confirmation d'absence de modification applicative, confirmation d'absence de modification documentaire hors dossier de session.
+  - Dépendances : F1, F2, F3 terminés ou reportés explicitement.
+  - Sortie principale : plan de sessions recommandé + questions à arbitrer.
 
 - `DX_F4_AUDIT-PREUVES-PHASE`
   - Nature : DX.
