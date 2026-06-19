@@ -7,6 +7,14 @@
 > Avant toute décision, se référer aux documents maîtres et au protocole de session.
 > A NE PAS SUPPRIMER
 
+Rédige les prompts
+
+docs\3-TEMPLATES\TEMPLATE_SESSION_CODEX.md
+docs\3-TEMPLATES\TEMPLATE_CONTROLE_CHATGPT.md
+
+Pour la sessions :
+
+
 ---
 
 tree .\docs /F /A | Out-File -FilePath .\docs\STRUCTURE_DOCS.md -Encoding utf8

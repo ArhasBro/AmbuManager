@@ -573,22 +573,27 @@ T5 protège le multi-tenant et évite les migrations opportunistes inspirées de
 
 #### Dépendances aval
 
-- P-SOCIETE, P-SUIVI-VEHICULES, P-DASHBOARD, P-MISE-EN-ROUTE.
-- P-PLANNING pour référentiels.
+- P-SOCIETE, P-SUIVI-VEHICULES, P-VEHICULES, P-DASHBOARD, P-MISE-EN-ROUTE.
+- P-PLANNING pour référentiels et impacts TPMR.
 
 #### Décisions connues
 
 - Le schéma officiel contient `Company`, `Depot`, `User`, `UserAbsence`, `Vehicle`, `ShiftTemplate`, `DraftShift`, `Shift`, `PlanningAuditLog`, `LoginAuditLog`.
 - `CompanyContact`, `DashboardPreference`, `VehicleCheck`, `Disinfection`, `VehicleAnomaly`, `OnboardingStep` sont absents du schéma officiel lu.
 - `PlanningEntry` Base44 ne doit pas remplacer `Shift`/`DraftShift`/`AutoScheduleRun`.
+- Arbitrages humains validés avant mise à jour documentaire : `DashboardPreference` reporté, modèles de suivi véhicules reportés, `OnboardingStep` refusé pour Alpha, audit `companyId` obligatoire avant correction multi-tenant, `TPMR` à cadrer dans T5 avec impacts `P-VEHICULES` / `P-PLANNING`, `CompanyContact` à confirmer avant toute CX.
 
 #### Décisions à confirmer
 
-- Création ou report de `CompanyContact` : `INFORMATION NON FOURNIE — À CONFIRMER`.
-- Création ou report de `DashboardPreference` : `INFORMATION NON FOURNIE — À CONFIRMER`.
-- Création ou report de `VehicleCheck`, `Disinfection`, `VehicleAnomaly` : `INFORMATION NON FOURNIE — À CONFIRMER`.
-- Création ou refus de `OnboardingStep` : `INFORMATION NON FOURNIE — À CONFIRMER`.
-- Gestion TPMR / TPMR VSL / TPMR TAXI : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- `CompanyContact` : `À CONFIRMER`; ne pas créer maintenant; future CX seulement après cadrage/mapping et validation humaine explicite.
+- `TPMR` / `TPMR VSL` / `TPMR TAXI` : `À CONFIRMER`; cadrage initial dans T5 avec impacts `P-VEHICULES` et `P-PLANNING`.
+
+#### Reports et refus validés
+
+- `DashboardPreference` est reporté vers `P-DASHBOARD`; pas de création T5.
+- `VehicleCheck`, `Disinfection`, `VehicleAnomaly` sont reportés vers `P-SUIVI-VEHICULES`; pas de création T5.
+- `OnboardingStep` est refusé pour Alpha; progression calculée depuis l'état réel du paramétrage.
+- `CompanyContact` reste à confirmer dans `P-SOCIETE` et ne doit pas être groupé avec `DashboardPreference`.
 
 #### Risques principaux
 
@@ -601,6 +606,7 @@ T5 protège le multi-tenant et évite les migrations opportunistes inspirées de
 - `DX_T5_CADRAGE-BLOC-SESSIONS`
   - Nature : DX.
   - Type métier : AUDIT+CADRAGE.
+  - Statut : réalisé / cadrage initial.
   - Objectif : analyser la cohérence du bloc T5 et de ses sessions avant démarrage, vérifier si le découpage est suffisant, identifier les sessions manquantes, trop larges, redondantes ou à reporter, puis produire les questions d'arbitrage nécessaires.
   - Périmètre inclus : relecture du plan de développement, relecture du plan des blocs/sessions, relecture de la référence Base44 comme référence fonctionnelle/métier/visuelle, analyse du périmètre fonctionnel du bloc T5, analyse de la cohérence des dépendances amont/aval, revue des sessions prévues, vérification des sessions trop larges ou trop longues, identification des répétitions avec d'autres sessions du même bloc ou d'un autre bloc, proposition d'ordre d'exécution, identification des risques de périmètre, identification des risques de surconsommation de crédits, production des questions d'arbitrage si nécessaire.
   - Hors périmètre : correction de code, création de code, modification applicative, modification Prisma, modification API, modification RBAC effective, modification de routes, modification de packages, modification automatique de documents de fond sans validation humaine, validation navigateur, captures, exécution de build, application automatique des recommandations dans le MASTER.
@@ -614,6 +620,7 @@ T5 protège le multi-tenant et évite les migrations opportunistes inspirées de
 - `DX_T5_AUDIT-MAPPING-ENTITES`
   - Nature : DX.
   - Type métier : AUDIT.
+  - Statut : à conserver.
   - Objectif : produire une matrice Base44 -> Prisma officiel pour toutes les entités utiles.
   - Périmètre inclus : entités Base44, `prisma/schema.prisma`, services officiels, validators.
   - Hors périmètre : migration, `prisma generate`, modification Prisma.
@@ -623,21 +630,50 @@ T5 protège le multi-tenant et évite les migrations opportunistes inspirées de
   - Preuves attendues : tableau, extraits schéma, `git status --short`.
   - Dépendances : T4 audit si permissions liées.
 
+- `DX_T5_AUDIT-COMPANYID-SURFACES`
+  - Nature : DX.
+  - Type métier : AUDIT.
+  - Statut : à créer / à planifier.
+  - Objectif : lire et auditer les surfaces `companyId` avant toute correction multi-tenant.
+  - Périmètre inclus : routes, services, validators et relations tenant concernés par `companyId`.
+  - Hors périmètre : correction.
+  - Zones à lire : surfaces applicatives tenant, `prisma/schema.prisma`, audits ciblés.
+  - Zones modifiables plus tard : aucune dans cette session DX d'audit.
+  - Critères de validation : cartographie des surfaces `companyId` prête avant toute CX de correction.
+  - Preuves attendues : matrice des surfaces, risques, `git status --short`.
+  - Dépendances : T5, T4, schéma Prisma officiel.
+
+- `DX_T5_CADRAGE-TPMR-REPRESENTATION`
+  - Nature : DX.
+  - Type métier : CADRAGE.
+  - Statut : à créer / à planifier.
+  - Objectif : cadrer `TPMR` / `TPMR VSL` / `TPMR TAXI`.
+  - Périmètre inclus : représentation métier et schéma, impacts `P-VEHICULES` et `P-PLANNING`.
+  - Hors périmètre : création Prisma.
+  - Zones à lire : T5, `P-VEHICULES`, `P-PLANNING`, fiches fonctionnelles utiles.
+  - Zones modifiables plus tard : Prisma, API, UI si validation humaine obtenue.
+  - Critères de validation : choix de représentation prêt pour décision humaine et répartition des impacts connue.
+  - Preuves attendues : options, risques, dépendances.
+  - Dépendances : DX_T5_AUDIT-MAPPING-ENTITES.
+
 - `DX_T5_CADRAGE-MODELES-CANDIDATS`
   - Nature : DX.
   - Type métier : CADRAGE.
+  - Statut : à conserver mais borné.
   - Objectif : cadrer les modèles candidats et leurs impacts avant toute migration.
-  - Périmètre inclus : `CompanyContact`, `DashboardPreference`, suivi véhicules, `OnboardingStep`.
+  - Périmètre inclus : `CompanyContact`, `DashboardPreference`, `VehicleCheck`, `Disinfection`, `VehicleAnomaly`, `OnboardingStep`.
   - Hors périmètre : création Prisma.
   - Zones à lire : audit T5, fiches Société, Dashboard, Suivi véhicules, Mise en route.
   - Zones modifiables plus tard : migrations Prisma, validators, services, API selon décisions.
-  - Critères de validation : chaque modèle a option créer/report/refuser avec impact sessions.
+  - Critères de validation : `CompanyContact` à confirmer, `DashboardPreference` reporté, `VehicleCheck` / `Disinfection` / `VehicleAnomaly` reportés, `OnboardingStep` refusé Alpha / progression calculée, impacts sessions connus.
   - Preuves attendues : options, risques multi-tenant, dépendances RBAC/audit.
+  - Interdiction explicite : aucune création Prisma dans cette session.
   - Dépendances : DX_T5_AUDIT-MAPPING-ENTITES.
 
 - `CX_T5_CORRECTION-MULTITENANT-CRITIQUE`
   - Nature : CX.
   - Type métier : CORRECTION.
+  - Statut : conditionnée / reportée.
   - Objectif : corriger les accès tenant critiques déjà prouvés comme incohérents.
   - Périmètre inclus : requêtes qui ne bornent pas correctement par `companyId`.
   - Hors périmètre : création de nouveaux modèles.
@@ -645,15 +681,18 @@ T5 protège le multi-tenant et évite les migrations opportunistes inspirées de
   - Zones modifiables plus tard : routes API et services ciblés uniquement.
   - Critères de validation : `companyId` issu serveur, dépendances résolues dans le tenant.
   - Preuves attendues : diff, tests qualité, extraits.
-  - Dépendances : audit T5, T4 si permission modifiée.
+  - Dépendances : DX_T5_AUDIT-COMPANYID-SURFACES, T4 si permission modifiée.
 
-- `CX_T5_CREATION-MODELE-CANDIDAT`
+- La session générique `CX_T5_CREATION-MODELE-CANDIDAT` est retirée du plan ; les créations futures devront être ciblées par modèle validé ou par bloc métier rattaché.
+
+- `CX_T5_CREATION-COMPANYCONTACT`
   - Nature : CX.
   - Type métier : CRÉATION.
-  - Objectif : créer un modèle Prisma uniquement après décision humaine explicite sur un modèle candidat.
-  - Périmètre inclus : un seul modèle ou groupe cohérent validé par session.
-  - Hors périmètre : création simultanée de tous les modèles Base44, UI métier.
-  - Zones à lire : cadrage modèle, `prisma/schema.prisma`, validators/services ciblés.
+  - Statut : à confirmer, non lançable avant cadrage/mapping et validation humaine explicite.
+  - Objectif : créer `CompanyContact` uniquement si le cadrage T5 et la validation humaine le confirment.
+  - Périmètre inclus : une seule famille contacts société, jamais groupée avec `DashboardPreference`.
+  - Hors périmètre : création simultanée avec `DashboardPreference` ou avec les modèles de suivi véhicules.
+  - Zones à lire : cadrage `CompanyContact`, `prisma/schema.prisma`, validators/services ciblés.
   - Zones modifiables plus tard : Prisma, migration, validators/API minimaux du modèle retenu.
   - Critères de validation : migration cohérente, `companyId` obligatoire si tenant, relations/indexes validés.
   - Preuves attendues : migration, `npx prisma validate`, tests ciblés.
@@ -662,6 +701,7 @@ T5 protège le multi-tenant et évite les migrations opportunistes inspirées de
 - `DX_T5_VALIDATION-CLOTURE-DONNEES-TENANT`
   - Nature : DX.
   - Type métier : VALIDATION+CLOTURE.
+  - Statut : à conserver.
   - Objectif : valider le cloisonnement des données après corrections ou créations.
   - Périmètre inclus : API touchées, scripts qualité, Prisma validate si migration.
   - Hors périmètre : correction.
@@ -670,7 +710,7 @@ T5 protège le multi-tenant et évite les migrations opportunistes inspirées de
   - Zones modifiables plus tard : aucune dans cette session DX VALIDATION+CLOTURE.
   - Critères de validation : pas de confiance dans `companyId` client, relations tenant contrôlées.
   - Preuves attendues : commandes, extraits, `git status --short`.
-  - Dépendances : CX T5.
+  - Dépendances : CX T5, DX_T5_AUDIT-COMPANYID-SURFACES.
 
 #### Critère de clôture du bloc
 
@@ -1069,7 +1109,7 @@ Société porte le contexte permanent du tenant, les informations de profil, les
 
 #### Décisions à confirmer
 
-- Création de `CompanyContact` en Alpha : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- `CompanyContact` : `À CONFIRMER`; ne pas grouper avec `DashboardPreference` et ne pas lancer de CX avant cadrage/mapping T5 et validation humaine explicite.
 - Champs ARS/réglementaires exacts : `INFORMATION NON FOURNIE — À CONFIRMER`.
 - Permission profil société vs règles société vs contacts : `INFORMATION NON FOURNIE — À CONFIRMER`.
 
@@ -1077,6 +1117,7 @@ Société porte le contexte permanent du tenant, les informations de profil, les
 
 - Les contacts société ont été explicitement sortis du périmètre T4.
 - Ils doivent être repris pendant le cadrage P-SOCIETE.
+- `CompanyContact` reste une décision distincte, non regroupée avec `DashboardPreference`.
 - Il faudra décider s’ils relèvent de `COMPANY_MANAGE` ou d’une permission dédiée future.
 - Il faudra vérifier les impacts UI/API, audit et traçabilité.
 
@@ -1140,6 +1181,7 @@ Société porte le contexte permanent du tenant, les informations de profil, les
 - `CX_PSOCIETE_CREATION-CONTACTS`
   - Nature : CX.
   - Type métier : CRÉATION.
+  - Statut : à confirmer; non lançable avant validation humaine CompanyContact.
   - Objectif : créer les contacts société uniquement si `CompanyContact` est validé.
   - Périmètre inclus : migration Prisma, API contacts, UI minimale, audit.
   - Hors périmètre : annuaire complet, utilisateurs applicatifs, conformité juridique complète.
@@ -1468,7 +1510,7 @@ Véhicules porte la flotte administrative, les statuts, les documents, les ratta
 
 - Permission disponibilité véhicule : `INFORMATION NON FOURNIE — À CONFIRMER`.
 - Mapping `VehicleStatus`, `isActive`, disponibilité opérationnelle et indisponibilité planning : `INFORMATION NON FOURNIE — À CONFIRMER`.
-- TPMR / TPMR VSL / TPMR TAXI : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- `TPMR` / `TPMR VSL` / `TPMR TAXI` : `À CONFIRMER`; cadrage initial dans T5, impacts véhicules et planning à coordonner.
 - Restauration véhicule : `INFORMATION NON FOURNIE — À CONFIRMER`.
 
 #### Point à ne pas oublier pendant la session AUDIT+CADRAGE
@@ -1476,6 +1518,7 @@ Véhicules porte la flotte administrative, les statuts, les documents, les ratta
 - La disponibilité véhicule avancée a été sortie de T4.
 - T4 ne traite que le RBAC des actions véhicules déjà existantes.
 - Le bloc P-VEHICULES devra cadrer les statuts, disponibilités, indisponibilités, affectations dépôt et impacts planning.
+- `TPMR` reste un point de cadrage partagé avec T5 et P-PLANNING.
 - Il faudra décider si des permissions comme `VEHICLES_AVAILABILITY` doivent être créées.
 
 #### Risques principaux
@@ -1620,6 +1663,8 @@ Le module porte vue d'ensemble, vérifications, désinfections et anomalies, dis
 - Le suivi véhicules a été explicitement sorti de T4.
 - Les permissions `VEHICLES_CHECK` ou équivalentes ne doivent pas être créées dans T4 sans surface métier stable.
 - Le bloc P-SUIVI-VEHICULES devra cadrer les contrôles, vérifications, historiques, responsabilités et permissions associées.
+- `VehicleCheck`, `Disinfection` et `VehicleAnomaly` sont reportés depuis T5 et ne doivent plus être traités comme des créations T5.
+- Ces trois modèles restent à cadrer ici, pas à recréer dans T5.
 
 #### Risques principaux
 
@@ -1891,6 +1936,7 @@ Le planning synthétise utilisateurs, véhicules, dépôts, modèles horaires, a
 - Week-ends/jours fériés/équilibrage : `INFORMATION NON FOURNIE — À CONFIRMER`.
 - Informations sensibles visibles par rôle : `INFORMATION NON FOURNIE — À CONFIRMER`.
 - Restauration planning/shift annulé : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- `TPMR` / `TPMR VSL` / `TPMR TAXI` : `À CONFIRMER`; impacts planning à coordonner avec T5 et P-VEHICULES.
 
 #### Risques principaux
 
@@ -2145,7 +2191,7 @@ Le dashboard synthétise KPI, raccourcis, alertes et widgets après stabilisatio
 
 #### Décisions à confirmer
 
-- Persistance `DashboardPreference` : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- `DashboardPreference` : reportée en Alpha; état UI/local sauf besoin serveur explicite.
 - Widgets obligatoires Alpha : `INFORMATION NON FOURNIE — À CONFIRMER`.
 - Personnalisation Alpha : `INFORMATION NON FOURNIE — À CONFIRMER`.
 - Raccourci suivi véhicules si module créé : `INFORMATION NON FOURNIE — À CONFIRMER`.
@@ -2154,6 +2200,7 @@ Le dashboard synthétise KPI, raccourcis, alertes et widgets après stabilisatio
 
 - Les préférences Dashboard ont été sorties de T4.
 - Elles doivent être reprises après stabilisation du portail / tableau de bord.
+- `DashboardPreference` reste un report distinct et ne doit pas être regroupée avec `CompanyContact`.
 - Il faudra décider si elles relèvent d’un simple réglage utilisateur ou d’une permission d’administration.
 
 #### Risques principaux
@@ -2216,6 +2263,7 @@ Le dashboard synthétise KPI, raccourcis, alertes et widgets après stabilisatio
 - `CX_PDASHBOARD_CREATION-PREFERENCES`
   - Nature : CX.
   - Type métier : CRÉATION.
+  - Statut : reportée; non lançable tant que le choix local/UI tient en Alpha.
   - Objectif : créer préférences dashboard uniquement si validées.
   - Périmètre inclus : modèle/API/UI préférences tenant/user-scopées.
   - Hors périmètre : marketplace widgets, reporting avancé.
@@ -2276,7 +2324,7 @@ Mise en route guide l'installation initiale sans remplacer Société ni les page
 
 - Conditions minimales de complétion par étape : `INFORMATION NON FOURNIE — À CONFIRMER`.
 - Permission dédiée Mise en route : `INFORMATION NON FOURNIE — À CONFIRMER`.
-- Création ou refus `OnboardingStep` : `INFORMATION NON FOURNIE — À CONFIRMER`.
+- `OnboardingStep` : refusé pour Alpha; progression calculée depuis l'état réel du paramétrage.
 - Périmètre imports Alpha : `INFORMATION NON FOURNIE — À CONFIRMER`.
 
 #### Risques principaux
@@ -2315,7 +2363,7 @@ Mise en route guide l'installation initiale sans remplacer Société ni les page
 - `DX_PMER_CADRAGE-CONDITIONS-COMPLETION`
   - Nature : DX.
   - Type métier : CADRAGE.
-  - Objectif : définir les conditions de complétion et le besoin éventuel d'`OnboardingStep`.
+  - Objectif : définir les conditions de complétion et confirmer qu'`OnboardingStep` n'est pas requis comme modèle persistant Alpha.
   - Périmètre inclus : sources dynamiques, options de persistance, droits.
   - Hors périmètre : migration.
   - Zones à lire : audit PMER, T5, Base44 OnboardingStep.
@@ -2971,17 +3019,32 @@ La phase est clôturée ou non clôturée explicitement, avec preuves, reports e
 
 ## 8. Décisions à confirmer avant production
 
+Les arbitrages T5 suivants ont été validés humainement avant modification du plan de sessions : `DashboardPreference` reporté, modèles de suivi véhicules reportés, `OnboardingStep` refusé pour Alpha, audit `companyId` obligatoire avant correction multi-tenant, `TPMR` à cadrer dans T5 avec impacts `P-VEHICULES` / `P-PLANNING`, `CompanyContact` à confirmer avant toute CX.
+
+### Arbitrages déjà validés
+
+- `DashboardPreference` est reporté vers `P-DASHBOARD`; état UI/local en Alpha.
+- `VehicleCheck`, `Disinfection`, `VehicleAnomaly` sont reportés vers `P-SUIVI-VEHICULES`.
+- `OnboardingStep` est refusé pour Alpha; progression calculée depuis l'état réel du paramétrage.
+- L'audit des surfaces `companyId` est obligatoire avant toute correction multi-tenant.
+- `CompanyContact` reste à confirmer et ne doit pas être groupé avec `DashboardPreference`.
+
+### Reports vers autres blocs
+
+- `VehicleCheck`, `Disinfection`, `VehicleAnomaly` -> `P-SUIVI-VEHICULES`.
+- `DashboardPreference` -> `P-DASHBOARD`.
+- `OnboardingStep` -> `P-MISE-EN-ROUTE`, via progression calculée uniquement.
+- `TPMR` -> `P-VEHICULES` et `P-PLANNING`.
+
+### Décisions encore à confirmer
+
 - Comportement exact de `Se souvenir de moi`.
 - Renommage technique éventuel de `/templates`.
 - Renommage technique éventuel de `/onboarding`.
 - Statut technique de `Suivi des véhicules`.
-- Création ou report de `VehicleCheck`, `Disinfection`, `VehicleAnomaly`.
-- Création ou report de `CompanyContact`.
-- Création ou report de `DashboardPreference`.
-- Création ou refus de `OnboardingStep`.
 - Granularité RBAC : dépôts, contacts société, disponibilité véhicule, suivi véhicules, reset password, archive/restauration.
 - Politique archive/restauration par module.
-- Gestion officielle de TPMR, TPMR VSL, TPMR TAXI.
+- Gestion officielle de `TPMR`, `TPMR VSL`, `TPMR TAXI`.
 - Règles ARS exactes pour vérifications et désinfections.
 - Conditions de complétion de Mise en route.
 - Règles de publication planning avec besoins non couverts, semaine 53, jours fériés/week-ends et informations sensibles par rôle.
